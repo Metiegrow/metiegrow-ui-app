@@ -1,0 +1,35 @@
+import { adminRoot } from './defaultValues';
+
+const data = [
+  {
+    id: 'profile',
+    icon: 'iconsminds-home',
+    label: 'menu.home',
+    to: `${adminRoot}/profile`,
+  },
+  {
+    id: 'myapplications',
+    icon: 'iconsminds-folder',
+    label: 'menu.myapplications',
+    to: `${adminRoot}/myapplications`,
+  },
+  {
+    id: 'mydetails',
+    icon: 'iconsminds-folder',
+    label: 'menu.mydetails',
+    to: `${adminRoot}/mydetails`,
+  },
+  {
+    id: 'mydocuments',
+    icon: 'iconsminds-folder',
+    label: 'menu.mydocuments',
+    to: `${adminRoot}/mydocuments`,
+  },
+  {
+    id: 'App',
+    icon: 'iconsminds-folder',
+    label: 'menu.myapp',
+    to: `${adminRoot}/myapp`,
+  },
+];
+export default data;
