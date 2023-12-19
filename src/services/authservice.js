@@ -13,7 +13,7 @@ export const authService = {
       email: email,
       userType: role,
     });
-    const url = `${baseUrl}api/signUp`;
+    const url = `${baseUrl}/signUp`;
     try {
       return await axios
         .post(url, bodyData)
@@ -43,14 +43,15 @@ export const authService = {
       username: email,
       password: password,
     });
-    const url = `${baseUrl}api/signIn`;
+    const url = `${baseUrl}/signIn`;
     try {
       return await axios
         .post(url, bodyData)
         .then((res) => {
           console.log(res);
-          console.log(res.data.data.userType);
-          localStorage.setItem('userType', res.data.data.userType);
+          console.log(res.data.userType);
+          localStorage.setItem('userType', res.data.userType);
+        
 
           return res;
         })
