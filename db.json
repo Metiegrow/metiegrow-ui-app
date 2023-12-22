@@ -9,33 +9,126 @@
     "username": "vssivanesh@gmail.com",
     "password": "sivanesh"
   },
-  "StudentPersonalInfo": {
-    "addressl1": "test addess 1",
-    "addressl2": "test address 2",
-    "adhaarno": 147852369,
-    "age": 18,
-    "country": "USA",
-    "studentId": 2
+  "StudentPersonalInfo":[
+  {
+  "id": 1,
+  "addressl1": "test addess 1",
+  "addressl2": "test address 2",
+  "adhaarno": 147852369,
+  "age": 18,
+  "country": "USA",
+  "dob": null,
+  "gender": null,
+  "state": null,
+  "zipCode": null,
+  "studentId":1
+ },
+ {
+  "id": 2,
+  "addressl1": "test addess 1",
+  "addressl2": "test address 2",
+  "adhaarno": 147852369,
+  "age": 18,
+  "country": "USA",
+  "dob": null,
+  "gender": null,
+  "state": null,
+  "zipCode": null,
+  "studentId":3
+}
+  ],
+"mentorAbout":[
+  {
+  "id":1,
+  "firstName":"srihith",
+  "lastName":"ks",
+  "email":"srihith@gmail.com",
+  "password":"123456",
+  "jobTitle":"cyber security",
+  "company":"google",
+  "location":"India"
   },
-  "updateStudentPersonalInfo": {
-    "id": 1,
-    "addressl1": "test add 1",
-    "addressl2": "test add2  updated",
-    "adhaarno": 147852369,
-    "age": 58,
-    "country": "USA",
-    "studentId": 1
-  },
-  "getStudentPersonalInfo": {
-    "id": 1,
-    "addressl1": "test addess 1",
-    "addressl2": "test address 2",
-    "adhaarno": 147852369,
-    "age": 18,
-    "country": "USA",
-    "dob": null,
-    "gender": null,
-    "state": null,
-    "zipCode": null
+  {
+  "id":2,
+  "firstName":"Raj",
+  "lastName":"ks",
+  "email":"raj@gmail.com",
+  "password":"654321",
+  "jobTitle":"mobile app",
+  "company":"whatsapp",
+  "location":"India"
   }
+ ],
+"mentorProfile":[
+  {
+  "id":1,
+  "category":"employee",
+   "skills":["skill 1","skill 2","skill 3"],
+  "bio":"Hi..",
+  "linkedinUrl":"https://www.linkedin.com/in/srihith/",
+  "twitterHandle":"srihith",
+  "website":"https://www.srihith.com/"
+  },
+  {
+  "id":2,
+  "category":"employee",
+  "skills":["skill 4","skill 5","skill 6"],
+  "bio":"Hi..",
+  "linkedinUrl":"https://www.linkedin.com/in/raj/",
+  "twitterHandle":"raj",
+  "website":"https://www.raj.com/"
+  }
+ ],
+"mentorExperience":[
+  {
+  "id":1,
+  "introVideo":"https://www.youtube.com/watch?v=abc",
+  "featuredArticle":"https://wordpress.com/posts/srihith.wordpress.com",
+  "reasonForMentor":"I have failed many times and got up again and again",
+  "achievement":"University top"
+  },
+  {
+  "id":2,
+  "introVideo":"https://www.youtube.com/watch?v=xyz",
+  "featuredArticle":"https://wordpress.com/posts/raj.wordpress.com",
+  "reasonForMentor":"Let's make it simple",
+  "achievement":"University gold medalist"
+  }
+ ],
+ "mentorCards":[
+  {
+    "id": 1,
+    "mentorPhotoDocumentId": "65816791afe2e22b3b1a9446",
+    "star": 4,
+    "ratings": 200,
+    "firstName": "srihith",
+    "lastName": "ks",
+    "jobTitle": "cyber security",
+    "company": "google",
+    "bio": "Hi..",
+    "skills": [
+        "skill 1",
+        "skill 2",
+        "skill 3"
+    ],
+    "price": 200
+},
+{
+    "id": 2,
+    "mentorPhotoDocumentId": "6583b44389d19532873b36b8",
+    "star": 4,
+    "ratings": 200,
+    "firstName": "raj",
+    "lastName": "ks",
+    "jobTitle": "mobile app",
+    "company": "whatsapp",
+    "bio": "Hi..",
+    "skills": [
+        "skill 4",
+        "skill 5",
+        "skill 6"
+    ],
+    "price": 200
+}
+ ]
 }
