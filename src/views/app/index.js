@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AppLayout from 'layout/AppLayout';
+// import MentorCard from './myapp/mentorship/mentorcard';
 
 // import MyApplications from './myapp/my-applications/my-applications';
 // import MyDetails from './myapp/my-details/my-details';
@@ -30,12 +31,34 @@ const ViewMyDocuments = React.lazy(() =>
 const ProfilePage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './profiles')
 );
+const Mentorship = React.lazy(() =>
+  import(/* webpackChunkName: "viwes-blank-page" */ './myapp/mentorship')
+);
+// Mentorship Cards
+const MentorCard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/mentorship/mentorcard'
+  )
+);
+// Mentors profile page
+const MentorProfile = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorProfile'
+  )
+);
+const MentorAnswers = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorAnswers'
+  )
+);
+
 // const CreateJobPage = React.lazy(() =>
 //   import(/* webpackChunkName: "viwes-blank-page" */ './create-jobs')
 // );
 // const EditJobPage = React.lazy(() =>
 //   import(/* webpackChunkName: "viwes-blank-page" */ './edit-jobs')
 // );
+//
 
 const App = ({ match }) => {
   return (
@@ -73,6 +96,24 @@ const App = ({ match }) => {
               path={`${match.url}/profile`}
               render={(props) => <ProfilePage {...props} />}
             />
+            <Route
+              path={`${match.url}/mentor`}
+              render={(props) => <MentorCard {...props} />}
+            />
+             <Route
+              path={`${match.url}/mentorship`}
+              render={(props) => <Mentorship {...props} />}
+            />
+             <Route
+              path={`${match.url}/mentorprofile`}
+              render={(props) => <MentorProfile {...props} />}
+            />
+              <Route
+              path={`${match.url}/mentoranswers`}
+              render={(props) => <MentorAnswers {...props} />}
+            />
+           
+          
             {/* <Route
               path={`${match.url}/jobs`}
               render={(props) => <JobPage {...props} />}

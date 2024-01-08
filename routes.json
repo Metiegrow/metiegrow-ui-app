@@ -1,4 +1,7 @@
 {
     "/signUp": "/signUp",
-    "/signIn":"/signIn"
+    "/signIn":"/signIn",
+    "/mentor/cards":"/mentorDetails",
+    "/countries":"/countries",
+    "/mentor/profile":"/mentorProfile"
 }
