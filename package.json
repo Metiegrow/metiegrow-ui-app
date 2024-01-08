@@ -17,18 +17,17 @@
     "json-server": "^0.17.4",
     "moment": "2.29.4",
     "mousetrap": "^1.6.5",
-    "node-sass": "^6.0.0",
     "prop-types": "^15.7.2",
     "rc-slider": "^9.7.2",
     "rc-switch": "^3.2.2",
-    "react": "^17.0.2",
+    "react": "^16.0.0",
     "react-albus": "^2.0.0",
     "react-autosuggest": "^10.1.0",
     "react-big-calendar": "^0.33.5",
     "react-circular-progressbar": "^2.0.4",
     "react-contextmenu": "^2.14.0",
     "react-datepicker": "^4.1.1",
-    "react-dom": "^17.0.2",
+    "react-dom": "^16.0.0",
     "react-dropzone-component": "^3.2.0",
     "react-google-maps": "^9.4.5",
     "react-headroom": "^3.1.1",
@@ -93,6 +92,7 @@
     "eslint-plugin-react": "^7.24.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
-    "prettier": "^2.3.1"
+    "prettier": "^2.3.1",
+    "sass": "^1.69.5"
   }
 }

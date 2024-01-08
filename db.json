@@ -11,14 +11,35 @@
     "role":0
 
   },
-  "StudentPersonalInfo": {
-    "addressl1": "test addess 1",
-    "addressl2": "test address 2",
-    "adhaarno": 147852369,
-    "age": 18,
-    "country": "USA",
-    "studentId": 2
-  },
+  "StudentPersonalInfo":[
+  {
+  "id": 1,
+  "addressl1": "test addess 1",
+  "addressl2": "test address 2",
+  "adhaarno": 147852369,
+  "age": 18,
+  "country": "USA",
+  "dob": null,
+  "gender": null,
+  "state": null,
+  "zipCode": null,
+  "studentId":1
+ },
+ {
+  "id": 2,
+  "addressl1": "test addess 1",
+  "addressl2": "test address 2",
+  "adhaarno": 147852369,
+  "age": 18,
+  "country": "USA",
+  "dob": null,
+  "gender": null,
+  "state": null,
+  "zipCode": null,
+  "studentId":3
+}
+  ],
+
   "updateStudentPersonalInfo": {
     "id": 1,
     "addressl1": "test add 1",
