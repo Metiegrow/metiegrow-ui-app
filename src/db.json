@@ -1,0 +1,49 @@
+{
+   "signUp":{
+        "username": "sivanesh",
+        "password": "sivanesh",
+        "email": "vssivanesh@gmail.com",
+        "userRole":"ADMIN"
+    },
+    "signIn":{
+    "username": "sivanesh",    
+    "password": "sivanesh"
+    },
+
+    "StudentPersonalInfo":{
+        
+            "addressl1":"test addess 1",
+            "addressl2":"test address 2",
+            "adhaarno":147852369,
+            "age":18,
+            "country":"USA",
+            "studentId":2
+         
+         
+    },
+    "updateStudentPersonalInfo":{
+        "id":1,
+        "addressl1":"test add 1",
+        "addressl2":"test add2  updated",
+        "adhaarno":147852369,
+        "age":58,
+        "country":"USA",
+        "studentId":1
+     
+    },
+    "getStudentPersonalInfo":{
+        "id": 1,
+        "addressl1": "test addess 1",
+        "addressl2": "test address 2",
+        "adhaarno": 147852369,
+        "age": 18,
+        "country": "USA",
+        "dob": null,
+        "gender": null,
+        "state": null,
+        "zipCode": null
+    
+    }
+
+}
+

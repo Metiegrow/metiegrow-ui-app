@@ -21,15 +21,15 @@ const validatePassword = (value) => {
   return error;
 };
 
-// const validateEmail = (value) => {
-//   let error;
-//   if (!value) {
-//     error = 'Please enter your email address';
-//   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-//     error = 'Invalid email address';
-//   }
-//   return error;
-// };
+const validateEmail = (value) => {
+  let error;
+  if (!value) {
+    error = 'Please enter your email address';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+    error = 'Invalid email address';
+  }
+  return error;
+};
 
 const Login = ({ history, loading, error, loginUserAction }) => {
   // const [user, setUser] = useState({
@@ -61,8 +61,8 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   //       break;
   //   }
   // }
-  const [email] = useState('demo@gogo.com');
-  const [password] = useState('gogo123');
+  const [email] = useState('vssivanesh@gmail.com');
+  const [password] = useState('sivanesh');
 
   useEffect(() => {
     if (error) {
@@ -75,9 +75,12 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   //     console.log(res);
   //   });
   // };
+
+  // new 
   const onUserLogin = (values) => {
     if (!loading) {
       if (values.email !== '' && values.password !== '') {
+      
         const loginResponse = authService.login(email, password);
         console.log(loginResponse);
         // axios
@@ -136,7 +139,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                     <Field
                       className="form-control"
                       name="email"
-                      validate={false}
+                      validate={validateEmail}
                     />
                     {errors.email && touched.email && (
                       <div className="invalid-feedback d-block">
@@ -164,7 +167,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                     <NavLink to="/user/forgot-password">
                       <IntlMessages id="user.forgot-password-question" />
                     </NavLink>
-                    <Button
+                    <Button type='submit'
                       color="primary"
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''
