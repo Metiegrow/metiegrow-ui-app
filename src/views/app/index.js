@@ -31,9 +31,9 @@ const ViewMyDocuments = React.lazy(() =>
 const ProfilePage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './profiles')
 );
-const Mentorship = React.lazy(() =>
-  import(/* webpackChunkName: "viwes-blank-page" */ './myapp/mentorship')
-);
+// const Mentorship = React.lazy(() =>
+//   import(/* webpackChunkName: "viwes-blank-page" */ './myapp/mentorship')
+// );
 // Mentorship Cards
 const MentorCard = React.lazy(() =>
   import(
@@ -100,10 +100,10 @@ const App = ({ match }) => {
               path={`${match.url}/mentor`}
               render={(props) => <MentorCard {...props} />}
             />
-             <Route
+             {/* <Route
               path={`${match.url}/mentorship`}
               render={(props) => <Mentorship {...props} />}
-            />
+            /> */}
              <Route
               path={`${match.url}/mentorprofile`}
               render={(props) => <MentorProfile {...props} />}
