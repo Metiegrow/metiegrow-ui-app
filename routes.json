@@ -1,6 +1,11 @@
 {
-    "/api/signUp": "/signUp",
-    "/api/authenticate":"/signIn",
+
+    "/signUp": "/signUp",
+    "/signIn":"/signIn",
+    "/mentor/cards":"/mentorDetails",
+    "/countries":"/countries",
+    "/mentor/profile":"/mentorProfile",
+
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",
     "/api/student/personal/info?studentId=:studentId":"/StudentPersonalInfo?studentId=:studentId",
@@ -9,7 +14,8 @@
     "/api/mentor/details/profile":"/mentorProfile",
     "/api/mentor/:id/details/profile":"/mentorProfile/:id",
     "/api/mentor/details/experience":"/mentorExperience",
-    "/api/mentor/:id/details/experience":"/mentorExperience/:id",
-    "/api/mentor/cards":"/mentorCards"
+    "/api/mentor/:id/details/experience":"/mentorExperience/:id"
+    
+
 
 }
