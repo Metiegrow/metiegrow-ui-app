@@ -1,7 +1,7 @@
 
 import { Colxx } from 'components/common/CustomBootstrap'
 import React,{useState} from 'react'
-import { Button, Card, CardBody} from 'reactstrap'
+import { Button, Card, CardBody, NavLink} from 'reactstrap'
 
 
 const MentorAnswers = () => {
@@ -71,9 +71,12 @@ const MentorAnswers = () => {
         </div>
        <div>
        {/* <Button size='sm'>Consult Now</Button> */}
+       <NavLink href='/app/mentorconsult'>
        <Button outline color="primary" size='sm' className="">
               Consult Now
               </Button>
+       </NavLink>
+      
        </div>
     
       

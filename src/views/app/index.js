@@ -51,6 +51,11 @@ const MentorAnswers = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorAnswers'
   )
 );
+const MentorConsult = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorConsult'
+  )
+);
 
 // const CreateJobPage = React.lazy(() =>
 //   import(/* webpackChunkName: "viwes-blank-page" */ './create-jobs')
@@ -112,6 +117,11 @@ const App = ({ match }) => {
               path={`${match.url}/mentoranswers`}
               render={(props) => <MentorAnswers {...props} />}
             />
+               <Route
+              path={`${match.url}/mentorconsult`}
+              render={(props) => <MentorConsult {...props} />}
+            />
+           
            
           
             {/* <Route
