@@ -3,6 +3,9 @@ import { Card, Col, Container, Row, Table } from 'reactstrap';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { NavLink } from 'react-router-dom';
 import { adminRoot } from 'constants/defaultValues';
+// import Courses from 'courses/courses';
+
+
 
 const ProfilePage = () => {
   return (
@@ -10,7 +13,9 @@ const ProfilePage = () => {
       <Row>
         <Colxx xxs="12">
           <h1>Home</h1>
+          
         </Colxx>
+       
       </Row>
       <Container
         style={{
@@ -29,6 +34,7 @@ const ProfilePage = () => {
                   <Row>
                     <Col>
                       <p className="h4 pt-2"> Application 10</p>
+                     
                     </Col>
                   </Row>
                 </Container>
@@ -63,6 +69,7 @@ const ProfilePage = () => {
           </Col>
         </Row>
       </Container>
+      
     </>
   );
 };

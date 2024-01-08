@@ -80,11 +80,13 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   //     console.log(res);
   //   });
   // };
-  const onUserLogin = async  (values) => {
+
+  // new 
+  const onUserLogin = (values) => {
     if (!loading) {
       if (values.email !== '' && values.password !== '') {
-        
-        const loginResponse = await authService.login(values.email, values.password);
+      
+        const loginResponse = authService.login(email, password);
         console.log(loginResponse);
         // axios
         //   .post(`${baseUrl}/signIn`, {
@@ -172,8 +174,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                     <NavLink to="/user/forgot-password">
                       <IntlMessages id="user.forgot-password-question" />
                     </NavLink>
-                    <Button
-                      type='submit'
+                    <Button type='submit'
                       color="primary"
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''

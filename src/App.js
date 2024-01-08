@@ -65,13 +65,13 @@ class App extends React.Component {
             <Suspense fallback={<div className="loading" />}>
               <Router>
                 <Switch>
-                {/* <ProtectedRoute
+                  {/* <ProtectedRoute
                     path={adminRoot}
                     component={ViewApp}
                     roles={[UserRole.Admin, UserRole.Editor]}
                   /> */}
-
-                <Route path={adminRoot} render={(props) => <ViewApp {...props} />}/>
+                  <Route path={adminRoot} render={(props) => <ViewApp {...props} />}/>
+              
                   <Route
                     path="/user"
                     exact

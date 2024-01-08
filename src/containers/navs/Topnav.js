@@ -138,12 +138,38 @@ const TopNav = ({
         >
           <MobileMenuIcon />
         </NavLink>
+        
+        <div className='d-flex align-items-center justify-content-between w-100'>
+      <NavLink to="" className="">
+      <span className=''>Home</span>
+      
+        </NavLink>
+        <NavLink to='' id='courses'>
+          <span className=''>Courses</span>
+        </NavLink>
+        <NavLink to="">
+          <span className=''>Services</span>
+        </NavLink>
+        {/* shows only if logged in */}
+        <NavLink to="">
+          <span className=''>Sign up / Login</span>
+        </NavLink>
+        <NavLink to="">
+          <span className=''>My Profile</span>
+        </NavLink>
+        <NavLink to="">
+          <span className=''>My File</span>
+        </NavLink>   
+      
       </div>
+      </div>
+    
+      
       <NavLink className="navbar-logo" to={adminRoot}>
         <span className="logo d-none d-xs-block" />
         <span className="logo-mobile d-block d-xs-none" />
       </NavLink>
-
+       
       <div className="navbar-right">
         <div
           style={{
@@ -151,6 +177,7 @@ const TopNav = ({
           }}
           className="d-inline-block "
         >
+        
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
               <span>

@@ -8,6 +8,12 @@ const data = [
     to: `${adminRoot}/profile`,
   },
   {
+    id: 'Mentor',
+    icon: 'simple-icon-people',
+    label: 'MentorShip',
+    to: `${adminRoot}/mentor`,
+  },
+  {
     id: 'myapplications',
     icon: 'iconsminds-folder',
     label: 'menu.myapplications',
