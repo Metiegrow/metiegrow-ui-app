@@ -58,9 +58,9 @@ const TopNavigation = ({ className, disableNav, topNavClick }) => {
             }
             return <span key={`topNavStep_${index}`} />;
           })}
-          <li>
+          {/* <li>
             <h1>Hello</h1>
-          </li>
+          </li> */}
         </ul>
       )}
     />

@@ -31,5 +31,11 @@ const data = [
     label: 'menu.myapp',
     to: `${adminRoot}/myapp`,
   },
+  {
+    id: 'Login',
+    icon: 'iconsminds-folder',
+    label: 'mylogin',
+    to: `${adminRoot}/mylogin`,
+  },
 ];
 export default data;

@@ -36,6 +36,11 @@ const ProfilePage = React.lazy(() =>
 // const EditJobPage = React.lazy(() =>
 //   import(/* webpackChunkName: "viwes-blank-page" */ './edit-jobs')
 // );
+const ViewMylogin = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/my-login/Mylogin'
+  )
+);
 
 const App = ({ match }) => {
   return (
@@ -72,6 +77,10 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/profile`}
               render={(props) => <ProfilePage {...props} />}
+            />
+            <Route
+              path={`${match.url}/mylogin`}
+              render={(props) => <ViewMylogin {...props} />}
             />
             {/* <Route
               path={`${match.url}/jobs`}

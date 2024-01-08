@@ -10,6 +10,11 @@ import IntlMessages from 'helpers/IntlMessages';
 // import axios from 'axios';
 // import { baseUrl } from 'constants/defaultValues';
 import { authService } from 'services/authservice';
+// import { connect } from 'react-redux';
+
+
+// check
+// ck
 
 const validatePassword = (value) => {
   let error;
@@ -21,15 +26,15 @@ const validatePassword = (value) => {
   return error;
 };
 
-// const validateEmail = (value) => {
-//   let error;
-//   if (!value) {
-//     error = 'Please enter your email address';
-//   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-//     error = 'Invalid email address';
-//   }
-//   return error;
-// };
+const validateEmail = (value) => {
+  let error;
+  if (!value) {
+    error = 'Please enter your email address';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+    error = 'Invalid email address';
+  }
+  return error;
+};
 
 const Login = ({ history, loading, error, loginUserAction }) => {
   // const [user, setUser] = useState({
@@ -61,8 +66,8 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   //       break;
   //   }
   // }
-  const [email] = useState('demo@gogo.com');
-  const [password] = useState('gogo123');
+  const [email] = useState('vssivanesh@gmail.com');
+  const [password] = useState('sivanesh');
 
   useEffect(() => {
     if (error) {
@@ -75,10 +80,11 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   //     console.log(res);
   //   });
   // };
-  const onUserLogin = (values) => {
+  const onUserLogin = async  (values) => {
     if (!loading) {
       if (values.email !== '' && values.password !== '') {
-        const loginResponse = authService.login(email, password);
+        
+        const loginResponse = await authService.login(values.email, values.password);
         console.log(loginResponse);
         // axios
         //   .post(`${baseUrl}/signIn`, {
@@ -96,7 +102,9 @@ const Login = ({ history, loading, error, loginUserAction }) => {
         //   });
         // console.log(values, history);
         loginUserAction(values, history);
-      }
+        
+        
+      } 
     }
   };
 
@@ -136,7 +144,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                     <Field
                       className="form-control"
                       name="email"
-                      validate={false}
+                      validate={validateEmail}
                     />
                     {errors.email && touched.email && (
                       <div className="invalid-feedback d-block">
@@ -165,6 +173,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                       <IntlMessages id="user.forgot-password-question" />
                     </NavLink>
                     <Button
+                      type='submit'
                       color="primary"
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''
