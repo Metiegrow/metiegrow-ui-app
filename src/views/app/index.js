@@ -7,6 +7,7 @@ import AppLayout from 'layout/AppLayout';
 // import MyApplications from './myapp/my-applications/my-applications';
 // import MyDetails from './myapp/my-details/my-details';
 // import MyDocuments from './myapp/my-documents/my-documents';
+// import { MyProfile } from './myapp/my-profile/MyProfile';
 
 const ViewMyApp = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ './myapp')
@@ -66,6 +67,16 @@ const MentorConsult = React.lazy(() =>
 const ViewMylogin = React.lazy(() =>
   import(
     /* webpackChunkName: "views-app" */ './myapp/my-login/Mylogin'
+  )
+);
+const ViewMyProfile = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/my-profile/MyProfile'
+  )
+);
+const ViewMyChat = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Chat/Chat'
   )
 );
 
@@ -128,6 +139,14 @@ const App = ({ match }) => {
                <Route
               path={`${match.url}/mentorconsult`}
               render={(props) => <MentorConsult {...props} />}
+            />
+               <Route
+              path={`${match.url}/myprofile`}
+              render={(props) => <ViewMyProfile {...props} />}
+            />
+               <Route
+              path={`${match.url}/chat`}
+              render={(props) => <ViewMyChat {...props} />}
             />
            
            
