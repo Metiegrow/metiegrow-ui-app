@@ -192,7 +192,7 @@ const MentorCard = () => {
                     </div> */}
                     <div className=''>
                      <NavLink href={`/app/mentorprofile/${mentors.id}`}>
-                        <Button color="primary " className="default w-80 py-2  rounded" >
+                       <Button color="primary " className="default w-80 py-2  rounded" >
                         View Profile
               </Button>
               </NavLink>

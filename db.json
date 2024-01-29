@@ -83,7 +83,7 @@
   {
       "id": 2,
       "mentorPhotoDocumentId": "6583b44389d19532873b36b8",
-      "image":"/assets/img/profiles/2.jpg",
+      "image":"/assets/img/profiles/8.jpg",
       "star": 4.0,
       "ratings": 200,
       "firstName": "raj",
@@ -138,7 +138,8 @@
     "bio":"Hi..",
     "linkedinUrl":"https://www.linkedin.com/in/srihith/",
     "twitterHandle":"srihith",
-    "website":"https://www.srihith.com/"
+    "website":"https://www.srihith.com/",
+    "about":"I have more than a decade experience in Software Engineering (and related practices including DevOps)  and I have been lucky enough to have worked with a bunch of great minds in the big tech giants.  I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
     },
     {
     "id":2,
@@ -147,7 +148,8 @@
     "bio":"Hi..",
     "linkedinUrl":"https://www.linkedin.com/in/raj/",
     "twitterHandle":"raj",
-    "website":"https://www.raj.com/"
+    "website":"https://www.raj.com/",
+    "about":"I have more than a decade experience in Software Engineering (and related practices including DevOps)  and I have been lucky enough to have worked with a bunch of great minds in the big tech giants."
     }
    ],
   "mentorExperience":[
@@ -164,6 +166,58 @@
     "featuredArticle":"https://wordpress.com/posts/raj.wordpress.com",
     "reasonForMentor":"Let's make it simple",
     "achievement":"University gold medalist"
+    }
+   ],
+   "multipleQuestions":[
+    {
+      "id":1,
+      "questionHeading":"Speaking better",
+      "questionHeadingBrief":"How do I become better at public speaking?",
+      "views":300,
+      "time":1705559036000
+    },
+    {
+      "id":2,
+      "questionHeading":"Speaking in public problem",
+      "questionHeadingBrief":"What do you do to avoid nervousness when speaking in public?",
+      "views":390,
+      "time":1705559066456
+    }
+   ],
+   "mentorAnswers":[
+    {
+      "id":1,
+      
+      "answer":[
+       {
+        "mentorId":1,
+        "mentorName":"Ashok Kumar",
+        "mentorRole":"Spoken English Teacher",
+        "answered":"Practice your speech multiple times before the actual presentation. This helps you become familiar with the content and improves your confidence."
+       },
+       {
+        "mentorId":1,
+        "mentorName":"Ashok Kumar",
+        "mentorRole":"Spoken English Teacher",
+        "answered":" This helps you become familiar with the content and improves your confidence.",
+        "answeredYear":10
+       }
+      ]
+      
+    },
+    {
+      "id":2,
+      
+      "answer":[
+        {
+            "mentorId":2,
+            "mentorName":"Dinesh Kumar",
+            "mentorRole":"English Teacher",
+          "answered":" Practice deep breathing exercises to calm your nerves. Deep breaths can help regulate your heart rate and reduce anxiety..",
+          "answeredYear":5
+        }
+      ]
+     
     }
    ]
 }
