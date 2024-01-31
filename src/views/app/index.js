@@ -79,6 +79,11 @@ const ViewMyChat = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/Chat/Chat'
   )
 );
+const ViewMyWallet = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/my-wallet/MyWallet'
+  )
+);
 
 const App = ({ match }) => {
   return (
@@ -147,6 +152,10 @@ const App = ({ match }) => {
                <Route
               path={`${match.url}/chat`}
               render={(props) => <ViewMyChat {...props} />}
+            />
+               <Route
+              path={`${match.url}/mywallet`}
+              render={(props) => <ViewMyWallet {...props} />}
             />
            
            
