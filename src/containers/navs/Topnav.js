@@ -1,46 +1,47 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-use-before-define */
-import React, { useState } from 'react';
-import { injectIntl } from 'react-intl';
+import React, { useState } from "react";
+import { injectIntl } from "react-intl";
 
 import {
   UncontrolledDropdown,
   DropdownItem,
   DropdownToggle,
   DropdownMenu,
-} from 'reactstrap';
+} from "reactstrap";
 
-import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
 
 import {
   setContainerClassnames,
   clickOnMobileMenu,
   logoutUser,
   changeLocale,
-} from 'redux/actions';
+} from "redux/actions";
 
 import {
   searchPath,
   isDarkSwitchActive,
   adminRoot,
-} from 'constants/defaultValues';
+} from "constants/defaultValues";
 
-import { MobileMenuIcon, MenuIcon } from 'components/svg';
-import TopnavDarkSwitch from './Topnav.DarkSwitch';
+import { MobileMenuIcon, MenuIcon } from "components/svg";
+// import MyProfile from 'views/app/myapp/my-profile/MyProfile';
+import TopnavDarkSwitch from "./Topnav.DarkSwitch";
 
 const NotificationData = {
   payload: [
     {
       id: 1,
-      msg: 'This is a sample notification',
-      created_at: '2020-09-08',
+      msg: "This is a sample notification",
+      created_at: "2020-09-08",
     },
     {
       id: 2,
-      msg: 'This is a sample notification 2',
-      created_at: '2020-09-08',
+      msg: "This is a sample notification 2",
+      created_at: "2020-09-08",
     },
   ],
 };
@@ -54,11 +55,11 @@ const TopNav = ({
   clickOnMobileMenuAction,
   logoutUserAction,
 }) => {
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const search = () => {
     history.push(`${searchPath}?key=${searchKeyword}`);
-    setSearchKeyword('');
+    setSearchKeyword("");
   };
 
   const handleDocumentClickSearch = (e) => {
@@ -66,31 +67,38 @@ const TopNav = ({
     if (
       e.target &&
       e.target.classList &&
-      (e.target.classList.contains('navbar') ||
-        e.target.classList.contains('simple-icon-magnifier'))
+      (e.target.classList.contains("navbar") ||
+        e.target.classList.contains("simple-icon-magnifier"))
     ) {
       isSearchClick = true;
-      if (e.target.classList.contains('simple-icon-magnifier')) {
+      if (e.target.classList.contains("simple-icon-magnifier")) {
         search();
       }
     } else if (
       e.target.parentElement &&
       e.target.parentElement.classList &&
-      e.target.parentElement.classList.contains('search')
+      e.target.parentElement.classList.contains("search")
     ) {
       isSearchClick = true;
     }
 
     if (!isSearchClick) {
-      const input = document.querySelector('.mobile-view');
-      if (input && input.classList) input.classList.remove('mobile-view');
+      const input = document.querySelector(".mobile-view");
+      if (input && input.classList) input.classList.remove("mobile-view");
       removeEventsSearch();
-      setSearchKeyword('');
+      setSearchKeyword("");
     }
   };
 
   const removeEventsSearch = () => {
-    document.removeEventListener('click', handleDocumentClickSearch, true);
+    document.removeEventListener("click", handleDocumentClickSearch, true);
+  };
+
+  const handleMyProfileClick = () => {
+    history.push(`${adminRoot}/myprofile`);
+  };
+  const handleMyWalletClick = () => {
+    history.push(`${adminRoot}/mywallet`);
   };
 
   const handleLogout = () => {
@@ -101,8 +109,8 @@ const TopNav = ({
     e.preventDefault();
 
     setTimeout(() => {
-      const event = document.createEvent('HTMLEvents');
-      event.initEvent('resize', false, false);
+      const event = document.createEvent("HTMLEvents");
+      event.initEvent("resize", false, false);
       window.dispatchEvent(event);
     }, 350);
     setContainerClassnamesAction(
@@ -138,46 +146,42 @@ const TopNav = ({
         >
           <MobileMenuIcon />
         </NavLink>
-        
-        <div className='d-flex align-items-center justify-content-between w-100'>
-      <NavLink to="" className="">
-      <span className=''>Home</span>
-      
-        </NavLink>
-        <NavLink to='' id='courses'>
-          <span className=''>Courses</span>
-        </NavLink>
-        <NavLink to="">
-          <span className=''>Services</span>
-        </NavLink>
-        {/* shows only if logged in */}
-        <NavLink to="">
-          <span className=''>Sign up / Login</span>
-        </NavLink>
-        <NavLink to="">
-          <span className=''>My Profile</span>
-        </NavLink>
-        <NavLink to="">
-          <span className=''>My File</span>
-        </NavLink>   
-      
+
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <NavLink to="" className="">
+            <span className="">Home</span>
+          </NavLink>
+          <NavLink to="" id="courses">
+            <span className="">Courses</span>
+          </NavLink>
+          <NavLink to="">
+            <span className="">Services</span>
+          </NavLink>
+          {/* shows only if logged in */}
+          <NavLink to="">
+            <span className="">Sign up / Login</span>
+          </NavLink>
+          <NavLink to="">
+            <span className="">My Profile</span>
+          </NavLink>
+          <NavLink to="">
+            <span className="">My File</span>
+          </NavLink>
+        </div>
       </div>
-      </div>
-    
-      
+
       <NavLink className="navbar-logo" to={adminRoot}>
         <span className="logo d-none d-xs-block" />
         <span className="logo-mobile d-block d-xs-none" />
       </NavLink>
-       
+
       <div className="navbar-right">
         <div
           style={{
-            paddingRight: '20px',
+            paddingRight: "20px",
           }}
           className="d-inline-block "
         >
-        
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
               <span>
@@ -213,9 +217,22 @@ const TopNav = ({
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>
+              <NavLink to={`${adminRoot}/myprofile`}>
+                <DropdownItem onClick={() => handleMyProfileClick()}>
+                <i className="simple-icon-user" />  My Profile
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/mywallet`}>
+                <DropdownItem onClick={() => handleMyWalletClick()}>
+                <i className="simple-icon-wallet" />  My Wallet
+                </DropdownItem>
+              </NavLink>
+              <DropdownItem onClick={() => handleLogout()}>
+              <i className="simple-icon-settings" />  Settings
+              </DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={() => handleLogout()}>
-                Sign out
+              <i className="simple-icon-logout" />   Sign out
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

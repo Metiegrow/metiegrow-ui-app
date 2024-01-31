@@ -7,6 +7,7 @@ import AppLayout from 'layout/AppLayout';
 // import MyApplications from './myapp/my-applications/my-applications';
 // import MyDetails from './myapp/my-details/my-details';
 // import MyDocuments from './myapp/my-documents/my-documents';
+// import { MyProfile } from './myapp/my-profile/MyProfile';
 
 const ViewMyApp = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ './myapp')
@@ -92,6 +93,17 @@ const Month = React.lazy(() =>
 const ViewMylogin = React.lazy(() =>
   import(
     /* webpackChunkName: "views-app" */ './myapp/my-login/Mylogin'
+  )
+);
+const ViewMyProfile = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/my-profile/MyProfile'
+  )
+);
+
+const ViewMyWallet = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/my-wallet/MyWallet'
   )
 );
 
@@ -182,6 +194,20 @@ const App = ({ match }) => {
               path={`${match.url}/gcalendar`}
               render={(props) => <CalendarGoogle {...props} />}
             /> */}
+               <Route
+              path={`${match.url}/myprofile`}
+              render={(props) => <ViewMyProfile {...props} />}
+            />
+               <Route
+              path={`${match.url}/chat`}
+              render={(props) => <ViewMyChat {...props} />}
+            />
+               <Route
+              path={`${match.url}/mywallet`}
+              render={(props) => <ViewMyWallet {...props} />}
+            />
+           
+           
           
             {/* <Route
               path={`${match.url}/jobs`}

@@ -6,40 +6,37 @@
     "userType": 0
   },
   "signIn": {
-    "email": "vssivanesh@gmail.com",
-    "password": "sivanesh",
-    "role":0
-
+    "email": "demo@gogo.com",
+    "password": "gogo123"
   },
-  "StudentPersonalInfo":[
-  {
-  "id": 1,
-  "addressl1": "test addess 1",
-  "addressl2": "test address 2",
-  "adhaarno": 147852369,
-  "age": 18,
-  "country": "USA",
-  "dob": null,
-  "gender": null,
-  "state": null,
-  "zipCode": null,
-  "studentId":1
- },
- {
-  "id": 2,
-  "addressl1": "test addess 1",
-  "addressl2": "test address 2",
-  "adhaarno": 147852369,
-  "age": 18,
-  "country": "USA",
-  "dob": null,
-  "gender": null,
-  "state": null,
-  "zipCode": null,
-  "studentId":3
-}
+  "StudentPersonalInfo": [
+    {
+      "id": 1,
+      "addressl1": "test addess 1",
+      "addressl2": "test address 2",
+      "adhaarno": 147852369,
+      "age": 18,
+      "country": "USA",
+      "dob": null,
+      "gender": null,
+      "state": null,
+      "zipCode": null,
+      "studentId": 1
+    },
+    {
+      "id": 2,
+      "addressl1": "test addess 1",
+      "addressl2": "test address 2",
+      "adhaarno": 147852369,
+      "age": 18,
+      "country": "USA",
+      "dob": null,
+      "gender": null,
+      "state": null,
+      "zipCode": null,
+      "studentId": 3
+    }
   ],
-
   "updateStudentPersonalInfo": {
     "id": 1,
     "addressl1": "test add 1",
@@ -60,33 +57,26 @@
     "gender": null,
     "state": null,
     "zipCode": null
-<<<<<<< HEAD
-  }
-=======
   },
-  "mentorDetails":[
+  "mentorDetails": [
     {
       "id": 1,
       "mentorPhotoDocumentId": "65816791afe2e22b3b1a9446",
-      "image":"/assets/img/profiles/2.jpg",
-      "star": 5.0,
+      "image": "/assets/img/profiles/2.jpg",
+      "star": 5,
       "ratings": 200,
       "firstName": "srihith",
       "lastName": "ks",
       "jobTitle": "cyber security",
       "company": "google",
-      "bio":"UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make …",
-      "skills": [
-          "skill 1",
-          "skill 2",
-          "skill 3"
-      ],
+      "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make …",
+      "skills": ["skill 1", "skill 2", "skill 3"],
       "price": 200
-  },
-  {
+    },
+    {
       "id": 2,
       "mentorPhotoDocumentId": "6583b44389d19532873b36b8",
-      "image":"/assets/img/profiles/8.jpg",
+      "image":"/assets/img/profiles/2.jpg",
       "star": 4.0,
       "ratings": 200,
       "firstName": "raj",
@@ -94,16 +84,11 @@
       "jobTitle": "mobile app",
       "company": "whatsapp",
       "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make …",
-      "skills": [
-          "skill 4",
-          "skill 5",
-          "skill 6"
-      ],
-      "price":200
+      "skills": ["skill 4", "skill 5", "skill 6"],
+      "price": 200
     }
-
   ],
-  "countries":[
+  "countries": [
     {
     "country1":"USA",
     "country2":"Australia",
@@ -135,14 +120,73 @@
    ],
   "mentorProfile":[
     {
+      "firstName": "Raj",
+      "lastName": "Kumar",
+      "email": "email@gmail.com",
+      "password": "aeiou123",
+      "jobTitle": "Job",
+      "company": "TCS",
+      "location": "Location2",
+      "category": "Category3",
+      "skills": ["skill 1", "Html", "css"],
+      "bio": "bio",
+      "linkedinUrl": "linkedin.com/in",
+      "twitterHandle": "thcheck",
+      "personalWebsite": "pwck",
+      "introVideo": "https://www.youtube.com/watch?v=SfKPfqBpMS0",
+      "featuredArticle": "check",
+      "why": ["skill 1", "Html", "css"],
+      "what": "ddddddddddddddddddd",
+      "id": 1
+    },
+    {
+      "firstName": "Raju",
+      "jobTitle": "UX Designer - Tcs",
+      "company": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide.",
+      "location": "Chennai",
+      "bio": "bio",
+      "skills": ["Html", "css", "React"],
+      "lastName": "pandian",
+      "email": "pondy@gmail.com",
+      "password": "aeiou123",
+      "category": "Category3",
+      "linkedinUrl": "https://www.linkedin.com/in/brovin-roy-w-594a8791/",
+      "twitterHandle": "thcheck",
+      "personalWebsite": "pwck",
+      "introVideo": "https://www.youtube.com/watch?v=SfKPfqBpMS0",
+      "featuredArticle": "check",
+      "why": ["skill 1", "Html", "css"],
+      "what": "ddddddddddddddddddd",
+      "id": 2
+    },
+    {
+      "firstName": "Arun",
+      "lastName": "Pandiya",
+      "email": "arun@gmail.com",
+      "password": "aeiou123",
+      "jobTitle": "UX Designer",
+      "company": "CTS",
+      "location": "Location2",
+      "category": "Category4",
+      "skills": ["Html", "css", "java", "React"],
+      "bio": "Bio CHeck",
+      "linkedinUrl": "linkedin.com/in",
+      "twitterHandle": "",
+      "personalWebsite": "",
+      "introVideo": "https://www.youtube.com/watch?v=SfKPfqBpMS0",
+      "featuredArticle": "check",
+      "why": "why check",
+      "what": "what check",
+      "id": 3
+    },
+    {
     "id":1,
     "category":"employee",
      "skills":["skill 1","skill 2","skill 3"],
     "bio":"Hi..",
     "linkedinUrl":"https://www.linkedin.com/in/srihith/",
     "twitterHandle":"srihith",
-    "website":"https://www.srihith.com/",
-    "about":"I have more than a decade experience in Software Engineering (and related practices including DevOps)  and I have been lucky enough to have worked with a bunch of great minds in the big tech giants.  I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
+    "website":"https://www.srihith.com/"
     },
     {
     "id":2,
@@ -151,8 +195,7 @@
     "bio":"Hi..",
     "linkedinUrl":"https://www.linkedin.com/in/raj/",
     "twitterHandle":"raj",
-    "website":"https://www.raj.com/",
-    "about":"I have more than a decade experience in Software Engineering (and related practices including DevOps)  and I have been lucky enough to have worked with a bunch of great minds in the big tech giants."
+    "website":"https://www.raj.com/"
     }
    ],
   "mentorExperience":[
@@ -164,7 +207,7 @@
     "achievement":"University top"
     },
     {
-    "id":2,
+  "id":2,
     "introVideo":"https://www.youtube.com/watch?v=xyz",
     "featuredArticle":"https://wordpress.com/posts/raj.wordpress.com",
     "reasonForMentor":"Let's make it simple",
@@ -222,6 +265,38 @@
       ]
      
     }
-   ]
->>>>>>> origin/main
+  ],
+
+  "wallets": [
+    {
+      "newBalance": 2100,
+      "newTransactions": [
+        {
+          "id": 1,
+          "type": "Purchase",
+          "amount": 500,
+          "status": "Success",
+          "paymentmethod": "Credit Card",
+          "date": "2024-01-31T10:15:22.501Z"
+        },
+        {
+          "id": 3,
+          "type": "Recharge",
+          "amount": 1500,
+          "status": "Success",
+          "paymentmethod": "PayPal",
+          "date": "2024-01-31T10:30:45.789Z"
+        },
+        {
+          "id": 3,
+          "type": "Recharge",
+          "amount": 100,
+          "status": "Success",
+          "paymentmethod": "UPI",
+          "date": "2024-01-31T10:30:45.789Z"
+        }
+      ],
+      "id": 1
+    }
+  ]
 }

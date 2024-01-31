@@ -69,5 +69,11 @@ const data = [
     label: 'mylogin',
     to: `${adminRoot}/mylogin`,
   },
+  {
+    id: 'Chat',
+    icon: 'iconsminds-speach-bubbles',
+    label: 'Chat',
+    to: `${adminRoot}/chat`,
+  },
 ];
 export default data;

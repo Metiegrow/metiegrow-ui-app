@@ -7,6 +7,8 @@
     "/mentor/profile":"/mentorProfile",
     "/mentor/questions":"/multipleQuestions",
     "/mentor/answers":"/mentorAnswers",
+    "/wallets": "/wallets",
+
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",
     "/api/student/personal/info?studentId=:studentId":"/StudentPersonalInfo?studentId=:studentId",
