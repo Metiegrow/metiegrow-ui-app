@@ -21,3 +21,16 @@ export {
   loginUser,
   resetPassword,
 } from './auth/actions';
+
+export {
+  addMessageToConversation,
+  changeConversation,
+  createConversation,
+  getContacts,
+  getContactsError,
+  getContactsSuccess,
+  getConversationsError,
+  getConversations,
+  getConversationsSuccess,
+  searchContact,
+} from './chat/actions';

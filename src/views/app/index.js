@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AppLayout from 'layout/AppLayout';
-// import MentorCard from './myapp/mentorship/mentorcard';
+
 
 // import MyApplications from './myapp/my-applications/my-applications';
 // import MyDetails from './myapp/my-details/my-details';
@@ -56,7 +56,33 @@ const MentorConsult = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorConsult'
   )
 );
+const FilterQuestions = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/mentorship/FilterQuestions'
+  )
+);
+const ViewMyChat = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Chat/Chat'
+  )
+);
 
+const AskQuestion = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/mentorship/AskQuestion'
+  )
+);
+
+const Month = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/BigCalendar/Month'
+  )
+);
+// const CalendarGoogle = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/mentorship/CalendarGoogle'
+//   )
+// );
 // const CreateJobPage = React.lazy(() =>
 //   import(/* webpackChunkName: "viwes-blank-page" */ './create-jobs')
 // );
@@ -113,24 +139,49 @@ const App = ({ match }) => {
               path={`${match.url}/mentor`}
               render={(props) => <MentorCard {...props} />}
             />
+            
+         
              {/* <Route
               path={`${match.url}/mentorship`}
               render={(props) => <Mentorship {...props} />}
             /> */}
              <Route
-              path={`${match.url}/mentorprofile`}
+              path={`${match.url}/mentorprofile/:mid`}
               render={(props) => <MentorProfile {...props} />}
             />
               <Route
-              path={`${match.url}/mentoranswers`}
+              path={`${match.url}/questions/:questionId`}
               render={(props) => <MentorAnswers {...props} />}
             />
                <Route
               path={`${match.url}/mentorconsult`}
               render={(props) => <MentorConsult {...props} />}
             />
-           
-           
+                <Route
+              path={`${match.url}/questions`}
+              render={(props) => <FilterQuestions {...props} />}
+            />
+             <Route
+              path={`${match.url}/askquestions`}
+              render={(props) => <AskQuestion {...props} />}
+            />
+            {/* Chat application */}
+                   <Route
+              path={`${match.url}/chat`}
+              render={(props) => <ViewMyChat {...props} />}
+            />
+            
+            {/* Calendar */}
+
+            <Route
+              path={`${match.url}/calendar`}
+              render={(props) => <Month {...props} />}
+            />
+
+            {/* <Route
+              path={`${match.url}/gcalendar`}
+              render={(props) => <CalendarGoogle {...props} />}
+            /> */}
           
             {/* <Route
               path={`${match.url}/jobs`}

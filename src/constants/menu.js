@@ -12,6 +12,32 @@ const data = [
     icon: 'simple-icon-people',
     label: 'MentorShip',
     to: `${adminRoot}/mentor`,
+    subs: [
+      {
+        icon: 'simple-icon-user',
+        label: 'MentorCard',
+        to: `${adminRoot}/mentor`,
+   
+      },
+      {
+        icon: 'simple-icon-question',
+        label: 'Student Questions',
+        to: `${adminRoot}/questions`,
+   
+      },
+      {
+        icon: 'simple-icon-bubbles',
+        label: 'Chat',
+        to: `${adminRoot}/chat`,
+   
+      },
+      {
+        icon: 'simple-icon-calendar',
+        label: 'Calendar',
+        to: `${adminRoot}/calendar`,
+   
+      },
+    ]
   },
   {
     id: 'myapplications',

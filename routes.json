@@ -5,7 +5,8 @@
     "/mentor/cards":"/mentorDetails",
     "/countries":"/countries",
     "/mentor/profile":"/mentorProfile",
-
+    "/mentor/questions":"/multipleQuestions",
+    "/mentor/answers":"/mentorAnswers",
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",
     "/api/student/personal/info?studentId=:studentId":"/StudentPersonalInfo?studentId=:studentId",
