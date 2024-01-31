@@ -2,14 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AppLayout from 'layout/AppLayout';
-// import NewChat from './myapp/Chat/NewChat';
-// import ChatAppProject from './myapp/mentorship/ChatAppProject';
-// import CalendarGoogle from './myapp/mentorship/CalendarGoogle';
-// import CalendarCard from 'containers/dashboards/Calendar';
 
-
-// import FilterQuestions from './myapp/mentorship/FilterQuestions';
-// import MentorCard from './myapp/mentorship/mentorcard';
 
 // import MyApplications from './myapp/my-applications/my-applications';
 // import MyDetails from './myapp/my-details/my-details';
@@ -77,6 +70,12 @@ const ViewMyChat = React.lazy(() =>
 const AskQuestion = React.lazy(() =>
   import(
     /* webpackChunkName: "views-app" */ './myapp/mentorship/AskQuestion'
+  )
+);
+
+const Month = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/BigCalendar/Month'
   )
 );
 // const CalendarGoogle = React.lazy(() =>
@@ -154,14 +153,23 @@ const App = ({ match }) => {
               path={`${match.url}/questions`}
               render={(props) => <FilterQuestions {...props} />}
             />
-                   <Route
-              path={`${match.url}/chat`}
-              render={(props) => <ViewMyChat {...props} />}
-            />
              <Route
               path={`${match.url}/askquestions`}
               render={(props) => <AskQuestion {...props} />}
             />
+            {/* Chat application */}
+                   <Route
+              path={`${match.url}/chat`}
+              render={(props) => <ViewMyChat {...props} />}
+            />
+            
+            {/* Calendar */}
+
+            <Route
+              path={`${match.url}/calendar`}
+              render={(props) => <Month {...props} />}
+            />
+
             {/* <Route
               path={`${match.url}/gcalendar`}
               render={(props) => <CalendarGoogle {...props} />}

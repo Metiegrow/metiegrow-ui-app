@@ -31,6 +31,12 @@ const data = [
         to: `${adminRoot}/chat`,
    
       },
+      {
+        icon: 'simple-icon-calendar',
+        label: 'Calendar',
+        to: `${adminRoot}/calendar`,
+   
+      },
     ]
   },
   {

@@ -105,9 +105,10 @@ const MentorAnswers = () => {
       </Button> */}
      
       <NavLink href='/app/askquestions'>
-      <Button color="primary" outline block className="default mt-3 mb-2 text-one py-3">
+      <Button color="primary" outline block className="default mt-3 mb-2 text-one py-3 w-100" >
         Ask a Free Question
       </Button>
+      
      
       </NavLink>
       
