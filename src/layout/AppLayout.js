@@ -1,10 +1,11 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-import TopNav from 'containers/navs/Topnav';
-import Sidebar from 'containers/navs/Sidebar';
-import Footer from 'containers/navs/Footer';
+import TopNav from "containers/navs/Topnav";
+import Sidebar from "containers/navs/Sidebar";
+import Footer from "containers/navs/Footer";
+import BottomMenu from "containers/navs/BottomMenu";
 
 const AppLayout = ({ containerClassnames, children, history }) => {
   return (
@@ -15,6 +16,9 @@ const AppLayout = ({ containerClassnames, children, history }) => {
         <div className="container-fluid">{children}</div>
       </main>
       <Footer />
+      <div className="d-md-none">
+        <BottomMenu />
+      </div>
     </div>
   );
 };
