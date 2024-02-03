@@ -60,9 +60,6 @@
     "gender": null,
     "state": null,
     "zipCode": null
-<<<<<<< HEAD
-  }
-=======
   },
   "mentorDetails":[
     {
@@ -223,5 +220,4 @@
      
     }
    ]
->>>>>>> origin/main
 }
