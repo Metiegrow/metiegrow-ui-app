@@ -4,17 +4,16 @@ import {  Button, Card, CardBody, Modal, ModalBody, Table ,
   Dropdown,
   DropdownToggle,
   DropdownItem,
-  DropdownMenu,} from 'reactstrap';
-// import IntlMessages from 'helpers/IntlMessages';
-import EventModal from './EventModal';
-
-
+  DropdownMenu} from 'reactstrap';
+// import EventModal from './EventModal';
+import DatePicker from './DatePicker';
 
 
 const Month = () => {
+ 
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [clickedRowPosition, setClickedRowPosition] = useState({ top: 0, left: 0 });
+  // const [isModalOpen, setModalOpen] = useState(false);
+  // const [clickedRowPosition, setClickedRowPosition] = useState({ top: 0, left: 0 });
   const [modalSmall, setModalSmall] = useState(false);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
 
@@ -46,7 +45,7 @@ const Month = () => {
     for (let i = 1; i <= 12; i+=1) {
       const formattedHour = i < 10 ? `0${i}` : i;
       items.push(
-        <DropdownItem key={i} onClick={() => handleDropdownItemClick(i)}>
+        <DropdownItem key={i} onClick={() => handleDropdownItemClick(i)} >
           {formattedHour}
         </DropdownItem>
       );
@@ -55,7 +54,7 @@ const Month = () => {
   };
   const generateMinuteDropdownItems = () => {
     const items1 = [];
-    for (let i = 1; i <= 15; i+=1) {
+    for (let i = 1; i <= 60; i+=1) {
       const formattedMinute = i < 10 ? `0${i}` : i;
       items1.push(
         <DropdownItem key={i} onClick={() => handleDropdownItemClick1(i)}>
@@ -66,17 +65,13 @@ const Month = () => {
     return items1;
   };
  
-  const handleRowClick = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setClickedRowPosition({ top: rect.top + window.scrollY, left: rect.left + window.scrollX });
-    setModalOpen(true);
+  // const handleRowClick = (event) => {
+  //   const rect = event.currentTarget.getBoundingClientRect();
+  //   setClickedRowPosition({ top: rect.top + window.scrollY, left: rect.left + window.scrollX });
+  //   setModalOpen(true);
     
-  }
-  // const handleMin=(e)=>{
-  //   const val= setMinuteDrop(e.target.value);
-  //   console.log(val);
-   
   // }
+  
 
   const handleSave = () => {
     // Create a new entry object with the current form values
@@ -108,8 +103,10 @@ const Month = () => {
 
     
     <Colxx xxs="6" className='mx-auto'>
+   
+
     <h2>Mentor availability</h2>
-    <div className='font-weight-semibold'>
+    <div className='font-weight-semibold d-flex justify-content-between'>
       <span className='font-weight-semibold text-one'><i className='simple-icon-arrow-left'/></span>
       <span className='ml-5 font-weight-semibold text-one' ><i className='simple-icon-arrow-right '/></span>
     </div>
@@ -126,7 +123,8 @@ const Month = () => {
                   </tr>
                 </thead>
                 <tbody >
-                  <tr onClick={(event) => handleRowClick(event)}>
+                  {/* <tr onClick={(event) => handleRowClick(event)}> */}
+                  <tr  onClick={() => setModalSmall(true)}>
                     
                     <td>Feb 01,2024</td>
                     <td>10pm to 12pm</td>
@@ -166,7 +164,7 @@ const Month = () => {
                   </tr>
                 </tbody>
               </Table>
-              <Button>Book Now</Button>
+              <Button onClick={() => setModalSmall(true)}>Book Now</Button>
               <div className="mb-4">
             <div>
           
@@ -185,9 +183,14 @@ const Month = () => {
            required value={title} onChange={(e) => setTitle(e.target.value)}/>
         </div>
           
-           <div className='d-flex my-3 '>
+           <div className='d-flex my-3 align-items-center'>
             <span className='text-one'><i className='simple-icon-calendar'/></span>
-            <p className='text-one ml-2'>Feb 02,2024</p>
+            {/* <p className='text-one ml-2'>Feb 02,2024</p> */}
+            <div>
+            <DatePicker />
+            </div>
+         
+
            </div>
            <div className='d-flex my-3 '>
             <div className='ml-2 '>
@@ -195,13 +198,13 @@ const Month = () => {
       isOpen={dropdownBasicOpen}
       toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
       className="mb-5 "
-      // value={hourdrop} onChange={(e) => setHourDrop(e.target.value)}
+      
      
     >
       <DropdownToggle caret color="secondary" outline className=''>
         Hours
       </DropdownToggle>
-      <DropdownMenu className=''>
+      <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
       {generateDropdownItems()}
       </DropdownMenu>
     </Dropdown>
@@ -216,7 +219,7 @@ const Month = () => {
                 <DropdownToggle caret color="secondary" outline>
                   Minutes
                 </DropdownToggle>
-                <DropdownMenu >
+                <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
                  {generateMinuteDropdownItems()}
                 </DropdownMenu>
               </Dropdown>
@@ -244,9 +247,9 @@ const Month = () => {
               </div>
             </div>
           </div>
-              {isModalOpen && <EventModal onClose={() => setModalOpen(false)} 
+              {/* {isModalOpen && <EventModal onClose={() => setModalOpen(false)} 
                   clickedRowPosition={clickedRowPosition}
-              />}
+              />} */}
             </CardBody>
           </Card>
           {/* <EventModal/> */}
