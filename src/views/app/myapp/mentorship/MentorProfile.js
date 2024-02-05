@@ -47,44 +47,7 @@ const MentorProfile = () => {
   return (
     <div  className='mentor-profile'>
       <div className=''>
-       {/* <h1>This id from mentorcard {mid}</h1><br/>
-       <h1>{mentorprofiledetails.id}</h1>
-       <h2>{mentorprofiledetails.jobTitle}</h2> */}
-       {/* {Array.isArray(mentorprofiledetails) && mentorprofiledetails.length > 0 ? (
-  mentorprofiledetails.map((val) => (
-    <div key={val.id}>
-      <h1>my id: {val.id}</h1><br />
-      <h1>my role: {val.jobTitle}</h1><br />
-    </div>
-  ))
-) : (
-  <p>No mentor profile details available.</p>
-)} */}
-       {/* {mentorprofiledetails.length > 0 ? (
-  mentorprofiledetails.map((val) => (
-    <div key={val.id}>
-      <h1>my role: {val.id}</h1><br />
-    </div>
-  ))
-) : (
-  <p>No mentor profile details available.</p>
-)} */}
-       {/* {mentorprofiledetails.map((val)=>{
-        return(
-          <div key={val.id}>
-          <h1>my role:{val.jobTitle}</h1><br/>
-         
-          </div>
-        )
-      })} */}
-      {/* {mentorprofiledetails.map((val)=>{
-        return(
-          <div key={val.id}>
-          <h1>{val.category}</h1><br/>
-          <h1>{val.twitterHandle}</h1>
-          </div>
-        )
-      })} */}
+     
         <Colxx sm="12" md="12" lg="12" xxs="12" className=''>
           <div className=''>
            {/* <Colxx className='bg-secondary '>
@@ -130,17 +93,7 @@ const MentorProfile = () => {
         
           <div className='col-7 mt-4'>
             <h2 className='mx-2'>Skills</h2>
-            {/* <div>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                Skill 1
-              </Button>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                Skill 2
-              </Button>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                Skill 3
-              </Button>
-            </div> */}
+           
             <div className='d-flex'>
               {mentorprofiledetails.skills&&mentorprofiledetails.skills.map((skill)=>{
                
@@ -156,7 +109,6 @@ const MentorProfile = () => {
                )
               })}
             </div>
-            <Button>More btn</Button>
             <div className='mt-2'>
             <h2 className='mx-2'>Topics</h2>
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
