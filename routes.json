@@ -5,6 +5,8 @@
     "/mentor/cards":"/mentorDetails",
     "/countries":"/countries",
     "/mentor/profile":"/mentorProfile",
+    "/mentor/questions":"/multipleQuestions",
+    "/mentor/answers":"/mentorAnswers",
     "/wallets": "/wallets",
 
     "/api/student/personal/info":"/StudentPersonalInfo",

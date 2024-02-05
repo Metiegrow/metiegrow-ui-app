@@ -3,16 +3,24 @@ import React ,{useState,useEffect} from 'react';
 import {  Button, NavLink, Row,Card,CardBody,CardSubtitle,CardImg} from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
+import {useParams} from "react-router-dom";
 
 
 const MentorProfile = () => {
-  const url=`${baseUrl}/mentor/profile`;
+  const {mid}=useParams();
+  console.log('Mentor Profile ID:', mid);
+  // const url=`${baseUrl}/mentor/profile`;
+  // const url1=`${baseUrl}/mentor/cards/${mid}`;
+  const url=`${baseUrl}/mentorDetails/${mid}`;
+ const url1=`${baseUrl}/mentorProfile/${mid}`;
   const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
-  // const [inputkey,setInputKey]=useState('')
- 
+  const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
 
+
+  
   useEffect(()=>{
     const mentorProfileDetails = async () => {
+      
       try {
         const response = await axios.get(url);
         setMentorProfileDetails(response.data);
@@ -21,20 +29,25 @@ const MentorProfile = () => {
       }
     };
     mentorProfileDetails();
+
+    const mentorProfile = async () => {
+      
+      try {
+        const response = await axios.get(url1);
+        setMentorProfileDetails1(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    mentorProfile();
   },[])
+
+
 
   return (
     <div  className='mentor-profile'>
       <div className=''>
-   
-      {mentorprofiledetails.map((val)=>{
-        return(
-          <div key={val.id}>
-          <h1>{val.category}</h1><br/>
-          <h1>{val.twitterHandle}</h1>
-          </div>
-        )
-      })}
+     
         <Colxx sm="12" md="12" lg="12" xxs="12" className=''>
           <div className=''>
            {/* <Colxx className='bg-secondary '>
@@ -49,7 +62,9 @@ const MentorProfile = () => {
           <Row className='h-100'>
           <div className='w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center'>
           <div className=' '>
-            <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
+            {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
+             rounded-circle img-thumbnail border    ' alt="" /> */}
+             <img src={mentorprofiledetails.image} className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" />
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
                 <span className='font-weight-semibold text-one'><i className='iconsminds-thunder text-primary'/>  Quick Responder</span>
@@ -65,28 +80,34 @@ const MentorProfile = () => {
             </div>
           </div>
           <div className='col-5 mt-4'>
-          <h1 className='font-weight-semibold text-large'>Arun Prasad</h1>
-            <h3 className='font-weight-semibold '>UX Designer - Tcs</h3>
-            <p  className='text-one font-weight-medium text-primary'>UX Designer for the past 15+ years.
-             Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide.</p>
+          <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails.firstName} {mentorprofiledetails.lastName}</h1>
+          <h3 className='text-large  text-muted  '>{mentorprofiledetails.jobTitle}</h3>
+            <h2 className='text-one  text-primary'>{mentorprofiledetails.company}</h2>
+            <p  className='text-one font-weight-medium text-primary'>{mentorprofiledetails.bio}</p>
+            
             <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>India</span></h5>
-            <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>5.0 (100reviews)</span></h6>
+            <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{mentorprofiledetails.star} ({mentorprofiledetails.ratings} reviews)</span></h6>
            <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6>
           </div>
            
         
           <div className='col-7 mt-4'>
             <h2 className='mx-2'>Skills</h2>
-            <div>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                Skill 1
+           
+            <div className='d-flex'>
+              {mentorprofiledetails.skills&&mentorprofiledetails.skills.map((skill)=>{
+               
+                
+               return (
+               
+
+                <div  key={skill}>
+                <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
+                {skill}
               </Button>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                Skill 2
-              </Button>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                Skill 3
-              </Button>
+                </div>
+               )
+              })}
             </div>
             <div className='mt-2'>
             <h2 className='mx-2'>Topics</h2>
@@ -107,9 +128,7 @@ const MentorProfile = () => {
             <Row>
             <div className=''>
             <h1 className='font-weight-semibold text-large'>About</h1>
-            <p className='text-one font-weight-medium w-40'>I have more than a decade experience in Software Engineering (and related practices including DevOps) 
-              and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. 
-            I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the</p>
+            <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.about}</p>
             </div>
              
             </Row>
@@ -187,6 +206,9 @@ const MentorProfile = () => {
               </CardBody>
             </Card>
             </NavLink>
+            <div id='more'>
+             <h1>Full Skills Here</h1> 
+            </div>
           </Colxx>
           {/* <Colxx xxs="12" xs="6" lg="4">
             <Card className="mb-4">

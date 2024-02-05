@@ -70,7 +70,11 @@
       "jobTitle": "cyber security",
       "company": "google",
       "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make …",
-      "skills": ["skill 1", "skill 2", "skill 3"],
+      "skills": [
+        "skill 1",
+        "skill 2",
+        "skill 3"
+      ],
       "price": 200
     },
     {
@@ -84,7 +88,11 @@
       "jobTitle": "mobile app",
       "company": "whatsapp",
       "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make …",
-      "skills": ["skill 4", "skill 5", "skill 6"],
+      "skills": [
+        "skill 4",
+        "skill 5",
+        "skill 6"
+      ],
       "price": 200
     }
   ],
@@ -120,6 +128,34 @@
   ],
   "mentorProfile": [
     {
+      "id": 1,
+      "category": "employee",
+      "skills": [
+        "skill 1",
+        "skill 2",
+        "skill 3"
+      ],
+      "bio": "Hi..",
+      "linkedinUrl": "https://www.linkedin.com/in/srihith/",
+      "twitterHandle": "srihith",
+      "website": "https://www.srihith.com/",
+      "about": "I have more than a decade experience in Software Engineering (and related practices including DevOps)  and I have been lucky enough to have worked with a bunch of great minds in the big tech giants.  I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
+    },
+    {
+      "id": 2,
+      "category": "employee",
+      "skills": [
+        "skill 4",
+        "skill 5",
+        "skill 6"
+      ],
+      "bio": "Hi..",
+      "linkedinUrl": "https://www.linkedin.com/in/raj/",
+      "twitterHandle": "raj",
+      "website": "https://www.raj.com/",
+      "about": "I have more than a decade experience in Software Engineering (and related practices including DevOps)  and I have been lucky enough to have worked with a bunch of great minds in the big tech giants."
+    },
+    {
       "firstName": "Raj",
       "lastName": "Kumar",
       "email": "email@gmail.com",
@@ -128,16 +164,24 @@
       "company": "TCS",
       "location": "Location2",
       "category": "Category3",
-      "skills": ["skill 1", "Html", "css"],
+      "skills": [
+        "skill 1",
+        "Html",
+        "css"
+      ],
       "bio": "bio",
       "linkedinUrl": "linkedin.com/in",
       "twitterHandle": "thcheck",
       "personalWebsite": "pwck",
       "introVideo": "https://www.youtube.com/watch?v=SfKPfqBpMS0",
       "featuredArticle": "check",
-      "why": ["skill 1", "Html", "css"],
+      "why": [
+        "skill 1",
+        "Html",
+        "css"
+      ],
       "what": "ddddddddddddddddddd",
-      "id": 1
+      "id": 3
     },
     {
       "firstName": "Raju",
@@ -145,7 +189,12 @@
       "company": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide.",
       "location": "Chennai",
       "bio": "bio",
-      "skills": ["Html", "css", "React"],
+      "skills": [
+        "Html",
+        "css",
+        "React",
+        "java"
+      ],
       "lastName": "pandian",
       "email": "pondy@gmail.com",
       "password": "aeiou123",
@@ -155,9 +204,13 @@
       "personalWebsite": "pwck",
       "introVideo": "https://www.youtube.com/watch?v=SfKPfqBpMS0",
       "featuredArticle": "check",
-      "why": ["skill 1", "Html", "css"],
+      "why": [
+        "skill 1",
+        "Html",
+        "css"
+      ],
       "what": "ddddddddddddddddddd",
-      "id": 2
+      "id": 4
     },
     {
       "firstName": "Arun",
@@ -168,7 +221,12 @@
       "company": "CTS",
       "location": "Location2",
       "category": "Category4",
-      "skills": ["Html", "css", "java", "React"],
+      "skills": [
+        "Html",
+        "css",
+        "java",
+        "React"
+      ],
       "bio": "Bio CHeck",
       "linkedinUrl": "linkedin.com/in",
       "twitterHandle": "",
@@ -177,27 +235,7 @@
       "featuredArticle": "check",
       "why": "why check",
       "what": "what check",
-      "id": 3
-    },
-    {
-      "firstName": "Ashok",
-      "jobTitle": "Web-developer",
-      "company": "TCS",
-      "location": "India",
-      "bio": "bbbb",
-      "skills": ["html", "Javascript", "React", "NextJs"],
-      "lastName": "Kumar",
-      "email": "ashok@gmail.com",
-      "password": "aeiou123",
-      "category": "Category1",
-      "linkedinUrl": "https://www.linkedin.com/",
-      "twitterHandle": "https://twitter.com/",
-      "personalWebsite": "www.ashok.com",
-      "introVideo": "https://www.youtube.com/watch?v=SfKPfqBpMS0",
-      "featuredArticle": "check",
-      "why": "nnnnnnnnnnnnnnnnnnnnnnn",
-      "what": "nnnnnnnnnnnnnn",
-      "id": 4
+      "id": 5
     }
   ],
   "mentorExperience": [
@@ -216,7 +254,54 @@
       "achievement": "University gold medalist"
     }
   ],
-
+  "multipleQuestions": [
+    {
+      "id": 1,
+      "questionHeading": "Speaking better",
+      "questionHeadingBrief": "How do I become better at public speaking?",
+      "views": 300,
+      "time": 1705559036000
+    },
+    {
+      "id": 2,
+      "questionHeading": "Speaking in public problem",
+      "questionHeadingBrief": "What do you do to avoid nervousness when speaking in public?",
+      "views": 390,
+      "time": 1705559066456
+    }
+  ],
+  "mentorAnswers": [
+    {
+      "id": 1,
+      "answer": [
+        {
+          "mentorId": 1,
+          "mentorName": "Ashok Kumar",
+          "mentorRole": "Spoken English Teacher",
+          "answered": "Practice your speech multiple times before the actual presentation. This helps you become familiar with the content and improves your confidence."
+        },
+        {
+          "mentorId": 5,
+          "mentorName": "Naveen Kumar",
+          "mentorRole": "English Teacher",
+          "answered": " This helps you become familiar with the content and improves your confidence.",
+          "answeredYear": 10
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "answer": [
+        {
+          "mentorId": 2,
+          "mentorName": "Dinesh Kumar",
+          "mentorRole": "English Teacher",
+          "answered": " Practice deep breathing exercises to calm your nerves. Deep breaths can help regulate your heart rate and reduce anxiety..",
+          "answeredYear": 5
+        }
+      ]
+    }
+  ],
   "wallets": [
     {
       "newBalance": 2100,
