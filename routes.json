@@ -17,8 +17,9 @@
     "/api/mentor/details/profile":"/mentorProfile",
     "/api/mentor/:id/details/profile":"/mentorProfile/:id",
     "/api/mentor/details/experience":"/mentorExperience",
-    "/api/mentor/:id/details/experience":"/mentorExperience/:id"
-    
+    "/api/mentor/:id/details/experience":"/mentorExperience/:id",
+    "/api/calendar/appointment?slot_type=:slot_type":"/appointment_booking?slot_type=:slot_type",
+    "/api/calendar/appointment?fromTimeStamp_gte=:fromTimeStamp&toTimeStamp_lte=:toTimeStamp&slot_type=:slot_type":"/appointment_booking?fromTimeStamp_gte=:fromTimeStamp&toTimeStamp_lte=:toTimeStamp&slot_type=:slot_type"
 
 
 }

@@ -333,5 +333,52 @@
       ],
       "id": 1
     }
+  ],
+  "appointment_booking": [
+    {
+      "id": 4,
+      "slot_type": 1,
+      "created_by": 2,
+      "booked_by": 3, 
+      "description": "about career in Europe",
+      "fromTimeStamp": 1706711400000,
+      "toTimeStamp": 1706713200000
+    },
+    {
+      "id": 6,
+      "slot_type": 1,
+      "created_by": 2,
+      "booked_by": 3,
+      "description": "about career in Australia",
+      "fromTimeStamp": 1706707800000,
+      "toTimeStamp": 1706709600000
+    },
+    {
+      "id": 8,
+      "slot_type": 1,
+      "created_by": 2,
+      "booked_by": 3,
+      "description": "about career in SriLanka",
+      "fromTimeStamp": 1706713201000,
+      "toTimeStamp": 1706714400000
+    },
+    {
+      "id": 9,
+      "slot_type": 1,
+      "created_by": 2,
+      "booked_by": 3,
+      "description": "about career in NewYork",
+      "fromTimeStamp": 1706709601000,
+      "toTimeStamp": 1706711399000
+    },
+    {
+      "id": 7,
+      "slot_type": 0,
+      "booked_by": null,
+      "created_by": 2,
+      "description": "students and job seekers can enroll",
+      "fromTimeStamp": 1706714401000,
+      "toTimeStamp": 1706715000000
+    }
   ]
 }
