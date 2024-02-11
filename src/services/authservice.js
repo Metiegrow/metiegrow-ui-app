@@ -36,42 +36,53 @@ export const authService = {
       return e;
     }
   },
-
+  
   async login(email, password) {
-    // localStorage.clear();
-    const bodyData = JSON.stringify({
-      email: email,
-      password: password,
-      
-    });
+    const bodyData = JSON.stringify({ email: email,
+          password: password, });
     const url = `${baseUrl}/signIn`;
     try {
-      return await axios
-        .get(url, bodyData)
-        .then((res) => {
-          console.log(res);
-          // console.log(res.data);
-          // console.log('Full response:', loginResponse);
-
-          // localStorage.setItem('email', res.data.email);
-          // if (!res.data.email) {
-          //   console.error('User email not found in the response:', res.data);
-          // } else {
-          //   localStorage.setItem('email', res.data.email);
-          console.log(res.data.data.userType);
-          localStorage.setItem('userType', 0);
-          // localStorage.setItem('gogo_react_login')
-          // }
-
-          return res;
-        })
-        .catch((error) => {
-          throw error;
-        });
-    } catch (e) {
-      return e;
+      return await axios.post(url, bodyData);
+    } catch (error) {
+      throw error;
     }
   },
+
+  // async login(email, password) {
+  //   // localStorage.clear();
+  //   const bodyData = JSON.stringify({
+  //     email: email,
+  //     password: password,
+      
+  //   });
+  //   const url = `${baseUrl}/signIn`;
+  //   try {
+  //     return await axios
+  //       .get(url, bodyData)
+  //       .then((res) => {
+  //         console.log(res);
+  //         // console.log(res.data);
+  //         // console.log('Full response:', loginResponse);
+
+  //         // localStorage.setItem('email', res.data.email);
+  //         // if (!res.data.email) {
+  //         //   console.error('User email not found in the response:', res.data);
+  //         // } else {
+  //         //   localStorage.setItem('email', res.data.email);
+  //         console.log(res.data.data.userType);
+  //         localStorage.setItem('userType', 0);
+  //         // localStorage.setItem('gogo_react_login')
+  //         // }
+
+  //         return res;
+  //       })
+  //       .catch((error) => {
+  //         throw error;
+  //       });
+  //   } catch (e) {
+  //     return e;
+  //   }
+  // },
 };
 
 export default authService;
