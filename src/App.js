@@ -14,14 +14,14 @@ import { NotificationContainer } from './components/common/react-notifications';
 import {
   isMultiColorActive,
   adminRoot,
-  // UserRole,
+  UserRole,
 } from './constants/defaultValues';
 import { getDirection } from './helpers/Utils';
-// import { ProtectedRoute } from './helpers/authHelper';
+import { ProtectedRoute } from './helpers/authHelper';
 
-// const ViewHome = React.lazy(() =>
-//   import(/* webpackChunkName: "views" */ './views/home')
-// );
+const ViewHome = React.lazy(() =>
+  import(/* webpackChunkName: "views" */ './views/home')
+);
 const ViewApp = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ './views/app')
 );
@@ -65,12 +65,14 @@ class App extends React.Component {
             <Suspense fallback={<div className="loading" />}>
               <Router>
                 <Switch>
-                  {/* <ProtectedRoute
+                  
+                  <ProtectedRoute
                     path={adminRoot}
                     component={ViewApp}
                     roles={[UserRole.Admin, UserRole.Editor]}
-                  /> */}
-                  <Route path={adminRoot} render={(props) => <ViewApp {...props} />}/>
+                  />
+
+                  {/* <Route path={adminRoot} render={(props) => <ViewApp {...props} />}/> */}
               
                   <Route
                     path="/user"
@@ -86,6 +88,11 @@ class App extends React.Component {
                     path="/unauthorized"
                     exact
                     render={(props) => <ViewUnauthorized {...props} />}
+                  />
+                  <Route
+                    path="/"
+                    exact
+                    render={(props) => <ViewHome {...props} />}
                   />
 
                   <Route path="" render={(props) => <ViewUser {...props} />} />
