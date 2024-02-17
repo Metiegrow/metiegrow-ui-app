@@ -28,22 +28,29 @@ export function* watchLoginUser() {
   yield takeEvery(LOGIN_USER, loginWithEmailPassword);
 }
 
-let userObj=null;
+// let userObj=null;
 
+// const loginWithEmailPasswordAsync = async (email, password) =>
+//   authService.login(email,password)
+//   .then(res => {
+//     userObj=res.data;
+//   })
+//   .catch((error) => {
+//     throw error;
+//   });
 const loginWithEmailPasswordAsync = async (email, password) =>
-  authService.login(email,password)
-  .then(res => {
-    userObj=res.data;
-  })
-  .catch((error) => {
-    throw error;
-  });
+  // eslint-disable-next-line no-return-await
+  await authService
+    .login(email, password)
+    .then((user) => user)
+    .catch((error) => error);
+
 
 function* loginWithEmailPassword({ payload }) {
   const { email, password } = payload.user;
   const { history } = payload;
   try {
-    yield call(loginWithEmailPasswordAsync, email, password);
+    const userObj = yield call(loginWithEmailPasswordAsync, email, password);
     if (userObj!=null && userObj.data) {
       const item = { token:userObj.data.token,role:userObj.data.userType, ...currentUser };
       setCurrentUser(item);
@@ -64,19 +71,26 @@ export function* watchRegisterUser() {
 
 
 
-const registerWithEmailAndPasswordAsync = async (email, password,name) =>
-  authService.signUp(email,password,name)
-  .then(res => {
-    userObj=res.data;
-  })
-  .catch((error) => error);
+// const registerWithEmailAndPasswordAsync = async (email, password,name) =>
+//   authService.signUp(email,password,name)
+//   .then(res => {
+//     userObj=res.data;
+//   })
+//   .catch((error) => error);
+const registerWithEmailAndPasswordAsync = async (email, password) =>
+  // eslint-disable-next-line no-return-await
+  await authService
+    .signUp(email, password)
+    .then((user) => user)
+    .catch((error) => error);
+
 
 
 function* registerWithEmailPassword({ payload }) {
   const { email, password,name } = payload.user;
   const { history } = payload;
   try {
-    yield call(registerWithEmailAndPasswordAsync, email, password,name);
+   const userObj = yield call(registerWithEmailAndPasswordAsync, email, password,name);
     if (userObj!=null && userObj.data) {
       const item = { id: userObj.data.id, ...currentUser };
       yield put(registerUserSuccess(item));

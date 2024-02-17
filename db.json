@@ -6,8 +6,8 @@
     "userType": 0
   },
   "signIn": {
-    "email": "demo@gogo.com",
-    "password": "gogo123"
+    "email": "vssivanesh@gmail.com",
+    "password": "sivanesh"
   },
   "StudentPersonalInfo": [
     {
@@ -205,7 +205,7 @@
       "firstName": "Raju",
       "jobTitle": "UX Designer - Tcs",
       "company": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide.",
-      "location": "Chennai",
+      "location": "india",
       "bio": "bio",
       "skills": [
         "Html",
@@ -214,12 +214,12 @@
         "java"
       ],
       "lastName": "pandian",
-      "email": "pondy@gmail.com",
+      "email": "pandian@gmail.com",
       "password": "aeiou123",
       "category": "Category3",
-      "linkedinUrl": "https://www.linkedin.com/in/brovin-roy-w-594a8791/",
-      "twitterHandle": "thcheck",
-      "personalWebsite": "pwck",
+      "linkedinUrl": "https://www.linkedin.com",
+      "twitterHandle": "www.twitter.com",
+      "personalWebsite": "www.raju.com",
       "introVideo": "https://www.youtube.com/watch?v=SfKPfqBpMS0",
       "featuredArticle": "check",
       "why": [
@@ -350,6 +350,32 @@
         }
       ],
       "id": 1
+    }
+  ],
+  "notifications": [
+    {
+      "img": "/assets/img/profiles/l-2.jpg",
+      "title": "Joisse Kaycee just sent a new comment!",
+      "date": "09.02.2024 - 12:45",
+      "id": 1
+    },
+    {
+      "img": "/assets/img/profiles/l-2.jpg",
+      "title": "Raju replied to your message.",
+      "date": "09.02.2024 - 12:45",
+      "id": 2
+    },
+    {
+      "img": "/assets/img/profiles/l-2.jpg",
+      "title": "New Request from Raj",
+      "date": "09.02.2024 - 12:45",
+      "id": 3
+    },
+    {
+      "img": "/assets/img/profiles/l-2.jpg",
+      "title": "Arun just sent a new comment!",
+      "date": "09.02.2024 - 12:45",
+      "id": 4
     }
   ],
   "mentorAvailablity": [
