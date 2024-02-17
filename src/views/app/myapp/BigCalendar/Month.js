@@ -167,8 +167,8 @@ const Month = () => {
 
    <h2>Mentor availability</h2>
    <div className='font-weight-semibold d-flex justify-content-between'>
-     <Button className='font-weight-semibold text-one ' onClick={goToPreviousWeek}><i className='simple-icon-arrow-left'/></Button>
-     <Button className='ml-5 font-weight-semibold text-one' onClick={goToNextWeek} ><i className='simple-icon-arrow-right '/></Button>
+     <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}><i className='simple-icon-arrow-left'/></Button>
+     <Button className='ml-5 font-weight-semibold text-one' color="primary" onClick={goToNextWeek} ><i className='simple-icon-arrow-right '/></Button>
    </div>
          <Card className="mb-4 mt-4">
            <CardBody>
@@ -298,7 +298,7 @@ const Month = () => {
 
                </tbody>
              </Table>
-             <Button onClick={() => setModalSmall(true)}>Book Now</Button>
+             <Button onClick={() => setModalSmall(true)} color="primary">Book Now</Button>
              <div className="mb-4">
            <div>
          

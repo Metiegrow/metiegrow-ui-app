@@ -151,8 +151,8 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
    <h3>City is {city}</h3> */}
    <div>
     {/* Your other components */}
-    <h3>firstName is {firstNameParam}</h3>
-    <h3>jobTitle is {jobTitleParam}</h3>
+    {/* <h3>firstName is {firstNameParam}</h3>
+    <h3>jobTitle is {jobTitleParam}</h3> */}
     {/* <Button onClick={()=>setFirstName('defaultname')}>set firstName</Button> */}
     {/* <input
             type="text"
@@ -178,7 +178,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
           />
           {/* <i className="simple-icon-magnifier" /> */}
       
-          <Button className='ml-3' >Search</Button>
+          <Button className='ml-3 ' color='primary' >Search</Button>
         
         
           
