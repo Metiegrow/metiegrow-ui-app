@@ -30,21 +30,23 @@ import {
 import { MobileMenuIcon, MenuIcon } from "components/svg";
 // import MyProfile from 'views/app/myapp/my-profile/MyProfile';
 import TopnavDarkSwitch from "./Topnav.DarkSwitch";
+import TopnavNotifications from "./Topnav.Notifications";
 
-const NotificationData = {
-  payload: [
-    {
-      id: 1,
-      msg: "This is a sample notification",
-      created_at: "2020-09-08",
-    },
-    {
-      id: 2,
-      msg: "This is a sample notification 2",
-      created_at: "2020-09-08",
-    },
-  ],
-};
+
+// const NotificationData = {
+//   payload: [
+//     {
+//       id: 1,
+//       msg: "This is a sample notification",
+//       created_at: "2020-09-08",
+//     },
+//     {
+//       id: 2,
+//       msg: "This is a sample notification 2",
+//       created_at: "2020-09-08",
+//     },
+//   ],
+// };
 
 const TopNav = ({
   history,
@@ -176,7 +178,7 @@ const TopNav = ({
       </NavLink>
 
       <div className="navbar-right">
-        <div
+        {/* <div
           style={{
             paddingRight: "20px",
           }}
@@ -205,7 +207,9 @@ const TopNav = ({
               })}
             </DropdownMenu>
           </UncontrolledDropdown>
-        </div>
+        </div> */}
+          <TopnavNotifications />
+
         {isDarkSwitchActive && <TopnavDarkSwitch />}
 
         <div className="user d-inline-block">

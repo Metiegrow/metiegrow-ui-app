@@ -42,7 +42,10 @@ export const authService = {
           password: password, });
     const url = `${baseUrl}/signIn`;
     try {
-      return await axios.post(url, bodyData);
+      return await axios.post(url, bodyData)
+      // .then((res) =>{
+      //   console.log(res.data);
+      // });
     } catch (error) {
       throw error;
     }

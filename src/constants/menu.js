@@ -75,5 +75,11 @@ const data = [
     label: 'Chat',
     to: `${adminRoot}/chat`,
   },
+  // {
+  //   id: 'videoroom',
+  //   icon: 'iconsminds-speach-bubbles',
+  //   label: 'Video Room',
+  //   to: `${adminRoot}/videoroom`,
+  // },
 ];
 export default data;

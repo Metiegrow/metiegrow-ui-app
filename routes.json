@@ -8,6 +8,7 @@
     "/mentor/questions":"/multipleQuestions",
     "/mentor/answers":"/mentorAnswers",
     "/wallets": "/wallets",
+    "/notifications": "/notifications",
 
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",

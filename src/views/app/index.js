@@ -106,6 +106,11 @@ const ViewMyWallet = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/my-wallet/MyWallet'
   )
 );
+// const ViewVideoRoom = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/video-room/VideoRoom'
+//   )
+// );
 
 const App = ({ match }) => {
   return (
@@ -206,6 +211,10 @@ const App = ({ match }) => {
               path={`${match.url}/mywallet`}
               render={(props) => <ViewMyWallet {...props} />}
             />
+               {/* <Route
+              path={`${match.url}/videoroom`}
+              render={(props) => <ViewVideoRoom {...props} />}
+            /> */}
            
            
           
