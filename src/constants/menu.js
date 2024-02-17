@@ -37,6 +37,12 @@ const data = [
         to: `${adminRoot}/calendar`,
    
       },
+      {
+        icon: 'simple-icon-list',
+        label: 'SessionList',
+        to: `${adminRoot}/sessionlists`,
+   
+      },
     ]
   },
   {
@@ -68,6 +74,7 @@ const data = [
     icon: 'iconsminds-folder',
     label: 'mylogin',
     to: `${adminRoot}/mylogin`,
+    
   },
   {
     id: 'Chat',
