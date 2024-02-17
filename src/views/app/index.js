@@ -79,6 +79,11 @@ const Month = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/BigCalendar/Month'
   )
 );
+const MentorSessionList = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/BigCalendar/MentorSessionList'
+  )
+);
 // const CalendarGoogle = React.lazy(() =>
 //   import(
 //     /* webpackChunkName: "views-app" */ './myapp/mentorship/CalendarGoogle'
@@ -152,6 +157,7 @@ const App = ({ match }) => {
               render={(props) => <MentorCard {...props} />}
             />
             
+            
          
              {/* <Route
               path={`${match.url}/mentorship`}
@@ -188,6 +194,10 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/calendar`}
               render={(props) => <Month {...props} />}
+            />
+              <Route
+              path={`${match.url}/sessionlists`}
+              render={(props) => <MentorSessionList {...props} />}
             />
 
             {/* <Route

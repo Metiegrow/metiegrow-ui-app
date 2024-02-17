@@ -80,7 +80,7 @@
     {
       "id": 2,
       "mentorPhotoDocumentId": "6583b44389d19532873b36b8",
-      "image": "/assets/img/profiles/2.jpg",
+      "image": "/assets/img/profiles/8.jpg",
       "star": 4,
       "ratings": 200,
       "firstName": "raj",
@@ -94,6 +94,24 @@
         "skill 6"
       ],
       "price": 200
+    },
+    {
+      "id": 3,
+      "mentorPhotoDocumentId": "6583b44389d19532873b36c8",
+      "image": "/assets/img/profiles/4.jpg",
+      "star": 4,
+      "ratings": 200,
+      "firstName": "Alexa",
+      "lastName": "john",
+      "jobTitle": "content writer",
+      "company": "hexaware",
+      "bio": "I'm a writer and content strategist with over 10 years of experience in helping companies build and execute their content strategies. With a background in journalism and the arts, I've also used my diverse experience and skillset to build up communities and help people find their next … ",
+      "skills": [
+        "skill 7",
+        "skill 8",
+        "skill 9"
+      ],
+      "price": 300
     }
   ],
   "countries": [
@@ -332,6 +350,28 @@
         }
       ],
       "id": 1
+    }
+  ],
+  "mentorAvailablity": [
+    {
+      "id": 5,
+      "fromTimeStamp": 1709173800000,
+      "toTimeStamp": 1709175600000
+    },
+    {
+      "id": 9,
+      "fromTimeStamp": 1709170200000,
+      "toTimeStamp": 1709172000000
+    },
+    {
+      "id": 11,
+      "fromTimeStamp": 1709175601000,
+      "toTimeStamp": 1709176800000
+    },
+    {
+      "id": 12,
+      "fromTimeStamp": 1709172001000,
+      "toTimeStamp": 1709173799000
     }
   ]
 }

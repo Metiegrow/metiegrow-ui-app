@@ -17,7 +17,9 @@
     "/api/mentor/details/profile":"/mentorProfile",
     "/api/mentor/:id/details/profile":"/mentorProfile/:id",
     "/api/mentor/details/experience":"/mentorExperience",
-    "/api/mentor/:id/details/experience":"/mentorExperience/:id"
+    "/api/mentor/:id/details/experience":"/mentorExperience/:id",
+    "/api/calendar/appointment/mentee":"/mentorAvailablity"
+
     
 
 
