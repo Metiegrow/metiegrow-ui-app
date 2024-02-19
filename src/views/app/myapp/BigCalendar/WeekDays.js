@@ -36,10 +36,10 @@ const WeekDays = () => {
     ];
     return monthNames[monthIndex];
   };
-
+  
   return (
     <div>
-      <Button onClick={goToPreviousWeek}>Previous Week</Button>
+      <Button onClick={goToPreviousWeek}  >Previous Week</Button>
       <Button onClick={goToNextWeek} className='ml-3'>Next Week</Button>
       <div>
         <p>Current Week Start: {formatDate(currentWeekStart)}</p>
