@@ -10,6 +10,9 @@ import IntlMessages from 'helpers/IntlMessages';
 // import axios from 'axios';
 // import { baseUrl } from 'constants/defaultValues';
 import { authService } from 'services/authservice';
+import axios from 'axios';
+import { baseUrl } from 'constants/defaultValues';
+
 // import { connect } from 'react-redux';
 
 
@@ -82,33 +85,74 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   // };
 
   // new 
+  const [emailData, setEmailData] = useState('');
+const [passwordData, setPasswordData] = useState('');
+  const url = `${baseUrl}/signIn`
+  useEffect(() => {
+    axios.get(url)
+      .then(response => {
+        // console.log(response.data.password);
+        setEmailData(response.data.email);
+        setPasswordData(response.data.password);
+      }).catch(loginError => {
+        console.error('Error fetching data: ', loginError);
+        NotificationManager.warning("Network errorr", 'Login Error', 6000, null, null, '');
+      });
+      
+  }, []);
+  
+
   const onUserLogin = (values) => {
     if (!loading) {
-      if (values.email !== '' && values.password !== '') {
-      
-        const loginResponse = authService.login(email, password);
-        console.log(loginResponse);
-        // axios
-        //   .post(`${baseUrl}/signIn`, {
-        //     username: 'test.student1', //  values.email,
-        //     password: 'student1', // values.password,
-        //   })
-        //   .then((response) => {
-        //     console.log(response);
-        //     console.log(response.data.data.token);
-        //     localStorage.setItem('AUTH_TOKEN', response.data.data.token);
-        //     getStudents();
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
-        // console.log(values, history);
-        loginUserAction(values, history);
-        
-        
-      } 
+      if (values.email !== emailData) {
+        NotificationManager.warning('Not a registered user', 'Login Error');
+        return;
+      }
+  
+      if (values.password !== passwordData) {
+        NotificationManager.warning('Incorrect password', 'Login Error');
+        return;
+      }
+  
+      const loginResponse = authService.login(email, password);
+      console.log(loginResponse.data);
+      loginUserAction(values, history);
     }
   };
+  
+  // const onUserLogin = (values) => {
+  //   if (!loading) {
+  //     if (values.email !== '' && values.password !== '') {
+  //       // if (values.email === email && values.password === password) {
+      
+  //       const loginResponse = authService.login(email, password);
+  //       // const loginResponse = authService.login(values.email, values.password);
+
+  //       console.log(loginResponse);
+  //       // axios
+  //       //   .post(`${baseUrl}/signIn`, {
+  //       //     username: 'test.student1', //  values.email,
+  //       //     password: 'student1', // values.password,
+  //       //   })
+  //       //   .then((response) => {
+  //       //     console.log(response);
+  //       //     console.log(response.data.data.token);
+  //       //     localStorage.setItem('AUTH_TOKEN', response.data.data.token);
+  //       //     getStudents();
+  //       //   })
+  //       //   .catch((err) => {
+  //       //     console.log(err);
+  //       //   });
+  //       // console.log(values, history);
+  //       loginUserAction(values, history);
+        
+        
+  //     } 
+  //   }
+  // };
+
+ 
+
 
   const initialValues = { email, password };
 
