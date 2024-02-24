@@ -8,12 +8,15 @@ import {  Button, Card, CardBody, Modal, ModalBody, Table ,
   DropdownItem,
   DropdownMenu,
   Row,
+  FormGroup,  CustomInput, Form 
   } from 'reactstrap';
   import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
 // import EventModal from './EventModal';
 // import DatePicker from './DatePicker';
 import DateRangePicker from './DateRangePicker';
+
+
 
 // import WeekDisplay from './WeekList';
 // import WeekDays from './WeekDays';
@@ -22,32 +25,57 @@ import DateRangePicker from './DateRangePicker';
 
 
 const Month = () => {
-  const url=`${baseUrl}/api/calendar/appointment/mentee`;
+  // const url=`${baseUrl}/api/calendar/appointment/mentee`;
   // const url='http://localhost:9091/api/mentor/cards?page=0&size=3 ';
   const[mentoravailable,setMentorAvailable]=useState([]);
-
+  const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const mentorName = searchParams.get('mentorName');
+  const mentorId = searchParams.get('mentorId');
 
-  useEffect(()=>{
-    const MentorAvailabllity = async () => {
+  const [selectedDate, setSelectedDate] = useState(null); 
+ 
+  useEffect(() => {
+    const fetchMentorAvailability = async () => {
       try {
-        const response = await axios.get(url);
-        setMentorAvailable(response.data);
+        const response = await axios.get(`${baseUrl}/api/calendar/appointment/mentee`);
+        // Filter availability data based on mentorId
+        const filteredAvailability = response.data.filter(avail => avail.id === parseInt(mentorId, 10));
+
+        setMentorAvailable(filteredAvailability);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    MentorAvailabllity();
-  },[])
+    if (mentorId) {
+      fetchMentorAvailability();
+    }
+  }, [mentorId]);
+
+  // useEffect(()=>{
+  //   const MentorAvailabllity = async () => {
+  //     try {
+  //       const response = await axios.get(url);
+  //       setMentorAvailable(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   MentorAvailabllity();
+  
+  // },[])
+  
 
   // const [isModalOpen, setModalOpen] = useState(false);
   // const [clickedRowPosition, setClickedRowPosition] = useState({ top: 0, left: 0 });
   const [modalSmall, setModalSmall] = useState(false);
    const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
+   const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
 
   const [minutedrop,setMinutedrop]=useState(null)
+  const [minutedrop1,setMinutedrop1]=useState(null)
+
 
 
   // const [selectedHour, setSelectedHour] = useState(null); // State variable for selected hour
@@ -57,21 +85,38 @@ const Month = () => {
   // const [description,setDescription]=useState("");
   const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
+  const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
+  const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
+  const [selectedRadioButton, setSelectedRadioButton] = useState(null);
   // const [savedEntries, setSavedEntries] = useState([]);
-  const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);  
+  
+ 
  
  
 
   const handleDropdownItemClick = (selectedHour) => {
     // Handle the selected hour as needed
-    setSelectedHourDropdown(selectedHour)
+    setSelectedHourDropdown(selectedHour);
+    
     console.log(`Selected hour: ${selectedHour}`);
     // setSelectedHourDropdown(selectedHour); 
   };
   const handleDropdownItemClick1 = (selectedMinute) => {
     // Handle the selected minutes as needed
     setMinutedrop(selectedMinute);
+   setMinutedrop1(selectedMinute);
+    console.log(`Selected minute: ${selectedMinute}`);
+    // setMinuteDrop(selectedMinute); 
+  };
+  const handleDropdownItemClick2 = (selectedHour) => {
+    // Handle the selected hour as needed
+    setSelectedHourDropdown1(selectedHour)
+    console.log(`Selected hour: ${selectedHour}`);
+    // setSelectedHourDropdown(selectedHour); 
+  };
+  const handleDropdownItemClick3 = (selectedMinute) => {
+    // Handle the selected minutes as needed
+    setMinutedrop1(selectedMinute);
     console.log(`Selected minute: ${selectedMinute}`);
     // setMinuteDrop(selectedMinute); 
   };
@@ -88,16 +133,43 @@ const Month = () => {
     return items;
   };
   const generateMinuteDropdownItems = () => {
-    const items1 = [];
-    for (let i = 1; i <= 60; i+=1) {
-      const formattedMinute = i < 10 ? `0${i}` : i;
-      items1.push(
-        <DropdownItem key={i} onClick={() => handleDropdownItemClick1(i)}>
+    const minutes = [0, 15, 30, 45];
+    const items = minutes.map((minute) => {
+      const formattedMinute = minute < 10 ? `0${minute}` : minute;
+      return (
+        <DropdownItem key={minute} onClick={() => handleDropdownItemClick1(minute)}>
           {formattedMinute}
         </DropdownItem>
       );
+    });
+    return items;
+  };
+  const generateDropdownItems1 = () => {
+    const items = [];
+    for (let i = 1; i <= 12; i+=1) {
+      const formattedHour = i < 10 ? `0${i}` : i;
+      items.push(
+        <DropdownItem key={i} onClick={() => handleDropdownItemClick2(i)} >
+          {formattedHour}
+        </DropdownItem>
+      );
     }
-    return items1;
+    return items;
+  };
+
+
+  
+  const generateMinuteDropdownItems1 = () => {
+    const minutes = [0, 15, 30, 45];
+    const items = minutes.map((minute) => {
+      const formattedMinute = minute < 10 ? `0${minute}` : minute;
+      return (
+        <DropdownItem key={minute} onClick={() => handleDropdownItemClick3(minute)}>
+          {formattedMinute}
+        </DropdownItem>
+      );
+    });
+    return items;
   };
   // weeklist functions start
   const goToPreviousWeek = () => {
@@ -132,23 +204,27 @@ const Month = () => {
     ];
     return monthNames[monthIndex];
   };
+ 
   const isPreviousWeekDisabled = () => {
     // Disable the button if you're already in the current week
     const today = new Date();
     const currentWeekStartDate = new Date(today);
-    currentWeekStartDate.setDate(today.getDate() - today.getDay() + 1); // Adjust to the start of the week
+    // currentWeekStartDate.setDate(today.getDate() - today.getDay() + 1); // Adjust to the start of the week
   
-   
+    console.log('Current Week Start Date:', currentWeekStartDate);
+    console.log('Stored Current Week Start Date:', currentWeekStart);
   
     const disabled = (
       currentWeekStartDate.getFullYear() === currentWeekStart.getFullYear() &&
       currentWeekStartDate.getMonth() === currentWeekStart.getMonth() &&
       currentWeekStartDate.getDate() === currentWeekStart.getDate()
     );
- 
+    console.log('Is Previous Week Disabled:', disabled);
+
   
     return disabled;
   };
+ 
   
   const handleTimeSlotClick = (date) => {
     setSelectedDate(date);
@@ -157,9 +233,15 @@ const Month = () => {
   };
 
   // weeklist functions ends
+  const handlesave = () => {
+    console.log('Selected Date:', selectedDate);
+    console.log('Selected Hour:', selectedHourDropdown);
+    console.log('Selected Minute:', minutedrop);
+    console.log('Selected Radio Button:', selectedRadioButton);
+   
+  };
+
  
-  
-  
 
 
   return (
@@ -172,7 +254,7 @@ const Month = () => {
 
    <h2> {mentorName} availability</h2>
    <div className='font-weight-semibold d-flex justify-content-between align-items-center'>
-     <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}  disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button>
+     <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button>
       <div>
       <h4 className=' font-weight-semibold'> 
       From {formatDate(currentWeekStart)} to {formatDate(new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000))}
@@ -242,12 +324,12 @@ const Month = () => {
         const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
         
         return (
-            <td className='bg-primary d-block text-center' key={date.getTime()} onClick={() => handleTimeSlotClick(date)}>
+            <td className='bg-primary d-block text-center  '  key={date.getTime()} onClick={() => handleTimeSlotClick(date)}>
                 {fromTime} to {toTime}
             </td>
         );
     } 
-        return '-'; // Returning null when condition is not met
+        return <div key={date.getTime()} className='text-center text-one '>-</div>; // Returning null when condition is not met
     
 })}
 
@@ -306,8 +388,13 @@ const Month = () => {
         
 
           </div>
-          <div className='d-flex my-3 '>
+          {/* <div className='d-flex my-3 '>
+          <div className='mr-2'>
+          <h5 className='mb-0'>From</h5>
+          </div>
+         
            <div className='ml-2 '>
+          
              <Dropdown direction="down"
      isOpen={dropdownBasicOpen}
      toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
@@ -315,9 +402,11 @@ const Month = () => {
      
     
    >
+  
      <DropdownToggle caret color="secondary" outline className=''>
-       {/* Hours */}
-       {selectedHourDropdown !== null ? selectedHourDropdown : 'Hours'} {/* Display selected hour */}
+       
+       
+       {selectedHourDropdown !== null ? selectedHourDropdown : 'Hours'} 
      </DropdownToggle>
      <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
      {generateDropdownItems()}
@@ -332,28 +421,125 @@ const Month = () => {
               
              >
                <DropdownToggle caret color="secondary" outline>
-                 {/* Minutes */}
-                 {minutedrop !== null ? minutedrop : 'Minutes'} {/* Display selected minute */}
+              
+                 {minutedrop !== null ? minutedrop : 'Minutes'} 
+      
                </DropdownToggle>
                <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
                 {generateMinuteDropdownItems()}
                </DropdownMenu>
              </Dropdown>
+          
        </div>
      
+          </div> */}
+         <div className='d-flex justify-content-between '>
+         <div>
+          <h5 className='text-center'>From</h5>
+          <div className='d-flex'>
+          <Dropdown direction="down"
+     isOpen={dropdownBasicOpen}
+     toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
+     className="mb-5 "
+     
+    
+   >
+  
+     <DropdownToggle caret color="secondary" outline className=''>
+       
+       
+       {selectedHourDropdown !== null ? selectedHourDropdown : 'Hours'} 
+     </DropdownToggle>
+     <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
+     {generateDropdownItems()}
+     </DropdownMenu>
+   </Dropdown>
+   <Dropdown direction='down'
+               isOpen={dropdownBasicOpen1}
+               toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
+               className="mb-5 ml-3"
+              
+             >
+               <DropdownToggle caret color="secondary" outline>
+              
+                 {minutedrop !== null ? minutedrop : 'Minutes'} 
+      
+               </DropdownToggle>
+               <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                {generateMinuteDropdownItems()}
+               </DropdownMenu>
+             </Dropdown>
           </div>
-          <form className='d-flex align-items-center justify-content-start'>
-           {/* <span><i className='iconsminds-align-left'/></span> */}
-           {/* <input type="text"  placeholder='Add a description' className='py-3 ml-2 border-top-0 border-left-0
-            border-right-0 focus-none text-one   w-80 shadow-none'
-          required value={description} onChange={(e) => setDescription(e.target.value)}/> */}
-          </form>
+        </div>
+        <div className=''>
+          <h5 className='text-center'>To</h5>
+          <div className='d-flex'>
+          <Dropdown direction="down"
+     isOpen={dropdownBasicOpen2}
+     toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
+     className="mb-5 "
+     
+    
+   >
+  
+     <DropdownToggle caret color="secondary" outline className=''>
+       
+       
+       {selectedHourDropdown1 !== null ? selectedHourDropdown1 : 'Hours'} 
+     </DropdownToggle>
+     <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
+     {generateDropdownItems1()}
+     </DropdownMenu>
+   </Dropdown>
+   <Dropdown direction='down'
+               isOpen={dropdownBasicOpen3}
+               toggle={() => setDropdownBasicOpen3(!dropdownBasicOpen3)}
+               className="mb-5 ml-3"
+              
+             >
+               <DropdownToggle caret color="secondary" outline>
+              
+                 {minutedrop1 !== null ? minutedrop1 : 'Minutes'} 
+      
+               </DropdownToggle>
+               <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                {generateMinuteDropdownItems1()}
+               </DropdownMenu>
+             </Dropdown>
+          </div>
+        </div>
+         </div>
+       
+          <Form>
+           <FormGroup>
+       
+        <div className='d-flex '>
+          <CustomInput
+            type="radio"
+            id="exCustomRadio"
+            name="customRadio"
+            label="Audio"
+            onChange={() => setSelectedRadioButton('Audio')}
+          />
+          <CustomInput
+            type="radio"
+            id="exCustomRadio2"
+            name="customRadio"
+            label="Video"
+            className='ml-3'
+            onChange={() => setSelectedRadioButton('Video')}
+          />
+            
+        </div>
+      </FormGroup>
+      </Form>
+        
           <footer className="d-flex justify-content-end border-t p-3 mt-5">
-         <Button type='submit'  className="bg-primary  px-6 py-2 ">
-         {/*  onClick={handleSave} */}
-           Save
+         <Button type='submit'  className="  px-6 py-2 " color='primary'  onClick={handlesave}>
+          
+           Next
          </Button>
-         <Button className='ml-2'   color="secondary" onClick={() => setModalSmall(false)}
+         <Button className='ml-2'  outline  color="secondary"  onClick={() => setModalSmall(false)}
                    >
                      Cancel
                    </Button>

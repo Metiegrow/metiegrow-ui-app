@@ -4,6 +4,8 @@ import { Badge, Card, CardBody, Row } from 'reactstrap';
 
 
 const MentorSessionList = () => {
+  // const { sessions } = location.state || {}; // Retrieve sessions from location state
+  
   return (
     <div>
    
@@ -19,6 +21,7 @@ const MentorSessionList = () => {
         <div className='my-3'>
         
         <h2>Upcoming sessions</h2>
+       
         <div>
         <Card className='my-2'>
         <Badge

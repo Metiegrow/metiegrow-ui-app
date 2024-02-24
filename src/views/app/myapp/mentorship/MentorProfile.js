@@ -18,14 +18,23 @@ const MentorProfile = () => {
 
   const history = useHistory();
 
-  const handleConnectClick = () => {
-    // Construct the URL with mentor's name as query parameter
-    const mentorName = `${mentorprofiledetails.firstName} ${mentorprofiledetails.lastName}`;
-    const url2 = `/app/calendar?mentorName=${mentorName}`;
+  // const handleConnectClick = () => {
+  //   // Construct the URL with mentor's name as query parameter
+  //   const mentorName = `${mentorprofiledetails.firstName} ${mentorprofiledetails.lastName}`;
+  //   const url2 = `/app/calendar?mentorName=${mentorName}`;
 
-    // Navigate to the Month component with the mentor's name as a query parameter
+  //   // Navigate to the Month component with the mentor's name as a query parameter
+  //   history.push(url2);
+  // };
+  const handleConnectClick = () => {
+    // Construct the URL with mentor's ID and name as query parameters
+    const mentorId = mentorprofiledetails.id;
+    const mentorName = `${mentorprofiledetails.firstName} ${mentorprofiledetails.lastName}`;
+    const url2 = `/app/calendar?mentorId=${mentorId}&mentorName=${mentorName}`;
+
+    // Navigate to the Month component with the mentor's ID and name as query parameters
     history.push(url2);
-  };
+};
   
   useEffect(()=>{
     const mentorProfileDetails = async () => {
