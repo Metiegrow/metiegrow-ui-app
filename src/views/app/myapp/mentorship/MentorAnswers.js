@@ -52,6 +52,7 @@ const MentorAnswers = () => {
     const [editing1, setEditing1] = useState(false);
   const [editedAnswer1, setEditedAnswer1] = useState('');
  const [editedAnswerId, setEditedAnswerId] = useState(null); 
+ const [newAnswer,setNewAnswer]=useState('')
  
      const [textQuillStandart, setTextQuillStandart] = useState('');
  
@@ -148,6 +149,21 @@ const MentorAnswers = () => {
     };
   
 
+    const handlePostAnswer = async () => {
+      try {
+        // Send request to post the new answer
+        await axios.post(url, { answered: newAnswer });
+  
+        // Fetch updated answers after posting
+        const updatedResponse = await axios.get(url);
+        setAnswers(updatedResponse.data.answer);
+        
+        // Clear the answer input after posting
+        setNewAnswer('');
+      } catch (error) {
+        console.error('Error posting answer:', error);
+      }
+    };
   
  
 
@@ -442,7 +458,7 @@ const MentorAnswers = () => {
                 formats={quillFormats}
               />
            <div>
-        <Button className='mt-2' szie='xs' color='primary'>Post your answer</Button>
+        <Button className='mt-2' szie='xs' color='primary' onClick={handlePostAnswer}>Post your answer</Button>
         </div>
        
         </Colxx>
