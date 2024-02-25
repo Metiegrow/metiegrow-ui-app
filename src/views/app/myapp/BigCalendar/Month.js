@@ -324,9 +324,9 @@ const Month = () => {
         const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
         
         return (
-            <td className='bg-primary d-block text-center  '  key={date.getTime()} onClick={() => handleTimeSlotClick(date)}>
+            <Button className='bg-primary d-block text-center  '  key={date.getTime()} onClick={() => handleTimeSlotClick(date)}>
                 {fromTime} to {toTime}
-            </td>
+            </Button>
         );
     } 
         return <div key={date.getTime()} className='text-center text-one '>-</div>; // Returning null when condition is not met

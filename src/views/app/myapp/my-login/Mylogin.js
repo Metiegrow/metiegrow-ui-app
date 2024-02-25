@@ -118,7 +118,7 @@ const Mylogin = ({ intl }) => {
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState({
-    photo: "",
+    image: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -138,7 +138,7 @@ const Mylogin = ({ intl }) => {
     achievement: "",
   });
   const [aboutField, setAboutField] = useState({
-    photo: "",
+    image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -168,7 +168,7 @@ const Mylogin = ({ intl }) => {
   //   await axios.post(experienceUrl, data);
   // };
   
-const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiOiJhbmp1IiwiaWF0IjoxNzA3NzEyODI3LCJleHAiOjE3MDc3MzA4Mjd9.PAUNEoy_7mtPkblS7B0g6xTfML8J3a3ooaV56Sv8rbNF4VqgLHfou6B0UKzcdUeATnvH-CG4KHoYOAeybKn_KQ"
+const token = "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiOiJhbmp1IiwiaWF0IjoxNzA3NzEyODI3LCJleHAiOjE3MDc3MzA4Mjd9.PAUNEoy_7mtPkblS7B0g6xTfML8J3a3ooaV56Sv8rbNF4VqgLHfou6B0UKzcdUeATnvH-CG4KHoYOAeybKn_KQ"
 
   const postDataAbout = async (data) => {
     await axios.post(mentorAboutUrl, data, {
@@ -219,8 +219,8 @@ const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiO
         const base64Image = reader.result;
         // .split(",")[1];
         setSelectedFile(base64Image);
-        // setFieldValue("photo", base64Image);
-        setAboutField({ ...aboutField, photo: base64Image });
+        // setFieldValue("image", base64Image);
+        setAboutField({ ...aboutField, image: base64Image });
         // console.log(base64Image)
       };
 
@@ -287,7 +287,7 @@ const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiO
                 <Formik
                   innerRef={forms[0]}
                   initialValues={{
-                    // photo: aboutField.photo,
+                    // image: aboutField.image,
                     firstName: fields.firstName,
                     lastName: fields.lastName,
                     email: fields.email,
@@ -298,10 +298,10 @@ const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiO
                   }}
                   validateOnMount
                   onSubmit={(values) => {
-                    // postDataAbout(values,aboutField.photo);
-                    postDataAbout({ ...values, photo: aboutField.photo });
+                    // postDataAbout(values,aboutField.image);
+                    postDataAbout({ ...values, image: aboutField.image });
 
-                    console.log(aboutField.photo);
+                    console.log(aboutField.image);
                   }}
                 >
                   {({ errors, touched }) => (
@@ -320,7 +320,7 @@ const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiO
                         at those.
                       </Alert>
                       <FormGroup>
-                        <Label for="photo">Photo</Label>
+                        <Label for="image">image</Label>
                         <Row>
                           <Col md={1}>
                             <ThumbnailImage
@@ -330,11 +330,11 @@ const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiO
                                 selectedFile || "/assets/img/profiles/l-1.jpg"
                                 // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
                               }
-                              alt="photo"
+                              alt="image"
                             />
                           </Col>
                           <Col md={5} className="mt-3">
-                            <Label for="photo" className="d-md-none">
+                            <Label for="image" className="d-md-none">
                               Photo
                             </Label>
                             <InputGroup className="mb-3">
@@ -346,8 +346,8 @@ const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiO
                               </InputGroupAddon>
                               <CustomInput
                                 type="file"
-                                id="photo"
-                                name="photo"
+                                id="image"
+                                name="image"
                                 onChange={handleFileChange}
                                 // onChange={() => {
                                 //   handleFileChange()}}
@@ -357,13 +357,13 @@ const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiO
                                 className="form-control"
                                 type="file"
                                 id="exampleCustomFileBrowser1"
-                                name="photo"
+                                name="image"
                                 validate={validateFile}
                                 onChange={handleFileChange}
                               /> */}
-                              {errors.photo && touched.photo && (
+                              {errors.image && touched.image && (
                                 <div className="invalid-feedback d-block">
-                                  {errors.photo}
+                                  {errors.image}
                                 </div>
                               )}
                             </InputGroup>

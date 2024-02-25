@@ -22,7 +22,7 @@ const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [isEditingButton, setIsEditingButton] = useState(false);
-  const [photo, setPhoto] = useState(null)
+  const [image, setImage] = useState(null)
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("")
   const [experience, setExperience] = useState(
@@ -70,7 +70,7 @@ const MyProfile = () => {
         const aboutData = response.data;
         // console.log("profileData:", aboutData);
         if (aboutData) {
-          setPhoto(aboutData.photo)
+          setImage(aboutData.image)
           setFirstName(aboutData.firstName);
           setLastName(aboutData.lastName);
           setJobTitle(aboutData.jobTitle);
@@ -136,7 +136,7 @@ const MyProfile = () => {
   //       const userData = response.data;
   //       console.log("userData:", userData);
   //       if (userData) {
-  //         // setPhoto(userData.photo)
+  //         // setimage(userData.image)
   //         // setFirstName(userData.firstName);
   //         // setJobRole(userData.jobRole);
   //         // setJobTitle(userData.jobTitle);
@@ -175,7 +175,7 @@ const MyProfile = () => {
   const updateMentorAbout = async () => {
     try {
       const updatedAboutData = {
-        photo,
+        image,
         firstName,
         lastName,
         email,
@@ -244,7 +244,7 @@ const MyProfile = () => {
   // const updateMEntorProfile = async () => {
   //   try {
   //     const updatedData = {
-  //       // photo,
+  //       // image,
   //       // firstName,
   //       // lastName,
   //       // email,
@@ -354,7 +354,7 @@ const MyProfile = () => {
           <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
             <div className=" ">
               <img
-                src={photo}
+                src={image}
                 // "/assets/img/profiles/2.jpg"
                 className=" col-2 mx-2 w-60 rounded-circle img-thumbnail border"
                 alt=""
