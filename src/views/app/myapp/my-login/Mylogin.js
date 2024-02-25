@@ -40,8 +40,8 @@ import {
   validateSkills,
   validateBio,
   validateLinkedinUrl,
-  validateWhy,
-  validateWhat,
+  validateReasonForMentor,
+  validateAchievement,
   validateFile,
 } from "./validation";
 
@@ -118,7 +118,7 @@ const Mylogin = ({ intl }) => {
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState({
-    // photo: "",
+    photo: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -131,15 +131,21 @@ const Mylogin = ({ intl }) => {
     bio: "",
     linkedinUrl: "",
     twitterHandle: "",
-    personalWebsite: "",
+    website: "",
     introVideo: "",
     featuredArticle: "",
-    why: "",
-    what: "",
+    reasonForMentor: "",
+    achievement: "",
+  });
+  const [aboutField, setAboutField] = useState({
+    photo: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const url = `${baseUrl}/mentor/profile`;
+  // const url = `${baseUrl}/mentor/profile`;
+  const mentorAboutUrl = `${baseUrl}/mentorAbout`;
+  const mentorProfileUrl = `${baseUrl}/mentorProfile`;
+  const experienceUrl = `${baseUrl}/mentorExperience`;
 
   // const postData = async () => {
 
@@ -147,9 +153,61 @@ const Mylogin = ({ intl }) => {
 
   // };
 
-  const postData = async (data) => {
-    await axios.post(url, data);
+  // const postData = async (data) => {
+  //   await axios.post(url, data);
+  // };
+
+  // const postDataAbout = async (data) => {
+  //   await axios.post(mentorAboutUrl, data);
+  // };
+
+  // const postDataProfile = async (data) => {
+  //   await axios.post(mentorProfileUrl, data);
+  // };
+  // const postDataExperience = async (data) => {
+  //   await axios.post(experienceUrl, data);
+  // };
+  
+const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiOiJhbmp1IiwiaWF0IjoxNzA3NzEyODI3LCJleHAiOjE3MDc3MzA4Mjd9.PAUNEoy_7mtPkblS7B0g6xTfML8J3a3ooaV56Sv8rbNF4VqgLHfou6B0UKzcdUeATnvH-CG4KHoYOAeybKn_KQ"
+
+  const postDataAbout = async (data) => {
+    await axios.post(mentorAboutUrl, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   };
+
+  const postDataProfile = async (data) => {
+    await axios.post(mentorProfileUrl, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
+
+  const postDataExperience = async (data) => {
+    await axios.post(experienceUrl, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
+
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+
+  //   if (file) {
+  //     const reader = new FileReader();
+
+  //     reader.onloadend = () => {
+  //       setSelectedFile(reader.result);
+  //     };
+
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+  // console.log(selectedFile)
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -158,7 +216,12 @@ const Mylogin = ({ intl }) => {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setSelectedFile(reader.result);
+        const base64Image = reader.result;
+        // .split(",")[1];
+        setSelectedFile(base64Image);
+        // setFieldValue("photo", base64Image);
+        setAboutField({ ...aboutField, photo: base64Image });
+        // console.log(base64Image)
       };
 
       reader.readAsDataURL(file);
@@ -183,7 +246,7 @@ const Mylogin = ({ intl }) => {
           setLoading(true);
 
           try {
-            await postData(newFields);
+            // await postData(newFields);
 
             setTimeout(() => {
               setLoading(false);
@@ -224,7 +287,7 @@ const Mylogin = ({ intl }) => {
                 <Formik
                   innerRef={forms[0]}
                   initialValues={{
-                    photo: fields.photo,
+                    // photo: aboutField.photo,
                     firstName: fields.firstName,
                     lastName: fields.lastName,
                     email: fields.email,
@@ -235,7 +298,10 @@ const Mylogin = ({ intl }) => {
                   }}
                   validateOnMount
                   onSubmit={(values) => {
-                    console.log("Form 1 values:", values);
+                    // postDataAbout(values,aboutField.photo);
+                    postDataAbout({ ...values, photo: aboutField.photo });
+
+                    console.log(aboutField.photo);
                   }}
                 >
                   {({ errors, touched }) => (
@@ -280,9 +346,11 @@ const Mylogin = ({ intl }) => {
                               </InputGroupAddon>
                               <CustomInput
                                 type="file"
-                                id="exampleCustomFileBrowser1"
+                                id="photo"
                                 name="photo"
                                 onChange={handleFileChange}
+                                // onChange={() => {
+                                //   handleFileChange()}}
                                 validate={validateFile}
                               />
                               {/* <Field
@@ -441,9 +509,11 @@ const Mylogin = ({ intl }) => {
                     bio: fields.bio,
                     linkedinUrl: fields.linkedinUrl,
                     twitterHandle: fields.twitterHandle,
-                    personalWebsite: fields.personalWebsite,
+                    website: fields.website,
                   }}
-                  onSubmit={() => {}}
+                  onSubmit={(values) => {
+                    postDataProfile(values);
+                  }}
                   validateOnMount
                 >
                   {({
@@ -585,21 +655,19 @@ const Mylogin = ({ intl }) => {
                         </Row>
                       </FormGroup>
                       <FormGroup>
-                        <Label for="personalWebsite">
-                          Personal Website (optional)
-                        </Label>
+                        <Label for="website">Personal Website (optional)</Label>
                         <Field
                           type="url"
-                          name="personalWebsite"
-                          id="personalWebsite"
+                          name="website"
+                          id="website"
                           className="form-control"
                         />
                         <FormText color="muted">
                           You can add your blog, GitHub profile or similar here
                         </FormText>
-                        {/* {errors.personalWebsite && touched.personalWebsite && (
+                        {/* {errors.website && touched.website && (
                           <div className="invalid-feedback d-block">
-                            {errors.personalWebsite}
+                            {errors.website}
                           </div>
                         )} */}
                       </FormGroup>
@@ -619,11 +687,11 @@ const Mylogin = ({ intl }) => {
                   initialValues={{
                     introVideo: fields.introVideo,
                     featuredArticle: fields.featuredArticle,
-                    why: fields.why,
-                    what: fields.what,
+                    reasonForMentor: fields.reasonForMentor,
+                    achievement: fields.achievement,
                   }}
                   onSubmit={(values) => {
-                    console.log("Form 3 values:", values);
+                    postDataExperience(values);
                   }}
                   validateOnMount
                 >
@@ -684,14 +752,14 @@ const Mylogin = ({ intl }) => {
                         </Label>
                         <Field
                           as="textarea"
-                          name="why"
-                          id="why"
+                          name="reasonForMentor"
+                          id="reasonForMentor"
                           className="form-control"
-                          validate={validateWhy}
+                          validate={validateReasonForMentor}
                         />
-                        {errors.why && touched.why && (
+                        {errors.reasonForMentor && touched.reasonForMentor && (
                           <div className="invalid-feedback d-block">
-                            {errors.why}
+                            {errors.reasonForMentor}
                           </div>
                         )}
                       </FormGroup>
@@ -702,14 +770,14 @@ const Mylogin = ({ intl }) => {
                         </Label>
                         <Field
                           as="textarea"
-                          name="what"
-                          id="what"
+                          name="achievement"
+                          id="achievement"
                           className="form-control"
-                          validate={validateWhat}
+                          validate={validateAchievement}
                         />
-                        {errors.what && touched.what && (
+                        {errors.achievement && touched.achievement && (
                           <div className="invalid-feedback d-block">
-                            {errors.what}
+                            {errors.achievement}
                           </div>
                         )}
                       </FormGroup>

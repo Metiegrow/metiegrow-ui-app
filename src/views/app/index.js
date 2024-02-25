@@ -149,7 +149,7 @@ const App = ({ match }) => {
               render={(props) => <ProfilePage {...props} />}
             />
             <Route
-              path={`${match.url}/mylogin`}
+              path={`${match.url}/mentor/apply`}
               render={(props) => <ViewMylogin {...props} />}
             />
             <Route

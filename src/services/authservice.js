@@ -45,12 +45,51 @@ export const authService = {
       return await axios.post(url, bodyData)
       // .then((res) =>{
       //   console.log(res.data);
+      //   return res;
       // });
     } catch (error) {
       throw error;
     }
   },
 
+//   async login(email, password) {
+//     const bodyData = JSON.stringify({ email, password });
+//     const url = `${baseUrl}/signIn`;
+//     try {
+//       return await axios.post(url, bodyData)
+//       .then((res) =>{
+//         console.log(res.data.email);
+//         const emailREs = res.data.email;
+//         console.log("input - "+email)
+//         if (emailREs !== email) {
+//           console.log("faild")
+//         } else {
+//           return res;
+           
+//         }
+//       });
+//     } catch (error) {
+//       throw error;
+//     }
+// }
+
+  // async login(email, password) {
+  //   const bodyData = JSON.stringify({ email: email, password: password });
+  //   const url = `${baseUrl}/signIn`;
+  //   try {
+  //     const response = await axios.post(url, bodyData);
+  //     console.log(response.data);
+  //     if (response.data) {
+  //       return response.data; 
+  //     } else {
+  //       throw new Error(response.data.message); 
+  //     }
+  //   } catch (error) {
+  //     console.error('Login error:', error.response.data);
+  //     throw error;
+  //   }
+  // },
+  
   // async login(email, password) {
   //   // localStorage.clear();
   //   const bodyData = JSON.stringify({

@@ -121,7 +121,7 @@ const validateFirstName = (value) => {
     return error;
   }
   
-  function validateWhy(value) {
+  function validateReasonForMentor(value) {
     let error;
     if (!value) {
       error = "This field is required.";
@@ -129,7 +129,7 @@ const validateFirstName = (value) => {
     return error;
   }
   
-  function validateWhat(value) {
+  function validateAchievement(value) {
     let error;
     if (!value) {
       error = "This field is required.";
@@ -159,7 +159,7 @@ const validateFirstName = (value) => {
     validateSkills,
     validateBio,
     validateLinkedinUrl,
-    validateWhy,
-    validateWhat,
+    validateReasonForMentor,
+    validateAchievement,
     validateFile,
   };  

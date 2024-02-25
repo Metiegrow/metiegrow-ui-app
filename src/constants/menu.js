@@ -66,8 +66,8 @@ const data = [
   {
     id: 'Login',
     icon: 'iconsminds-folder',
-    label: 'mylogin',
-    to: `${adminRoot}/mylogin`,
+    label: 'Apply as a mentor',
+    to: `${adminRoot}/mentor/apply`,
   },
   {
     id: 'Chat',
