@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
+import {useParams,useLocation} from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useState ,useEffect} from 'react';
@@ -12,14 +13,59 @@ import MentorDropDown from './MentorDropDown';
 
 
 const MentorCard = () => {
-  const url=`${baseUrl}/mentor/cards`;
+  const {category}=useParams();
+  const location = useLocation();
+const firstNameParam = new URLSearchParams(location.search).get('firstName');
+const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
+ // Using useLocation hook
+  // const age = new URLSearchParams(location.search);
+
+  // let filteredUrl = `${url}?`;
+  // if (firstNameParam) filteredUrl += `firstName=${firstNameParam}&`;
+  // if (jobTitleParam) filteredUrl += `jobTitle=${jobTitleParam}&`;
+  // Add more conditions for other parameters
+  // const age = searchParams.get('age');
+  console.log('Category:', category);
+  // const url=`${baseUrl}/mentor/cards`;
+  // const url=`${baseUrl}/mentorDetails/?${firstNameParam}&jobTitle=${jobTitleParam}`;
+  // const url1=`${baseUrl}/mentorDetails/${category}`;
+  // const url='http://localhost:9091/api/mentor/cards?page=0&size=3 ';
   const[mentordetails,setMentorDetails]=useState([]);
+  // const[mentorfilter,setMentorFilter]=useState([]);
   const [inputkey,setInputKey]=useState('')
+
+
+ 
+
+  // const setFirstName = (newFirstName) => {
+  //   const searchParams = new URLSearchParams(location.search);
+  //   searchParams.set('firstName', newFirstName);
+  //   const newSearch = searchParams.toString();
+  //   const newPath = `${location.pathname}?${newSearch}`;
+  //   window.history.replaceState(null, '', newPath);
+  //   setInputKey(newFirstName); // Optionally, you can update the state with the new value
+  // };
+
   
 
+  // useEffect(()=>{
+  //   const mentorCardDetails = async () => {
+  //     try {
+  //       const response = await axios.get(url);
+  //       setMentorDetails(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   mentorCardDetails();
+  // },[location.search])   
   useEffect(()=>{
     const mentorCardDetails = async () => {
       try {
+        let url = `${baseUrl}/mentorDetails`;
+        if (firstNameParam || jobTitleParam) {
+          url += `?firstName=${firstNameParam || ''}&jobTitle=${jobTitleParam || ''}`;
+        }
         const response = await axios.get(url);
         setMentorDetails(response.data);
       } catch (error) {
@@ -27,9 +73,42 @@ const MentorCard = () => {
       }
     };
     mentorCardDetails();
-  },[])
-
+  },[location.search])  
  
+  // useEffect(() => {
+  //   const mentorCardDetails = async () => {
+  //     try {
+  //       const queryParams = new URLSearchParams(location.search);
+  //       const firstNameParam = queryParams.get('firstName');
+  //       const jobTitleParam = queryParams.get('jobTitle');
+  //       // Add more parameters as needed
+
+  //       let filteredUrl = `${url}?`;
+  //       if (firstNameParam) filteredUrl += `firstName=${firstNameParam}&`;
+  //       if (jobTitleParam) filteredUrl += `jobTitle=${jobTitleParam}&`;
+  //       // Add more conditions for other parameters
+
+  //       const response = await axios.get(filteredUrl);
+  //       setMentorDetails(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   mentorCardDetails();
+  // }, [location.search]);
+
+  // const mentorFilterSearch = async () => {
+  //   try {
+  //     const response = await axios.get(url1);
+  //     setMentorFilter(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
+  // const handleInputChange = (e) => {
+  //   setInputKey(e.target.value);
+  //   mentorFilterSearch(); // Call the search function when input changes
+  // };
   return (
     <div >
   {/* <Button onClick={mentorCardDetails}>
@@ -52,7 +131,7 @@ const MentorCard = () => {
 </Nav> */}
 
       {/* searchbar starts */}
-     
+    
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <div>
       {/* <div className="search input-group">
@@ -68,6 +147,24 @@ const MentorCard = () => {
          <i className="simple-icon-magnifier" />
        </span>
      </div> */}
+     {/* <h3>Age is {age} </h3>
+   <h3>City is {city}</h3> */}
+   <div>
+    {/* Your other components */}
+    {/* <h3>firstName is {firstNameParam}</h3>
+    <h3>jobTitle is {jobTitleParam}</h3> */}
+    {/* <Button onClick={()=>setFirstName('defaultname')}>set firstName</Button> */}
+    {/* <input
+            type="text"
+            className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
+            placeholder='query'
+            value={inputkey}
+            onChange={(e) =>setFirstName(e.target.value)}
+            // onChange={handleInputChange}
+          /> */}
+  </div>
+
+     
        <div className="">
         <div className="form-group">
        <div className='input-group'>
@@ -77,10 +174,15 @@ const MentorCard = () => {
             placeholder='Search by skill or job title'
             value={inputkey}
             onChange={(e) =>setInputKey(e.target.value)}
+            // onChange={handleInputChange}
           />
           {/* <i className="simple-icon-magnifier" /> */}
-         
-     
+      
+          <Button className='ml-3 ' color='primary' >Search</Button>
+        
+        
+          
+           
        </div>
         
   
@@ -108,19 +210,10 @@ const MentorCard = () => {
       </Colxx>
   
       {/* searchbar ends */}
+
       
       
-   {mentordetails.filter((mentors)=>{
-  
-        if (
-    inputkey === "" ||
-    mentors.jobTitle.toLowerCase().includes(inputkey.toLowerCase()) ||
-    mentors.skills.some((skill) => skill.toLowerCase().includes(inputkey.toLowerCase()))
-  ) {
-    return true;
-  }
-        return false;
-   }).map((mentors)=>{
+   {mentordetails.map((mentors)=>{
     return (
       <Colxx xxs="12" key={mentors.id}>
       <Row>

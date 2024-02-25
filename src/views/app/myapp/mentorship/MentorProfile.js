@@ -3,7 +3,7 @@ import React ,{useState,useEffect} from 'react';
 import {  Button, NavLink, Row,Card,CardBody,CardSubtitle,CardImg} from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
-import {useParams} from "react-router-dom";
+import {useParams,useHistory} from "react-router-dom";
 
 
 const MentorProfile = () => {
@@ -16,7 +16,25 @@ const MentorProfile = () => {
   const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
 
+  const history = useHistory();
 
+  // const handleConnectClick = () => {
+  //   // Construct the URL with mentor's name as query parameter
+  //   const mentorName = `${mentorprofiledetails.firstName} ${mentorprofiledetails.lastName}`;
+  //   const url2 = `/app/calendar?mentorName=${mentorName}`;
+
+  //   // Navigate to the Month component with the mentor's name as a query parameter
+  //   history.push(url2);
+  // };
+  const handleConnectClick = () => {
+    // Construct the URL with mentor's ID and name as query parameters
+    const mentorId = mentorprofiledetails.id;
+    const mentorName = `${mentorprofiledetails.firstName} ${mentorprofiledetails.lastName}`;
+    const url2 = `/app/calendar?mentorId=${mentorId}&mentorName=${mentorName}`;
+
+    // Navigate to the Month component with the mentor's ID and name as query parameters
+    history.push(url2);
+};
   
   useEffect(()=>{
     const mentorProfileDetails = async () => {
@@ -69,6 +87,14 @@ const MentorProfile = () => {
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
                 <span className='font-weight-semibold text-one'><i className='iconsminds-thunder text-primary'/>  Quick Responder</span>
               </Button>
+            </div>
+            <div>
+            <NavLink  onClick={handleConnectClick}>
+              <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
+                <span className='font-weight-semibold text-primary text-one'>Connect</span>
+                {/* <i className='simple-icon-social-linkedin text-primary font-weight-semibold text-one  '/> */}
+              </Button>
+              </NavLink>
             </div>
             <div>
               <NavLink>

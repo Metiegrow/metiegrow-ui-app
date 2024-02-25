@@ -37,6 +37,12 @@ const data = [
         to: `${adminRoot}/calendar`,
    
       },
+      {
+        icon: 'simple-icon-list',
+        label: 'SessionList',
+        to: `${adminRoot}/sessionlists`,
+   
+      },
     ]
   },
   {
