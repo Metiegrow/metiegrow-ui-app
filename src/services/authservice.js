@@ -38,19 +38,20 @@ export const authService = {
   },
   
   async login(email, password) {
-    const bodyData = JSON.stringify({ email: email,
-          password: password, });
+    const bodyData = JSON.stringify({ email: email, password: password });
     const url = `${baseUrl}/signIn`;
     try {
-      return await axios.post(url, bodyData)
-      // .then((res) =>{
-      //   console.log(res.data);
-      //   return res;
-      // });
+        const res = await axios.post(url, bodyData);
+        const tokenRes = res.data.token; 
+        console.log(res.data.token);
+        localStorage.setItem('tokenRes', tokenRes);
+        localStorage.setItem('cRes', "check");
+        return res;
     } catch (error) {
-      throw error;
+        throw error;
     }
-  },
+},
+
 
 //   async login(email, password) {
 //     const bodyData = JSON.stringify({ email, password });
