@@ -25,24 +25,22 @@ const MyProfile = () => {
   const [image, setImage] = useState(null)
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("")
-  const [experience, setExperience] = useState(
-    "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide."
-  );
-  const [country, setCountry] = useState("");
-  const [about, setAbout] = useState(
-    "I have more than a decade experience in Software Engineering (and related practices including DevOps) and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
-  );
+  const [experience, setExperience] = useState("");
+  const [location, setLocation] = useState("");
+  // const [about, setAbout] = useState(
+  //   "I have more than a decade experience in Software Engineering (and related practices including DevOps) and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
+  // );
   const [newInputSkill, setNewInputSkill] = useState("");
   const [newInputTopics, setNewInputTopics] = useState("");
   const [skills, setSkills] = useState([]);
-  const [topics, setTopics] = useState(["Change Jobs", "Learn a new skill"]);
+  const [topics, setTopics] = useState([]);
   // const [userId, setUserId] = useState("");
-  // const [star, setStar] = useState("");
+  const [star, setStar] = useState("");
   // const [lastSceen, setLastseen] = useState("");
   // const [ratings, setRatings] = useState("")
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [company, setCompany] = useState("");
   const [category, setCategory] = useState("");
   const [bio, setBio] = useState("");
@@ -53,53 +51,55 @@ const MyProfile = () => {
   const [featuredArticle, setFeaturedArticle] = useState("");
   const [reasonForMentor, setReasonForMentor] = useState("");
   const [achievement, setAchievement] = useState("");
+  const [reviews, setReviews] = useState("");
+  // const [price, setPrice] =useState("");
 
-  const Id = "3";
+  // const Id = 11;
 
+  // const url = `${baseUrl}/user`;
   // const url = `${baseUrl}/api/mentor/11/details/profile`;
   // const url1 = `${baseUrl}/mentor/profile${userId}`;
   // const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
-  const aboutUrl = `${baseUrl}/api/mentor/${Id}/details/about`;
-  const profileUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
-  const experienceUrl = `${baseUrl}/api/mentor/${Id}/details/experience`;
-
-  useEffect(() => {
-    const mentorAboutDetails = async () => {
-      try {
-        const response = await axios.get(aboutUrl);
-        const aboutData = response.data;
-        // console.log("profileData:", aboutData);
-        if (aboutData) {
-          setImage(aboutData.image)
-          setFirstName(aboutData.firstName);
-          setLastName(aboutData.lastName);
-          setJobTitle(aboutData.jobTitle);
-          setCompany(aboutData.company);
-          setEmail(aboutData.email);
-          setPassword(aboutData.password);
-          setCountry(aboutData.location);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    mentorAboutDetails();
-  }, []);
+  const endUrl = `${baseUrl}/myprofile`;
+  const inputUrl = `${baseUrl}/inputs`
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
       try {
-        const response = await axios.get(profileUrl);
-        const profileData = response.data;
-        console.log("profileData:", profileData);
-        if (profileData) {
-          setSkills(profileData.skills);
-          setCategory(profileData.category);
-          setBio(profileData.bio);
-          setLinkedinUrl(profileData.linkedinUrl);
-          setTwitterHandle(profileData.twitterHandle);
-          setWebsite(profileData.website);
+        const response = await axios.get(endUrl);
+        const userData = response.data;
+        console.log("userData:", userData);
+        if (userData) {
+          setImage(userData.image)
+          setFirstName(userData.firstName);
+          // setJobRole(userData.jobRole);
+          setJobTitle(userData.jobTitle);
+          setCompany(userData.company);
+          setLocation(userData.location);
+          // setAbout(userData.bio);
+          setSkills(userData.skills);
+          // setUserId(userData.id);
+          // setLastseen(userData.lastSeen);
+          // setRatings(userData[0].ratings)
+          // console.log(response)
+          // console.log("Username:", userData[1].jobRole);
+          setLastName(userData.lastName);
+          setEmail(userData.email);
+          // setPassword(userData.password);
+          setCategory(userData.category);
+          setBio(userData.bio);
+          setLinkedinUrl(userData.linkedinUrl);
+          setTwitterHandle(userData.twitterHandle);
+          setWebsite(userData.website);
+          setIntroVideo(userData.introVideo);
+          setFeaturedArticle(userData.featuredArticle);
+          setReasonForMentor(userData.reasonForMentor);
+          setAchievement(userData.achievement);
+          // setReviews(userData.reviews)
+          // setPrice(userData.price)
+          // setExperience(userData.experience)
+          // setTopics(userData.topics);
+          // setStar(userData.star);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -110,107 +110,69 @@ const MyProfile = () => {
   }, []);
 
   useEffect(() => {
-    const mentorExperienceDetails = async () => {
+    const mentorProfileDetails = async () => {
       try {
-        const response = await axios.get(experienceUrl);
-        const experienceData = response.data;
-        console.log("experienceData:", experienceData);
-        if (experienceData) {
-          setIntroVideo(experienceData.introVideo);
-          setFeaturedArticle(experienceData.featuredArticle);
-          setReasonForMentor(experienceData.reasonForMentor);
-          setAchievement(experienceData.achievement);
+        const response = await axios.get(inputUrl);
+        const inputData = response.data;
+        console.log("inputData:", inputData);
+        if (inputData) {
+          setReviews(inputData.reviews)
+          // setPrice(inputData.price)
+          setExperience(inputData.experience)
+          setTopics(inputData.topics);
+          setStar(inputData.star);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    mentorExperienceDetails();
+    mentorProfileDetails();
   }, []);
 
-  // useEffect(() => {
-  //   const mentorProfileDetails = async () => {
-  //     try {
-  //       const response = await axios.get(endUrl);
-  //       const userData = response.data;
-  //       console.log("userData:", userData);
-  //       if (userData) {
-  //         // setimage(userData.image)
-  //         // setFirstName(userData.firstName);
-  //         // setJobRole(userData.jobRole);
-  //         // setJobTitle(userData.jobTitle);
-  //         // setCompany(userData.company);
-  //         // setCountry(userData.location);
-  //         // setAbout(userData.bio);
-  //         setSkills(userData.skills);
-  //         // setTopics(userData.reasonForMentor);
-  //         // setUserId(userData.id);
-  //         // setStar(userData.star);
-  //         // setLastseen(userData.lastSeen);
-  //         // setRatings(userData[0].ratings)
-  //         // console.log(response)
-  //         // console.log("Username:", userData[1].jobRole);
-  //         // setLastName(userData.lastName);
-  //         setEmail(userData.email);
-  //         // setPassword(userData.password);
-  //         setCategory(userData.category);
-  //         setBio(userData.bio);
-  //         setLinkedinUrl(userData.linkedinUrl);
-  //         setTwitterHandle(userData.twitterHandle);
-  //         setWebsite(userData.website);
-  //         setIntroVideo(userData.introVideo);
-  //         setFeaturedArticle(userData.featuredArticle);
-  //         setReasonForMentor(userData.reasonForMentor);
-  //         setAchievement(userData.achievement);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
+  function getTokenRes() {
+    return localStorage.getItem('tokenRes');
+}
+const token = getTokenRes();
+// console.log(token);
 
-  //   mentorProfileDetails();
-  // }, []);
-
-  const updateMentorAbout = async () => {
+  const updateMEntorProfile = async () => {
     try {
-      const updatedAboutData = {
+      const updatedData = {
         image,
         firstName,
         lastName,
         email,
-        password,
         jobTitle,
         company,
-        location: country,
-      };
-
-      // console.log("Updated Data:", updatedData);
-      // const response =
-      await axios.put(aboutUrl, updatedAboutData);
-
-      // console.log("Response", response.data);
-
-      console.log("About updated successfully");
-    } catch (error) {
-      console.error("Error updating About", error);
-    }
-  };
-
-  const updateMentorProfile = async () => {
-    try {
-      const updatedProfileData = {
+        location,
         category,
         skills,
         bio,
+        // password,
         linkedinUrl,
         twitterHandle,
-        website
+        website,
+        introVideo,
+        featuredArticle,
+        reasonForMentor,
+        achievement,
+        // reviews,
+        // star,
+        // topics,
+        // price,
+        // experience,
       };
 
       // console.log("Updated Data:", updatedData);
       // const response =
-      await axios.put(profileUrl, updatedProfileData);
+
+
+      await axios.put(endUrl, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       // console.log("Response", response.data);
 
@@ -219,62 +181,6 @@ const MyProfile = () => {
       console.error("Error updating profile", error);
     }
   };
-
-  const updateMentorExperience = async () => {
-    try {
-      const updatedExperienceData = {
-        introVideo,
-        featuredArticle,
-        reasonForMentor,
-        achievement,
-      };
-
-      // console.log("Updated Data:", updatedData);
-      // const response =
-      await axios.put(experienceUrl, updatedExperienceData);
-
-      // console.log("Response", response.data);
-
-      console.log("Experience updated successfully");
-    } catch (error) {
-      console.error("Error updating Experience", error);
-    }
-  };
-
-  // const updateMEntorProfile = async () => {
-  //   try {
-  //     const updatedData = {
-  //       // image,
-  //       // firstName,
-  //       // lastName,
-  //       // email,
-  //       // password,
-  //       // jobTitle,
-  //       // company,
-  //       // location: country,
-  //       bio,
-  //       skills,
-  //       category,
-  //       linkedinUrl,
-  //       twitterHandle,
-  //       website,
-  //       introVideo,
-  //       featuredArticle,
-  //       reasonForMentor,
-  //       achievement,
-  //     };
-
-  //     // console.log("Updated Data:", updatedData);
-  //     // const response =
-  //     await axios.put(endUrl, updatedData);
-
-  //     // console.log("Response", response.data);
-
-  //     console.log("Profile updated successfully");
-  //   } catch (error) {
-  //     console.error("Error updating profile", error);
-  //   }
-  // };
 
   const handleAddSkill = (newSkill) => {
     setSkills([...skills, newSkill]);
@@ -286,10 +192,7 @@ const MyProfile = () => {
 
   const handleSaveAbout = () => {
     setIsEditingAbout(false);
-    // updateMEntorProfile();
-    updateMentorAbout();
-    updateMentorProfile();
-    updateMentorExperience();
+    updateMEntorProfile();
   };
 
   const handleCancelEditAbout = () => {
@@ -301,10 +204,7 @@ const MyProfile = () => {
   };
   const handleSaveButton = () => {
     setIsEditingButton(false);
-    // updateMEntorProfile();
-    updateMentorAbout();
-    updateMentorProfile();
-    updateMentorExperience();
+    updateMEntorProfile();
   };
 
   const handleCancelButton = () => {
@@ -317,10 +217,7 @@ const MyProfile = () => {
 
   const handleSave = () => {
     setIsEditing(false);
-    // updateMEntorProfile();
-    updateMentorAbout();
-    updateMentorProfile();
-    updateMentorExperience();
+    updateMEntorProfile();
   };
 
   const handleCancel = () => {
@@ -453,14 +350,14 @@ const MyProfile = () => {
                       <br />
                     </>
                     <>
-                      <Label for="country" className="font-weight-medium">
+                      <Label for="location" className="font-weight-medium">
                         <h4>Country</h4>
                       </Label>
                       <Input
                         type="text"
-                        id="country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
+                        id="location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
                       />
                       <br />
                     </>
@@ -491,11 +388,11 @@ const MyProfile = () => {
                     <h5 className="font-weight-medium">
                       <i className="simple-icon-location-pin text-primary" />
 
-                      <span className="ml-2">{country}</span>
+                      <span className="ml-2">{location}</span>
                     </h5>
                     <h6 className="">
                       <i className="simple-icon-star text-primary " />
-                      <span className="ml-2">5.0 (200 reviews)</span>
+                      <span className="ml-2">{`${star} (${reviews} reviews)`}</span>
                     </h6>
                     <h6 className="">
                       <i className="simple-icon-clock text-primary" />
@@ -581,6 +478,7 @@ const MyProfile = () => {
                     color="light"
                     className="mb-2 font-weight-semibold mx-2"
                     size="xs"
+                    // onClick={() => handleRemoveSkill(index)}
                   >
                     {skill}
                   </Button>
@@ -637,6 +535,7 @@ const MyProfile = () => {
                       color="light"
                       className="mb-2 font-weight-semibold mx-2"
                       size="xs"
+                      // onClick={() => handleRemoveSkill(index)}
                     >
                       {newTopics}
                     </Button>
@@ -668,6 +567,7 @@ const MyProfile = () => {
                       onClick={handleCancelButton}
                       className="ml-2"
                     >
+                      {/* <i className="simple-icon-close" />  */}
                       Cancel
                     </Button>
                   </>
@@ -691,8 +591,8 @@ const MyProfile = () => {
                     <Input
                       type="textarea"
                       id="about"
-                      value={about}
-                      onChange={(e) => setAbout(e.target.value)}
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
                       className="form-control"
                       rows="5"
                     />
@@ -731,7 +631,7 @@ const MyProfile = () => {
                   </div>
                 ) : (
                   <div className="col-lg-6 col-12">
-                    <p className="text-one font-weight-medium">{about}</p>
+                    <p className="text-one font-weight-medium">{bio}</p>
                   </div>
                 )}
               </div>
