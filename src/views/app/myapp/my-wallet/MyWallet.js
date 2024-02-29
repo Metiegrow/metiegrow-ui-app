@@ -21,16 +21,16 @@ const MyWallet = () => {
   const [transactions, setTransactions] = useState([]);
   const [rechargeAmount, setRechargeAmount] = useState("");
 
-  const url = `${baseUrl}/wallets`;
+  // const url = `${baseUrl}/wallets`;
   const url1 = `${baseUrl}/wallets/1`;
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(url1);
 
-        const walletData = response.data[0];
-        // console.log("checkk", response.data[0])
+        const walletData = response.data;
+        console.log("checkk", walletData)
         setBalance(walletData.newBalance);
         setTransactions(walletData.newTransactions);
 
