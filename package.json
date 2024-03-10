@@ -11,6 +11,7 @@
     "agora-classroom-sdk": "^2.9.40",
     "agora-electron-sdk": "^4.2.6",
     "agora-plugin-gallery": "^2.9.40",
+    "agora-react-uikit": "^1.2.0",
     "agora-rtc-react": "^2.1.0",
     "agora-rtc-sdk": "^3.6.11",
     "agora-rtc-sdk-ng": "^4.20.0",

@@ -111,11 +111,41 @@ const ViewMyWallet = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/my-wallet/MyWallet'
   )
 );
-// const ViewVideoRoom = React.lazy(() =>
+// const ViewVideoCall = React.lazy(() =>
 //   import(
-//     /* webpackChunkName: "views-app" */ './myapp/video-room/VideoRoom'
+//     /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCall'
 //   )
 // );
+const ViewJobPosting = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/JobPosting'
+  )
+);
+const ViewStayPosting = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/StayPosting'
+  )
+);
+const ViewOtherPosting = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/OtherPosting'
+  )
+);
+const ViewJobListing = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/JobListing'
+  )
+);
+const ViewStayListing = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/StayListing'
+  )
+);
+const ViewOtherListing = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/OtherListing'
+  )
+);
 
 const App = ({ match }) => {
   return (
@@ -222,9 +252,33 @@ const App = ({ match }) => {
               render={(props) => <ViewMyWallet {...props} />}
             />
                {/* <Route
-              path={`${match.url}/videoroom`}
-              render={(props) => <ViewVideoRoom {...props} />}
+              path={`${match.url}/videocall`}
+              render={(props) => <ViewVideoCall {...props} />}
             /> */}
+               <Route
+              path={`${match.url}/jobposting`}
+              render={(props) => <ViewJobPosting {...props} />}
+            />
+               <Route
+              path={`${match.url}/stayposting`}
+              render={(props) => <ViewStayPosting {...props} />}
+            />
+               <Route
+              path={`${match.url}/otherposting`}
+              render={(props) => <ViewOtherPosting {...props} />}
+            />
+               <Route
+              path={`${match.url}/job/listing`}
+              render={(props) => <ViewJobListing {...props} />}
+            />
+               <Route
+              path={`${match.url}/stay/listing`}
+              render={(props) => <ViewStayListing {...props} />}
+            />
+               <Route
+              path={`${match.url}/other/listing`}
+              render={(props) => <ViewOtherListing {...props} />}
+            />
            
            
           

@@ -9,6 +9,7 @@
     "/mentor/answers":"/mentorAnswers",
     "/wallets": "/wallets",
     "/notifications": "/notifications",
+    
 
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",
@@ -19,7 +20,12 @@
     "/api/mentor/:id/details/profile":"/mentorProfile/:id",
     "/api/mentor/details/experience":"/mentorExperience",
     "/api/mentor/:id/details/experience":"/mentorExperience/:id",
-    "/api/calendar/appointment/mentee":"/mentorAvailablity"
+    "/api/calendar/appointment/mentee":"/mentorAvailablity",
+    "/api/mentor/id/myprofile": "/myprofile/:id",
+    "/api/posts/job-post": "/jobpost",
+    "/api/posts/stay-post": "/staypost",
+    "/api/joblisting/cards": "/joblistingcard",
+    "/api/staylisting/cards": "/staylistingcard"
 
     
 

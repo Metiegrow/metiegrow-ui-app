@@ -12,7 +12,7 @@ const MentorProfile = () => {
   // const url=`${baseUrl}/mentor/profile`;
   // const url1=`${baseUrl}/mentor/cards/${mid}`;
   const url=`${baseUrl}/mentorDetails/${mid}`;
- const url1=`${baseUrl}/mentorProfile/${mid}`;
+ const url1=`${baseUrl}/myprofile`;
   const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
 
@@ -154,7 +154,7 @@ const MentorProfile = () => {
             <Row>
             <div className=''>
             <h1 className='font-weight-semibold text-large'>About</h1>
-            <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.about}</p>
+            <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.bio}</p>
             </div>
              
             </Row>
