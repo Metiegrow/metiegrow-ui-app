@@ -88,7 +88,7 @@
       "location": "India"
     }
   ],
-  "mentorExperience":[
+  "mentorExperience": [
     {
       "id": 1,
       "introVideo": "https://www.youtube.com/watch?v=abc",
@@ -113,25 +113,23 @@
       "id": 1
     },
     {
+      "id": 2,
       "questionHeading": "Speaking in public problem",
       "questionHeadingBrief": "What do you do to avoid nervousness when speaking in public?",
       "views": 390,
-      "time": 1705559066456,
-      "id": 2
+      "time": 1705559066456
     }
   ],
   "mentorAnswers": [
     {
       "answer": [
         {
-          "id": 101,
           "mentorId": 1,
           "mentorName": "Ashok Kumar",
           "mentorRole": "Spoken English Teacher",
           "answered": "Practice yours speech multiple times before the actual presentation. This helps you become familiar with the content and improves your confidence."
         },
         {
-          "id": 102,
           "mentorId": 5,
           "mentorName": "Naveen Kumar",
           "mentorRole": "English Teacher",
@@ -144,19 +142,10 @@
     {
       "answer": [
         {
-          "id": 103,
           "mentorId": 2,
           "mentorName": "Dinesh Kumar",
           "mentorRole": "English Teacher",
-          "answered": " Practice deep breathing exercise to calm your nerves. Deep breaths can help regulate your heart rate and reduce anxiety..",
-          "answeredYear": 5
-        },
-        {
-          "id": 110,
-          "mentorId": 11,
-          "mentorName": "Arun Kumar",
-          "mentorRole": "English Teacher",
-          "answered": "  Deep breaths can help regulate your heart rate and reduce anxiety........",
+          "answered": " Practice deep breathing exercises to calm your nerves. Deep breaths can help regulate your heart rate and reduce anxiety..",
           "answeredYear": 5
         }
       ],
@@ -181,26 +170,50 @@
       "id": 4
     }
   ],
-  "myAnswers":[
+  "myAnswers": [
     {
       "totalAnswers": 25,
       "answers": [
-        {"questionId": 1, "question": "What is question?", "timestamp": 1666632563517},
-        {"questionId": 2, "question": "What is this?", "timestamp": 1666632563517},
-        {"questionId": 546, "question": "What was that?", "timestamp":1707542436000}
+        {
+          "questionId": 1,
+          "question": "What is question?",
+          "timestamp": 1666632563517
+        },
+        {
+          "questionId": 2,
+          "question": "What is this?",
+          "timestamp": 1666632563517
+        },
+        {
+          "questionId": 546,
+          "question": "What was that?",
+          "timestamp": 1707542436000
+        }
       ]
-      }
-  ],
-"myQuestions":[
-  {
-    "totalQuestions": 25,
-    "questions": [
-      {"questionId": 1, "question": "Speaking better?", "timestamp": 7345693452000},
-      {"questionId": 2, "question": "Speaking in public problem?", "timestamp": 734565452000},
-      {"questionId": 546, "question": "What was that?", "timestamp": 1707542436000}
-    ]
     }
-],
+  ],
+  "myQuestions": [
+    {
+      "totalQuestions": 25,
+      "questions": [
+        {
+          "questionId": 1,
+          "question": "Speaking better?",
+          "timestamp": 7345693452000
+        },
+        {
+          "questionId": 2,
+          "question": "Speaking in public problem?",
+          "timestamp": 734565452000
+        },
+        {
+          "questionId": 546,
+          "question": "What was that?",
+          "timestamp": 1707542436000
+        }
+      ]
+    }
+  ],
   "wallets": [
     {
       "newBalance": 2100,
@@ -233,7 +246,7 @@
       "id": 1
     }
   ],
-  "mentorAvailablity":[
+  "mentorAvailablity": [
     {
       "id": 1,
       "fromTimeStamp": 1710485141000,
@@ -280,45 +293,43 @@
       "toTimeStamp": 1709173799000
     }
   ],
-  "userCard":[
+  "userCard": [
     {
       "id": 1,
       "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
-      "image":"/assets/img/profiles/3.jpg",
-      "star": 5.0,
+      "image": "/assets/img/profiles/3.jpg",
+      "star": 5,
       "ratings": 200,
       "firstName": "Vignesh",
       "lastName": "RK",
       "jobTitle": "lawyer",
       "company": "google",
-      "bio":"A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
+      "bio": "A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
       "skills": [
-          "skill 1",
-          "skill 2",
-          "skill 3"
-      ],
-      "price": 10000
-  },
-  {
-    "id": 2,
-    "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
-    "image":"/assets/img/profiles/11.jpg",
-    "star": 5.0,
-    "ratings": 200,
-    "firstName": "Rajendren",
-    "lastName": "RD",
-    "jobTitle": "lawyer",
-    "company": "google",
-    "bio":"A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
-    "skills": [
         "skill 1",
         "skill 2",
         "skill 3"
-    ],
-    "price": 20000
-}
-
-    
+      ],
+      "price": 10000
+    },
+    {
+      "id": 2,
+      "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
+      "image": "/assets/img/profiles/11.jpg",
+      "star": 5,
+      "ratings": 200,
+      "firstName": "Rajendren",
+      "lastName": "RD",
+      "jobTitle": "lawyer",
+      "company": "google",
+      "bio": "A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
+      "skills": [
+        "skill 1",
+        "skill 2",
+        "skill 3"
+      ],
+      "price": 20000
+    }
   ],
   "myprofile": {
     "image": "data:image/jpeg;base64,/9j/4QAY",
@@ -499,102 +510,6 @@
       "id": 5
     }
   ],
-  "mentorExperience": [
-    {
-      "id": 1,
-      "introVideo": "https://www.youtube.com/watch?v=abc",
-      "featuredArticle": "https://wordpress.com/posts/srihith.wordpress.com",
-      "reasonForMentor": "I have failed many times and got up again and again",
-      "achievement": "University top"
-    },
-    {
-      "id": 2,
-      "introVideo": "https://www.youtube.com/watch?v=xyz",
-      "featuredArticle": "https://wordpress.com/posts/raj.wordpress.com",
-      "reasonForMentor": "Let's make it simple",
-      "achievement": "University gold medalist"
-    }
-  ],
-  "multipleQuestions": [
-    {
-      "questionHeading": "Speaking better",
-      "questionHeadingBrief": "How do I become better at public speaking?",
-      "views": 300,
-      "time": 1705559036000,
-      "id": 1
-    },
-    {
-      "id": 2,
-      "questionHeading": "Speaking in public problem",
-      "questionHeadingBrief": "What do you do to avoid nervousness when speaking in public?",
-      "views": 390,
-      "time": 1705559066456
-    }
-  ],
-  "mentorAnswers": [
-    {
-      "answer": [
-        {
-          "mentorId": 1,
-          "mentorName": "Ashok Kumar",
-          "mentorRole": "Spoken English Teacher",
-          "answered": "Practice yours speech multiple times before the actual presentation. This helps you become familiar with the content and improves your confidence."
-        },
-        {
-          "mentorId": 5,
-          "mentorName": "Naveen Kumar",
-          "mentorRole": "English Teacher",
-          "answered": "Practice yours speech multiple times before the actual presentation. This helps you become familiar with the content and improves your confidence.",
-          "answeredYear": 10
-        }
-      ],
-      "id": 1
-    },
-    {
-      "answer": [
-        {
-          "mentorId": 2,
-          "mentorName": "Dinesh Kumar",
-          "mentorRole": "English Teacher",
-          "answered": " Practice deep breathing exercises to calm your nerves. Deep breaths can help regulate your heart rate and reduce anxiety..",
-          "answeredYear": 5
-        }
-      ],
-      "id": 2
-    }
-  ],
-  "wallets": [
-    {
-      "newBalance": 2100,
-      "newTransactions": [
-        {
-          "id": 1,
-          "type": "Purchase",
-          "amount": 500,
-          "status": "Success",
-          "paymentmethod": "Credit Card",
-          "date": "2024-01-31T10:15:22.501Z"
-        },
-        {
-          "id": 3,
-          "type": "Recharge",
-          "amount": 1500,
-          "status": "Success",
-          "paymentmethod": "PayPal",
-          "date": "2024-01-31T10:30:45.789Z"
-        },
-        {
-          "id": 3,
-          "type": "Recharge",
-          "amount": 100,
-          "status": "Success",
-          "paymentmethod": "UPI",
-          "date": "2024-01-31T10:30:45.789Z"
-        }
-      ],
-      "id": 1
-    }
-  ],
   "notifications": [
     {
       "img": "/assets/img/profiles/l-2.jpg",
@@ -619,53 +534,6 @@
       "title": "Arun just sent a new comment!",
       "date": "09.02.2024 - 12:45",
       "id": 4
-    }
-  ],
-  "mentorAvailablity": [
-    {
-      "id": 1,
-      "fromTimeStamp": 1709254858000,
-      "toTimeStamp": 1709261158000
-    },
-    {
-      "id": 2,
-      "fromTimeStamp": 1709352931000,
-      "toTimeStamp": 1709359231000
-    },
-    {
-      "id": 3,
-      "fromTimeStamp": 1709616631000,
-      "toTimeStamp": 1709622031000
-    },
-    {
-      "id": 10,
-      "fromTimeStamp": 1709176801000,
-      "toTimeStamp": 1709177400000
-    },
-    {
-      "id": 14,
-      "fromTimeStamp": 1708990200000,
-      "toTimeStamp": 1708997400000
-    },
-    {
-      "id": 5,
-      "fromTimeStamp": 1709173800000,
-      "toTimeStamp": 1709175600000
-    },
-    {
-      "id": 9,
-      "fromTimeStamp": 1709170200000,
-      "toTimeStamp": 1709172000000
-    },
-    {
-      "id": 11,
-      "fromTimeStamp": 1709175601000,
-      "toTimeStamp": 1709176800000
-    },
-    {
-      "id": 12,
-      "fromTimeStamp": 1709172001000,
-      "toTimeStamp": 1709173799000
     }
   ],
   "mentorDetails": [
