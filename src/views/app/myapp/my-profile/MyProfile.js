@@ -60,6 +60,7 @@ const MyProfile = () => {
   // const url1 = `${baseUrl}/mentor/profile${userId}`;
   const endUrl = `${baseUrl}/api/mentor/${userId}/details/profile`;
 
+
   useEffect(() => {
     const mentorProfileDetails = async () => {
       try {

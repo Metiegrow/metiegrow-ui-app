@@ -15,34 +15,56 @@ const data = [
     subs: [
       {
         icon: 'simple-icon-user',
-        label: 'MentorCard',
+        label: 'Find Mentors',
         to: `${adminRoot}/mentor`,
    
       },
       {
+        icon: 'simple-icon-list',
+        label: 'Mentor sessions',
+        to: `${adminRoot}/sessionlists`,
+   
+      },
+      {
         icon: 'simple-icon-question',
-        label: 'Student Questions',
+        label: 'Questions & Answers',
         to: `${adminRoot}/questions`,
    
       },
       {
-        icon: 'simple-icon-bubbles',
-        label: 'Chat',
-        to: `${adminRoot}/chat`,
+        icon: 'simple-icon-question',
+        label: 'My Q&A activities ',
+        to: `${adminRoot}/myactivities`,
    
       },
+      // {
+      //   icon: 'simple-icon-bubbles',
+      //   label: 'Chat',
+      //   to: `${adminRoot}/chat`,
+   
+      // },
+      // {
+      //   icon: 'simple-icon-calendar',
+      //   label: 'Calendar',
+      //   to: `${adminRoot}/calendar`,
+   
+      // },
+     
+    ]
+  },
+  {
+    id: 'Lawyer',
+    icon: 'iconsminds-scale',
+    label: 'Lawyer',
+    to: `${adminRoot}/lawyer`,
+    subs: [
       {
-        icon: 'simple-icon-calendar',
-        label: 'Calendar',
-        to: `${adminRoot}/calendar`,
+        icon: 'simple-icon-user',
+        label: 'Find lawyers',
+        to: `${adminRoot}/usercard`,
    
       },
-      {
-        icon: 'simple-icon-list',
-        label: 'SessionList',
-        to: `${adminRoot}/sessionlists`,
    
-      },
     ]
   },
   {
@@ -76,17 +98,11 @@ const data = [
     to: `${adminRoot}/mylogin`,
     
   },
-  {
-    id: 'Chat',
-    icon: 'iconsminds-speach-bubbles',
-    label: 'Chat',
-    to: `${adminRoot}/chat`,
-  },
   // {
-  //   id: 'videoroom',
+  //   id: 'Chat',
   //   icon: 'iconsminds-speach-bubbles',
-  //   label: 'Video Room',
-  //   to: `${adminRoot}/videoroom`,
+  //   label: 'Chat',
+  //   to: `${adminRoot}/chat`,
   // },
 ];
 export default data;

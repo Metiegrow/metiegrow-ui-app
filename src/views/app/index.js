@@ -73,6 +73,10 @@ const AskQuestion = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/mentorship/AskQuestion'
   )
 );
+const ViewActivities=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/mentorship/myQandA'
+))
 
 const Month = React.lazy(() =>
   import(
@@ -111,11 +115,14 @@ const ViewMyWallet = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/my-wallet/MyWallet'
   )
 );
-// const ViewVideoRoom = React.lazy(() =>
-//   import(
-//     /* webpackChunkName: "views-app" */ './myapp/video-room/VideoRoom'
-//   )
-// );
+const ViewLawyer=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawQuestionAnswer'
+))
+const ViewUserCard=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Lawyer/UserCard'
+))
 
 const App = ({ match }) => {
   return (
@@ -176,6 +183,10 @@ const App = ({ match }) => {
               path={`${match.url}/questions/:questionId`}
               render={(props) => <MentorAnswers {...props} />}
             />
+              {/* <Route
+              path={`${match.url}/questions/:questionId/answer/:ansid`}
+              render={(props) => <MentorAnswers {...props} />}
+            /> */}
                <Route
               path={`${match.url}/mentorconsult`}
               render={(props) => <MentorConsult {...props} />}
@@ -187,6 +198,11 @@ const App = ({ match }) => {
              <Route
               path={`${match.url}/askquestions`}
               render={(props) => <AskQuestion {...props} />}
+              
+            />
+             <Route
+              path={`${match.url}/myactivities`}
+              render={(props) => <ViewActivities {...props} />}
             />
             {/* Chat application */}
                    <Route
@@ -226,7 +242,15 @@ const App = ({ match }) => {
               render={(props) => <ViewVideoRoom {...props} />}
             /> */}
            
-           
+           <Route
+              path={`${match.url}/lawyer`}
+              render={(props) => <ViewLawyer {...props} />}
+            />
+            <Route
+              path={`${match.url}/usercard`}
+              render={(props) => <ViewUserCard {...props} />}
+            />
+            
           
             {/* <Route
               path={`${match.url}/jobs`}
