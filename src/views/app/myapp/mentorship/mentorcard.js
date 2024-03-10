@@ -226,6 +226,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                       className="card-img-left"
                       src={mentors.image}
                       alt="Card"
+                      style={{minWidth:'150px',minHeight:"300px"}}
                     />
                     <div className='my-5  '>
                         <CardText className='text-primary '>
@@ -235,7 +236,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                     </div> 
               </div>
              
-              <div className=" d-flex align-items-center">
+              <div className=" d-flex align-items-center col-9">
               <CardBody className=" " >
                   <div className="min-width-zero">
                     

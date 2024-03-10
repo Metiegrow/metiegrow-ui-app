@@ -13,6 +13,7 @@ const MentorProfile = () => {
   // const url1=`${baseUrl}/mentor/cards/${mid}`;
   const url=`${baseUrl}/mentorDetails/${mid}`;
  const url1=`${baseUrl}/mentorProfile/${mid}`;
+//  const url1=`${baseUrl}/mentor/myprofile`;
   const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
 
@@ -82,10 +83,10 @@ const MentorProfile = () => {
           <div className=' '>
             {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
-             <img src={mentorprofiledetails.image} className=' col-2 mx-2 w-60
+             <img src={mentorprofiledetails1.image} className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" />
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
-                <span className='font-weight-semibold text-one'><i className='iconsminds-thunder text-primary'/>  Quick Responder</span>
+                <span className='font-weight-semibold text-one'><i className='iconsminds-thunder text-primary'/>{mentorprofiledetails1.achievement}</span>
               </Button>
             </div>
             <div>
@@ -106,12 +107,13 @@ const MentorProfile = () => {
             </div>
           </div>
           <div className='col-5 mt-4'>
-          <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails.firstName} {mentorprofiledetails.lastName}</h1>
-          <h3 className='text-large  text-muted  '>{mentorprofiledetails.jobTitle}</h3>
-            <h2 className='text-one  text-primary'>{mentorprofiledetails.company}</h2>
-            <p  className='text-one font-weight-medium text-primary'>{mentorprofiledetails.bio}</p>
+          <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails.lastName}</h1>
+          {/* <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1> */}
+          <h3 className='text-large  text-muted  '>{mentorprofiledetails1.jobTitle}</h3>
+            <h2 className='text-one  text-primary'>{mentorprofiledetails1.company}</h2>
+            <p  className='text-one font-weight-medium text-primary'>{mentorprofiledetails1.bio}</p>
             
-            <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>India</span></h5>
+            <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{mentorprofiledetails1.location}</span></h5>
             <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{mentorprofiledetails.star} ({mentorprofiledetails.ratings} reviews)</span></h6>
            <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6>
           </div>
@@ -154,7 +156,8 @@ const MentorProfile = () => {
             <Row>
             <div className=''>
             <h1 className='font-weight-semibold text-large'>About</h1>
-            <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.about}</p>
+            {/* <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.about}</p> */}
+            <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.bio}</p>
             </div>
              
             </Row>
