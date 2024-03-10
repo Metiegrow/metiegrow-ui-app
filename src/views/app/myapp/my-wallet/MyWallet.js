@@ -22,6 +22,7 @@ const MyWallet = () => {
   const [rechargeAmount, setRechargeAmount] = useState("");
 
   // const url = `${baseUrl}/wallets`;
+  // const url = `${baseUrl}/wallets`;
   const url1 = `${baseUrl}/wallets/1`;
 
   useEffect(() => {

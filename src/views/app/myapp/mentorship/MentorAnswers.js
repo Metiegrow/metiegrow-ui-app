@@ -9,6 +9,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 
+
 const quillModules = {
   toolbar: [
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
@@ -40,19 +41,25 @@ const quillFormats = [
 
 const MentorAnswers = () => {
   const {questionId}=useParams();
+//  const {ansid}=useParams();
 
-  // console.log(questionId);
+ 
     const [inputkey,setInputKey]=useState('')
     const url=`${baseUrl}/mentorAnswers/${questionId}`;
     const url1=`${baseUrl}/multipleQuestions/${questionId}`;
+    // const deleteurl=`${baseUrl}/mentorAnswers/${questionId}/answer/${ansid}`
+    // console.log('Params:', { questionId, ansid });
     const[answers,setAnswers]=useState([]);
     const[answers1,setAnswers1]=useState([]);
     const [editing, setEditing] = useState(false);
     const [editedQuestion, setEditedQuestion] = useState('');
-    const [editing1, setEditing1] = useState(false);
+    // const [editing1, setEditing1] = useState(false);
   const [editedAnswer1, setEditedAnswer1] = useState('');
- const [editedAnswerId, setEditedAnswerId] = useState(null); 
- const [newAnswer,setNewAnswer]=useState('')
+//  const [editedAnswerId, setEditedAnswerId] = useState(null); 
+const [editStates, setEditStates] = useState({});
+//  const [newAnswer,setNewAnswer]=useState('')
+
+
  
      const [textQuillStandart, setTextQuillStandart] = useState('');
  
@@ -109,62 +116,166 @@ const MentorAnswers = () => {
     };
    
     // answer edit
-    const handleEdit1 = (id, answered) => { // Updated handleEdit1 to accept id parameter
-      console.log("Answered:", answered);
-      setEditedAnswerId(id); // Set editedAnswerId when editing
-      setEditedAnswer1(answered);
-      setEditing1(true);
-    };
+    // const handleEdit1 = (id, answered) => { // Updated handleEdit1 to accept id parameter
+    //   console.log("Answered:", answered);
+    //   setEditedAnswerId(id); // Set editedAnswerId when editing
+    //   setEditedAnswer1(answered);
+    //   setEditing1(true);
+    // };
   
    
-    const handleSave1 = async () => {
+    // const handleSave1 = async () => {
+    //   try {
+    //     // Update the state with the edited answer text
+    //     const updatedAnswers = answers1.answer.map(ans =>
+    //       ans.id === editedAnswerId ? { ...ans, answered: editedAnswer1 } : ans
+    //     );
+    //     setAnswers1(prevAnswers => ({
+    //       ...prevAnswers,
+    //       answer: updatedAnswers
+    //     }));
+    
+    //     // Prepare the updated answer object to send to the server
+    //     const updatedAnswer = {
+    //       answer: updatedAnswers
+    //     };
+    
+    //     await axios.put(`${baseUrl}/mentorAnswers/${questionId}`, updatedAnswer);
+    //   } catch (error) {
+    //     console.error('Error updating answered:', error);
+    //   }
+    //   setEditedAnswerId(null); // Reset editedAnswerId after saving
+    //   setEditing1(false);
+    // };
+    
+    
+    //  const handleCancel1 = () => {
+    //   setEditedAnswer1('');
+    //   setEditedAnswerId(null); // Reset editedAnswerId when canceling
+    //   setEditing1(false);
+    // };
+    const handleEdit1 = (id) => {
+       // Find the answer object with the corresponding id
+  const answerToUpdate = answers1.answer.find(answer => answer.id === id);
+  // Set the initial value of the input field to the current answer text
+  setEditedAnswer1(answerToUpdate.answered);
+      setEditStates(prevState => ({
+        ...prevState,
+        [id]: !prevState[id]
+      }));
+    };
+    // const handleEdit1 = (id, answered) => {
+    //   console.log("Answered:", answered);
+    //   setEditedAnswer1(answered);
+    //   // Assuming 'setEditing1' is defined elsewhere, use it to set the edit state
+    //   setEditing1(true);
+    // };
+  
+    const handleSave1 = async (id) => {
       try {
-        // Update the state with the edited answer text
         const updatedAnswers = answers1.answer.map(ans =>
-          ans.id === editedAnswerId ? { ...ans, answered: editedAnswer1 } : ans
+          ans.id === id ? { ...ans, answered: editedAnswer1 } : ans
         );
         setAnswers1(prevAnswers => ({
           ...prevAnswers,
           answer: updatedAnswers
         }));
-    
-        // Prepare the updated answer object to send to the server
+  
         const updatedAnswer = {
           answer: updatedAnswers
         };
-    
+  
         await axios.put(`${baseUrl}/mentorAnswers/${questionId}`, updatedAnswer);
       } catch (error) {
         console.error('Error updating answered:', error);
       }
-      setEditedAnswerId(null); // Reset editedAnswerId after saving
-      setEditing1(false);
-    };
-    
-    
-     const handleCancel1 = () => {
-      setEditedAnswer1('');
-      setEditedAnswerId(null); // Reset editedAnswerId when canceling
-      setEditing1(false);
+      setEditStates(prevState => ({
+        ...prevState,
+        [id]: false
+      }));
     };
   
-
+    const handleCancel1 = (id) => {
+      setEditStates(prevState => ({
+        ...prevState,
+        [id]: false
+      }));
+    };
+    // const handleDeleteAnswer = async (id) => {
+    //   try {
+    //     // Send a request to delete the answer with the given ID
+    //     await axios.delete(`${baseUrl}/mentorAnswers/${questionId}/${id}`);
+    //     console.log('my is',id);
+    //     // Update the state to remove the deleted answer
+    //     setAnswers1(prevState => ({
+    //       ...prevState,
+    //       answer: prevState.answer.filter(answer => answer.id !== id)
+    //     }));
+    //   } catch (error) {
+    //     console.error('Error deleting answer:', error);
+    //   }
+    // };
+    const handleDeleteAnswer = async (answerId) => {
+      try {
+        // Construct the URL for deleting the answer
+        const deleteUrl = `${baseUrl}/mentorAnswers/${questionId}/answer/${answerId}`;
+        
+        // Send a DELETE request to the constructed URL
+        await axios.delete(deleteUrl);
+        
+        // After successfully deleting the answer from the backend, update the state
+        // to reflect the change in the UI.
+        setAnswers1(prevState => ({
+          ...prevState,
+          answer: prevState.answer.filter(answer => answer.id !== answerId)
+        }));
+      } catch (error) {
+        console.error('Error deleting answer:', error);
+      }
+    };
+  
     const handlePostAnswer = async () => {
       try {
-        // Send request to post the new answer
-        await axios.post(url, { answered: newAnswer });
-  
-        // Fetch updated answers after posting
-        const updatedResponse = await axios.get(url);
-        setAnswers(updatedResponse.data.answer);
-        
-        // Clear the answer input after posting
-        setNewAnswer('');
+        console.log("Posting answer...");
+        // Make a POST request to the backend to post the new answer
+        await axios.post(`${baseUrl}/mentorAnswers/${questionId}/answer`, { answered: textQuillStandart });
+        // After posting the answer successfully, fetch the updated answers
+        const updatedResponse = await axios.get(`${baseUrl}/mentorAnswers/${questionId}/answer`);
+        // Update the state with the updated answers
+        setAnswers1(updatedResponse.data.answer);
+        // Clear the textQuillStandart state to reset the Quill editor
+        setTextQuillStandart('');
+        console.log("Answer posted successfully!");
       } catch (error) {
         console.error('Error posting answer:', error);
       }
     };
-  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // const handlePostAnswer = async () => {
+    //   try {
+    //     console.log("Posting answer...");
+    //     await axios.post(`${baseUrl}/mentorAnswers/${questionId}/answer`, { answered: newAnswer });
+    //     const updatedResponse = await axios.get(`${baseUrl}/mentorAnswers/${questionId}/answer`);
+    //     setAnswers1(updatedResponse.data.answer);
+    //     setNewAnswer('');
+    //     console.log("Answer posted successfully!");
+    //   } catch (error) {
+    //     console.error('Error posting answer:', error);
+    //   }
+    // };
+    
+    
+   
+   
  
 
  
@@ -197,7 +308,7 @@ const MentorAnswers = () => {
      
     <div className=''>
      
-  
+   
      <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
      {/* <h1>This is id of the question :{questionId}</h1><br/> */}
      {/* <h1>Yeah {answers.id}</h1> */}
@@ -245,7 +356,7 @@ const MentorAnswers = () => {
         </div>
         
         
-         <h6 className='text-muted'>Asked for Male Student, 25 Years</h6>
+         <h6 className='text-muted'>Asked by</h6>
          {/* <p className='text-one'>How do I become better at public speaking?<br/>
          What do you do to avoid nervousness when speaking in public?</p> */}
          {/* <p className='text-one'>{answers.questionHeadingBrief}</p> */}
@@ -304,7 +415,7 @@ const MentorAnswers = () => {
       {answers1.answer&&answers1.answer.map((an)=>{
         return (
          
-        <Card key={an.mentorId} className='mt-3'>
+        <Card key={an.id} className='mt-3'>
         <CardBody>
         <div className='d-flex w-100 justify-content-between'>
         <div className=' '>
@@ -323,7 +434,8 @@ const MentorAnswers = () => {
         </div>
          
           {/* <p>{an.answered}</p> */}
-          {editing1 ? (
+          {/* want */}
+          {/* {editing1 ? (
                       <input
                         type="text"
                         className="form-control py-2 my-2"
@@ -332,7 +444,18 @@ const MentorAnswers = () => {
                       />
                     ) : (
                       <p>{an.answered}</p>
-                    )}
+                    )} */}
+                    {/* want ends */}
+                    {editStates[an.id] ? (
+                <input
+                  type="text"
+                  className="form-control py-2 my-2"
+                  value={editedAnswer1}
+                  onChange={(e) => setEditedAnswer1(e.target.value)}
+                />
+              ) : (
+                <p>{an.answered}</p>
+              )}
                     {/* <div className="d-flex align-items-center">
                       {editing1 ? (
                         <>
@@ -384,7 +507,8 @@ const MentorAnswers = () => {
         </div>
         <div>
         {/* <Button  outline color="primary" className='mr-2' ><i className='simple-icon-pencil'/></Button> */}
-        <div className="d-flex align-items-center ">
+        {/* want */}
+        {/* <div className="d-flex align-items-center ">
                       {editing1 ? (
                         <>
                           <Button
@@ -415,7 +539,37 @@ const MentorAnswers = () => {
                       )}
                
                       <Button outline color="primary" ><i className='simple-icon-trash'/></Button>
-                      </div>
+                      </div> */}
+                      <div className="d-flex align-items-center">
+                {editStates[an.id] ? (
+                  <>
+                    <Button
+                      outline
+                      color="primary"
+                      onClick={() => handleSave1(an.id)}
+                      className="mr-2"
+                    >
+                      Save
+                    </Button>
+                    <Button className='mr-2'
+                      outline
+                      color="primary"
+                      onClick={() => handleCancel1(an.id)}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <Button className='mr-2'
+                    outline
+                    color="primary"
+                    onClick={() => handleEdit1(an.id)}
+                  >
+                    <i className="simple-icon-pencil" />
+                  </Button>
+                )}
+                <Button outline color="primary" onClick={()=>handleDeleteAnswer(an.id)} ><i className='simple-icon-trash' /></Button>
+              </div>
        
         </div>
               </div>

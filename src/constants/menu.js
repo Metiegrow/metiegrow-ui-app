@@ -15,34 +15,56 @@ const data = [
     subs: [
       {
         icon: 'simple-icon-user',
-        label: 'MentorCard',
+        label: 'Find Mentors',
         to: `${adminRoot}/mentor`,
    
       },
       {
+        icon: 'simple-icon-list',
+        label: 'Mentor sessions',
+        to: `${adminRoot}/sessionlists`,
+   
+      },
+      {
         icon: 'simple-icon-question',
-        label: 'Student Questions',
+        label: 'Questions & Answers',
         to: `${adminRoot}/questions`,
    
       },
       {
-        icon: 'simple-icon-bubbles',
-        label: 'Chat',
-        to: `${adminRoot}/chat`,
+        icon: 'simple-icon-question',
+        label: 'My Q&A activities ',
+        to: `${adminRoot}/myactivities`,
    
       },
+      // {
+      //   icon: 'simple-icon-bubbles',
+      //   label: 'Chat',
+      //   to: `${adminRoot}/chat`,
+   
+      // },
+      // {
+      //   icon: 'simple-icon-calendar',
+      //   label: 'Calendar',
+      //   to: `${adminRoot}/calendar`,
+   
+      // },
+     
+    ]
+  },
+  {
+    id: 'Lawyer',
+    icon: 'iconsminds-scale',
+    label: 'Lawyer',
+    to: `${adminRoot}/lawyer`,
+    subs: [
       {
-        icon: 'simple-icon-calendar',
-        label: 'Calendar',
-        to: `${adminRoot}/calendar`,
+        icon: 'simple-icon-user',
+        label: 'Find lawyers',
+        to: `${adminRoot}/usercard`,
    
       },
-      {
-        icon: 'simple-icon-list',
-        label: 'SessionList',
-        to: `${adminRoot}/sessionlists`,
    
-      },
     ]
   },
   {
@@ -72,64 +94,15 @@ const data = [
   {
     id: 'Login',
     icon: 'iconsminds-folder',
-    label: 'Apply as a mentor',
-    to: `${adminRoot}/mentor/apply`,
-  },
-  {
-    id: 'Listing',
-    icon: 'simple-icon-list',
-    label: 'Listing',
-    to: `${adminRoot}/listing`,
-    subs: [
-      {
-        icon: 'iconsminds-office',
-        label: 'Job Posting',
-        to: `${adminRoot}/jobposting`,
-   
-      },
-      {
-        icon: 'iconsminds-building',
-        label: 'Stay Posting',
-        to: `${adminRoot}/stayposting`,
-   
-      },
-      {
-        icon: 'iconsminds-building',
-        label: 'Other Posting',
-        to: `${adminRoot}/otherposting`,
-   
-      },
-      {
-        icon: 'simple-icon-list',
-        label: 'Job Listing',
-        to: `${adminRoot}/job/listing`,
-   
-      },
-      {
-        icon: 'simple-icon-list',
-        label: 'Stay Listing',
-        to: `${adminRoot}/stay/listing`,
-   
-      },
-      {
-        icon: 'simple-icon-list',
-        label: 'Other Listing',
-        to: `${adminRoot}/other/listing`,
-   
-      }
-    ]
-  },
-  {
-    id: 'Chat',
-    icon: 'iconsminds-speach-bubbles',
-    label: 'Chat',
-    to: `${adminRoot}/chat`,
+    label: 'mylogin',
+    to: `${adminRoot}/mylogin`,
+    
   },
   // {
-  //   id: 'videocall',
+  //   id: 'videoroom',
   //   icon: 'iconsminds-speach-bubbles',
-  //   label: 'Video Call',
-  //   to: `${adminRoot}/videocall`,
+  //   label: 'Video Room',
+  //   to: `${adminRoot}/videoroom`,
   // },
 ];
 export default data;

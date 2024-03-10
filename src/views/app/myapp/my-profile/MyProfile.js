@@ -63,6 +63,7 @@ const MyProfile = () => {
   const endUrl = `${baseUrl}/myprofile`;
   const inputUrl = `${baseUrl}/inputs`
 
+
   useEffect(() => {
     const mentorProfileDetails = async () => {
       try {
