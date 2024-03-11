@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 
-import { Button, Card, CardBody, CardText, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardText, NavLink, Row } from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import Rating from 'components/common/Rating';
 import MentorDropDown from '../mentorship/MentorDropDown';
@@ -105,7 +105,7 @@ const UserCard = () => {
                    <CardText className='d-flex'>
                   
               
-            {users.skills && users.skills.map((skill) => (
+            {users.services && users.services.map((skill) => (
           <div key={skill} className='m-2 ' id='btn.rounded'>
           
               <Button color="light" className="mb-2 font-weight-semibold" size='xs'>
@@ -125,9 +125,12 @@ const UserCard = () => {
                         View Profile
               </Button>
               </NavLink> */}
+              <NavLink href={`/app/lawyerprofile/${users.id}`}>
               <Button color="primary " className="default w-80 py-2  rounded" >
                         View Profile
               </Button>
+              </NavLink>
+              
               
                     </div>
                 </CardBody>
