@@ -315,34 +315,6 @@
       "lastName": "RK",
       "jobTitle": "lawyer",
       "company": "google",
-<<<<<<< HEAD
-      "bio": "A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
-      "skills": [
-        "skill 1",
-        "skill 2",
-        "skill 3"
-      ],
-      "price": 10000
-    },
-    {
-      "id": 2,
-      "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
-      "image": "/assets/img/profiles/11.jpg",
-      "star": 5,
-      "ratings": 200,
-      "firstName": "Rajendren",
-      "lastName": "RD",
-      "jobTitle": "lawyer",
-      "company": "google",
-      "bio": "A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
-      "skills": [
-        "skill 1",
-        "skill 2",
-        "skill 3"
-      ],
-      "price": 20000
-    }
-=======
       "bio":"A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
       "services":[
         "all immigartion",
@@ -406,31 +378,8 @@
     "about":"You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
   }
     
->>>>>>> suresh
   ],
-  "myprofile": {
-    "image": "data:image/jpeg;base64,/9j/4QAY",
-    "firstName": "abi",
-    "lastName": "ab",
-    "email": "abi@gmail.com",
-    "jobTitle": "mobile app",
-    "company": "whatsapp",
-    "location": "Location1",
-    "category": "employee",
-    "skills": [
-      "skill 1",
-      "skill 2",
-      "skill 3"
-    ],
-    "bio": "I have more than a decade experience in Software Engineering (and related practices including DevOps) and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the",
-    "linkedinUrl": "https://www.linkedin.com/in/abi/",
-    "twitterHandle": "abi",
-    "website": "https://www.abi.com/",
-    "introVideo": "https://www.youtube.com/watch?abc",
-    "featuredArticle": "https://wordpress.com/posts/abi.wordpress.com",
-    "reasonForMentor": "Let's make it simple",
-    "achievement": "University bronze medalist"
-  },
+ 
   "sessionHistory":[
     {
       "mentorId":1,
