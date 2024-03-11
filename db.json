@@ -315,6 +315,7 @@
       "lastName": "RK",
       "jobTitle": "lawyer",
       "company": "google",
+<<<<<<< HEAD
       "bio": "A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
       "skills": [
         "skill 1",
@@ -341,6 +342,71 @@
       ],
       "price": 20000
     }
+=======
+      "bio":"A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
+      "services":[
+        "all immigartion",
+        "visa"
+      ],
+      "price": 10000
+  },
+  {
+    "id": 2,
+    "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
+    "image":"/assets/img/profiles/11.jpg",
+    "star": 5.0,
+    "ratings": 200,
+    "firstName": "Rajendren",
+    "lastName": "RD",
+    "jobTitle": "lawyer",
+    "company": "google",
+    "bio":"A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
+    "services":[
+      "all immigartion",
+      "visa"
+    ],
+    "price": 20000
+}
+  ]
+
+,
+"lawyerProfile":[
+  {
+    "id":1,
+    "topic":"I will help mentee",
+    "star": 5.0,
+    "ratings": 200,
+    "image":"/assets/img/profiles/3.jpg",
+    "services":[
+      "all immigartion",
+      "visa"
+    ],
+    "firstName": "Vignesh",
+      "lastName": "RK",
+    "location":"India",
+    "languages":"English",
+    "bio":"a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
+    "about":"You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
+  },
+  {
+    "id":2,
+    "topic":"I will help mentee",
+    "star": 5.0,
+    "ratings": 200,
+    "image":"/assets/img/profiles/11.jpg",
+    "services":[
+      "all immigartion",
+      "visa"
+    ],
+    "firstName": "Rajendren",
+    "lastName": "RD",
+    "location":"India",
+    "languages":"English",
+    "bio":"a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
+    "about":"You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
+  }
+    
+>>>>>>> suresh
   ],
   "myprofile": {
     "image": "data:image/jpeg;base64,/9j/4QAY",
@@ -365,6 +431,16 @@
     "reasonForMentor": "Let's make it simple",
     "achievement": "University bronze medalist"
   },
+  "sessionHistory":[
+    {
+      "mentorId":1,
+      "name":"srihith",
+      "duration":"03:00",
+      "mode":"video",
+      "fromtimestamp":1710179061000,
+      "totimestamp": 1710182661000
+    }
+  ],
   "mentorProfile": [
     {
       "id": 1,

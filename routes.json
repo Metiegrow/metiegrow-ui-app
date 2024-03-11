@@ -4,6 +4,7 @@
     "/signIn":"/signIn",
     "/mentor/cards":"/mentorDetails",
     "/user/cards":"/userCard",
+    "/lawyer/profile":"/lawyerProfile",
     "/countries":"/countries",
     "/mentor/profile":"/mentorProfile",
     "/mentor/questions":"/multipleQuestions",
@@ -16,6 +17,7 @@
     "/notifications": "/notifications",
     
 
+    "/mentor/session":"/sessionHistory",
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",
     "/api/student/personal/info?studentId=:studentId":"/StudentPersonalInfo?studentId=:studentId",
