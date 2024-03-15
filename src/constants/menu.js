@@ -109,44 +109,7 @@ const data = [
     icon: 'simple-icon-list',
     label: 'Listing',
     to: `${adminRoot}/listing`,
-    subs: [
-      {
-        icon: 'iconsminds-office',
-        label: 'Job Posting',
-        to: `${adminRoot}/jobposting`,
-   
-      },
-      {
-        icon: 'iconsminds-building',
-        label: 'Stay Posting',
-        to: `${adminRoot}/stayposting`,
-   
-      },
-      {
-        icon: 'iconsminds-building',
-        label: 'Other Posting',
-        to: `${adminRoot}/otherposting`,
-   
-      },
-      {
-        icon: 'simple-icon-list',
-        label: 'Job Listing',
-        to: `${adminRoot}/job/listing`,
-   
-      },
-      {
-        icon: 'simple-icon-list',
-        label: 'Stay Listing',
-        to: `${adminRoot}/stay/listing`,
-   
-      },
-      {
-        icon: 'simple-icon-list',
-        label: 'Other Listing',
-        to: `${adminRoot}/other/listing`,
-   
-      }
-    ]
   },
+  
 ];
 export default data;

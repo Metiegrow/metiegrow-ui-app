@@ -120,34 +120,39 @@ const ViewMyWallet = React.lazy(() =>
 //     /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCall'
 //   )
 // );
-const ViewJobPosting = React.lazy(() =>
+// const ViewJobPosting = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/Listing/JobPosting'
+//   )
+// );
+// const ViewStayPosting = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/Listing/StayPosting'
+//   )
+// );
+// const ViewOtherPosting = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/Listing/OtherPosting'
+//   )
+// );
+// const ViewJobListing = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/Listing/JobListing'
+//   )
+// );
+// const ViewStayListing = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/Listing/StayListing'
+//   )
+// );
+// const ViewOtherListing = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/Listing/OtherListing'
+//   )
+// );
+const ViewListing = React.lazy(() =>
   import(
-    /* webpackChunkName: "views-app" */ './myapp/Listing/JobPosting'
-  )
-);
-const ViewStayPosting = React.lazy(() =>
-  import(
-    /* webpackChunkName: "views-app" */ './myapp/Listing/StayPosting'
-  )
-);
-const ViewOtherPosting = React.lazy(() =>
-  import(
-    /* webpackChunkName: "views-app" */ './myapp/Listing/OtherPosting'
-  )
-);
-const ViewJobListing = React.lazy(() =>
-  import(
-    /* webpackChunkName: "views-app" */ './myapp/Listing/JobListing'
-  )
-);
-const ViewStayListing = React.lazy(() =>
-  import(
-    /* webpackChunkName: "views-app" */ './myapp/Listing/StayListing'
-  )
-);
-const ViewOtherListing = React.lazy(() =>
-  import(
-    /* webpackChunkName: "views-app" */ './myapp/Listing/OtherListing'
+    /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
   )
 );
 const ViewLawyer=React.lazy(()=>
@@ -276,7 +281,7 @@ const App = ({ match }) => {
               path={`${match.url}/videocall`}
               render={(props) => <ViewVideoCall {...props} />}
             /> */}
-               <Route
+               {/* <Route
               path={`${match.url}/jobposting`}
               render={(props) => <ViewJobPosting {...props} />}
             />
@@ -299,6 +304,10 @@ const App = ({ match }) => {
                <Route
               path={`${match.url}/other/listing`}
               render={(props) => <ViewOtherListing {...props} />}
+            /> */}
+               <Route
+              path={`${match.url}/listing`}
+              render={(props) => <ViewListing {...props} />}
             />
            
            <Route
