@@ -168,6 +168,11 @@ const ViewUserCard=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/UserCard'
 ))
+const ViewLawyerProfile=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerProfile'
+))
+
 
 const App = ({ match }) => {
   return (
@@ -323,9 +328,9 @@ const App = ({ match }) => {
               path={`${match.url}/usercard`}
               render={(props) => <ViewUserCard {...props} />}
             />
-            <Route
-              path={`${match.url}/notification`}
-              render={(props) => <ViewNotification {...props} />}
+             <Route
+              path={`${match.url}/lawyerprofile/:pid`}
+              render={(props) => <ViewLawyerProfile {...props} />}
             />
             
           

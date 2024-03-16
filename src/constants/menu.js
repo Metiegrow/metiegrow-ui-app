@@ -64,7 +64,7 @@ const data = [
         to: `${adminRoot}/usercard`,
    
       },
-   
+     
     ]
   },
   {
