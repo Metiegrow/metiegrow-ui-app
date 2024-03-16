@@ -155,11 +155,11 @@ const ViewListing = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
   )
 );
-const ViewNotification = React.lazy(() =>
-  import(
-    /* webpackChunkName: "views-app" */ './myapp/notifications/DesktopNotifications'
-  )
-);
+// const ViewNotification = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/notifications/DesktopNotifications'
+//   )
+// );
 const ViewLawyer=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawQuestionAnswer'
