@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import { Colxx } from 'components/common/CustomBootstrap';
 import {   Card, CardBody, CustomInput, Dropdown, DropdownItem, DropdownMenu,
-   DropdownToggle, Form, FormGroup, Label, Row } from 'reactstrap';
+   DropdownToggle, Form, FormGroup,  InputGroup, InputGroupAddon, Label, Row 
+
+   } from 'reactstrap';
 import { Wizard, Steps, Step } from 'react-albus';
 import { injectIntl } from 'react-intl';
 // import IntlMessages from 'helpers/IntlMessages';
@@ -12,7 +14,7 @@ import DateRangePicker from './DateRangePicker';
 
 
 
-const PopupWizard = ({ selectedDate}) => {
+const PopupWizard = ({ selectedDate,setSelectedDate}) => {
   // const [selectedDate, setSelectedDate] = useState(null);
   const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
@@ -21,7 +23,7 @@ const PopupWizard = ({ selectedDate}) => {
   const [selectedradiobutton, setSelectedRadioButton] = useState(null);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
    const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
-
+ 
   const [minutedrop,setMinutedrop]=useState(null)
   const [minutedrop1,setMinutedrop1]=useState(null)
   const handleDropdownItemClick = (selectedHour) => {
@@ -131,8 +133,8 @@ const PopupWizard = ({ selectedDate}) => {
   return (
     <Row >
       <Colxx  >
-      <Card className='mt-2  ' >
-      <CardBody className="wizard wizard-default " >
+      <Card className='mt-2  '  >
+      <CardBody className="wizard wizard-default  " >
       <Wizard>
           <TopNavigation
             className="justify-content-center"
@@ -147,25 +149,36 @@ const PopupWizard = ({ selectedDate}) => {
               desc="Schedule appointement"
             
             >
-                       <form className=' '  >
+                       <Form className=' '  >
        
-         
-       <div className=''>
-       <Label className='text-one'>Appointment date</Label>
-       <div className='d-flex my-3 align-items-center' >
-       <span className='text-one'><i className='simple-icon-calendar'/></span>
-        {/* <p className='text-one ml-2'>Feb 02,2024</p> */}
-        <div>
-        {/* <DatePicker /> */}
-
-        <DateRangePicker selectedDate={selectedDate}  />
-       </div>
+                       <FormGroup>
+                       <div className=''>
+     
+     <Label className='text-one'>Appointment date</Label>
+     <div className='d-flex  align-items-center' >
+     <span className='text-one '><i className='simple-icon-calendar'/></span>
+     {/* <DateRangePicker  selectedDate={selectedDate}  /> */}
+     <DateRangePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+      {/* <div>
+    
       
-        </div>
-     
+     </div> */}
+    
+      </div>
+      
+    
+            <InputGroup className="mb-3">
+          
+            <InputGroupAddon addonType="prepend">📆</InputGroupAddon>
+              <DateRangePicker  selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            </InputGroup>
+            
 
-       </div>
-     
+     </div>
+                       </FormGroup>
+      
+ 
+      <FormGroup>
       <div className=' '>
       <div>
        <h5 className=''>From</h5>
@@ -242,6 +255,8 @@ const PopupWizard = ({ selectedDate}) => {
        </div>
      </div>
       </div>
+      </FormGroup>
+     
     
        <Form>
         <FormGroup>
@@ -279,7 +294,7 @@ const PopupWizard = ({ selectedDate}) => {
                   Cancel
                 </Button>
     </footer> */}
-    </form>
+    </Form>
               
             </Step>
             <Step
@@ -308,15 +323,15 @@ const PopupWizard = ({ selectedDate}) => {
               <Card className='my-3 '>
                 <CardBody>
                 <div className='p-3 border-dark mb-2 rounded'>
-                <h3>Session Price:Rs:300</h3>
-                    <h3>Your Available Balance: Rs. 14000</h3>
-                    <h3>Balance after deduction: Rs. 900</h3>
+                <h3>Session Price:<span className='font-weight-bold color-theme-1'>Rs:300 </span></h3>
+                    <h3>Your Available Balance:<span  className='font-weight-bold color-theme-1'>Rs. 14000</span> </h3>
+                    <h3>Balance after deduction: <span  className='font-weight-bold color-theme-1'>Rs.900</span></h3>
                 </div>
+
                 <div className='p-3 border-dark mb-2 rounded'>
                 <h3>Session Price: Rs. 500</h3>
                 <h3>Your Available Balance: Rs. 400</h3>
                 <h4>Do you want to recharge Rs. 100?</h4>
-                
                 </div>
                    
                 </CardBody>
@@ -362,13 +377,18 @@ const PopupWizard = ({ selectedDate}) => {
               </div>
             </Step> */}
           </Steps>
-          <BottomNavigation
+          <Form>
+            <FormGroup>
+            <BottomNavigation
             onClickNext={onClickNext}
             onClickPrev={onClickPrev}
             className="justify-content-center"
             prevLabel="Back"
             nextLabel="Next"
           />
+            </FormGroup>
+          </Form>
+         
         </Wizard>
       </CardBody>
     </Card>

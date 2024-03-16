@@ -181,13 +181,28 @@
       "id": 4
     }
   ],
+  "answersDup":[
+    
+      {"questionId": 1, "question": "What is question?", "timestamp": 1666632563517},
+      {"questionId": 2, "question": "What is this?", "timestamp": 1666632563517},
+      {"questionId": 546, "question": "What was that?", "timestamp":1707542436000},
+      {"questionId": 547, "question": "What was that?", "timestamp":1707542436000},
+      {"questionId": 548, "question": "What was that?", "timestamp":1707542436000},
+      {"questionId": 549, "question": "What was that?", "timestamp":1707542436000},
+      {"questionId": 550, "question": "What was that?", "timestamp":1707542436000}
+    
+  ],
   "myAnswers":[
     {
       "totalAnswers": 25,
       "answers": [
         {"questionId": 1, "question": "What is question?", "timestamp": 1666632563517},
         {"questionId": 2, "question": "What is this?", "timestamp": 1666632563517},
-        {"questionId": 546, "question": "What was that?", "timestamp":1707542436000}
+        {"questionId": 546, "question": "What was that?", "timestamp":1707542436000},
+        {"questionId": 547, "question": "What was that?", "timestamp":1707542436000},
+        {"questionId": 548, "question": "What was that?", "timestamp":1707542436000},
+        {"questionId": 549, "question": "What was that?", "timestamp":1707542436000},
+        {"questionId": 550, "question": "What was that?", "timestamp":1707542436000}
       ]
       }
   ],

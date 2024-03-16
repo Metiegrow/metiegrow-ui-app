@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
-import { Badge, Card, CardBody, Row } from 'reactstrap';
+import { Badge, Card, CardBody, NavLink, Row } from 'reactstrap';
 
 
 const MentorSessionList = () => {
@@ -69,7 +69,10 @@ useEffect(()=>{
               <Card className='my-2 ' key={sh.mentorId}>
               <CardBody className='d-flex justify-content-between' >
                 <div className='d-flex justify-content-between flex-column'>
-                  <h4>Mentor Name: {sh.name}</h4>
+                <NavLink href={`/app/mentorprofile/${sh.mentorId}`}>
+                <h4 className='text-large text-primary'>{sh.name}</h4>
+                </NavLink>
+                 
                   <h4>Date: {shdateformat}</h4>
                 </div>
                 <div className='d-flex justify-content-around flex-column '>
