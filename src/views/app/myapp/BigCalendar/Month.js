@@ -566,7 +566,7 @@ const Month = () => {
        </footer>
        </form> */}
    
-       <PopupWizard selectedDate={selectedDate}/>
+       <PopupWizard selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
        {/* <Button className='ml-2 mt-2 '  outline  color="secondary"  onClick={() => setModalSmall(false)}
                    >
                      Close
