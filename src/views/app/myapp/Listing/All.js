@@ -1,56 +1,73 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
+import Pagination from "containers/pages/Pagination";
 import {
-  // Collapse,
   Button,
-  Row,
   Card,
-  CardSubtitle,
   CardBody,
+  CardSubtitle,
   CardTitle,
   Col,
+  Row,
 } from "reactstrap";
 import { Colxx } from "components/common/CustomBootstrap";
-import { baseUrl } from "constants/defaultValues";
-import axios from "axios";
-import Pagination from "containers/pages/Pagination";
 
+const url = `${baseUrl}/alllistingcard`;
 
-const StayListing = () => {
-  const url = `${baseUrl}/api/staylisting/cards`;
-  const [expandedIndex, setExpandedIndex] = useState(-1);
-  const [items, setItems] = useState([]);
+const JobListing = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage] = useState(2);
+  const [items, setItems] = useState([]);
+  const [expandedIndex, setExpandedIndex] = useState(-1);
 
-  useEffect(() => {
-    const fetchDataFromServer = async () => {
+  const toggleExpand = (index) => {
+    setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
+  };
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
+//         console.log(res);
+//         const { data } = res;
+//         //   setTotalPage(data.totalPage);
+//         setItems(data.map((x) => ({ ...x })));
+//         setIsLoaded(true);
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//         setIsLoaded(true);
+//       }
+//     };
+
+//     fetchData();
+//   }, [currentPage]);
+
+useEffect(() => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(url);
+        const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
+        console.log(res);
         const { data } = res;
         const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
         setItems(sortedData);
-        // const stayListingCardData = res.data;
-        // console.log("staylisting", stayListingCardData);
-        // setItems(stayListingCardData);
-
-        // console.log("Fetched data:", walletData);
+        setIsLoaded(true);
       } catch (error) {
-        console.error("Error while fetching data from the server", error);
+        console.error("Error fetching data:", error);
+        setIsLoaded(true);
       }
     };
-    fetchDataFromServer();
-  }, []);
+  
+    fetchData();
+  }, [currentPage]);
+  
 
-  const toggleExpand = (index) => {
-    if (expandedIndex === index) {
-      setExpandedIndex(-1);
-    } else {
-      setExpandedIndex(index);
-    }
-  };
-
-  return (
-    <>
+  
+  return !isLoaded ? (
+    <div className="loading" />
+  ) : (
+    <div className="disable-text-selection">
       {items.map((data, index) => (
         <Row key={data.title} className="mb-2">
           <Colxx xxs="12">
@@ -62,14 +79,12 @@ const StayListing = () => {
                       {data.title}
                     </CardTitle>
                   </Col>
-
                   <Col className="text-right">
                     <p className="text-muted">
                     Posted on {new Date(data.postedOn).toLocaleString()} 
                     </p>
                   </Col>
                 </Row>
-                {/* <CardSubtitle>{data.description}</CardSubtitle> */}
                 {expandedIndex === index ? (
                   <CardSubtitle>{data.description}</CardSubtitle>
                 ) : (
@@ -86,19 +101,50 @@ const StayListing = () => {
                     )}
                   </CardSubtitle>
                 )}
-                {/* {data.description.length > 100 && (
-                  <Button
-                    color="link"
-                    onClick={() => toggleExpand(index)}
-                    className=" p-0"
-                  >
-                    {expandedIndex === index ? "Read less" : "Read more"}
-                  </Button>
-                )} */}
-                {/* <Row className="justify-content-between">
-                  
-                </Row> */}
-
+                {data.company ? (
+                <Row>
+                  <Col>
+                    <i className="iconsminds-office text-primary" />{" "}
+                    {data.company}
+                  </Col>
+                  <Col>
+                    <i className="iconsminds-engineering text-primary" />{" "}
+                    {data.jobTitle}
+                  </Col>
+                  <Col>
+                    {" "}
+                    <i className="simple-icon-location-pin text-primary" />{" "}
+                    {data.jobLocation}
+                  </Col>
+                  <Col>
+                    {" "}
+                    <i className="iconsminds-building text-primary" />{" "}
+                    {data.workPlaceType}
+                  </Col>
+                  <Col>
+                    {" "}
+                    <i className="simple-icon-briefcase text-primary" />{" "}
+                    {data.employmentType}
+                  </Col>
+                </Row>
+                ) : null}
+                {data.skills ? (
+                <Row className="mt-3">
+                  <Col>
+                    {data.skills.map((skill) => (
+                      <Button
+                        key={skill}
+                        color="light"
+                        className="mb-2 font-weight-semibold mx-2"
+                        size="xs"
+                      >
+                        {skill}
+                      </Button>
+                    ))}
+                  </Col>
+                </Row>
+                ) : null}
+                {data.apartmentType ? (
                 <Row>
                   <Col md={5}>
                     <i className="iconsminds-office text-primary" />{" "}
@@ -130,10 +176,10 @@ const StayListing = () => {
                     <span data-toggle="tooltip" title="Parking">{data.parking}</span>
                   </Col>
                 </Row>
-
-                <Row className="mt-2">
+                ) : null}
+                <Row className="">
                   <Col className="">
-                  <div className="text-muted mt-2">
+                    <div className="text-muted mt-2">
                       {data.interestedCount} people have shown interest
                     </div>
                   </Col>
@@ -153,8 +199,8 @@ const StayListing = () => {
         totalPage={totalPage}
         onChangePage={(i) => setCurrentPage(i)}
       />
-    </>
+    </div>
   );
 };
 
-export default StayListing;
+export default JobListing;

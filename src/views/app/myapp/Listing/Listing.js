@@ -1,0 +1,211 @@
+import React, { useState } from "react";
+import {
+  Row,
+  //   Card,
+  //   CardBody,
+  Nav,
+  NavItem,
+  Button,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu,
+  TabContent,
+  TabPane,
+  //   Badge,
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from "reactstrap";
+import { NavLink } from "react-router-dom";
+import classnames from "classnames";
+import { injectIntl } from "react-intl";
+// import Rating from 'components/common/Rating';
+
+// import Breadcrumb from 'containers/navs/Breadcrumb';
+import { Colxx } from "components/common/CustomBootstrap";
+
+import JobListing from "./JobListing";
+import StayListing from "./StayListing";
+import OtherListing from "./OtherListing";
+import All from "./All";
+import JobPosting from "./JobPosting";
+import StayPosting from "./StayPosting";
+import OtherPosting from "./OtherPosting";
+
+const DetailsAltPages = () => {
+  const [activeTab, setActiveTab] = useState("all");
+  const [modal, setModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [listingType, setListingType] = useState("");
+
+  const toggleModal = (title, type) => {
+    setModalTitle(title);
+    setListingType(type);
+    setModal(!modal);
+  };
+  //   const { messages } = intl;
+
+  const toggleModalState = () => {
+    setModal(false);
+  };
+  
+
+  return (
+    <>
+      <Row>
+        <Colxx xxs="12" className="mx-auto" style={{ maxWidth: "900px" }}>
+          <h1>Listing</h1>
+          <div className="text-zero top-right-button-container">
+            {activeTab === "all" && (
+              <UncontrolledDropdown>
+                <DropdownToggle
+                  caret
+                  color="primary"
+                  size="sm"
+                  outline
+                  className="top-right-button top-right-button-single"
+                >
+                  Create Listing
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem
+                    onClick={() => toggleModal("Create a job List", "job")}
+                  >
+                    Create a Job list
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => toggleModal("Create a Stay list", "stay")}
+                  >
+                    Create a Stay list
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => toggleModal("Create a other list", "others")}
+                  >
+                    Create a other list
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            )}
+            {activeTab === "job" && (
+              <Button
+                outline
+                color="primary"
+                onClick={() => toggleModal("Create a job List", "job")}
+              >
+                Create a job list
+              </Button>
+            )}
+            {activeTab === "stay" && (
+              <Button
+                outline
+                color="primary"
+                onClick={() => toggleModal("Create a Stay list", "stay")}
+              >
+                Create a stay list
+              </Button>
+            )}
+            {activeTab === "others" && (
+              <Button
+                outline
+                color="primary"
+                onClick={() => toggleModal("Create a other list", "others")}
+              >
+                Create a other list
+              </Button>
+            )}
+          </div>
+
+          {/* <Breadcrumb match={match} /> */}
+
+          <Nav tabs className="separator-tabs ml-0 mb-5">
+            <NavItem>
+              <NavLink
+                location={{}}
+                to="#"
+                className={classnames({
+                  active: activeTab === "all",
+                  "nav-link": true,
+                })}
+                onClick={() => setActiveTab("all")}
+              >
+                <i className="iconsminds-align-justify-all text-primary" />
+                All
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                location={{}}
+                to="#"
+                className={classnames({
+                  active: activeTab === "job",
+                  "nav-link": true,
+                })}
+                onClick={() => setActiveTab("job")}
+              >
+                <i className="iconsminds-management text-primary" />
+                Job
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                location={{}}
+                to="#"
+                className={classnames({
+                  active: activeTab === "stay",
+                  "nav-link": true,
+                })}
+                onClick={() => setActiveTab("stay")}
+              >
+                <i className="iconsminds-building text-primary" />
+                Stay
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                location={{}}
+                to="#"
+                className={classnames({
+                  active: activeTab === "others",
+                  "nav-link": true,
+                })}
+                onClick={() => setActiveTab("others")}
+              >
+                <i className="iconsminds-testimonal text-primary" />
+                Others
+              </NavLink>
+            </NavItem>
+          </Nav>
+
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="all">
+              <All />
+            </TabPane>
+            <TabPane tabId="job">
+              <JobListing />
+            </TabPane>
+            <TabPane tabId="stay">
+              <StayListing />
+            </TabPane>
+            <TabPane tabId="others">
+              <OtherListing />
+            </TabPane>
+          </TabContent>
+        </Colxx>
+      </Row>
+      <Modal size="lg" isOpen={modal} toggle={() => setModal(!modal)}>
+        <ModalHeader className="pb-1" toggle={() => setModal(!modal)}>
+          <h1 className="font-weight-semibold">{modalTitle}</h1>
+        </ModalHeader>
+        <ModalBody>
+          {listingType === "job" && <JobPosting closeModal={toggleModalState}/>}
+          {listingType === "stay" && <StayPosting closeModal={toggleModalState}/>}
+          {/* {listingType === "others" && <OtherPosting />} */}
+          {listingType === "others" && <OtherPosting closeModal={toggleModalState} />}
+
+        </ModalBody>
+      </Modal>
+    </>
+  );
+};
+export default injectIntl(DetailsAltPages);

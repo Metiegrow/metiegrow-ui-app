@@ -58,7 +58,7 @@ const BHKData = ["1 BHK", "2 BHK", "3 BHK"];
 const FloorData = ["Ground Floor", "1", "2", "3", "4", "5", "6"];
 const RoomTypeData = ["Single Room", "Shared Room"];
 
-const StayPosting = () => {
+const StayPosting = ({ closeModal }) => {
   const [availableFrom, setAvailableFrom] = useState(new Date());
   const [title, setTitle] = useState("");
   const [apartmentType, setApartmentType] = useState("");
@@ -114,7 +114,7 @@ const StayPosting = () => {
   return (
     <div>
       <Card className="mx-auto my-4 p-3" style={{ maxWidth: "900px" }}>
-        <h1 className="font-weight-semibold">Post a Room Stay</h1>
+        {/* <h1 className="font-weight-semibold">Create a Room Stay post</h1> */}
         {/* <Card className="mt-3 p-3"> */}
         <Colxx sm="12" md="12" lg="12" xxs="12" className="mx-auto ">
           <Formik>
@@ -440,10 +440,15 @@ const StayPosting = () => {
                 <Button
                   color="primary "
                   className="default  py-2 "
-                  onClick={handleSubmit}
+                  onClick={() => {
+                    handleSubmit();
+                    closeModal();
+                  }}
                 >
                   List a Room
                 </Button>
+                
+
               </div>
             </Form>
           </Formik>

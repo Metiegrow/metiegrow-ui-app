@@ -30,7 +30,8 @@
     "/api/posts/job-post": "/jobpost",
     "/api/posts/stay-post": "/staypost",
     "/api/joblisting/cards": "/joblistingcard",
-    "/api/staylisting/cards": "/staylistingcard"
+    "/api/staylisting/cards": "/staylistingcard",
+    "/api/otherlisting/cards": "/otherlistingcard"
 
     
 

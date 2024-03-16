@@ -99,17 +99,17 @@ const data = [
     
   },
   // {
-  //   id: 'videoroom',
+  //   id: 'videocall',
   //   icon: 'iconsminds-speach-bubbles',
-  //   label: 'Video Room',
-  //   to: `${adminRoot}/videoroom`,
+  //   label: 'Video Call',
+  //   to: `${adminRoot}/videocall`,
   // },
   {
     id: 'Listing',
     icon: 'simple-icon-list',
     label: 'Listing',
     to: `${adminRoot}/listing`,
-  },
+  }
   
 ];
 export default data;

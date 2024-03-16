@@ -30,10 +30,12 @@ const JobListing = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
-        console.log(res);
+        // console.log(res);
         const { data } = res;
+        const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+        setItems(sortedData);
         //   setTotalPage(data.totalPage);
-        setItems(data.map((x) => ({ ...x })));
+        // setItems(data.map((x) => ({ ...x })));
         setIsLoaded(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -44,6 +46,12 @@ const JobListing = () => {
     fetchData();
   }, [currentPage]);
 
+  // useEffect(() => {
+  //   setItems((prevItems) =>
+  //     prevItems.slice().sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn))
+  //   );
+  // }, [items]);
+  
   return !isLoaded ? (
     <div className="loading" />
   ) : (
@@ -52,7 +60,7 @@ const JobListing = () => {
         <Row key={data.title} className="mb-2">
           <Colxx xxs="12">
             <Card className="mx-auto" style={{ maxWidth: "900px" }}>
-              <CardBody>
+              <CardBody className="p-4">
                 <Row>
                   <Col>
                     <CardTitle className="font-weight-bold">
@@ -61,7 +69,7 @@ const JobListing = () => {
                   </Col>
                   <Col className="text-right">
                     <p className="text-muted">
-                      Posted on {new Date(data.postedOn).toLocaleDateString()}{" "}
+                    Posted on {new Date(data.postedOn).toLocaleString()} 
                     </p>
                   </Col>
                 </Row>
@@ -106,7 +114,7 @@ const JobListing = () => {
                     {data.employmentType}
                   </Col>
                 </Row>
-                <Row className="mt-2">
+                <Row className="mt-3">
                   <Col>
                     {data.skills.map((skill) => (
                       <Button
@@ -120,14 +128,14 @@ const JobListing = () => {
                     ))}
                   </Col>
                 </Row>
-                <Row>
-                  <Col className="mt-2">
-                    <p className="text-muted">
+                <Row className="">
+                  <Col className="">
+                    <div className="text-muted mt-2">
                       {data.interestedCount} people have shown interest
-                    </p>
+                    </div>
                   </Col>
                   <Col className="text-right">
-                    <Button outline color="primary">
+                    <Button outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>
                   </Col>

@@ -155,6 +155,11 @@ const ViewListing = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
   )
 );
+const ViewNotification = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/notifications/DesktopNotifications'
+  )
+);
 const ViewLawyer=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawQuestionAnswer'
@@ -317,6 +322,10 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/usercard`}
               render={(props) => <ViewUserCard {...props} />}
+            />
+            <Route
+              path={`${match.url}/notification`}
+              render={(props) => <ViewNotification {...props} />}
             />
             
           
