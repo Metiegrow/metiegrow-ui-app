@@ -25,18 +25,13 @@ const data = [
         to: `${adminRoot}/sessionlists`,
    
       },
-      {
-        icon: 'simple-icon-question',
-        label: 'Questions & Answers',
-        to: `${adminRoot}/questions`,
+     
+      // {
+      //   icon: 'simple-icon-question',
+      //   label: 'My Q&A activities ',
+      //   to: `${adminRoot}/myactivities`,
    
-      },
-      {
-        icon: 'simple-icon-question',
-        label: 'My Q&A activities ',
-        to: `${adminRoot}/myactivities`,
-   
-      },
+      // },
       // {
       //   icon: 'simple-icon-bubbles',
       //   label: 'Chat',
@@ -49,6 +44,27 @@ const data = [
       //   to: `${adminRoot}/calendar`,
    
       // },
+     
+    ]
+  },
+  {
+    id: 'Q & A',
+    icon: 'simple-icon-question',
+    label: 'Q & A',
+    to: `${adminRoot}/myactivities`,
+    subs: [
+      {
+        icon: 'simple-icon-question',
+        label: 'My Q&A activities ',
+        to: `${adminRoot}/myactivities`,
+   
+      },
+      {
+        icon: 'simple-icon-question',
+        label: 'Questions & Answers',
+        to: `${adminRoot}/questions`,
+   
+      },
      
     ]
   },

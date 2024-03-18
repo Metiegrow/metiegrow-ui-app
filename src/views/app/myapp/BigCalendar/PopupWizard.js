@@ -152,19 +152,19 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
                        <Form className=' '  >
        
                        <FormGroup>
-                       <div className=''>
+                       {/* <div className=''> */}
      
-     <Label className='text-one'>Appointment date</Label>
+     {/* <Label className='text-one'>Appointment date</Label> */}
      <div className='d-flex  align-items-center' >
-     <span className='text-one '><i className='simple-icon-calendar'/></span>
+     {/* <span className='text-one '><i className='simple-icon-calendar'/></span> */}
      {/* <DateRangePicker  selectedDate={selectedDate}  /> */}
-     <DateRangePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+     {/* <DateRangePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} /> */}
       {/* <div>
     
       
      </div> */}
     
-      </div>
+      {/* </div> */}
       
     
             <InputGroup className="mb-3">
