@@ -216,6 +216,42 @@
     ]
     }
 ],
+"myActivities":{
+  "paginationMeta": {
+    "totalCount": 2,
+    "totalPage": 1,
+    "pageNumber": 0,
+    "pageSize": 2,
+    "first": true,
+    "last": true
+},
+  "data":{
+    "myAnswers":[
+      {
+        "totalAnswers": 25,
+        "answers": [
+          {"questionId": 1, "question": "What is question?", "timestamp": 1666632563517},
+          {"questionId": 2, "question": "What is this?", "timestamp": 1666632563517},
+          {"questionId": 546, "question": "What was that?", "timestamp":1707542436000},
+          {"questionId": 547, "question": "What was that?", "timestamp":1707542436000},
+          {"questionId": 548, "question": "What was that?", "timestamp":1707542436000},
+          {"questionId": 549, "question": "What was that?", "timestamp":1707542436000},
+          {"questionId": 550, "question": "What was that?", "timestamp":1707542436000}
+        ]
+        }
+    ],
+  "myQuestions":[
+    {
+      "totalQuestions": 25,
+      "questions": [
+        {"questionId": 1, "question": "Speaking better?", "timestamp": 7345693452000},
+        {"questionId": 2, "question": "Speaking in public problem?", "timestamp": 734565452000},
+        {"questionId": 546, "question": "What was that?", "timestamp": 1707542436000}
+      ]
+      }
+  ]
+  }
+},
   "wallets": [
     {
       "newBalance": 2100,
@@ -393,15 +429,50 @@
     "reasonForMentor": "Let's make it simple",
     "achievement": "University bronze medalist"
   },
-  "sessionHistory":[
+  "sessionUpcomingHistroy":
     {
+   "data":{
+    "history":[
+      {
       "mentorId":1,
       "name":"srihith",
       "duration":"03:00",
       "mode":"video",
       "fromtimestamp":1710179061000,
       "totimestamp": 1710182661000
+      }
+    ],
+    "upcomingSessions":[
+      {
+        "mentorId":1,
+        "name":"srihith",
+        "mode":"Audio",
+        "fromtimestamp":1710179061000,
+      "totimestamp": 1710182661000
+      },
+      {
+        "mentorId":2,
+        "name":"Raj",
+        "mode":"Audio",
+        "fromtimestamp":1710179061000,
+      "totimestamp": 1710182661000
+      }
+    ]
+  }
+}
+,
+  
+  "sessionHistory":[
+    {
+      "mentorId":1,
+      "name":"srihith",
+      "duration":"03:00",
+      "mode":"Video",
+      "fromtimestamp":1710179061000,
+      "totimestamp": 1710182661000
     }
+   
+    
   ],
   "mentorProfile": [
     {

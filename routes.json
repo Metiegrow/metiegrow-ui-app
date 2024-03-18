@@ -12,9 +12,11 @@
     "/mentor/postanswer/:questionId/answered": "/postanswer",
     "/mentor/myanswers":"/myAnswers",
     "/mentor/myquestions":"/myQuestions",
+    "/mentor/myactivities":"/myActivities",
     "/mentor/myprofile":"/myprofile",
     "/wallets": "/wallets",
     "/mentor/session":"/sessionHistory",
+    "/mentor/upcoming":"/sessionUpcomingHistroy",
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",
     "/api/student/personal/info?studentId=:studentId":"/StudentPersonalInfo?studentId=:studentId",
@@ -25,7 +27,7 @@
     "/api/mentor/details/experience":"/mentorExperience",
     "/api/mentor/:id/details/experience":"/mentorExperience/:id",
     "/api/calendar/appointment/mentee":"/mentorAvailablity"
-
+    
     
 
 

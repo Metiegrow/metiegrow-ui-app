@@ -8,17 +8,38 @@ import { Badge, Card, CardBody, NavLink, Row } from 'reactstrap';
 const MentorSessionList = () => {
   // const { sessions } = location.state || {}; // Retrieve sessions from location state
 const [session,setSession]=useState('');
-const url=`${baseUrl}/mentor/session`;
+const [upcomingsession,setUpcomingSession]=useState('');
+// const url=`${baseUrl}/mentor/session`;
+const url1=`${baseUrl}/sessionUpcomingHistroy`;
 useEffect(()=>{
+  // const SessionHistroy=async()=>{
+  //     try {
+  //         const response = await axios.get(url);
+  //         setSession(response.data);
+  //       } catch (error) {
+  //         console.error('Error fetching data:', error);
+  //       }
+  // }
+  // SessionHistroy();
   const SessionHistroy=async()=>{
-      try {
-          const response = await axios.get(url);
-          setSession(response.data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-  }
-  SessionHistroy();
+    try {
+        const response = await axios.get(url1);
+        setSession(response.data.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+}
+SessionHistroy();
+  const SessionUpcomingHistroy=async()=>{
+    try {
+        const response = await axios.get(url1);
+        setUpcomingSession(response.data.data);
+        console.log("Upcoming Session Data:", response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+}
+SessionUpcomingHistroy();
 },[])
 
   return (
@@ -35,10 +56,41 @@ useEffect(()=>{
         </Card>
         <div className='my-3'>
         
-        <h2>Upcoming sessions</h2>
+        <h2 className='font-weight-medium'>Upcoming sessions</h2>
        
         <div>
-        <Card className='my-2'>
+       <div  className=''>
+       {upcomingsession.upcomingSessions&&upcomingsession.upcomingSessions.map((up)=>{
+        const date=new Date(up.fromtimestamp);
+            const fromtime = new Date(up.fromtimestamp);
+            const updateformat = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+            const timeOptions = { hour: '2-digit', minute: '2-digit' };
+          
+          return (
+            <div key={up.mentorId}>
+            <Card className='my-4'>
+        <Badge
+                  color="primary"
+                  pill
+                  className="position-absolute badge-top-right"
+                >
+                  NEW
+                </Badge>
+          <CardBody>
+          <NavLink href={`/app/mentorprofile/${up.mentorId}`}>
+          <h2 className='text-primary text-large'>{up.name}</h2>
+          </NavLink>
+           
+            <h4>Date:{updateformat}</h4>
+            <h4>Time:{ fromtime.toLocaleTimeString([], timeOptions)}</h4>
+            <h4>Mode:{up.mode}</h4>
+          </CardBody>
+        </Card>
+            </div>
+          )
+        })}
+       </div>
+        {/* <Card className='my-2'>
         <Badge
                   color="primary"
                   pill
@@ -52,13 +104,13 @@ useEffect(()=>{
             <h4>Time:</h4>
             <h4>Mode:</h4>
           </CardBody>
-        </Card>
+        </Card> */}
         </div>
         </div>
-        <div className='my-3'>
-          <h2>Session history</h2>
+        <div className='my-3 mt-4'>
+          <h2 className='font-weight-medium'>Session history</h2>
           <div>
-           {session&&session.map((sh)=>{
+           {session.history&&session.history.map((sh)=>{
             const date=new Date(sh.fromtimestamp);
             const fromtime = new Date(sh.fromtimestamp);
             const totime=new Date(sh.totimestamp);
