@@ -21,8 +21,8 @@ const validateFirstName = (value) => {
       error = "Please enter your first name";
     } else if (!/^[a-zA-Z]+$/.test(value)) {
       error = "Only alphabets are allowed";
-    } else if (value.length < 2) {
-      error = "Must be longer than 2 characters";
+    } else if (value.length < 1) {
+      error = "Must be longer than 1 characters";
     }
   
     return error;
@@ -113,14 +113,14 @@ const validateFirstName = (value) => {
     let error;
   
     if (!value) {
-      error = "Please provide your LinkedIn URL";
-    } else if
-      (!/^(https?:\/\/)?(www\.)?linkedin\.com\/[a-zA-Z0-9_-]+\/?$/i.test(value)) {
+        error = "Please provide your LinkedIn URL";
+    } else if (!/^https?:\/\/(?:www\.)?linkedin\.com\/(?:[a-z]{2,3}\.)?in\/[a-zA-Z0-9_-]+\/?$/i.test(value)) {
         error = "Invalid LinkedIn URL format";
     }
     return error;
-  }
-  
+}
+
+
   function validateReasonForMentor(value) {
     let error;
     if (!value) {
