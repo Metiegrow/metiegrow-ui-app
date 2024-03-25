@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 
 
-const MentorSessionList = () => {
+const MentorSessionList = ({ onClick }) => {
   // const { sessions } = location.state || {}; // Retrieve sessions from location state
 const [session,setSession]=useState('');
 const [upcomingsession,setUpcomingSession]=useState('');
@@ -134,7 +134,9 @@ SessionUpcomingHistroy();
                   <Label className='text-one mr-2 '>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                   </div>
-                 <Button outline color='primary' className='mt-2 text-one'>Join Call</Button>
+                  <NavLink href='/app/videocall'>
+                      <Button outline color='primary' onClick={onClick}>Join Call</Button> 
+                 </NavLink>
                  
                 </div>
               </CardBody>
