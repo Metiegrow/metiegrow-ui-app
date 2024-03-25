@@ -5,6 +5,8 @@
     "/mentor/cards":"/mentorDetails",
     "/user/cards":"/userCard",
     "/lawyer/profile":"/lawyerProfile",
+    "/user/reviews":"/lawyerReviews",
+    "lawyer/packages":"/lawyerPackages",
     "/countries":"/countries",
     "/mentor/profile":"/mentorProfile",
     "/mentor/questions":"/multipleQuestions",
@@ -12,12 +14,16 @@
     "/mentor/postanswer/:questionId/answered": "/postanswer",
     "/mentor/myanswers":"/myAnswers",
     "/mentor/myquestions":"/myQuestions",
+    "/mentor/myactivities/myQuestions":"/myActivitiesQuestions",
+    "/mentor/myactivities/myAnswers":"/myActivitiesAnswers",
+    "/mentor/myactivities":"/myActivities",
     "/mentor/myprofile":"/myprofile",
     "/wallets": "/wallets",
     "/notifications": "/notifications",
     
 
     "/mentor/session":"/sessionHistory",
+    "/mentor/upcoming":"/sessionUpcomingHistroy",
     "/api/student/personal/info":"/StudentPersonalInfo",
     "/api/student/:id/personal/info":"/StudentPersonalInfo/:id",
     "/api/student/personal/info?studentId=:studentId":"/StudentPersonalInfo?studentId=:studentId",
@@ -35,6 +41,8 @@
     "/api/staylisting/cards": "/staylistingcard",
     "/api/otherlisting/cards": "/otherlistingcard"
 
+
+    
     
 
 

@@ -105,6 +105,13 @@ const TopNav = ({
   const handleMyListingClick = () => {
     history.push(`${adminRoot}/mylisting`);
   };
+  const handleMyActivitiesClick = () => {
+    history.push(`${adminRoot}/myactivities`);
+  };
+  const handleMySessionsClick = () => {
+    history.push(`${adminRoot}/sessionlists`);
+  };
+  
 
   const handleLogout = () => {
     logoutUserAction(history);
@@ -235,7 +242,17 @@ const TopNav = ({
                 </DropdownItem>
               </NavLink>
               {/* <NavLink to={`${adminRoot}/mylisting`}> */}
-                <DropdownItem onClick={() => handleMyListingClick()}>
+                <NavLink to={`${adminRoot}/myactivities`}>
+                <DropdownItem onClick={() => handleMyActivitiesClick()}>
+                <i className="simple-icon-question" />  My Activities
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/sessionlists`}>
+                <DropdownItem onClick={() => handleMySessionsClick()}>
+                <i className="simple-icon-list" />  Sessions
+                </DropdownItem>
+              </NavLink>
+              <DropdownItem onClick={() => handleMyListingClick()}>
                 <i className="simple-icon-list" />  My Listing
                 </DropdownItem>
               {/* </NavLink> */}

@@ -77,6 +77,7 @@ const Month = () => {
 
   // Update the current week start date when component mounts
   useEffect(() => {
+  
     setCurrentWeekStart(getStartOfWeek());
   }, []);
 
@@ -87,6 +88,16 @@ const Month = () => {
     const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeek.getTime()}&toTime=${endOfWeek.getTime()}`;
     window.history.replaceState(null, '', newUrl);
   }, [currentWeekStart]);
+  // useEffect(() => {
+  //   const startOfWeek = getStartOfWeek();
+  //   const endOfWeek = getEndOfWeek(startOfWeek);
+  
+  //   // Construct the relative URL with fromTime and toTime parameters
+  //   const newUrl = `/api/calendar/appointment/mentee?mentorUserId=${mentorId}&fromTime=${startOfWeek.getTime()}&toTime=${endOfWeek.getTime()}`;
+  
+  //   // Update the browser history with the new relative URL
+  //   window.history.replaceState(null, '', newUrl);
+  // }, [currentWeekStart]);
 
   // from and to ends
 
@@ -287,7 +298,9 @@ const Month = () => {
    <h1 className='py-4 text-large'> {mentorName} availability</h1>
    <div className='font-weight-semibold d-flex justify-content-center align-items-center'>
      {/* <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button> */}
-     <span className='font-weight-semibold text-xlarge mr-2' onClick={!isPreviousWeekDisabled() ? goToPreviousWeek : undefined}
+     <span className='font-weight-semibold text-xlarge mr-2 cursor-pointer'
+     style={{cursor:"pointer"}}
+      onClick={!isPreviousWeekDisabled() ? goToPreviousWeek : undefined}
       onKeyDown={(e) => {
     if (!isPreviousWeekDisabled() && (e.key === 'Enter' || e.key === ' ')) {
       goToPreviousWeek();
@@ -305,7 +318,9 @@ const Month = () => {
       </h4>
        
       </div>
-      <span className='ml-2 font-weight-semibold text-xlarge' role="button" tabIndex={0} onClick={goToNextWeek}
+      <span className='ml-2 font-weight-semibold text-xlarge' role="button" tabIndex={0} 
+       style={{cursor:"pointer"}}
+      onClick={goToNextWeek}
       onKeyDown={(e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       goToNextWeek();
@@ -566,7 +581,8 @@ const Month = () => {
        </footer>
        </form> */}
    
-       <PopupWizard selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+       <PopupWizard selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
+        mentorName={mentorName} mentorId={mentorId} />
        {/* <Button className='ml-2 mt-2 '  outline  color="secondary"  onClick={() => setModalSmall(false)}
                    >
                      Close

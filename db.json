@@ -260,28 +260,170 @@
       ]
     }
   ],
-  "myQuestions": [
-    {
-      "totalQuestions": 25,
-      "questions": [
+  "myActivities": {
+    "paginationMeta": {
+      "totalCount": 2,
+      "totalPage": 1,
+      "pageNumber": 0,
+      "pageSize": 2,
+      "first": true,
+      "last": true
+    },
+    "data": {
+      "myAnswers": [
         {
-          "questionId": 1,
-          "question": "Speaking better?",
-          "timestamp": 7345693452000
-        },
+          "totalAnswers": 25,
+          "answers": [
+            {
+              "questionId": 1,
+              "question": "What is question?",
+              "timestamp": 1666632563517
+            },
+            {
+              "questionId": 2,
+              "question": "What is this?",
+              "timestamp": 1666632563517
+            },
+            {
+              "questionId": 546,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 547,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 548,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 549,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 550,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            }
+          ]
+        }
+      ],
+      "myQuestions": [
         {
-          "questionId": 2,
-          "question": "Speaking in public problem?",
-          "timestamp": 734565452000
-        },
-        {
-          "questionId": 546,
-          "question": "What was that?",
-          "timestamp": 1707542436000
+          "totalQuestions": 25,
+          "questions": [
+            {
+              "questionId": 1,
+              "question": "Speaking better?",
+              "timestamp": 7345693452000
+            },
+            {
+              "questionId": 2,
+              "question": "Speaking in public problem?",
+              "timestamp": 734565452000
+            },
+            {
+              "questionId": 546,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            }
+          ]
         }
       ]
     }
-  ],
+  },
+  "myActivitiesAnswers": {
+    "paginationMeta": {
+      "totalCount": 2,
+      "totalPage": 1,
+      "pageNumber": 0,
+      "pageSize": 2,
+      "first": true,
+      "last": true
+    },
+    "data": {
+      "myAnswers": [
+        {
+          "totalAnswers": 25,
+          "answers": [
+            {
+              "questionId": 1,
+              "question": "What is question?",
+              "timestamp": 1666632563517
+            },
+            {
+              "questionId": 2,
+              "question": "What is this?",
+              "timestamp": 1666632563517
+            },
+            {
+              "questionId": 546,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 547,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 548,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 549,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            },
+            {
+              "questionId": 550,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "myActivitiesQuestions": {
+    "paginationMeta": {
+      "totalCount": 2,
+      "totalPage": 1,
+      "pageNumber": 0,
+      "pageSize": 2,
+      "first": true,
+      "last": true
+    },
+    "data": {
+      "myQuestions": [
+        {
+          "totalQuestions": 25,
+          "questions": [
+            {
+              "questionId": 1,
+              "question": "Speaking better?",
+              "timestamp": 7345693452000
+            },
+            {
+              "questionId": 2,
+              "question": "Speaking in public problem?",
+              "timestamp": 734565452000
+            },
+            {
+              "questionId": 546,
+              "question": "What was that?",
+              "timestamp": 1707542436000
+            }
+          ]
+        }
+      ]
+    }
+  },
   "wallets": [
     {
       "newBalance": 2100,
@@ -317,18 +459,18 @@
   "mentorAvailablity": [
     {
       "id": 1,
-      "fromTimeStamp": 1710485141000,
-      "toTimeStamp": 1710492341000
+      "fromTimeStamp": 1711614600000,
+      "toTimeStamp": 1711618200000
     },
     {
       "id": 2,
-      "fromTimeStamp": 1710561641000,
-      "toTimeStamp": 1710565241000
+      "fromTimeStamp": 1711780200000,
+      "toTimeStamp": 1711783800000
     },
     {
       "id": 3,
-      "fromTimeStamp": 1709616631000,
-      "toTimeStamp": 1709622031000
+      "fromTimeStamp": 1711697400000,
+      "toTimeStamp": 1711701000000
     },
     {
       "id": 10,
@@ -397,6 +539,85 @@
       "price": 20000
     }
   ],
+  "lawyerPackages": [
+    {
+      "id": 1,
+      "title": "Basic package",
+      "bio": "bio here",
+      "description": "Number of end products 1 Free updates Forum support",
+      "amount": 4500
+    },
+    {
+      "id": 2,
+      "title": "Standard package",
+      "bio": "bio here",
+      "description": "24/5 support Number of end products 1 Two factor authentication Free updates Forum support",
+      "amount": 8500
+    },
+    {
+      "id": 3,
+      "title": "Premium package",
+      "bio": "bio here",
+      "description": "24/5 support Number of end products 1 Two factor authentication Free updates Forum support",
+      "amount": 12500
+    },
+    {
+      "id": 4,
+      "title": "Premium-1 package",
+      "bio": "bio here",
+      "description": "24/5 support Number of end products 1 Two factor authentication Free updates Forum support",
+      "amount": 14000
+    },
+    {
+      "id": 5,
+      "title": "Premium-2 package",
+      "bio": "bio here",
+      "description": "24/5 support Number of end products 1 Two factor authentication Free updates Forum support",
+      "amount": 15000
+    }
+  ],
+  "lawyerReviews": [
+    {
+      "lawyerId": 1,
+      "reviewerId": 100,
+      "packageId": 4,
+      "imgText": "Mukesh kumar",
+      "name": "Mukesh kumar",
+      "country": "India",
+      "star": 4,
+      "reviewMsg": "Great service as usual"
+    },
+    {
+      "lawyerId": 1,
+      "reviewerId": 220,
+      "packageId": 4,
+      "imgText": "Dinesh kumar",
+      "name": "Dinesh kumar",
+      "country": "India",
+      "star": 5,
+      "reviewMsg": "Great service as usual"
+    },
+    {
+      "lawyerId": 2,
+      "reviewerId": 180,
+      "packageId": 4,
+      "imgText": "Arun kumar",
+      "name": "Arun kumar",
+      "country": "India",
+      "star": 4,
+      "reviewMsg": "Great service as usual"
+    },
+    {
+      "lawyerId": 2,
+      "reviewerId": 250,
+      "packageId": 4,
+      "imgText": "Gokul kumar",
+      "name": "Gokul kumar",
+      "country": "India",
+      "star": 5,
+      "reviewMsg": "Great service as usual"
+    }
+  ],
   "lawyerProfile": [
     {
       "id": 1,
@@ -406,7 +627,16 @@
       "image": "/assets/img/profiles/3.jpg",
       "services": [
         "all immigartion",
-        "visa"
+        "visa",
+        "visa 1",
+        "visa 2",
+        "visa 3",
+        "visa 4",
+        "visa 5",
+        "visa 6",
+        "visa 7",
+        "visa 8",
+        "visa 9"
       ],
       "firstName": "Vignesh",
       "lastName": "RK",
@@ -433,12 +663,48 @@
       "about": "You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
     }
   ],
+  "myprofile": {
+    "image": "data:image/jpeg;base64,/9j/4QAY",
+    "firstName": "abi",
+    "lastName": "ab",
+    "email": "abi@gmail.com",
+    "jobTitle": "mobile app",
+    "company": "whatsapp",
+    "location": "Location1",
+    "category": "employee",
+    "skills": [
+      "skill 1",
+      "skill 2",
+      "skill 3"
+    ],
+    "bio": "I have more than a decade experience in Software Engineering (and related practices including DevOps) and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the",
+    "linkedinUrl": "https://www.linkedin.com/in/abi/",
+    "twitterHandle": "abi",
+    "website": "https://www.abi.com/",
+    "introVideo": "https://www.youtube.com/watch?abc",
+    "featuredArticle": "https://wordpress.com/posts/abi.wordpress.com",
+    "reasonForMentor": "Let's make it simple",
+    "achievement": "University bronze medalist"
+  },
+  "sessionUpcomingHistroy": {
+    "data": {
+      "upcomingSessions": [
+        {
+          "mentorId": "1",
+          "name": "srihith ks",
+          "mode": "Video",
+          "fromtimestamp": 1711627135078000,
+          "totimestamp": 1711645135078000
+        }
+      ]
+    }
+  },
   "sessionHistory": [
     {
       "mentorId": 1,
       "name": "srihith",
       "duration": "03:00",
-      "mode": "video",
+      "mode": "Video",
       "fromtimestamp": 1710179061000,
       "totimestamp": 1710182661000
     }
@@ -456,7 +722,16 @@
       "skills": [
         "skill 1",
         "skill 2",
-        "skill 3"
+        "skill 3",
+        "skill 4",
+        "skill 5",
+        "skill 6",
+        "skill 7",
+        "skill 8",
+        "skill 9",
+        "skill 10",
+        "skill 11",
+        "skill 12"
       ],
       "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make …",
       "linkedinUrl": "https://www.linkedin.com/in/srihith/",
@@ -660,7 +935,16 @@
       "skills": [
         "skill 1",
         "skill 2",
-        "skill 3"
+        "skill 3",
+        "skill 4",
+        "skill 5",
+        "skill 6",
+        "skill 7",
+        "skill 8",
+        "skill 9",
+        "skill 10",
+        "skill 11",
+        "skill 12"
       ],
       "price": 200
     },

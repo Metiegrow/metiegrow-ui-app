@@ -4,6 +4,7 @@ import {  Button, NavLink, Row,Card,CardBody,CardSubtitle,CardImg} from 'reactst
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {useParams,useHistory} from "react-router-dom";
+import MentorTabCard from './MentorTabCard';
 
 
 const MentorProfile = () => {
@@ -18,6 +19,12 @@ const MentorProfile = () => {
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
 
   const history = useHistory();
+
+  const [showAll, setShowAll] = useState(false);
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
+  };
+ 
 
   // const handleConnectClick = () => {
   //   // Construct the URL with mentor's name as query parameter
@@ -61,7 +68,14 @@ const MentorProfile = () => {
     mentorProfile();
   },[])
 
+  useEffect(() => {
+    if (showAll) {
+      // Scroll to the skills section when showAll becomes true
+      document.getElementById('skillsSection').scrollIntoView();
+    }
+  }, [showAll]);
 
+  const remainingSkillsCount = mentorprofiledetails.skills ?  mentorprofiledetails.skills.length - 3 : 0;
 
   return (
     <div  className='mentor-profile'>
@@ -84,19 +98,19 @@ const MentorProfile = () => {
             {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
              <img src={mentorprofiledetails1.image} className=' col-2 mx-2 w-60
-             rounded-circle img-thumbnail border    ' alt="" />
+             rounded-circle img-thumbnail border    ' alt=""  />
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
                 <span className='font-weight-semibold text-one'><i className='iconsminds-thunder text-primary'/>{mentorprofiledetails1.achievement}</span>
               </Button>
             </div>
-            <div>
+            {/* <div>
             <NavLink  onClick={handleConnectClick}>
               <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
                 <span className='font-weight-semibold text-primary text-one'>Connect</span>
-                {/* <i className='simple-icon-social-linkedin text-primary font-weight-semibold text-one  '/> */}
+             
               </Button>
               </NavLink>
-            </div>
+            </div> */}
             <div>
               <NavLink>
               <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
@@ -117,12 +131,11 @@ const MentorProfile = () => {
             <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{mentorprofiledetails.star} ({mentorprofiledetails.ratings} reviews)</span></h6>
            <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6>
           </div>
-           
-        
+         
           <div className='col-7 mt-4'>
             <h2 className='mx-2'>Skills</h2>
            
-            <div className='d-flex'>
+            {/* <div className='d-flex'>
               {mentorprofiledetails.skills&&mentorprofiledetails.skills.map((skill)=>{
                
                 
@@ -136,6 +149,25 @@ const MentorProfile = () => {
                 </div>
                )
               })}
+            </div> */}
+            <div className='d-flex align-items-center'>
+            <div className='d-flex'>
+            {mentorprofiledetails.skills && mentorprofiledetails.skills.slice(0, 3).map((skill) => (
+            <div key={skill}>
+              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
+                {skill}
+              </Button>
+            </div>
+          ))}
+        </div>
+        {mentorprofiledetails.skills && mentorprofiledetails.skills.length > 3 && (
+          <div className=''>
+            <Button color="link" className='text-one font-weight-bold ' style={{textDecoration:"underline"}} onClick={toggleShowAll}>
+              + {remainingSkillsCount}more
+           
+            </Button>
+          </div>
+        )}
             </div>
             <div className='mt-2'>
             <h2 className='mx-2'>Topics</h2>
@@ -149,6 +181,15 @@ const MentorProfile = () => {
                 Grow your career
               </Button>
             </div>
+            {/* <div className='mt-2 '>
+            <NavLink className=''  onClick={handleConnectClick}>
+              <Button outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
+                <span className='font-weight-semibold  text-one'>Connect</span>
+                <i className='simple-icon-social-linkedin text-primary font-weight-semibold text-one  '/>
+              </Button>
+              </NavLink>
+            </div> */}
+            <MentorTabCard  handleConnectClick={handleConnectClick}/>
           </div>
           </Row>
           <hr/>
@@ -235,9 +276,7 @@ const MentorProfile = () => {
               </CardBody>
             </Card>
             </NavLink>
-            <div id='more'>
-             <h1>Full Skills Here</h1> 
-            </div>
+            
           </Colxx>
           {/* <Colxx xxs="12" xs="6" lg="4">
             <Card className="mb-4">
@@ -272,6 +311,32 @@ const MentorProfile = () => {
               </div>
             </Card>
           </Colxx> */}
+          {/* {showAll && (
+          <Colxx  lg={7} className="my-4" id="skillsSection">
+            <h1>Skills</h1>
+            <div className='d-flex flex-wrap '>
+              {mentorprofiledetails.skills && mentorprofiledetails.skills.map((skill) => (
+                <div key={skill}>
+              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='md'>
+                {skill}
+              </Button>
+            </div>
+              ))}
+            </div>
+          </Colxx>
+        )} */}
+        <Colxx  lg={7} className="my-4" id="skillsSection">
+            <h1>Skills </h1>
+            <div className='d-flex flex-wrap '>
+              {mentorprofiledetails.skills && mentorprofiledetails.skills.map((skill) => (
+                <div key={skill}>
+              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='md'>
+                {skill}
+              </Button>
+            </div>
+              ))}
+            </div>
+          </Colxx>
         </Row>
       </Colxx>
           </Colxx>

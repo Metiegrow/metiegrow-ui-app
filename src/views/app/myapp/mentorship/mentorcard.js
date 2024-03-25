@@ -263,7 +263,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                    {/* {mentordetails.skills&&mentordetails.skills.map((skill) => (
               <span key={skill} className="">{skill}</span>
             ))} */}
-            {mentors.skills && mentors.skills.map((skill) => (
+            {mentors.skills && mentors.skills.slice(0, 3).map((skill) => (
           <div key={skill} className='m-2 ' id='btn.rounded'>
           
               <Button color="light" className="mb-2 font-weight-semibold" size='xs'>
