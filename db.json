@@ -1,9 +1,9 @@
 {
   "signUp": {
     "username": "testName",
-    "password": "TestPass",
+    "password": "kk",
     "email": "test@email.com",
-    "userType": "STUDENT"
+    "userType": "COORDINATOR"
   },
   "signIn": {
     "email": "vssivanesh@gmail.com",
@@ -181,28 +181,82 @@
       "id": 4
     }
   ],
-  "answersDup":[
-    
-      {"questionId": 1, "question": "What is question?", "timestamp": 1666632563517},
-      {"questionId": 2, "question": "What is this?", "timestamp": 1666632563517},
-      {"questionId": 546, "question": "What was that?", "timestamp":1707542436000},
-      {"questionId": 547, "question": "What was that?", "timestamp":1707542436000},
-      {"questionId": 548, "question": "What was that?", "timestamp":1707542436000},
-      {"questionId": 549, "question": "What was that?", "timestamp":1707542436000},
-      {"questionId": 550, "question": "What was that?", "timestamp":1707542436000}
-    
+  "answersDup": [
+    {
+      "questionId": 1,
+      "question": "What is question?",
+      "timestamp": 1666632563517
+    },
+    {
+      "questionId": 2,
+      "question": "What is this?",
+      "timestamp": 1666632563517
+    },
+    {
+      "questionId": 546,
+      "question": "What was that?",
+      "timestamp": 1707542436000
+    },
+    {
+      "questionId": 547,
+      "question": "What was that?",
+      "timestamp": 1707542436000
+    },
+    {
+      "questionId": 548,
+      "question": "What was that?",
+      "timestamp": 1707542436000
+    },
+    {
+      "questionId": 549,
+      "question": "What was that?",
+      "timestamp": 1707542436000
+    },
+    {
+      "questionId": 550,
+      "question": "What was that?",
+      "timestamp": 1707542436000
+    }
   ],
-  "myAnswers":[
+  "myAnswers": [
     {
       "totalAnswers": 25,
       "answers": [
-        {"questionId": 1, "question": "What is question?", "timestamp": 1666632563517},
-        {"questionId": 2, "question": "What is this?", "timestamp": 1666632563517},
-        {"questionId": 546, "question": "What was that?", "timestamp":1707542436000},
-        {"questionId": 547, "question": "What was that?", "timestamp":1707542436000},
-        {"questionId": 548, "question": "What was that?", "timestamp":1707542436000},
-        {"questionId": 549, "question": "What was that?", "timestamp":1707542436000},
-        {"questionId": 550, "question": "What was that?", "timestamp":1707542436000}
+        {
+          "questionId": 1,
+          "question": "What is question?",
+          "timestamp": 1666632563517
+        },
+        {
+          "questionId": 2,
+          "question": "What is this?",
+          "timestamp": 1666632563517
+        },
+        {
+          "questionId": 546,
+          "question": "What was that?",
+          "timestamp": 1707542436000
+        },
+        {
+          "questionId": 547,
+          "question": "What was that?",
+          "timestamp": 1707542436000
+        },
+        {
+          "questionId": 548,
+          "question": "What was that?",
+          "timestamp": 1707542436000
+        },
+        {
+          "questionId": 549,
+          "question": "What was that?",
+          "timestamp": 1707542436000
+        },
+        {
+          "questionId": 550,
+          "question": "What was that?",
+          "timestamp": 1707542436000
+        }
       ]
     }
   ],
@@ -318,78 +372,74 @@
       "lastName": "RK",
       "jobTitle": "lawyer",
       "company": "google",
-      "bio":"A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
-      "services":[
+      "bio": "A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
+      "services": [
         "all immigartion",
         "visa"
       ],
       "price": 10000
-  },
-  {
-    "id": 2,
-    "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
-    "image":"/assets/img/profiles/11.jpg",
-    "star": 5.0,
-    "ratings": 200,
-    "firstName": "Rajendren",
-    "lastName": "RD",
-    "jobTitle": "lawyer",
-    "company": "google",
-    "bio":"A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
-    "services":[
-      "all immigartion",
-      "visa"
-    ],
-    "price": 20000
-}
-  ]
-
-,
-"lawyerProfile":[
-  {
-    "id":1,
-    "topic":"I will help mentee",
-    "star": 5.0,
-    "ratings": 200,
-    "image":"/assets/img/profiles/3.jpg",
-    "services":[
-      "all immigartion",
-      "visa"
-    ],
-    "firstName": "Vignesh",
-      "lastName": "RK",
-    "location":"India",
-    "languages":"English",
-    "bio":"a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
-    "about":"You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
-  },
-  {
-    "id":2,
-    "topic":"I will help mentee",
-    "star": 5.0,
-    "ratings": 200,
-    "image":"/assets/img/profiles/11.jpg",
-    "services":[
-      "all immigartion",
-      "visa"
-    ],
-    "firstName": "Rajendren",
-    "lastName": "RD",
-    "location":"India",
-    "languages":"English",
-    "bio":"a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
-    "about":"You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
-  }
-    
-  ],
- 
-  "sessionHistory":[
+    },
     {
-      "mentorId":1,
-      "name":"srihith",
-      "duration":"03:00",
-      "mode":"video",
-      "fromtimestamp":1710179061000,
+      "id": 2,
+      "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
+      "image": "/assets/img/profiles/11.jpg",
+      "star": 5,
+      "ratings": 200,
+      "firstName": "Rajendren",
+      "lastName": "RD",
+      "jobTitle": "lawyer",
+      "company": "google",
+      "bio": "A lawyer is a professional who is qualified to offer advice about the law or represent someone in legal matters. A lawyer can also be called an attorney, a solicitor, a counselor, a barrister, or — pejoratively — an ambulance chaser.",
+      "services": [
+        "all immigartion",
+        "visa"
+      ],
+      "price": 20000
+    }
+  ],
+  "lawyerProfile": [
+    {
+      "id": 1,
+      "topic": "I will help mentee",
+      "star": 5,
+      "ratings": 200,
+      "image": "/assets/img/profiles/3.jpg",
+      "services": [
+        "all immigartion",
+        "visa"
+      ],
+      "firstName": "Vignesh",
+      "lastName": "RK",
+      "location": "India",
+      "languages": "English",
+      "bio": "a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
+      "about": "You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
+    },
+    {
+      "id": 2,
+      "topic": "I will help mentee",
+      "star": 5,
+      "ratings": 200,
+      "image": "/assets/img/profiles/11.jpg",
+      "services": [
+        "all immigartion",
+        "visa"
+      ],
+      "firstName": "Rajendren",
+      "lastName": "RD",
+      "location": "India",
+      "languages": "English",
+      "bio": "a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
+      "about": "You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
+    }
+  ],
+  "sessionHistory": [
+    {
+      "mentorId": 1,
+      "name": "srihith",
+      "duration": "03:00",
+      "mode": "video",
+      "fromtimestamp": 1710179061000,
       "totimestamp": 1710182661000
     }
   ],
@@ -479,6 +529,94 @@
       "twitterHandle": "arunkumar",
       "website": "https://www.arunkumar.com/",
       "id": 3
+    },
+    {
+      "category": "Category1",
+      "skills": [
+        "aaaaaaaa"
+      ],
+      "bio": "hhhhh",
+      "linkedinUrl": "linkedin.com/in",
+      "twitterHandle": "",
+      "website": "",
+      "id": 4
+    },
+    {
+      "category": "Category1",
+      "skills": [
+        "aaaaaaaa"
+      ],
+      "bio": "hhhhh",
+      "linkedinUrl": "www.linkedin.com/in",
+      "twitterHandle": "",
+      "website": "",
+      "id": 5
+    },
+    {
+      "category": "Category1",
+      "skills": [
+        "aaaaaaaa"
+      ],
+      "bio": "hhhhh",
+      "linkedinUrl": "www.linkedin.com/ff",
+      "twitterHandle": "",
+      "website": "",
+      "id": 6
+    },
+    {
+      "category": "Category1",
+      "skills": [
+        "aaaaaaaa"
+      ],
+      "bio": "hhhhh",
+      "linkedinUrl": "www.linkedin.com/in",
+      "twitterHandle": "",
+      "website": "",
+      "id": 7
+    },
+    {
+      "category": "Category1",
+      "skills": [
+        "aaaaaaaa"
+      ],
+      "bio": "hhhhh",
+      "linkedinUrl": "www.linkedin.com/in",
+      "twitterHandle": "",
+      "website": "",
+      "id": 8
+    },
+    {
+      "category": "Category3",
+      "skills": [
+        "html"
+      ],
+      "bio": "vcfd",
+      "linkedinUrl": "https://www.linkedin.com/in/srihith",
+      "twitterHandle": "",
+      "website": "",
+      "id": 9
+    },
+    {
+      "category": "Category4",
+      "skills": [
+        "jjj"
+      ],
+      "bio": "jjjjjjjjjj",
+      "linkedinUrl": "https://au.linkedin.com/in/mrdalehenry",
+      "twitterHandle": "",
+      "website": "",
+      "id": 10
+    },
+    {
+      "category": "Category3",
+      "skills": [
+        "ggg"
+      ],
+      "bio": "gggggg",
+      "linkedinUrl": "https://www.linkedin.com/in/srihith",
+      "twitterHandle": "",
+      "website": "",
+      "id": 11
     }
   ],
   "notifications": [

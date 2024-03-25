@@ -54,13 +54,14 @@ const MyProfile = () => {
   const [reviews, setReviews] = useState("");
   // const [price, setPrice] =useState("");
 
-  // const Id = 11;
+  const Id = 1;
 
   // const url = `${baseUrl}/user`;
   // const url = `${baseUrl}/api/mentor/11/details/profile`;
   // const url1 = `${baseUrl}/mentor/profile${userId}`;
-  // const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
-  const endUrl = `${baseUrl}/myprofile`;
+  const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
+  // const endUrl = `${baseUrl}/myprofile`;
+  // const endUrl = `${baseUrl}/api/mentor/myprofile`;
   const inputUrl = `${baseUrl}/inputs`
 
 

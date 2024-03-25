@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
@@ -21,6 +22,8 @@ const JobListing = () => {
   const [totalPage] = useState(2);
   const [items, setItems] = useState([]);
   const [expandedIndex, setExpandedIndex] = useState(-1);
+
+  const history = useHistory();
 
   const toggleExpand = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
@@ -46,12 +49,11 @@ const JobListing = () => {
     fetchData();
   }, [currentPage]);
 
-  // useEffect(() => {
-  //   setItems((prevItems) =>
-  //     prevItems.slice().sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn))
-  //   );
-  // }, [items]);
-  
+  const handleClick = (id) => {
+    history.push(`/app/listing/joblisting/view/${id}`);
+  };
+
+ 
   return !isLoaded ? (
     <div className="loading" />
   ) : (
@@ -135,6 +137,24 @@ const JobListing = () => {
                     </div>
                   </Col>
                   <Col className="text-right">
+                  <Button
+                        outline
+                        color="primary"
+                        className="mr-2"
+                        size="xs"
+                        onClick={() =>handleClick(data.id)}
+                      >
+                        <i className="simple-icon-size-fullscreen text-primary" />
+                      </Button>
+                  <Button
+                      outline
+                      color="primary"
+                      className="mr-2"
+                      size="xs"
+                      // onClick={}
+                    >
+                      <i className="iconsminds-sharethis text-primary" />
+                    </Button>
                     <Button outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>

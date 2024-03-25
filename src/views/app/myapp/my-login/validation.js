@@ -137,16 +137,31 @@ const validateFirstName = (value) => {
     return error;
   }
   
+  // function validateFile(value) {
+  //   let error;
+  //   if (!value) {
+  //     error = "This field is required.";
+  //   }
+  //   //  else if (!["image/jpeg", "image/png"].includes(file.type)) {
+  //   //   error = "Unsupported file type. Only JPEG and PNG images are allowed";
+  //   // }
+  //   return error;
+  // }
   function validateFile(value) {
     let error;
+  
     if (!value) {
       error = "This field is required.";
+    } else {
+      const fileType = value.type;
+      if (!["image/jpeg", "image/png"].includes(fileType)) {
+        error = "Unsupported file type. Only JPEG and PNG images are allowed";
+      }
     }
-    //  else if (!["image/jpeg", "image/png"].includes(file.type)) {
-    //   error = "Unsupported file type. Only JPEG and PNG images are allowed";
-    // }
+  
     return error;
   }
+  
   export {
     validateLastName,
     validateEmail,

@@ -145,7 +145,7 @@ useEffect(() => {
                 </Row>
                 ) : null}
                 {data.apartmentType ? (
-                <Row>
+                <Row className="mb-2">
                   <Col md={5}>
                     <i className="iconsminds-office text-primary" />{" "}
                     <span data-toggle="tooltip" title="Apartment Type">{data.apartmentType}</span> | <span data-toggle="tooltip" title="Floor">{data.floor}</span> |  <span data-toggle="tooltip" title="BHK Type">{data.BHKType}</span>
@@ -184,6 +184,15 @@ useEffect(() => {
                     </div>
                   </Col>
                   <Col className="text-right">
+                  <Button
+                      outline
+                      color="primary"
+                      className="mr-2"
+                      size="xs"
+                      // onClick={}
+                    >
+                      <i className="iconsminds-sharethis text-primary" />
+                    </Button>
                     <Button outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>

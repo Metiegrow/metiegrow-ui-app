@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
@@ -14,8 +15,7 @@ import {
 import { Colxx } from "components/common/CustomBootstrap";
 import DesktopNotifications from "../notifications/DesktopNotifications";
 
-
-const url = `${baseUrl}/api/otherlisting/cards`;
+const url = `${baseUrl}/otherlistingcard`;
 
 const JobListing = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,26 +25,30 @@ const JobListing = () => {
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [clickedCardTitle, setClickedCardTitle] = useState("");
 
+  const history = useHistory();
+
   const toggleExpand = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
   };
   const handleInterest = (title) => {
-    setClickedCardTitle(title); 
+    setClickedCardTitle(title);
   };
   // const handleInterest = (title) => {
   //   // setClickedCardTitle(title);
-  //   // DesktopNotifications({ title }); 
+  //   // DesktopNotifications({ title });
   //   <DesktopNotifications title={title} />
   // };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(url);
+        const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
         // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
         console.log(res);
         const { data } = res;
-        const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+        const sortedData = data
+          .map((x) => ({ ...x }))
+          .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
         setItems(sortedData);
         setIsLoaded(true);
       } catch (error) {
@@ -55,7 +59,11 @@ const JobListing = () => {
 
     fetchData();
   }, [currentPage]);
-  
+
+  const handleClick = (id) => {
+    history.push(`/app/listing/otherlisting/view/${id}`);
+  };
+
   return !isLoaded ? (
     <div className="loading" />
   ) : (
@@ -74,7 +82,7 @@ const JobListing = () => {
                   <Col className="text-right">
                     <p className="text-muted">
                       {/* Posted on {new Date(data.postedOn).toLocaleDateString()}{" "} */}
-                      Posted on {new Date(data.postedOn).toLocaleString()} 
+                      Posted on {new Date(data.postedOn).toLocaleString()}
                     </p>
                   </Col>
                 </Row>
@@ -94,7 +102,7 @@ const JobListing = () => {
                     )}
                   </CardSubtitle>
                 )}
-                
+
                 <Row className="">
                   <Col className="">
                     <div className="text-muted mt-2">
@@ -102,7 +110,30 @@ const JobListing = () => {
                     </div>
                   </Col>
                   <Col className="text-right">
-                    <Button outline color="primary" size="xs" onClick={() => handleInterest(data.title)}>
+                  <Button
+                        outline
+                        color="primary"
+                        className="mr-2"
+                        size="xs"
+                        onClick={() =>handleClick(data.id)}
+                      >
+                        <i className="simple-icon-size-fullscreen text-primary" />
+                      </Button>
+                    <Button
+                      outline
+                      color="primary"
+                      className="mr-2"
+                      size="xs"
+                      // onClick={}
+                    >
+                      <i className="iconsminds-sharethis text-primary" />
+                    </Button>
+                    <Button
+                      outline
+                      color="primary"
+                      size="xs"
+                      onClick={() => handleInterest(data.title)}
+                    >
                       I&apos;m interested
                     </Button>
                   </Col>

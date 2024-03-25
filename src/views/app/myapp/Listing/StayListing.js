@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
 import {
   // Collapse,
   Button,
@@ -16,16 +17,18 @@ import Pagination from "containers/pages/Pagination";
 
 
 const StayListing = () => {
-  const url = `${baseUrl}/api/staylisting/cards`;
+  const url = `${baseUrl}/staylistingcard`;
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage] = useState(2);
+  const history = useHistory();
+
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
       try {
-        const res = await axios.get(url);
+        const res = await axios.get(`${url}?_page=${currentPage}&_limit=4`);
         const { data } = res;
         const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
         setItems(sortedData);
@@ -39,7 +42,7 @@ const StayListing = () => {
       }
     };
     fetchDataFromServer();
-  }, []);
+  }, [currentPage]);
 
   const toggleExpand = (index) => {
     if (expandedIndex === index) {
@@ -47,6 +50,9 @@ const StayListing = () => {
     } else {
       setExpandedIndex(index);
     }
+  };
+  const handleClick = (id) => {
+    history.push(`/app/listing/staylisting/view/${id}`);
   };
 
   return (
@@ -138,6 +144,24 @@ const StayListing = () => {
                     </div>
                   </Col>
                   <Col className="text-right">
+                  <Button
+                        outline
+                        color="primary"
+                        className="mr-2"
+                        size="xs"
+                        onClick={() =>handleClick(data.id)}
+                      >
+                        <i className="simple-icon-size-fullscreen text-primary" />
+                      </Button>
+                  <Button
+                      outline
+                      color="primary"
+                      className="mr-2"
+                      size="xs"
+                      // onClick={}
+                    >
+                      <i className="iconsminds-sharethis text-primary" />
+                    </Button>
                     <Button outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>

@@ -115,11 +115,16 @@ const ViewMyWallet = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/my-wallet/MyWallet'
   )
 );
-// const ViewVideoCall = React.lazy(() =>
-//   import(
-//     /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCall'
-//   )
-// );
+const ViewMyListing = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/MyListing'
+  )
+);
+const ViewVideoCall = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCall'
+  )
+);
 // const ViewJobPosting = React.lazy(() =>
 //   import(
 //     /* webpackChunkName: "views-app" */ './myapp/Listing/JobPosting'
@@ -155,6 +160,21 @@ const ViewListing = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
   )
 );
+const ViewOtherListing = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/ViewOtherListing'
+  )
+);
+const ViewJobListing = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/ViewJobListing'
+  )
+);
+const ViewStayListing = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/ViewStayListing'
+  )
+);
 // const ViewNotification = React.lazy(() =>
 //   import(
 //     /* webpackChunkName: "views-app" */ './myapp/notifications/DesktopNotifications'
@@ -172,20 +192,39 @@ const ViewLawyerProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerProfile'
 ))
+function getTokenRes() {
+  return localStorage.getItem('status');
+}
 
 
 
 const App = ({ match }) => {
+const statusRes = getTokenRes();
+const redirectTo =
+  statusRes === '0' && `${match.url}/mentor/apply` ||
+  statusRes === '1' && `${match.url}/mentor/apply` ||
+  statusRes === '3' && `${match.url}/mentor/apply` ||
+  statusRes === '7' && `${match.url}/mentor` ||
+  `${match.url}/profile`;
+  
   return (
     <AppLayout>
       <div className="dashboard-wrapper">
         <Suspense fallback={<div className="loading" />}>
           <Switch>
-            <Redirect
+            {/* <Redirect
               exact
               from={`${match.url}/`}
               to={`${match.url}/profile`}
-            />
+            /> */}
+            
+          <Redirect
+           exact 
+           from={`${match.url}/`}
+           to={redirectTo} 
+           />
+
+            
             <Route
               path={`${match.url}/myapp`}
               exact
@@ -288,10 +327,26 @@ const App = ({ match }) => {
               path={`${match.url}/mywallet`}
               render={(props) => <ViewMyWallet {...props} />}
             />
-               {/* <Route
+               <Route
+              path={`${match.url}/mylisting`}
+              render={(props) => <ViewMyListing {...props} />}
+            />
+               <Route
+              path={`${match.url}/listing/otherlisting/view/:id`}
+              render={(props) => <ViewOtherListing {...props} />}
+            />
+               <Route
+              path={`${match.url}/listing/joblisting/view/:id`}
+              render={(props) => <ViewJobListing {...props} />}
+            />
+               <Route
+              path={`${match.url}/listing/staylisting/view/:id`}
+              render={(props) => <ViewStayListing {...props} />}
+            />
+               <Route
               path={`${match.url}/videocall`}
               render={(props) => <ViewVideoCall {...props} />}
-            /> */}
+            />
                {/* <Route
               path={`${match.url}/jobposting`}
               render={(props) => <ViewJobPosting {...props} />}
