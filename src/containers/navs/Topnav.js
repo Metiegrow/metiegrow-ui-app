@@ -102,6 +102,13 @@ const TopNav = ({
   const handleMyWalletClick = () => {
     history.push(`${adminRoot}/mywallet`);
   };
+  const handleMyActivitiesClick = () => {
+    history.push(`${adminRoot}/myactivities`);
+  };
+  const handleMySessionsClick = () => {
+    history.push(`${adminRoot}/sessionlists`);
+  };
+  
 
   const handleLogout = () => {
     logoutUserAction(history);
@@ -229,6 +236,16 @@ const TopNav = ({
               <NavLink to={`${adminRoot}/mywallet`}>
                 <DropdownItem onClick={() => handleMyWalletClick()}>
                 <i className="simple-icon-wallet" />  My Wallet
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/myactivities`}>
+                <DropdownItem onClick={() => handleMyActivitiesClick()}>
+                <i className="simple-icon-question" />  My Activities
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/sessionlists`}>
+                <DropdownItem onClick={() => handleMySessionsClick()}>
+                <i className="simple-icon-list" />  Sessions
                 </DropdownItem>
               </NavLink>
               <DropdownItem onClick={() => handleLogout()}>

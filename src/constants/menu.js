@@ -12,20 +12,47 @@ const data = [
     icon: 'simple-icon-people',
     label: 'MentorShip',
     to: `${adminRoot}/mentor`,
-    subs: [
-      {
-        icon: 'simple-icon-user',
-        label: 'Find Mentors',
-        to: `${adminRoot}/mentor`,
+    // subs: [
+    //   {
+    //     icon: 'simple-icon-user',
+    //     label: 'Find Mentors',
+    //     to: `${adminRoot}/mentor`,
    
-      },
-      {
-        icon: 'simple-icon-list',
-        label: 'Mentor sessions',
-        to: `${adminRoot}/sessionlists`,
+    //   },
+    //   // {
+    //   //   icon: 'simple-icon-list',
+    //   //   label: 'Mentor sessions',
+    //   //   to: `${adminRoot}/sessionlists`,
    
-      },
+    //   // },
      
+    //   // {
+    //   //   icon: 'simple-icon-question',
+    //   //   label: 'My Q&A activities ',
+    //   //   to: `${adminRoot}/myactivities`,
+   
+    //   // },
+    //   // {
+    //   //   icon: 'simple-icon-bubbles',
+    //   //   label: 'Chat',
+    //   //   to: `${adminRoot}/chat`,
+   
+    //   // },
+    //   // {
+    //   //   icon: 'simple-icon-calendar',
+    //   //   label: 'Calendar',
+    //   //   to: `${adminRoot}/calendar`,
+   
+    //   // },
+     
+    // ]
+  },
+  {
+    id: 'Q & A',
+    icon: 'simple-icon-question',
+    label: 'Q & A',
+    to: `${adminRoot}/questions`,
+    subs: [
       // {
       //   icon: 'simple-icon-question',
       //   label: 'My Q&A activities ',
@@ -33,38 +60,11 @@ const data = [
    
       // },
       // {
-      //   icon: 'simple-icon-bubbles',
-      //   label: 'Chat',
-      //   to: `${adminRoot}/chat`,
+      //   icon: 'simple-icon-question',
+      //   label: 'Questions & Answers',
+      //   to: `${adminRoot}/questions`,
    
       // },
-      // {
-      //   icon: 'simple-icon-calendar',
-      //   label: 'Calendar',
-      //   to: `${adminRoot}/calendar`,
-   
-      // },
-     
-    ]
-  },
-  {
-    id: 'Q & A',
-    icon: 'simple-icon-question',
-    label: 'Q & A',
-    to: `${adminRoot}/myactivities`,
-    subs: [
-      {
-        icon: 'simple-icon-question',
-        label: 'My Q&A activities ',
-        to: `${adminRoot}/myactivities`,
-   
-      },
-      {
-        icon: 'simple-icon-question',
-        label: 'Questions & Answers',
-        to: `${adminRoot}/questions`,
-   
-      },
      
     ]
   },
@@ -72,16 +72,16 @@ const data = [
     id: 'Lawyer',
     icon: 'iconsminds-scale',
     label: 'Lawyer',
-    to: `${adminRoot}/lawyer`,
-    subs: [
-      {
-        icon: 'simple-icon-user',
-        label: 'Find lawyers',
-        to: `${adminRoot}/usercard`,
+    to: `${adminRoot}/usercard`,
+    // subs: [
+    //   {
+    //     icon: 'simple-icon-user',
+    //     label: 'Find lawyers',
+    //     to: `${adminRoot}/usercard`,
    
-      },
+    //   },
      
-    ]
+    // ]
   },
   {
     id: 'myapplications',

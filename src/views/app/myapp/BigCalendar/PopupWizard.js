@@ -1,11 +1,15 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
+// import { baseUrl } from 'constants/defaultValues';
+import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-import {   Card, CardBody, CustomInput, Dropdown, DropdownItem, DropdownMenu,
-   DropdownToggle, Form, FormGroup,  InputGroup, InputGroupAddon, Label, Row 
+import {  Button, Card, CardBody, CustomInput, Dropdown, DropdownItem, DropdownMenu,
+   DropdownToggle, Form, FormGroup, Label, Row ,InputGroup
 
    } from 'reactstrap';
+  //  import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { Wizard, Steps, Step } from 'react-albus';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { injectIntl } from 'react-intl';
 // import IntlMessages from 'helpers/IntlMessages';
 import BottomNavigation from 'components/wizard/BottomNavigation';
@@ -14,8 +18,19 @@ import DateRangePicker from './DateRangePicker';
 
 
 
-const PopupWizard = ({ selectedDate,setSelectedDate}) => {
+
+
+const PopupWizard = ({ selectedDate,setSelectedDate,upcomingsession,mentorId,mentorName}) => {
+
+  const history = useHistory();  
+  
+
+  const redirectToSessionLists = () => {
+    // Redirect to the specified URL with the query parameter
+    history.push('/app/sessionlists?appointment=true');
+  };
   // const [selectedDate, setSelectedDate] = useState(null);
+  // const [storedData, setStoredData] = useState(null);
   const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
@@ -23,9 +38,54 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
   const [selectedradiobutton, setSelectedRadioButton] = useState(null);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
    const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
- 
+  //  const [upcomingSessions] = useState([]); 
   const [minutedrop,setMinutedrop]=useState(null)
   const [minutedrop1,setMinutedrop1]=useState(null)
+
+  // const [upcomingSessions] = useState([]);
+//    const fromTimestamp = new Date(selectedDate).getTime();
+// const toTimestamp = fromTimestamp + (selectedHourDropdown * 3600000) + (minutedrop * 60000) + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
+
+// const fromTime = new Date(fromTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+// const toTime = new Date(toTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+ 
+const handleCloseButtonClick = () => {
+  const fromTimestamp = new Date(selectedDate).getTime();
+  const toTimestamp = fromTimestamp + (selectedHourDropdown * 3600000) + (minutedrop * 60000) + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
+
+  // Convert timestamps to milliseconds
+  const fromTimestampMilliseconds = fromTimestamp * 1000;
+  const toTimestampMilliseconds = toTimestamp * 1000;
+
+  console.log('From Timestamp (milliseconds):', fromTimestampMilliseconds);
+  console.log('To Timestamp (milliseconds):', toTimestampMilliseconds);
+
+  const newData = {
+    mentorId,
+    name: mentorName,
+    mode: selectedradiobutton,
+    fromtimestamp: fromTimestampMilliseconds,
+    totimestamp: toTimestampMilliseconds,
+  };
+
+  axios.post('http://localhost:3001/sessionUpcomingHistroy', {
+    data: {
+      ...upcomingsession,
+      upcomingSessions: upcomingsession && upcomingsession.upcomingSessions ? [...upcomingsession.upcomingSessions, newData] : [newData],
+    }
+  })
+    .then(() => {
+      redirectToSessionLists();
+    })
+    .catch(error => {
+      console.error('Error storing data:', error);
+    });
+};
+
+
+
+
+
   const handleDropdownItemClick = (selectedHour) => {
     // Handle the selected hour as needed
     setSelectedHourDropdown(selectedHour);
@@ -36,7 +96,7 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
   const handleDropdownItemClick1 = (selectedMinute) => {
     // Handle the selected minutes as needed
     setMinutedrop(selectedMinute);
-   setMinutedrop1(selectedMinute);
+  //  setMinutedrop1(selectedMinute);
     console.log(`Selected minute: ${selectedMinute}`);
     // setMinuteDrop(selectedMinute); 
   };
@@ -114,13 +174,32 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
     push(stepItem.id);
   };
 
+  // const onClickNext = (goToNext, steps, step) => {
+  //   step.isDone = true;
+  //   if (steps.length - 1 <= steps.indexOf(step)) {
+  //     return;
+  //   }
+  //   goToNext();
+  // };
+  // const onClickNext = (goToNext, steps, step) => {
+  //   step.isDone = true;
+  //   if (steps.length - 1 <= steps.indexOf(step)) {
+  //     redirectToSessionLists();
+  //   } else {
+  //     goToNext();
+  //   }
+  // };
   const onClickNext = (goToNext, steps, step) => {
     step.isDone = true;
     if (steps.length - 1 <= steps.indexOf(step)) {
-      return;
+      
+      if (step.id === 'step3') {
+        redirectToSessionLists(); // Redirect to the session list
+        return;
+      }
     }
     goToNext();
-  };
+};
 
   const onClickPrev = (goToPrev, steps, step) => {
     if (steps.indexOf(step) <= 0) {
@@ -151,38 +230,44 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
             >
                        <Form className=' '  >
        
-                       <FormGroup>
+                       <FormGroup className=''>  
                        {/* <div className=''> */}
      
      {/* <Label className='text-one'>Appointment date</Label> */}
-     <div className='d-flex  align-items-center' >
-     {/* <span className='text-one '><i className='simple-icon-calendar'/></span> */}
-     {/* <DateRangePicker  selectedDate={selectedDate}  /> */}
-     {/* <DateRangePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} /> */}
-      {/* <div>
-    
-      
-     </div> */}
-    
-      {/* </div> */}
-      
-    
-            <InputGroup className="mb-3">
-          
-            <InputGroupAddon addonType="prepend">📆</InputGroupAddon>
-              <DateRangePicker  selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+     <div className=''>
+     
+     <Label className='text-one font-weight-bold'>Appointment date</Label>  
+            <InputGroup className="mb-3 ">
+             <DateRangePicker  selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
             </InputGroup>
+            {/* <div>
+            <DateRangePicker  selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            </div> */}
             
 
      </div>
                        </FormGroup>
+                       {/* <FormGroup>
+                      <Row>
+                        <Colxx sm="3">
+                          <Label className='text-one'>Appointment date</Label>
+                        </Colxx>
+                        <Colxx sm="9">
+                          <InputGroup className="mb-3">
+                            <DateRangePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                          </InputGroup>
+                        </Colxx>
+                      </Row>
+    </FormGroup> */}
       
  
       <FormGroup>
-      <div className=' '>
+      <div className=''>
       <div>
-       <h5 className=''>From</h5>
-       <div className='d-flex'>
+       {/* <h5 className=''>From</h5> */}
+       <Label className='text-one font-weight-bold'>From</Label>
+       <div className='d-flex '>
+    
        <Dropdown direction="down"
   isOpen={dropdownBasicOpen}
   toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
@@ -218,7 +303,8 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
        </div>
      </div>
      <div className=''>
-       <h5 className=''>To</h5>
+       {/* <h5 className=''>To</h5> */}
+       <Label className='text-one font-weight-bold'>To</Label>
        <div className='d-flex'>
        <Dropdown direction="down"
   isOpen={dropdownBasicOpen2}
@@ -257,10 +343,10 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
       </div>
       </FormGroup>
      
-    
+   
        <Form>
         <FormGroup>
-      <Label className='text-one'>Call type</Label>
+      <Label className='text-one font-weight-bold'>Call type</Label>
      <div className='d-flex '>
        <CustomInput
          type="radio"
@@ -322,17 +408,44 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
               </div> */}
               <Card className='my-3 '>
                 <CardBody>
-                <div className='p-3 border-dark mb-2 rounded'>
-                <h3>Session Price:<span className='font-weight-bold color-theme-1'>Rs:300 </span></h3>
-                    <h3>Your Available Balance:<span  className='font-weight-bold color-theme-1'>Rs. 14000</span> </h3>
-                    <h3>Balance after deduction: <span  className='font-weight-bold color-theme-1'>Rs.900</span></h3>
-                </div>
-
-                <div className='p-3 border-dark mb-2 rounded'>
-                <h3>Session Price: Rs. 500</h3>
-                <h3>Your Available Balance: Rs. 400</h3>
-                <h4>Do you want to recharge Rs. 100?</h4>
-                </div>
+                <Form className=''>
+                  <FormGroup className='w-100'>
+                  <div className='d-flex justify-content-between align-items-center  '>
+                  <Label  className='text-one '>Session Price</Label>
+                  <Colxx lg={5}  className=''>
+                  <h3 className=''><span className='font-weight-bold color-theme-1 '>Rs:300 </span></h3>
+                  </Colxx>
+                  </div>
+                 
+              
+                  </FormGroup>
+                  <FormGroup className='w-100'>
+                  <div className='d-flex justify-content-between align-items-center '>
+                  <Label  className='text-one'>Your Available Balance</Label>
+                  <Colxx lg={5}>
+                  <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:14000 </span></h3>
+                  </Colxx>
+                  </div>
+                 
+              
+                  </FormGroup>
+                  <FormGroup className='w-100'>
+                  <div className='d-flex justify-content-between align-itmes-center '>
+                  <Label  className='text-one'>Balance after deduction</Label>
+                  <Colxx lg={5}>
+                  <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
+                  </Colxx>
+                  </div>
+                 
+              
+                  </FormGroup>
+                  
+                 
+                
+             
+                </Form>
+               
+               
                    
                 </CardBody>
               </Card>
@@ -345,29 +458,31 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
               desc="Finish"
               
             >
-              {/* <div className="wizard-basic-step">
-                <Form>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="forms.password" />
-                    </Label>
-                    <Input
-                      type="password"
-                      name="password"
-                      placeholder={messages['forms.password']}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </FormGroup>
-                </Form>
-              </div> */}
+             
               <div className='text-center ' >
               <span className='text-xlarge text-primary'><i className='simple-icon-check'/></span>
               <h3 className=' my-3 py-3 '>Your appointment is successfull</h3>
               <h2 className=' my-3'>Thank you</h2>
+                
+
+              {/* <div className='text-center my-2'>
+              <Button className="btn btn-primary " onClick={redirectToSessionLists}>
+                   Close
+                  </Button>
+              </div> */}
+              <div className='text-center my-2'>
+              <Button className="btn btn-primary " onClick={handleCloseButtonClick}>
+                   Close
+                  </Button>
+              </div>
+                  
               </div>
               
+              
             </Step>
+         
+           
+            
             {/* <Step id="step4" hideTopNav>
               <div className="wizard-basic-step text-center">
                 <h2 className="mb-2">
@@ -377,6 +492,7 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
               </div>
             </Step> */}
           </Steps>
+          
           <Form>
             <FormGroup>
             <BottomNavigation
@@ -390,6 +506,7 @@ const PopupWizard = ({ selectedDate,setSelectedDate}) => {
           </Form>
          
         </Wizard>
+        
       </CardBody>
     </Card>
     
