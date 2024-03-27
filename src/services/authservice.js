@@ -5,15 +5,18 @@ import axios from 'axios';
 import { baseUrl } from '../constants/defaultValues';
 
 export const authService = {
-  async signUp(email, password, name, role) {
+  async signUp(email,phoneNumber, password, firstName,lastName, userRoles, username) {
     localStorage.clear();
     const bodyData = JSON.stringify({
-      username: name,
-      password: password,
-      email: email,
-      userType: role,
+      firstName,
+      lastName,
+      username,
+      password,
+      email,
+      phoneNumber,
+      userRoles,
     });
-    const url = `${baseUrl}/signUp`;
+    const url = `${baseUrl}/api/signUp`;
     try {
       return await axios
         .post(url, bodyData)
@@ -46,11 +49,13 @@ export const authService = {
         console.log(res.data)
         // const statusRes = res.data.roles.map(role => role.status);
         const statusRes = "0"; 
+        const roleRes = "0"; 
         console.log(res.data.token);
         console.log(statusRes);
         // localStorage.setItem('status', JSON.stringify(statusRes));
         localStorage.setItem('tokenRes', tokenRes);
         localStorage.setItem('status', statusRes);
+        localStorage.setItem('role', roleRes);
         localStorage.setItem('cRes', "check");
         return res;
     } catch (error) {

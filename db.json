@@ -1,9 +1,14 @@
 {
   "signUp": {
-    "username": "testName",
-    "password": "kk",
-    "email": "test@email.com",
-    "userType": "COORDINATOR"
+    "firstName": "Arun",
+    "lastName": "Kumar",
+    "username": "arun0123",
+    "password": "arun@1995",
+    "email": "arun@gmail.com",
+    "phoneNumber": "+919292929297",
+    "userRoles": [
+      "MENTOR"
+    ]
   },
   "signIn": {
     "email": "vssivanesh@gmail.com",

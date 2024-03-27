@@ -1,6 +1,6 @@
 {
 
-    "/signUp": "/signUp",
+    "/api/signUp": "/signUp",
     "/api/authenticate":"/signIn",
     "/mentor/cards":"/mentorDetails",
     "/user/cards":"/userCard",

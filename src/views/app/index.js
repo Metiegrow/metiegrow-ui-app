@@ -192,14 +192,17 @@ const ViewLawyerProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerProfile'
 ))
-function getTokenRes() {
+function getStatusRes() {
   return localStorage.getItem('status');
 }
+// function getroleRes() {
+//   return localStorage.getItem('role');
+// }
 
 
 
 const App = ({ match }) => {
-const statusRes = getTokenRes();
+const statusRes = getStatusRes();
 const redirectTo =
   statusRes === '0' && `${match.url}/mentor/apply` ||
   statusRes === '1' && `${match.url}/mentor/apply` ||

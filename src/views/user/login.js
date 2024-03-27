@@ -14,9 +14,6 @@ import { authService } from 'services/authservice';
 // import { connect } from 'react-redux';
 
 
-// check
-// ck
-
 const validatePassword = (value) => {
   let error;
   if (!value) {
@@ -175,7 +172,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                     )}
                   </FormGroup>
                   <div className="d-flex justify-content-between align-items-center">
-                    <NavLink to="/user/forgot-password">
+                    <NavLink to="/forgot-password">
                       <IntlMessages id="user.forgot-password-question" />
                     </NavLink>
                     <Button type='submit'

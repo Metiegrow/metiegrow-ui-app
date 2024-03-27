@@ -8,9 +8,10 @@ import {
   Label,
   Input,
   Button,
-  ButtonGroup,
+  // ButtonGroup,
+  Col,
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory  } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from 'redux/actions';
 
@@ -22,62 +23,113 @@ import { authService } from 'services/authservice';
 // import { adminRoot } from 'constants/defaultValues';
 
 const Register = () => {
-  const [newUser, setNewUser] = useState({
-    name: 'testName',
-    email: 'test@email.com',
-    password: 'TestPass',
-    role: 0,
-  });
+  // const [newUser, setNewUser] = useState({
+  //   name: 'testName',
+  //   email: 'test@email.com',
+  //   password: 'TestPass',
+  //   role: "MENTOR",
+  // });
+  const [firstName, setFirstName] = useState("Arun");
+  const [lastName, setLastName] = useState("Kumar");
+  const [username,setUsername] = useState("arun123")
+  const [email, setEmail] = useState("arun@gmail.com");
+  const [phoneNumber, setPhoneNumber] = useState("+919292929292");
+  const [password,setPassword] = useState("arun@1996")
+  const [userRoles,setUserRoles] = useState(["MENTOR"])
 
-  function handleChange(field, e) {
-    switch (field) {
-      case 'name':
-        setNewUser((props) => {
-          return {
-            ...props,
-            name: e.target.value,
-          };
-        });
-        break;
-      case 'email':
-        setNewUser((props) => {
-          return {
-            ...props,
-            email: e.target.value,
-          };
-        });
-        break;
-      case 'password':
-        setNewUser((props) => {
-          return {
-            ...props,
-            password: e.target.value,
-          };
-        });
-        break;
-      case 'role':
-        setNewUser((props) => {
-          return {
-            ...props,
-            role: e === 1 ? 'COORDINATOR' : 'STUDENT', // checks if the event value passed is 1 and assigns the respective role
-          };
-        });
-        break;
+  const history = useHistory();
 
-      default:
-        console.log('default case ran');
-        break;
+  // 
+  
+  const handleRoleChange = (role) => {
+    if (userRoles.includes(role)) {
+      setUserRoles(userRoles.filter(item => item !== role)); 
+    } else {
+      setUserRoles([...userRoles, role]);
+    }
+  };
+
+  // function handleChange(field, value) {
+  //   setNewUser((prevState) => ({
+  //     ...prevState,
+  //     [field]: value,
+  //   }));
+  // }
+ 
+
+  // function handleChange(field, e) {
+  //   switch (field) {
+  //     case 'name':
+  //       setNewUser((props) => {
+  //         return {
+  //           ...props,
+  //           name: e.target.value,
+  //         };
+  //       });
+  //       break;
+  //     case 'email':
+  //       setNewUser((props) => {
+  //         return {
+  //           ...props,
+  //           email: e.target.value,
+  //         };
+  //       });
+  //       break;
+  //     case 'password':
+  //       setNewUser((props) => {
+  //         return {
+  //           ...props,
+  //           password: e.target.value,
+  //         };
+  //       });
+  //       break;
+  //     case 'role':
+  //       setNewUser((props) => {
+  //         return {
+  //           ...props,
+  //           role: e === 1 ? 'MENTOR' : 'MENTEE', // checks if the event value passed is 1 and assigns the respective role
+  //         };
+  //       });
+  //       break;
+
+  //     default:
+  //       console.log('default case ran');
+  //       break;
+  //   }
+  // }
+  async function OnRegisterButtonclick() {
+    try {
+      // const response = await authService.signUp(
+      //   newUser.email,
+      //   newUser.password,
+      //   newUser.name,
+      //   newUser.role
+      const response = await authService.signUp(
+        email,
+        phoneNumber,
+        password,
+        firstName,
+        lastName,
+        userRoles,
+        username
+      );
+      
+      console.log(response.data);
+      history.push('/login');
+    } catch (error) {
+      console.error('Error registering user:', error);
     }
   }
 
-  function OnRegisterButtonclick() {
-    console.log(newUser);
-    authService.signUp(
-      newUser.email,
-      newUser.password,
-      newUser.name,
-      newUser.role
-    );
+
+  // function OnRegisterButtonclick() {
+  //   console.log(newUser);
+  //   authService.signUp(
+  //     newUser.email,
+  //     newUser.password,
+  //     newUser.name,
+  //     newUser.role
+  //   );
     // axios
     //   .post(`${baseUrl}api/signup`, {
     //     username: newUser.name,
@@ -92,7 +144,7 @@ const Register = () => {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-  }
+  // }
 
   // const [email] = useState('demo@gogo.com');
   // const [password] = useState('gogo123');
@@ -130,28 +182,88 @@ const Register = () => {
               <IntlMessages id="user.register" />
             </CardTitle>
             <Form>
+              <Row>
+                <Col md={6}>
               <FormGroup className="form-group has-float-label  mb-4">
                 <Label>
-                  <IntlMessages id="user.fullname" />
+                  {/* <IntlMessages id="user.fullname" /> */}
+                  First Name
                 </Label>
                 <Input
                   type="name"
-                  defaultValue={newUser.name}
+                  defaultValue={firstName}
+                  // onChange={(e) => {
+                  //   handleChange('name', e);
+                  // }}
                   onChange={(e) => {
-                    handleChange('name', e);
+                    setFirstName(e.target.value);
                   }}
                 />
               </FormGroup>
+              </Col>
+              <Col md={6}>
+              <FormGroup className="form-group has-float-label  mb-4">
+                <Label>
+                  {/* <IntlMessages id="user.fullname" /> */}
+                  Last Name
+                </Label>
+                <Input
+                  type="name"
+                  defaultValue={lastName}
+                  // onChange={(e) => {
+                  //   handleChange('name', e);
+                  // }}
+                  onChange={(e) => {
+                    setLastName(e.target.value);
+                  }}
+                />
+              </FormGroup>
+              </Col>
+              </Row>
 
+              <FormGroup className="form-group has-float-label  mb-4">
+                <Label>
+                  {/* <IntlMessages id="user.email" /> */}
+                  Set user name
+                </Label>
+                <Input
+                  type="name"
+                  defaultValue={username}
+                  // onChange={(e) => {
+                  //   handleChange('email', e);
+                  // }}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                />
+              </FormGroup>
               <FormGroup className="form-group has-float-label  mb-4">
                 <Label>
                   <IntlMessages id="user.email" />
                 </Label>
                 <Input
                   type="email"
-                  defaultValue={newUser.email}
+                  defaultValue={email}
+                  // onChange={(e) => {
+                  //   handleChange('email', e);
+                  // }}
                   onChange={(e) => {
-                    handleChange('email', e);
+                    setEmail(e.target.value);
+                  }}
+                />
+              </FormGroup>
+              <FormGroup className="form-group has-float-label  mb-4">
+                <Label>
+                  Mobile Number
+                </Label>
+                <Input
+                  type="text"
+                  defaultValue={phoneNumber}
+                  // onChange={(e) => {
+                  //   handleChange('email', e);
+                  // }}
+                  onChange={(e) => {
+                    setPhoneNumber(e.target.value);
                   }}
                 />
               </FormGroup>
@@ -160,40 +272,85 @@ const Register = () => {
                 <Label>
                   <IntlMessages
                     id="user.password"
-                    defaultValue={newUser.password}
-                  />
+                    />
                 </Label>
                 <Input
                   type="password"
+                  defaultValue={password}
+                  // onChange={(e) => {
+                  //   handleChange('password', e);
+                  // }}
                   onChange={(e) => {
-                    handleChange('password', e);
+                    setPassword(e.target.value);
                   }}
                 />
               </FormGroup>
               <h4>Select Role</h4>
-              <ButtonGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    onChange={() => handleRoleChange('MENTOR')}
+                    checked={userRoles.includes('MENTOR')}
+                  />
+                  Mentor
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    onChange={() => handleRoleChange('MENTEE')}
+                    checked={userRoles.includes('MENTEE')}
+                  />
+                  Mentee
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    onChange={() => handleRoleChange('LAWYER')}
+                    checked={userRoles.includes('LAWYER')}
+                  />
+                  Lawyer
+                </Label>
+              </FormGroup>
+              {/* <ButtonGroup>
                 <Button
                   color="primary"
                   // onChange={(e) => {
                   //   handleChange('role', e);
                   // }}
                   onClick={() => {
-                    handleChange('role', 1);
-                  }} // click function
-                  active={newUser.role === 'COORDINATOR'} // set property to selected
+                    // handleChange('role', 1);
+                    handleRoleChange('MENTOR')
+                  }} 
+                  active={userRoles === 'MENTOR'}
                 >
-                  Coordinator
+                  Mentor
                 </Button>
                 <Button
                   color="primary"
                   onClick={() => {
-                    handleChange('role', 2);
+                    // handleChange('role', 2);
+                    handleRoleChange('MENTEE')
                   }}
-                  active={newUser.role === 'STUDENT'}
+                  active={userRoles === 'MENTEE'}
                 >
-                  Student
+                  Mentee
                 </Button>
-              </ButtonGroup>
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    // handleChange('role', 3);
+                    handleRoleChange('LAWYER')
+                  }}
+                  active={userRoles === 'LAWYER'}
+                >
+                  Lawyer
+                </Button>
+              </ButtonGroup> */}
 
               <div className="d-flex justify-content-end align-items-center">
                 <Button
