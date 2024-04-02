@@ -880,12 +880,35 @@
       "callType": "video"
     }
   ],
+  "slotAddedByMentor": [
+    {
+      "id": 3,
+      "fromTimeStamp": 1712051466000,
+      "toTimeStamp": 1712055066000
+    },
+    {
+      "fromTimestamp": 1711999800000,
+      "toTimestamp": 1712003400000,
+      "id": 5
+    },
+    {
+      "fromTimestamp": 1712035800000,
+      "toTimestamp": 1712037600000,
+      "id": 6
+    }
+  ],
   "mentorSlotAvailablity": [
     {
       "availableSlots": [
         {
+          
           "fromTimeStamp": 1712664001000,
           "toTimeStamp": 1712665800000
+        },
+        {
+          
+          "fromTimeStamp": 1712293200000,
+          "toTimeStamp": 1712296800000
         }
       ],
       "bookedSlots": [
@@ -894,6 +917,13 @@
           "toTimeStamp": 1712664000000,
           "mode": "VIDEO",
           "name": "sivanesh"
+        },
+        {
+          "fromTimeStamp":  1712383200000,
+          "toTimeStamp": 1712386800000,
+          "mode": "VIDEO",
+          "userId": 1,
+          "name": "brovin"
         }
       ]
     }
@@ -923,6 +953,12 @@
         "id": 2,
         "fromTimestamp": 1711922400000,
         "toTimestamp": 1711925100000
+      }
+    ],
+    [
+      {
+        "fromTimestamp": 1712007000000,
+        "toTimestamp": 1712008800000
       }
     ]
   ],

@@ -23,6 +23,7 @@
     "/notifications": "/notifications",
     
     "api/mentor/createslots":"/mentorCreatedSlot",
+    "api/mentorship/mentor/slotadded":"/slotAddedByMentor",
     "api/mentorship/mentor/appointment":"/mentorSlotAvailablity",
     "/mentor/session":"/sessionHistory",
     "/mentor/upcoming":"/sessionUpcomingHistroy",

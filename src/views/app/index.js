@@ -299,7 +299,7 @@ const redirectTo =
               render={(props) => <MentorConsult {...props} />}
             />
               <Route
-              path={`${match.url}/mentorcreatedslots`}
+              path={`${match.url}/calendar/mentor/appointment`}
               render={(props) => <MentorCreatedSlots {...props} />}
             />
                 <Route
