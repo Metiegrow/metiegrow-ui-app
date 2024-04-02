@@ -286,8 +286,9 @@ const Register = () => {
                 />
               </FormGroup>
               <h4>Select Role</h4>
+              <Row>
               <FormGroup check>
-                <Label check>
+                <Label check className='ml-2'>
                   <Input
                     type="checkbox"
                     onChange={() => handleRoleChange('MENTOR')}
@@ -296,8 +297,9 @@ const Register = () => {
                   Mentor
                 </Label>
               </FormGroup>
-              <FormGroup check>
-                <Label check>
+              <FormGroup check className='ml-2'>
+                  
+                <Label check >
                   <Input
                     type="checkbox"
                     onChange={() => handleRoleChange('MENTEE')}
@@ -307,7 +309,7 @@ const Register = () => {
                 </Label>
               </FormGroup>
               <FormGroup check>
-                <Label check>
+                <Label check className='ml-2'>
                   <Input
                     type="checkbox"
                     onChange={() => handleRoleChange('LAWYER')}
@@ -316,6 +318,7 @@ const Register = () => {
                   Lawyer
                 </Label>
               </FormGroup>
+              </Row>
               {/* <ButtonGroup>
                 <Button
                   color="primary"
