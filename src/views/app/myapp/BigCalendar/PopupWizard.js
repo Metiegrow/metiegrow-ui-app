@@ -12,10 +12,10 @@ import { Wizard, Steps, Step } from 'react-albus';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { injectIntl } from 'react-intl';
 // import IntlMessages from 'helpers/IntlMessages';
-import BottomNavigation from 'components/wizard/BottomNavigation';
+// import BottomNavigation from 'components/wizard/BottomNavigation';
 import TopNavigation from 'components/wizard/TopNavigation';
 import DateRangePicker from './DateRangePicker';
-
+import BottomNavigation from '../my-login/BottomNavigation';
 
 
 
@@ -471,7 +471,7 @@ const handleCloseButtonClick = () => {
                   </Button>
               </div> */}
               <div className='text-center my-2'>
-              <Button className="btn btn-primary " onClick={handleCloseButtonClick}>
+              <Button color='primary' className="btn btn-primary " onClick={handleCloseButtonClick}>
                    Close
                   </Button>
               </div>

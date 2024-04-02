@@ -134,8 +134,8 @@ SessionUpcomingHistroy();
                   <Label className='text-one mr-2 '>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                   </div>
-                  <NavLink href='/app/videocall'>
-                      <Button outline color='primary' onClick={onClick}>Join Call</Button> 
+                  <NavLink href={`/app/videocall/${up.name}`}>
+                      <Button outline color='primary' className='mt-2 text-one' onClick={onClick}>Join Call</Button> 
                  </NavLink>
                  
                 </div>

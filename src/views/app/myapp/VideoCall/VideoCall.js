@@ -11,7 +11,7 @@ const VideoCall = () => {
   const rtcProps = {
     appId: '0b60a4bb92204911a7c24ac04304b518',
     channel: 'gogo',
-    token: '007eJxTYGBg26SnGnE7Pu72hVULxSdbfq/4fERri+mpdY/PiTan93IrMBgkmRkkmiQlWRoZGZhYGhommicbmSQmG5gYG5gkmRpapEz+l9oQyMjQsb6YkZEBAkF8Fob0/PR8BgYAPd8feA==',
+    token: '007eJxTYGjN2XcuSlDOUX5v2ymVL5YziplDyw7oBdwIt/35bNeJpw4KDAZJZgaJJklJlkZGBiaWhoaJ5slGJonJBibGBiZJpoYWxy5wpTUEMjKYeV9mZmSAQBCfhSE9Pz2fgQEAJ5Qe0A==',
   };
 
   // const callbacks = {

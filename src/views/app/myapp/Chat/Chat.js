@@ -20,7 +20,7 @@ import MessageCard from 'components/applications/MessageCard';
 import SaySomething from 'components/applications/SaySomething';
 
 const ChatApp = ({
-  intl,
+  // intl,
   allContacts,
   conversations,
   loadingConversations,
@@ -104,7 +104,7 @@ const ChatApp = ({
     }
   };
 
-  const { messages } = intl;
+  // const { messages } = intl;
 
   const selectedConversation =
     loadingConversations && loadingContacts && selectedUser
@@ -149,7 +149,8 @@ const ChatApp = ({
         </Colxx>
       </Row>
       <SaySomething
-        placeholder={messages['chat.saysomething']}
+        // placeholder={messages['chat.saysomething']}
+        placeholder="Say something..."
         messageInput={messageInput}
         handleChatInputPress={handleChatInputPress}
         handleChatInputChange={(e) => {
