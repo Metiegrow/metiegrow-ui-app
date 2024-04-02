@@ -2,29 +2,10 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import React,{useState,useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 
-import {  Button, Card, CardBody, Modal, ModalBody, Table ,
-  // Dropdown,
-  // DropdownToggle,
-  // DropdownItem,
-  // DropdownMenu,
-  Row,
-
-  // FormGroup,  CustomInput, Form 
-  } from 'reactstrap';
-  import axios from 'axios';
+import {  Button, Card, CardBody, Modal, ModalBody, Table ,Row,} from 'reactstrap';
+import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
-// import EventModal from './EventModal';
-// import DatePicker from './DatePicker';
-// import DateRangePicker from './DateRangePicker';
 import PopupWizard from './PopupWizard';
-
-
-
-// import WeekDisplay from './WeekList';
-// import WeekDays from './WeekDays';
-// import WeekList from './WeekList';
-
-
 
 const Month = () => {
   // const url=`${baseUrl}/api/calendar/appointment/mentee`;
@@ -37,29 +18,7 @@ const Month = () => {
   const mentorId = searchParams.get('mentorId');
 
   const [selectedDate, setSelectedDate] = useState(null); 
-  
 
- 
-  useEffect(() => {
-    const fetchMentorAvailability = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/api/calendar/appointment/mentee`);
-        // Filter availability data based on mentorId
-        const filteredAvailability = response.data.filter(avail => avail.id === parseInt(mentorId, 10));
-
-        setMentorAvailable(filteredAvailability);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    if (mentorId) {
-      fetchMentorAvailability();
-    }
-  }, [mentorId]);
-
-
-  // from and to starts
-  
   // Function to get the start date of the current week
   const getStartOfWeek = () => {
     const currentDate = new Date();
@@ -69,143 +28,102 @@ const Month = () => {
   };
 
   // Function to get the end date of the current week
-  const getEndOfWeek = (startOfWeek) => {
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
-    return endOfWeek;
-  };
+  // const getEndOfWeek = (startOfWeek) => {
+  //   const endOfWeek = new Date(startOfWeek);
+  //   endOfWeek.setDate(endOfWeek.getDate() + 6);
+  //   return endOfWeek;
+  // };
 
-  // Update the current week start date when component mounts
-  useEffect(() => {
+ 
+
   
-    setCurrentWeekStart(getStartOfWeek());
-  }, []);
 
-  // Add start and end date parameters to the URL
-  useEffect(() => {
-    const startOfWeek = getStartOfWeek();
-    const endOfWeek = getEndOfWeek(startOfWeek);
-    const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeek.getTime()}&toTime=${endOfWeek.getTime()}`;
-    window.history.replaceState(null, '', newUrl);
-  }, [currentWeekStart]);
-  // useEffect(() => {
-  //   const startOfWeek = getStartOfWeek();
-  //   const endOfWeek = getEndOfWeek(startOfWeek);
+const fetchMentorAvailability = async (fromTime, toTime) => {
+  try {
+    const response = await axios.get(`${baseUrl}/mentorAvailablity?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`);
+    const availability = response.data;
+    setMentorAvailable(availability);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+
+
+// useEffect(() => {
+//   const startOfWeek = getStartOfWeek();
+//   const endOfWeek = getEndOfWeek(startOfWeek);
+//   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeek.getTime()}&toTime=${endOfWeek.getTime()}`;
+//   window.history.replaceState(null, '', newUrl);
+//   if (mentorId) {
+//     fetchMentorAvailability(startOfWeek.getTime(), endOfWeek.getTime());
+//   }
+// }, []);
+// useEffect(() => {
+//   const startOfWeekTimestamp = currentWeekStart.getTime(); // Start of the current week
+//   const endOfWeekTimestamp = new Date(currentWeekStart); // End of the current week
+//   endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6);
+
+//   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp}&toTime=${endOfWeekTimestamp.getTime()}`;
+//   window.history.replaceState(null, '', newUrl);
+
+//   if (mentorId) {
+//     fetchMentorAvailability(startOfWeekTimestamp, endOfWeekTimestamp.getTime());
+//   }
+// }, []);
+// useEffect(() => {
+//   // Set the time of currentWeekStart to 12:00 PM (noon)
+//   const startOfWeekTimestamp = new Date(currentWeekStart);
+//   startOfWeekTimestamp.setHours(12, 0, 0, 0);
+
+//   // Set the time of endOfWeekTimestamp to 11:59 PM
+//   const endOfWeekTimestamp = new Date(currentWeekStart);
+//   endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
+//   endOfWeekTimestamp.setHours(11, 59, 59, 999);
+
+//   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
+//   window.history.replaceState(null, '', newUrl);
+
+//   if (mentorId) {
+//     fetchMentorAvailability(startOfWeekTimestamp.getTime(), endOfWeekTimestamp.getTime());
+//   }
+// }, [currentWeekStart, mentorId]);
+// new code
+useEffect(() => {
+  // Set the time of currentWeekStart to 12:00 AM (midnight)
+  const startOfWeekTimestamp = new Date(currentWeekStart);
+  startOfWeekTimestamp.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+
+  // Set the time of endOfWeekTimestamp to 11:59 PM
+  const endOfWeekTimestamp = new Date(currentWeekStart);
+  endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
+  endOfWeekTimestamp.setHours(23, 59, 59, 999); // Set hours to 11, minutes to 59, seconds to 59, and milliseconds to 999
+
+  const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
+  window.history.replaceState(null, '', newUrl);
+
+  if (mentorId) {
+    fetchMentorAvailability(startOfWeekTimestamp.getTime(), endOfWeekTimestamp.getTime());
+  }
+}, [currentWeekStart, mentorId]);
+
+
+
+
+
+
+
+useEffect(() => {
+  const startOfWeek = getStartOfWeek();
+  setCurrentWeekStart(startOfWeek);
+}, []);
+
   
-  //   // Construct the relative URL with fromTime and toTime parameters
-  //   const newUrl = `/api/calendar/appointment/mentee?mentorUserId=${mentorId}&fromTime=${startOfWeek.getTime()}&toTime=${endOfWeek.getTime()}`;
+
   
-  //   // Update the browser history with the new relative URL
-  //   window.history.replaceState(null, '', newUrl);
-  // }, [currentWeekStart]);
-
-  // from and to ends
-
-
-  // const [isModalOpen, setModalOpen] = useState(false);
-  // const [clickedRowPosition, setClickedRowPosition] = useState({ top: 0, left: 0 });
+  
   const [modalSmall, setModalSmall] = useState(false);
-  //  const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
-  //  const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
-
-  // const [minutedrop,setMinutedrop]=useState(null)
-  // const [minutedrop1,setMinutedrop1]=useState(null)
-
-
-
-  // const [selectedHour, setSelectedHour] = useState(null); // State variable for selected hour
-  // const [selectedMinute, setSelectedMinute] = useState(null); // State variable for selected minute
   
-  // const [title,setTitle]=useState("");
-  // const [description,setDescription]=useState("");
-  // const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
-  // const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
-  // const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
-  // const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
-  // const [selectedRadioButton, setSelectedRadioButton] = useState(null);
-  // const [savedEntries, setSavedEntries] = useState([]);
-  
- 
- 
- 
-
-  // const handleDropdownItemClick = (selectedHour) => {
-  //   // Handle the selected hour as needed
-  //   setSelectedHourDropdown(selectedHour);
-    
-  //   console.log(`Selected hour: ${selectedHour}`);
-  //   // setSelectedHourDropdown(selectedHour); 
-  // };
-  // const handleDropdownItemClick1 = (selectedMinute) => {
-  //   // Handle the selected minutes as needed
-  //   setMinutedrop(selectedMinute);
-  //  setMinutedrop1(selectedMinute);
-  //   console.log(`Selected minute: ${selectedMinute}`);
-  //   // setMinuteDrop(selectedMinute); 
-  // };
-  // const handleDropdownItemClick2 = (selectedHour) => {
-  //   // Handle the selected hour as needed
-  //   setSelectedHourDropdown1(selectedHour)
-  //   console.log(`Selected hour: ${selectedHour}`);
-  //   // setSelectedHourDropdown(selectedHour); 
-  // };
-  // const handleDropdownItemClick3 = (selectedMinute) => {
-  //   // Handle the selected minutes as needed
-  //   setMinutedrop1(selectedMinute);
-  //   console.log(`Selected minute: ${selectedMinute}`);
-  //   // setMinuteDrop(selectedMinute); 
-  // };
-  // const generateDropdownItems = () => {
-  //   const items = [];
-  //   for (let i = 1; i <= 12; i+=1) {
-  //     const formattedHour = i < 10 ? `0${i}` : i;
-  //     items.push(
-  //       <DropdownItem key={i} onClick={() => handleDropdownItemClick(i)} >
-  //         {formattedHour}
-  //       </DropdownItem>
-  //     );
-  //   }
-  //   return items;
-  // };
-  // const generateMinuteDropdownItems = () => {
-  //   const minutes = [0, 15, 30, 45];
-  //   const items = minutes.map((minute) => {
-  //     const formattedMinute = minute < 10 ? `0${minute}` : minute;
-  //     return (
-  //       <DropdownItem key={minute} onClick={() => handleDropdownItemClick1(minute)}>
-  //         {formattedMinute}
-  //       </DropdownItem>
-  //     );
-  //   });
-  //   return items;
-  // };
-  // const generateDropdownItems1 = () => {
-  //   const items = [];
-  //   for (let i = 1; i <= 12; i+=1) {
-  //     const formattedHour = i < 10 ? `0${i}` : i;
-  //     items.push(
-  //       <DropdownItem key={i} onClick={() => handleDropdownItemClick2(i)} >
-  //         {formattedHour}
-  //       </DropdownItem>
-  //     );
-  //   }
-  //   return items;
-  // };
-
-
-  
-  // const generateMinuteDropdownItems1 = () => {
-  //   const minutes = [0, 15, 30, 45];
-  //   const items = minutes.map((minute) => {
-  //     const formattedMinute = minute < 10 ? `0${minute}` : minute;
-  //     return (
-  //       <DropdownItem key={minute} onClick={() => handleDropdownItemClick3(minute)}>
-  //         {formattedMinute}
-  //       </DropdownItem>
-  //     );
-  //   });
-  //   return items;
-  // };
   // weeklist functions start
   const goToPreviousWeek = () => {
     const newStartDate = new Date(currentWeekStart);
@@ -213,11 +131,58 @@ const Month = () => {
     setCurrentWeekStart(newStartDate);
   };
 
-  const goToNextWeek = () => {
-    const newStartDate = new Date(currentWeekStart);
-    newStartDate.setDate(newStartDate.getDate() + 7);
-    setCurrentWeekStart(newStartDate);
-  };
+  // const goToNextWeek = () => {
+  //   const newStartDate = new Date(currentWeekStart);
+  //   newStartDate.setDate(newStartDate.getDate() + 7);
+  //   setCurrentWeekStart(newStartDate);
+
+    
+  // };
+
+  // const goToNextWeek = () => {
+  //   const newStartDate = new Date(currentWeekStart);
+  //   newStartDate.setDate(newStartDate.getDate() + 7);
+  //   setCurrentWeekStart(newStartDate);
+  
+  //   // Calculate the start of the next week
+  //   const nextWeekStart = new Date(newStartDate);
+  //   nextWeekStart.setDate(nextWeekStart.getDate() - nextWeekStart.getDay() + 1);
+  
+  //   // Calculate the end of the next week
+  //   const nextWeekEnd = new Date(nextWeekStart);
+  //   nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
+  
+  //   const fromTime = nextWeekStart.getTime(); // Timestamp of the start of the next week
+  //   const toTime = nextWeekEnd.getTime(); // Timestamp of the end of the next week
+  
+  //   fetchMentorAvailability(fromTime, toTime);
+  // };
+  // Modify the goToNextWeek function to update the URL and fetch availability for the next week
+const goToNextWeek = () => {
+  const newStartDate = new Date(currentWeekStart);
+  newStartDate.setDate(newStartDate.getDate() + 7);
+  setCurrentWeekStart(newStartDate);
+
+  // Calculate the start of the next week
+  const nextWeekStart = new Date(newStartDate);
+  nextWeekStart.setDate(nextWeekStart.getDate() - nextWeekStart.getDay() + 1);
+
+  // Calculate the end of the next week
+  const nextWeekEnd = new Date(nextWeekStart);
+  nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
+
+  // const fromTime = nextWeekStart.getTime(); // Timestamp of the start of the next week
+  // const toTime = nextWeekEnd.getTime(); // Timestamp of the end of the next week
+
+  // // Update the URL with the new timestamps
+  // const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${fromTime}&toTime=${toTime}`;
+  // window.history.replaceState(null, '', newUrl);
+
+  // // Fetch mentor availability for the next week
+  // fetchMentorAvailability(fromTime, toTime);
+};
+
+  
 
   // const formatDate = (date) => {
   //   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -240,12 +205,7 @@ const Month = () => {
     }
     return weekDates;
   };
-  // const getMonthName = (monthIndex) => {
-  //   const monthNames = [
-  //     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  //   ];
-  //   return monthNames[monthIndex];
-  // };
+;
  
   const isPreviousWeekDisabled = () => {
     // Disable the button if you're already in the current week
@@ -275,14 +235,6 @@ const Month = () => {
     
   };
 
-  // weeklist functions ends
-  // const handlesave = () => {
-  //   console.log('Selected Date:', selectedDate);
-  //   console.log('Selected Hour:', selectedHourDropdown);
-  //   console.log('Selected Minute:', minutedrop);
-  //   console.log('Selected Radio Button:', selectedRadioButton);
-   
-  // };
 
  
 
@@ -292,7 +244,7 @@ const Month = () => {
      
 
     <Row>
-    <Colxx xxs="8" className='mx-auto'>
+    <Colxx xxs="12" md='9' lg='7' className='mx-auto'>
   
 
    <h1 className='py-4 text-large'> {mentorName} availability</h1>
@@ -351,28 +303,8 @@ const Month = () => {
     {/* <td>{getMonthName(date.getMonth())} {formatDate(date)}</td> */}
     <td> {formatDate(date)}</td>
     <td>
-      {/* {mentoravailable.map((avail) => {
-        const availDate = new Date(avail.fromTimeStamp);
-        if (availDate.toDateString() === date.toDateString()) {
-    
-          const FromDate = new Date(avail.fromTimeStamp);
-          const ToDate = new Date(avail.toTimeStamp);
-         
-          
-          return  <td className='bg-primary d-block text-center' key={date.getTime()}>{FromDate.toLocaleTimeString()} to {ToDate.toLocaleTimeString()} 
-        
-          </td>
-          
-       
-          
-        } 
-          // Mentor is not available on this date, display an empty string
-         
-          return '-';
-        
-      })} */}
-     
-{mentoravailable.map((avail) => {
+      
+ {mentoravailable.map((avail) => {
     const availDate = new Date(avail.fromTimeStamp);
     if (availDate.toDateString() === date.toDateString()) {
         // Mentor is available on this date, display the available time
@@ -402,14 +334,12 @@ const Month = () => {
           onClick={() => handleTimeSlotClick(date)}
         >
          {fromTime} to {toTime}
-</Button>
-
-            
+        </Button>
         );
     } 
         return <div key={date.getTime()} className='text-center text-one '>-</div>; // Returning null when condition is not met
-    
 })}
+
 
     </td>
   </tr>
@@ -454,132 +384,7 @@ const Month = () => {
         </span>
                  </div>
                 
-                   {/* <form className=' '  >
-       
-         
-          <div className='d-flex my-3 align-items-center'>
-           <span className='text-one'><i className='simple-icon-calendar'/></span>
-           
-           <div>
-          
-           <DateRangePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-           </div>
-        
-
-          </div>
-        
-         <div className='d-flex justify-content-between '>
-         <div>
-          <h5 className='text-center'>From</h5>
-          <div className='d-flex'>
-          <Dropdown direction="down"
-     isOpen={dropdownBasicOpen}
-     toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
-     className="mb-5 "
-     
-    
-   >
-  
-     <DropdownToggle caret color="secondary" outline className=''>
-       
-       
-       {selectedHourDropdown !== null ? selectedHourDropdown : 'Hours'} 
-     </DropdownToggle>
-     <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
-     {generateDropdownItems()}
-     </DropdownMenu>
-   </Dropdown>
-   <Dropdown direction='down'
-               isOpen={dropdownBasicOpen1}
-               toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
-               className="mb-5 ml-3"
               
-             >
-               <DropdownToggle caret color="secondary" outline>
-              
-                 {minutedrop !== null ? minutedrop : 'Minutes'} 
-      
-               </DropdownToggle>
-               <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                {generateMinuteDropdownItems()}
-               </DropdownMenu>
-             </Dropdown>
-          </div>
-        </div>
-        <div className=''>
-          <h5 className='text-center'>To</h5>
-          <div className='d-flex'>
-          <Dropdown direction="down"
-     isOpen={dropdownBasicOpen2}
-     toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
-     className="mb-5 "
-     
-    
-   >
-  
-     <DropdownToggle caret color="secondary" outline className=''>
-       
-       
-       {selectedHourDropdown1 !== null ? selectedHourDropdown1 : 'Hours'} 
-     </DropdownToggle>
-     <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
-     {generateDropdownItems1()}
-     </DropdownMenu>
-   </Dropdown>
-   <Dropdown direction='down'
-               isOpen={dropdownBasicOpen3}
-               toggle={() => setDropdownBasicOpen3(!dropdownBasicOpen3)}
-               className="mb-5 ml-3"
-              
-             >
-               <DropdownToggle caret color="secondary" outline>
-              
-                 {minutedrop1 !== null ? minutedrop1 : 'Minutes'} 
-      
-               </DropdownToggle>
-               <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                {generateMinuteDropdownItems1()}
-               </DropdownMenu>
-             </Dropdown>
-          </div>
-        </div>
-         </div>
-       
-          <Form>
-           <FormGroup>
-       
-        <div className='d-flex '>
-          <CustomInput
-            type="radio"
-            id="exCustomRadio"
-            name="customRadio"
-            label="Audio"
-            onChange={() => setSelectedRadioButton('Audio')}
-          />
-          <CustomInput
-            type="radio"
-            id="exCustomRadio2"
-            name="customRadio"
-            label="Video"
-            className='ml-3'
-            onChange={() => setSelectedRadioButton('Video')}
-          />
-            
-        </div>
-      </FormGroup>
-      </Form>
-        
-          <footer className="d-flex justify-content-end border-t p-3 mt-5">
-         <Button type='submit'  className="  px-6 py-2 " color='primary'  onClick={handlesave}>
-          
-           Next
-         </Button>
-         <Button className='ml-2'  outline  color="secondary"  onClick={() => setModalSmall(false)}
-                   >
-                     Cancel
-                   </Button>
-       </footer>
-       </form> */}
    
        <PopupWizard selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
         mentorName={mentorName} mentorId={mentorId} />

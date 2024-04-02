@@ -612,49 +612,29 @@
   ],
   "mentorAvailablity": [
     {
-      "id": 1,
-      "fromTimeStamp": 1711614600000,
-      "toTimeStamp": 1711618200000
-    },
-    {
-      "id": 2,
-      "fromTimeStamp": 1711780200000,
-      "toTimeStamp": 1711783800000
-    },
-    {
       "id": 3,
-      "fromTimeStamp": 1711697400000,
-      "toTimeStamp": 1711701000000
+      "fromTimeStamp": 1711621800000,
+      "toTimeStamp": 1711629000000
     },
     {
-      "id": 10,
-      "fromTimeStamp": 1709176801000,
-      "toTimeStamp": 1709177400000
-    },
-    {
-      "id": 14,
-      "fromTimeStamp": 1708990200000,
-      "toTimeStamp": 1708997400000
-    },
-    {
-      "id": 5,
-      "fromTimeStamp": 1709173800000,
-      "toTimeStamp": 1709175600000
-    },
-    {
-      "id": 9,
-      "fromTimeStamp": 1709170200000,
-      "toTimeStamp": 1709172000000
+      "id": 4,
+      "fromTimeStamp": 1711632600000,
+      "toTimeStamp": 1711636200000
     },
     {
       "id": 11,
-      "fromTimeStamp": 1709175601000,
-      "toTimeStamp": 1709176800000
+      "fromTimeStamp": 1711713001000,
+      "toTimeStamp": 1711713600000
     },
     {
-      "id": 12,
-      "fromTimeStamp": 1709172001000,
-      "toTimeStamp": 1709173799000
+      "id": 13,
+      "fromTimeStamp": 1711971000000,
+      "toTimeStamp": 1711974600000
+    },
+    {
+      "id": 14,
+      "fromTimeStamp": 1712662200000,
+      "toTimeStamp": 1712665800000
     }
   ],
   "userCard": [
@@ -772,6 +752,58 @@
       "reviewMsg": "Great service as usual"
     }
   ],
+  "lwayerJobList": [
+    {
+      "jobId": "100",
+      "jobName": "job 1"
+    },
+    {
+      "jobId": "101",
+      "jobName": "job 2"
+    },
+    {
+      "jobId": "460",
+      "jobName": "job 3"
+    },
+    {
+      "jobId": "477",
+      "jobName": "job 4"
+    },
+    {
+      "jobId": "479",
+      "jobName": "job 5"
+    }
+  ],
+  "lawyerJobsDetails": [
+    {
+      "jobId": "100",
+      "jobName": "job 1",
+      "doneBy": "Lawyer",
+      "description": "lawyer description",
+      "status": "yet to start",
+      "uploadDocuments": "true",
+      "documentList": [
+        "PAN Card",
+        "Appointment"
+      ],
+      "stepNumber": 1,
+      "stepName": "verification"
+    },
+    {
+      "jobId": "101",
+      "jobName": "job 2",
+      "doneBy": "Lawyer",
+      "description": "lawyer description",
+      "status": "yet to start",
+      "uploadDocuments": "true",
+      "documentList": [
+        "PAN Card",
+        "Appointment"
+      ],
+      "stepNumber": 1,
+      "stepName": "verification"
+    }
+  ],
   "lawyerProfile": [
     {
       "id": 1,
@@ -840,15 +872,88 @@
     "reasonForMentor": "Let's make it simple",
     "achievement": "University bronze medalist"
   },
+  "mentorAppointmentTime": [
+    {
+      "mentorId": 1,
+      "fromTimeStamp": 1712214600000,
+      "toTimeStamp": 1712214600000,
+      "callType": "video"
+    }
+  ],
+  "mentorSlotAvailablity":[
+    {
+      "availableSlots": [
+          {   
+             
+              "fromTimeStamp": 1712664001000,
+              "toTimeStamp": 1712665800000
+          }
+      ],
+      "bookedSlots": [
+          {
+              "fromTimeStamp": 1712662200000,
+              "toTimeStamp": 1712664000000,
+              "mode": "VIDEO",
+              "name": "sivanesh"
+  }
+]
+  }
+  ],
+
+  "mentorCreatedSlot": [
+    {
+      "id": 1,
+      "fromTimeStamp": 1712221200000,
+      "toTimeStamp": 1712224800000
+    },
+    [
+      {
+        "id": 2,
+        "fromTimestamp": 1711945800000,
+        "toTimestamp": 1711946700000
+      }
+    ],
+    [
+      {
+        "id": 2,
+        "fromTimestamp": 1711927800000,
+        "toTimestamp": 1711931400000
+      }
+    ],
+    [
+      {
+        "id": 2,
+        "fromTimestamp": 1711922400000,
+        "toTimestamp": 1711925100000
+      }
+    ]
+  ],
   "sessionUpcomingHistroy": {
     "data": {
+      "history": [
+        {
+          "mentorId": 1,
+          "name": "srihith",
+          "duration": "03:00",
+          "mode": "video",
+          "fromtimestamp": 1710179061000,
+          "totimestamp": 1710182661000
+        }
+      ],
       "upcomingSessions": [
         {
-          "mentorId": "2",
-          "name": "raj ks",
-          "mode": "Video",
-          "fromtimestamp": 1711996200000000,
-          "totimestamp": 1712016000000000
+          "mentorId": 1,
+          "name": "srihith",
+          "mode": "Audio",
+          "fromtimestamp": 1710179061000,
+          "totimestamp": 1710182661000
+        },
+        {
+          "mentorId": 2,
+          "name": "Raj",
+          "mode": "Audio",
+          "fromtimestamp": 1710179061000,
+          "totimestamp": 1710182661000
         }
       ]
     }
