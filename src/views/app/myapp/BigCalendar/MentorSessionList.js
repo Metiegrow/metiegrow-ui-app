@@ -3,11 +3,11 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, CardBody,  Label, NavLink, Row } from 'reactstrap';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 
 
-const MentorSessionList = ({ onClick }) => {
+const MentorSessionList = () => {
   // const { sessions } = location.state || {}; // Retrieve sessions from location state
 const [session,setSession]=useState('');
 const [upcomingsession,setUpcomingSession]=useState('');
@@ -15,6 +15,12 @@ const [showSuccessCard, setShowSuccessCard] = useState(false);
 const location = useLocation();
 // const url=`${baseUrl}/mentor/session`;
 const url1=`${baseUrl}/sessionUpcomingHistroy`;
+const history = useHistory();
+
+const handleJoinCall = (name) => {
+  // onClick();
+  history.push(`/app/videocall/${name}`);
+};
 useEffect(()=>{
   // const SessionHistroy=async()=>{
   //     try {
@@ -134,9 +140,9 @@ SessionUpcomingHistroy();
                   <Label className='text-one mr-2 '>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                   </div>
-                  <NavLink href={`/app/videocall/${up.name}`}>
-                      <Button outline color='primary' className='mt-2 text-one' onClick={onClick}>Join Call</Button> 
-                 </NavLink>
+                  {/* <NavLink href={`/app/videocall/${up.name}`}> */}
+                      <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.name)}>Join Call</Button> 
+                 {/* </NavLink> */}
                  
                 </div>
               </CardBody>

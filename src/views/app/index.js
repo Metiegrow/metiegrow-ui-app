@@ -221,7 +221,7 @@ const redirectTo =
   statusRes === '0' && `${match.url}/mentor/apply` ||
   statusRes === '1' && `${match.url}/mentor/apply` ||
   statusRes === '3' && `${match.url}/mentor/apply` ||
-  statusRes === '7' && `${match.url}/mentor` ||
+  statusRes === '7' && `${match.url}/mentorcreatedslots` ||
   `${match.url}/profile`;
   
   return (

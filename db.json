@@ -880,26 +880,24 @@
       "callType": "video"
     }
   ],
-  "mentorSlotAvailablity":[
+  "mentorSlotAvailablity": [
     {
       "availableSlots": [
-          {   
-             
-              "fromTimeStamp": 1712664001000,
-              "toTimeStamp": 1712665800000
-          }
+        {
+          "fromTimeStamp": 1712664001000,
+          "toTimeStamp": 1712665800000
+        }
       ],
       "bookedSlots": [
-          {
-              "fromTimeStamp": 1712662200000,
-              "toTimeStamp": 1712664000000,
-              "mode": "VIDEO",
-              "name": "sivanesh"
-  }
-]
-  }
+        {
+          "fromTimeStamp": 1712662200000,
+          "toTimeStamp": 1712664000000,
+          "mode": "VIDEO",
+          "name": "sivanesh"
+        }
+      ]
+    }
   ],
-
   "mentorCreatedSlot": [
     {
       "id": 1,
@@ -930,30 +928,13 @@
   ],
   "sessionUpcomingHistroy": {
     "data": {
-      "history": [
-        {
-          "mentorId": 1,
-          "name": "srihith",
-          "duration": "03:00",
-          "mode": "video",
-          "fromtimestamp": 1710179061000,
-          "totimestamp": 1710182661000
-        }
-      ],
       "upcomingSessions": [
         {
-          "mentorId": 1,
-          "name": "srihith",
-          "mode": "Audio",
-          "fromtimestamp": 1710179061000,
-          "totimestamp": 1710182661000
-        },
-        {
-          "mentorId": 2,
-          "name": "Raj",
-          "mode": "Audio",
-          "fromtimestamp": 1710179061000,
-          "totimestamp": 1710182661000
+          "mentorId": "1",
+          "name": "srihith ks",
+          "mode": "Video",
+          "fromtimestamp": 1711996200000000,
+          "totimestamp": 1712032200000000
         }
       ]
     }
@@ -1905,5 +1886,12 @@
       "lastSeenDate": "Last seen yesterday 15:43"
     }
   ],
-  "callStatus": {}
+  "callStatus": {
+    "menteeUserId": "1",
+    "mentorUserId": "2",
+    "status": "ended",
+    "startTime": "2024-04-02T13:32:52.535Z",
+    "endTime": "2024-04-02T13:32:58.025Z",
+    "duration": null
+  }
 }

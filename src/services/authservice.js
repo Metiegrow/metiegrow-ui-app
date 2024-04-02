@@ -48,7 +48,7 @@ export const authService = {
         const tokenRes = res.data.token; 
         console.log(res.data)
         // const statusRes = res.data.roles.map(role => role.status);
-        const statusRes = "0"; 
+        const statusRes = "7"; 
         const roleRes = "0"; 
         console.log(res.data.token);
         console.log(statusRes);
@@ -62,6 +62,31 @@ export const authService = {
         throw error;
     }
 },
+
+// for backend
+
+
+// async login(email, password) {
+//   const bodyData = JSON.stringify({ email: email, password: password });  
+//   const url = ${baseUrl}/api/authenticate;
+//   try {
+//       const res = await axios.post(url, bodyData);
+//       const tokenRes = res.data.token; 
+//       console.log(res.data)
+//       const statusRes = res.data.roles.map(role => role.status);
+//       //const statusRes = "3"; 
+//       console.log(res.data.token);
+//       console.log(statusRes);
+//       const check1=JSON.stringify(statusRes);
+//       localStorage.setItem('status', check1[1]);
+//       localStorage.setItem('tokenRes', tokenRes);
+//      // localStorage.setItem('status', statusRes);
+//       localStorage.setItem('cRes', "check");
+//       return res;
+//   } catch (error) {
+//       throw error;
+//   }
+// }
 
 
 //   async login(email, password) {
