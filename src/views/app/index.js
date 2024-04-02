@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import AppLayout from 'layout/AppLayout';
 
 
+
 // import MyApplications from './myapp/my-applications/my-applications';
 // import MyDetails from './myapp/my-details/my-details';
 // import MyDocuments from './myapp/my-documents/my-documents';
@@ -55,6 +56,11 @@ const MentorAnswers = React.lazy(() =>
 const MentorConsult = React.lazy(() =>
   import(
     /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorConsult'
+  )
+);
+const MentorCreatedSlots = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorCreatedSlot'
   )
 );
 const FilterQuestions = React.lazy(() =>
@@ -172,8 +178,14 @@ const ViewLawyerProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerProfile'
 ))
-
-
+const ViewJobDetail=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Lawyer/JobDetails'
+))
+const ViewJobList=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Lawyer/JobList'
+))
 
 const App = ({ match }) => {
   return (
@@ -241,6 +253,10 @@ const App = ({ match }) => {
                <Route
               path={`${match.url}/mentorconsult`}
               render={(props) => <MentorConsult {...props} />}
+            />
+              <Route
+              path={`${match.url}/mentorcreatedslots`}
+              render={(props) => <MentorCreatedSlots {...props} />}
             />
                 <Route
               path={`${match.url}/questions`}
@@ -328,6 +344,14 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/usercard`}
               render={(props) => <ViewUserCard {...props} />}
+            />
+             <Route
+              path={`${match.url}/jobsdetails`}
+              render={(props) => <ViewJobDetail {...props} />}
+            />
+            <Route
+              path={`${match.url}/jobslist`}
+              render={(props) => <ViewJobList {...props} />}
             />
              <Route
               path={`${match.url}/lawyerprofile/:pid`}
