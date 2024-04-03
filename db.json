@@ -901,12 +901,10 @@
     {
       "availableSlots": [
         {
-          
           "fromTimeStamp": 1712664001000,
           "toTimeStamp": 1712665800000
         },
         {
-          
           "fromTimeStamp": 1712293200000,
           "toTimeStamp": 1712296800000
         }
@@ -919,7 +917,7 @@
           "name": "sivanesh"
         },
         {
-          "fromTimeStamp":  1712383200000,
+          "fromTimeStamp": 1712383200000,
           "toTimeStamp": 1712386800000,
           "mode": "VIDEO",
           "userId": 1,
@@ -964,6 +962,9 @@
   ],
   "sessionUpcomingHistroy": {
     "data": {
+      "history": [
+        
+      ],  
       "upcomingSessions": [
         {
           "mentorId": "1",
@@ -975,15 +976,10 @@
       ]
     }
   },
+
+  
   "sessionHistory": [
-    {
-      "mentorId": 1,
-      "name": "srihith",
-      "duration": "03:00",
-      "mode": "Video",
-      "fromtimestamp": 1710179061000,
-      "totimestamp": 1710182661000
-    }
+    
   ],
   "mentorProfile": [
     {
@@ -1926,8 +1922,8 @@
     "menteeUserId": "1",
     "mentorUserId": "2",
     "status": "ended",
-    "startTime": "2024-04-02T13:32:52.535Z",
-    "endTime": "2024-04-02T13:32:58.025Z",
+    "startTime": "2024-04-03T05:49:31.497Z",
+    "endTime": "2024-04-03T05:49:43.894Z",
     "duration": null
   }
 }
