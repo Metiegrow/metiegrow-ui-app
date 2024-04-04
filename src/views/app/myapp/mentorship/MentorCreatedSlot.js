@@ -288,7 +288,7 @@ const MentorCreatedSlot = () => {
   
 
    {/* <h1 className='py-4 text-large'> {mentorName} availability</h1> */}
-   <h1 className='py-4 text-large'>Mentor slots</h1>
+   <h1 className='py-4 text-large'>My slots</h1>
 
    <div className='font-weight-semibold d-flex justify-content-center align-items-center'>
      {/* <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button> */}
