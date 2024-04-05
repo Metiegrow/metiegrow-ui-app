@@ -102,9 +102,9 @@ SessionUpcomingHistroy();
        <div className=''>
   {upcomingsession.upcomingSessions && upcomingsession.upcomingSessions.length > 0 ? (
     upcomingsession.upcomingSessions.map((up) => {
-      const date = new Date(up.fromtimestamp);
-      const fromtime = new Date(up.fromtimestamp);
-      const totime = new Date(up.totimestamp);
+      const date = new Date(up.fromTimeStamp);
+      const fromtime = new Date(up.fromTimeStamp);
+      const totime = new Date(up.toTimeStamp);
       const updateformat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       const timeOptions = { hour: '2-digit', minute: '2-digit' };
 
@@ -157,9 +157,9 @@ SessionUpcomingHistroy();
           <div>
   {session.history && session.history.length > 0 ? (
     session.history.map((sh) => {
-      const date = new Date(sh.fromtimestamp);
-      const fromtime = new Date(sh.fromtimestamp);
-      const totime = new Date(sh.totimestamp);
+      const date = new Date(sh.fromTimeStamp);
+      const fromtime = new Date(sh.fromTimeStamp);
+      const totime = new Date(sh.toTimeStamp);
       const timeOptions = { hour: '2-digit', minute: '2-digit' };
       const shdateformat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
