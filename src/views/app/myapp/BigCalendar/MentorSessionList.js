@@ -17,10 +17,15 @@ const location = useLocation();
 const url1=`${baseUrl}/sessionUpcomingHistroy`;
 const history = useHistory();
 
-const handleJoinCall = (name) => {
-  // onClick();
-  history.push(`/app/videocall/${name}`);
+// const handleJoinCall = (id) => {
+//   // onClick();
+//   history.push(`/app/videocall/${id}`);
+// };
+const handleJoinCall = (id, name, fromtime, totime) => {
+  const fullUrl = `/app/videocall/${id}?name=${name}&fromtime=${fromtime}&totime=${totime}`;
+  history.push(fullUrl);
 };
+
 useEffect(()=>{
   // const SessionHistroy=async()=>{
   //     try {
@@ -141,7 +146,7 @@ SessionUpcomingHistroy();
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                   </div>
                   {/* <NavLink href={`/app/videocall/${up.name}`}> */}
-                      <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.name)}>Join Call</Button> 
+                      <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.mentorId, up.name, fromtime, totime)}>Join Call</Button> 
                  {/* </NavLink> */}
                  
                 </div>

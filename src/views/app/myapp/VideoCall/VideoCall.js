@@ -64,7 +64,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation  } from 'react-router-dom';
 import AgoraUIKit from 'agora-react-uikit';
 import { Card } from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
@@ -76,7 +76,13 @@ const VideoCall = () => {
   const [endCallTime, setEndCallTime] = useState(null)
 
   const history = useHistory();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const name = searchParams.get('name');
+  const fromtime = searchParams.get('fromtime');
+  const totime = searchParams.get('totime');
 const url = `${baseUrl}/api/mentee/connect-to-videocall`
+console.log("from video", name)
 
 useEffect(() => {
   setStartTime(new Date());
@@ -94,7 +100,7 @@ useEffect(() => {
   const rtcProps = {
     appId: '0b60a4bb92204911a7c24ac04304b518',
     channel: 'gogo',
-    token: '007eJxTYFisWq+97X/5iy0Hbj+y+bH2qkzF6ed6XaXdj1ylKm7KX12hwGCQZGaQaJKUZGlkZGBiaWiYaJ5sZJKYbGBibGCSZGpoofqKO60hkJFhWTcLCyMDBIL4LAzp+en5DAwAFw0g+A==',
+    token: '007eJxTYLD/dECGMeCh0HznRb8yHB7nP4x9ILqh5demqMTSC2byud8UGExSzYzNTRINU1NSUkxSjAwSzQxM0pIMTA2N0xJTLdKSOOr40xoCGRnOzwlkYWSAQBCfhSE9Pz2fgQEAkC0gKg==',
   };
 
   const callbacks = {
@@ -102,13 +108,14 @@ useEffect(() => {
       if (videoCall) {
         setVideoCall(false);
         setEndCallTime(new Date());
-        history.push('/app/sessionlists');
+        history.push(`/app/callcompleted?name=${name}&fromtime=${fromtime}&totime=${totime}`);
+
 
         const endTime = new Date();
         const duration = calculateDuration(); 
         const data = {
           menteeUserId: '1',
-          mentorUserId: '2',
+          mentorUserId: "2",
           status: 'ended',
           startTime,
           endTime,
@@ -138,11 +145,6 @@ useEffect(() => {
 };
 
 export default VideoCall;
-
-
-
-
-
 
 
 
