@@ -9,7 +9,8 @@ import {  Button, Card, CardBody, Modal, ModalBody, Table ,
   Form,
   Label,
   Row,
-  FormGroup
+  FormGroup,
+
   // FormGroup,  CustomInput, Form 
   } from 'reactstrap';
 
@@ -24,8 +25,10 @@ import DateRangePicker from '../BigCalendar/DateRangePicker';
 
 
 const MentorCreatedSlot = () => {
-  // const url=`${baseUrl}/api/calendar/appointment/mentee`;
-  // const url='http://localhost:9091/api/mentor/cards?page=0&size=3 ';
+  const url=`${baseUrl}/mentorSlotAvailablity`;
+  // To change the url to backend uncomment the below line 
+  // const url=`${baseUrl}/api/calendar/appointment/mentor`;
+
   const[mentoravailable,setMentorAvailable]=useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const location = useLocation();
@@ -71,7 +74,7 @@ const MentorCreatedSlot = () => {
   
     // Make the POST request
     try {
-      const response = await axios.post(`${baseUrl}/mentorSlotAvailablity`, [slot]);
+      const response = await axios.post(url, [slot]);
       // Handle success response
       console.log('Data saved successfully:', response.data);
     } catch (error) {
@@ -96,7 +99,7 @@ const MentorCreatedSlot = () => {
  
   const fetchMentorSlotsCreate = async (fromTime, toTime) => {
     try {
-      const response = await axios.get(`${baseUrl}/mentorSlotAvailablity?&fromTime=${fromTime}&toTime=${toTime}`);
+      const response = await axios.get(`${url}?&fromTime=${fromTime}&toTime=${toTime}`);
       const availability = response.data;
       setMentorAvailable(availability);
       console.log(availability);
@@ -370,7 +373,7 @@ const MentorCreatedSlot = () => {
 
       return (
         <>
-          <Button
+          {/* <Button
             key={date.getTime()}
             outline
             color='primary'
@@ -382,7 +385,15 @@ const MentorCreatedSlot = () => {
               <span className=' d-flex justify-content-center  align-items-center  ' 
                style={{display:'block'}}>{fromTime} to {toTime}
                <i className='iconsminds-close font-weight-bold ml-3  '  /></span>
-          </Button>
+          </Button> */}
+          <Button  key={date.getTime()}  color='primary' block
+          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          disabled={isPastTime}
+          onClick={() => handleTimeSlotClick(date)}
+        >
+         {fromTime} to {toTime}
+    
+        </Button>
           <div className='mt-2 text-center mx-auto'>
             <Button
               size='sm'
@@ -485,7 +496,10 @@ const MentorCreatedSlot = () => {
 
                </tbody>
              </Table>
-             <Button outline color="primary" >Save</Button>
+          <div className=''>
+          <Button outline color="primary "  className=''>Save</Button>
+          </div>
+         
              <div className="mb-4">
            <div>
          
@@ -633,8 +647,12 @@ const MentorCreatedSlot = () => {
             
            </CardBody>
          </Card>
+        
       {/* <PopupWizard/> */}
        </Colxx>
+       {/* <NavLink href='app/sessionmentor'>
+  <Button>sessions</Button>
+</NavLink> */}
     </Row>
   
     </div>

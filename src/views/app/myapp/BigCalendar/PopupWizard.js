@@ -1,29 +1,37 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
-// import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
+import { baseUrl } from 'constants/defaultValues';
 import { Colxx } from 'components/common/CustomBootstrap';
 import {  Button, Card, CardBody, CustomInput, Dropdown, DropdownItem, DropdownMenu,
-   DropdownToggle, Form, FormGroup, Label, Row
+   DropdownToggle, Form, FormGroup, InputGroup, Label, Row
 
    } from 'reactstrap';
   //  import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { Wizard, Steps, Step } from 'react-albus';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { injectIntl } from 'react-intl';
-// import IntlMessages from 'helpers/IntlMessages';
-// import BottomNavigation from 'components/wizard/BottomNavigation';
+
 import TopNavigation from 'components/wizard/TopNavigation';
 import DateRangePicker from './DateRangePicker';
 import BottomNavigation from '../my-login/BottomNavigation';
 
-
-
-
-const PopupWizard = ({ selectedDate,setSelectedDate,upcomingsession,mentorId,mentorName}) => {
+// const PopupWizard = ({ selectedDate,setSelectedDate,upcomingsession,mentorId,mentorName})
+ const PopupWizard = ({ selectedDate,setSelectedDate,mentorId}) => {
 
   const history = useHistory();  
   
+//  const url=`${baseUrl}/sessionUpcomingHistroy`;
+
+
+//  if you want to change backend url uncomment the below line
+// const url=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`
+
+ const url1=`${baseUrl}/ mentorAppointmentTime`
+// const url1=`${baseUrl}/api/calendar/appointment/mentee`
+ 
+//  if you want to change backend url uncomment the below line
+
 
   const redirectToSessionLists = () => {
     // Redirect to the specified URL with the query parameter
@@ -35,55 +43,169 @@ const PopupWizard = ({ selectedDate,setSelectedDate,upcomingsession,mentorId,men
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
+  const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
+  const [dropdownBasicOpen5, setDropdownBasicOpen5] = useState(false);
   const [selectedradiobutton, setSelectedRadioButton] = useState(null);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
    const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
   //  const [upcomingSessions] = useState([]); 
   const [minutedrop,setMinutedrop]=useState(null)
   const [minutedrop1,setMinutedrop1]=useState(null)
+  const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
+  const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
 
-  // const [upcomingSessions] = useState([]);
-//    const fromTimestamp = new Date(selectedDate).getTime();
-// const toTimestamp = fromTimestamp + (selectedHourDropdown * 3600000) + (minutedrop * 60000) + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
-
-// const fromTime = new Date(fromTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-// const toTime = new Date(toTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  // const handleCloseButtonClick = () => {
+  //   // Convert selectedDate to timestamp in milliseconds
+  //   const DateTime = new Date(selectedDate).getTime();
+  //   // const fromTimestamp =  DateTime + (selectedHourDropdown * 3600000) + (minutedrop * 60000)
+  //   const fromTimestamp = DateTime + (selectedHourDropdown % 12) * 3600000 + (minutedrop * 60000) + (selectedfromampm === 'PM' ? 43200000 : 0);
+  //   const toTimestamp = DateTime + (selectedHourDropdown1 % 12) * 3600000 + (minutedrop1 * 60000) + (selectedfromampm1 === 'PM' ? 43200000 : 0);
+  
+  
+  //   // Calculate the 'to' timestamp based on selected hours and minutes
+  //   // const toTimestamp = fromTimestamp + (selectedHourDropdown * 3600000) + (minutedrop * 60000) + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
+  //   // const toTimestamp = DateTime + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
+  //   // No need to multiply timestamps by 1000 to convert to milliseconds
+    
+  //   console.log('From Timestamp (milliseconds):', fromTimestamp);
+  //   console.log('To Timestamp (milliseconds):', toTimestamp);
+  
+  //   const newData = {
+  //     mentorId,
+  //     name: mentorName,
+  //     mode: selectedradiobutton,
+  //     fromtimestamp: fromTimestamp, // Already in milliseconds
+  //     totimestamp: toTimestamp, // Already in milliseconds
+  //   };
+  
+  //   axios.post(url, {
+  //     data: {
+  //       ...upcomingsession,
+  //       upcomingSessions: upcomingsession && upcomingsession.upcomingSessions ? [...upcomingsession.upcomingSessions, newData] : [newData],
+  //     }
+     
+  //   })
+  //     .then(() => {
+  //       redirectToSessionLists();
+  //     })
+  //     .catch(error => {
+  //       console.error('Error storing data:', error);
+  //     });
+  // };
+  
  
-const handleCloseButtonClick = () => {
-  const fromTimestamp = new Date(selectedDate).getTime();
-  const toTimestamp = fromTimestamp + (selectedHourDropdown * 3600000) + (minutedrop * 60000) + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
+  // const handleNextButtonClick = () => {
+  //   const DateTime = new Date(selectedDate).getTime();
+  //   const fromTimeStamp =  DateTime + (selectedHourDropdown * 3600000) + (minutedrop * 60000)
+  //   const toTimeStamp = DateTime + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
+  //   console.log('From Timestamp (milliseconds):', fromTimeStamp);
+  //   console.log('To Timestamp (milliseconds):', toTimeStamp);
+  //   const newData = {
+  //     mentorId,
+  //     mode: selectedradiobutton,
+  //     fromtimestamp: fromTimeStamp,
+  //     totimestamp: toTimeStamp,
+  //   };
+  
+  //   axios.post('http://localhost:3001/mentorAppointmentTime', newData)
+  //     .then(response => {
+  //       // Handle successful response, such as redirecting the user
+  //       console.log('Post request successful:', response.data);
+  //       // redirectToSessionLists(); // Redirect to the specified URL
+  //     })
+  //     .catch(error => {
+  //       // Handle error
+  //       console.error('Error posting data:', error);
+  //     });
+  // };
 
-  // Convert timestamps to milliseconds
-  const fromTimestampMilliseconds = fromTimestamp * 1000;
-  const toTimestampMilliseconds = toTimestamp * 1000;
 
-  console.log('From Timestamp (milliseconds):', fromTimestampMilliseconds);
-  console.log('To Timestamp (milliseconds):', toTimestampMilliseconds);
+  // const handleNextButtonClick = () => {
+  //   // Convert selected date to UTC timestamp
+  //   const selectedDateTime = new Date(selectedDate);
+  
+  //   // Set the hours and minutes for the selected date
+  //   selectedDateTime.setHours(selectedHourDropdown, minutedrop, 0, 0);
+  //   const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
+  
+  //   // Calculate 'to' time
+  //   const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
+  //   toDateTime.setMinutes(toDateTime.getMinutes() + minutedrop1); // Add selected minutes
+  
+  //   // Check if adding minutes exceeds 59 minutes, if so, increment the hour
+  //   if (toDateTime.getMinutes() !== minutedrop1) {
+  //     toDateTime.setHours(toDateTime.getHours() + 1);
+  //   }
+  
+  //   const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
+  
+  //   console.log('From Timestamp (milliseconds):', fromTimeStamp);
+  //   console.log('To Timestamp (milliseconds):', toTimeStamp);
+  
+  //   const newData = {
+  //     mentorId,
+  //     mode: selectedradiobutton,
+  //     fromtimestamp: fromTimeStamp,
+  //     totimestamp: toTimeStamp,
+  //   };
+  
+  //   axios.post('http://localhost:3001/mentorAppointmentTime', [newData])
+  //     .then(response => {
+  //       // Handle successful response, such as redirecting the user
+  //       console.log('Post request successful:', response.data);
+  //       // redirectToSessionLists(); // Redirect to the specified URL
+  //     })
+  //     .catch(error => {
+  //       // Handle error
+  //       console.error('Error posting data:', error);
+  //     });
+  // };
+  
+  
+  
+// const handleFromAmPm=(selectampm)=>{
+//   setSelectedFromAmPm(selectampm)
+// }
+  
+// const handleToAmPm=(selectampm)=>{
+//   setSelectedToAmPm(selectampm)
+// }
+const handleNextButtonClick = () => {
+  // Convert selected date to UTC timestamp
+  const selectedDateTime = new Date(selectedDate);
+
+  // Set the hours and minutes for the selected date
+  const selectedHour = selectedHourDropdown % 12 + (selectedfromampm === 'PM' ? 12 : 0); // Adjust for PM
+  selectedDateTime.setHours(selectedHour, minutedrop, 0, 0);
+  const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
+
+  // Calculate 'to' time
+  const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
+  const selectedHourTo = selectedHourDropdown1 % 12 + (selectedfromampm1 === 'PM' ? 12 : 0); // Adjust for PM
+  toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0); // Set the 'to' hour
+  const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
+
+  console.log('From Timestamp (milliseconds):', fromTimeStamp);
+  console.log('To Timestamp (milliseconds):', toTimeStamp);
 
   const newData = {
     mentorId,
-    name: mentorName,
     mode: selectedradiobutton,
-    fromtimestamp: fromTimestampMilliseconds,
-    totimestamp: toTimestampMilliseconds,
+    fromtimestamp: fromTimeStamp,
+    totimestamp: toTimeStamp,
   };
 
-  axios.post('http://localhost:3001/sessionUpcomingHistroy', {
-    data: {
-      ...upcomingsession,
-      upcomingSessions: upcomingsession && upcomingsession.upcomingSessions ? [...upcomingsession.upcomingSessions, newData] : [newData],
-    }
-  })
-    .then(() => {
-      redirectToSessionLists();
+  axios.post(url1, [newData])
+    .then(response => {
+      // Handle successful response, such as redirecting the user
+      console.log('Post request successful:', response.data);
+      // redirectToSessionLists(); // Redirect to the specified URL
     })
     .catch(error => {
-      console.error('Error storing data:', error);
+      // Handle error
+      console.error('Error posting data:', error);
     });
 };
-
-
-
 
 
   const handleDropdownItemClick = (selectedHour) => {
@@ -110,6 +232,18 @@ const handleCloseButtonClick = () => {
     // Handle the selected minutes as needed
     setMinutedrop1(selectedMinute);
     console.log(`Selected minute: ${selectedMinute}`);
+    // setMinuteDrop(selectedMinute); 
+  };
+  const handleDropdownItemClick4 = (selectedAmPmFrom) => {
+    // Handle the selected minutes as needed
+    setSelectedFromAmPm(selectedAmPmFrom);
+    console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
+    // setMinuteDrop(selectedMinute); 
+  };
+  const handleDropdownItemClick5 = (selectedAmPmTo) => {
+    // Handle the selected minutes as needed
+    setSelectedFromAmPm1(selectedAmPmTo);
+    console.log(`Selected from AM/PM: ${selectedAmPmTo}`);
     // setMinuteDrop(selectedMinute); 
   };
   const generateDropdownItems = () => {
@@ -163,6 +297,23 @@ const handleCloseButtonClick = () => {
     });
     return items;
   };
+  
+const generateAmPmDropdownItems = () => {
+  const amPmOptions = ['AM', 'PM'];
+  return amPmOptions.map((amPm) => (
+    <DropdownItem key={amPm} onClick={() => handleDropdownItemClick4(amPm)}>
+      {amPm}
+    </DropdownItem>
+  ));
+};
+const generateAmPmDropdownItems1 = () => {
+  const amPmOptions = ['AM', 'PM'];
+  return amPmOptions.map((amPm) => (
+    <DropdownItem key={amPm} onClick={() => handleDropdownItemClick5(amPm)}>
+      {amPm}
+    </DropdownItem>
+  ));
+};
   // const handlesave = () => {
   //   console.log('Selected Date:', selectedDate);
   //   console.log('Selected Hour:', selectedHourDropdown);
@@ -198,6 +349,7 @@ const handleCloseButtonClick = () => {
         return;
       }
     }
+    handleNextButtonClick(); // Call the function to post data when moving to the next step
     goToNext();
 };
 
@@ -212,7 +364,7 @@ const handleCloseButtonClick = () => {
   return (
     <Row >
       <Colxx  >
-      <Card className='mt-2  '  >
+      <Card className='mt-2    '>
       <CardBody className="wizard wizard-default  " >
       <Wizard>
           <TopNavigation
@@ -231,7 +383,7 @@ const handleCloseButtonClick = () => {
                        <Form className=' '  >
 
        
-                       {/* <FormGroup className=''>  
+                       <FormGroup className=''>  
                        
      
      <div className=''>
@@ -244,18 +396,17 @@ const handleCloseButtonClick = () => {
             
 
      </div>
-                       </FormGroup> */}
-                       <FormGroup row>
+                       </FormGroup>
+                       {/* <FormGroup row>
                   <Label  sm={4} className='font-weight-bold'>
                     Appointment date
                   </Label>
                   <Colxx sm={8}>
                   <DateRangePicker  selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
                   </Colxx>
-                </FormGroup>
+                </FormGroup> */}
                        {/* <FormGroup>
-                      <Row>
-                        <Colxx sm="3">
+                       <Colxx sm="3">
                           <Label className='text-one'>Appointment date</Label>
                         </Colxx>
                         <Colxx sm="9">
@@ -263,10 +414,9 @@ const handleCloseButtonClick = () => {
                             <DateRangePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                           </InputGroup>
                         </Colxx>
-                      </Row>
     </FormGroup> */}
       
-    <FormGroup row>
+    {/* <FormGroup row className=''>
                   <Label  sm={4} className='font-weight-bold'>
                     From
                   </Label>
@@ -309,8 +459,8 @@ const handleCloseButtonClick = () => {
        </div>
      </div>
                   </Colxx>
-                </FormGroup>
-                <FormGroup row>
+                </FormGroup> */}
+                {/* <FormGroup row>
                   <Label  sm={4} className='font-weight-bold'>
                     To
                   </Label>
@@ -380,8 +530,8 @@ const handleCloseButtonClick = () => {
          
      </div>
                   </Colxx>
-        </FormGroup>
-      {/* <FormGroup>
+        </FormGroup> */}
+      <FormGroup>
       
       
       <div className=''>
@@ -389,7 +539,8 @@ const handleCloseButtonClick = () => {
        
        <Label className='text-one font-weight-bold'>From</Label>
        <div className='d-flex '>
-    
+      
+
        <Dropdown direction="down"
   isOpen={dropdownBasicOpen}
   toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
@@ -397,13 +548,16 @@ const handleCloseButtonClick = () => {
   
  
 >
+ 
+
+
 
   <DropdownToggle caret color="secondary" outline className=''>
     
     
     {selectedHourDropdown !== null ? selectedHourDropdown : 'Hours'} 
   </DropdownToggle>
-  <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
+  <DropdownMenu className=''>
   {generateDropdownItems()}
   </DropdownMenu>
 </Dropdown>
@@ -418,10 +572,35 @@ const handleCloseButtonClick = () => {
               {minutedrop !== null ? minutedrop : 'Minutes'} 
    
             </DropdownToggle>
-            <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
+            <DropdownMenu >
              {generateMinuteDropdownItems()}
             </DropdownMenu>
           </Dropdown>
+
+          {/* <Dropdown isOpen={ampmDropdownOpen} toggle={toggleAmpmDropdown} className='ml-3'>
+        <DropdownToggle caret color="secondary" outline>
+          {selectedAmPm !=null ? selectedAmPm : 'Select AM/PM'}
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem onClick={() => handleAmPmSelection('AM')}>AM</DropdownItem>
+          <DropdownItem onClick={() => handleAmPmSelection('PM')}>PM</DropdownItem>
+        </DropdownMenu>
+      </Dropdown> */}
+      <Dropdown direction="down"
+  isOpen={dropdownBasicOpen4}
+  toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
+  className="mb-5 "
+  
+ 
+>
+<DropdownToggle caret color="secondary" outline className='ml-3'>
+{selectedfromampm !==null ? selectedfromampm : 'AM /PM' }
+<DropdownMenu className=''>
+  { generateAmPmDropdownItems ()}
+  </DropdownMenu>
+</DropdownToggle>
+      
+  </Dropdown>
        </div>
      </div>
 
@@ -432,7 +611,7 @@ const handleCloseButtonClick = () => {
        <Dropdown direction="down"
   isOpen={dropdownBasicOpen2}
   toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
-  className="mb-5 ml-2"
+  className="mb-5"
   
  
 >
@@ -442,7 +621,7 @@ const handleCloseButtonClick = () => {
     
     {selectedHourDropdown1 !== null ? selectedHourDropdown1 : 'Hours'} 
   </DropdownToggle>
-  <DropdownMenu className='' style={{ maxHeight: '200px', overflowY: 'auto'}}>
+  <DropdownMenu className=''>
   {generateDropdownItems1()}
   </DropdownMenu>
 </Dropdown>
@@ -457,17 +636,41 @@ const handleCloseButtonClick = () => {
               {minutedrop1 !== null ? minutedrop1 : 'Minutes'} 
    
             </DropdownToggle>
-            <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
+            <DropdownMenu >
              {generateMinuteDropdownItems1()}
             </DropdownMenu>
           </Dropdown>
+          <Dropdown direction="down"
+  isOpen={dropdownBasicOpen5}
+  toggle={() => setDropdownBasicOpen5(!dropdownBasicOpen5)}
+  className="mb-5 "
+  
+ 
+>
+<DropdownToggle caret color="secondary" outline className='ml-3'>
+{selectedfromampm1 !==null ? selectedfromampm1 : 'AM /PM' }
+<DropdownMenu className=''>
+  { generateAmPmDropdownItems1 ()}
+  </DropdownMenu>
+</DropdownToggle>
+      
+  </Dropdown>
+          {/* <Dropdown isOpen={ampmDropdownOpen1} toggle={toggleAmpmDropdown1} className='ml-3'>
+        <DropdownToggle caret color="secondary" outline>
+          {selectedAmPm1 !=null ? selectedAmPm1 : 'Select AM/PM'}
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem onClick={() => handleAmPmSelection1('AM')}>AM</DropdownItem>
+          <DropdownItem onClick={() => handleAmPmSelection1('PM')}>PM</DropdownItem>
+        </DropdownMenu>
+      </Dropdown> */}
        </div>
      </div>
       </div>
-      </FormGroup> */}
+      </FormGroup>
      
    
-       {/* <Form>
+       <Form>
 
         <FormGroup>
       <Label className='text-one font-weight-bold'>Call type</Label>
@@ -492,7 +695,7 @@ const handleCloseButtonClick = () => {
          
      </div>
    </FormGroup>
-   </Form> */}
+   </Form>
      
        {/* <footer className="d-flex justify-content-end border-t p-3 mt-5">
       <Button type='submit'  className="  px-6 py-2 " color='primary'  onClick={handlesave}>
@@ -595,7 +798,8 @@ const handleCloseButtonClick = () => {
                   </Button>
               </div> */}
               <div className='text-center my-2'>
-              <Button color='primary' className="btn btn-primary " onClick={handleCloseButtonClick}>
+              {/* <Button color='primary' className="btn btn-primary " onClick={handleCloseButtonClick}> */}
+              <Button color='primary' className="btn btn-primary " onClick={redirectToSessionLists}>
                    Close
                   </Button>
               </div>

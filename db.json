@@ -877,7 +877,7 @@
       "mentorId": 1,
       "fromTimeStamp": 1712214600000,
       "toTimeStamp": 1712214600000,
-      "callType": "video"
+      "mode": "video"
     }
   ],
   "slotAddedByMentor": [
@@ -960,16 +960,45 @@
       }
     ]
   ],
+  "mentorSessionUpcomingHistory": {
+    "data": {
+      "history": [
+        {
+          "menteeId": 1,
+          "name": "sivanesh",
+          "duration": "03:00",
+          "mode": "video",
+          "fromtimestamp": 1712466000000,
+          "totimestamp": 1712469600000
+        }
+      ],
+      "upcomingSessions": [
+        {
+          "menteeId": 1,
+          "name": "sivanesh",
+          "mode": "Audio",
+          "fromtimestamp": 1712556000000,
+          "totimestamp": 1710182661000
+        },
+        {
+          "menteeId": 2,
+          "name": "Raj",
+          "mode": "Audio",
+          "fromtimestamp": 1712642400000,
+          "totimestamp": 1712646000000
+        }
+      ]
+    }
+  },
   "sessionUpcomingHistroy": {
     "data": {
-      "history": [],
       "upcomingSessions": [
         {
           "mentorId": "1",
           "name": "srihith ks",
           "mode": "Video",
-          "fromtimestamp": 1711996200000000,
-          "totimestamp": 1712032200000000
+          "fromtimestamp": 1712853000000,
+          "totimestamp": 1712856600000
         }
       ]
     }
