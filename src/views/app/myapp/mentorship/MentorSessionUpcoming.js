@@ -44,9 +44,9 @@ const url1=`${baseUrl}/mentorSessionUpcomingHistory`;
 
 const history = useHistory();
 
-const handleJoinCall = (name) => {
-  // onClick();
-  history.push(`/app/videocall/${name}`);
+const handleJoinCall = (id, name, fromtime, totime) => {
+  const fullUrl = `/app/videocall/${id}?name=${name}&fromtime=${fromtime}&totime=${totime}`;
+  history.push(fullUrl);
 };
 useEffect(()=>{
 //   console.log("Deploy Type:", deployType);
@@ -137,7 +137,7 @@ SessionUpcomingHistroy();
                   <Label className='text-one mr-2'>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                 </div>
-                <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.name)}>Join Call</Button>
+                <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.mentorId, up.name, fromtime, totime)}>Join Call</Button> 
               </div>
             </CardBody>
           </Card>

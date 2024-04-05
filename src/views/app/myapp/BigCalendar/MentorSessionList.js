@@ -180,7 +180,7 @@ SessionUpcomingHistroy();
                   <Label className='text-one mr-2'>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                 </div>
-                <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.name)}>Join Call</Button>
+                <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.mentorId, up.name, fromtime, totime)}>Join Call</Button> 
               </div>
             </CardBody>
           </Card>
