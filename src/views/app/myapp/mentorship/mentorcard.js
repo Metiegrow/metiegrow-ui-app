@@ -13,6 +13,10 @@ import MentorDropDown from './MentorDropDown';
 
 
 const MentorCard = () => {
+  const url1=`${baseUrl}/mentorDetails`
+  // To change to backend api url uncomment the below line
+  // const url1=`${baseUrl}/api/mentor`
+
   const {category}=useParams();
   const location = useLocation();
 const firstNameParam = new URLSearchParams(location.search).get('firstName');
@@ -62,7 +66,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   useEffect(()=>{
     const mentorCardDetails = async () => {
       try {
-        let url = `${baseUrl}/mentorDetails`;
+        let url = url1;
         if (firstNameParam || jobTitleParam) {
           url += `?firstName=${firstNameParam || ''}&jobTitle=${jobTitleParam || ''}`;
         }

@@ -8,8 +8,12 @@ import { baseUrl } from 'constants/defaultValues';
 import PopupWizard from './PopupWizard';
 
 const Month = () => {
-  // const url=`${baseUrl}/api/calendar/appointment/mentee`;
-  // const url='http://localhost:9091/api/mentor/cards?page=0&size=3 ';
+  
+  const url=`${baseUrl}/mentorAvailablity`
+
+  // if you change the url to backend uncomment the below line
+  // const url=`${baseUrl}/api/calendar/appointment/mentee`
+
   const[mentoravailable,setMentorAvailable]=useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const location = useLocation();
@@ -40,7 +44,8 @@ const Month = () => {
 
 const fetchMentorAvailability = async (fromTime, toTime) => {
   try {
-    const response = await axios.get(`${baseUrl}/mentorAvailablity?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`);
+    // const response = await axios.get(`${baseUrl}/mentorAvailablity?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`);
+    const response = await axios.get(`${url}?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`);
     const availability = response.data;
     setMentorAvailable(availability);
   } catch (error) {
@@ -337,10 +342,13 @@ const goToNextWeek = () => {
         </Button>
         );
     } 
-        return <div key={date.getTime()} className='text-center text-one '>-</div>; // Returning null when condition is not met
+    
+       return null;
 })}
 
-
+{mentoravailable.every(avail => new Date(avail.fromTimeStamp).toDateString() !== date.toDateString()) && (
+        <div className="text-center text-one">-</div>
+      )}
     </td>
   </tr>
 ))}
@@ -365,7 +373,7 @@ const goToNextWeek = () => {
                >
                  
                  <ModalBody >
-                 <div className='text-right py-2'>
+                 <div className='text-right my-2'>
                  {/* <Button className='ml-2 my-4 '  outline   color="primary"  onClick={() => setModalSmall(false)}
         ><i className='simple-icon-close text-one'  />
                    </Button> */}

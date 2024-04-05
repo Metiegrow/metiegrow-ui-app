@@ -9,7 +9,8 @@ import {  Button, Card, CardBody, Modal, ModalBody, Table ,
   Form,
   Label,
   Row,
-  FormGroup
+  FormGroup,
+
   // FormGroup,  CustomInput, Form 
   } from 'reactstrap';
 
@@ -24,8 +25,10 @@ import DateRangePicker from '../BigCalendar/DateRangePicker';
 
 
 const MentorCreatedSlot = () => {
-  // const url=`${baseUrl}/api/calendar/appointment/mentee`;
-  // const url='http://localhost:9091/api/mentor/cards?page=0&size=3 ';
+  const url=`${baseUrl}/mentorSlotAvailablity`;
+  // To change the url to backend uncomment the below line 
+  // const url=`${baseUrl}/api/calendar/appointment/mentor`;
+
   const[mentoravailable,setMentorAvailable]=useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const location = useLocation();
@@ -47,43 +50,7 @@ const MentorCreatedSlot = () => {
   const [minutedrop1,setMinutedrop1]=useState(null)
   const [modalSmall, setModalSmall] = useState(false);
 
-  // const handleOkButtonClick = () => {
-  //   // Store the selected timestamps
-  //   const fromTimestamp = new Date().setHours(selectedHourDropdown, minutedrop, 0, 0);
-  //   const toTimestamp = new Date().setHours(selectedHourDropdown1, minutedrop1, 0, 0);
-  //   const selectedTimestamps = { fromTimestamp, toTimestamp };
-  //   setSelectedDate([...selectedDate, selectedTimestamps]);
-  //   setModalSmall(false); // Close the modal after storing timestamps
-  //   console.log("date is",selectedDate);
-  // };
-
-  // const handleOkButtonClick = async () => {
-  //   // Ensure selectedDate is not null
-  //   if (!selectedDate) {
-  //     console.error('Selected date is null');
-  //     return;
-  //   }
   
-  //   // Get the selected date in milliseconds
-  //   const selectedDateMillis = selectedDate.getTime();
-  
-  //   // Store the selected timestamps
-  //   const fromTimestamp = new Date(selectedDateMillis).setHours(selectedHourDropdown, minutedrop, 0, 0) / 1000;
-  //   const toTimestamp = new Date(selectedDateMillis).setHours(selectedHourDropdown1, minutedrop1, 0, 0) / 1000;
-    
-  //   // Make the POST request
-  //   try {
-  //     const response = await axios.post(`${baseUrl}/mentorSlotAvailablity`, [{ fromTimestamp, toTimestamp }]);
-  //     // Handle success response
-  //     console.log('Data saved successfully:', response.data);
-  //   } catch (error) {
-  //     // Handle error
-  //     console.error('Error saving data:', error);
-  //   }
-    
-  //   // Optionally, close the modal
-  //   setModalSmall(false);
-  // };
   const handleOkButtonClick = async () => {
     // Ensure selectedDate is not null
     if (!selectedDate) {
@@ -107,7 +74,7 @@ const MentorCreatedSlot = () => {
   
     // Make the POST request
     try {
-      const response = await axios.post(`${baseUrl}/mentorSlotAvailablity`, [slot]);
+      const response = await axios.post(url, [slot]);
       // Handle success response
       console.log('Data saved successfully:', response.data);
     } catch (error) {
@@ -120,42 +87,6 @@ const MentorCreatedSlot = () => {
   };
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-
-  // // post request
-  // const handleSaveButtonClick = async () => {
-  //   // Store the selected timestamps
-  //   const fromTimestamp = new Date().setHours(selectedHourDropdown, minutedrop, 0, 0);
-  //   const toTimestamp = new Date().setHours(selectedHourDropdown1, minutedrop1, 0, 0);
-    
-  //   // Make sure both timestamps are valid
-  //   if (!Number.isNaN(fromTimestamp) && !Number.isNaN(toTimestamp)) {
-  //     // Create an array of timestamp objects
-  //     const selectedTimestamps = [{ fromTimestamp, toTimestamp }];
-  
-  //     // Send the stored timestamps to the server
-  //     try {
-  //       const response = await axios.post(`${baseUrl}/mentorSlotAvailablity`, selectedTimestamps);
-  //       // Handle success response
-  //       console.log('Data saved successfully:', response.data);
-  //     } catch (error) {
-  //       // Handle error
-  //       console.error('Error saving data:', error);
-  //     }
-  //   } else {
-  //     console.error('Invalid timestamps');
-  //   }
-  // };
-  
-  
-  
 
   // Function to get the start date of the current week
   const getStartOfWeek = () => {
@@ -165,15 +96,10 @@ const MentorCreatedSlot = () => {
     return new Date(currentDate.setDate(diff));
   };
 
-  // Function to get the end date of the current week
-  // const getEndOfWeek = (startOfWeek) => {
-  //   const endOfWeek = new Date(startOfWeek);
-  //   endOfWeek.setDate(endOfWeek.getDate() + 6);
-  //   return endOfWeek;
-  // };
+ 
   const fetchMentorSlotsCreate = async (fromTime, toTime) => {
     try {
-      const response = await axios.get(`${baseUrl}/mentorSlotAvailablity?&fromTime=${fromTime}&toTime=${toTime}`);
+      const response = await axios.get(`${url}?&fromTime=${fromTime}&toTime=${toTime}`);
       const availability = response.data;
       setMentorAvailable(availability);
       console.log(availability);
@@ -181,20 +107,7 @@ const MentorCreatedSlot = () => {
       console.error('Error fetching data:', error);
     }
   };
-  // const fetchMentorSlotsCreate = async (fromTime, toTime) => {
-  //   try {
-  //     const response = await axios.get(`${baseUrl}/mentorSlotAvailablity`, {
-  //       mentorId,
-  //        fromTime,
-  //        toTime
-  //     });
-  //     const availability = response.data;
-  //     setMentorAvailable(availability);
-  //     console.log(availability);
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
+  
   useEffect(() => {
     // Set the time of currentWeekStart to 12:00 PM (noon)
     const startOfWeekTimestamp = new Date(currentWeekStart);
@@ -212,35 +125,7 @@ const MentorCreatedSlot = () => {
   }, [currentWeekStart, mentorId]);
   
 
-// Function to handle the OK button click
-// const handleOkButtonClick = async () => {
-//   // Store the selected timestamps
-//   const fromTimestamp = new Date().setHours(selectedHourDropdown, minutedrop, 0, 0);
-//   const toTimestamp = new Date().setHours(selectedHourDropdown1, minutedrop1, 0, 0);
-//   const selectedTimestamps = { fromTimestamp, toTimestamp };
 
-//   // Make the POST request
-//   try {
-//     const response = await axios.post(`${baseUrl}/slotAddedByMentor`, selectedTimestamps);
-//     // Handle success response
-//     console.log('Data saved successfully:', response.data);
-//   } catch (error) {
-//     // Handle error
-//     console.error('Error saving data:', error);
-  
-//   }
-//   setModalSmall(false);
-// };
-
-  // from and to starts
-  
-  
-
-  // Update the current week start date when component mounts
-  // useEffect(() => {
-  
-  //   setCurrentWeekStart(getStartOfWeek());
-  // }, []);
   useEffect(() => {
     const startOfWeek = getStartOfWeek();
     setCurrentWeekStart(startOfWeek);
@@ -406,7 +291,7 @@ const MentorCreatedSlot = () => {
   
 
    {/* <h1 className='py-4 text-large'> {mentorName} availability</h1> */}
-   <h1 className='py-4 text-large'>Mentor slots</h1>
+   <h1 className='py-4 text-large'>My slots</h1>
 
    <div className='font-weight-semibold d-flex justify-content-center align-items-center'>
      {/* <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button> */}
@@ -465,11 +350,7 @@ const MentorCreatedSlot = () => {
     <td>
      
  {/*  new one */}
- {/* {mentoravailable.map((availability) => (
-  availability.availableSlots.map((slot) => (
-    <h1 key={slot.id}>{slot.fromTimeStamp}</h1>
-  ))
-))} */}
+
  {mentoravailable.map((availability) => (
   availability.availableSlots.map((avail) => {
     const availDate = new Date(avail.fromTimeStamp);
@@ -492,33 +373,45 @@ const MentorCreatedSlot = () => {
 
       return (
         <>
-          <Button
+          {/* <Button
             key={date.getTime()}
+            outline
             color='primary'
             block
             className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             disabled={isPastTime}
             onClick={() => handleTimeSlotClick(date)}
           >
-              <span className=' d-flex justify-content-center align-items-center  ' style={{display:'block'}}>{fromTime} to {toTime} <i className='iconsminds-close text-one ml-3 '/></span>
-          </Button>
+              <span className=' d-flex justify-content-center  align-items-center  ' 
+               style={{display:'block'}}>{fromTime} to {toTime}
+               <i className='iconsminds-close font-weight-bold ml-3  '  /></span>
+          </Button> */}
+          <Button  key={date.getTime()}  color='primary' block
+          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          disabled={isPastTime}
+          onClick={() => handleTimeSlotClick(date)}
+        >
+         {fromTime} to {toTime}
+    
+        </Button>
           <div className='mt-2 text-center mx-auto'>
             <Button
               size='sm'
-              className='text-center mx-auto my-4'
+              className='text-center mx-auto my-4 '
               onClick={() => setModalSmall(true)}
               key={`edit-${date.getTime()}`}
               outline
               color="primary"
+              block
             >
-              +
+             +
             </Button>
           </div>
         </>
       );
     }
    
-    return <div key={date.getTime()} className='text-center text-one'>-</div>;
+   return  null;
     
   })
 ))}
@@ -547,7 +440,7 @@ const MentorCreatedSlot = () => {
 
       return (
         <>
-          <Button
+          {/* <Button
             key={date.getTime()}
             color='primary'
             block
@@ -556,13 +449,28 @@ const MentorCreatedSlot = () => {
             onClick={() => handleTimeSlotClick(date)}
           >
           <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
-          </Button>
+          </Button> */}
+          <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2`}
+      style={{ outline: 'none' }} // Remove default focus outline if needed
+      onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
+    </div>
          
         </>
       );
     }
    
-    return <div key={date.getTime()} className='text-center text-one'>-</div>;
+  return null;
   })
 ))}
 
@@ -588,7 +496,10 @@ const MentorCreatedSlot = () => {
 
                </tbody>
              </Table>
-             <Button outline color="primary" >Save</Button>
+          <div className=''>
+          <Button outline color="primary "  className=''>Save</Button>
+          </div>
+         
              <div className="mb-4">
            <div>
          
@@ -736,8 +647,12 @@ const MentorCreatedSlot = () => {
             
            </CardBody>
          </Card>
+        
       {/* <PopupWizard/> */}
        </Colxx>
+       {/* <NavLink href='app/sessionmentor'>
+  <Button>sessions</Button>
+</NavLink> */}
     </Row>
   
     </div>

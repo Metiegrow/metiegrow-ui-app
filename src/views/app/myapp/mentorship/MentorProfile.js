@@ -14,6 +14,11 @@ const MentorProfile = () => {
   // const url1=`${baseUrl}/mentor/cards/${mid}`;
   const url=`${baseUrl}/mentorDetails/${mid}`;
  const url1=`${baseUrl}/mentorProfile/${mid}`;
+
+//  To change url to backend please uncomment the below line
+// const url1=`${baseUrl}/api/mentor/${mid}`
+
+
 //  const url1=`${baseUrl}/mentor/myprofile`;
   const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
@@ -36,8 +41,8 @@ const MentorProfile = () => {
   // };
   const handleConnectClick = () => {
     // Construct the URL with mentor's ID and name as query parameters
-    const mentorId = mentorprofiledetails.id;
-    const mentorName = `${mentorprofiledetails.firstName} ${mentorprofiledetails.lastName}`;
+    const mentorId = mentorprofiledetails1.id;
+    const mentorName = `${mentorprofiledetails1.firstName} ${mentorprofiledetails1.lastName}`;
     const url2 = `/app/calendar?mentorId=${mentorId}&mentorName=${mentorName}`;
 
     // Navigate to the Month component with the mentor's ID and name as query parameters
@@ -75,7 +80,7 @@ const MentorProfile = () => {
     }
   }, [showAll]);
 
-  const remainingSkillsCount = mentorprofiledetails.skills ?  mentorprofiledetails.skills.length - 3 : 0;
+  const remainingSkillsCount = mentorprofiledetails1.skills ?  mentorprofiledetails1.skills.length - 3 : 0;
 
   return (
     <div  className='mentor-profile'>
@@ -121,7 +126,7 @@ const MentorProfile = () => {
             </div>
           </div>
           <div className='col-5 mt-4'>
-          <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails.lastName}</h1>
+          <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1>
           {/* <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1> */}
           <h3 className='text-large  text-muted  '>{mentorprofiledetails1.jobTitle}</h3>
             <h2 className='text-one  text-primary'>{mentorprofiledetails1.company}</h2>
@@ -152,7 +157,7 @@ const MentorProfile = () => {
             </div> */}
             <div className='d-flex align-items-center'>
             <div className='d-flex'>
-            {mentorprofiledetails.skills && mentorprofiledetails.skills.slice(0, 3).map((skill) => (
+            {mentorprofiledetails1.skills && mentorprofiledetails1.skills.slice(0, 3).map((skill) => (
             <div key={skill}>
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
                 {skill}
@@ -160,7 +165,7 @@ const MentorProfile = () => {
             </div>
           ))}
         </div>
-        {mentorprofiledetails.skills && mentorprofiledetails.skills.length > 3 && (
+        {mentorprofiledetails1.skills && mentorprofiledetails1.skills.length > 3 && (
           <div className=''>
             <Button color="link" className='text-one font-weight-bold ' style={{textDecoration:"underline"}} onClick={toggleShowAll}>
               + {remainingSkillsCount}more

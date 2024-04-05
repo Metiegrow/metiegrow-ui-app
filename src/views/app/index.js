@@ -94,6 +94,11 @@ const MentorSessionList = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/BigCalendar/MentorSessionList'
   )
 );
+const MentorListSessions = React.lazy(()=>
+import (
+  /* webpackChunkName: "views-app" */ './myapp/mentorship/MentorSessionUpcoming'
+)
+)
 // const CalendarGoogle = React.lazy(() =>
 //   import(
 //     /* webpackChunkName: "views-app" */ './myapp/mentorship/CalendarGoogle'
@@ -335,6 +340,10 @@ console.log("role res from index", roleRes)
               <Route
               path={`${match.url}/calendar/mentor/appointment`}
               render={(props) => <MentorCreatedSlots {...props} />}
+            />
+             <Route
+              path={`${match.url}/sessionmentor`}
+              render={(props) => <MentorListSessions {...props} />}
             />
                 <Route
               path={`${match.url}/questions`}
