@@ -13,7 +13,7 @@ import {  Button, Card, CardBody, Modal, ModalBody, Table ,
 
   // FormGroup,  CustomInput, Form 
   } from 'reactstrap';
-
+  import { useHistory } from 'react-router-dom/cjs/react-router-dom';
   import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
 import DateRangePicker from '../BigCalendar/DateRangePicker';
@@ -21,11 +21,9 @@ import DateRangePicker from '../BigCalendar/DateRangePicker';
 
 
 
-
-
-
 const MentorCreatedSlot = () => {
   const url=`${baseUrl}/mentorSlotAvailablity`;
+
   // To change the url to backend uncomment the below line 
   // const url=`${baseUrl}/api/calendar/appointment/mentor`;
 
@@ -35,6 +33,11 @@ const MentorCreatedSlot = () => {
   const searchParams = new URLSearchParams(location.search);
   // const mentorName = searchParams.get('mentorName');
   const mentorId = searchParams.get('mentorId');
+  const history = useHistory();  
+const redirectToSessionLists1 = () => {
+  // Redirect to the specified URL with the query parameter
+  history.push('/app/sessionmentor');
+};
 
   const [selectedDate, setSelectedDate] = useState(null); 
   // const [selectedDate, setSelectedDate] = useState(''); 
@@ -49,6 +52,10 @@ const MentorCreatedSlot = () => {
   const [minutedrop,setMinutedrop]=useState(null)
   const [minutedrop1,setMinutedrop1]=useState(null)
   const [modalSmall, setModalSmall] = useState(false);
+  // const redirectToSessionLists1 = () => {
+  //   // Redirect to the specified URL with the query parameter
+  //   history.push('/app/sessionmentor');
+  // };
 
   
   const handleOkButtonClick = async () => {
@@ -647,14 +654,16 @@ const MentorCreatedSlot = () => {
             
            </CardBody>
          </Card>
-        
+         <Button className='' onClick={redirectToSessionLists1}>My Sessions</Button>
       {/* <PopupWizard/> */}
        </Colxx>
        {/* <NavLink href='app/sessionmentor'>
   <Button>sessions</Button>
 </NavLink> */}
-    </Row>
   
+
+    </Row>
+   
     </div>
   );
 }

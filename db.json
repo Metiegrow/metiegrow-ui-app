@@ -968,8 +968,8 @@
           "name": "sivanesh",
           "duration": "03:00",
           "mode": "video",
-          "fromtimestamp": 1712466000000,
-          "totimestamp": 1712469600000
+          "fromTimeStamp": 1712466000000,
+          "toTimeStamp": 1712469600000
         }
       ],
       "upcomingSessions": [
@@ -977,15 +977,15 @@
           "menteeId": 1,
           "name": "sivanesh",
           "mode": "Audio",
-          "fromtimestamp": 1712556000000,
-          "totimestamp": 1710182661000
+          "fromTimeStamp": 1712556000000,
+          "toTimeStamp": 1710182661000
         },
         {
           "menteeId": 2,
           "name": "Raj",
           "mode": "Audio",
-          "fromtimestamp": 1712642400000,
-          "totimestamp": 1712646000000
+          "fromTimeStamp": 1712642400000,
+          "toTimeStamp": 1712646000000
         }
       ]
     }
