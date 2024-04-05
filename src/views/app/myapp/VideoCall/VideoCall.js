@@ -79,6 +79,7 @@ const VideoCall = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const name = searchParams.get('name');
+  const mode = searchParams.get('mode');
   const fromtime = searchParams.get('fromtime');
   const totime = searchParams.get('totime');
 const url = `${baseUrl}/api/mentee/connect-to-videocall`
@@ -98,9 +99,9 @@ useEffect(() => {
   };
 
   const rtcProps = {
-    appId: '0b60a4bb92204911a7c24ac04304b518',
+    appId: '4e6374a1eddd4d20a604fb0513fae8fb',
     channel: 'gogo',
-    token: '007eJxTYLD/dECGMeCh0HznRb8yHB7nP4x9ILqh5demqMTSC2byud8UGExSzYzNTRINU1NSUkxSjAwSzQxM0pIMTA2N0xJTLdKSOOr40xoCGRnOzwlkYWSAQBCfhSE9Pz2fgQEAkC0gKg==',
+    token: '007eJxTYNiu+Vpij9ma90J3dFQu9hWZpgi1C1zXlr7z/9p8lpvpX6YpMJikmhmbmyQapqakpJikGBkkmhmYpCUZmBoapyWmWqQl5YcIpDUEMjJETTzCwAiFID4LQ3p+ej4DAwBhix+/',
   };
 
   const callbacks = {
@@ -108,7 +109,7 @@ useEffect(() => {
       if (videoCall) {
         setVideoCall(false);
         setEndCallTime(new Date());
-        history.push(`/app/callcompleted?name=${name}&fromtime=${fromtime}&totime=${totime}`);
+        history.push(`/app/callcompleted?name=${name}&fromtime=${fromtime}&totime=${totime}&mode=${mode}`);
 
 
         const endTime = new Date();

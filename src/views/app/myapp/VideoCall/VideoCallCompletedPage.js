@@ -31,6 +31,7 @@ const VideoCallCompletedPage = () => {
   const name = searchParams.get("name");
   const fromtime = searchParams.get("fromtime");
   const totime = searchParams.get("totime");
+  const mode = searchParams.get("mode");
   //   const dateString = "Thu Feb 21 56222 17:30:00 GMT 0530 (India Standard Time)";
   const dateParts = fromtime.split(" ");
   const timeParts = dateParts[4].split(":");
@@ -59,6 +60,7 @@ const VideoCallCompletedPage = () => {
   };
 
   const handleSubmit = () => {
+        setSubmissionStatus("success"); 
     setIsLoading(true);
     axios
       .post(url, {
@@ -88,7 +90,7 @@ const VideoCallCompletedPage = () => {
     <>
       <Row>
         <Colxx xxs="12" className="mb-2">
-          <Card>
+          <Card className="mx-auto my-4 " style={{ maxWidth: "1000px" }}>
             <CardBody className="text-center">
               <Jumbotron className="text-center">
                 <i
@@ -110,7 +112,7 @@ const VideoCallCompletedPage = () => {
                       <h4>End time: {extractedToTime}</h4>
                     </Col>
                     <Col>
-                      <h4>Mode: Video</h4>
+                      <h4>Mode: {mode}</h4>
                     </Col>
                   </Row>
                 </div>

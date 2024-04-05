@@ -49,8 +49,8 @@ export const authService = {
         console.log(res.data)
         // const statusRes = res.data.roles.map(role => role.status);
         // const roleRes = res.data.roles.map(role => role.role);
-        const statusRes = "3"; 
-        const roleRes = ["MENTEE"]; 
+        const statusRes = "7"; 
+        const roleRes = ["MENTOR"]; 
         console.log(res.data.token);
         console.log(statusRes);
         console.log(roleRes);
