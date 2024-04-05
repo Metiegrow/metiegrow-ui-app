@@ -191,8 +191,8 @@ const handleNextButtonClick = () => {
   const newData = {
     mentorId,
     mode: selectedradiobutton,
-    fromtimestamp: fromTimeStamp,
-    totimestamp: toTimeStamp,
+    fromTimeStamp,
+    toTimeStamp,
   };
 
   axios.post(url1, [newData])
