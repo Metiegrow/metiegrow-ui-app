@@ -34,10 +34,10 @@ const MentorCreatedSlot = () => {
   // const mentorName = searchParams.get('mentorName');
   const mentorId = searchParams.get('mentorId');
   const history = useHistory();  
-const redirectToSessionLists1 = () => {
-  // Redirect to the specified URL with the query parameter
-  history.push('/app/sessionmentor');
-};
+// const redirectToSessionLists1 = () => {
+//   // Redirect to the specified URL with the query parameter
+//   history.push('/app/sessionmentor');
+// };
 
   const [selectedDate, setSelectedDate] = useState(null); 
   // const [selectedDate, setSelectedDate] = useState(''); 
@@ -46,18 +46,57 @@ const redirectToSessionLists1 = () => {
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
+  const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
+  const [dropdownBasicOpen5, setDropdownBasicOpen5] = useState(false);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
    const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
   //  const [upcomingSessions] = useState([]); 
   const [minutedrop,setMinutedrop]=useState(null)
   const [minutedrop1,setMinutedrop1]=useState(null)
   const [modalSmall, setModalSmall] = useState(false);
-  // const redirectToSessionLists1 = () => {
-  //   // Redirect to the specified URL with the query parameter
-  //   history.push('/app/sessionmentor');
-  // };
+  const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
+  const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
+
+  const redirectToSessionLists1 = () => {
+    // Redirect to the specified URL with the query parameter
+    history.push('/app/sessionmentor');
+  };
 
   
+  // const handleOkButtonClick = async () => {
+  //   // Ensure selectedDate is not null
+  //   if (!selectedDate) {
+  //     console.error('Selected date is null');
+  //     return;
+  //   }
+  
+  //   // Get the selected date in milliseconds
+  //   const selectedDateMillis = selectedDate.getTime();
+  
+  //   // Store the selected timestamps
+  //   const fromTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown, minutedrop, 0, 0);
+  //   const toTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown1, minutedrop1, 0, 0);
+    
+  //   // Create an object with the required structure and assign id=1
+  //   const slot = {
+      
+  //     fromTimeStamp,
+  //     toTimeStamp
+  //   };
+  
+  //   // Make the POST request
+  //   try {
+  //     const response = await axios.post(url, [slot]);
+  //     // Handle success response
+  //     console.log('Data saved successfully:', response.data);
+  //   } catch (error) {
+  //     // Handle error
+  //     console.error('Error saving data:', error);
+  //   }
+    
+  //   // Optionally, close the modal
+  //   setModalSmall(false);
+  // };
   const handleOkButtonClick = async () => {
     // Ensure selectedDate is not null
     if (!selectedDate) {
@@ -65,16 +104,22 @@ const redirectToSessionLists1 = () => {
       return;
     }
   
-    // Get the selected date in milliseconds
-    const selectedDateMillis = selectedDate.getTime();
+    // Convert selected date to UTC timestamp
+    const selectedDateTime = new Date(selectedDate);
   
-    // Store the selected timestamps
-    const fromTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown, minutedrop, 0, 0);
-    const toTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown1, minutedrop1, 0, 0);
-    
-    // Create an object with the required structure and assign id=1
+    // Set the hours and minutes for the selected date
+    const selectedHourFrom = selectedHourDropdown % 12 + (selectedfromampm === 'PM' ? 12 : 0); // Adjust for PM
+    selectedDateTime.setHours(selectedHourFrom, minutedrop, 0, 0);
+    const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
+  
+    // Calculate 'to' time
+    const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
+    const selectedHourTo = selectedHourDropdown1 % 12 + (selectedfromampm1 === 'PM' ? 12 : 0); // Adjust for PM
+    toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0); // Set the 'to' hour
+    const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
+  
+    // Create an object with the required structure
     const slot = {
-      
       fromTimeStamp,
       toTimeStamp
     };
@@ -88,10 +133,13 @@ const redirectToSessionLists1 = () => {
       // Handle error
       console.error('Error saving data:', error);
     }
-    
+  
     // Optionally, close the modal
     setModalSmall(false);
   };
+  
+  
+  
   
   
 
@@ -167,6 +215,18 @@ const redirectToSessionLists1 = () => {
     console.log(`Selected minute: ${selectedMinute}`);
     // setMinuteDrop(selectedMinute); 
   };
+  const handleDropdownItemClick4 = (selectedAmPmFrom) => {
+    // Handle the selected minutes as needed
+    setSelectedFromAmPm(selectedAmPmFrom);
+    console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
+    // setMinuteDrop(selectedMinute); 
+  };
+  const handleDropdownItemClick5 = (selectedAmPmTo) => {
+    // Handle the selected minutes as needed
+    setSelectedFromAmPm1(selectedAmPmTo);
+    console.log(`Selected from AM/PM: ${selectedAmPmTo}`);
+    // setMinuteDrop(selectedMinute); 
+  };
   const generateDropdownItems = () => {
     const items = [];
     for (let i = 1; i <= 12; i+=1) {
@@ -217,6 +277,22 @@ const redirectToSessionLists1 = () => {
       );
     });
     return items;
+  };
+  const generateAmPmDropdownItems = () => {
+    const amPmOptions = ['AM', 'PM'];
+    return amPmOptions.map((amPm) => (
+      <DropdownItem key={amPm} onClick={() => handleDropdownItemClick4(amPm)}>
+        {amPm}
+      </DropdownItem>
+    ));
+  };
+  const generateAmPmDropdownItems1 = () => {
+    const amPmOptions = ['AM', 'PM'];
+    return amPmOptions.map((amPm) => (
+      <DropdownItem key={amPm} onClick={() => handleDropdownItemClick5(amPm)}>
+        {amPm}
+      </DropdownItem>
+    ));
   };
  
  
@@ -394,26 +470,14 @@ const redirectToSessionLists1 = () => {
                <i className='iconsminds-close font-weight-bold ml-3  '  /></span>
           </Button> */}
           <Button  key={date.getTime()}  color='primary' block
-          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} m-2`}
           disabled={isPastTime}
           onClick={() => handleTimeSlotClick(date)}
         >
          {fromTime} to {toTime}
     
         </Button>
-          <div className='mt-2 text-center mx-auto'>
-            <Button
-              size='sm'
-              className='text-center mx-auto my-4 '
-              onClick={() => setModalSmall(true)}
-              key={`edit-${date.getTime()}`}
-              outline
-              color="primary"
-              block
-            >
-             +
-            </Button>
-          </div>
+        
         </>
       );
     }
@@ -421,7 +485,26 @@ const redirectToSessionLists1 = () => {
    return  null;
     
   })
+ 
+ 
 ))}
+{mentoravailable.every(availability => (
+        !availability.availableSlots.some(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
+      )) && (
+        <div className='mt-2 text-center mx-auto' key={`edit-${date.getTime()}`}>
+          <Button
+            size='sm'
+            className='text-center mx-auto my-4 '
+            onClick={() => setModalSmall(true)}
+            key={`edit-${date.getTime()}`}
+            outline
+            color="primary"
+            block
+          >
+            +
+          </Button>
+        </div>
+      )}
 
 
 
@@ -585,6 +668,21 @@ const redirectToSessionLists1 = () => {
              {generateMinuteDropdownItems()}
             </DropdownMenu>
           </Dropdown>
+          <Dropdown direction="down"
+  isOpen={dropdownBasicOpen4}
+  toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
+  className="mb-5 "
+  
+ 
+>
+<DropdownToggle caret color="secondary" outline className='ml-3'>
+{selectedfromampm !==null ? selectedfromampm : 'AM /PM' }
+<DropdownMenu className=''>
+  { generateAmPmDropdownItems ()}
+  </DropdownMenu>
+</DropdownToggle>
+      
+  </Dropdown>
        </div>
      </div>
                   </Colxx>
@@ -629,6 +727,21 @@ const redirectToSessionLists1 = () => {
              {generateMinuteDropdownItems1()}
             </DropdownMenu>
           </Dropdown>
+          <Dropdown direction="down"
+  isOpen={dropdownBasicOpen5}
+  toggle={() => setDropdownBasicOpen5(!dropdownBasicOpen5)}
+  className="mb-5 "
+  
+ 
+>
+<DropdownToggle caret color="secondary" outline className='ml-3'>
+{selectedfromampm1 !==null ? selectedfromampm1 : 'AM /PM' }
+<DropdownMenu className=''>
+  { generateAmPmDropdownItems1 ()}
+  </DropdownMenu>
+</DropdownToggle>
+      
+  </Dropdown>
        </div>
        <Button onClick={handleOkButtonClick}>OK</Button>
      </div>
@@ -655,11 +768,10 @@ const redirectToSessionLists1 = () => {
            </CardBody>
          </Card>
          <Button className='' onClick={redirectToSessionLists1}>My Sessions</Button>
+        
       {/* <PopupWizard/> */}
        </Colxx>
-       {/* <NavLink href='app/sessionmentor'>
-  <Button>sessions</Button>
-</NavLink> */}
+   
   
 
     </Row>
