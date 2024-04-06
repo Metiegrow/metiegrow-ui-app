@@ -23,6 +23,8 @@ const url1=`${baseUrl}/mentorSessionUpcomingHistory`;
 // if you want to change the url to backend uncomment the below line
 // const url1=`${baseUrl}/api/calendar/mentor/upcoming-bookedslots-session-history`;
 
+
+
 //  const deployType = 'dev'; // 'dev' or 'production'
 
 // const urls = {
@@ -39,10 +41,11 @@ const url1=`${baseUrl}/mentorSessionUpcomingHistory`;
 // };
 
 // const { baseUrl, mentorApp } = urls[deployType];
-// const getURL = () => {
-//   return `${baseUrl}/${mentorApp}`;
-// };
+// const getURL = (urlSlug) => {
+//   return urls[deployType][urlSlug]
 
+// };
+// const urlnew=`${baseUrl}` / getURL("mentorApp");
 const history = useHistory();
 
 
