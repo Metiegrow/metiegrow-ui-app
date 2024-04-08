@@ -184,7 +184,7 @@ SessionUpcomingHistroy();
             <div className='d-flex justify-content-around flex-column '>
               <div className='d-flex'>
                 <Label className='text-one mr-2'>Duration:</Label>
-                <h4 className='font-weight-bold'>{sh.duration}</h4>
+                <h4 className='font-weight-bold'>{sh.duration/60000} minutes</h4>
               </div>
 
               <div className='d-flex justify-content-between'>

@@ -351,7 +351,10 @@ const generateAmPmDropdownItems1 = () => {
         return;
       }
     }
-    handleNextButtonClick(); // Call the function to post data when moving to the next step
+    if (step.id === 'step2') {
+      handleNextButtonClick(); // Call the function to post data when moving to Step 2
+    }
+    // handleNextButtonClick(); // Call the function to post data when moving to the next step
     goToNext();
 };
 
@@ -766,6 +769,46 @@ const generateAmPmDropdownItems1 = () => {
                   </Colxx>
                   </div>
                  
+              
+                  </FormGroup>
+                  {/* no money */}
+
+                  <FormGroup className='w-100'>
+                  <div className='d-flex justify-content-between align-items-center  '>
+                  <Label  className='text-one '>Session Price</Label>
+                  <Colxx lg={5}  className=''>
+                  <h3 className=''><span className='font-weight-bold color-theme-1 '>Rs:3000 </span></h3>
+                  </Colxx>
+                  </div>
+                 
+              
+                  </FormGroup>
+                  
+                  <FormGroup className='w-100'>
+                  <div className='d-flex justify-content-between align-items-center '>
+                  <Label  className='text-one'>Your Available Balance</Label>
+                  <Colxx lg={5}>
+                  <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:2000 </span></h3>
+                  
+                  </Colxx>
+                  </div>
+              
+              
+                  </FormGroup>
+                     
+                  <FormGroup className='w-100'>
+                  <div className='d-flex justify-content-between align-items-center '>
+                  <Label  className='text-one'>Do you want to recharge ?</Label>
+                  
+                  </div>
+                  <Colxx lg={12}>
+                 <div className='d-flex '>
+                 <Button outline color="primary">Yes</Button>
+                  <Button outline color="primary" className='ml-3'>No</Button>
+                 </div>
+                
+                  </Colxx>
+              
               
                   </FormGroup>
                   

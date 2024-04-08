@@ -166,12 +166,12 @@ const MentorCreatedSlot = () => {
   useEffect(() => {
     // Set the time of currentWeekStart to 12:00 PM (noon)
     const startOfWeekTimestamp = new Date(currentWeekStart);
-    startOfWeekTimestamp.setHours(12, 0, 0, 0);
+    startOfWeekTimestamp.setHours(0, 0, 0, 0);
   
     // Set the time of endOfWeekTimestamp to 11:59 PM
     const endOfWeekTimestamp = new Date(currentWeekStart);
     endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
-    endOfWeekTimestamp.setHours(11, 59, 59, 999);
+    endOfWeekTimestamp.setHours(23, 59, 59, 999);
   
     const newUrl = `${window.location.origin}${window.location.pathname}?&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
     window.history.replaceState(null, '', newUrl);
@@ -360,7 +360,10 @@ const MentorCreatedSlot = () => {
     
   };
 
- 
+  const handleAddSlotClick = (date) => {
+    setSelectedDate(date); // Set the selected date
+    setModalSmall(true); // Show the modal
+  };
  
  
 
@@ -469,15 +472,29 @@ const MentorCreatedSlot = () => {
                style={{display:'block'}}>{fromTime} to {toTime}
                <i className='iconsminds-close font-weight-bold ml-3  '  /></span>
           </Button> */}
-          <Button  key={date.getTime()}  color='primary' block
+          {/* <Button  key={date.getTime()}  color='primary' block
           className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} m-2`}
           disabled={isPastTime}
           onClick={() => handleTimeSlotClick(date)}
         >
          {fromTime} to {toTime}
     
-        </Button>
-        
+        </Button> */}
+        <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2`}
+      style={{ outline: 'none', cursor:"pointer"}} // Remove default focus outline if needed
+      onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime}<i className='simple-icon-close ml-4'/></span> 
+    </div>
         </>
       );
     }
@@ -495,7 +512,7 @@ const MentorCreatedSlot = () => {
           <Button
             size='sm'
             className='text-center mx-auto my-4 '
-            onClick={() => setModalSmall(true)}
+            onClick={()=>handleAddSlotClick(date)}
             key={`edit-${date.getTime()}`}
             outline
             color="primary"
@@ -540,12 +557,31 @@ const MentorCreatedSlot = () => {
           >
           <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
           </Button> */}
-          <div
+
+          {/* <div
       key={date.getTime()}
       role="button" // Add role attribute for accessibility
       tabIndex={0}   // Add tabIndex for keyboard accessibility
-      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2`}
-      style={{ outline: 'none' }} // Remove default focus outline if needed
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 mt-2`}
+      style={{ outline: `1px solid black`,cursor:"pointer" }} // Remove default focus outline if needed
+      onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+      onMouseEnter={(e) => { e.currentTarget.classList.add('bg-primary'); }}
+  onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }} 
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
+    </div> */}
+
+    <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2 mt-2`}
+      style={{ outline: 'none', cursor:"pointer"}} // Remove default focus outline if needed
       onClick={() => handleTimeSlotClick(date)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -553,8 +589,10 @@ const MentorCreatedSlot = () => {
         }
       }}
     >
-      <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
+      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime}<i className='iconsminds-full-view-2 ml-4'/></span> 
     </div>
+    
+
          
         </>
       );
@@ -586,9 +624,9 @@ const MentorCreatedSlot = () => {
 
                </tbody>
              </Table>
-          <div className=''>
+          {/* <div className=''>
           <Button outline color="primary "  className=''>Save</Button>
-          </div>
+          </div> */}
          
              <div className="mb-4">
            <div>
