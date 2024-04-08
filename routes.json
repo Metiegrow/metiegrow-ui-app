@@ -2,7 +2,7 @@
 
     "/api/signUp": "/signUp",
     "/api/authenticate":"/signIn",
-    "/mentor/cards":"/mentorDetails",
+    "/api/mentor":"/mentorDetails",
     "/user/cards":"/userCard",
     "/lawyer/profile":"/lawyerProfile",
     "/user/reviews":"/lawyerReviews",

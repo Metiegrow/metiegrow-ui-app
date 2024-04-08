@@ -966,7 +966,7 @@
         {
           "menteeId": 1,
           "name": "sivanesh",
-          "duration": "03:00",
+          "duration": "3600000",
           "mode": "video",
           "fromTimeStamp": 1712466000000,
           "toTimeStamp": 1712469600000
@@ -992,6 +992,16 @@
   },
   "sessionUpcomingHistroy": {
     "data": {
+      "history": [
+        {
+          "menteeId": 1,
+          "name": "srihith",
+          "duration": "3600000",
+          "mode": "video",
+          "fromTimeStamp": 1712466000000,
+          "toTimeStamp": 1712469600000
+        }
+      ],
       "upcomingSessions": [
         {
           "mentorId": "1",

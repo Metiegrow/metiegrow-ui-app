@@ -13,7 +13,8 @@ import MentorDropDown from './MentorDropDown';
 
 
 const MentorCard = () => {
-  const url1=`${baseUrl}/mentorDetails`
+  // const url1=`${baseUrl}/mentorDetails`
+  const url1=`${baseUrl}/api/mentor`
   // To change to backend api url uncomment the below line
   // const url1=`${baseUrl}/api/mentor`
 

@@ -81,6 +81,13 @@ const MentorProfile = () => {
   }, [showAll]);
 
   const remainingSkillsCount = mentorprofiledetails1.skills ?  mentorprofiledetails1.skills.length - 3 : 0;
+  const handleLinkedInClick = () => {
+    // Assuming mentorprofiledetails1 contains the LinkedIn URL of the mentor
+    const linkedInUrl = mentorprofiledetails1.linkedinUrl;
+
+    // Open the mentor's LinkedIn profile in a new tab/window
+    window.open(linkedInUrl, '_blank');
+  };
 
   return (
     <div  className='mentor-profile'>
@@ -102,8 +109,8 @@ const MentorProfile = () => {
           <div className=' '>
             {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
-             <img src={mentorprofiledetails1.image} className=' col-2 mx-2 w-60
-             rounded-circle img-thumbnail border    ' alt=""  />
+             <img src={mentorprofiledetails1.image} className=' col-2 mx-2 w-60 rounded-circle
+              img-thumbnail border    ' alt="" />
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
                 <span className='font-weight-semibold text-one'><i className='iconsminds-thunder text-primary'/>{mentorprofiledetails1.achievement}</span>
               </Button>
@@ -117,12 +124,12 @@ const MentorProfile = () => {
               </NavLink>
             </div> */}
             <div>
-              <NavLink>
-              <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
+             
+              <Button color="light" className=" font-weight-semibold mx-2 " size='large' onClick={handleLinkedInClick}>
              
                 <i className='simple-icon-social-linkedin text-primary font-weight-semibold text-one  '/>
               </Button>
-              </NavLink>
+
             </div>
           </div>
           <div className='col-5 mt-4'>
