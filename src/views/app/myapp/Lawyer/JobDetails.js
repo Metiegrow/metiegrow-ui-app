@@ -1,9 +1,12 @@
 import { Colxx } from 'components/common/CustomBootstrap';
 import DropzoneExample from 'containers/forms/DropzoneExample';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { baseUrl } from 'constants/defaultValues';
 import { Card,CardBody, Col,  Form, FormGroup, Label, Row } from 'reactstrap';
 import Select from 'react-select';
 import CustomSelectInput from 'components/common/CustomSelectInput';
+import axios from 'axios';
+import {useParams} from "react-router-dom";
 
 const selectData = [
   { label: 'Yet to start', value: 'yet to start', key: 0 },
@@ -13,6 +16,26 @@ const selectData = [
 
 const JobDetails = () => {
   const [selectedOption, setSelectedOption] = useState('');
+  const [jobdetails,setJobDetails]=useState('');
+  const {jid}=useParams();
+  const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
+
+
+    useEffect(()=>{
+        const LawyerJobsDetails=async()=>{
+            try {
+                const response = await axios.get(url);
+                setJobDetails(response.data);
+                console.log("checking response",response.data);
+                
+              } catch (error) {
+                console.error('Error fetching data:', error);
+              }
+        }
+        LawyerJobsDetails();
+       
+    
+    },[url])
   return (
     <div>
       <h1>Job Name</h1>
@@ -22,12 +45,13 @@ const JobDetails = () => {
         <CardBody>
         <div className='d-flex align-items-center'>
           <div> 
-          <h1>1</h1>
+          <h1>{jobdetails.stepNumber}</h1>
+         
           </div>
           <div className='ml-3'>
-          <h3>Name</h3>
-            <h6>Description</h6>
-            <h6>Done by <strong>Lawyer</strong></h6>
+          <h3>{jobdetails.stepName}</h3>
+            <h6>{jobdetails.description}</h6>
+            <h6>Done by <strong>{jobdetails.doneBy}</strong></h6>
           </div>
         </div>
         
@@ -35,6 +59,24 @@ const JobDetails = () => {
         </CardBody>
       </Card>
       </Colxx>
+      {/* <Colxx lg={4}>
+          {jobdetails&&jobdetails.map(job => (
+            <Card key={job.jobId} className='mb-2'>
+              <CardBody>
+                <div className='d-flex align-items-center my-2'>
+                  <div> 
+                    <h1>{job.stepNumber}</h1>
+                  </div>
+                  <div className='ml-5'>
+                    <h3>{job.jobName}</h3>
+                    <h6>{job.description}</h6>
+                    <h6>Done by <strong>{job.doneBy}</strong></h6>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          ))}
+        </Colxx> */}
       <Colxx>
       <Card>
       <CardBody>
@@ -77,18 +119,7 @@ const JobDetails = () => {
         <Col>
         <DropzoneExample/>
         <div className='mt-4'>
-          {/* <CustomInput
-            type="radio"
-            id="exCustomRadio"
-            name="customRadio"
-            label="PAN Card"
-          />
-          <CustomInput
-            type="radio"
-            id="exCustomRadio2"
-            name="customRadio"
-            label="Appointment"
-          /> */}
+         
            <h5>PAN Card<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
            <h5>Appointment<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
         </div>

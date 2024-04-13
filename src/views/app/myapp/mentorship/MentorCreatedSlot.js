@@ -331,7 +331,8 @@ const MentorCreatedSlot = () => {
     return weekDates;
   };
  
- 
+  
+
   const isPreviousWeekDisabled = () => {
     // Disable the button if you're already in the current week
     const today = new Date();
@@ -433,6 +434,7 @@ const MentorCreatedSlot = () => {
   <tr key={date.getTime()} >
     {/* <td>{getMonthName(date.getMonth())} {formatDate(date)}</td> */}
     <td > {formatDate(date)}</td>
+   
     <td>
      
  {/*  new one */}
@@ -480,7 +482,7 @@ const MentorCreatedSlot = () => {
          {fromTime} to {toTime}
     
         </Button> */}
-        <div
+        {/* <div
       key={date.getTime()}
       role="button" // Add role attribute for accessibility
       tabIndex={0}   // Add tabIndex for keyboard accessibility
@@ -494,6 +496,24 @@ const MentorCreatedSlot = () => {
       }}
     >
       <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime}<i className='simple-icon-close ml-4'/></span> 
+    </div> */}
+    
+          <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 mt-2`}
+      style={{ outline: `1px solid black`,cursor:"pointer" }} // Remove default focus outline if needed
+      onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+      onMouseEnter={(e) => { e.currentTarget.classList.add('bg-primary'); }}
+  onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }} 
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime} <i className='simple-icon-close ml-4'/></span> 
     </div>
         </>
       );
@@ -507,7 +527,7 @@ const MentorCreatedSlot = () => {
 ))}
 {mentoravailable.every(availability => (
         !availability.availableSlots.some(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
-      )) && (
+      ))  &&(
         <div className='mt-2 text-center mx-auto' key={`edit-${date.getTime()}`}>
           <Button
             size='sm'
