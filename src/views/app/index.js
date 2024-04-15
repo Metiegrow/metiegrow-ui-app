@@ -133,7 +133,7 @@ const ViewMyListing = React.lazy(() =>
 );
 const ViewVideoCall = React.lazy(() =>
   import(
-    /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCall'
+    /* webpackChunkName: "views-app" */ './myapp/VideoCall/RTCVideoCall/VideoCall'
   )
 );
 // const ViewJobPosting = React.lazy(() =>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Row,
@@ -9,7 +9,7 @@ import {
   CardTitle,
   Col,
 } from "reactstrap";
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Colxx } from "components/common/CustomBootstrap";
 import ReactQuill from "react-quill";
 import Rating from "components/common/Rating";
@@ -23,32 +23,56 @@ const VideoCallCompletedPage = () => {
   const [rating, setRating] = useState(0);
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [name, setName] = useState("Raj");
+  const [fromTime, setFromTime] = useState("");
+  const [toTime, setToTime] = useState("");
+  const [mode, setMode] = useState("");
+  const getUrl = `${baseUrl}/api/calldetails`;
   const history = useHistory();
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const name = searchParams.get("name");
-  const fromtime = searchParams.get("fromtime");
-  const totime = searchParams.get("totime");
-  const mode = searchParams.get("mode");
-  //   const dateString = "Thu Feb 21 56222 17:30:00 GMT 0530 (India Standard Time)";
-  const dateParts = fromtime.split(" ");
-  const timeParts = dateParts[4].split(":");
-  const hours = timeParts[0];
-  const minutes = timeParts[1];
-  const seconds = timeParts[2];
+  useEffect(() => {
+    const callEndDetails = async () => {
+      try {
+        const response = await axios.get(getUrl);
+        const reviewData = response.data;
+        console.log("review data:", reviewData);
+        if (reviewData) {
+          setName(reviewData.name);
+          setFromTime(reviewData.fromTime);
+          setToTime(reviewData.toTime);
+          setMode(reviewData.mode);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  const extractedFromTime = `${hours}:${minutes}:${seconds}`;
-  console.log(extractedFromTime);
-  const dateParts2 = totime.split(" ");
-  const timeParts2 = dateParts2[4].split(":");
-  const hours2 = timeParts2[0];
-  const minutes2 = timeParts2[1];
-  const seconds2 = timeParts2[2];
+    callEndDetails();
+  }, []);
 
-  const extractedToTime = `${hours2}:${minutes2}:${seconds2}`;
-  console.log(extractedToTime);
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const name = searchParams.get("name");
+  // const fromeTime = searchParams.get("fromeTime");
+  // const totime = searchParams.get("totime");
+  // const mode = searchParams.get("mode");
+  // //   const dateString = "Thu Feb 21 56222 17:30:00 GMT 0530 (India Standard Time)";
+  // const dateParts = fromeTime.split(" ");
+  // const timeParts = dateParts[4].split(":");
+  // const hours = timeParts[0];
+  // const minutes = timeParts[1];
+  // const seconds = timeParts[2];
+
+  // const extractedfromeTime = `${hours}:${minutes}:${seconds}`;
+  // console.log(extractedfromeTime);
+  // const dateParts2 = totime.split(" ");
+  // const timeParts2 = dateParts2[4].split(":");
+  // const hours2 = timeParts2[0];
+  // const minutes2 = timeParts2[1];
+  // const seconds2 = timeParts2[2];
+
+  // const extractedToTime = `${hours2}:${minutes2}:${seconds2}`;
+  // console.log(extractedToTime);
 
   const revieweeId = 2;
   const url = `${baseUrl}/api/rating`;
@@ -60,7 +84,7 @@ const VideoCallCompletedPage = () => {
   };
 
   const handleSubmit = () => {
-        setSubmissionStatus("success"); 
+    setSubmissionStatus("success");
     setIsLoading(true);
     axios
       .post(url, {
@@ -86,6 +110,20 @@ const VideoCallCompletedPage = () => {
     history.push("/app/profile");
   };
 
+  const FromDate = new Date(parseInt(fromTime, 10));
+  const ToDate = new Date(parseInt(toTime, 10));
+
+  const fromHours = FromDate.getHours() % 12 || 12;
+  const fromMinutes = String(FromDate.getMinutes()).padStart(2, "0");
+  const fromPeriod = FromDate.getHours() < 12 ? "AM" : "PM";
+
+  const toHours = ToDate.getHours() % 12 || 12;
+  const toMinutes = String(ToDate.getMinutes()).padStart(2, "0");
+  const toPeriod = ToDate.getHours() < 12 ? "AM" : "PM";
+
+  const fromTime1 = `${fromHours}:${fromMinutes} ${fromPeriod}`;
+  const toTime1 = `${toHours}:${toMinutes} ${toPeriod}`;
+
   return (
     <>
       <Row>
@@ -106,10 +144,10 @@ const VideoCallCompletedPage = () => {
                   {/* <h4 className=''>Duration: {up.duration}</h4> */}
                   <Row className="mt-2">
                     <Col>
-                      <h4 className="mr-2">Start time: {extractedFromTime}</h4>
+                      <h4 className="mr-2">Start time: {fromTime1}</h4>
                     </Col>
                     <Col>
-                      <h4>End time: {extractedToTime}</h4>
+                      <h4>End time: {toTime1}</h4>
                     </Col>
                     <Col>
                       <h4>Mode: {mode}</h4>

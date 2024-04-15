@@ -96,6 +96,19 @@ const TopNav = ({
     document.removeEventListener("click", handleDocumentClickSearch, true);
   };
 
+  function getRoleRes() {
+    return localStorage.getItem('roleRes');
+  }
+
+  const roleRes = getRoleRes();
+          
+let session;  
+if (roleRes.includes("MENTOR")) {
+  session = `${adminRoot}/sessionmentor`;
+}else {
+  session = `${adminRoot}/sessionlists`; 
+}
+
   const handleMyProfileClick = () => {
     history.push(`${adminRoot}/myprofile`);
   };
@@ -109,7 +122,7 @@ const TopNav = ({
     history.push(`${adminRoot}/myactivities`);
   };
   const handleMySessionsClick = () => {
-    history.push(`${adminRoot}/sessionlists`);
+    history.push(session);
   };
   
 
@@ -247,7 +260,7 @@ const TopNav = ({
                 <i className="simple-icon-question" />  My Activities
                 </DropdownItem>
               </NavLink>
-              <NavLink to={`${adminRoot}/sessionlists`}>
+              <NavLink to={session}>
                 <DropdownItem onClick={() => handleMySessionsClick()}>
                 <i className="simple-icon-list" />  Sessions
                 </DropdownItem>
