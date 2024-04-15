@@ -62,6 +62,7 @@ SessionHistroy();
 SessionUpcomingHistroy();
 },[])
 
+
   return (
     <div>
    
@@ -146,9 +147,9 @@ SessionUpcomingHistroy();
        <div className=''>
   {upcomingsession.upcomingSessions && upcomingsession.upcomingSessions.length > 0 ? (
     upcomingsession.upcomingSessions.map((up) => {
-      const date = new Date(up.fromtimestamp);
-      const fromtime = new Date(up.fromtimestamp);
-      const totime = new Date(up.totimestamp);
+      const date = new Date(up.fromTimeStamp);
+      const fromtime = new Date(up.fromTimeStamp);
+      const totime = new Date(up.fromTimeStamp);
       const updateformat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       const timeOptions = { hour: '2-digit', minute: '2-digit' };
 
@@ -249,11 +250,17 @@ SessionUpcomingHistroy();
           <div>
   {session.history && session.history.length > 0 ? (
     session.history.map((sh) => {
-      const date = new Date(sh.fromtimestamp);
-      const fromtime = new Date(sh.fromtimestamp);
-      const totime = new Date(sh.totimestamp);
+      const date = new Date(sh.fromTimeStamp);
+      const fromtime = new Date(sh.fromTimeStamp);
+      const totime = new Date(sh.toTimeStamp);
       const timeOptions = { hour: '2-digit', minute: '2-digit' };
       const shdateformat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+       
+       
+       
+           // Calculate duration in minutes
+     /* const durationInMs = totime.getTime() - fromtime.getTime(); */
+    /* const durationInMinutes = Math.floor(durationInMs / (1000 * 60));  */
 
       return (
         <Card className='my-2' key={sh.mentorId}>
@@ -272,7 +279,8 @@ SessionUpcomingHistroy();
             <div className='d-flex justify-content-around flex-column '>
               <div className='d-flex'>
                 <Label className='text-one mr-2'>Duration:</Label>
-                <h4 className='font-weight-bold'>{sh.duration}</h4>
+                <h4 className='font-weight-bold'>{sh.duration/60000} minutes</h4>
+                {/* <h4 className='font-weight-bold'>{durationInMinutes}</h4> */}
               </div>
 
               <div className='d-flex justify-content-between'>

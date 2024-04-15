@@ -635,7 +635,22 @@
       "id": 14,
       "fromTimeStamp": 1712662200000,
       "toTimeStamp": 1712665800000
+    },
+    {
+      "id": 15,
+      "fromTimeStamp": 1713223800000,
+      "toTimeStamp": 1713227400000
     }
+  ],
+  "licenseDetails":[
+  
+    {
+      "sessionPrice": 125,
+      "availableBalance": 125,
+      "balance":true
+  }
+  
+  
   ],
   "userCard": [
     {
@@ -752,7 +767,7 @@
       "reviewMsg": "Great service as usual"
     }
   ],
-  "lwayerJobList": [
+  "lawyerJobList": [
     {
       "jobId": "100",
       "jobName": "job 1"
@@ -776,7 +791,7 @@
   ],
   "lawyerJobsDetails": [
     {
-      "jobId": "100",
+      "id": "100",
       "jobName": "job 1",
       "doneBy": "Lawyer",
       "description": "lawyer description",
@@ -789,8 +804,9 @@
       "stepNumber": 1,
       "stepName": "verification"
     },
+    
     {
-      "jobId": "101",
+      "id": "101",
       "jobName": "job 2",
       "doneBy": "Lawyer",
       "description": "lawyer description",
@@ -966,7 +982,7 @@
         {
           "menteeId": 1,
           "name": "sivanesh",
-          "duration": "03:00",
+          "duration": "3600000",
           "mode": "video",
           "fromTimeStamp": 1712466000000,
           "toTimeStamp": 1712469600000
@@ -992,13 +1008,23 @@
   },
   "sessionUpcomingHistroy": {
     "data": {
+      "history": [
+        {
+          "mentorId": 1,
+          "name": "srihith ks",
+          "duration": "3600000",
+          "mode": "video",
+          "fromTimeStamp": 1712466000000,
+          "toTimeStamp": 1712469600000
+        }
+      ],
       "upcomingSessions": [
         {
-          "mentorId": "1",
+          "mentorId": 1,
           "name": "srihith ks",
           "mode": "Video",
-          "fromtimestamp": 1712853000000,
-          "totimestamp": 1712856600000
+          "fromTimeStamp": 1712853000000,
+          "toTimeStamp": 1712856600000
         }
       ]
     }

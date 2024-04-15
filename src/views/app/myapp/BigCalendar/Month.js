@@ -11,6 +11,7 @@ const Month = () => {
   
   const url=`${baseUrl}/mentorAvailablity`
 
+
   // if you change the url to backend uncomment the below line
   // const url=`${baseUrl}/api/calendar/appointment/mentee`
 
@@ -22,6 +23,7 @@ const Month = () => {
   const mentorId = searchParams.get('mentorId');
 
   const [selectedDate, setSelectedDate] = useState(null); 
+  const [hasAvailableSlots,setHasAvailableSlots] = useState(true);
 
   // Function to get the start date of the current week
   const getStartOfWeek = () => {
@@ -52,7 +54,6 @@ const fetchMentorAvailability = async (fromTime, toTime) => {
     console.error('Error fetching data:', error);
   }
 };
-
 
 
 // useEffect(() => {
@@ -106,6 +107,7 @@ useEffect(() => {
 
   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
   window.history.replaceState(null, '', newUrl);
+  
 
   if (mentorId) {
     fetchMentorAvailability(startOfWeekTimestamp.getTime(), endOfWeekTimestamp.getTime());
@@ -166,7 +168,8 @@ useEffect(() => {
 const goToNextWeek = () => {
   const newStartDate = new Date(currentWeekStart);
   newStartDate.setDate(newStartDate.getDate() + 7);
-  setCurrentWeekStart(newStartDate);
+
+  // setCurrentWeekStart(newStartDate);
 
   // Calculate the start of the next week
   const nextWeekStart = new Date(newStartDate);
@@ -176,16 +179,26 @@ const goToNextWeek = () => {
   const nextWeekEnd = new Date(nextWeekStart);
   nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
 
-  // const fromTime = nextWeekStart.getTime(); // Timestamp of the start of the next week
-  // const toTime = nextWeekEnd.getTime(); // Timestamp of the end of the next week
+  const hasAvailable = mentoravailable.some(avail => {
+    const availDate = new Date(avail.fromTimeStamp);
+    return availDate >= nextWeekStart && availDate <= nextWeekEnd;
+  });
+  console.log('Has Available Slots:', hasAvailable);
+  if (!hasAvailable) {
+    // Optionally display a message to inform the user
+    setHasAvailableSlots(false);
+    console.log("No available slots for the next week");
+    return; // Exit the function without updating state if no slots available
+  }
 
-  // // Update the URL with the new timestamps
-  // const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${fromTime}&toTime=${toTime}`;
-  // window.history.replaceState(null, '', newUrl);
+  // Update the state and fetch availability for the next week
+  setCurrentWeekStart(newStartDate);
 
-  // // Fetch mentor availability for the next week
-  // fetchMentorAvailability(fromTime, toTime);
+
 };
+
+
+
 
   
 
@@ -275,7 +288,7 @@ const goToNextWeek = () => {
       </h4>
        
       </div>
-      <span className='ml-2 font-weight-semibold text-xlarge' role="button" tabIndex={0} 
+      {/* <span className='ml-2 font-weight-semibold text-xlarge' role="button" tabIndex={0} 
        style={{cursor:"pointer"}}
       onClick={goToNextWeek}
       onKeyDown={(e) => {
@@ -285,7 +298,32 @@ const goToNextWeek = () => {
   }}
 >
 <i className='simple-icon-arrow-right' />
-</span>
+</span> */}
+{hasAvailableSlots && (
+  <span
+    className='ml-2 font-weight-semibold text-xlarge'
+    role="button"
+    tabIndex={0}
+    style={{ cursor: "pointer" }}
+    onClick={goToNextWeek}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        goToNextWeek();
+      }
+    }}
+  >
+    <i className='simple-icon-arrow-right' />
+  </span>
+)}
+
+{!hasAvailableSlots && (
+  <span
+    className='ml-2 font-weight-semibold text-xlarge disabled'
+    style={{ cursor: "not-allowed", color: "gray" }}
+  >
+    <i className='simple-icon-arrow-right' />
+  </span>
+)}
      {/* <Button className='ml-5 font-weight-semibold text-one' color="primary" onClick={goToNextWeek} ><i className='simple-icon-arrow-right '/></Button> */}
    </div>
          <Card className="mb-4 mt-4">
@@ -334,7 +372,7 @@ const goToNextWeek = () => {
 
         return (
         <Button  key={date.getTime()}  color='primary' block
-          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} my-2`}
           disabled={isPastTime}
           onClick={() => handleTimeSlotClick(date)}
         >

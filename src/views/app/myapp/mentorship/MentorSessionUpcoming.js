@@ -23,6 +23,8 @@ const url1=`${baseUrl}/mentorSessionUpcomingHistory`;
 // if you want to change the url to backend uncomment the below line
 // const url1=`${baseUrl}/api/calendar/mentor/upcoming-bookedslots-session-history`;
 
+
+
 //  const deployType = 'dev'; // 'dev' or 'production'
 
 // const urls = {
@@ -39,10 +41,11 @@ const url1=`${baseUrl}/mentorSessionUpcomingHistory`;
 // };
 
 // const { baseUrl, mentorApp } = urls[deployType];
-// const getURL = () => {
-//   return `${baseUrl}/${mentorApp}`;
-// };
+// const getURL = (urlSlug) => {
+//   return urls[deployType][urlSlug]
 
+// };
+// const urlnew=`${baseUrl}` / getURL("mentorApp");
 const history = useHistory();
 
 const handleJoinCall = (id, name, mode, fromtime, totime) => {
@@ -181,7 +184,7 @@ SessionUpcomingHistroy();
             <div className='d-flex justify-content-around flex-column '>
               <div className='d-flex'>
                 <Label className='text-one mr-2'>Duration:</Label>
-                <h4 className='font-weight-bold'>{sh.duration}</h4>
+                <h4 className='font-weight-bold'>{sh.duration/60000} minutes</h4>
               </div>
 
               <div className='d-flex justify-content-between'>

@@ -34,10 +34,10 @@ const MentorCreatedSlot = () => {
   // const mentorName = searchParams.get('mentorName');
   const mentorId = searchParams.get('mentorId');
   const history = useHistory();  
-const redirectToSessionLists1 = () => {
-  // Redirect to the specified URL with the query parameter
-  history.push('/app/sessionmentor');
-};
+// const redirectToSessionLists1 = () => {
+//   // Redirect to the specified URL with the query parameter
+//   history.push('/app/sessionmentor');
+// };
 
   const [selectedDate, setSelectedDate] = useState(null); 
   // const [selectedDate, setSelectedDate] = useState(''); 
@@ -46,18 +46,57 @@ const redirectToSessionLists1 = () => {
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
+  const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
+  const [dropdownBasicOpen5, setDropdownBasicOpen5] = useState(false);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
    const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
   //  const [upcomingSessions] = useState([]); 
   const [minutedrop,setMinutedrop]=useState(null)
   const [minutedrop1,setMinutedrop1]=useState(null)
   const [modalSmall, setModalSmall] = useState(false);
-  // const redirectToSessionLists1 = () => {
-  //   // Redirect to the specified URL with the query parameter
-  //   history.push('/app/sessionmentor');
-  // };
+  const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
+  const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
+
+  const redirectToSessionLists1 = () => {
+    // Redirect to the specified URL with the query parameter
+    history.push('/app/sessionmentor');
+  };
 
   
+  // const handleOkButtonClick = async () => {
+  //   // Ensure selectedDate is not null
+  //   if (!selectedDate) {
+  //     console.error('Selected date is null');
+  //     return;
+  //   }
+  
+  //   // Get the selected date in milliseconds
+  //   const selectedDateMillis = selectedDate.getTime();
+  
+  //   // Store the selected timestamps
+  //   const fromTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown, minutedrop, 0, 0);
+  //   const toTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown1, minutedrop1, 0, 0);
+    
+  //   // Create an object with the required structure and assign id=1
+  //   const slot = {
+      
+  //     fromTimeStamp,
+  //     toTimeStamp
+  //   };
+  
+  //   // Make the POST request
+  //   try {
+  //     const response = await axios.post(url, [slot]);
+  //     // Handle success response
+  //     console.log('Data saved successfully:', response.data);
+  //   } catch (error) {
+  //     // Handle error
+  //     console.error('Error saving data:', error);
+  //   }
+    
+  //   // Optionally, close the modal
+  //   setModalSmall(false);
+  // };
   const handleOkButtonClick = async () => {
     // Ensure selectedDate is not null
     if (!selectedDate) {
@@ -65,16 +104,22 @@ const redirectToSessionLists1 = () => {
       return;
     }
   
-    // Get the selected date in milliseconds
-    const selectedDateMillis = selectedDate.getTime();
+    // Convert selected date to UTC timestamp
+    const selectedDateTime = new Date(selectedDate);
   
-    // Store the selected timestamps
-    const fromTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown, minutedrop, 0, 0);
-    const toTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown1, minutedrop1, 0, 0);
-    
-    // Create an object with the required structure and assign id=1
+    // Set the hours and minutes for the selected date
+    const selectedHourFrom = selectedHourDropdown % 12 + (selectedfromampm === 'PM' ? 12 : 0); // Adjust for PM
+    selectedDateTime.setHours(selectedHourFrom, minutedrop, 0, 0);
+    const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
+  
+    // Calculate 'to' time
+    const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
+    const selectedHourTo = selectedHourDropdown1 % 12 + (selectedfromampm1 === 'PM' ? 12 : 0); // Adjust for PM
+    toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0); // Set the 'to' hour
+    const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
+  
+    // Create an object with the required structure
     const slot = {
-      
       fromTimeStamp,
       toTimeStamp
     };
@@ -88,10 +133,13 @@ const redirectToSessionLists1 = () => {
       // Handle error
       console.error('Error saving data:', error);
     }
-    
+  
     // Optionally, close the modal
     setModalSmall(false);
   };
+  
+  
+  
   
   
 
@@ -118,12 +166,12 @@ const redirectToSessionLists1 = () => {
   useEffect(() => {
     // Set the time of currentWeekStart to 12:00 PM (noon)
     const startOfWeekTimestamp = new Date(currentWeekStart);
-    startOfWeekTimestamp.setHours(12, 0, 0, 0);
+    startOfWeekTimestamp.setHours(0, 0, 0, 0);
   
     // Set the time of endOfWeekTimestamp to 11:59 PM
     const endOfWeekTimestamp = new Date(currentWeekStart);
     endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
-    endOfWeekTimestamp.setHours(11, 59, 59, 999);
+    endOfWeekTimestamp.setHours(23, 59, 59, 999);
   
     const newUrl = `${window.location.origin}${window.location.pathname}?&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
     window.history.replaceState(null, '', newUrl);
@@ -165,6 +213,18 @@ const redirectToSessionLists1 = () => {
     // Handle the selected minutes as needed
     setMinutedrop1(selectedMinute);
     console.log(`Selected minute: ${selectedMinute}`);
+    // setMinuteDrop(selectedMinute); 
+  };
+  const handleDropdownItemClick4 = (selectedAmPmFrom) => {
+    // Handle the selected minutes as needed
+    setSelectedFromAmPm(selectedAmPmFrom);
+    console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
+    // setMinuteDrop(selectedMinute); 
+  };
+  const handleDropdownItemClick5 = (selectedAmPmTo) => {
+    // Handle the selected minutes as needed
+    setSelectedFromAmPm1(selectedAmPmTo);
+    console.log(`Selected from AM/PM: ${selectedAmPmTo}`);
     // setMinuteDrop(selectedMinute); 
   };
   const generateDropdownItems = () => {
@@ -218,6 +278,22 @@ const redirectToSessionLists1 = () => {
     });
     return items;
   };
+  const generateAmPmDropdownItems = () => {
+    const amPmOptions = ['AM', 'PM'];
+    return amPmOptions.map((amPm) => (
+      <DropdownItem key={amPm} onClick={() => handleDropdownItemClick4(amPm)}>
+        {amPm}
+      </DropdownItem>
+    ));
+  };
+  const generateAmPmDropdownItems1 = () => {
+    const amPmOptions = ['AM', 'PM'];
+    return amPmOptions.map((amPm) => (
+      <DropdownItem key={amPm} onClick={() => handleDropdownItemClick5(amPm)}>
+        {amPm}
+      </DropdownItem>
+    ));
+  };
  
  
  
@@ -255,7 +331,8 @@ const redirectToSessionLists1 = () => {
     return weekDates;
   };
  
- 
+  
+
   const isPreviousWeekDisabled = () => {
     // Disable the button if you're already in the current week
     const today = new Date();
@@ -284,7 +361,10 @@ const redirectToSessionLists1 = () => {
     
   };
 
- 
+  const handleAddSlotClick = (date) => {
+    setSelectedDate(date); // Set the selected date
+    setModalSmall(true); // Show the modal
+  };
  
  
 
@@ -354,6 +434,7 @@ const redirectToSessionLists1 = () => {
   <tr key={date.getTime()} >
     {/* <td>{getMonthName(date.getMonth())} {formatDate(date)}</td> */}
     <td > {formatDate(date)}</td>
+   
     <td>
      
  {/*  new one */}
@@ -393,27 +474,47 @@ const redirectToSessionLists1 = () => {
                style={{display:'block'}}>{fromTime} to {toTime}
                <i className='iconsminds-close font-weight-bold ml-3  '  /></span>
           </Button> */}
-          <Button  key={date.getTime()}  color='primary' block
-          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          {/* <Button  key={date.getTime()}  color='primary' block
+          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} m-2`}
           disabled={isPastTime}
           onClick={() => handleTimeSlotClick(date)}
         >
          {fromTime} to {toTime}
     
-        </Button>
-          <div className='mt-2 text-center mx-auto'>
-            <Button
-              size='sm'
-              className='text-center mx-auto my-4 '
-              onClick={() => setModalSmall(true)}
-              key={`edit-${date.getTime()}`}
-              outline
-              color="primary"
-              block
-            >
-             +
-            </Button>
-          </div>
+        </Button> */}
+        {/* <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2`}
+      style={{ outline: 'none', cursor:"pointer"}} // Remove default focus outline if needed
+      onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime}<i className='simple-icon-close ml-4'/></span> 
+    </div> */}
+    
+          <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 mt-2`}
+      style={{ outline: `1px solid black`,cursor:"pointer" }} // Remove default focus outline if needed
+      onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+      onMouseEnter={(e) => { e.currentTarget.classList.add('bg-primary'); }}
+  onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }} 
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime} <i className='simple-icon-close ml-4'/></span> 
+    </div>
         </>
       );
     }
@@ -421,7 +522,26 @@ const redirectToSessionLists1 = () => {
    return  null;
     
   })
+ 
+ 
 ))}
+{mentoravailable.every(availability => (
+        !availability.availableSlots.some(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
+      ))  &&(
+        <div className='mt-2 text-center mx-auto' key={`edit-${date.getTime()}`}>
+          <Button
+            size='sm'
+            className='text-center mx-auto my-4 '
+            onClick={()=>handleAddSlotClick(date)}
+            key={`edit-${date.getTime()}`}
+            outline
+            color="primary"
+            block
+          >
+            +
+          </Button>
+        </div>
+      )}
 
 
 
@@ -457,12 +577,31 @@ const redirectToSessionLists1 = () => {
           >
           <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
           </Button> */}
-          <div
+
+          {/* <div
       key={date.getTime()}
       role="button" // Add role attribute for accessibility
       tabIndex={0}   // Add tabIndex for keyboard accessibility
-      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2`}
-      style={{ outline: 'none' }} // Remove default focus outline if needed
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 mt-2`}
+      style={{ outline: `1px solid black`,cursor:"pointer" }} // Remove default focus outline if needed
+      onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+      onMouseEnter={(e) => { e.currentTarget.classList.add('bg-primary'); }}
+  onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }} 
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
+    </div> */}
+
+    <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2 mt-2`}
+      style={{ outline: 'none', cursor:"pointer"}} // Remove default focus outline if needed
       onClick={() => handleTimeSlotClick(date)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -470,8 +609,10 @@ const redirectToSessionLists1 = () => {
         }
       }}
     >
-      <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
+      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime}<i className='iconsminds-full-view-2 ml-4'/></span> 
     </div>
+    
+
          
         </>
       );
@@ -503,9 +644,9 @@ const redirectToSessionLists1 = () => {
 
                </tbody>
              </Table>
-          <div className=''>
+          {/* <div className=''>
           <Button outline color="primary "  className=''>Save</Button>
-          </div>
+          </div> */}
          
              <div className="mb-4">
            <div>
@@ -585,6 +726,21 @@ const redirectToSessionLists1 = () => {
              {generateMinuteDropdownItems()}
             </DropdownMenu>
           </Dropdown>
+          <Dropdown direction="down"
+  isOpen={dropdownBasicOpen4}
+  toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
+  className="mb-5 "
+  
+ 
+>
+<DropdownToggle caret color="secondary" outline className='ml-3'>
+{selectedfromampm !==null ? selectedfromampm : 'AM /PM' }
+<DropdownMenu className=''>
+  { generateAmPmDropdownItems ()}
+  </DropdownMenu>
+</DropdownToggle>
+      
+  </Dropdown>
        </div>
      </div>
                   </Colxx>
@@ -629,6 +785,21 @@ const redirectToSessionLists1 = () => {
              {generateMinuteDropdownItems1()}
             </DropdownMenu>
           </Dropdown>
+          <Dropdown direction="down"
+  isOpen={dropdownBasicOpen5}
+  toggle={() => setDropdownBasicOpen5(!dropdownBasicOpen5)}
+  className="mb-5 "
+  
+ 
+>
+<DropdownToggle caret color="secondary" outline className='ml-3'>
+{selectedfromampm1 !==null ? selectedfromampm1 : 'AM /PM' }
+<DropdownMenu className=''>
+  { generateAmPmDropdownItems1 ()}
+  </DropdownMenu>
+</DropdownToggle>
+      
+  </Dropdown>
        </div>
        <Button onClick={handleOkButtonClick}>OK</Button>
      </div>
@@ -655,11 +826,10 @@ const redirectToSessionLists1 = () => {
            </CardBody>
          </Card>
          <Button className='' onClick={redirectToSessionLists1}>My Sessions</Button>
+        
       {/* <PopupWizard/> */}
        </Colxx>
-       {/* <NavLink href='app/sessionmentor'>
-  <Button>sessions</Button>
-</NavLink> */}
+   
   
 
     </Row>

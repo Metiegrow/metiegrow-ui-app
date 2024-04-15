@@ -53,123 +53,35 @@ import BottomNavigation from '../my-login/BottomNavigation';
   const [minutedrop1,setMinutedrop1]=useState(null)
   const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
   const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
-
-  // const handleCloseButtonClick = () => {
-  //   // Convert selectedDate to timestamp in milliseconds
-  //   const DateTime = new Date(selectedDate).getTime();
-  //   // const fromTimestamp =  DateTime + (selectedHourDropdown * 3600000) + (minutedrop * 60000)
-  //   const fromTimestamp = DateTime + (selectedHourDropdown % 12) * 3600000 + (minutedrop * 60000) + (selectedfromampm === 'PM' ? 43200000 : 0);
-  //   const toTimestamp = DateTime + (selectedHourDropdown1 % 12) * 3600000 + (minutedrop1 * 60000) + (selectedfromampm1 === 'PM' ? 43200000 : 0);
-  
-  
-  //   // Calculate the 'to' timestamp based on selected hours and minutes
-  //   // const toTimestamp = fromTimestamp + (selectedHourDropdown * 3600000) + (minutedrop * 60000) + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
-  //   // const toTimestamp = DateTime + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
-  //   // No need to multiply timestamps by 1000 to convert to milliseconds
-    
-  //   console.log('From Timestamp (milliseconds):', fromTimestamp);
-  //   console.log('To Timestamp (milliseconds):', toTimestamp);
-  
-  //   const newData = {
-  //     mentorId,
-  //     name: mentorName,
-  //     mode: selectedradiobutton,
-  //     fromtimestamp: fromTimestamp, // Already in milliseconds
-  //     totimestamp: toTimestamp, // Already in milliseconds
-  //   };
-  
-  //   axios.post(url, {
-  //     data: {
-  //       ...upcomingsession,
-  //       upcomingSessions: upcomingsession && upcomingsession.upcomingSessions ? [...upcomingsession.upcomingSessions, newData] : [newData],
-  //     }
-     
-  //   })
-  //     .then(() => {
-  //       redirectToSessionLists();
-  //     })
-  //     .catch(error => {
-  //       console.error('Error storing data:', error);
-  //     });
-  // };
-  
- 
-  // const handleNextButtonClick = () => {
-  //   const DateTime = new Date(selectedDate).getTime();
-  //   const fromTimeStamp =  DateTime + (selectedHourDropdown * 3600000) + (minutedrop * 60000)
-  //   const toTimeStamp = DateTime + (selectedHourDropdown1 * 3600000) + (minutedrop1 * 60000);
-  //   console.log('From Timestamp (milliseconds):', fromTimeStamp);
-  //   console.log('To Timestamp (milliseconds):', toTimeStamp);
-  //   const newData = {
-  //     mentorId,
-  //     mode: selectedradiobutton,
-  //     fromtimestamp: fromTimeStamp,
-  //     totimestamp: toTimeStamp,
-  //   };
-  
-  //   axios.post('http://localhost:3001/mentorAppointmentTime', newData)
-  //     .then(response => {
-  //       // Handle successful response, such as redirecting the user
-  //       console.log('Post request successful:', response.data);
-  //       // redirectToSessionLists(); // Redirect to the specified URL
-  //     })
-  //     .catch(error => {
-  //       // Handle error
-  //       console.error('Error posting data:', error);
-  //     });
-  // };
+const [license,setLicense]=useState([]);
 
 
-  // const handleNextButtonClick = () => {
-  //   // Convert selected date to UTC timestamp
-  //   const selectedDateTime = new Date(selectedDate);
-  
-  //   // Set the hours and minutes for the selected date
-  //   selectedDateTime.setHours(selectedHourDropdown, minutedrop, 0, 0);
-  //   const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
-  
-  //   // Calculate 'to' time
-  //   const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
-  //   toDateTime.setMinutes(toDateTime.getMinutes() + minutedrop1); // Add selected minutes
-  
-  //   // Check if adding minutes exceeds 59 minutes, if so, increment the hour
-  //   if (toDateTime.getMinutes() !== minutedrop1) {
-  //     toDateTime.setHours(toDateTime.getHours() + 1);
-  //   }
-  
-  //   const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
-  
-  //   console.log('From Timestamp (milliseconds):', fromTimeStamp);
-  //   console.log('To Timestamp (milliseconds):', toTimeStamp);
-  
-  //   const newData = {
-  //     mentorId,
-  //     mode: selectedradiobutton,
-  //     fromtimestamp: fromTimeStamp,
-  //     totimestamp: toTimeStamp,
-  //   };
-  
-  //   axios.post('http://localhost:3001/mentorAppointmentTime', [newData])
-  //     .then(response => {
-  //       // Handle successful response, such as redirecting the user
-  //       console.log('Post request successful:', response.data);
-  //       // redirectToSessionLists(); // Redirect to the specified URL
-  //     })
-  //     .catch(error => {
-  //       // Handle error
-  //       console.error('Error posting data:', error);
-  //     });
-  // };
-  
-  
-  
-// const handleFromAmPm=(selectampm)=>{
-//   setSelectedFromAmPm(selectampm)
-// }
-  
-// const handleToAmPm=(selectampm)=>{
-//   setSelectedToAmPm(selectampm)
-// }
+
+const url=`${baseUrl}/licenseDetails`;
+
+
+  const LicenseDetails=async()=>{
+    try {
+        const response = await axios.get(url);
+        setLicense(response.data);
+       
+        
+       
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+}
+
+
+
+
+
+const handleLicenseNextButtonClick=()=>{
+  LicenseDetails();
+
+}
+
+
 const handleNextButtonClick = () => {
   // Convert selected date to UTC timestamp
   const selectedDateTime = new Date(selectedDate);
@@ -314,13 +226,7 @@ const generateAmPmDropdownItems1 = () => {
     </DropdownItem>
   ));
 };
-  // const handlesave = () => {
-  //   console.log('Selected Date:', selectedDate);
-  //   console.log('Selected Hour:', selectedHourDropdown);
-  //   console.log('Selected Minute:', minutedrop);
-  //   console.log('Selected Radio Button:', selectedRadioButton);
-   
-  // };
+
   const topNavClick = (stepItem, push) => {
     push(stepItem.id);
   };
@@ -349,7 +255,16 @@ const generateAmPmDropdownItems1 = () => {
         return;
       }
     }
-    handleNextButtonClick(); // Call the function to post data when moving to the next step
+  
+
+    if (step.id === 'step2') {
+     
+      handleNextButtonClick(); 
+    // Call the function to post data when moving to Step 2
+    }
+   
+    // handleNextButtonClick(); // Call the function to post data when moving to the next step
+    handleLicenseNextButtonClick();
     goToNext();
 };
 
@@ -359,6 +274,8 @@ const generateAmPmDropdownItems1 = () => {
     }
     goToPrev();
   };
+
+ 
 
 
   return (
@@ -577,15 +494,7 @@ const generateAmPmDropdownItems1 = () => {
             </DropdownMenu>
           </Dropdown>
 
-          {/* <Dropdown isOpen={ampmDropdownOpen} toggle={toggleAmpmDropdown} className='ml-3'>
-        <DropdownToggle caret color="secondary" outline>
-          {selectedAmPm !=null ? selectedAmPm : 'Select AM/PM'}
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem onClick={() => handleAmPmSelection('AM')}>AM</DropdownItem>
-          <DropdownItem onClick={() => handleAmPmSelection('PM')}>PM</DropdownItem>
-        </DropdownMenu>
-      </Dropdown> */}
+         
       <Dropdown direction="down"
   isOpen={dropdownBasicOpen4}
   toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
@@ -655,15 +564,7 @@ const generateAmPmDropdownItems1 = () => {
 </DropdownToggle>
       
   </Dropdown>
-          {/* <Dropdown isOpen={ampmDropdownOpen1} toggle={toggleAmpmDropdown1} className='ml-3'>
-        <DropdownToggle caret color="secondary" outline>
-          {selectedAmPm1 !=null ? selectedAmPm1 : 'Select AM/PM'}
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem onClick={() => handleAmPmSelection1('AM')}>AM</DropdownItem>
-          <DropdownItem onClick={() => handleAmPmSelection1('PM')}>PM</DropdownItem>
-        </DropdownMenu>
-      </Dropdown> */}
+        
        </div>
      </div>
       </div>
@@ -697,16 +598,6 @@ const generateAmPmDropdownItems1 = () => {
    </FormGroup>
    </Form>
      
-       {/* <footer className="d-flex justify-content-end border-t p-3 mt-5">
-      <Button type='submit'  className="  px-6 py-2 " color='primary'  onClick={handlesave}>
-       
-        Next
-      </Button>
-      <Button className='ml-2'  outline  color="secondary"  onClick={() => setModalSmall(false)}
-                >
-                  Cancel
-                </Button>
-    </footer> */}
     </Form>
               
             </Step>
@@ -717,65 +608,80 @@ const generateAmPmDropdownItems1 = () => {
               desc="Payment"
             
             >
-              {/* <div className="wizard-basic-step">
-                <Form>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="forms.email" />
-                    </Label>
-                    <Input
-                      type="email"
-                      name="email"
-                      placeholder={messages['forms.email']}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </FormGroup>
-                </Form>
-              </div> */}
-              <Card className='my-3 '>
-                <CardBody>
-                <Form className=''>
-                  <FormGroup className='w-100'>
-                  <div className='d-flex justify-content-between align-items-center  '>
-                  <Label  className='text-one '>Session Price</Label>
-                  <Colxx lg={5}  className=''>
-                  <h3 className=''><span className='font-weight-bold color-theme-1 '>Rs:300 </span></h3>
-                  </Colxx>
-                  </div>
-                 
-              
-                  </FormGroup>
-                  <FormGroup className='w-100'>
-                  <div className='d-flex justify-content-between align-items-center '>
-                  <Label  className='text-one'>Your Available Balance</Label>
-                  <Colxx lg={5}>
-                  <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:14000 </span></h3>
-                  </Colxx>
-                  </div>
-                 
-              
-                  </FormGroup>
-                  <FormGroup className='w-100'>
-                  <div className='d-flex justify-content-between align-itmes-center '>
-                  <Label  className='text-one'>Balance after deduction</Label>
-                  <Colxx lg={5}>
-                  <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
-                  </Colxx>
-                  </div>
-                 
-              
-                  </FormGroup>
-                  
-                 
-                
              
+            
+              {license && license.map((li) => {
+    return (
+        <Card className='my-3' key={li.sessionPrice}>
+            <CardBody>
+                <Form className=''>
+                    {li.balance ? (
+                        <>
+                        <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Session Price</Label>
+                                    <Colxx lg={5}>
+                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{li.sessionPrice}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Your Available Balance</Label>
+                                    <Colxx lg={5}>
+                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{li.availableBalance}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Balance after deduction</Label>
+                                    <Colxx lg={5}>
+                                        <h3><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                        </>
+                    ) : (
+                        <>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Session Price</Label>
+                                    <Colxx lg={5}>
+                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{li.sessionPrice}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Your Available Balance</Label>
+                                    <Colxx lg={5}>
+                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{li.availableBalance}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Do you want to recharge ?</Label>
+                                </div>
+                                <Colxx lg={12}>
+                                    <div className='d-flex'>
+                                        <Button outline color="primary">Yes</Button>
+                                        <Button outline color="primary" className='ml-3'>No</Button>
+                                    </div>
+                                </Colxx>
+                            </FormGroup>
+                        </>
+                    )}
                 </Form>
-               
-               
-                   
-                </CardBody>
-              </Card>
+            </CardBody>
+        </Card>
+    )
+})}
+
+              
+
+             
               
             </Step>
             <Step
@@ -790,13 +696,7 @@ const generateAmPmDropdownItems1 = () => {
               <span className='text-xlarge text-primary'><i className='simple-icon-check'/></span>
               <h3 className=' my-3 py-3 '>Your appointment is successfull</h3>
               <h2 className=' my-3'>Thank you</h2>
-                
-
-              {/* <div className='text-center my-2'>
-              <Button className="btn btn-primary " onClick={redirectToSessionLists}>
-                   Close
-                  </Button>
-              </div> */}
+      
               <div className='text-center my-2'>
               {/* <Button color='primary' className="btn btn-primary " onClick={handleCloseButtonClick}> */}
               <Button color='primary' className="btn btn-primary " onClick={redirectToSessionLists}>
@@ -811,14 +711,7 @@ const generateAmPmDropdownItems1 = () => {
          
            
             
-            {/* <Step id="step4" hideTopNav>
-              <div className="wizard-basic-step text-center">
-                <h2 className="mb-2">
-                  Thank You
-                </h2>
-                
-              </div>
-            </Step> */}
+           
           </Steps>
           
           <Form className='mt-4'>
@@ -829,6 +722,8 @@ const generateAmPmDropdownItems1 = () => {
             className="justify-content-center"
             prevLabel="Back"
             nextLabel="Next"
+            licenseBalance={license.length > 0 ? license[0].balance : null} 
+           
           />
             </FormGroup>
           </Form>

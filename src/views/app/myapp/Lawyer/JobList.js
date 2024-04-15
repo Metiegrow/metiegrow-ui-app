@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
-import { Card,CardBody } from 'reactstrap';
+import { Card,CardBody ,NavLink} from 'reactstrap';
 
 const JobList = () => {
     const [joblist,setJobList]=useState("");
@@ -28,9 +28,12 @@ const JobList = () => {
       {joblist&&joblist.map((j)=>{
         return(
             <Card key={j.jobId} className='my-2'>
-        <CardBody>
+        <NavLink href={`/app/jobsdetails/${j.jobId}`}>
+        <CardBody className=''>
             <h2>{j.jobName}</h2>
         </CardBody>
+        </NavLink>
+       
        </Card>
         )
       

@@ -22,6 +22,7 @@ const DateRangePicker = ({selectedDate,setSelectedDate}) => {
                 onChange={handleDateChange} // Pass the handler function to onChange
                 // setSelectedDate={setSelectedDate} 
                 // placeholderText={messages['forms.date']}
+                // placeholderText='MM/DD/YYYY'
               />
             </div>
     </div>

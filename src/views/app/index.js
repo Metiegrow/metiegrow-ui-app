@@ -449,7 +449,7 @@ console.log("role res from index", roleRes)
               render={(props) => <ViewUserCard {...props} />}
             />
              <Route
-              path={`${match.url}/jobsdetails`}
+              path={`${match.url}/jobsdetails/:jid`}
               render={(props) => <ViewJobDetail {...props} />}
             />
             <Route
