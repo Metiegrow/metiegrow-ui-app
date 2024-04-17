@@ -295,7 +295,7 @@ LawyerPackage();
     <Row>
     <Colxx xxs="12">
       <Row>
-        <Colxx xxs="12" xs="6" lg="10">
+        <Colxx xxs="12" xs="10" lg="10">
           <Card className="mb-4">
             <CardHeader>
               <Nav tabs className="card-header-tabs">

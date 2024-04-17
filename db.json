@@ -642,13 +642,12 @@
       "toTimeStamp": 1713227400000
     }
   ],
-  "licenseDetails": [
-    {
-      "sessionPrice": 125,
-      "availableBalance": 125,
-      "balance": true
-    }
-  ],
+  "licenseDetails":{
+  
+    "sessionPrice": 125,
+    "availableBalance": 125,
+    "balance":true  
+},
   "userCard": [
     {
       "id": 1,
@@ -767,54 +766,113 @@
   "lawyerJobList": [
     {
       "jobId": "100",
-      "jobName": "job 1"
+      "jobName": "job 1",
+      "clientUserId": 10,
+        "clientName": "sivanesh a",
+        "createdAt": 1712811600000
+
     },
     {
       "jobId": "101",
-      "jobName": "job 2"
+      "jobName": "job 2",
+      "clientUserId": 11,
+        "clientName": "browin",
+        "createdAt": 1712811600000
+
     },
     {
       "jobId": "460",
-      "jobName": "job 3"
+      "jobName": "job 3",
+      "clientUserId": 12,
+        "clientName": "Arun",
+        "createdAt": 1712811600000
+
     },
     {
       "jobId": "477",
-      "jobName": "job 4"
+      "jobName": "job 4",
+      "clientUserId": 13,
+        "clientName": "bala",
+        "createdAt": 1712811600000
+
     },
     {
       "jobId": "479",
-      "jobName": "job 5"
+      "jobName": "job 5",
+      "clientUserId": 14,
+      "clientName": "david warner",
+      "createdAt": 1712811600000
     }
   ],
   "lawyerJobsDetails": [
     {
       "id": "100",
       "jobName": "job 1",
-      "doneBy": "Lawyer",
-      "description": "lawyer description",
-      "status": "yet to start",
-      "uploadDocuments": "true",
-      "documentList": [
-        "PAN Card",
-        "Appointment"
-      ],
-      "stepNumber": 1,
-      "stepName": "verification"
+      "steps":[
+        {
+          "stepId":200,
+          "stepNumber": 1,
+          "stepName":"verification",
+          "doneBy": "Lawyer",
+          "description": "lawyer description",
+          "status": "yet to start",
+          "uploadDocuments": "true",
+          "documentList": [
+            "PAN Card",
+            "Appointment"
+          ]
+        },
+        {
+          "stepId":201,
+          "stepNumber": 2,
+          "stepName":"collection",
+          "doneBy": "Lawyer",
+          "description": "lawyer description",
+          "status": "yet to start",
+          "uploadDocuments": "true",
+          "documentList": [
+            "PAN Card",
+            "Appointment"
+          ]
+        }
+       
+      ]
     },
     {
-      "id": "101",
+      "id": "500",
       "jobName": "job 2",
-      "doneBy": "Lawyer",
-      "description": "lawyer description",
-      "status": "yet to start",
-      "uploadDocuments": "true",
-      "documentList": [
-        "PAN Card",
-        "Appointment"
-      ],
-      "stepNumber": 1,
-      "stepName": "verification"
+      "steps":[
+        {
+          "stepId":209,
+          "stepNumber": 1,
+          "stepName":"verification",
+          "doneBy": "Lawyer",
+          "description": "lawyer description",
+          "status": "yet to start",
+          "uploadDocuments": "true",
+          "documentList": [
+            "PAN Card",
+            "Appointment"
+          ]
+        },
+        {
+          "stepId":205,
+          "stepNumber": 2,
+          "stepName":"collection",
+          "doneBy": "Lawyer",
+          "description": "lawyer description",
+          "status": "yet to start",
+          "uploadDocuments": "true",
+          "documentList": [
+            "PAN Card",
+            "Appointment"
+          ]
+        }
+       
+      ]
     }
+    
+    
   ],
   "lawyerProfile": [
     {
@@ -1050,7 +1108,7 @@
         "skill 11",
         "skill 12"
       ],
-      "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make …",
+      "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems.",
       "linkedinUrl": "https://www.linkedin.com/in/srihith/",
       "twitterHandle": "srihith",
       "website": "https://www.srihith.com/",
@@ -1074,7 +1132,7 @@
         "skill 5",
         "skill 6"
       ],
-      "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems. Also, I make … ",
+      "bio": "UX Designer for the past 15+ years. Teaching UI UX Design for the past 7+ years to more than 100K+ students worldwide. Designed for Fortune 500 like Panasonic and Intel. My super-powers are Usability, Typography, and Color Scheme along with creating simple UX solutions to complex problems.",
       "linkedinUrl": "https://www.linkedin.com/in/arun/",
       "twitterHandle": "rajks",
       "website": "https://www.raj.com/",
@@ -1098,7 +1156,7 @@
         "skill 8",
         "skill 9"
       ],
-      "bio": "I'm a writer and content strategist with over 10 years of experience in helping companies build and execute their content strategies. With a background in journalism and the arts, I've also used my diverse experience and skillset to build up communities and help people find their next …",
+      "bio": "I'm a writer and content strategist with over 10 years of experience in helping companies build and execute their content strategies. With a background in journalism and the arts, I've also used my diverse experience and skillset to build up communities and help people find their next.",
       "linkedinUrl": "https://www.linkedin.com/in/alexa/",
       "twitterHandle": "alexa",
       "website": "https://www.alexa.com/",

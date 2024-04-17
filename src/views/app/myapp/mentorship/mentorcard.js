@@ -39,8 +39,20 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   // const[mentorfilter,setMentorFilter]=useState([]);
   const [inputkey,setInputKey]=useState('')
 
+  const truncateBio = (bio, lineCount) => {
+   
+    const words = bio.split(' ');
+   
+    const truncatedBio = words.slice(0, lineCount).join(' '); 
+   
+    if (words.length > lineCount) {
+      return `${truncatedBio}...`;
+    }
+    return truncatedBio;
+  };
+  
+  
 
- 
 
   // const setFirstName = (newFirstName) => {
   //   const searchParams = new URLSearchParams(location.search);
@@ -261,7 +273,8 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                     
                     </CardText>
                     <CardText className=" text-one mb-2">
-                     {mentors.bio}
+                     {/* {mentors.bio} */}
+                     {truncateBio(mentors.bio, 20)}
                     </CardText>
                    <CardText className='d-flex'>
                   
