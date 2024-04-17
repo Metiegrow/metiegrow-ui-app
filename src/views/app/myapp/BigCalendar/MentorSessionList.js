@@ -144,7 +144,7 @@ SessionUpcomingHistroy();
     upcomingsession.upcomingSessions.map((up) => {
       const date = new Date(up.fromTimeStamp);
       const fromtime = new Date(up.fromTimeStamp);
-      const totime = new Date(up.fromTimeStamp);
+      const totime = new Date(up.toTimeStamp);
       const updateformat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       const timeOptions = { hour: '2-digit', minute: '2-digit' };
 
