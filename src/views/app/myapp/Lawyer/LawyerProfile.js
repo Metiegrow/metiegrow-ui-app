@@ -19,6 +19,7 @@ const LawyerProfile = () => {
     const[reviews,setReviews]=useState('');
     const [packages,setPackages]=useState('');
     const [showAll, setShowAll] = useState(false);
+    // const [isFixed, setIsFixed] = useState(false);
     const toggleShowAll = () => {
       setShowAll(!showAll);
     };
@@ -59,7 +60,7 @@ const LawyerProfile = () => {
     }
     LawyerPackage();
     },[])
-
+   
 
     useEffect(() => {
       if (showAll) {
@@ -67,21 +68,49 @@ const LawyerProfile = () => {
         document.getElementById('skillsSection').scrollIntoView();
       }
     }, [showAll]);
+
     // const status=5;
+
+
+//     useEffect(() => {
+//       const handleScroll = () => {
+//           const fixedPositionStart = 100; // The scroll position (in pixels) to fix the tab
+//           setIsFixed(window.scrollY > fixedPositionStart);
+//       };
+
+//       window.addEventListener('scroll', handleScroll);
+//       return () => {
+//           window.removeEventListener('scroll', handleScroll);
+//       };
+//   }, []);
+
+//   const fixedTabCardStyle = {
+//     position: 'fixed',
+//     top: '20%',  // Adjust this value based on your needs
+//     right: '20px', // Adjust the distance from the right edge
+//     width: '500px', // Adjust the width as needed
+//     zIndex: 1000 // Ensure it sits above other content
+// };
+
     const remainingSkillsCount = lawyerprofile.services ? lawyerprofile.services.length - 3 : 0;
 
   return (
     <div>
-    {/* from mentor profile */}
-      <Colxx sm="12" md="12" lg="12" xxs="12" className=''>
-        <Row>
-        <Row className='h-100'>
-          <div className='w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center'>
+    
+
+
+      <div>
+      <div className='w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center'>
           <div className=' '>
             {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
-             <img src={lawyerprofile.image} className=' col-2 mx-2 w-60
-             rounded-circle img-thumbnail border    ' alt="" />
+             {/* <img src={lawyerprofile.image} className=' col-2 mx-2 w-60
+             rounded-circle img-thumbnail border    ' alt="" /> */}
+             <img 
+              src={lawyerprofile.image} 
+              className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
+              alt="" 
+            />
        
             </div>
             <div>
@@ -101,7 +130,11 @@ const LawyerProfile = () => {
               </NavLink>
             </div>
           </div>
-          <div className='col-5 mt-4'>
+      </div>
+     <Row>
+      <Colxx>
+   
+          <div className=' mt-4'>
           <h1 className='font-weight-semibold text-xlarge'>{lawyerprofile.firstName} {lawyerprofile.lastName}</h1>
           {/* <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1> */}
           <h3 className='text-large  text-muted  '>{lawyerprofile.jobTitle}</h3>
@@ -113,11 +146,11 @@ const LawyerProfile = () => {
            <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6>
           </div>
          
-          <div className='col-7 mt-4'>
+          <div className=' mt-4'>
             <h2 className='mx-2'>Topics</h2>
            
            
-            <div className='d-flex align-items-center'>
+            <div className='d-flex align-items-center flex-wrap'>
             <div className='d-flex'>
             {lawyerprofile.services && lawyerprofile.services.slice(0, 3).map((skill) => (
             <div key={skill}>
@@ -140,33 +173,15 @@ const LawyerProfile = () => {
          
            
           </div>
-          </Row>
-        </Row>
-      </Colxx>
-      {/* from mentor profile ends */}
-      <hr/>
-      <Colxx>
-        <Row>
-         <Row>
-         <Colxx lg={5} key={lawyerprofile.id}>
-              
-                <div className='mt-4' >
+          <div   className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none  ' >
+        <LawyerTabCard  />
+    </div>
+        
+          <div className='mt-4' >
                     <h2 className='text-large'>About</h2>
                     <p className='text-one'>{lawyerprofile.about}</p>
                 </div>
-               
-            </Colxx>
-          
-            <Colxx lg={6} className='ml-2'>
-            <div className='mx-auto   h-100'>
-            <LawyerTabCard className='text-center mx-auto '/>
-            </div>
-           
-            </Colxx>
-           
-         </Row>
-        
-         <Colxx lg={5}  className="my-4" id="skillsSection">
+                <Colxx lg={10}   className="my-4" id="skillsSection">
        
             <h1>Full Topics</h1>
             <div className='d-flex flex-wrap '>
@@ -180,12 +195,12 @@ const LawyerProfile = () => {
             </div>
           </Colxx>
           
-         <Colxx lg={12} className='mt-4'>
+         <Colxx lg={12} xl={12}  className='mt-4'>
          <hr/>
   <h5 className='font-weight-bold'>Compare Packages</h5>
   <Row className='d-flex'>
     {packages && packages.map((pack) => (
-      <Col lg={4} key={pack.id} className='my-2'>
+      <Col lg={6}  key={pack.id} className='my-2'>
         <Card className='pt-5 pb-5 d-flex'>
           <CardBody className='pt-5 pb-5'>
             <div className='price-top-part'>
@@ -281,10 +296,25 @@ const LawyerProfile = () => {
           </div>
             
             </Colxx>
-           
-        </Row>
       </Colxx>
-     
+      <Colxx className='mt-4' lg={6} xl={6} md={12}> 
+      {/* {isFixed ? (
+    <div style={fixedTabCardStyle}>
+        <LawyerTabCard />
+    </div>
+) : (
+    <div style={{width:'500px',position:'fixed',top:'40%',right:'20px'}}>
+        <LawyerTabCard />
+    </div>
+)} */}
+<div  style={{width:"40%",position:'fixed',top:'40%',right:'20px'}} className='mt-2 d-lg-block d-xl-block d-none'>
+        <LawyerTabCard />
+    </div>
+    {/* <div    className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none bg-primary'>
+        <LawyerTabCard />
+    </div> */}
+      </Colxx>
+     </Row>
     </div>
   );
 }

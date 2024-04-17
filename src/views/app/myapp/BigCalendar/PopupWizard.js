@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
 import { Colxx } from 'components/common/CustomBootstrap';
-import {  Button, Card, CardBody, CustomInput, Dropdown, DropdownItem, DropdownMenu,
+import {  Button, Card, CardBody,  CustomInput, Dropdown, DropdownItem, DropdownMenu,
    DropdownToggle, Form, FormGroup, InputGroup, Label, Row
 
    } from 'reactstrap';
@@ -60,17 +60,48 @@ const [license,setLicense]=useState([]);
 const url=`${baseUrl}/licenseDetails`;
 
 
-  const LicenseDetails=async()=>{
-    try {
-        const response = await axios.get(url);
-        setLicense(response.data);
-       
-        
-       
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-}
+// Backend Url
+// const url=`${baseUrl}/api/calendar/mentee/license-details`
+
+
+const LicenseDetails = async () => {
+  try {
+    // Generate newData object
+    const selectedDateTime = new Date(selectedDate);
+    const selectedHour = selectedHourDropdown % 12 + (selectedfromampm === 'PM' ? 12 : 0);
+    selectedDateTime.setHours(selectedHour, minutedrop, 0, 0);
+    const fromTimeStamp = selectedDateTime.getTime();
+
+    const toDateTime = new Date(selectedDateTime);
+    const selectedHourTo = selectedHourDropdown1 % 12 + (selectedfromampm1 === 'PM' ? 12 : 0);
+    toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0);
+    const toTimeStamp = toDateTime.getTime();
+
+    const newData = {
+      mentorId,
+    
+      fromTimeStamp,
+      toTimeStamp,
+    };
+
+    // Convert newData object to query parameters string
+    const queryString = Object.keys(newData)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newData[key])}`)
+      .join('&');
+    
+    // Perform axios request with query parameters
+    const response = await axios.get(`${url}?${queryString}`);
+    console.log('Response from server:', response.data);
+
+    // Set the license state with the response data
+    setLicense(response.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+
+
 
 
 
@@ -610,7 +641,7 @@ const generateAmPmDropdownItems1 = () => {
             >
              
             
-              {license && license.map((li) => {
+              {/* {license && license.map((li) => {
     return (
         <Card className='my-3' key={li.sessionPrice}>
             <CardBody>
@@ -618,29 +649,36 @@ const generateAmPmDropdownItems1 = () => {
                     {li.balance ? (
                         <>
                         <FormGroup className='w-100'>
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <Label className='text-one'>Session Price</Label>
-                                    <Colxx lg={5}>
-                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{li.sessionPrice}</span></h3>
+                                <div  className='d-flex justify-content-between align-items-center'>
+                             
+                              
+                                  <Label className='text-one '>Session Price</Label>
+                                 
+                                  <Colxx lg={5}   className=''>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:{li.sessionPrice}</span></h3>
                                     </Colxx>
+                             
+                                    
+                                    
                                 </div>
                             </FormGroup>
                             <FormGroup className='w-100'>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Your Available Balance</Label>
-                                    <Colxx lg={5}>
-                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{li.availableBalance}</span></h3>
+                                    <Colxx lg={5} >
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:{li.availableBalance}</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>
                             <FormGroup className='w-100'>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Balance after deduction</Label>
-                                    <Colxx lg={5}>
-                                        <h3><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
+                                    <Colxx lg={5} >
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>
+  
                         </>
                     ) : (
                         <>
@@ -677,7 +715,71 @@ const generateAmPmDropdownItems1 = () => {
             </CardBody>
         </Card>
     )
-})}
+})} */}
+<Form className=''>
+            {license && (
+                <>
+                    {license.balance ? (
+                        <>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Session Price</Label>
+                                    <Colxx lg={5} className=''>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:{license.sessionPrice}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Your Available Balance</Label>
+                                    <Colxx lg={5}>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:{license.availableBalance}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Balance after deduction</Label>
+                                    <Colxx lg={5}>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                        </>
+                    ) : (
+                        <>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Session Price</Label>
+                                    <Colxx lg={5}>
+                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{license.sessionPrice}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Your Available Balance</Label>
+                                    <Colxx lg={5}>
+                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{license.availableBalance}</span></h3>
+                                    </Colxx>
+                                </div>
+                            </FormGroup>
+                            <FormGroup className='w-100'>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <Label className='text-one'>Do you want to recharge ?</Label>
+                                </div>
+                                <Colxx lg={12}>
+                                    <div className='d-flex'>
+                                        <Button outline color="primary">Yes</Button>
+                                        <Button outline color="primary" className='ml-3'>No</Button>
+                                    </div>
+                                </Colxx>
+                            </FormGroup>
+                        </>
+                    )}
+                </>
+            )}
+        </Form>
 
               
 
@@ -722,7 +824,8 @@ const generateAmPmDropdownItems1 = () => {
             className="justify-content-center"
             prevLabel="Back"
             nextLabel="Next"
-            licenseBalance={license.length > 0 ? license[0].balance : null} 
+            // licenseBalance={license.length > 0 ? license[0].balance : null} 
+            licenseBalance={license && license.balance} 
            
           />
             </FormGroup>
