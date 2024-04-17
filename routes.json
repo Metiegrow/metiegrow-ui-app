@@ -48,7 +48,8 @@
     "/api/otherlisting/cards": "/otherlistingcard",
     "/api/mentee/connect-to-videocall": "/callStatus",
     "/api/rating": "/rating",
-    "/api/calldetails": "/calldetails"
+    "/api/calldetails": "/calldetails",
+    "/api/rating/meta/mentor/:revieweeId": "/allReviews"
 
 
     

@@ -642,15 +642,12 @@
       "toTimeStamp": 1713227400000
     }
   ],
-  "licenseDetails":[
-  
+  "licenseDetails": [
     {
       "sessionPrice": 125,
       "availableBalance": 125,
-      "balance":true
-  }
-  
-  
+      "balance": true
+    }
   ],
   "userCard": [
     {
@@ -804,7 +801,6 @@
       "stepNumber": 1,
       "stepName": "verification"
     },
-    
     {
       "id": "101",
       "jobName": "job 2",
@@ -1969,13 +1965,13 @@
   ],
   "callStatus": {
     "id": 22,
-    "status": "DISCONNECTING",
-    "startTime": 1713177158969,
-    "endTime": 1713177207609,
-    "duration": 48640
+    "status": "CALL_IN_PROGRESS",
+    "startTime": 1713270331464,
+    "endTime": 1713270365427,
+    "duration": 33963
   },
   "rating": {
-    "rating": 0,
+    "rating": 3,
     "feedBack": "",
     "revieweeId": 2
   },
@@ -1984,5 +1980,16 @@
     "fromTime": "1712871311000",
     "toTime": "1712871611000",
     "mode": "Video"
-  }
+  },
+  "allReviews":{
+    "id": 1,
+    "oneStar": 1,
+    "twoStar": 4,
+    "threeStar": 1,
+    "fourStar": 0,
+    "fiveStar": 6,
+    "totalFeedBack": 1,
+    "totalRatings": 12,
+    "averageStar": 2.0
+}
 }

@@ -1,6 +1,6 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
-import { useHistory} from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { useClient } from "./settings";
 
 const Controls = (props) => {
@@ -29,7 +29,7 @@ const Controls = (props) => {
     tracks[1].close();
     setStart(false);
     setInCall(false);
-    history.push('/app/callcompleted');
+    history.push("/app/callcompleted");
   };
 
   return (
@@ -41,9 +41,11 @@ const Controls = (props) => {
             color={trackState.audio ? "primary" : "secondary"}
             onClick={() => mute("audio")}
           >
-            {trackState.audio ? <i className="simple-icon-microphone " /> : <i className="iconsminds-reset " />} 
-            
-
+            {trackState.audio ? (
+              <i className="simple-icon-microphone " />
+            ) : (
+              <i className="simple-icon-microphone" />
+            )}
           </Button>
         </Col>
         <Col md={2}>
@@ -51,23 +53,34 @@ const Controls = (props) => {
             color={trackState.video ? "primary" : "secondary"}
             onClick={() => mute("video")}
           >
-            {trackState.video ? <i className="simple-icon-camrecorder " /> : <i className="iconsminds-reset " />}
-            
-            
-
+            {trackState.video ? (
+              <i className="simple-icon-camrecorder " />
+            ) : (
+              <i className="simple-icon-camrecorder" />
+            )}
           </Button>
+          {/* <span onClick={() => mute("video")}><i className="simple-icon-camrecorder " /></span> */}
+          {/* <span
+            role="button"
+            tabIndex={0}
+            onClick={() => mute("video")}
+            onKeyPress={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                mute("video");
+              }
+            }}
+          >
+            <i className="simple-icon-camrecorder" />
+          </span> */}
         </Col>
         <Col md={2}>
           <Button color="danger" onClick={() => leaveChannel()}>
-          <i className="simple-icon-call-end" />{" "}
-
+            <i className="simple-icon-call-end" />{" "}
           </Button>
-
-        
         </Col>
       </Row>
     </Container>
   );
-}
+};
 
 export default Controls;
