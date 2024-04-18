@@ -111,6 +111,10 @@ const TopNav = ({
   const handleMySessionsClick = () => {
     history.push(`${adminRoot}/sessionlists`);
   };
+  const handleMyLawyerJobsClick = () => {
+    history.push(`${adminRoot}/jobslist`);
+  };
+  
   
 
   const handleLogout = () => {
@@ -250,6 +254,11 @@ const TopNav = ({
               <NavLink to={`${adminRoot}/sessionlists`}>
                 <DropdownItem onClick={() => handleMySessionsClick()}>
                 <i className="simple-icon-list" />  Sessions
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/jobslist`}>
+                <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
+                <i className="iconsminds-scale" />  My Lawyer Jobs
                 </DropdownItem>
               </NavLink>
               <DropdownItem onClick={() => handleMyListingClick()}>
