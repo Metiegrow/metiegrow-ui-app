@@ -26,8 +26,8 @@ const AllReviews = (props) => {
       try {
         const response = await axios.get(url);
         const reviewData = response.data;
-        console.log("reviewData:", reviewData);
-        console.log("reviewData1:", reviewData.averageStar);
+        // console.log("reviewData:", reviewData);
+        // console.log("reviewData1:", reviewData.averageStar);
         if (reviewData) {
           setAverageStar(reviewData.averageStar);
           setTotalRatings(reviewData.totalRatings);
