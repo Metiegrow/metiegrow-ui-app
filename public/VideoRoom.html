@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Introducing SDK, 2.9.20 is the sample version number, you can check the latest version number through the release notes or GitHub warehouse branch  -->
+    <script src="https://download.agora.io/edu-apaas/release/edu_sdk@2.9.20.bundle.js"></script>
+    <!-- Introducing Widget, 2.9.20 is the sample version number. You can check the latest version number through the release notes or GitHub warehouse branch. (Widgets before 2.9.20 are packaged together with the SDK, and there is no need to introduce this library) -->
+    <script src="https://download.agora.io/edu-apaas/release/edu_widget@2.9.20.bundle.js"></script>
+</head>
+<body>
+    <style>
+        #root {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div id="root"></div>
+    <script type="text/javascript">
+        AgoraEduSDK.config({
+            appId: 'df1444ece7394c15b552b8b906b5f476',
+            region: 'NA'
+        });
+
+        AgoraEduSDK.launch(document.querySelector('#root'), {
+            userUuid: '10',
+            userName: 'Student',
+            roomUuid: 'room id',
+            roleType: 2, // User roles: 1 is teacher, 2 is student.
+            roomType: 0, // Room type: 0 is one-on-one, 2 is large class, and 4 is small class.
+            roomName: 'room name',
+            pretest: true, // Whether to enable pre-class equipment detection.
+            rtmToken: '007eJxTYGBoPM2x0e3qM5uQD+0tMnPVYllnb3KU4rpZsb31w+oXm94qMKSkGZqYmKQmp5obW5okG5ommZoaJVkkWRqYJZmmmZibLUziTRPgY2BQuRuiycjAxMAIhCA+E4OhAQC9ehyn', // In a test environment, you can use a temporary RTM Token; in a production or security environment, it is strongly recommended that you use a server-generated RTM Token.
+            language: 'en', // The language of the classroom interface. If the interface is in English, set it to 'en'.
+            duration: 60 * 60, // Course time in seconds.
+            recordUrl: 'https://solutions-apaas.agora.io/apaas/record/dev/2.8.0/record_page.html',
+            courseWareList: [],
+            virtualBackgroundImages: ["src/assets/img/details/1.jpg"], // Virtual background image resource list.
+            webrtcExtensionBaseUrl: 'https://solutions-apaas.agora.io/static', // WebRTC Plug-in deployment address.
+            uiMode: 'light', // Set the classroom interface to bright mode. If you want the interface to be in dark mode, set it to 'dark'.
+            widgets: {
+                popupQuiz: AgoraSelector,
+                countdownTimer: AgoraCountdown,
+                easemobIM: AgoraHXChatWidget,
+                mediaPlayer: FcrStreamMediaPlayerWidget,
+                poll: AgoraPolling,
+                watermark: FcrWatermarkWidget,
+                webView: FcrWebviewWidget,
+                netlessBoard: FcrBoardWidget
+            },
+            listener: (evt, args) => {
+                if (evt === 'userExit') {
+                    console.log('exit classroom');
+                    window.close();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

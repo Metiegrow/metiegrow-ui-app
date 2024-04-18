@@ -642,12 +642,11 @@
       "toTimeStamp": 1713227400000
     }
   ],
-  "licenseDetails":{
-  
+  "licenseDetails": {
     "sessionPrice": 125,
     "availableBalance": 125,
-    "balance":true  
-},
+    "balance": true
+  },
   "userCard": [
     {
       "id": 1,
@@ -768,33 +767,29 @@
       "jobId": "100",
       "jobName": "job 1",
       "clientUserId": 10,
-        "clientName": "sivanesh a",
-        "createdAt": 1712811600000
-
+      "clientName": "sivanesh a",
+      "createdAt": 1712811600000
     },
     {
       "jobId": "500",
       "jobName": "job 2",
       "clientUserId": 11,
-        "clientName": "browin",
-        "createdAt": 1712811600000
-
+      "clientName": "browin",
+      "createdAt": 1712811600000
     },
     {
       "jobId": "460",
       "jobName": "job 3",
       "clientUserId": 12,
-        "clientName": "Arun",
-        "createdAt": 1712811600000
-
+      "clientName": "Arun",
+      "createdAt": 1712811600000
     },
     {
       "jobId": "477",
       "jobName": "job 4",
       "clientUserId": 13,
-        "clientName": "bala",
-        "createdAt": 1712811600000
-
+      "clientName": "bala",
+      "createdAt": 1712811600000
     },
     {
       "jobId": "479",
@@ -808,11 +803,11 @@
     {
       "id": "100",
       "jobName": "job 1",
-      "steps":[
+      "steps": [
         {
-          "stepId":200,
+          "stepId": 200,
           "stepNumber": 1,
-          "stepName":"verification",
+          "stepName": "verification",
           "doneBy": "Lawyer",
           "description": "lawyer description",
           "status": "yet to start",
@@ -823,9 +818,9 @@
           ]
         },
         {
-          "stepId":201,
+          "stepId": 201,
           "stepNumber": 2,
-          "stepName":"collection",
+          "stepName": "collection",
           "doneBy": "Lawyer",
           "description": "lawyer description",
           "status": "yet to start",
@@ -835,15 +830,14 @@
             "Appointment"
           ]
         }
-       
       ]
     },
     {
       "id": "500",
       "jobName": "job 2",
-      "steps":[
+      "steps": [
         {
-          "stepId":209,
+          "stepId": 209,
           "stepNumber": 1,
           "stepName":"verification one",
           "doneBy": "Lawyer",
@@ -856,7 +850,7 @@
           ]
         },
         {
-          "stepId":205,
+          "stepId": 205,
           "stepNumber": 2,
           "stepName":"collection one",
           "doneBy": "Lawyer",
@@ -868,11 +862,8 @@
             "Appointment"
           ]
         }
-       
       ]
     }
-    
-    
   ],
   "lawyerProfile": [
     {
@@ -2022,11 +2013,32 @@
     }
   ],
   "callStatus": {
-    "menteeUserId": "1",
-    "mentorUserId": "2",
-    "status": "ended",
-    "startTime": "2024-04-03T05:49:31.497Z",
-    "endTime": "2024-04-03T05:49:43.894Z",
-    "duration": null
+    "id": 22,
+    "status": "BOTH_JOINED",
+    "startTime": 1713385819922,
+    "endTime": 1713385827372,
+    "duration": 7450
+  },
+  "rating": {
+    "rating": 0,
+    "feedBack": "",
+    "revieweeId": 2
+  },
+  "calldetails": {
+    "name": "Raj Kumar",
+    "fromTime": "1712871311000",
+    "toTime": "1712871611000",
+    "mode": "Video"
+  },
+  "allReviews": {
+    "id": 1,
+    "oneStar": 1,
+    "twoStar": 4,
+    "threeStar": 1,
+    "fourStar": 0,
+    "fiveStar": 6,
+    "totalFeedBack": 1,
+    "totalRatings": 12,
+    "averageStar": 2
   }
 }

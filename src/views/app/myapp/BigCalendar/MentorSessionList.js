@@ -19,10 +19,15 @@ const url1=`${baseUrl}/sessionUpcomingHistroy`;
 // const url1=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`;
 const history = useHistory();
 
-const handleJoinCall = (name) => {
-  // onClick();
-  history.push(`/app/videocall/${name}`);
+// const handleJoinCall = (id) => {
+//   // onClick();
+//   history.push(`/app/videocall/${id}`);
+// };
+const handleJoinCall = (id) => {
+  const fullUrl = `/app/videocall/${id}`;
+  history.push(fullUrl);
 };
+
 useEffect(()=>{
   // const SessionHistroy=async()=>{
   //     try {
@@ -176,7 +181,7 @@ SessionUpcomingHistroy();
                   <Label className='text-one mr-2'>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                 </div>
-                <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.name)}>Join Call</Button>
+                <Button outline color='primary' className='mt-2 text-one' onClick={() => handleJoinCall(up.mentorId)}>Join Call</Button> 
               </div>
             </CardBody>
           </Card>

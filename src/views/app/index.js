@@ -133,7 +133,7 @@ const ViewMyListing = React.lazy(() =>
 );
 const ViewVideoCall = React.lazy(() =>
   import(
-    /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCall'
+    /* webpackChunkName: "views-app" */ './myapp/VideoCall/RTCVideoCall/VideoCall'
   )
 );
 // const ViewJobPosting = React.lazy(() =>
@@ -206,9 +206,9 @@ import(
 function getStatusRes() {
   return localStorage.getItem('status');
 }
-// function getroleRes() {
-//   return localStorage.getItem('role');
-// }
+function getRoleRes() {
+  return localStorage.getItem('roleRes');
+}
 
 
 const ViewJobDetail=React.lazy(()=>
@@ -219,16 +219,50 @@ const ViewJobList=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/JobList'
 ))
+const ViewCallCompleted=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCallCompletedPage'
+))
 
 const App = ({ match }) => {
 const statusRes = getStatusRes();
-const redirectTo =
-  statusRes === '0' && `${match.url}/mentor/apply` ||
-  statusRes === '1' && `${match.url}/mentor/apply` ||
-  statusRes === '3' && `${match.url}/mentor/apply` ||
-  statusRes === '7' && `${match.url}/calendar/mentor/appointment` ||
-  `${match.url}/profile`;
-  
+const roleRes = getRoleRes();
+console.log("role res from index", roleRes)
+// const redirectTo =
+// roleRes === "MENTEE" && `${match.url}/mentor` ||
+// roleRes === "LAWYER" && `${match.url}/profile` ||
+// roleRes.some(role => role === "MENTOR" || role === "LAWYER") && `${match.url}/mentor` ||
+//   statusRes === '0' && `${match.url}/mentor/apply` ||
+//   statusRes === '1' && `${match.url}/mentor/apply` ||
+//   statusRes === '3' && `${match.url}/mentor/apply` ||
+//   statusRes === '7' && `${match.url}/calendar/mentor/appointment` ||
+//   `${match.url}/profile`;
+
+
+
+          let redirectTo;
+
+          if (roleRes.includes("MENTOR")) {
+            if (statusRes === '0') {
+              redirectTo = `${match.url}/mentor/apply`;
+            } else if (statusRes === '1') {
+              redirectTo = `${match.url}/mentor/apply`;
+            } else if (statusRes === '3') {
+              redirectTo = `${match.url}/mentor/apply`;
+            } else if (statusRes === '7') {
+              redirectTo = `${match.url}/calendar/mentor/appointment`;
+            } else {
+              redirectTo =  `${match.url}/profile`;
+            }
+          } else if (roleRes.includes("MENTEE")) {
+            redirectTo = `${match.url}/mentor`;
+          } else if (roleRes.includes("LAWYER")) {
+            redirectTo = `${match.url}/profile`;
+          } else {
+            redirectTo = `${match.url}/profile`; 
+          }
+
+
   return (
     <AppLayout>
       <div className="dashboard-wrapper">
@@ -425,6 +459,10 @@ const redirectTo =
              <Route
               path={`${match.url}/lawyerprofile/:pid`}
               render={(props) => <ViewLawyerProfile {...props} />}
+            />
+             <Route
+              path={`${match.url}/callcompleted`}
+              render={(props) => <ViewCallCompleted {...props} />}
             />
             
           

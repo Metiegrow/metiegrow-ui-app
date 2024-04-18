@@ -46,7 +46,10 @@
     "/api/joblisting/cards": "/joblistingcard",
     "/api/staylisting/cards": "/staylistingcard",
     "/api/otherlisting/cards": "/otherlistingcard",
-    "/api/mentee/connect-to-videocall": "/callStatus"
+    "/api/mentee/connect-to-videocall": "/callStatus",
+    "/api/rating": "/rating",
+    "/api/calldetails": "/calldetails",
+    "/api/rating/meta/mentor/:revieweeId": "/allReviews"
 
 
     
