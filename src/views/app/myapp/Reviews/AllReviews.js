@@ -6,7 +6,10 @@ import { Card, CardBody, Col, Progress, Row } from "reactstrap";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 
-const AllReviews = () => {
+const AllReviews = (props) => {
+  console.log("prop chk", props);
+  const rid = props;
+  const revieweeId = rid.id;
   const [averageStar, setAverageStar] = useState("");
   const [totalRatings, setTotalRatings] = useState("");
   const [totalFeedBack, setTotalFeedBack] = useState("");
@@ -16,8 +19,8 @@ const AllReviews = () => {
     threeStar: 0,
     fourStar: 0,
     fiveStar: 0,
- });
-  const url = `${baseUrl}/api/rating/meta/mentor/1`;
+  });
+  const url = `${baseUrl}/api/rating/meta/mentor/${revieweeId}`;
   useEffect(() => {
     const ReviewDetails = async () => {
       try {
@@ -26,9 +29,9 @@ const AllReviews = () => {
         console.log("reviewData:", reviewData);
         console.log("reviewData1:", reviewData.averageStar);
         if (reviewData) {
-          setAverageStar(reviewData.averageStar)
-          setTotalRatings(reviewData.totalRatings)
-          setTotalFeedBack(reviewData.totalFeedBack)
+          setAverageStar(reviewData.averageStar);
+          setTotalRatings(reviewData.totalRatings);
+          setTotalFeedBack(reviewData.totalFeedBack);
           setStarRatings({
             oneStar: reviewData.oneStar,
             twoStar: reviewData.twoStar,
@@ -47,7 +50,7 @@ const AllReviews = () => {
 
   const calculatePercentage = (starCount) => {
     return (starCount / totalRatings) * 100;
- };
+  };
 
   return (
     <Colxx xl="4" lg="6" md="12" className="mb-4">
@@ -63,41 +66,56 @@ const AllReviews = () => {
               <h4>{averageStar} out of 5 stars</h4>
             </Col>
           </Row>
-          <h4>{totalRatings} ratings & {totalFeedBack} Reviews</h4>
+          <h4>
+            {totalRatings} ratings & {totalFeedBack} Reviews
+          </h4>
           <div className="mb-4">
             <p className="mb-2">
               5 Star
-              <span className="float-right text-muted">{starRatings.fiveStar}</span>
+              <span className="float-right text-muted">
+                {starRatings.fiveStar}
+              </span>
             </p>
             <Progress value={calculatePercentage(starRatings.fiveStar)} />
           </div>
           <div className="mb-4">
             <p className="mb-2">
               4 Star
-              <span className="float-right text-muted">{starRatings.fourStar}</span>
+              <span className="float-right text-muted">
+                {starRatings.fourStar}
+              </span>
             </p>
             <Progress value={calculatePercentage(starRatings.fourStar)} />
           </div>
           <div className="mb-4">
             <p className="mb-2">
               3 Star
-              <span className="float-right text-muted">{starRatings.threeStar}</span>
+              <span className="float-right text-muted">
+                {starRatings.threeStar}
+              </span>
             </p>
             <Progress value={calculatePercentage(starRatings.threeStar)} />
           </div>
           <div className="mb-4">
             <p className="mb-2">
               2 Star
-              <span className="float-right text-muted">{starRatings.twoStar}</span>
+              <span className="float-right text-muted">
+                {starRatings.twoStar}
+              </span>
             </p>
             <Progress value={calculatePercentage(starRatings.twoStar)} />
           </div>
           <div className="mb-4">
             <p className="mb-2">
               1 Star
-              <span className="float-right text-muted">{starRatings.oneStar}</span>
+              <span className="float-right text-muted">
+                {starRatings.oneStar}
+              </span>
             </p>
-            <Progress value={calculatePercentage(starRatings.oneStar)} barStyle={{ backgroundColor: 'primary'}}  />
+            <Progress
+              value={calculatePercentage(starRatings.oneStar)}
+              barStyle={{ backgroundColor: "primary" }}
+            />
           </div>
         </CardBody>
       </Card>

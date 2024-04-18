@@ -351,10 +351,10 @@ const MentorProfile = () => {
           </Colxx>
         </Row>
       </Colxx>
-      <AllReviews />
           </Colxx>
           </div>
         </Colxx>
+      <AllReviews id={mid} />
       </div>
     </div>
   );
