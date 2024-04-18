@@ -124,6 +124,10 @@ if (roleRes.includes("MENTOR")) {
   const handleMySessionsClick = () => {
     history.push(session);
   };
+  const handleMyLawyerJobsClick = () => {
+    history.push(`${adminRoot}/jobslist`);
+  };
+  
   
 
   const handleLogout = () => {
@@ -263,6 +267,11 @@ if (roleRes.includes("MENTOR")) {
               <NavLink to={session}>
                 <DropdownItem onClick={() => handleMySessionsClick()}>
                 <i className="simple-icon-list" />  Sessions
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/jobslist`}>
+                <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
+                <i className="iconsminds-scale" />  My Lawyer Jobs
                 </DropdownItem>
               </NavLink>
               <DropdownItem onClick={() => handleMyListingClick()}>

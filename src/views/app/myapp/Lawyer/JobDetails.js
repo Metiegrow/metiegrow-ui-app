@@ -38,13 +38,50 @@ const JobDetails = () => {
     },[url])
   return (
     <div>
-      <h1>Job Name</h1>
+        <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1>
+
       <Row>
       <Colxx lg={4}>
+      {jobdetails.steps&&jobdetails.steps.map((s)=>{
+            return(
+              <div key={s.stepId}>
+           
+           
+      <Card className='mb-2'>
+        <CardBody className=''>
+        <div className='d-flex align-items-center'>
+          <div> 
+
+   
+          <h1>{s.stepNumber}</h1>
+          
+         
+          </div>
+          <div className='ml-3'>
+          <h3>{s.stepName}</h3>
+            <h6>{s.description}</h6>
+            <h6>Done by <strong>{s.doneBy}</strong></h6>
+          </div>
+        </div>
+        
+    
+        </CardBody>
+      </Card>
+      
+              </div>
+             
+            )
+           
+          })}
+      </Colxx>
+     
+      {/* <Colxx lg={4}>
       <Card>
         <CardBody>
         <div className='d-flex align-items-center'>
           <div> 
+
+   
           <h1>{jobdetails.stepNumber}</h1>
          
           </div>
@@ -58,7 +95,7 @@ const JobDetails = () => {
     
         </CardBody>
       </Card>
-      </Colxx>
+      </Colxx> */}
       {/* <Colxx lg={4}>
           {jobdetails&&jobdetails.map(job => (
             <Card key={job.jobId} className='mb-2'>
@@ -78,7 +115,86 @@ const JobDetails = () => {
           ))}
         </Colxx> */}
       <Colxx>
-      <Card>
+      {jobdetails.steps&&jobdetails.steps.map((st)=>{
+        return (
+          <Card key={st.stepId} className='mb-2'>
+      <CardBody>
+   
+      <Form>
+      <h2 className='text-primary text-center'>Step {st.stepNumber}</h2>
+       <FormGroup >
+
+       <Col sm={2}>
+       <Label className='text-one'>Name</Label>
+       </Col>
+        <Col>
+        <h3>{st.stepName}</h3>
+        </Col>
+        
+       </FormGroup>
+       <FormGroup >
+       <Col sm={2}>
+       <Label className='text-one'>Description</Label>
+       </Col>
+        <Col>
+        <h3>{st.description}</h3>
+        </Col>
+        
+       </FormGroup>
+       <FormGroup >
+       <Col sm={2}>
+       <Label className='text-one'>Done by</Label>
+       </Col>
+        <Col>
+        <h3>{st.doneBy}</h3>
+        </Col>
+        
+       </FormGroup>
+       <FormGroup >
+       <Col sm={2}>
+       <Label className='text-one'>Documents</Label>
+       </Col>
+        <Col>
+        <DropzoneExample/>
+        {/* <div className='mt-4'>
+         
+           <h5>PAN Card<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
+           <h5>Appointment<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
+        </div> */}
+        <div className='mt-4'>
+      {st.documentList && st.documentList.map((document) => (
+        <h5 key={document}>{document}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
+      ))}
+    </div>
+        </Col>
+        
+       </FormGroup>
+      <FormGroup>
+        <Col sm={2}>
+          <Label>
+            Status
+          </Label>
+        </Col>
+        <Col>
+        <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          value={selectedOption}
+          onChange={setSelectedOption}
+          options={selectData}
+        />
+        </Col>
+      </FormGroup>
+ 
+       </Form>
+      </CardBody>
+      
+      </Card>
+        )
+      })}
+      {/* <Card>
       <CardBody>
    
       <Form>
@@ -148,7 +264,7 @@ const JobDetails = () => {
        </Form>
       </CardBody>
       
-      </Card>
+      </Card> */}
        
       </Colxx>
       </Row>
