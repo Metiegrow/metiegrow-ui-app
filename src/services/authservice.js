@@ -40,64 +40,72 @@ export const authService = {
     }
   },
   
-  async login(email, password) {
-    const bodyData = JSON.stringify({ email: email, password: password });
-    const url = `${baseUrl}/api/authenticate`;
-    try {
-        const res = await axios.post(url, bodyData);
-        const tokenRes = res.data.token; 
-        console.log(res.data)
-        // const statusRes = res.data.roles.map(role => role.status);
-        // const roleRes = res.data.roles.map(role => role.role);
-        const statusRes = "7"; 
-        const roleRes = ["MENTOR"]; 
-        console.log(res.data.token);
-        console.log(statusRes);
-        console.log(roleRes);
-        // localStorage.setItem('status', JSON.stringify(statusRes));
-        // localStorage.setItem('roleRes', JSON.stringify(roleRes));
-        localStorage.setItem('tokenRes', tokenRes);
-        localStorage.setItem('status', statusRes);
-        localStorage.setItem('roleRes', roleRes);
-        localStorage.setItem('cRes', "check");
-        return res;
-    } catch (error) {
-        throw error;
-    }
-},
+//   async login(email, password) {
+//     const bodyData = JSON.stringify({ email: email, password: password });
+//     const url = `${baseUrl}/api/authenticate`;
+//     try {
+//         const res = await axios.post(url, bodyData);
+//         const tokenRes = res.data.token; 
+//         console.log(res.data)
+//         // const statusRes = res.data.roles.map(role => role.status);
+//         // const roleRes = res.data.roles.map(role => role.role);
+//         const statusRes = "7"; 
+//         const roleRes = ["MENTOR"]; 
+//         console.log(res.data.token);
+//         console.log(statusRes);
+//         console.log(roleRes);
+//         // localStorage.setItem('status', JSON.stringify(statusRes));
+//         // localStorage.setItem('roleRes', JSON.stringify(roleRes));
+//         localStorage.setItem('tokenRes', tokenRes);
+//         localStorage.setItem('status', statusRes);
+//         localStorage.setItem('roleRes', roleRes);
+//         localStorage.setItem('cRes', "check");
+//         return res;
+//     } catch (error) {
+//         throw error;
+//     }
+// },
 
 
 // with backend
 
 
-// async login(email, password) {
-//   const bodyData = JSON.stringify({ email: email, password: password });  
-//   const url = `${baseUrl}/api/authenticate`;
-//   try {
-//       const res = await axios.post(url, bodyData);
-//       const tokenRes = res.data.token; 
-//       console.log(res.data)
-//       const statusRes = res.data.roles.map(role => role.status);
-//         const roleRes = res.data.roles.map(role => role.role);
-//       console.log("role res from auth", roleRes)
+async login(email, password) {
+  const bodyData = JSON.stringify({ email: email, password: password });  
+  const url = `${baseUrl}/api/authenticate`;
+  try {
+      const res = await axios.post(url, bodyData);
+      const tokenRes = res.data.token; 
+      console.log(res.data)
+      console.log("res.data.roles: check")
 
-//       //const statusRes = "3"; 
-//       console.log(res.data.token);
-//       console.log("status response", statusRes);
-//       console.log("Role response", roleRes);
-//       const check1=JSON.stringify(statusRes);
-//       // const check2=JSON.stringify(roleRes);
-//       localStorage.setItem('status', check1[1]);
-//       // localStorage.setItem('roleRes', check2[1]);
-//       localStorage.setItem('tokenRes', tokenRes);
-//     localStorage.setItem('roleRes', roleRes);
-//      // localStorage.setItem('status', statusRes);
-//       // localStorage.setItem('cRes', "check");
-//       return res;
-//   } catch (error) {
-//       throw error;
-//   }
-// }
+      if(res.data.roles){
+        console.log("res.data.roles: true")
+      const statusRes = res.data.roles.map(role => role.status);
+        const roleRes = res.data.roles.map(role => role.role);
+      console.log("role res from auth", roleRes)
+
+      //const statusRes = "3"; 
+      console.log(res.data.token);
+      console.log("status response", statusRes);
+      console.log("Role response", roleRes);
+      const check1=JSON.stringify(statusRes);
+      // const check2=JSON.stringify(roleRes);
+      localStorage.setItem('status', check1[1]);
+      // localStorage.setItem('roleRes', check2[1]);
+      localStorage.setItem('tokenRes', tokenRes);
+    localStorage.setItem('roleRes', roleRes);
+     // localStorage.setItem('status', statusRes);
+      // localStorage.setItem('cRes', "check");
+    }else{
+      console.log("res.data.roles: false")
+
+    }
+      return res;
+  } catch (error) {
+      throw error;
+  }
+}
 
 
 //   async login(email, password) {

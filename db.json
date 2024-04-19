@@ -2015,9 +2015,9 @@
   "callStatus": {
     "id": 22,
     "status": "BOTH_JOINED",
-    "startTime": 1713385819922,
-    "endTime": 1713385827372,
-    "duration": 7450
+    "startTime": 1713387575508,
+    "endTime": 1713387582499,
+    "duration": 6991
   },
   "rating": {
     "rating": 0,
@@ -2030,15 +2030,39 @@
     "toTime": "1712871611000",
     "mode": "Video"
   },
-  "allReviews": {
-    "id": 1,
-    "oneStar": 1,
-    "twoStar": 4,
-    "threeStar": 1,
-    "fourStar": 0,
-    "fiveStar": 6,
-    "totalFeedBack": 1,
-    "totalRatings": 12,
-    "averageStar": 2
-  }
+  "allReviews": [
+    {
+      "id": 1,
+      "oneStar": 0,
+      "twoStar": 1,
+      "threeStar": 2,
+      "fourStar": 5,
+      "fiveStar": 10,
+      "totalFeedBack": 2,
+      "totalRatings": 18,
+      "averageStar": 4
+    },
+    {
+      "id": 2,
+      "oneStar": 2,
+      "twoStar": 3,
+      "threeStar": 6,
+      "fourStar": 5,
+      "fiveStar": 4,
+      "totalFeedBack": 2,
+      "totalRatings": 20,
+      "averageStar": 3
+    },
+    {
+      "id": 3,
+      "oneStar": 3,
+      "twoStar": 5,
+      "threeStar": 7,
+      "fourStar": 4,
+      "fiveStar": 1,
+      "totalFeedBack": 3,
+      "totalRatings": 20,
+      "averageStar": 3
+    }
+  ]
 }

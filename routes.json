@@ -49,7 +49,7 @@
     "/api/mentee/connect-to-videocall": "/callStatus",
     "/api/rating": "/rating",
     "/api/calldetails": "/calldetails",
-    "/api/rating/meta/mentor/:revieweeId": "/allReviews"
+    "/api/rating/meta/mentor/:id": "/allReviews/:id"
 
 
     
