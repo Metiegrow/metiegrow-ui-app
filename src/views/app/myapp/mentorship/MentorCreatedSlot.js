@@ -22,10 +22,10 @@ import DateRangePicker from '../BigCalendar/DateRangePicker';
 
 
 const MentorCreatedSlot = () => {
-  const url=`${baseUrl}/mentorSlotAvailablity`;
+  // const url=`${baseUrl}/mentorSlotAvailablity`;
 
   // To change the url to backend uncomment the below line 
-  // const url=`${baseUrl}/api/calendar/appointment/mentor`;
+   const url=`${baseUrl}/api/calendar/appointment/mentor`;
 
   const[mentoravailable,setMentorAvailable]=useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());

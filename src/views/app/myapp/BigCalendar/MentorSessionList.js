@@ -14,9 +14,9 @@ const [upcomingsession,setUpcomingSession]=useState('');
 const [showSuccessCard, setShowSuccessCard] = useState(false);
 const location = useLocation();
 // const url=`${baseUrl}/mentor/session`;
-const url1=`${baseUrl}/sessionUpcomingHistroy`;
+// const url1=`${baseUrl}/sessionUpcomingHistroy`;
 // To change the url to backend uncomment the below line 
-// const url1=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`;
+const url1=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`;
 const history = useHistory();
 
 // const handleJoinCall = (id) => {

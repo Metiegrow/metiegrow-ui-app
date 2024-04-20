@@ -25,10 +25,10 @@ import BottomNavigation from '../my-login/BottomNavigation';
 
 
 //  if you want to change backend url uncomment the below line
-// const url=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`
+ // const url=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`
 
- const url1=`${baseUrl}/ mentorAppointmentTime`
-// const url1=`${baseUrl}/api/calendar/appointment/mentee`
+ // const url1=`${baseUrl}/ mentorAppointmentTime`
+ const url1=`${baseUrl}/api/calendar/appointment/mentee`
  
 //  if you want to change backend url uncomment the below line
 
@@ -57,11 +57,11 @@ const [license,setLicense]=useState([]);
 
 
 
-const url=`${baseUrl}/licenseDetails`;
+ // const url=`${baseUrl}/licenseDetails`;
 
 
 // Backend Url
-// const url=`${baseUrl}/api/calendar/mentee/license-details`
+ const url=`${baseUrl}/api/calendar/mentee/license-details`
 
 
 const LicenseDetails = async () => {
