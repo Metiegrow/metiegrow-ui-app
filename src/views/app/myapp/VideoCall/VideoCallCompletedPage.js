@@ -75,7 +75,9 @@ const VideoCallCompletedPage = () => {
   // console.log(extractedToTime);
 
   const revieweeId = 2;
-  const url = `${baseUrl}/api/rating`;
+  // const url = `${baseUrl}/api/rating`;
+  const url = `${baseUrl}/api/rating/mentor`;
+
   console.log("rating", rating);
   console.log("quill", feedBack);
 
