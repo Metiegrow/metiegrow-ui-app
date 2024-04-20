@@ -12,6 +12,9 @@ const UserCard = () => {
   const [userdetails,setUserDetails]=useState('')
   const [inputkey,setInputKey]=useState('');
   const url=`${baseUrl}/user/cards`
+
+  // Backend url below 
+  // const url =`${baseUrl}/api/lawyer`
   useEffect(()=>{
 
     const UserList = async () => {

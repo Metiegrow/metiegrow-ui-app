@@ -24,8 +24,19 @@ const LawyerProfile = () => {
       setShowAll(!showAll);
     };
     const url=`${baseUrl}/lawyerProfile/${pid}`;
+
+    // backend lawyerprofile url 
+   
+    // const url=`${baseUrl}/ api/lawyer/${pid}`;
+
     const reviewURL=`${baseUrl}/user/reviews`;
+    // backend  url
+    // const reviewURL=`${baseUrl}/api/rating/lawyer/1`;
+
     const packageURL=`${baseUrl}/lawyerPackages`;
+    // backend url 
+
+    // const packageURL=`${baseUrl}/api/lawyer/package?lawyerId`
     useEffect(()=>{
         const ProfileLawyer=async()=>{
             try {
