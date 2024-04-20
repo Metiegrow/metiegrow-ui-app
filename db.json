@@ -1,9 +1,14 @@
 {
   "signUp": {
-    "username": "Arul",
-    "password": "arul@gmail.com",
-    "email": "arul@gmail.com",
-    "userType": "LAWYER"
+    "firstName": "Arun",
+    "lastName": "Kumar",
+    "username": "arun123",
+    "password": "arun@1996",
+    "email": "arun@gmail.com",
+    "phoneNumber": "+919292929292",
+    "userRoles": [
+      "MENTOR"
+    ]
   },
   "signIn": {
     "email": "vssivanesh@gmail.com",
