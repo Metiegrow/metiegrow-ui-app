@@ -9,11 +9,11 @@ import PopupWizard from './PopupWizard';
 
 const Month = () => {
   
-  const url=`${baseUrl}/mentorAvailablity`
+  // const url=`${baseUrl}/mentorAvailablity`
 
 
   // if you change the url to backend uncomment the below line
-  // const url=`${baseUrl}/api/calendar/appointment/mentee`
+  const url=`${baseUrl}/api/calendar/appointment/mentee`
 
   const[mentoravailable,setMentorAvailable]=useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());

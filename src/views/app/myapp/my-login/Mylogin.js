@@ -143,9 +143,13 @@ const Mylogin = ({ intl }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   // const url = `${baseUrl}/mentor/profile`;
-  const mentorAboutUrl = `${baseUrl}/mentorAbout`;
-  const mentorProfileUrl = `${baseUrl}/mentorProfile`;
-  const experienceUrl = `${baseUrl}/mentorExperience`;
+  const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
+  const mentorProfileUrl =`${baseUrl}/api/mentor/details/profile` ;
+  const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
+
+  // const mentorAboutUrl = `${baseUrl}/mentorAbout`;
+  //  const mentorProfileUrl = `${baseUrl}/mentorProfile`;
+  // const experienceUrl = `${baseUrl}/mentorExperience`;
 
   // const postData = async () => {
 
