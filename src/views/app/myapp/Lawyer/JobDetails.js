@@ -16,6 +16,7 @@ const selectData = [
 
 const JobDetails = () => {
   const [selectedOption, setSelectedOption] = useState('');
+  const [selectedStep, setSelectedStep] = useState(null);
   const [jobdetails,setJobDetails]=useState('');
   const {jid}=useParams();
   const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
@@ -27,6 +28,11 @@ const JobDetails = () => {
                 const response = await axios.get(url);
                 setJobDetails(response.data);
                 console.log("checking response",response.data);
+
+           // Set the selected step to the first step in the jobdetails array
+        if (response.data.steps && response.data.steps.length > 0) {
+          setSelectedStep(response.data.steps[0]);
+        }
                 
               } catch (error) {
                 console.error('Error fetching data:', error);
@@ -36,6 +42,11 @@ const JobDetails = () => {
        
     
     },[url])
+
+    const handleStepClick = (step) => {
+      setSelectedStep(step);
+    };
+  
   return (
     <div>
         <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1>
@@ -47,7 +58,7 @@ const JobDetails = () => {
               <div key={s.stepId}>
            
            
-      <Card className='mb-2'>
+      <Card className='mb-2'  onClick={() => handleStepClick(s)}>
         <CardBody className=''>
         <div className='d-flex align-items-center'>
           <div> 
@@ -114,7 +125,7 @@ const JobDetails = () => {
             </Card>
           ))}
         </Colxx> */}
-      <Colxx>
+      {/* <Colxx>
       {jobdetails.steps&&jobdetails.steps.map((st)=>{
         return (
           <Card key={st.stepId} className='mb-2'>
@@ -122,6 +133,7 @@ const JobDetails = () => {
    
       <Form>
       <h2 className='text-primary text-center'>Step {st.stepNumber}</h2>
+
        <FormGroup >
 
        <Col sm={2}>
@@ -156,11 +168,7 @@ const JobDetails = () => {
        </Col>
         <Col>
         <DropzoneExample/>
-        {/* <div className='mt-4'>
-         
-           <h5>PAN Card<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
-           <h5>Appointment<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
-        </div> */}
+       
         <div className='mt-4'>
       {st.documentList && st.documentList.map((document) => (
         <h5 key={document}>{document}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
@@ -194,18 +202,25 @@ const JobDetails = () => {
       </Card>
         )
       })}
-      {/* <Card>
+
+      </Colxx> */}
+
+      <Colxx>
+          {selectedStep && (
+           
+            <Card key={selectedStep.stepId} className='mb-2'>
       <CardBody>
    
       <Form>
-      <h2 className='text-primary text-center'>Step 1</h2>
+      <h2 className='text-primary text-center'>Step {selectedStep.stepNumber}</h2>
+
        <FormGroup >
 
        <Col sm={2}>
        <Label className='text-one'>Name</Label>
        </Col>
         <Col>
-        <h3>Appointment</h3>
+        <h3>{selectedStep.stepName}</h3>
         </Col>
         
        </FormGroup>
@@ -214,8 +229,7 @@ const JobDetails = () => {
        <Label className='text-one'>Description</Label>
        </Col>
         <Col>
-        <h3>Description details Lorem ipsum dolor sit 
-         amet consectetur adipisicing elit. Reiciendis, at!</h3>
+        <h3>{selectedStep.description}</h3>
         </Col>
         
        </FormGroup>
@@ -224,7 +238,7 @@ const JobDetails = () => {
        <Label className='text-one'>Done by</Label>
        </Col>
         <Col>
-        <h3>Lawyer/User</h3>
+        <h3>{selectedStep.doneBy}</h3>
         </Col>
         
        </FormGroup>
@@ -234,11 +248,12 @@ const JobDetails = () => {
        </Col>
         <Col>
         <DropzoneExample/>
-        <div className='mt-4'>
-         
-           <h5>PAN Card<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
-           <h5>Appointment<span className='ml-2 text-primary '><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
-        </div>
+       
+     <div className='mt-4'>
+                      {selectedStep.documentList && selectedStep.documentList.map((document) => (
+                        <h5 key={document}>{document}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
+                      ))}
+                    </div>
         </Col>
         
        </FormGroup>
@@ -264,9 +279,10 @@ const JobDetails = () => {
        </Form>
       </CardBody>
       
-      </Card> */}
-       
-      </Colxx>
+      </Card>
+            
+          )}
+        </Colxx>
       </Row>
 
       
