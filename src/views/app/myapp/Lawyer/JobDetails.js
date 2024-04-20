@@ -46,7 +46,10 @@ const JobDetails = () => {
     const handleStepClick = (step) => {
       setSelectedStep(step);
     };
-  
+   
+    
+ 
+
   return (
     <div>
         <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1>
@@ -58,7 +61,8 @@ const JobDetails = () => {
               <div key={s.stepId}>
            
            
-      <Card className='mb-2'  onClick={() => handleStepClick(s)}>
+      <Card className='mb-2'  style={{ border: selectedStep === s ? '3px solid green' : 'none' }}
+      >
         <CardBody className=''>
         <div className='d-flex align-items-center'>
           <div> 
@@ -68,12 +72,41 @@ const JobDetails = () => {
           
          
           </div>
+          <div className='d-flex justify-content-between flex-grow-1 align-items-center  '>
           <div className='ml-3'>
           <h3>{s.stepName}</h3>
             <h6>{s.description}</h6>
             <h6>Done by <strong>{s.doneBy}</strong></h6>
           </div>
+          <div className='text-end'>
+    <span 
+        className='text-xlarge text-muted' 
+        style={{cursor: 'pointer'}}
+        onClick={() => handleStepClick(s)}
+        onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === 'Space') {
+                handleStepClick(s);
+                event.preventDefault();  
+            }
+        }}
+        role="button"
+        tabIndex="0"
+        onMouseEnter={(event) => { 
+            const { target } = event;
+            target.style.fontWeight = 'bold';
+        }}
+        onMouseLeave={(event) => { 
+            const { target } = event;
+            target.style.fontWeight = 'normal';
+        }}
+    >
+        <i className='simple-icon-arrow-right' />
+    </span>
+</div>
+          </div>
+         
         </div>
+     
         
     
         </CardBody>
