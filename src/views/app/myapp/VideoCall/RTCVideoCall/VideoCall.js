@@ -63,7 +63,7 @@ console.log("idd:", id)
           {setTimeout(handleJoinCall)}
         </>
       )}
-      {inCall && <VideoCallCtrl setInCall={setInCall} />}
+      {inCall && <VideoCallCtrl id={id} setInCall={setInCall} />}
     </div>
   );
 }

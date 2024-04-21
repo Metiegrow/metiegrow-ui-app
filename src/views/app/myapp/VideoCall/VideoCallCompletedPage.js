@@ -9,7 +9,7 @@ import {
   CardTitle,
   Col,
 } from "reactstrap";
-import { useHistory } from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import { Colxx } from "components/common/CustomBootstrap";
 import ReactQuill from "react-quill";
 import Rating from "components/common/Rating";
@@ -29,6 +29,9 @@ const VideoCallCompletedPage = () => {
   const [mode, setMode] = useState("");
   const getUrl = `${baseUrl}/api/calldetails`;
   const history = useHistory();
+  const {id}=useParams();
+
+  console.log("id end:", id)
 
   useEffect(() => {
     const callEndDetails = async () => {
@@ -74,7 +77,7 @@ const VideoCallCompletedPage = () => {
   // const extractedToTime = `${hours2}:${minutes2}:${seconds2}`;
   // console.log(extractedToTime);
 
-  const revieweeId = 2;
+  // const revieweeId = 2;
   // const url = `${baseUrl}/api/rating`;
   const url = `${baseUrl}/api/rating/mentor`;
 
@@ -98,7 +101,7 @@ const token = getTokenRes();
       .post(url, {
         rating,
         feedBack,
-        revieweeId,
+        revieweeId : id,
       }, {
         headers: {
           Authorization: `Bearer ${token}`,

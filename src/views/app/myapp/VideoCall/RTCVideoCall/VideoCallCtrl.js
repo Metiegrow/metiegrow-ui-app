@@ -80,7 +80,7 @@ const VideoCallCtrl = (props) => {
           const duration = endTime - callStartTime;
           console.log("Call duration:", duration);
         const response = await axios.post(url, {
-          id: 22,
+          id,
           status: connectionState,
           
         });
@@ -243,6 +243,7 @@ const VideoCallCtrl = (props) => {
         {ready && tracks && (
           <>
             <Controls
+             id={id}
               tracks={tracks}
               setStart={setStart}
               setInCall={setInCall}

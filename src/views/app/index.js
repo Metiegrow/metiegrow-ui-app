@@ -408,7 +408,7 @@ console.log("role res from index", roleRes)
               render={(props) => <ViewStayListing {...props} />}
             />
                <Route
-              path={`${match.url}/videocall`}
+              path={`${match.url}/videocall/:id`}
               render={(props) => <ViewVideoCall {...props} />}
             />
                {/* <Route
@@ -461,7 +461,7 @@ console.log("role res from index", roleRes)
               render={(props) => <ViewLawyerProfile {...props} />}
             />
              <Route
-              path={`${match.url}/callcompleted`}
+              path={`${match.url}/callcompleted/:id`}
               render={(props) => <ViewCallCompleted {...props} />}
             />
             
