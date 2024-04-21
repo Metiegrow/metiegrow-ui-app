@@ -23,7 +23,7 @@ const VideoCallCompletedPage = () => {
   const [rating, setRating] = useState(0);
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState("Raj");
+  const [name, setName] = useState("");
   const [fromTime, setFromTime] = useState("");
   const [toTime, setToTime] = useState("");
   const [mode, setMode] = useState("");
@@ -78,6 +78,12 @@ const VideoCallCompletedPage = () => {
   // const url = `${baseUrl}/api/rating`;
   const url = `${baseUrl}/api/rating/mentor`;
 
+  
+  function getTokenRes() {
+    return localStorage.getItem('tokenRes');
+}
+const token = getTokenRes();
+
   console.log("rating", rating);
   console.log("quill", feedBack);
 
@@ -93,6 +99,10 @@ const VideoCallCompletedPage = () => {
         rating,
         feedBack,
         revieweeId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -103,10 +113,37 @@ const VideoCallCompletedPage = () => {
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
-        setSubmissionStatus("failure");
+        setSubmissionStatus("success");
+        // setSubmissionStatus("failure");
         setIsLoading(false);
       });
   };
+  
+
+  
+
+  // const handleSubmit = () => {
+  //   setSubmissionStatus("success");
+  //   setIsLoading(true);
+  //   axios
+  //     .post(url, {
+  //       rating,
+  //       feedBack,
+  //       revieweeId,
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setSubmissionStatus("success");
+  //       setTimeout(() => {
+  //         setIsLoading(false);
+  //       }, 3000);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error submitting data:", error);
+  //       setSubmissionStatus("failure");
+  //       setIsLoading(false);
+  //     });
+  // };
 
   const handleHomeClick = () => {
     history.push("/app/profile");

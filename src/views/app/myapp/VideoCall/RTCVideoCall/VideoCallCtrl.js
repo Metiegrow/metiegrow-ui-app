@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useParams} from "react-router-dom";
 // import { Container, Row, Col } from "reactstrap";
 // import AgoraRTC from "agora-rtc-react"
 import { baseUrl } from "constants/defaultValues";
@@ -24,86 +25,88 @@ const VideoCallCtrl = (props) => {
   const [status, setStatus] = useState("MENTOR_JOINED");
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
+  const {id}=useParams();
+
+  console.log("idds:", id)
   console.log("user chk", users);
   console.log("check status", status);
+ const url = `${baseUrl}/api/mentee/connect-to-videocall`;
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     console.log("fetchedData chk");
+  //     try {
+  //       if (callStartTime && callEndTime && callEndTime > callStartTime) {
+  //         const duration = callEndTime - callStartTime;
+  //         console.log("Call duration:", duration);
+  //         const response = await axios.post(
+  //           url,
+  //           {
+  //             id: 22,
+  //             status,
+  //             startTime: callStartTime,
+  //             endTime: callEndTime,
+  //             duration,
+  //           }
+  //         );
+  //         console.log("status post vid :", response.data);
+  //         setTimeRemaining(response.data.remainingDuration);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
+
+  //   if (callStartTime && callEndTime) {
+  //     fetchData();
+  //   }
+
+  //   const intervalId = setInterval(() => {
+  //     fetchData();
+  //   }, 300000);
+
+  //   return () => {
+  //     console.log("Clearing interval chk");
+  //     clearInterval(intervalId);
+  //   };
+  // }, [callStartTime]);
 
   useEffect(() => {
     const fetchData = async () => {
       console.log("fetchedData chk");
       try {
-        if (callStartTime && callEndTime && callEndTime > callStartTime) {
-          const duration = callEndTime - callStartTime;
+
+        if (callStartTime) {
+          const endTime = Date.now();
+          const duration = endTime - callStartTime;
           console.log("Call duration:", duration);
-          const response = await axios.post(
-            `${baseUrl}/api/mentee/connect-to-videocall`,
-            {
-              id: 22,
-              status,
-              startTime: callStartTime,
-              endTime: callEndTime,
-              duration,
-            }
-          );
-          console.log("status post vid :", response.data);
-          setTimeRemaining(response.data.remainingDuration);
-        }
+        const response = await axios.post(url, {
+          id: 22,
+          status: connectionState,
+          
+        });
+        console.log("status post vid :",response.data);
+      }
       } catch (error) {
-        console.error("Error:", error);
+        console.error('Error:', error);
       }
     };
-
-    if (callStartTime && callEndTime) {
-      fetchData();
-    }
+    fetchData();
 
     const intervalId = setInterval(() => {
       fetchData();
     }, 300000);
-
     return () => {
       console.log("Clearing interval chk");
       clearInterval(intervalId);
     };
-  }, [callStartTime, callEndTime, status]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("fetchedData chk");
-  //     try {
-
-  //       if (callStartTime) {
-  //         const endTime = Date.now();
-  //         const duration = endTime - callStartTime;
-  //         console.log("Call duration:", duration);
-  //       const response = await axios.post(`${baseUrl}/api/mentee/connect-to-videocall`, {
-  //         id: 22,
-  //         status: connectionState,
-  //         startTime: callStartTime,
-  //         duration,
-  //         endTime: callEndTime,
-  //       });
-  //       console.log("status post vid :",response.data);
-  //     }
-  //     } catch (error) {
-  //       console.error('Error:', error);
-  //     }
-  //   };
-  //   fetchData();
-
-  //   const intervalId = setInterval(() => {
-  //     fetchData();
-  //   }, 300000);
-  //   return () => {
-  //     console.log("Clearing interval chk");
-  //     clearInterval(intervalId);
-  //   };
-  // }, [connectionState, callStartTime, callEndTime]);
+  }, [connectionState, callStartTime, callEndTime]);
 
   useEffect(() => {
     const init = async (name) => {
       client.on("user-joined", () => {
         if (!callStartTime) {
           setCallStartTime(Date.now());
+          setStatus("BOTH_JOINED")
           console.log("user joined cc");
         }
       });
@@ -112,6 +115,7 @@ const VideoCallCtrl = (props) => {
         if (users.length === 1) {
           // setCallStartTime(null);
           setCallEndTime(Date.now());
+          setStatus("CALL_ENDED")
           console.log("user left cc");
         }
       });
@@ -194,16 +198,16 @@ const VideoCallCtrl = (props) => {
     };
   }, [timeRemaining]);
 
-  useEffect(() => {
-    if (connectionState === "CONNECTED") {
-      setStatus("CALL_IN_PROGRESS");
-    }
-    if (callStartTime) {
-      setStatus("BOTH_JOINED");
-    } else if (connectionState === "DISCONNECTED") {
-      setStatus("CALL_ENDED");
-    }
-  }, [connectionState]);
+  // useEffect(() => {
+  //   if (connectionState === "CONNECTED") {
+  //     setStatus("CALL_IN_PROGRESS");
+  //   }
+  //   if (callStartTime) {
+  //     setStatus("BOTH_JOINED");
+  //   } else if (connectionState === "DISCONNECTED") {
+  //     setStatus("CALL_ENDED");
+  //   }
+  // }, [connectionState]);
 
   const minutes1 = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;

@@ -104,12 +104,12 @@ const data = [
     label: "menu.myapp",
     to: `${adminRoot}/myapp`,
   },
-  {
-    id: "Login",
-    icon: "iconsminds-folder",
-    label: "Apply as a mentor",
-    to: `${adminRoot}/mentor/apply`,
-  },
+  // {
+  //   id: "Login",
+  //   icon: "iconsminds-folder",
+  //   label: "Apply as a mentor",
+  //   to: `${adminRoot}/mentor/apply`,
+  // },
   // {
   //   id: 'videocall',
   //   icon: 'iconsminds-speach-bubbles',

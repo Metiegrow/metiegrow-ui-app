@@ -29,12 +29,12 @@ const Register = () => {
   //   password: 'TestPass',
   //   role: "MENTOR",
   // });
-  const [firstName, setFirstName] = useState("Arun");
-  const [lastName, setLastName] = useState("Kumar");
-  const [username,setUsername] = useState("arun123")
-  const [email, setEmail] = useState("arun@gmail.com");
-  const [phoneNumber, setPhoneNumber] = useState("+919292929292");
-  const [password,setPassword] = useState("arun@1996")
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username,setUsername] = useState("")
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("+91");
+  const [password,setPassword] = useState("")
   const [userRoles,setUserRoles] = useState(["MENTOR"])
 
   const history = useHistory();
