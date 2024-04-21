@@ -207,10 +207,10 @@ const MentorProfile = () => {
           <hr/>
           <Colxx className='sm="12" md="12" lg="12" xxs="12" mt-5'>
             <Row>
-            <div className=''>
+            <div className='w-40 '>
             <h1 className='font-weight-semibold text-large'>About</h1>
             {/* <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.about}</p> */}
-            <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.bio}</p>
+            <p className='text-one font-weight-medium '>{mentorprofiledetails1.bio}</p>
             </div>
              
             </Row>
