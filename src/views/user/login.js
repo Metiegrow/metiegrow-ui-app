@@ -14,15 +14,41 @@ import { authService } from 'services/authservice';
 // import { connect } from 'react-redux';
 
 
+// const validatePassword = (value) => {
+//   let error;
+//   if (!value) {
+//     error = 'Please enter your password';
+//   } else if (value.length < 4) {
+//     error = 'Value must be longer than 3 characters';
+//   }
+//   return error;
+// };
 const validatePassword = (value) => {
   let error;
+
+  const lowercaseRegex = /[a-z]/;
+  const uppercaseRegex = /[A-Z]/;
+  const digitRegex = /\d/;
+  const specialCharRegex = /[@#$%^&+=!]/;
+  const lengthRegex = /^.{8,15}$/;
+
   if (!value) {
     error = 'Please enter your password';
-  } else if (value.length < 4) {
-    error = 'Value must be longer than 3 characters';
+  } else if (!lowercaseRegex.test(value)) {
+    error = 'Password must contain at least one lowercase letter';
+  } else if (!uppercaseRegex.test(value)) {
+    error = 'Password must contain at least one uppercase letter';
+  } else if (!digitRegex.test(value)) {
+    error = 'Password must contain at least one digit';
+  } else if (!specialCharRegex.test(value)) {
+    error = 'Password must contain at least one special character from the set @#$%^&+=!';
+  } else if (!lengthRegex.test(value)) {
+    error = 'Password must be between 8 and 15 characters long';
   }
+
   return error;
 };
+
 
 const validateEmail = (value) => {
   let error;
