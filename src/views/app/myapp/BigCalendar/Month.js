@@ -26,11 +26,19 @@ const Month = () => {
   const [hasAvailableSlots,setHasAvailableSlots] = useState(true);
 
   // Function to get the start date of the current week
+  // const getStartOfWeek = () => {
+  //   const currentDate = new Date();
+  //   const day = currentDate.getDay();
+  //   const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+  //   return new Date(currentDate.setDate(diff));
+  // };
   const getStartOfWeek = () => {
     const currentDate = new Date();
     const day = currentDate.getDay();
     const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-    return new Date(currentDate.setDate(diff));
+    const startOfWeek = new Date(currentDate.setDate(diff));
+    console.log('Calculated Start of Current Week:', startOfWeek);
+    return startOfWeek;
   };
 
   // Function to get the end date of the current week
@@ -120,8 +128,14 @@ useEffect(() => {
 
 
 
+// useEffect(() => {
+//   const startOfWeek = getStartOfWeek();
+//   console.log('Start of the Current Week checking:', startOfWeek);
+//   setCurrentWeekStart(startOfWeek);
+// }, []);
 useEffect(() => {
   const startOfWeek = getStartOfWeek();
+  console.log('Start of the Current Week checking:', startOfWeek);
   setCurrentWeekStart(startOfWeek);
 }, []);
 
@@ -225,25 +239,59 @@ const goToNextWeek = () => {
   };
 ;
  
+  // const isPreviousWeekDisabled = () => {
+  //   // Disable the button if you're already in the current week
+  //   const today = new Date();
+  //   const currentWeekStartDate = new Date(today);
+  //  currentWeekStartDate.setDate(today.getDate() - today.getDay() + 1); // Adjust to the start of the week
+  
+  //   console.log('Current Week Start Date:', currentWeekStartDate);
+  //   console.log('Stored Current Week Start Date:', currentWeekStart);
+  
+  //   // const disabled = (
+  //   //   currentWeekStartDate.getFullYear() === currentWeekStart.getFullYear() &&
+  //   //   currentWeekStartDate.getMonth() === currentWeekStart.getMonth() &&
+  //   //   currentWeekStartDate.getDate() === currentWeekStart.getDate()
+  //   // );
+    
+  //   const disabled = currentWeekStartDate.getTime() === currentWeekStart.getTime();
+  //   console.log('Is Previous Week Disabled:', disabled);
+   
+
+  
+  //   return disabled;
+  // };
   const isPreviousWeekDisabled = () => {
     // Disable the button if you're already in the current week
     const today = new Date();
     const currentWeekStartDate = new Date(today);
-   currentWeekStartDate.setDate(today.getDate() - today.getDay() + 1); // Adjust to the start of the week
-  
-    console.log('Current Week Start Date:', currentWeekStartDate);
-    console.log('Stored Current Week Start Date:', currentWeekStart);
-  
-    const disabled = (
-      currentWeekStartDate.getFullYear() === currentWeekStart.getFullYear() &&
-      currentWeekStartDate.getMonth() === currentWeekStart.getMonth() &&
-      currentWeekStartDate.getDate() === currentWeekStart.getDate()
-    );
-    console.log('Is Previous Week Disabled:', disabled);
+const day = today.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
 
+if (day === 0) {
+  // If today is Sunday, subtract 6 days to get the start of the current week
+  currentWeekStartDate.setDate(today.getDate() - 6);
+} else {
+  // Otherwise, subtract the number of days from the current day to get the start of the current week
+  currentWeekStartDate.setDate(today.getDate() - (day - 1));
+}
+
+// Set hours, minutes, seconds, and milliseconds to zero
+currentWeekStartDate.setHours(0, 0, 0, 0);
+
+console.log('Current Week Start Date:', currentWeekStartDate);
+
+    console.log('Stored Current Week Start Date:', currentWeekStart);
+    
+    const storedWeekStart = new Date(currentWeekStart);
+    storedWeekStart.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+    
+    const disabled = currentWeekStartDate.getTime() === storedWeekStart.getTime();
+    console.log('Is Previous Week Disabled:', disabled);
   
     return disabled;
   };
+  
+  
  
   
   const handleTimeSlotClick = (date) => {
