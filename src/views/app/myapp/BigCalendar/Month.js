@@ -317,7 +317,10 @@ console.log('Current Week Start Date:', currentWeekStartDate);
    <div className='font-weight-semibold d-flex justify-content-center align-items-center'>
      {/* <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button> */}
      <span className='font-weight-semibold text-xlarge mr-2 cursor-pointer'
-     style={{cursor:"pointer"}}
+      style={{ 
+       cursor: isPreviousWeekDisabled() ? "not-allowed" : "pointer",
+       opacity: isPreviousWeekDisabled() ? 0.5 : 1, // Lower opacity for disabled state
+     }}
       onClick={!isPreviousWeekDisabled() ? goToPreviousWeek : undefined}
       onKeyDown={(e) => {
     if (!isPreviousWeekDisabled() && (e.key === 'Enter' || e.key === ' ')) {
@@ -327,7 +330,9 @@ console.log('Current Week Start Date:', currentWeekStartDate);
   role="button"
   tabIndex={!isPreviousWeekDisabled() ? 0 : -1}
   aria-disabled={isPreviousWeekDisabled()}
-><i className='simple-icon-arrow-left' />
+>
+{/* <i className='simple-icon-arrow-left' /> */}
+<i className={`simple-icon-arrow-left ${isPreviousWeekDisabled() ? 'disabled' : ''}`} />
 </span>
 
       <div>
