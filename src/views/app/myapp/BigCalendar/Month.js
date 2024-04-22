@@ -24,6 +24,10 @@ const Month = () => {
 
   const [selectedDate, setSelectedDate] = useState(null); 
   const [hasAvailableSlots,setHasAvailableSlots] = useState(true);
+ 
+  // const [selectedStartTime, setSelectedStartTime] = useState(null);
+  // const [selectedEndTime, setSelectedEndTime] = useState(null);
+  
 
   // Function to get the start date of the current week
   // const getStartOfWeek = () => {
@@ -37,7 +41,7 @@ const Month = () => {
     const day = currentDate.getDay();
     const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
     const startOfWeek = new Date(currentDate.setDate(diff));
-    console.log('Calculated Start of Current Week:', startOfWeek);
+    
     return startOfWeek;
   };
 
@@ -135,7 +139,7 @@ useEffect(() => {
 // }, []);
 useEffect(() => {
   const startOfWeek = getStartOfWeek();
-  console.log('Start of the Current Week checking:', startOfWeek);
+
   setCurrentWeekStart(startOfWeek);
 }, []);
 
@@ -197,11 +201,11 @@ const goToNextWeek = () => {
     const availDate = new Date(avail.fromTimeStamp);
     return availDate >= nextWeekStart && availDate <= nextWeekEnd;
   });
-  console.log('Has Available Slots:', hasAvailable);
+ 
   if (!hasAvailable) {
     // Optionally display a message to inform the user
     setHasAvailableSlots(false);
-    console.log("No available slots for the next week");
+    
     return; // Exit the function without updating state if no slots available
   }
 
@@ -278,15 +282,13 @@ if (day === 0) {
 // Set hours, minutes, seconds, and milliseconds to zero
 currentWeekStartDate.setHours(0, 0, 0, 0);
 
-console.log('Current Week Start Date:', currentWeekStartDate);
 
-    console.log('Stored Current Week Start Date:', currentWeekStart);
     
     const storedWeekStart = new Date(currentWeekStart);
     storedWeekStart.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
     
     const disabled = currentWeekStartDate.getTime() === storedWeekStart.getTime();
-    console.log('Is Previous Week Disabled:', disabled);
+   
   
     return disabled;
   };
@@ -296,10 +298,15 @@ console.log('Current Week Start Date:', currentWeekStartDate);
   
   const handleTimeSlotClick = (date) => {
     setSelectedDate(date);
-    console.log(selectedDate);
+   
     setModalSmall(true); // Optionally open the modal when a time slot is clicked
     
+    
   };
+ 
+ 
+
+
 
 
  
@@ -400,7 +407,7 @@ console.log('Current Week Start Date:', currentWeekStartDate);
     <td> {formatDate(date)}</td>
     <td>
       
- {mentoravailable.map((avail) => {
+ {/* {mentoravailable.map((avail) => {
     const availDate = new Date(avail.fromTimeStamp);
     if (availDate.toDateString() === date.toDateString()) {
         // Mentor is available on this date, display the available time
@@ -435,7 +442,41 @@ console.log('Current Week Start Date:', currentWeekStartDate);
     } 
     
        return null;
-})}
+})} */}
+{mentoravailable
+        .filter(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
+        .map(avail => {
+          const FromDate = new Date(avail.fromTimeStamp);
+          const ToDate = new Date(avail.toTimeStamp);
+          
+          const fromHours = FromDate.getHours() % 12 || 12;
+          const fromMinutes = String(FromDate.getMinutes()).padStart(2, '0');
+          const fromPeriod = FromDate.getHours() < 12 ? 'AM' : 'PM';
+          
+          const toHours = ToDate.getHours() % 12 || 12;
+          const toMinutes = String(ToDate.getMinutes()).padStart(2, '0');
+          const toPeriod = ToDate.getHours() < 12 ? 'AM' : 'PM';
+          
+          const fromTime = `${fromHours}:${fromMinutes} ${fromPeriod}`;
+          const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
+
+          const isPastTime = ToDate < new Date();
+
+          return (
+            <Button
+              key={avail.fromTimeStamp} // Ensure a unique key for each button
+              color='primary'
+              block
+              className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} my-2`}
+              disabled={isPastTime}
+              onClick={() => handleTimeSlotClick(date)}
+              // onClick={() => handleTimeSlotClick(date, avail.fromTimeStamp, avail.toTimeStamp)}
+            >
+              {fromTime} to {toTime}
+            </Button>
+          );
+        })
+      }
 
 {mentoravailable.every(avail => new Date(avail.fromTimeStamp).toDateString() !== date.toDateString()) && (
         <div className="text-center text-one">-</div>
@@ -486,7 +527,9 @@ console.log('Current Week Start Date:', currentWeekStartDate);
               
    
        <PopupWizard selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
-        mentorName={mentorName} mentorId={mentorId} />
+        mentorName={mentorName} mentorId={mentorId}   
+ 
+     />
        {/* <Button className='ml-2 mt-2 '  outline  color="secondary"  onClick={() => setModalSmall(false)}
                    >
                      Close

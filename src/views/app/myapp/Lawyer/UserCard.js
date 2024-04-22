@@ -14,7 +14,7 @@ const UserCard = () => {
   const url=`${baseUrl}/user/cards`
 
   // Backend url below 
-  // const url =`${baseUrl}/api/lawyer`
+  // const url =`${baseUrl}/api/lawyer?page=0&size=2`
   useEffect(()=>{
 
     const UserList = async () => {

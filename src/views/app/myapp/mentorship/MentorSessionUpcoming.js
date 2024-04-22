@@ -3,13 +3,11 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, CardBody,  Label,  Row } from 'reactstrap';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom'
 
 
 
-
-
-
+// This is mentor view for the upcoming sessions
 const MentorSessionUpcoming = () => {
   // const { sessions } = location.state || {}; // Retrieve sessions from location state
 const [session,setSession]=useState('');

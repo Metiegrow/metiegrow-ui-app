@@ -9,7 +9,7 @@ const JobList = () => {
     const url=`${baseUrl}/api/lawyer/jobslist`;
 
     // Backend url 
-    // const url=`${baseUrl} api/lawyer/lawyerJob`;
+    // const url=`${baseUrl}/api/lawyer/job`;
 
 
     useEffect(()=>{
@@ -32,8 +32,8 @@ const JobList = () => {
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       {joblist&&joblist.map((j)=>{
         return(
-            <Card key={j.jobId} className='my-2'>
-        <NavLink href={`/app/jobsdetails/${j.jobId}`}>
+            <Card key={j.id} className='my-2'>
+        <NavLink href={`/app/jobsdetails/${j.id}`}>
         <CardBody className=''>
             <h2>{j.jobName}</h2>
         </CardBody>
