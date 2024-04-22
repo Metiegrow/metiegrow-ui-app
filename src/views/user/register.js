@@ -14,6 +14,7 @@ import {
 import { NavLink, useHistory  } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from 'redux/actions';
+import { NotificationManager } from 'components/common/react-notifications';
 
 import IntlMessages from 'helpers/IntlMessages';
 import { Colxx } from 'components/common/CustomBootstrap';
@@ -104,7 +105,7 @@ const Register = () => {
       //   newUser.password,
       //   newUser.name,
       //   newUser.role
-      const response = await authService.signUp(
+       await authService.signUp(
         email,
         phoneNumber,
         password,
@@ -114,10 +115,12 @@ const Register = () => {
         username
       );
       
-      console.log(response.data);
+      // console.log(response.data);
       history.push('/login');
     } catch (error) {
-      console.error('Error registering user:', error);
+      // console.error('Error registering user:', error);
+      NotificationManager.warning(error, 'SignUp Error', 3000, null, null, '');
+
     }
   }
 

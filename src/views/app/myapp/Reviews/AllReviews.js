@@ -8,7 +8,7 @@ import axios from "axios";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 
 const AllReviews = (props) => {
-  console.log("prop chk", props);
+  // console.log("prop chk", props);
   const rid = props;
   const revieweeId = rid.id;
   const [averageStar, setAverageStar] = useState(0);
@@ -55,11 +55,9 @@ const AllReviews = (props) => {
     const fetchData = async () => {
       try {
         const res = await axios.get(url2);
-        // console.log(res);
-        // const { data } = res;
-        setReviews(res);
-        //   setTotalPage(data.totalPage);
-        // setItems(data.map((x) => ({ ...x })));
+        const response = res.data
+        // console.log(response);
+        setReviews(response);
         // setIsLoaded(true);
       } catch (error) {
         console.error("Error fetching data:", error);
