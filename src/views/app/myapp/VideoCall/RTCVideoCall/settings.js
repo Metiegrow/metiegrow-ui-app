@@ -2,7 +2,7 @@ import { createClient, createMicrophoneAndCameraTracks } from "agora-rtc-react";
 
 const appId = "4e6374a1eddd4d20a604fb0513fae8fb";
 const token =
-  "007eJxTYHi3LvpKKj/Df/XHcUWf9qxTWGn19H7XB/ucPH6LntY1eqkKDCapZsbmJomGqSkpKSYpRgaJZgYmaUkGpobGaYmpFmlJpeaqaQ2BjAwvhQ8yMzJAIIjPwpCen57PwAAAnwYgNw==";
+  "007eJxTYCgSFqwR9+7uqp7/+G/5/Pzfb5daXsjcL8+xuJLTqUL1VJgCg0mqmbG5SaJhakpKikmKkUGimYFJWpKBqaFxWmKqRVrS+ZeqaQ2BjAzH/jezMDJAIIjPwpCen57PwAAAULEgew==";
   
 
 export const config = { mode: "rtc", codec: "vp8", appId, token };

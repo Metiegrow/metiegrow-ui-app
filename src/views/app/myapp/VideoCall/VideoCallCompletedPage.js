@@ -79,7 +79,7 @@ const VideoCallCompletedPage = () => {
 
   // const revieweeId = 2;
   // const url = `${baseUrl}/api/rating`;
-  const url = `${baseUrl}/api/rating/mentor`;
+  const url = `${baseUrl}/api/mentorship/rating`;
 
   
   function getTokenRes() {
