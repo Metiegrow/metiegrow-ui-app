@@ -227,7 +227,7 @@ import(
 const App = ({ match }) => {
 const statusRes = getStatusRes();
 const roleRes = getRoleRes();
-console.log("role res from index", roleRes)
+// console.log("role res from index", roleRes)
 // const redirectTo =
 // roleRes === "MENTEE" && `${match.url}/mentor` ||
 // roleRes === "LAWYER" && `${match.url}/profile` ||
@@ -408,7 +408,7 @@ console.log("role res from index", roleRes)
               render={(props) => <ViewStayListing {...props} />}
             />
                <Route
-              path={`${match.url}/videocall/:id`}
+              path={`${match.url}/videocall/:userId/:id`}
               render={(props) => <ViewVideoCall {...props} />}
             />
                {/* <Route

@@ -25,10 +25,11 @@ const VideoCallCtrl = (props) => {
   const [status, setStatus] = useState("");
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
-  const {id}=useParams();
+  const {userId,id}=useParams();
 
   console.log(callEndTime)
-  console.log("idds:", id)
+  console.log("userid:", userId)
+  console.log("iid",id)
   console.log("user chk", users);
   console.log("check status", status);
  const url = `${baseUrl}/api/mentee/connect-to-videocall`;
@@ -253,7 +254,7 @@ const VideoCallCtrl = (props) => {
         {ready && tracks && (
           <>
             <Controls
-             id={id}
+             id={userId}
               tracks={tracks}
               setStart={setStart}
               setInCall={setInCall}
