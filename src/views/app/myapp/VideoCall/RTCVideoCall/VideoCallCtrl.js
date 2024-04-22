@@ -22,11 +22,12 @@ const VideoCallCtrl = (props) => {
   const [callStartTime, setCallStartTime] = useState(null);
   const [callEndTime, setCallEndTime] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(5 * 60);
-  const [status, setStatus] = useState("MENTOR_JOINED");
+  const [status, setStatus] = useState("");
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const {id}=useParams();
 
+  console.log(callEndTime)
   console.log("idds:", id)
   console.log("user chk", users);
   console.log("check status", status);
@@ -70,8 +71,16 @@ const VideoCallCtrl = (props) => {
   //   };
   // }, [callStartTime]);
 
+  function getRoleRes() {
+    return localStorage.getItem('roleRes');
+  }
+
+  const roleRes = getRoleRes();
+
   useEffect(() => {
-    const fetchData = async () => {
+  if (roleRes.includes("MENTOR")) {
+
+    const postData = async () => {
       console.log("fetchedData chk");
       try {
 
@@ -81,7 +90,7 @@ const VideoCallCtrl = (props) => {
           console.log("Call duration:", duration);
         const response = await axios.post(url, {
           id,
-          status: connectionState,
+          status,
           
         });
         console.log("status post vid :",response.data);
@@ -90,23 +99,24 @@ const VideoCallCtrl = (props) => {
         console.error('Error:', error);
       }
     };
-    fetchData();
+    postData();
+  }
+    // const intervalId = setInterval(() => {
+    //   postData();
+    // }, 300000);
+    // return () => {
+    //   console.log("Clearing interval chk");
+    //   clearInterval(intervalId);
+    // };
+  }, [status]);
 
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 300000);
-    return () => {
-      console.log("Clearing interval chk");
-      clearInterval(intervalId);
-    };
-  }, [connectionState, callStartTime, callEndTime]);
 
   useEffect(() => {
     const init = async (name) => {
       client.on("user-joined", () => {
         if (!callStartTime) {
           setCallStartTime(Date.now());
-          setStatus("BOTH_JOINED")
+          setStatus("CONNECTED")
           console.log("user joined cc");
         }
       });
@@ -115,7 +125,7 @@ const VideoCallCtrl = (props) => {
         if (users.length === 1) {
           // setCallStartTime(null);
           setCallEndTime(Date.now());
-          setStatus("CALL_ENDED")
+          setStatus("DISCONNECTED")
           console.log("user left cc");
         }
       });
@@ -247,6 +257,7 @@ const VideoCallCtrl = (props) => {
               tracks={tracks}
               setStart={setStart}
               setInCall={setInCall}
+              setStatus={setStatus}
             />
             <p>Connection State: {connectionState}</p>
           </>

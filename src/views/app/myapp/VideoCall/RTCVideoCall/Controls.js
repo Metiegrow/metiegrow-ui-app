@@ -5,7 +5,7 @@ import { useClient } from "./settings";
 
 const Controls = (props) => {
   const client = useClient();
-  const { tracks, setStart, setInCall, id } = props;
+  const { tracks, setStart, setInCall, id, setStatus } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
 
   const mute = async (type) => {
@@ -24,6 +24,7 @@ const Controls = (props) => {
   const history = useHistory();
   const leaveChannel = async () => {
     await client.leave();
+    setStatus("DISCONNECTED")
     client.removeAllListeners();
     tracks[0].close();
     tracks[1].close();
