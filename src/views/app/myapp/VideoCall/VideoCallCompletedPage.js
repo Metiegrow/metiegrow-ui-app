@@ -9,7 +9,7 @@ import {
   CardTitle,
   Col,
 } from "reactstrap";
-import {useParams, useHistory} from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Colxx } from "components/common/CustomBootstrap";
 import ReactQuill from "react-quill";
 import Rating from "components/common/Rating";
@@ -29,9 +29,9 @@ const VideoCallCompletedPage = () => {
   const [mode, setMode] = useState("");
   const getUrl = `${baseUrl}/api/calldetails`;
   const history = useHistory();
-  const {id}=useParams();
+  const { id } = useParams();
 
-  console.log("id end:", id)
+  console.log("id end:", id);
 
   useEffect(() => {
     const callEndDetails = async () => {
@@ -81,11 +81,10 @@ const VideoCallCompletedPage = () => {
   // const url = `${baseUrl}/api/rating`;
   const url = `${baseUrl}/api/mentorship/rating`;
 
-  
   function getTokenRes() {
-    return localStorage.getItem('tokenRes');
-}
-const token = getTokenRes();
+    return localStorage.getItem("tokenRes");
+  }
+  const token = getTokenRes();
 
   console.log("rating", rating);
   console.log("quill", feedBack);
@@ -98,15 +97,19 @@ const token = getTokenRes();
     setSubmissionStatus("success");
     setIsLoading(true);
     axios
-      .post(url, {
-        rating,
-        feedBack,
-        revieweeId : id,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      .post(
+        url,
+        {
+          rating,
+          feedBack,
+          revieweeId: id,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setSubmissionStatus("success");
@@ -121,9 +124,6 @@ const token = getTokenRes();
         setIsLoading(false);
       });
   };
-  
-
-  
 
   // const handleSubmit = () => {
   //   setSubmissionStatus("success");
@@ -151,6 +151,10 @@ const token = getTokenRes();
   const handleHomeClick = () => {
     history.push("/app/profile");
   };
+  function getRoleRes() {
+    return localStorage.getItem("roleRes");
+  }
+  const roleRes = getRoleRes();
 
   const FromDate = new Date(parseInt(fromTime, 10));
   const ToDate = new Date(parseInt(toTime, 10));
@@ -200,81 +204,95 @@ const token = getTokenRes();
 
                 <p className="lead mb-0 ">
                   <Row className="mb-4">
-                    <Colxx xxs="12">
-                      {submissionStatus !== "success" ? (
-                        <>
-                          <div className="p-2 justify-content-center">
-                            <Row>
-                              <Col>
-                                <h4 className="mt-2 text-left ml-4">
+                    {roleRes.includes("MENTOR") ? (
+                       <Col className="text-center">
+                       <Button
+                         color="primary"
+                         size="lg"
+                         className="mt-4"
+                         onClick={handleHomeClick}
+                       >
+                         Home
+                       </Button>
+                     </Col>
+                     ) : (
+                      <Colxx xxs="12">
+                        {submissionStatus !== "success" ? (
+                          <>
+                            <div className="p-2 justify-content-center">
+                              <Row>
+                                <Col>
+                                  <h4 className="mt-2 text-left ml-4">
+                                    {" "}
+                                    Please rate your experience with {name}
+                                  </h4>
+                                </Col>
+                                <Col className="mt-2">
                                   {" "}
-                                  Please rate your experience with {name}
-                                </h4>
-                              </Col>
-                              <Col className="mt-2">
-                                {" "}
-                                <Rating
-                                  total={5}
-                                  rating={rating}
-                                  onRate={handleRate}
-                                />
-                              </Col>
-                            </Row>
+                                  <Rating
+                                    total={5}
+                                    rating={rating}
+                                    onRate={handleRate}
+                                  />
+                                </Col>
+                              </Row>
 
-                            <hr className="my-4" />
-                          </div>
-                          <div className="">
-                            <CardBody>
-                              <CardTitle className="text-left">
-                                Please write about your experience with {name}
-                              </CardTitle>
-                              <ReactQuill
-                                theme="bubble"
-                                value={feedBack}
-                                onChange={(val) => setFeedBack(val)}
-                              />
-                            </CardBody>
-                          </div>
-                          <Button
-                            color="primary"
-                            size="lg"
-                            disabled={isLoading}
-                            onClick={handleSubmit}
-                            className={`mt-2 btn-shadow btn-multiple-state ${
-                              isLoading ? "show-spinner" : ""
-                            }`}
-                          >
-                            <span className="spinner d-inline-block">
-                              <span className="bounce1" />
-                              <span className="bounce2" />
-                              <span className="bounce3" />
-                            </span>
-                            <span className="label">Submit</span>
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <div className="mt-2">
-                            <CardBody>
-                              <CardTitle className="h4">
-                                Thank you for your valuable feedback
-                              </CardTitle>
-                              <p className="lead">
-                                Your review submitted successfully!
-                              </p>
-                            </CardBody>
-                          </div>
-                          <Button
-                            color="primary"
-                            size="lg"
-                            className="mt-4"
-                            onClick={handleHomeClick}
-                          >
-                            Home
-                          </Button>
-                        </>
-                      )}
-                    </Colxx>
+                              <hr className="my-4" />
+                            </div>
+                            <div className="">
+                              <CardBody>
+                                <CardTitle className="text-left">
+                                  Please write about your experience with {name}
+                                </CardTitle>
+                                <ReactQuill
+                                  theme="bubble"
+                                  value={feedBack}
+                                  onChange={(val) => setFeedBack(val)}
+                                />
+                              </CardBody>
+                            </div>
+                            <Button
+                              color="primary"
+                              size="lg"
+                              disabled={isLoading}
+                              onClick={handleSubmit}
+                              className={`mt-2 btn-shadow btn-multiple-state ${
+                                isLoading ? "show-spinner" : ""
+                              }`}
+                            >
+                              <span className="spinner d-inline-block">
+                                <span className="bounce1" />
+                                <span className="bounce2" />
+                                <span className="bounce3" />
+                              </span>
+                              <span className="label">Submit</span>
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="mt-2">
+                              <CardBody>
+                                <CardTitle className="h4">
+                                  Thank you for your valuable feedback
+                                </CardTitle>
+                                <p className="lead">
+                                  Your review submitted successfully!
+                                </p>
+                              </CardBody>
+                            </div>
+                            <Button
+                              color="primary"
+                              size="lg"
+                              className="mt-4"
+                              onClick={handleHomeClick}
+                            >
+                              Home
+                            </Button>
+                          </>
+                        )}
+                      </Colxx>
+                    )}
+                    
                   </Row>
                 </p>
               </Jumbotron>

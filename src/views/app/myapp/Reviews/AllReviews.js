@@ -14,7 +14,7 @@ const AllReviews = (props) => {
   const [averageStar, setAverageStar] = useState(0);
   const [totalRatings, setTotalRatings] = useState(0);
   const [totalFeedBack, setTotalFeedBack] = useState(0);
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState([]);
   const [starRatings, setStarRatings] = useState({
     oneStar: 0,
     twoStar: 0,
@@ -23,7 +23,7 @@ const AllReviews = (props) => {
     fiveStar: 0,
   });
   const url = `${baseUrl}/api/mentorship/rating/meta/${revieweeId}`;
-  const url2 = `${baseUrl}/api/mentorship/rating/${revieweeId}`
+  const url2 = `${baseUrl}/api/mentorship/rating/${revieweeId}`;
   useEffect(() => {
     const ReviewDetails = async () => {
       try {
@@ -55,7 +55,7 @@ const AllReviews = (props) => {
     const fetchData = async () => {
       try {
         const res = await axios.get(url2);
-        const response = res.data
+        const response = res.data;
         // console.log(response);
         setReviews(response);
         // setIsLoaded(true);
@@ -80,83 +80,92 @@ const AllReviews = (props) => {
     const Day = time.getDate();
     const Year = time.getFullYear();
     return `${Month}/${Day}/${Year} ${Hours}:${Minutes} ${Period}`;
-  }
-  
+  };
+
+  function removeTags(str) {
+    if (str === null || str === '') {
+        return false;
+    }
+    const newStr = str.toString();
+    return newStr.replace(/(<([^>]+)>)/ig, '');
+}
+
+
 
   return (
     <Colxx xl="4" lg="6" md="12" className="mb-4">
       {totalRatings > 0 && (
-      <Card>
-        <CardBody>
-          <h3 className="fw-bold">Ratings & Reviews</h3>
+        <Card>
+          <CardBody>
+            <h3 className="fw-bold">Ratings & Reviews</h3>
 
-          <Row xxs="12" sm="6">
-            <Col>
-              <Rating total={5} rating={averageStar} interactive={false} />
-            </Col>
-            <Col>
-              <h4>{averageStar} out of 5 stars</h4>
-            </Col>
-          </Row>
-          <h4>
-            {totalRatings} ratings & {totalFeedBack} Reviews
-          </h4>
-          <div className="mb-4">
-            <p className="mb-2">
-              5 Star
-              <span className="float-right text-muted">
-                {starRatings.fiveStar}
-              </span>
-            </p>
-            <Progress value={calculatePercentage(starRatings.fiveStar)} />
-          </div>
-          <div className="mb-4">
-            <p className="mb-2">
-              4 Star
-              <span className="float-right text-muted">
-                {starRatings.fourStar}
-              </span>
-            </p>
-            <Progress value={calculatePercentage(starRatings.fourStar)} />
-          </div>
-          <div className="mb-4">
-            <p className="mb-2">
-              3 Star
-              <span className="float-right text-muted">
-                {starRatings.threeStar}
-              </span>
-            </p>
-            <Progress value={calculatePercentage(starRatings.threeStar)} />
-          </div>
-          <div className="mb-4">
-            <p className="mb-2">
-              2 Star
-              <span className="float-right text-muted">
-                {starRatings.twoStar}
-              </span>
-            </p>
-            <Progress value={calculatePercentage(starRatings.twoStar)} />
-          </div>
-          <div className="mb-4">
-            <p className="mb-2">
-              1 Star
-              <span className="float-right text-muted">
-                {starRatings.oneStar}
-              </span>
-            </p>
-            <Progress
-              value={calculatePercentage(starRatings.oneStar)}
-              barStyle={{ backgroundColor: "primary" }}
-            />
-          </div>
-        </CardBody>
-      </Card>
+            <Row xxs="12" sm="6">
+              <Col>
+                <Rating total={5} rating={averageStar} interactive={false} />
+              </Col>
+              <Col>
+                <h4>{averageStar} out of 5 stars</h4>
+              </Col>
+            </Row>
+            <h4>
+              {totalRatings} ratings & {totalFeedBack} Reviews
+            </h4>
+            <div className="mb-4">
+              <p className="mb-2">
+                5 Star
+                <span className="float-right text-muted">
+                  {starRatings.fiveStar}
+                </span>
+              </p>
+              <Progress value={calculatePercentage(starRatings.fiveStar)} />
+            </div>
+            <div className="mb-4">
+              <p className="mb-2">
+                4 Star
+                <span className="float-right text-muted">
+                  {starRatings.fourStar}
+                </span>
+              </p>
+              <Progress value={calculatePercentage(starRatings.fourStar)} />
+            </div>
+            <div className="mb-4">
+              <p className="mb-2">
+                3 Star
+                <span className="float-right text-muted">
+                  {starRatings.threeStar}
+                </span>
+              </p>
+              <Progress value={calculatePercentage(starRatings.threeStar)} />
+            </div>
+            <div className="mb-4">
+              <p className="mb-2">
+                2 Star
+                <span className="float-right text-muted">
+                  {starRatings.twoStar}
+                </span>
+              </p>
+              <Progress value={calculatePercentage(starRatings.twoStar)} />
+            </div>
+            <div className="mb-4">
+              <p className="mb-2">
+                1 Star
+                <span className="float-right text-muted">
+                  {starRatings.oneStar}
+                </span>
+              </p>
+              <Progress
+                value={calculatePercentage(starRatings.oneStar)}
+                barStyle={{ backgroundColor: "primary" }}
+              />
+            </div>
+          </CardBody>
+        </Card>
       )}
       <div className="">
         {reviews &&
           reviews.map((rv) => {
-             <hr />;
-            return ( 
+            <hr />;
+            return (
               <div
                 className="d-flex  justify-content-start my-4"
                 key={rv.reviewerId}
@@ -181,7 +190,9 @@ const AllReviews = (props) => {
                       {rv.star}
                     </p>
                   </div>
-                  <p>{rv.feedBack}</p>
+                  {/* <p>{rv.feedBack}</p> */}
+                  {/* <div>{rv.feedBack}</div> */}
+                  <div>{removeTags(rv.feedBack)}</div>
                   <p>{timeConvert(rv.time)}</p>
                   <div className="d-flex font-weight-medium">
                     <p>Helpful?</p>
@@ -199,8 +210,8 @@ const AllReviews = (props) => {
                   </div>
                 </div>
               </div>
-             ); 
-            })} 
+            );
+          })}
       </div>
     </Colxx>
   );
