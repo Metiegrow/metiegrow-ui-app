@@ -90,8 +90,8 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   //       break;
   //   }
   // }
-  const [email] = useState('vssivanesh@gmail.com');
-  const [password] = useState('sivanesh');
+  const [email] = useState('');
+  const [password] = useState('');
 
   useEffect(() => {
     if (error) {

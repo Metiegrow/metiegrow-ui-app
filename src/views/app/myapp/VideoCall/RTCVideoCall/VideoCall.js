@@ -26,10 +26,27 @@
 
 import React, { useState } from "react";
 // import { Button } from "reactstrap";
+import {useParams} from "react-router-dom";
+
 import VideoCallCtrl from "./VideoCallCtrl";
 
 const VideoCall = () => {
   const [inCall, setInCall] = useState(false);
+  const {id}=useParams();
+
+console.log("idd:", id)
+
+  // useEffect(() => {
+    
+  //   const getIDFromURL = () => {
+  //     const searchParams = new URLSearchParams(location.search);
+  //     const id = searchParams.get("id");
+      
+  //     console.log("id from url", id);
+  //   };
+
+  //   getIDFromURL(); 
+  // }, [location]);
 
   const handleJoinCall = () => {
     setInCall(false);
@@ -46,7 +63,7 @@ const VideoCall = () => {
           {setTimeout(handleJoinCall)}
         </>
       )}
-      {inCall && <VideoCallCtrl setInCall={setInCall} />}
+      {inCall && <VideoCallCtrl id={id} setInCall={setInCall} />}
     </div>
   );
 }

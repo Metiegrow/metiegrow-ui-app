@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import axios from 'axios';
+import { NotificationManager } from 'components/common/react-notifications';
 
 import { baseUrl } from '../constants/defaultValues';
 
@@ -21,17 +22,21 @@ export const authService = {
       return await axios
         .post(url, bodyData)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           return res;
         })
         .catch((error) => {
-          console.log('ERR:: ', error);
+          // console.log('ERR:: ', error);
+          NotificationManager.warning(error, 'Error', 3000, null, null, '');
           if (error.response) {
-            console.log('ERR:response: ', error);
+            // console.log('ERR:response: ', error);
+          NotificationManager.warning(error, 'Error', 3000, null, null, '');
           } else if (error.request) {
-            console.log('ERR:request: ', error);
+            // console.log('ERR:request: ', error);
+            NotificationManager.warning(error, 'Error', 3000, null, null, '');
           } else if (error.message) {
-            console.log('ERR:message: ', error);
+            // console.log('ERR:message: ', error);
+            NotificationManager.warning(error, 'Error', 3000, null, null, '');
           }
           throw error;
         });
@@ -76,19 +81,19 @@ async login(email, password) {
   try {
       const res = await axios.post(url, bodyData);
       const tokenRes = res.data.token; 
-      console.log(res.data)
-      console.log("res.data.roles: check")
+      // console.log(res.data)
+      // console.log("res.data.roles: check")
 
       if(res.data.roles){
-        console.log("res.data.roles: true")
+        // console.log("res.data.roles: true")
       const statusRes = res.data.roles.map(role => role.status);
         const roleRes = res.data.roles.map(role => role.role);
-      console.log("role res from auth", roleRes)
+      // console.log("role res from auth", roleRes)
 
       //const statusRes = "3"; 
-      console.log(res.data.token);
-      console.log("status response", statusRes);
-      console.log("Role response", roleRes);
+      // console.log(res.data.token);
+      // console.log("status response", statusRes);
+      // console.log("Role response", roleRes);
       const check1=JSON.stringify(statusRes);
       // const check2=JSON.stringify(roleRes);
       localStorage.setItem('status', check1[1]);
@@ -97,9 +102,6 @@ async login(email, password) {
     localStorage.setItem('roleRes', roleRes);
      // localStorage.setItem('status', statusRes);
       // localStorage.setItem('cRes', "check");
-    }else{
-      console.log("res.data.roles: false")
-
     }
       return res;
   } catch (error) {

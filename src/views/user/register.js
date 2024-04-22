@@ -14,6 +14,7 @@ import {
 import { NavLink, useHistory  } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from 'redux/actions';
+import { NotificationManager } from 'components/common/react-notifications';
 
 import IntlMessages from 'helpers/IntlMessages';
 import { Colxx } from 'components/common/CustomBootstrap';
@@ -29,12 +30,12 @@ const Register = () => {
   //   password: 'TestPass',
   //   role: "MENTOR",
   // });
-  const [firstName, setFirstName] = useState("Arun");
-  const [lastName, setLastName] = useState("Kumar");
-  const [username,setUsername] = useState("arun123")
-  const [email, setEmail] = useState("arun@gmail.com");
-  const [phoneNumber, setPhoneNumber] = useState("+919292929292");
-  const [password,setPassword] = useState("arun@1996")
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username,setUsername] = useState("")
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("+91");
+  const [password,setPassword] = useState("")
   const [userRoles,setUserRoles] = useState(["MENTOR"])
 
   const history = useHistory();
@@ -104,7 +105,7 @@ const Register = () => {
       //   newUser.password,
       //   newUser.name,
       //   newUser.role
-      const response = await authService.signUp(
+       await authService.signUp(
         email,
         phoneNumber,
         password,
@@ -114,10 +115,12 @@ const Register = () => {
         username
       );
       
-      console.log(response.data);
+      // console.log(response.data);
       history.push('/login');
     } catch (error) {
-      console.error('Error registering user:', error);
+      // console.error('Error registering user:', error);
+      NotificationManager.warning(error, 'SignUp Error', 3000, null, null, '');
+
     }
   }
 
