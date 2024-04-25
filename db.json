@@ -657,6 +657,11 @@
       "id": 1,
       "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
       "image": "/assets/img/profiles/3.jpg",
+      "topic": [
+        "career",
+        "stay room"
+    ],
+
       "star": 5,
       "ratings": 200,
       "firstName": "Vignesh",
@@ -674,6 +679,11 @@
       "id": 2,
       "lawyerPhotoDocumentId": "65816791afe2e22b3b1a9446",
       "image": "/assets/img/profiles/11.jpg",
+      "topic": [
+        "career",
+        "stay room"
+    ],
+
       "star": 5,
       "ratings": 200,
       "firstName": "Rajendren",
@@ -819,30 +829,44 @@
       "jobName": "job 1",
       "steps": [
         {
-          "stepId": 200,
+          "id": 200,
           "stepNumber": 1,
           "stepName": "verification",
           "doneBy": "Lawyer",
-          "description": "lawyer description",
+          "description": "form submission",
           "status": "yet to start",
           "uploadDocuments": "true",
           "documentList": [
-            "PAN Card",
-            "Appointment"
-          ]
+            {
+                "id": "6628c3c9cf60aa5ec36ee897",
+                "name": "patta"
+            },
+            {
+                "id": "6628c3c9cf60aa5ec36ee898",
+                "name": "voter id"
+            }
+        ]
+    
         },
         {
-          "stepId": 201,
+          "id": 201,
           "stepNumber": 2,
           "stepName": "collection",
           "doneBy": "Lawyer",
-          "description": "lawyer description",
+          "description": "form submission",
           "status": "yet to start",
           "uploadDocuments": "true",
           "documentList": [
-            "PAN Card",
-            "Appointment"
-          ]
+            {
+                "id": "6628c3c9cf60aa5ec36ee897",
+                "name": "patta"
+            },
+            {
+                "id": "6628c3c9cf60aa5ec36ee898",
+                "name": "voter id"
+            }
+        ]
+    
         }
       ]
     },
@@ -851,30 +875,42 @@
       "jobName": "job 2",
       "steps": [
         {
-          "stepId": 209,
+          "id": 209,
           "stepNumber": 1,
           "stepName": "verification",
           "doneBy": "Lawyer",
-          "description": "lawyer description",
+          "description": "form submission",
           "status": "yet to start",
           "uploadDocuments": "true",
           "documentList": [
-            "PAN Card",
-            "Appointment"
-          ]
+            {
+                "id": "6628c3c9cf60aa5ec36ee897",
+                "name": "patta"
+            },
+            {
+                "id": "6628c3c9cf60aa5ec36ee898",
+                "name": "voter id"
+            }
+        ]
         },
         {
-          "stepId": 205,
+          "id": 205,
           "stepNumber": 2,
           "stepName": "collection",
           "doneBy": "Lawyer",
-          "description": "lawyer description",
+          "description": "form submission",
           "status": "yet to start",
           "uploadDocuments": "true",
           "documentList": [
-            "PAN Card",
-            "Appointment"
-          ]
+            {
+                "id": "6628c3c9cf60aa5ec36ee897",
+                "name": "patta"
+            },
+            {
+                "id": "6628c3c9cf60aa5ec36ee898",
+                "name": "voter id"
+            }
+        ]
         }
       ]
     }
@@ -882,44 +918,143 @@
   "lawyerProfile": [
     {
       "id": 1,
-      "topic": "I will help mentee",
+      "topic": [
+        {
+            "id": 1,
+            "topicName": "career"
+        },
+        {
+            "id": 2,
+            "topicName": "stay room"
+        }
+    ],
       "star": 5,
       "ratings": 200,
       "image": "/assets/img/profiles/3.jpg",
       "services": [
-        "all immigartion",
-        "visa",
-        "visa 1",
-        "visa 2",
-        "visa 3",
-        "visa 4",
-        "visa 5",
-        "visa 6",
-        "visa 7",
-        "visa 8",
-        "visa 9"
-      ],
+        {
+            "id": 1,
+            "serviceName": "Immigration for higher studies",
+            "description": "In Australia"
+        },
+        {
+            "id": 2,
+            "serviceName": "Immigration for job search",
+            "description": "for mechanical,civil works"
+        },
+        {
+            "id": 3,
+            "serviceName": "Immigration for higher studies",
+            "description": "In Australia"
+        },
+        {
+            "id": 4,
+            "serviceName": "Immigration for job search",
+            "description": "for mechanical,civil works"
+        }
+    ],
+
       "firstName": "Vignesh",
       "lastName": "RK",
       "location": "India",
-      "languages": "English",
+      "languages": [
+        {
+            "id": 1,
+            "language": "TA"
+        },
+        {
+            "id": 2,
+            "language": "EN-UK"
+        },
+        {
+            "id": 3,
+            "language": "ML"
+        },
+        {
+            "id": 4,
+            "language": "TA"
+        },
+        {
+            "id": 5,
+            "language": "EN-UK"
+        },
+        {
+            "id": 6,
+            "language": "ML"
+        }
+    ],
+
       "bio": "a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
       "about": "You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
     },
     {
       "id": 2,
-      "topic": "I will help mentee",
+      "topic": [
+        {
+            "id": 1,
+            "topicName": "career"
+        },
+        {
+            "id": 2,
+            "topicName": "stay room"
+        }
+    ],
       "star": 5,
       "ratings": 200,
       "image": "/assets/img/profiles/11.jpg",
       "services": [
-        "all immigartion",
-        "visa"
-      ],
+        {
+            "id": 1,
+            "serviceName": "Immigration for higher studies",
+            "description": "In Australia"
+        },
+        {
+            "id": 2,
+            "serviceName": "Immigration for job search",
+            "description": "for mechanical,civil works"
+        },
+        {
+            "id": 3,
+            "serviceName": "Immigration for higher studies",
+            "description": "In Australia"
+        },
+        {
+            "id": 4,
+            "serviceName": "Immigration for job search",
+            "description": "for mechanical,civil works"
+        }
+    ],
+
       "firstName": "Rajendren",
       "lastName": "RD",
       "location": "India",
-      "languages": "English",
+      "languages": [
+        {
+            "id": 1,
+            "language": "TA"
+        },
+        {
+            "id": 2,
+            "language": "EN-UK"
+        },
+        {
+            "id": 3,
+            "language": "ML"
+        },
+        {
+            "id": 4,
+            "language": "TA"
+        },
+        {
+            "id": 5,
+            "language": "EN-UK"
+        },
+        {
+            "id": 6,
+            "language": "ML"
+        }
+    ],
+
       "bio": "a legal mentorship aims to create a relationship where a more experienced lawyer can convey real-world wisdom and support. So the mentee can learn and grow.",
       "about": "You graduated from law school, passed the bar, and secured a job in the legal profession. Now what? This is where a mentor comes in. Mentors can help set the tone for your career, turning theory into practice to help new attorneys navigate the profession’s ins and outs, convey confidence  in delivering legal services, and build a robust professional network."
     }

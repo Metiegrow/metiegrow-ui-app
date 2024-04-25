@@ -40,7 +40,7 @@ const TopnavNotifications = () => {
       const response = await axios.get(url);
 
       const notification = response.data;
-      console.log(notification);
+      // console.log(notification);
       setNotifications(notification);
     };
     notificationData();

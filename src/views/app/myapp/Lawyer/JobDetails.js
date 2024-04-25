@@ -22,6 +22,10 @@ const JobDetails = () => {
   const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
 
 
+  // Backedn url 
+  // const url=`${baseUrl}/api/lawyer/job/{jid}`
+
+
     useEffect(()=>{
         const LawyerJobsDetails=async()=>{
             try {
@@ -58,10 +62,12 @@ const JobDetails = () => {
       <Colxx lg={4}>
       {jobdetails.steps&&jobdetails.steps.map((s)=>{
             return(
-              <div key={s.stepId}>
+              <div key={s.id}>
            
            
-      <Card className='mb-2'  style={{ border: selectedStep === s ? '3px solid green' : 'none' }}
+      <Card className='mb-2'
+      onClick={() => handleStepClick(s)}
+        style={{ border: selectedStep === s ? `3px solid var(--theme-color-1)` : 'none' ,cursor:'pointer'}}
       >
         <CardBody className=''>
         <div className='d-flex align-items-center'>
@@ -241,7 +247,7 @@ const JobDetails = () => {
       <Colxx>
           {selectedStep && (
            
-            <Card key={selectedStep.stepId} className='mb-2'>
+            <Card key={selectedStep.id} className='mb-2'>
       <CardBody>
    
       <Form>
@@ -284,7 +290,7 @@ const JobDetails = () => {
        
      <div className='mt-4'>
                       {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                        <h5 key={document}>{document}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
+                        <h5 key={document}>{document.name}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
                       ))}
                     </div>
         </Col>

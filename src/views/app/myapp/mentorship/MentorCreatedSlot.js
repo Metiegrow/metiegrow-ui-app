@@ -414,7 +414,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
               
 
                  {getWeekDates().map((date) => (
-  <tr key={date.getTime()} >
+  <tr key={date.getTime()}  >
     {/* <td>{getMonthName(date.getMonth())} {formatDate(date)}</td> */}
     <td > {formatDate(date)}</td>
    
@@ -486,7 +486,9 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
  
  
 ))} */}
-{
+{date>=new Date()&&(
+  <>
+  {
   mentoravailable.map((availability) => {
     let hasSlotsForDay = false; // Flag to track if there are slots for the particular day
 
@@ -627,6 +629,9 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
   return null;
   })
 ))}
+  </>
+)}
+
 
  
 

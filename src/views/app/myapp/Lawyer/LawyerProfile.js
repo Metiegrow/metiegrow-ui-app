@@ -166,7 +166,7 @@ const LawyerProfile = () => {
             {lawyerprofile.services && lawyerprofile.services.slice(0, 3).map((skill) => (
             <div key={skill}>
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                {skill}
+                {skill.serviceName}
               </Button>
             </div>
           ))}
@@ -199,7 +199,7 @@ const LawyerProfile = () => {
               {lawyerprofile.services && lawyerprofile.services.map((skill) => (
                 <div key={skill}>
                   <Button color="light" className="mb-2 font-weight-semibold mx-2" size='sm'>
-                    {skill}
+                    {skill.serviceName}
                   </Button>
                 </div>
               ))}

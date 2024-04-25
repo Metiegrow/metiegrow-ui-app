@@ -407,7 +407,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
     <td> {formatDate(date)}</td>
     <td>
       
- {/* {mentoravailable.map((avail) => {
+  {/* {mentoravailable.map((avail) => {
     const availDate = new Date(avail.fromTimeStamp);
     if (availDate.toDateString() === date.toDateString()) {
         // Mentor is available on this date, display the available time
@@ -442,7 +442,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
     } 
     
        return null;
-})} */}
+})}  */}
 {mentoravailable
         .filter(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
         .map(avail => {

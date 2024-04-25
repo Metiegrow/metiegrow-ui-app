@@ -9,11 +9,11 @@ import AllReviews from "../Reviews/AllReviews";
 
 const MentorProfile = () => {
   const {mid}=useParams();
-  console.log('Mentor Profile ID:', mid);
+  // console.log('Mentor Profile ID:', mid);
   // const url=`${baseUrl}/mentor/profile`;
   // const url1=`${baseUrl}/mentor/cards/${mid}`;
   const url=`${baseUrl}/mentorDetails/${mid}`;
- // const url1=`${baseUrl}/mentorProfile/${mid}`;
+//  const url1=`${baseUrl}/mentorProfile/${mid}`;
 
 //  To change url to backend please uncomment the below line
  const url1=`${baseUrl}/api/mentor/${mid}`
