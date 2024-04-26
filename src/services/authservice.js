@@ -41,7 +41,7 @@ export const authService = {
           throw error;
         });
     } catch (e) {
-      return e;
+      return e.response;
     }
   },
   
