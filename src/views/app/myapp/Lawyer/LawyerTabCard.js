@@ -27,6 +27,9 @@ const LawyerTabCard = () => {
   const [activeFirstTab, setActiveFirstTab] = useState('1');
   const [packages,setPackages]=useState('');
   const packageURL=`${baseUrl}/lawyerPackages`;
+  // backend url 
+
+    // const packageURL=`${baseUrl}/api/lawyer/{lawyerId}/package`
   useEffect(()=>{
    
    

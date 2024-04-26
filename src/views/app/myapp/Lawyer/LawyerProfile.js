@@ -29,14 +29,14 @@ const LawyerProfile = () => {
    
     // const url=`${baseUrl}/ api/lawyer/${pid}`;
 
-    const reviewURL=`${baseUrl}/user/reviews`;
+    const reviewURL=`${baseUrl}/lawyerReviews/${pid}`;
     // backend  url
-    // const reviewURL=`${baseUrl}/api/rating/lawyer/1`;
+    // const reviewURL=`${baseUrl}/api/rating/${pid}`;
 
-    const packageURL=`${baseUrl}/lawyerPackages`;
+    const packageURL=`${baseUrl}/lawyerPackages/${pid}`;
     // backend url 
 
-    // const packageURL=`${baseUrl}/api/lawyer/package?lawyerId`
+    // const packageURL=`${baseUrl}/api/lawyer/{lawyerId}/package`
     useEffect(()=>{
         const ProfileLawyer=async()=>{
             try {
@@ -52,8 +52,8 @@ const LawyerProfile = () => {
           try {
               const response = await axios.get(reviewURL);
               // setReviews(response.data);
-              const lawyerReviews = response.data.filter(review => review.lawyerId === parseInt(pid, 10)); // Specify radix 10
-              setReviews(lawyerReviews);
+              // const lawyerReviews = response.data.filter(review => review.lawyerId === parseInt(pid, 10)); // Specify radix 10
+              setReviews(response.data);
             } catch (error) {
               console.error('Error fetching data:', error);
             }
@@ -210,7 +210,7 @@ const LawyerProfile = () => {
          <hr/>
   <h5 className='font-weight-bold'>Compare Packages</h5>
   <Row className='d-flex'>
-    {packages && packages.map((pack) => (
+    {/* {packages && packages.map((pack) => (
       <Col lg={6}  key={pack.id} className='my-2'>
         <Card className='pt-5 pb-5 d-flex'>
           <CardBody className='pt-5 pb-5'>
@@ -230,7 +230,26 @@ const LawyerProfile = () => {
           </CardBody>
         </Card>
       </Col>
-    ))}
+    ))} */}
+    <Col lg={6}  key={packages.id} className='my-2'>
+        <Card className='pt-5 pb-5 d-flex'>
+          <CardBody className='pt-5 pb-5'>
+            <div className='price-top-part'>
+              <i className='' />
+              <h2 className='mb-0 font-weight-semibold text-primary text-large mb-4'>
+                {packages.title}
+              </h2>
+              <p className='text-large mb-2 text-default'>₹ {packages.amount}</p>
+              <p className='text-muted text-small'>{packages.description}</p>
+              <div className=''>
+                <NavLink>
+                  <Button color='primary'>Purchase</Button>
+                </NavLink>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      </Col>
   </Row>
 </Colxx>
       
@@ -258,7 +277,7 @@ const LawyerProfile = () => {
           <div className=''>
          
            
-               {reviews&&reviews.map((rv)=>{
+               {/* {reviews&&reviews.map((rv)=>{
                 <hr/>
                return (
                  
@@ -270,7 +289,7 @@ const LawyerProfile = () => {
                 <ThumbnailLetters
                   rounded
                   small
-                  text={rv.imgText}
+                  text={rv.name}
                   className=""
                 />
               </NavLink>
@@ -283,7 +302,7 @@ const LawyerProfile = () => {
               <Rating total={5} rating={rv.star} interactive={false} />
               <p className="text-small  mb-0 d-inline-block ml-2">{rv.star}</p>
               </div>
-              <p>{rv.reviewMsg}</p>
+              <p>{rv.feedBack}</p>
               <div className='d-flex font-weight-medium' >
                     <p>Helpful?</p>
                     <div className='d-flex '>
@@ -302,7 +321,44 @@ const LawyerProfile = () => {
                )
                
             
-               })}
+               })} */}
+               <div className='d-flex  justify-content-start my-4' key={reviews.reviewerId}>
+               
+               <div>
+             
+               <NavLink  className="">
+                   {/* <ThumbnailLetters
+                     rounded
+                     small
+                     text={reviews.imgText}
+                     className=""
+                   /> */}
+                   {reviews && <ThumbnailLetters rounded small text={reviews.name} />}
+
+                 </NavLink>
+               </div>
+                <div className='ml-2'>
+                <h6 className='font-weight-bold'>{reviews.name}</h6>
+                 <h6>{reviews.country}</h6>
+                 
+                 <div className='d-flex align-items-center my-2'>
+                 <Rating total={5} rating={reviews.star} interactive={false} />
+                 <p className="text-small  mb-0 d-inline-block ml-2">{reviews.star}</p>
+                 </div>
+                 <p>{reviews.feedBack}</p>
+                 <div className='d-flex font-weight-medium' >
+                       <p>Helpful?</p>
+                       <div className='d-flex '>
+                       <span className=' ml-2'><i className='simple-icon-like mr-2'/>yes</span>
+                        <span className=' ml-2'><i className='simple-icon-dislike mr-2'/>no</span>
+                       </div>
+                       <hr />
+                       </div>
+                </div>
+                
+              
+             
+               </div>
            
           </div>
             

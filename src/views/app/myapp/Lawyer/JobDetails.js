@@ -23,7 +23,7 @@ const JobDetails = () => {
 
 
   // Backedn url 
-  // const url=`${baseUrl}/api/lawyer/job/{jid}`
+  // const url=`${baseUrl}/api/lawyer/job/${jid}`
 
 
     useEffect(()=>{
