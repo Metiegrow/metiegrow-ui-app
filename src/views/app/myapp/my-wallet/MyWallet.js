@@ -13,17 +13,18 @@ import {
   Row,
   Card,
 } from "reactstrap";
+import TimestampConverter from "../Calculation/TimestampConverter";
 // check
 
 const MyWallet = () => {
   const [balance, setBalance] = useState(0);
-  const [transactionIdCounter, setTransactionIdCounter] = useState(1);
+  // const [transactionIdCounter, setTransactionIdCounter] = useState(1);
   const [transactions, setTransactions] = useState([]);
   const [rechargeAmount, setRechargeAmount] = useState("");
 
   // const url = `${baseUrl}/wallets`;
   // const url = `${baseUrl}/wallets`;
-  const url1 = `${baseUrl}/wallets/1`;
+  const url1 = `${baseUrl}/api/transactions`;
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -31,7 +32,7 @@ const MyWallet = () => {
         const response = await axios.get(url1);
 
         const walletData = response.data;
-        console.log("checkk", walletData)
+        // console.log("checkk", walletData)
         setBalance(walletData.newBalance);
         setTransactions(walletData.newTransactions);
 
@@ -43,9 +44,7 @@ const MyWallet = () => {
     fetchDataFromServer();
   }, []);
 
-  const postData = async (data) => {
-    await axios.post(url1, data);
-  };
+  
 
   // const updateBalance = async () => {
   //     try {
@@ -60,36 +59,43 @@ const MyWallet = () => {
   //     }
   //   };
 
+  
+  const postData = async (amount) => {
+    const url2 = `${baseUrl}/api/paytm/makePayment?amount=${amount}`;
+    await axios.post(url2);
+  };
+
   const handleRecharge = () => {
     const amount = parseFloat(rechargeAmount);
+    console.log("rech", amount)
 
-    if (!Number.isNaN(amount) && amount > 0) {
-      const newBalance = balance + amount;
-      const newTransactions = {
-        id: transactionIdCounter,
-        type: "Recharge",
-        amount,
-        status: "Success",
-        paymentmethod: "UPI",
-        date: new Date(),
-      };
+    // if (!Number.isNaN(amount) && amount > 0) {
+    //   const newBalance = balance + amount;
+    //   const newTransactions = {
+    //     id: transactionIdCounter,
+    //     type: "Recharge",
+    //     amount,
+    //     status: "Success",
+    //     paymentmethod: "UPI",
+    //     date: new Date(),
+    //   };
 
-      setBalance(newBalance);
-      setTransactions((prevTransactions) => [
-        newTransactions,
-        ...prevTransactions,
-      ]);
-      setTransactionIdCounter((prevCounter) => prevCounter + 1);
+    //   setBalance(newBalance);
+    //   setTransactions((prevTransactions) => [
+    //     newTransactions,
+    //     ...prevTransactions,
+      // ]);
+    //   setTransactionIdCounter((prevCounter) => prevCounter + 1);
       setRechargeAmount("");
       //   updateBalance()
 
-      postData(newTransactions);
+      postData(amount);
     }
-  };
+  
 
   const handleRechargeSubmit = (e) => {
     e.preventDefault();
-    handleRecharge();
+    // handleRecharge();
   };
 
   const handleAmountButtonClick = (amount) => {
@@ -97,6 +103,7 @@ const MyWallet = () => {
       (parseFloat(prevAmount || 0) + amount).toString()
     );
   };
+  
 
   return (
     <Card className="mt-4">
@@ -161,10 +168,7 @@ const MyWallet = () => {
                 <span className="mr-2">
                   <strong>Transaction id:</strong> {transaction.id}
                 </span>
-                <span className="mr-2">
-                  <strong>Type:</strong>{" "}
-                  {transaction.type === "Recharge" ? "Recharge" : "Purchase"}
-                </span>
+                
                 <span className="mr-2">
                   <strong>Amount:</strong> ₹{Math.abs(transaction.amount)}
                 </span>
@@ -174,8 +178,12 @@ const MyWallet = () => {
                 <span className="mr-2">
                   <strong>Payment Method:</strong> {transaction.paymentmethod}
                 </span>
-                <span>
-                  <strong>Date:</strong> {transaction.date.toLocaleString()}
+                <span className="mr-2">
+                  <strong>Date:</strong> <TimestampConverter timeStamp={transaction.date} format="datetime" />
+                </span>
+                <span className="mr-2">
+                  <strong>Description:</strong>{" "}
+                  {transaction.description}
                 </span>
               </div>
             </Card>
