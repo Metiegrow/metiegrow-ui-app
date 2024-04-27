@@ -74,8 +74,7 @@ export const authService = {
 
 // with backend
 
-
-async login(email, password) {
+async login(email, password , history) {
   const bodyData = JSON.stringify({ email: email, password: password });  
   const url = `${baseUrl}/api/authenticate`;
   try {
@@ -89,7 +88,9 @@ async login(email, password) {
       const statusRes = res.data.roles.map(role => role.status);
         const roleRes = res.data.roles.map(role => role.role);
       // console.log("role res from auth", roleRes)
+      const expirationTime = new Date(Date.now() + 6 * 60 * 60 * 1000);
 
+      localStorage.setItem('expirationTime', expirationTime.getTime());
       //const statusRes = "3"; 
       // console.log(res.data.token);
       // console.log("status response", statusRes);
@@ -108,6 +109,8 @@ async login(email, password) {
       throw error;
   }
 }
+
+
 
 
 //   async login(email, password) {
