@@ -40,7 +40,7 @@ const TopnavNotifications = () => {
       const response = await axios.get(url);
 
       const notification = response.data;
-      console.log(notification);
+      // console.log(notification);
       setNotifications(notification);
     };
     notificationData();
@@ -60,6 +60,9 @@ const TopnavNotifications = () => {
           right
           id="notificationDropdown"
         >
+          {notifications.length === 0 ? (
+            <div className="p-3 text-center">You don&apos;t have any notifications</div>
+          ) : (
           <PerfectScrollbar
             options={{ suppressScrollX: true, wheelPropagation: false }}
           >
@@ -67,6 +70,7 @@ const TopnavNotifications = () => {
               return <NotificationItem key={index} {...notification} />;
             })}
           </PerfectScrollbar>
+                )}
         </DropdownMenu>
       </UncontrolledDropdown>
     </div>
