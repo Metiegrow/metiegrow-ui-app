@@ -6,6 +6,7 @@ import { Card, CardBody, Col, NavLink, Progress, Row } from "reactstrap";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 const AllReviews = (props) => {
   // console.log("prop chk", props);
@@ -71,16 +72,16 @@ const AllReviews = (props) => {
   const calculatePercentage = (starCount) => {
     return (starCount / totalRatings) * 100;
   };
-  const timeConvert = (time1) => {
-    const time = new Date(parseInt(time1, 10));
-    const Hours = time.getHours() % 12 || 12;
-    const Minutes = String(time.getMinutes()).padStart(2, "0");
-    const Period = time.getHours() < 12 ? "AM" : "PM";
-    const Month = time.getMonth() + 1;
-    const Day = time.getDate();
-    const Year = time.getFullYear();
-    return `${Month}/${Day}/${Year} ${Hours}:${Minutes} ${Period}`;
-  };
+  // const timeConvert = (time1) => {
+  //   const time = new Date(parseInt(time1, 10));
+  //   const Hours = time.getHours() % 12 || 12;
+  //   const Minutes = String(time.getMinutes()).padStart(2, "0");
+  //   const Period = time.getHours() < 12 ? "AM" : "PM";
+  //   const Month = time.getMonth() + 1;
+  //   const Day = time.getDate();
+  //   const Year = time.getFullYear();
+  //   return `${Month}/${Day}/${Year} ${Hours}:${Minutes} ${Period}`;
+  // };
 
   function removeTags(str) {
     if (str === null || str === '') {
@@ -193,7 +194,8 @@ const AllReviews = (props) => {
                   {/* <p>{rv.feedBack}</p> */}
                   {/* <div>{rv.feedBack}</div> */}
                   <div>{removeTags(rv.feedBack)}</div>
-                  <p>{timeConvert(rv.time)}</p>
+                  {/* <p>{timeConvert(rv.time)}</p> */}
+                  <p><TimestampConverter timeStamp={rv.time} format="datetime" /></p>
                   <div className="d-flex font-weight-medium">
                     <p>Helpful?</p>
                     <div className="d-flex ">
