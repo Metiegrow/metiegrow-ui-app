@@ -23,22 +23,24 @@ import classnames from 'classnames';
 import { Colxx } from 'components/common/CustomBootstrap';
 
 
-const LawyerTabCard = () => {
+const LawyerTabCard = ({pid}) => {
   const [activeFirstTab, setActiveFirstTab] = useState('1');
   const [packages,setPackages]=useState('');
   const packageURL=`${baseUrl}/lawyerPackages`;
+  
   // backend url 
 
-    // const packageURL=`${baseUrl}/api/lawyer/{lawyerId}/package`
+    // const packageURL=`${baseUrl}/api/lawyer/{pid}/package`
   useEffect(()=>{
    
    
   const LawyerPackage=async()=>{
+    console.log(pid);
     try {
         const response = await axios.get(packageURL);
         const fetchedPackages = response.data;
         setPackages(fetchedPackages);
-
+        
 
         if (fetchedPackages.length > 0) {
           setActiveFirstTab(fetchedPackages[0].id);

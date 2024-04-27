@@ -27,16 +27,16 @@ const LawyerProfile = () => {
 
     // backend lawyerprofile url 
    
-    // const url=`${baseUrl}/ api/lawyer/${pid}`;
+    // const url=`${baseUrl}/api/lawyer/${pid}`;
 
-    const reviewURL=`${baseUrl}/lawyerReviews/${pid}`;
+    const reviewURL=`${baseUrl}/lawyerReviews`;
     // backend  url
-    // const reviewURL=`${baseUrl}/api/rating/${pid}`;
+    // const reviewURL=`${baseUrl}/api/law/rating/${pid}`;
 
-    const packageURL=`${baseUrl}/lawyerPackages/${pid}`;
+    const packageURL=`${baseUrl}/lawyerPackages`;
     // backend url 
 
-    // const packageURL=`${baseUrl}/api/lawyer/{lawyerId}/package`
+    // const packageURL=`${baseUrl}/api/lawyer/${pid}/package`
     useEffect(()=>{
         const ProfileLawyer=async()=>{
             try {
@@ -210,7 +210,7 @@ const LawyerProfile = () => {
          <hr/>
   <h5 className='font-weight-bold'>Compare Packages</h5>
   <Row className='d-flex'>
-    {/* {packages && packages.map((pack) => (
+    {packages && packages.map((pack) => (
       <Col lg={6}  key={pack.id} className='my-2'>
         <Card className='pt-5 pb-5 d-flex'>
           <CardBody className='pt-5 pb-5'>
@@ -230,8 +230,8 @@ const LawyerProfile = () => {
           </CardBody>
         </Card>
       </Col>
-    ))} */}
-    <Col lg={6}  key={packages.id} className='my-2'>
+    ))}
+    {/* <Col lg={6}  key={packages.id} className='my-2'>
         <Card className='pt-5 pb-5 d-flex'>
           <CardBody className='pt-5 pb-5'>
             <div className='price-top-part'>
@@ -249,7 +249,7 @@ const LawyerProfile = () => {
             </div>
           </CardBody>
         </Card>
-      </Col>
+      </Col> */}
   </Row>
 </Colxx>
       
@@ -277,7 +277,7 @@ const LawyerProfile = () => {
           <div className=''>
          
            
-               {/* {reviews&&reviews.map((rv)=>{
+               {reviews&&reviews.map((rv)=>{
                 <hr/>
                return (
                  
@@ -321,18 +321,18 @@ const LawyerProfile = () => {
                )
                
             
-               })} */}
-               <div className='d-flex  justify-content-start my-4' key={reviews.reviewerId}>
+               })}
+               {/* <div className='d-flex  justify-content-start my-4' key={reviews.reviewerId}>
                
                <div>
              
                <NavLink  className="">
-                   {/* <ThumbnailLetters
+                   <ThumbnailLetters
                      rounded
                      small
                      text={reviews.imgText}
                      className=""
-                   /> */}
+                   />
                    {reviews && <ThumbnailLetters rounded small text={reviews.name} />}
 
                  </NavLink>
@@ -358,7 +358,7 @@ const LawyerProfile = () => {
                 
               
              
-               </div>
+               </div> */}
            
           </div>
             
@@ -375,7 +375,7 @@ const LawyerProfile = () => {
     </div>
 )} */}
 <div  style={{width:"40%",position:'fixed',top:'40%',right:'20px'}} className='mt-2 d-lg-block d-xl-block d-none'>
-        <LawyerTabCard />
+        <LawyerTabCard pid={pid}/>
     </div>
     {/* <div    className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none bg-primary'>
         <LawyerTabCard />
