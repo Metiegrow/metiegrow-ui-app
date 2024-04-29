@@ -8,10 +8,10 @@ import axios from "axios";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import TimestampConverter from "../Calculation/TimestampConverter";
 
-const AllReviews = (props) => {
+const ReviewsComponent = ({revieweeId,category}) => {
   // console.log("prop chk", props);
-  const rid = props;
-  const revieweeId = rid.id;
+  // const rid = props;
+  // const revieweeId = rid.id;
   const [averageStar, setAverageStar] = useState(0);
   const [totalRatings, setTotalRatings] = useState(0);
   const [totalFeedBack, setTotalFeedBack] = useState(0);
@@ -23,12 +23,12 @@ const AllReviews = (props) => {
     fourStar: 0,
     fiveStar: 0,
   });
-  const url = `${baseUrl}/api/mentorship/rating/meta/${revieweeId}`;
-  const url2 = `${baseUrl}/api/mentorship/rating/${revieweeId}`;
+  const metaRatingUrl = `${baseUrl}/api/${category}/rating/meta/${revieweeId}`;
+  const ratingUrl = `${baseUrl}/api/${category}/rating/${revieweeId}`;
   useEffect(() => {
     const ReviewDetails = async () => {
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(metaRatingUrl);
         const reviewData = response.data;
         // console.log("reviewData:", reviewData);
         // console.log("reviewData1:", reviewData.averageStar);
@@ -55,13 +55,14 @@ const AllReviews = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(url2);
+        const res = await axios.get(ratingUrl);
         const response = res.data;
         // console.log(response);
         setReviews(response);
         // setIsLoaded(true);
       } catch (error) {
         console.error("Error fetching data:", error);
+
         // setIsLoaded(true);
       }
     };
@@ -72,16 +73,6 @@ const AllReviews = (props) => {
   const calculatePercentage = (starCount) => {
     return (starCount / totalRatings) * 100;
   };
-  // const timeConvert = (time1) => {
-  //   const time = new Date(parseInt(time1, 10));
-  //   const Hours = time.getHours() % 12 || 12;
-  //   const Minutes = String(time.getMinutes()).padStart(2, "0");
-  //   const Period = time.getHours() < 12 ? "AM" : "PM";
-  //   const Month = time.getMonth() + 1;
-  //   const Day = time.getDate();
-  //   const Year = time.getFullYear();
-  //   return `${Month}/${Day}/${Year} ${Hours}:${Minutes} ${Period}`;
-  // };
 
   function removeTags(str) {
     if (str === null || str === '') {
@@ -162,6 +153,7 @@ const AllReviews = (props) => {
           </CardBody>
         </Card>
       )}
+      {reviews.length > 0 ? (
       <div className="">
         {reviews &&
           reviews.map((rv) => {
@@ -215,8 +207,11 @@ const AllReviews = (props) => {
             );
           })}
       </div>
+      ): (
+        <div>No reviews available</div> 
+      )}
     </Colxx>
   );
 };
 
-export default AllReviews;
+export default ReviewsComponent;
