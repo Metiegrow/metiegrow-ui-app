@@ -340,7 +340,7 @@ const MentorProfile = () => {
         <Colxx  lg={7} className="my-4" id="skillsSection">
             <h1>Skills </h1>
             <div className='d-flex flex-wrap '>
-              {mentorprofiledetails.skills && mentorprofiledetails.skills.map((skill) => (
+              {mentorprofiledetails1.skills && mentorprofiledetails1.skills.map((skill) => (
                 <div key={skill}>
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='md'>
                 {skill}

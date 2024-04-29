@@ -769,39 +769,48 @@
   ],
   "lawyerJobList": [
     {
-      "jobId": "100",
+      "id": "100",
       "jobName": "job 1",
       "clientUserId": 10,
       "clientName": "sivanesh a",
-      "createdAt": 1712811600000
+      "createdAt": 1712811600000,
+      "modifiedAt": 1713771670282
     },
     {
-      "jobId": "101",
+      "id": "101",
       "jobName": "job 2",
       "clientUserId": 11,
       "clientName": "browin",
-      "createdAt": 1712811600000
+      "createdAt": 1712811600000,
+      "modifiedAt": 1713771670282
+
     },
     {
-      "jobId": "460",
+      "id": "460",
       "jobName": "job 3",
       "clientUserId": 12,
       "clientName": "Arun",
-      "createdAt": 1712811600000
+      "createdAt": 1712811600000,
+      "modifiedAt": 1713771670282
+
     },
     {
-      "jobId": "477",
+      "id": "477",
       "jobName": "job 4",
       "clientUserId": 13,
       "clientName": "bala",
-      "createdAt": 1712811600000
+      "createdAt": 1712811600000,
+      "modifiedAt": 1713771670282
+
     },
     {
-      "jobId": "479",
+      "id": "479",
       "jobName": "job 5",
       "clientUserId": 14,
       "clientName": "david warner",
-      "createdAt": 1712811600000
+      "createdAt": 1712811600000,
+      "modifiedAt": 1713771670282
+
     }
   ],
   "lawyerJobsDetails": [
@@ -838,7 +847,7 @@
       ]
     },
     {
-      "id": "500",
+      "id": "101",
       "jobName": "job 2",
       "steps": [
         {

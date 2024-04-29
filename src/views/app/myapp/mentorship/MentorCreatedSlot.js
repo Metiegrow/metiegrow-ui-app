@@ -57,46 +57,15 @@ const MentorCreatedSlot = () => {
   const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
   const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
 
+
+
   const redirectToSessionLists1 = () => {
     // Redirect to the specified URL with the query parameter
     history.push('/app/sessionmentor');
   };
 
-  
-  // const handleOkButtonClick = async () => {
-  //   // Ensure selectedDate is not null
-  //   if (!selectedDate) {
-  //     console.error('Selected date is null');
-  //     return;
-  //   }
-  
-  //   // Get the selected date in milliseconds
-  //   const selectedDateMillis = selectedDate.getTime();
-  
-  //   // Store the selected timestamps
-  //   const fromTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown, minutedrop, 0, 0);
-  //   const toTimeStamp = new Date(selectedDateMillis).setHours(selectedHourDropdown1, minutedrop1, 0, 0);
-    
-  //   // Create an object with the required structure and assign id=1
-  //   const slot = {
-      
-  //     fromTimeStamp,
-  //     toTimeStamp
-  //   };
-  
-  //   // Make the POST request
-  //   try {
-  //     const response = await axios.post(url, [slot]);
-  //     // Handle success response
-  //     console.log('Data saved successfully:', response.data);
-  //   } catch (error) {
-  //     // Handle error
-  //     console.error('Error saving data:', error);
-  //   }
-    
-  //   // Optionally, close the modal
-  //   setModalSmall(false);
-  // };
+
+
   const handleOkButtonClick = async () => {
     // Ensure selectedDate is not null
     if (!selectedDate) {
@@ -136,10 +105,9 @@ const MentorCreatedSlot = () => {
   
     // Optionally, close the modal
     setModalSmall(false);
+
+    window.location.reload();
   };
-  
-  
-  
   
   
 
@@ -157,7 +125,7 @@ const MentorCreatedSlot = () => {
       const response = await axios.get(`${url}?&fromTime=${fromTime}&toTime=${toTime}`);
       const availability = response.data;
       setMentorAvailable(availability);
-      console.log(availability);
+      // console.log(availability);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -200,31 +168,31 @@ const MentorCreatedSlot = () => {
     // Handle the selected minutes as needed
     setMinutedrop(selectedMinute);
   //  setMinutedrop1(selectedMinute);
-    console.log(`Selected minute: ${selectedMinute}`);
+    // console.log(`Selected minute: ${selectedMinute}`);
     // setMinuteDrop(selectedMinute); 
   };
   const handleDropdownItemClick2 = (selectedHour) => {
     // Handle the selected hour as needed
     setSelectedHourDropdown1(selectedHour)
-    console.log(`Selected hour: ${selectedHour}`);
+    // console.log(`Selected hour: ${selectedHour}`);
     // setSelectedHourDropdown(selectedHour); 
   };
   const handleDropdownItemClick3 = (selectedMinute) => {
     // Handle the selected minutes as needed
     setMinutedrop1(selectedMinute);
-    console.log(`Selected minute: ${selectedMinute}`);
+    // console.log(`Selected minute: ${selectedMinute}`);
     // setMinuteDrop(selectedMinute); 
   };
   const handleDropdownItemClick4 = (selectedAmPmFrom) => {
     // Handle the selected minutes as needed
     setSelectedFromAmPm(selectedAmPmFrom);
-    console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
+    // console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
     // setMinuteDrop(selectedMinute); 
   };
   const handleDropdownItemClick5 = (selectedAmPmTo) => {
     // Handle the selected minutes as needed
     setSelectedFromAmPm1(selectedAmPmTo);
-    console.log(`Selected from AM/PM: ${selectedAmPmTo}`);
+   
     // setMinuteDrop(selectedMinute); 
   };
   const generateDropdownItems = () => {
@@ -333,25 +301,7 @@ const MentorCreatedSlot = () => {
  
   
 
-  // const isPreviousWeekDisabled = () => {
-  //   // Disable the button if you're already in the current week
-  //   const today = new Date();
-  //   const currentWeekStartDate = new Date(today);
-  //  currentWeekStartDate.setDate(today.getDate() - today.getDay() + 1); // Adjust to the start of the week
   
-  //   // console.log('Current Week Start Date:', currentWeekStartDate);
-  //   // console.log('Stored Current Week Start Date:', currentWeekStart);
-  
-  //   const disabled = (
-  //     currentWeekStartDate.getFullYear() === currentWeekStart.getFullYear() &&
-  //     currentWeekStartDate.getMonth() === currentWeekStart.getMonth() &&
-  //     currentWeekStartDate.getDate() === currentWeekStart.getDate()
-  //   );
-  //   // console.log('Is Previous Week Disabled:', disabled);
-
-  
-  //   return disabled;
-  // };
  
   const isPreviousWeekDisabled = () => {
     // Disable the button if you're already in the current week
@@ -370,22 +320,20 @@ if (day === 0) {
 // Set hours, minutes, seconds, and milliseconds to zero
 currentWeekStartDate.setHours(0, 0, 0, 0);
 
-console.log('Current Week Start Date:', currentWeekStartDate);
 
-    console.log('Stored Current Week Start Date:', currentWeekStart);
     
     const storedWeekStart = new Date(currentWeekStart);
     storedWeekStart.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
     
     const disabled = currentWeekStartDate.getTime() === storedWeekStart.getTime();
-    console.log('Is Previous Week Disabled:', disabled);
+   
   
     return disabled;
   };
 
   const handleTimeSlotClick = (date) => {
     setSelectedDate(date);
-    console.log(selectedDate);
+   
     setModalSmall(true); // Optionally open the modal when a time slot is clicked
     
   };
@@ -410,20 +358,7 @@ console.log('Current Week Start Date:', currentWeekStartDate);
    <h1 className='py-4 text-large'>My slots</h1>
 
    <div className='font-weight-semibold d-flex justify-content-center align-items-center'>
-     {/* <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button> */}
-     {/* <span className='font-weight-semibold text-xlarge mr-2 cursor-pointer'
-     style={{cursor:"pointer"}}
-      onClick={!isPreviousWeekDisabled() ? goToPreviousWeek : undefined}
-      onKeyDown={(e) => {
-    if (!isPreviousWeekDisabled() && (e.key === 'Enter' || e.key === ' ')) {
-      goToPreviousWeek();
-    }
-  }} 
-  role="button"
-  tabIndex={!isPreviousWeekDisabled() ? 0 : -1}
-  aria-disabled={isPreviousWeekDisabled()}
-><i className='simple-icon-arrow-left' />
-</span> */}
+    
 <span className='font-weight-semibold text-xlarge mr-2 cursor-pointer'
      style={{ 
        cursor: isPreviousWeekDisabled() ? "not-allowed" : "pointer",
@@ -487,7 +422,7 @@ console.log('Current Week Start Date:', currentWeekStartDate);
      
  {/*  new one */}
 
- {mentoravailable.map((availability) => (
+ {/* {mentoravailable.map((availability) => (
   availability.availableSlots.map((avail) => {
     const availDate = new Date(avail.fromTimeStamp);
     if (availDate.toDateString() === date.toDateString()) {
@@ -509,42 +444,7 @@ console.log('Current Week Start Date:', currentWeekStartDate);
 
       return (
         <>
-          {/* <Button
-            key={date.getTime()}
-            outline
-            color='primary'
-            block
-            className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-            disabled={isPastTime}
-            onClick={() => handleTimeSlotClick(date)}
-          >
-              <span className=' d-flex justify-content-center  align-items-center  ' 
-               style={{display:'block'}}>{fromTime} to {toTime}
-               <i className='iconsminds-close font-weight-bold ml-3  '  /></span>
-          </Button> */}
-          {/* <Button  key={date.getTime()}  color='primary' block
-          className={` text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} m-2`}
-          disabled={isPastTime}
-          onClick={() => handleTimeSlotClick(date)}
-        >
-         {fromTime} to {toTime}
-    
-        </Button> */}
-        {/* <div
-      key={date.getTime()}
-      role="button" // Add role attribute for accessibility
-      tabIndex={0}   // Add tabIndex for keyboard accessibility
-      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2`}
-      style={{ outline: 'none', cursor:"pointer"}} // Remove default focus outline if needed
-      onClick={() => handleTimeSlotClick(date)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleTimeSlotClick(date);
-        }
-      }}
-    >
-      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime}<i className='simple-icon-close ml-4'/></span> 
-    </div> */}
+         
     
           <div
       key={date.getTime()}
@@ -563,6 +463,19 @@ console.log('Current Week Start Date:', currentWeekStartDate);
     >
       <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime} <i className='simple-icon-close ml-4'/></span> 
     </div>
+    <div className='mt-2 text-center mx-auto' key={`edit-${date.getTime()}`}>
+          <Button
+            size='sm'
+            className='text-center mx-auto my-4 '
+            onClick={()=>handleAddSlotClick(date)}
+            key={`edit-${date.getTime()}`}
+            outline
+            color="primary"
+            block
+          >
+            +
+          </Button>
+        </div>
         </>
       );
     }
@@ -572,7 +485,79 @@ console.log('Current Week Start Date:', currentWeekStartDate);
   })
  
  
-))}
+))} */}
+{
+  mentoravailable.map((availability) => {
+    let hasSlotsForDay = false; // Flag to track if there are slots for the particular day
+
+    const slots = availability.availableSlots.map((avail) => {
+      const availDate = new Date(avail.fromTimeStamp);
+      if (availDate.toDateString() === date.toDateString()) {
+        hasSlotsForDay = true; // Set flag true if there's at least one slot for the day
+
+        const FromDate = new Date(avail.fromTimeStamp);
+        const ToDate = new Date(avail.toTimeStamp);
+        
+        const fromHours = FromDate.getHours() % 12 || 12; 
+        const fromMinutes = String(FromDate.getMinutes()).padStart(2, '0');
+        const fromPeriod = FromDate.getHours() < 12 ? 'AM' : 'PM';
+        
+        const toHours = ToDate.getHours() % 12 || 12; 
+        const toMinutes = String(ToDate.getMinutes()).padStart(2, '0');
+        const toPeriod = ToDate.getHours() < 12 ? 'AM' : 'PM';
+        
+        const fromTime = `${fromHours}:${fromMinutes} ${fromPeriod}`;
+        const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
+
+        const isPastTime = ToDate < new Date();
+
+        return (
+          <div
+            key={avail.fromTimeStamp} // Updated key to use timestamp to ensure it is unique
+            role="button"
+            tabIndex={0}
+            className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 mt-2`}
+            style={{ outline: `1px solid black`, cursor: "pointer" }}
+            onClick={() => handleTimeSlotClick(avail.fromTimeStamp)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleTimeSlotClick(avail.fromTimeStamp);
+              }
+            }}
+            onMouseEnter={(e) => { e.currentTarget.classList.add('bg-primary'); }}
+            onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }}
+          >
+            <span className='d-flex gap-5 justify-content-center align-items-center'>
+              {fromTime} to {toTime} <i className='simple-icon-close ml-4'/>
+            </span> 
+          </div>
+        );
+      }
+      return null;
+    });
+
+    // Add slot button only once per date
+    return (
+      <>
+        {slots}
+        {hasSlotsForDay && (
+          <div className='mt-2 text-center mx-auto' key={`add-slot-${date.getTime()}`}>
+            <Button
+              size='sm'
+              className='text-center mx-auto my-4'
+              onClick={() => handleAddSlotClick(date)}
+              outline
+              color="primary"
+              block
+            >
+              +
+            </Button>
+          </div>
+        )}
+      </>
+    );
+  })
+}
 {mentoravailable.every(availability => (
         !availability.availableSlots.some(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
       ))  &&(
@@ -615,42 +600,15 @@ console.log('Current Week Start Date:', currentWeekStartDate);
 
       return (
         <>
-          {/* <Button
-            key={date.getTime()}
-            color='primary'
-            block
-            className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-            disabled={isPastTime}
-            onClick={() => handleTimeSlotClick(date)}
-          >
-          <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
-          </Button> */}
-
-          {/* <div
-      key={date.getTime()}
-      role="button" // Add role attribute for accessibility
-      tabIndex={0}   // Add tabIndex for keyboard accessibility
-      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 mt-2`}
-      style={{ outline: `1px solid black`,cursor:"pointer" }} // Remove default focus outline if needed
-      onClick={() => handleTimeSlotClick(date)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleTimeSlotClick(date);
-        }
-      }}
-      onMouseEnter={(e) => { e.currentTarget.classList.add('bg-primary'); }}
-  onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }} 
-    >
-      <span className='d-flex gap-5 justify-content-center align-items-center'><i className='iconsminds-full-view-2 mr-4'/> {fromTime} to {toTime}</span> 
-    </div> */}
+          
 
     <div
       key={date.getTime()}
       role="button" // Add role attribute for accessibility
       tabIndex={0}   // Add tabIndex for keyboard accessibility
       className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2 mt-2`}
-      style={{ outline: 'none', cursor:"pointer"}} // Remove default focus outline if needed
-      onClick={() => handleTimeSlotClick(date)}
+      style={{ outline: 'none'}} // Remove default focus outline if needed
+      // onClick={() => handleTimeSlotClick(date)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           handleTimeSlotClick(date);
