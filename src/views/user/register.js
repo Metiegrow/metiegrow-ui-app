@@ -3,7 +3,7 @@ import {
   Row,
   Card,
   CardTitle,
-  Form,
+  // Form,
   FormGroup,
   Label,
   Input,
@@ -17,6 +17,7 @@ import { registerUser } from 'redux/actions';
 import { NotificationManager } from 'components/common/react-notifications';
 
 import IntlMessages from 'helpers/IntlMessages';
+import { AvForm, AvField} from 'availity-reactstrap-validation';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { authService } from 'services/authservice';
 // import { baseUrl } from 'constants/defaultValues';
@@ -35,8 +36,11 @@ const Register = () => {
   const [username,setUsername] = useState("")
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("+91");
-  const [password,setPassword] = useState("")
-  const [userRoles,setUserRoles] = useState(["MENTOR"])
+  const [password,setPassword] = useState("");
+  const [userRoles,setUserRoles] = useState(["MENTOR"]);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [roleError, setRoleError] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const history = useHistory();
 
@@ -49,6 +53,10 @@ const Register = () => {
       setUserRoles([...userRoles, role]);
     }
   };
+
+  const clickToLogin = () => {
+    history.push('/login')
+  }
 
   // function handleChange(field, value) {
   //   setNewUser((prevState) => ({
@@ -98,14 +106,20 @@ const Register = () => {
   //       break;
   //   }
   // }
-  async function OnRegisterButtonclick() {
+const OnRegisterButtonclick = async () => {
     try {
       // const response = await authService.signUp(
       //   newUser.email,
       //   newUser.password,
       //   newUser.name,
       //   newUser.role
-       await authService.signUp(
+      if (userRoles.length === 0) {
+        setRoleError(true); 
+        return;
+      }
+      setRoleError(false);
+
+       const signUpResponse = await authService.signUp(
         email,
         phoneNumber,
         password,
@@ -114,9 +128,13 @@ const Register = () => {
         userRoles,
         username
       );
-      
-      // console.log(response.data);
-      history.push('/login');
+      if (signUpResponse && signUpResponse.status === 201) {
+        setIsSubmitted(true)
+        // history.push('/login');
+    } else {
+        console.error('Signup Failed:', signUpResponse);
+        NotificationManager.warning(signUpResponse.data.error.message, 'Sign Up Error', 3000, null, null, '');
+    }
     } catch (error) {
       // console.error('Error registering user:', error);
       NotificationManager.warning(error, 'SignUp Error', 3000, null, null, '');
@@ -166,8 +184,11 @@ const Register = () => {
     <Row className="h-100">
       <Colxx xxs="12" md="10" className="mx-auto my-auto">
         <Card className="auth-card">
-          <div className="position-relative image-side ">
+        <div className="position-relative image-side ">
             <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
+            {isSubmitted? (
+              <div />
+            ) : (
             <p className="white mb-0">
               Please use this form to register. <br />
               If you are a member, please{' '}
@@ -176,123 +197,157 @@ const Register = () => {
               </NavLink>
               .
             </p>
+            )}
           </div>
           <div className="form-side">
             <NavLink to="/" className="white">
               <span className="logo-single" />
             </NavLink>
-            <CardTitle className="mb-4">
+            {isSubmitted?(
+              <Row>
+                  <h4>A verification link has been sent to your registered email address.</h4>
+                <Col className="text-center mt-4" ><Button onClick={clickToLogin} color='primary'>Login</Button></Col>
+              </Row>) : (
+            <AvForm onValidSubmit={OnRegisterButtonclick}>
+              <CardTitle className="mb-4">
               <IntlMessages id="user.register" />
             </CardTitle>
-            <Form>
               <Row>
-                <Col md={6}>
-              <FormGroup className="form-group has-float-label  mb-4">
-                <Label>
-                  {/* <IntlMessages id="user.fullname" /> */}
-                  First Name
-                </Label>
-                <Input
-                  type="name"
-                  defaultValue={firstName}
-                  // onChange={(e) => {
-                  //   handleChange('name', e);
-                  // }}
-                  onChange={(e) => {
-                    setFirstName(e.target.value);
-                  }}
-                />
-              </FormGroup>
+                <Col>
+                <AvField
+                name="firstName"
+                label="First Name"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                validate={{
+                  required: { value: true, errorMessage: 'First name cannot be empty' },
+                  pattern: {
+                    value: '^[a-zA-Z]+$',
+                    errorMessage: 'First name must contain only alphabetic characters',
+                  },
+                }}
+              />
+
               </Col>
-              <Col md={6}>
-              <FormGroup className="form-group has-float-label  mb-4">
-                <Label>
-                  {/* <IntlMessages id="user.fullname" /> */}
-                  Last Name
-                </Label>
-                <Input
-                  type="name"
-                  defaultValue={lastName}
-                  // onChange={(e) => {
-                  //   handleChange('name', e);
-                  // }}
-                  onChange={(e) => {
-                    setLastName(e.target.value);
-                  }}
-                />
-              </FormGroup>
+              <Col>
+              <AvField
+                name="lastName"
+                label="Last Name"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                validate={{
+                  required: { value: true, errorMessage: 'Last name cannot be empty' },
+                  pattern: {
+                    value: '^[a-zA-Z]+$',
+                    errorMessage: 'Last name must contain only alphabetic characters',
+                  },
+                }}
+              />
+
               </Col>
               </Row>
-
-              <FormGroup className="form-group has-float-label  mb-4">
-                <Label>
-                  {/* <IntlMessages id="user.email" /> */}
-                  Set user name
-                </Label>
-                <Input
-                  type="name"
-                  defaultValue={username}
-                  // onChange={(e) => {
-                  //   handleChange('email', e);
-                  // }}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                  }}
-                />
-              </FormGroup>
-              <FormGroup className="form-group has-float-label  mb-4">
-                <Label>
-                  <IntlMessages id="user.email" />
-                </Label>
-                <Input
-                  type="email"
-                  defaultValue={email}
-                  // onChange={(e) => {
-                  //   handleChange('email', e);
-                  // }}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-              </FormGroup>
-              <FormGroup className="form-group has-float-label  mb-4">
-                <Label>
-                  Mobile Number
-                </Label>
-                <Input
+              <AvField
+                  name="username"
+                  label="Username"
                   type="text"
-                  defaultValue={phoneNumber}
-                  // onChange={(e) => {
-                  //   handleChange('email', e);
-                  // }}
-                  onChange={(e) => {
-                    setPhoneNumber(e.target.value);
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  validate={{
+                    required: { value: true, errorMessage: 'Username cannot be empty' },
+                    pattern: {
+                      value: '^(?=.*[a-zA-Z0-9_@])(?=.*\\d{1,4})[a-zA-Z0-9_@]{3,20}$',
+                      errorMessage: 'Username must contain 3-20 characters, at least one alphanumeric character, and 1-4 digits',
+                    },
                   }}
                 />
-              </FormGroup>
 
-              <FormGroup className="form-group has-float-label  mb-4">
-                <Label>
-                  <IntlMessages
-                    id="user.password"
-                    />
-                </Label>
-                <Input
-                  type="password"
-                  defaultValue={password}
-                  // onChange={(e) => {
-                  //   handleChange('password', e);
-                  // }}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
+
+
+                <AvField
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  validate={{
+                    required: { value: true, errorMessage: 'Email cannot be empty' },
+                    email: { value: true, errorMessage: 'Please provide a valid email address' },
                   }}
                 />
-              </FormGroup>
-              <h4>Select Role</h4>
+
+             <AvField
+                name="phoneNumber"
+                label="Mobile Number"
+                type="text"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                validate={{
+                  required: { value: true, errorMessage: 'Phone number cannot be empty' },
+                  pattern: {
+                    value: '^\\+[0-9]{2}[0-9]{10}$',
+                    errorMessage: 'Please enter a valid mobile number',
+                  },
+                }}
+              />
+
               <Row>
+                <Col>
+              {/* <AvField
+                name="password"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                validate={{ required: true }}
+              /> */}
+                        {/* <AvGroup className="error-l-100 tooltip-label-right"> */}
+              <AvField
+                    name="password"
+                    label="Password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Please enter your password' },
+                      pattern: {
+                        value: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,15}$',
+                        errorMessage: 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be between 8 and 15 characters long',
+                      },
+                      minLength: {
+                        value: 8,
+                        errorMessage: 'Password must be at least 8 characters long',
+                      },
+                      maxLength: {
+                        value: 15,
+                        errorMessage: 'Password must be at most 15 characters long',
+                      },
+                    }}
+                  />
+                  {/* </AvGroup> */}
+
+
+                                
+
+              </Col>
+              <Col>
+              <AvField
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                validate={{ 
+                  required: { value: true, errorMessage: 'Confirm Password cannot be empty' },
+                   match: { value: 'password', errorMessage: 'Passwords do not match' } }}
+              />
+              </Col>
+              </Row>
+               <Row>
               <FormGroup check>
                 <Label check className='ml-2'>
-                  <Input
+                   <Input
                     type="checkbox"
                     onChange={() => handleRoleChange('MENTOR')}
                     checked={userRoles.includes('MENTOR')}
@@ -322,55 +377,19 @@ const Register = () => {
                 </Label>
               </FormGroup>
               </Row>
-              {/* <ButtonGroup>
-                <Button
-                  color="primary"
-                  // onChange={(e) => {
-                  //   handleChange('role', e);
-                  // }}
-                  onClick={() => {
-                    // handleChange('role', 1);
-                    handleRoleChange('MENTOR')
-                  }} 
-                  active={userRoles === 'MENTOR'}
-                >
-                  Mentor
-                </Button>
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    // handleChange('role', 2);
-                    handleRoleChange('MENTEE')
-                  }}
-                  active={userRoles === 'MENTEE'}
-                >
-                  Mentee
-                </Button>
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    // handleChange('role', 3);
-                    handleRoleChange('LAWYER')
-                  }}
-                  active={userRoles === 'LAWYER'}
-                >
-                  Lawyer
-                </Button>
-              </ButtonGroup> */}
-
+              {roleError && <p className="text-danger">Please select at least one role</p>} {/* Validation message */}
               <div className="d-flex justify-content-end align-items-center">
                 <Button
-                  color="primary"
-                  className="btn-shadow"
-                  size="lg"
-                  onClick={() => {
-                    OnRegisterButtonclick();
-                  }}
+                 color="primary"
+                 className="btn-shadow"
+                 size="lg"
+                 type="submit"
                 >
-                  <IntlMessages id="user.register-button" />
+                 <IntlMessages id="user.register-button" />
                 </Button>
               </div>
-            </Form>
+            </AvForm>
+            )}
           </div>
         </Card>
       </Colxx>

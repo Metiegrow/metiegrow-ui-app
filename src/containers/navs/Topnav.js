@@ -99,8 +99,19 @@ const TopNav = ({
   function getRoleRes() {
     return localStorage.getItem('roleRes');
   }
+  function getExpTime() {
+    return localStorage.getItem('expirationTime');
+  }
 
   const roleRes = getRoleRes();
+  const expTime = getExpTime();
+
+  const timeUntilExpiration = expTime - Date.now();
+    setTimeout(() => {
+    localStorage.clear();
+    logoutUserAction(history);
+      
+    }, timeUntilExpiration);
           
 let session;  
 if (roleRes.includes("MENTOR")) {

@@ -5,7 +5,7 @@ import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {useParams,useHistory} from "react-router-dom";
 import MentorTabCard from './MentorTabCard';
-import AllReviews from "../Reviews/AllReviews";
+import ReviewsComponent from '../Reviews/ReviewsComponent';
 
 const MentorProfile = () => {
   const {mid}=useParams();
@@ -354,7 +354,10 @@ const MentorProfile = () => {
           </Colxx>
           </div>
         </Colxx>
-      <AllReviews id={mid} />
+        <ReviewsComponent
+        category="mentorship"  // for lawyer profile "law"
+        revieweeId ={mid}
+        />
       </div>
     </div>
   );
