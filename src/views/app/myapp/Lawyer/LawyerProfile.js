@@ -8,6 +8,7 @@ import {useParams} from "react-router-dom";
 // import data from 'data/profileStatuses';
 import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import LawyerTabCard from './LawyerTabCard';
+import ReviewsComponent from '../Reviews/ReviewsComponent';
 
 
 
@@ -256,13 +257,14 @@ const LawyerProfile = () => {
               <Colxx className='mt-4' lg={12}>    
                 <h3 className='font-weight-bold'>Reviews</h3>
                 <div>
-                <h5 className='font-weight-bold'>133 reviews for this gig</h5>
+                {/* <h5 className='font-weight-bold'>133 reviews for this gig</h5>
                 <div className='d-flex align-items-center'>
                 <Rating total={5} rating={4.93} interactive={false} />
-          <p className="text-small text-muted mb-0 d-inline-block ml-2">4.93</p>
-              </div>
+                <p className="text-small text-muted mb-0 d-inline-block ml-2">4.93</p>
+              </div> */}
             
-        
+              <ReviewsComponent  category="law"
+             revieweeId ={pid}/>
               </div>
              
               

@@ -11,8 +11,8 @@
     ]
   },
   "signIn": {
-    "email": "",
-    "password": ""
+    "email": "Arunraj@gmail.com",
+    "password": "Arun@1234"
   },
   "StudentPersonalInfo": [
     {
@@ -737,40 +737,36 @@
   ],
   "lawyerReviews": [
     {
-      "id":1,
+      "id": 1,
       "reviewerId": 100,
       "name": "Mukesh kumar",
       "country": "India",
       "star": 4,
       "feedBack": "Great service as usual"
-      
     },
     {
-      "id":2,
+      "id": 2,
       "reviewerId": 220,
       "name": "Dinesh kumar",
       "country": "India",
       "star": 5,
       "feedBack": "Great service as usual"
-      
     },
     {
-      "id":3,
+      "id": 3,
       "reviewerId": 180,
       "name": "Arun kumar",
       "country": "India",
       "star": 4,
       "feedBack": "Great service as usual"
-    
     },
     {
-      "id":4,
+      "id": 4,
       "reviewerId": 250,
       "name": "Gokul kumar",
       "country": "India",
       "star": 5,
       "feedBack": "Great service as usual"
-   
     }
   ],
   "lawyerJobList": [
@@ -815,7 +811,7 @@
       "modifiedAt": 1713771670282
     }
   ],
-  "clientJobList":[
+  "clientJobList": [
     {
       "id": 1,
       "jobName": "UNTITLED_JOB",
@@ -823,8 +819,7 @@
       "lawyerName": "sunil K",
       "createdAt": 1713946788462,
       "modifiedAt": 1713946788462
-}
-
+    }
   ],
   "lawyerJobsDetails": [
     {

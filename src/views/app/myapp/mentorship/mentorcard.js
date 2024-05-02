@@ -15,6 +15,7 @@ import MentorDropDown from './MentorDropDown';
 const MentorCard = () => {
   // const url1=`${baseUrl}/mentorDetails`
   const url1=`${baseUrl}/api/mentor`
+  // const imageUrl = `${baseUrl}/api/public/images`;
   // To change to backend api url uncomment the below line
   // const url1=`${baseUrl}/api/mentor`
 
@@ -37,6 +38,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   // const url='http://localhost:9091/api/mentor/cards?page=0&size=3 ';
   const[mentordetails,setMentorDetails]=useState([]);
   // const[mentorfilter,setMentorFilter]=useState([]);
+  // const [image]=useState('');
   const [inputkey,setInputKey]=useState('')
 
   const truncateBio = (bio, lineCount) => {
@@ -76,7 +78,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   //   };
   //   mentorCardDetails();
   // },[location.search])   
-  useEffect(()=>{
+  useEffect(() => {
     const mentorCardDetails = async () => {
       try {
         let url = url1;
@@ -90,8 +92,11 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       }
     };
     mentorCardDetails();
-  },[location.search])  
+  }, [location.search]);
+
  
+ 
+  
   // useEffect(() => {
   //   const mentorCardDetails = async () => {
   //     try {
@@ -148,7 +153,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
 </Nav> */}
 
       {/* searchbar starts */}
-    
+     
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <div>
       {/* <div className="search input-group">
@@ -239,12 +244,20 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
            
               <div className='d-flex justify-content-between flex-column  w-100'>
             
-                <img
+                {/* <img
                       className="card-img-left"
                       src={mentors.image}
                       alt="Card"
                       style={{minWidth:'150px',minHeight:"300px"}}
-                    />
+                    /> */}
+                   
+                    <img
+                    className="card-img-left"
+                    src={`${baseUrl}/api/public/images/${mentors.id}/profile-pic`}
+                    alt="Card"
+                    style={{ minWidth: '150px', minHeight: '300px' }}
+                  />
+
                     <div className='my-5  '>
                         <CardText className='text-primary '>
                             <span className='text-xlarge font-weight-semibold'>${mentors.price}</span>/month
