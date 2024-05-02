@@ -747,7 +747,7 @@ const generateAmPmDropdownItems1 = () => {
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Balance after deduction</Label>
                                     <Colxx lg={5}>
-                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:{license.balanceAfterDeducation}</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>

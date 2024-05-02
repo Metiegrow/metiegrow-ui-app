@@ -650,6 +650,7 @@
   "licenseDetails": {
     "sessionPrice": 125,
     "availableBalance": 125,
+    "balanceAfterDeducation": 0,
     "balance": true
   },
   "userCard": [

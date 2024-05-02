@@ -2,8 +2,10 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, CardBody,  Label, NavLink, Row } from 'reactstrap';
+import { Badge, Button, Card, CardBody,   Col,  Label, NavLink, Row } from 'reactstrap';
 import { useLocation, useHistory } from 'react-router-dom';
+import ThumbnailImage from 'components/cards/ThumbnailImage';
+
 
 
 
@@ -144,6 +146,7 @@ SessionUpcomingHistroy();
         }
         
        </div> */}
+       
        <div className=''>
   {upcomingsession.upcomingSessions && upcomingsession.upcomingSessions.length > 0 ? (
     upcomingsession.upcomingSessions.map((up) => {
@@ -161,16 +164,45 @@ SessionUpcomingHistroy();
             </Badge>
 
             <CardBody className='d-flex justify-content-between'>
-              <div className='d-flex justify-content-between flex-column'>
-                <NavLink href={`/app/mentorprofile/${up.mentorId}`}>
-                  <h4 className='text-large text-primary'>{up.name}</h4>
-                </NavLink>
-                <div className='d-flex'>
-                  <Label className='text-one'>Date:</Label>
-                  <h4 className='ml-2 font-weight-bold'>{updateformat}</h4>
-                </div>
-              </div>
+              {/* <div className='d-flex justify-content-between flex-column'>
+                
+              <NavLink href={`/app/mentorprofile/${up.mentorId}`} className='d-flex align-items-center'>
+              <ThumbnailImage
+                rounded
+                small
+                src="/assets/img/profiles/l-1.jpg"
+                alt="profile"
+                className="text-start"
+              />
+              <h4 className='text-large text-primary ml-2'>{up.name}</h4>
+            </NavLink>
+            <div className='d-flex align-items-center'>
+              <Label className='text-one mr-2'>Date:</Label>
+              <h4 className='font-weight-bold'>{updateformat}</h4>
+            </div>
+              </div> */}
+              <Row  className=''> 
+  <Col className='d-flex'> 
+    <NavLink href={`/app/mentorprofile/${up.mentorId}`} 
+    className='d-flex align-items-center'>
+      <ThumbnailImage
+                  rounded
+                  src="/assets/img/profiles/l-1.jpg"
+                  alt="Card image cap"
+                  className="m-4"
+                />
+      <h4 className='text-large text-primary ml-2'>{up.name}</h4>
+    </NavLink>
+  </Col>
+</Row>
+  
+
+
               <div className='d-flex justify-content-around flex-column '>
+              <div className='d-flex '>
+              <Label className='text-one mr-2'>Date:</Label>
+              <h4 className='font-weight-bold '>{updateformat}</h4>
+            </div>
                 <div className='d-flex justify-content-between'>
                   <h4 className='mr-2'>From:</h4>
                   <h4 className='mr-2 font-weight-bold'>{fromtime.toLocaleTimeString([], timeOptions)}</h4>
