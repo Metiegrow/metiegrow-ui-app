@@ -14,6 +14,8 @@ const MentorSessionList = () => {
 const [session,setSession]=useState('');
 const [upcomingsession,setUpcomingSession]=useState('');
 const [showSuccessCard, setShowSuccessCard] = useState(false);
+const [mentorName, setMentorName] = useState('');
+
 const location = useLocation();
 // const url=`${baseUrl}/mentor/session`;
 // const url1=`${baseUrl}/sessionUpcomingHistroy`;
@@ -55,7 +57,13 @@ SessionHistroy();
         setUpcomingSession(response.data.data);
         const queryParams = new URLSearchParams(location.search);
         const appointment = queryParams.get('appointment');
-        setShowSuccessCard(appointment === 'true');
+        // setShowSuccessCard(appointment === 'true');
+        if (appointment === 'true' && response.data.data.upcomingSessions.length > 0) {
+          setMentorName(response.data.data.upcomingSessions[0].name); 
+          setShowSuccessCard(true);
+        } else {
+          setShowSuccessCard(false);
+        }
         console.log("Upcoming Session Data:", response);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -70,7 +78,7 @@ SessionUpcomingHistroy();
    
   
     <Row>
-    <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
+    <Colxx  sm="12" md="12" lg="7" xxs="12" className='mx-auto '>
         {/* <Card className='my-2' >
           <CardBody className='text-center'>
           <span className='text-xlarge text-primary'><i className='simple-icon-check'/></span>
@@ -81,7 +89,7 @@ SessionUpcomingHistroy();
             <Card className='my-2'>
               <CardBody className='text-center'>
                 <span className='text-xlarge text-primary'><i className='simple-icon-check'/></span>
-                <h3 className='text-center'>You have successfully scheduled appointment with mentorName</h3>
+                <h3 className='text-center'>You have successfully scheduled appointment with {mentorName}</h3>
               </CardBody>
             </Card>
           )}
@@ -158,7 +166,7 @@ SessionUpcomingHistroy();
 
       return (
         <div key={up.mentorId}>
-          <Card className='my-4'>
+          <Card className='my-4 '>
             <Badge color="primary" pill className="position-absolute badge-top-right">
               NEW
             </Badge>
@@ -187,7 +195,8 @@ SessionUpcomingHistroy();
     className='d-flex align-items-center'>
       <ThumbnailImage
                   rounded
-                  src="/assets/img/profiles/l-1.jpg"
+                  // src="/assets/img/profiles/l-1.jpg"
+                  src={`${baseUrl}/api/public/images/${up.mentorId}/profile-pic`}
                   alt="Card image cap"
                   className="m-4"
                 />
@@ -293,10 +302,14 @@ SessionUpcomingHistroy();
            // Calculate duration in minutes
      /* const durationInMs = totime.getTime() - fromtime.getTime(); */
     /* const durationInMinutes = Math.floor(durationInMs / (1000 * 60));  */
+    const formatDuration = (durationInMs) => {
+  const durationInMinutes = durationInMs / (1000 * 60);
+  return durationInMinutes.toFixed(2); // Formats the number to two decimal places
+};
 
       return (
         <Card className='my-2' key={sh.mentorId}>
-          <CardBody className='d-flex justify-content-between'>
+          {/* <CardBody className='d-flex justify-content-between'>
             <div className='d-flex justify-content-between flex-column'>
               <NavLink href={`/app/mentorprofile/${sh.mentorId}`}>
                 <h4 className='text-large text-primary'>{sh.name}</h4>
@@ -312,7 +325,8 @@ SessionUpcomingHistroy();
               <div className='d-flex'>
                 <Label className='text-one mr-2'>Duration:</Label>
                 <h4 className='font-weight-bold'>{sh.duration/60000} minutes</h4>
-                {/* <h4 className='font-weight-bold'>{durationInMinutes}</h4> */}
+                <h4 className='font-weight-bold'>{durationInMinutes}</h4>
+                <h4 className='font-weight-bold'>{formatDuration(sh.duration)} minutes</h4>
               </div>
 
               <div className='d-flex justify-content-between'>
@@ -329,7 +343,51 @@ SessionUpcomingHistroy();
                 <h4 className='font-weight-bold '>{sh.mode}</h4>
               </div>
             </div>
-          </CardBody>
+          </CardBody> */}
+          
+          <CardBody className='d-flex justify-content-between'>
+
+              <Row  className=''> 
+  <Col className='d-flex'> 
+    <NavLink href={`/app/mentorprofile/${sh.mentorId}`} 
+    className='d-flex align-items-center'>
+      <ThumbnailImage
+                  rounded
+                  // src="/assets/img/profiles/l-1.jpg"
+                  src={`${baseUrl}/api/public/images/${sh.mentorId}/profile-pic`}
+                  alt="Card image cap"
+                  className="m-4"
+                />
+      <h4 className='text-large text-primary ml-2'>{sh.name}</h4>
+    </NavLink>
+  </Col>
+</Row>
+  
+
+
+              <div className='d-flex justify-content-around flex-column '>
+              <div className='d-flex '>
+              <Label className='text-one mr-2'>Date:</Label>
+              <h4 className='font-weight-bold '>{shdateformat}</h4>
+            </div>
+            <div className='d-flex'>
+                <Label className='text-one mr-2'>Duration:</Label>
+                
+                <h4 className='font-weight-bold'>{formatDuration(sh.duration)} minutes</h4>
+              </div>
+                <div className='d-flex justify-content-between'>
+                  <h4 className='mr-2'>From:</h4>
+                  <h4 className='mr-2 font-weight-bold'>{fromtime.toLocaleTimeString([], timeOptions)}</h4>
+                  <h4>to</h4>
+                  <h4 className='font-weight-bold mx-2'>{totime.toLocaleTimeString([], timeOptions)}</h4>
+                </div>
+                <div className='d-flex'>
+                  <Label className='text-one mr-2'>Mode:</Label>
+                  <h4 className='font-weight-bold'>{sh.mode}</h4>
+                </div>
+               
+              </div>
+            </CardBody>
         </Card>
       );
     })

@@ -141,6 +141,9 @@ if (roleRes.includes("MENTOR")) {
   const handleMyClientJobsClick = () => {
     history.push(`${adminRoot}/lawyerjobslist`);
   };
+  const handleMySlots = () => {
+    history.push(`${adminRoot}/calendar/mentor/appointment`);
+  };
   
   
 
@@ -270,6 +273,11 @@ if (roleRes.includes("MENTOR")) {
               <NavLink to={`${adminRoot}/mywallet`}>
                 <DropdownItem onClick={() => handleMyWalletClick()}>
                 <i className="simple-icon-wallet" />  My Wallet
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/calendar/mentor/appointment`}>
+                <DropdownItem onClick={() => handleMySlots()}>
+                <i className="simple-icon-wallet" />  My Slots
                 </DropdownItem>
               </NavLink>
               {/* <NavLink to={`${adminRoot}/mylisting`}> */}

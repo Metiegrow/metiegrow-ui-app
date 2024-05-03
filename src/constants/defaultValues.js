@@ -39,8 +39,8 @@ export const buyUrl = 'https://1.envato.market/k4z0';
 export const searchPath = `${adminRoot}/#`;
 export const servicePath = 'https://api.coloredstrategies.com';
  // export const baseUrl = 'http://159.65.148.48:9091/';
-// export const baseUrl = 'http://localhost:3001';
-export const baseUrl = 'http://localhost:9091';
+export const baseUrl = 'http://localhost:3001';
+// export const baseUrl = 'http://localhost:9091';
 
 export const currentUser = {
   id: 1,

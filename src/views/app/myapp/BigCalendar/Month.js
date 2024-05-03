@@ -23,7 +23,7 @@ const Month = () => {
   const mentorId = searchParams.get('mentorId');
 
   const [selectedDate, setSelectedDate] = useState(null); 
-  const [hasAvailableSlots,setHasAvailableSlots] = useState(true);
+  // const [hasAvailableSlots,setHasAvailableSlots] = useState(true);
  
   // const [selectedStartTime, setSelectedStartTime] = useState(null);
   // const [selectedEndTime, setSelectedEndTime] = useState(null);
@@ -183,37 +183,25 @@ useEffect(() => {
   //   fetchMentorAvailability(fromTime, toTime);
   // };
   // Modify the goToNextWeek function to update the URL and fetch availability for the next week
-const goToNextWeek = () => {
-  const newStartDate = new Date(currentWeekStart);
-  newStartDate.setDate(newStartDate.getDate() + 7);
+  const goToNextWeek = () => {
+    const newStartDate = new Date(currentWeekStart);
+    newStartDate.setDate(newStartDate.getDate() + 7);
+    setCurrentWeekStart(newStartDate);
+  
+    // Calculate the start of the next week
+    const nextWeekStart = new Date(newStartDate);
+    nextWeekStart.setDate(nextWeekStart.getDate() - nextWeekStart.getDay() + 1);
+  
+    // Calculate the end of the next week
+    const nextWeekEnd = new Date(nextWeekStart);
+    nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
+  
+    const fromTime = nextWeekStart.getTime(); // Timestamp of the start of the next week
+    const toTime = nextWeekEnd.getTime(); // Timestamp of the end of the next week
+  
+    fetchMentorAvailability(fromTime, toTime);
+  };
 
-  // setCurrentWeekStart(newStartDate);
-
-  // Calculate the start of the next week
-  const nextWeekStart = new Date(newStartDate);
-  nextWeekStart.setDate(nextWeekStart.getDate() - nextWeekStart.getDay() + 1);
-
-  // Calculate the end of the next week
-  const nextWeekEnd = new Date(nextWeekStart);
-  nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
-
-  const hasAvailable = mentoravailable.some(avail => {
-    const availDate = new Date(avail.fromTimeStamp);
-    return availDate >= nextWeekStart && availDate <= nextWeekEnd;
-  });
- 
-  if (!hasAvailable) {
-    // Optionally display a message to inform the user
-    setHasAvailableSlots(false);
-    
-    return; // Exit the function without updating state if no slots available
-  }
-
-  // Update the state and fetch availability for the next week
-  setCurrentWeekStart(newStartDate);
-
-
-};
 
 
 
@@ -348,7 +336,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
       </h4>
        
       </div>
-      {/* <span className='ml-2 font-weight-semibold text-xlarge' role="button" tabIndex={0} 
+      <span className='ml-2 font-weight-semibold text-xlarge' role="button" tabIndex={0} 
        style={{cursor:"pointer"}}
       onClick={goToNextWeek}
       onKeyDown={(e) => {
@@ -358,8 +346,8 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
   }}
 >
 <i className='simple-icon-arrow-right' />
-</span> */}
-{hasAvailableSlots && (
+</span>
+{/* {hasAvailableSlots && (
   <span
     className='ml-2 font-weight-semibold text-xlarge'
     role="button"
@@ -383,7 +371,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
   >
     <i className='simple-icon-arrow-right' />
   </span>
-)}
+)} */}
      {/* <Button className='ml-5 font-weight-semibold text-one' color="primary" onClick={goToNextWeek} ><i className='simple-icon-arrow-right '/></Button> */}
    </div>
          <Card className="mb-4 mt-4">
