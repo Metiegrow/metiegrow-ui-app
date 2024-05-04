@@ -70,9 +70,9 @@ const MyProfile = () => {
       try {
         const response = await axios.get(endUrl);
         const userData = response.data;
-        console.log("userData:", userData);
+        // console.log("userData:", userData);
         if (userData) {
-          setImage(userData.image)
+          setImage(userData.imageUrl)
           setFirstName(userData.firstName);
           // setJobRole(userData.jobRole);
           setJobTitle(userData.jobTitle);
@@ -253,7 +253,7 @@ const token = getTokenRes();
           <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
             <div className=" ">
               <img
-                src={image}
+                src={`${baseUrl}/${image}`}
                 // "/assets/img/profiles/2.jpg"
                 className=" col-2 mx-2 w-60 rounded-circle img-thumbnail border"
                 alt=""

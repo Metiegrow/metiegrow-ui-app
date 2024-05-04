@@ -11,8 +11,10 @@
     ]
   },
   "signIn": {
-    "email": "Arunraj@gmail.com",
-    "password": "Arun@1234"
+
+    "email": "sivanesh@gmail.com",
+    "password": "Sivanesh@1996"
+
   },
   "StudentPersonalInfo": [
     {
@@ -810,6 +812,8 @@
       "clientName": "david warner",
       "createdAt": 1712811600000,
       "modifiedAt": 1713771670282
+<<<<<<< HEAD
+=======
     }
   ],
   "clientJobList": [
@@ -820,6 +824,7 @@
       "lawyerName": "sunil K",
       "createdAt": 1713946788462,
       "modifiedAt": 1713946788462
+>>>>>>> 373d7056449d21a4f1115207ad3d58c5a7ddfe8d
     }
   ],
   "lawyerJobsDetails": [
@@ -1998,7 +2003,7 @@
         0,
         1
       ],
-      "lastMessageTime": "18:20",
+      "lastMessageTime": "22:22",
       "messages": [
         {
           "sender": 0,
@@ -2029,6 +2034,41 @@
           "sender": 0,
           "time": "18:21",
           "text": "Aahan"
+        },
+        {
+          "sender": 0,
+          "time": "20:27",
+          "text": "hello"
+        },
+        {
+          "sender": 0,
+          "time": "20:27",
+          "text": "How are You"
+        },
+        {
+          "sender": 0,
+          "time": "20:28",
+          "text": "Hello"
+        },
+        {
+          "sender": 1,
+          "time": "22:19",
+          "text": "Hello"
+        },
+        {
+          "sender": 0,
+          "time": "22:19",
+          "text": "Nice to meet You"
+        },
+        {
+          "sender": 1,
+          "time": "22:21",
+          "text": "Bye"
+        },
+        {
+          "sender": 0,
+          "time": "22:22",
+          "text": "ok Bye"
         }
       ]
     },
@@ -2038,7 +2078,7 @@
         0,
         4
       ],
-      "lastMessageTime": "10:20",
+      "lastMessageTime": "20:29",
       "messages": [
         {
           "sender": 0,
@@ -2064,6 +2104,11 @@
           "sender": 4,
           "time": "10:30",
           "text": "I am very busy at the moment and on top of everything, I forgot my umbrella today."
+        },
+        {
+          "sender": 0,
+          "time": "20:29",
+          "text": "Hi"
         }
       ]
     }
@@ -2071,13 +2116,13 @@
   "contacts": [
     {
       "id": 0,
-      "name": "Nisha",
+      "name": "Client",
       "thumb": "/assets/img/profiles/l-1.jpg",
-      "lastSeenDate": "0"
+      "lastSeenDate": "Last seen today 13:24"
     },
     {
       "id": 1,
-      "name": "Abisha",
+      "name": "Lawyer",
       "thumb": "/assets/img/profiles/l-4.jpg",
       "lastSeenDate": "Last seen today 15:24"
     },
@@ -2205,6 +2250,98 @@
       "totalFeedBack": 3,
       "totalRatings": 20,
       "averageStar": 3
+    }
+  ],
+  "lawyerjobnotes": [
+    {
+      "title": "Title 2",
+      "text": "Note 2",
+      "id": 2,
+      "createdBy": "Raj",
+      "createdOn": 1714715455785
+    },
+    {
+      "title": "Check",
+      "text": "Notes notes",
+      "createdBy": "Sarah Kortney",
+      "id": 5,
+      "createdOn": 1714715455785
+    },
+    {
+      "id": 8,
+      "title": "Note 1 title",
+      "text": "Note chexk",
+      "createdBy": "Sarah Kortney",
+      "createdOn": 1714799084023
+    },
+    {
+      "title": "Note 2",
+      "text": "Note2 note\n\n",
+      "createdBy": "Sarah Kortney",
+      "createdOn": 1714804514999,
+      "id": 9
+    }
+  ],
+  "jobs": [
+    {
+      "jobId": 1,
+      "id": 1,
+      "lawyerJobNotes": [
+        {
+          "title": "Meeting Notes",
+          "text": "Discussed case strategy with client.",
+          "id": 1,
+          "createdBy": "John Doe",
+          "createdOn": 1714715455785
+        },
+        {
+          "title": "Case File Review",
+          "text": "Reviewed case files and prepared for trial.",
+          "id": 2,
+          "createdBy": "John Doe",
+          "createdOn": 1714715455785
+        }
+      ]
+    },
+    {
+      "jobId": 2,
+      "id": 2,
+      "lawyerJobNotes": [
+        {
+          "title": "Title 2",
+          "text": "Note 2",
+          "id": 3,
+          "createdBy": "Raj",
+          "createdOn": 1714715455785
+        },
+        {
+          "title": "Check",
+          "text": "Notes notes",
+          "createdBy": "Sarah Kortney",
+          "id": 4,
+          "createdOn": 1714715455785
+        }
+      ]
+    },
+    {
+      "jobId": 3,
+      "id": 3,
+      "lawyerJobNotes": [
+        {
+          "title": "Client Meeting",
+          "text": "Met with client to discuss settlement options.",
+          "id": 5,
+          "createdBy": "Alice Johnson",
+          "createdOn": 1714795680156
+        },
+        {
+          "title": "Legal Research",
+          "text": "Conducted research on relevant case law.",
+          "id": 6,
+          "createdBy": "Alice Johnson",
+          "createdOn": 1714799084023
+        }
+      ]
     }
   ]
 }
