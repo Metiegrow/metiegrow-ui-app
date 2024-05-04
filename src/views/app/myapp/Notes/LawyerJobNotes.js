@@ -27,6 +27,7 @@ const LawyerJobNotes = ({ jobId }) => {
   const [editNoteId, setEditNoteId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
   const [editedText, setEditedText] = useState("");
+  const [update, setUpdate] = useState("")
 
   const [addModal, setAddModal] = useState(false);
 
@@ -40,7 +41,7 @@ const LawyerJobNotes = ({ jobId }) => {
       .catch((error) => {
         console.error("Error fetching notes:", error);
       });
-  }, []);
+  }, [update]);
 
   const toggleAddModal = () => {
     setAddModal(!addModal);
@@ -65,6 +66,7 @@ const LawyerJobNotes = ({ jobId }) => {
         .then((response) => {
           const updatedNotes = [...notes, response.data];
           setNotes(updatedNotes);
+          setUpdate("post")
           toggleAddModal();
         })
         .catch((error) => {
@@ -82,6 +84,7 @@ const LawyerJobNotes = ({ jobId }) => {
         const updatedNotes = notes.filter((note) => note.id !== id);
         setNotes(updatedNotes);
         console.log(response);
+        setUpdate("delete")
       })
       .catch((error) => {
         console.error("Error deleting note:", error);
@@ -112,6 +115,7 @@ const LawyerJobNotes = ({ jobId }) => {
           return note;
         });
         setNotes(updatedNotes);
+        setUpdate("put")
         toggleEditModal();
       })
       .catch((error) => {
@@ -225,13 +229,13 @@ const LawyerJobNotes = ({ jobId }) => {
                                 format="datetime"
                               />
                             </p>
-                            <p className="text-muted">
+                            {/* <p className="text-muted">
                               Modified at -{" "}
                               <TimestampConverter
                                 timeStamp={note.modifiedAt}
                                 format="datetime"
                               />
-                            </p>
+                            </p> */}
                           </Col>
                           <Col className="">
                             <p className="text-muted">
