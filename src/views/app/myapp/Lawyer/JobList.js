@@ -10,7 +10,8 @@ const JobList = () => {
 
     // Backend url 
     // const url=`${baseUrl}/api/lawyer/job/client`;
-
+    
+      //  this file is login by client
 
     useEffect(()=>{
         const LawyerJobsList=async()=>{
@@ -46,7 +47,7 @@ const JobList = () => {
         <NavLink href={`/app/jobsdetails/${j.id}`}>
         <CardBody className=''>
         <div className='d-flex justify-content-between'>
-        <h2 className='text-primary'>{j.clientName}</h2>
+        <h2 className='text-primary'>{j.lawyerName}</h2>
             <h4 className=''>Job Name: <span className='font-weight-bold'>{j.jobName}</span></h4>
         </div>
         <div className='d-flex justify-content-between'>
