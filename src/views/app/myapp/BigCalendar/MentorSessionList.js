@@ -197,7 +197,8 @@ SessionUpcomingHistroy();
                   rounded
                   // src="/assets/img/profiles/l-1.jpg"
                   // src={`${baseUrl}/api/public/images/${up.mentorId}/profile-pic`}
-                  src={up.imageUrl}
+                
+                  src={`${baseUrl}/${up.imageUrl}`}
                   alt="Card image cap"
                   className="m-4"
                 />
@@ -356,7 +357,8 @@ SessionUpcomingHistroy();
                   rounded
                   // src="/assets/img/profiles/l-1.jpg"
                   // src={`${baseUrl}/api/public/images/${sh.mentorId}/profile-pic`}
-                  src={sh.imageUrl}
+                  // src={sh.imageUrl}
+                  src={`${baseUrl}/${sh.imageUrl}`}
                   alt="Card image cap"
                   className="m-4"
                 />

@@ -254,7 +254,8 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                     <img
                     className="card-img-left"
                     // src={`${baseUrl}/api/public/images/${mentors.id}/profile-pic`}
-                    src={mentors.imageUrl}
+                    src={`${baseUrl}/${mentors.imageUrl}`}
+                    // src={`${baseUrl/${mentors.imageUrl}`}
                     alt="Card"
                     style={{ minWidth: '150px', minHeight: '300px' }}
                   />
