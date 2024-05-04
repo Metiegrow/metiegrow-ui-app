@@ -7,6 +7,7 @@ import Select from 'react-select';
 import CustomSelectInput from 'components/common/CustomSelectInput';
 import axios from 'axios';
 import {useParams} from "react-router-dom";
+import LawyerJobNotes from "../Notes/LawyerJobNotes"
 
 const selectData = [
   { label: 'Yet to start', value: 'yet to start', key: 0 },
@@ -52,8 +53,9 @@ const JobDetails = () => {
 
   return (
     <div>
-        <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1>
-
+        <Row><Col><h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1></Col>
+        <Col><LawyerJobNotes jobId={jid}/></Col>
+        </Row>
       <Row>
       <Colxx lg={4}>
       {jobdetails.steps&&jobdetails.steps.map((s)=>{
@@ -317,7 +319,6 @@ const JobDetails = () => {
           )}
         </Colxx>
       </Row>
-
       
     </div>
   );
