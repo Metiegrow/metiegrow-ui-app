@@ -9,19 +9,21 @@ import ReviewsComponent from '../Reviews/ReviewsComponent';
 
 const MentorProfile = () => {
   const {mid}=useParams();
-  console.log('Mentor Profile ID:', mid);
+  // console.log('Mentor Profile ID:', mid);
   // const url=`${baseUrl}/mentor/profile`;
   // const url1=`${baseUrl}/mentor/cards/${mid}`;
-  const url=`${baseUrl}/mentorDetails/${mid}`;
- // const url1=`${baseUrl}/mentorProfile/${mid}`;
+  // const url=`${baseUrl}/mentorDetails/${mid}`;
+//  const url1=`${baseUrl}/mentorProfile/${mid}`;
 
 //  To change url to backend please uncomment the below line
  const url1=`${baseUrl}/api/mentor/${mid}`
+ const ratingUrl=`${baseUrl}/api/mentorship/rating/meta/${mid}`
 
 
 //  const url1=`${baseUrl}/mentor/myprofile`;
-  const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
+  // const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
+  const[reviews,setReviews]=useState('');
 
   const history = useHistory();
 
@@ -50,16 +52,26 @@ const MentorProfile = () => {
 };
   
   useEffect(()=>{
-    const mentorProfileDetails = async () => {
+    // const mentorProfileDetails = async () => {
+      
+    //   try {
+    //     const response = await axios.get(url);
+    //     setMentorProfileDetails(response.data);
+    //   } catch (error) {
+    //     console.error('Error fetching data:', error);
+    //   }
+    // };
+    // mentorProfileDetails();
+    const mentorReviews = async () => {
       
       try {
-        const response = await axios.get(url);
-        setMentorProfileDetails(response.data);
+        const response = await axios.get(ratingUrl);
+        setReviews(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    mentorProfileDetails();
+    mentorReviews();
 
     const mentorProfile = async () => {
       
@@ -109,8 +121,10 @@ const MentorProfile = () => {
           <div className=' '>
             {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
-             <img src={mentorprofiledetails1.image} className=' col-2 mx-2 w-60 rounded-circle
+             <img src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`}  className=' col-2 mx-2 w-60 rounded-circle
               img-thumbnail border    ' alt="" />
+              {/* <img  src={`${baseUrl}/api/public/images/${mid}/profile-pic`} className=' col-2 mx-2 w-60 rounded-circle
+              img-thumbnail border    ' alt="" /> */}
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
                 <span className='font-weight-semibold text-one'><i className='iconsminds-thunder text-primary'/>{mentorprofiledetails1.achievement}</span>
               </Button>
@@ -140,7 +154,8 @@ const MentorProfile = () => {
             <p  className='text-one font-weight-medium text-primary'>{mentorprofiledetails1.bio}</p>
             
             <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{mentorprofiledetails1.location}</span></h5>
-            <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{mentorprofiledetails.star} ({mentorprofiledetails.ratings} reviews)</span></h6>
+            {/* <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{mentorprofiledetails1.star} ({mentorprofiledetails1.ratings} reviews)</span></h6> */}
+            <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{reviews.averageStar} ({reviews.totalRatings} reviews)</span></h6>
            <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6>
           </div>
          

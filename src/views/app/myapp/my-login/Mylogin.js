@@ -176,7 +176,7 @@ const Mylogin = ({ intl }) => {
     return localStorage.getItem('tokenRes');
 }
 const token = getTokenRes();
-console.log(token);
+// console.log(token);
 
   
 // const token = "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiOiJhbmp1IiwiaWF0IjoxNzA3NzEyODI3LCJleHAiOjE3MDc3MzA4Mjd9.PAUNEoy_7mtPkblS7B0g6xTfML8J3a3ooaV56Sv8rbNF4VqgLHfou6B0UKzcdUeATnvH-CG4KHoYOAeybKn_KQ"

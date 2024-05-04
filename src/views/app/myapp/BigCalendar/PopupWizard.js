@@ -731,7 +731,7 @@ const generateAmPmDropdownItems1 = () => {
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Session Price</Label>
                                     <Colxx lg={5} className=''>
-                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:{license.sessionPrice}</span></h3>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>₹{license.sessionPrice}</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>
@@ -739,7 +739,7 @@ const generateAmPmDropdownItems1 = () => {
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Your Available Balance</Label>
                                     <Colxx lg={5}>
-                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:{license.availableBalance}</span></h3>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>₹{license.availableBalance}</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>
@@ -747,7 +747,7 @@ const generateAmPmDropdownItems1 = () => {
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Balance after deduction</Label>
                                     <Colxx lg={5}>
-                                        <h3 className=''><span className='font-weight-bold color-theme-1'>Rs:11000</span></h3>
+                                        <h3 className=''><span className='font-weight-bold color-theme-1'>₹{license.balanceAfterDeducation}</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>
@@ -758,7 +758,7 @@ const generateAmPmDropdownItems1 = () => {
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Session Price</Label>
                                     <Colxx lg={5}>
-                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{license.sessionPrice}</span></h3>
+                                        <h3><span className='font-weight-bold color-theme-1'>₹{license.sessionPrice}</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>
@@ -766,7 +766,7 @@ const generateAmPmDropdownItems1 = () => {
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Label className='text-one'>Your Available Balance</Label>
                                     <Colxx lg={5}>
-                                        <h3><span className='font-weight-bold color-theme-1'>Rs:{license.availableBalance}</span></h3>
+                                        <h3><span className='font-weight-bold color-theme-1'>₹{license.availableBalance}</span></h3>
                                     </Colxx>
                                 </div>
                             </FormGroup>
