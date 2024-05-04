@@ -6,11 +6,11 @@ import { Card,CardBody ,NavLink} from 'reactstrap';
 
 const LawyerJobList = () => {
     const [joblist,setJobList]=useState("");
-    const url=`${baseUrl}/api/lawyer/job/client`;
+    // const url=`${baseUrl}/api/lawyer/job/client`;
 
     // Backend url 
-    // const url=`${baseUrl}/api/lawyer/job`;
-  //  this file is login by lawyer
+    const url=`${baseUrl}/api/lawyer/job`;
+    // this file is logged by lawyer
 
     useEffect(()=>{
         const LawyerJobsList=async()=>{

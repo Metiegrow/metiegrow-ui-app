@@ -11,10 +11,10 @@ import MentorDropDown from '../mentorship/MentorDropDown';
 const UserCard = () => {
   const [userdetails,setUserDetails]=useState('')
   const [inputkey,setInputKey]=useState('');
-  const url=`${baseUrl}/user/cards`
+  // const url=`${baseUrl}/user/cards`
 
   // Backend url below 
-  // const url =`${baseUrl}/api/lawyer`
+  const url =`${baseUrl}/api/lawyer`
   useEffect(()=>{
 
     const UserList = async () => {
@@ -72,7 +72,8 @@ const UserCard = () => {
             
                 <img
                       className="card-img-left"
-                      src={users.image}
+                      // src={users.image}
+                      src={`${baseUrl}/${users.imageUrl}`} 
                       alt="Card"
                     />
                     <div className='my-5  '>

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-import Rating from 'components/common/Rating';
+// import Rating from 'components/common/Rating';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
 import { Button,   Card,   CardBody,    Col,   NavLink,Row } from 'reactstrap';
 import {useParams} from "react-router-dom";
 // import data from 'data/profileStatuses';
-import ThumbnailLetters from 'components/cards/ThumbnailLetters';
+// import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import LawyerTabCard from './LawyerTabCard';
 import ReviewsComponent from '../Reviews/ReviewsComponent';
 
@@ -17,27 +17,27 @@ import ReviewsComponent from '../Reviews/ReviewsComponent';
 const LawyerProfile = () => {
   const {pid}=useParams();
     const[lawyerprofile,setLawyerProfile]=useState('');
-    const[reviews,setReviews]=useState('');
+    // const[reviews,setReviews]=useState('');
     const [packages,setPackages]=useState('');
     const [showAll, setShowAll] = useState(false);
     // const [isFixed, setIsFixed] = useState(false);
     const toggleShowAll = () => {
       setShowAll(!showAll);
     };
-    const url=`${baseUrl}/lawyerProfile/${pid}`;
+    // const url=`${baseUrl}/lawyerProfile/${pid}`;
 
     // backend lawyerprofile url 
    
-    // const url=`${baseUrl}/api/lawyer/${pid}`;
+    const url=`${baseUrl}/api/lawyer/${pid}`;
 
-    const reviewURL=`${baseUrl}/lawyerReviews`;
+    // const reviewURL=`${baseUrl}/lawyerReviews`;
     // backend  url
     // const reviewURL=`${baseUrl}/api/law/rating/${pid}`;
 
-    const packageURL=`${baseUrl}/lawyerPackages`;
+    // const packageURL=`${baseUrl}/lawyerPackages`;
     // backend url 
 
-    // const packageURL=`${baseUrl}/api/lawyer/${pid}/package`
+    const packageURL=`${baseUrl}/api/lawyer/${pid}/package`
     useEffect(()=>{
         const ProfileLawyer=async()=>{
             try {
@@ -49,17 +49,17 @@ const LawyerProfile = () => {
               }
         }
         ProfileLawyer();
-        const UserReviewsToLawyer=async()=>{
-          try {
-              const response = await axios.get(reviewURL);
-              // setReviews(response.data);
-              // const lawyerReviews = response.data.filter(review => review.lawyerId === parseInt(pid, 10)); // Specify radix 10
-              setReviews(response.data);
-            } catch (error) {
-              console.error('Error fetching data:', error);
-            }
-      }
-      UserReviewsToLawyer();
+      //   const UserReviewsToLawyer=async()=>{
+      //     try {
+      //         const response = await axios.get(reviewURL);
+      //         // setReviews(response.data);
+      //         // const lawyerReviews = response.data.filter(review => review.lawyerId === parseInt(pid, 10)); // Specify radix 10
+      //         setReviews(response.data);
+      //       } catch (error) {
+      //         console.error('Error fetching data:', error);
+      //       }
+      // }
+      // UserReviewsToLawyer();
       const LawyerPackage=async()=>{
         try {
             const response = await axios.get(packageURL);
@@ -119,7 +119,8 @@ const LawyerProfile = () => {
              {/* <img src={lawyerprofile.image} className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
              <img 
-              src={lawyerprofile.image} 
+              // src={lawyerprofile.image} 
+              src={`${baseUrl}/${lawyerprofile.imageUrl}`} 
               className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
               alt="" 
             />
@@ -254,14 +255,10 @@ const LawyerProfile = () => {
   </Row>
 </Colxx>
       
-              <Colxx className='mt-4' lg={12}>    
+              {/* <Colxx className='mt-4' lg={12}>    
                 <h3 className='font-weight-bold'>Reviews</h3>
                 <div>
-                {/* <h5 className='font-weight-bold'>133 reviews for this gig</h5>
-                <div className='d-flex align-items-center'>
-                <Rating total={5} rating={4.93} interactive={false} />
-                <p className="text-small text-muted mb-0 d-inline-block ml-2">4.93</p>
-              </div> */}
+            
             
               <ReviewsComponent  category="law"
              revieweeId ={pid}/>
@@ -271,7 +268,7 @@ const LawyerProfile = () => {
               
               
 
-            </Colxx>
+            </Colxx> */}
           
             <Colxx className="mt-4" lg={12}>
             <hr/>
@@ -279,7 +276,7 @@ const LawyerProfile = () => {
           <div className=''>
          
            
-               {reviews&&reviews.map((rv)=>{
+               {/* {reviews&&reviews.map((rv)=>{
                 <hr/>
                return (
                  
@@ -323,7 +320,7 @@ const LawyerProfile = () => {
                )
                
             
-               })}
+               })} */}
                {/* <div className='d-flex  justify-content-start my-4' key={reviews.reviewerId}>
                
                <div>
@@ -384,6 +381,8 @@ const LawyerProfile = () => {
     </div> */}
       </Colxx>
      </Row>
+     <ReviewsComponent  category="law"
+             revieweeId ={pid}/>
     </div>
   );
 }
