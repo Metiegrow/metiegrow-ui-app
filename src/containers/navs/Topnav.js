@@ -25,6 +25,7 @@ import {
   searchPath,
   isDarkSwitchActive,
   adminRoot,
+  currentUser,
 } from "constants/defaultValues";
 
 import { MobileMenuIcon, MenuIcon } from "components/svg";
@@ -253,9 +254,9 @@ if (roleRes.includes("MENTOR")) {
         <div className="user d-inline-block">
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
-              <span className="name mr-1">Mia Sins</span>
+              <span className="name mr-1">{currentUser.title}</span>
               <span>
-                <img alt="Profile" src="/assets/img/profiles/l-1.jpg" />
+                <img alt="Profile" src={currentUser.img} />
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>

@@ -17,12 +17,20 @@ import {
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 
-const LawyerJobNotes = ({jobId}) => {
+const LawyerJobNotes = ({ jobId }) => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const [modal, setModal] = useState(false);
- const notesUrl = `${baseUrl}/api/lawyer/job/${jobId}/notes`
+
+  const [editModal, setEditModal] = useState(false);
+  const [editNoteId, setEditNoteId] = useState(null);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedText, setEditedText] = useState("");
+
+  const [addModal, setAddModal] = useState(false);
+
+  const notesUrl = `${baseUrl}/api/lawyer/job/${jobId}/notes`;
   useEffect(() => {
     axios
       .get(notesUrl)
@@ -34,18 +42,16 @@ const LawyerJobNotes = ({jobId}) => {
       });
   }, []);
 
-    // const saveNotes= (updatedNotes) => {
-    //   axios.put("https://localhost:3001/api/lawyer/jobs/notes", updatedNotes)
-    //     .then(response => {
-    //       console.log("Notes saved successfully:", response.data);
-    //     })
-    //     .catch(error => {
-    //       console.error("Error saving notes:", error);
-    //     });
-    // };
+  const toggleAddModal = () => {
+    setAddModal(!addModal);
+  };
 
   const toggleModal = () => {
     setModal(!modal);
+  };
+
+  const toggleEditModal = () => {
+    setEditModal(!editModal);
   };
 
   const handleAddNote = () => {
@@ -59,7 +65,7 @@ const LawyerJobNotes = ({jobId}) => {
         .then((response) => {
           const updatedNotes = [...notes, response.data];
           setNotes(updatedNotes);
-          // toggleModal();
+          toggleAddModal();
         })
         .catch((error) => {
           console.error("Error adding note:", error);
@@ -82,20 +88,11 @@ const LawyerJobNotes = ({jobId}) => {
       });
   };
 
-  const [editModal, setEditModal] = useState(false);
-  const [editNoteId, setEditNoteId] = useState(null);
-  const [editedTitle, setEditedTitle] = useState("");
-  const [editedText, setEditedText] = useState("");
-
-  const toggleEditModal = () => {
-    setEditModal(!editModal);
-  };
-
   const handleEditNote = (id) => {
     const noteToEdit = notes.find((note) => note.id === id);
     setEditNoteId(id);
     setEditedTitle(noteToEdit.title);
-    setEditedText(noteToEdit.text);
+    setEditedText(noteToEdit.details);
     toggleEditModal();
   };
 
@@ -105,11 +102,7 @@ const LawyerJobNotes = ({jobId}) => {
       details: editedText,
     };
     axios
-      .put(
-
-        `${baseUrl}/api/lawyer/job/notes/${editNoteId}`,
-        updatedNote
-      )
+      .put(`${baseUrl}/api/lawyer/job/notes/${editNoteId}`, updatedNote)
       .then((response) => {
         console.log(response);
         const updatedNotes = notes.map((note) => {
@@ -150,38 +143,57 @@ const LawyerJobNotes = ({jobId}) => {
             wrapClassName="modal-right"
             backdrop="static"
           >
-            <ModalHeader toggle={toggleModal}>Add a new note</ModalHeader>
+            <ModalHeader toggle={toggleModal}>Notes</ModalHeader>
+
             <ModalBody>
-              <Form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleAddNote();
-                }}
+              <Button color="primary" block onClick={toggleAddModal}>
+                Add Note
+              </Button>
+              <Modal
+                isOpen={addModal}
+                toggle={toggleAddModal}
+                // isOpen={modalOpen}
+                // toggle={toggleModal}
+                wrapClassName="modal-right"
+                backdrop="static"
               >
-                <FormGroup>
-                  <Label for="newTitle">Enter note title:</Label>
-                  <Input
-                    type="text"
-                    id="newTitle"
-                    placeholder="Enter note title"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="newNote">Enter your note:</Label>
-                  <Input
-                    type="textarea"
-                    id="newNote"
-                    placeholder="Enter your note"
-                    value={newNote}
-                    onChange={(e) => setNewNote(e.target.value)}
-                  />
-                </FormGroup>
-                <Button color="primary" block>
-                  Add Note
-                </Button>
-              </Form>
+                <ModalHeader toggle={toggleAddModal}>
+                  Add a new note
+                </ModalHeader>
+                <ModalBody>
+                  <Form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleAddNote();
+                    }}
+                  >
+                    <FormGroup>
+                      <Label for="newTitle">Enter note title:</Label>
+                      <Input
+                        type="text"
+                        id="newTitle"
+                        placeholder="Enter note title"
+                        value={newTitle}
+                        onChange={(e) => setNewTitle(e.target.value)}
+                      />
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="newNote">Enter your note:</Label>
+                      <Input
+                        type="textarea"
+                        id="newNote"
+                        placeholder="Enter your note"
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
+                      />
+                    </FormGroup>
+                    <Button color="primary" block>
+                      Add Note
+                    </Button>
+                  </Form>
+                </ModalBody>
+              </Modal>
+
               <Row>
                 {sortedNotes.map((note) => (
                   <Col key={note.id} xs={12} sm={12} lg={12}>

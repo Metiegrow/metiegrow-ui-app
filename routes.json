@@ -49,7 +49,10 @@
     "/api/mentee/connect-to-videocall": "/callStatus",
     "/api/rating": "/rating",
     "/api/calldetails": "/calldetails",
-    "/api/rating/meta/mentor/:id": "/allReviews/:id"
+    "/api/rating/meta/mentor/:id": "/allReviews/:id",
+    "/api/lawyer/job/notes": "/lawyerjobnotes",
+    "/api/lawyer/job/notes/:id": "/lawyerjobnotes/:id",
+    "api/lawyer/jobs/notes/:id/lawyerJobNotes/:id": "/jobs/:id/lawyerJobNotes/:id"
 
 
     
