@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { baseUrl } from 'constants/defaultValues';
+import { adminRoot, baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {
   Row,
@@ -15,7 +15,7 @@ import {
   Button,
  
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 
 import classnames from 'classnames';
@@ -48,6 +48,10 @@ const LawyerTabCard = () => {
 LawyerPackage();
 },[])
 //   const [activeSecondTab, setActiveSecondTab] = useState('1');
+const history = useHistory()
+const handleChatClick = () =>{
+  history.push(`${adminRoot}/chat`)
+}
 
   return (
     // <Row>
@@ -328,7 +332,7 @@ LawyerPackage();
                         <CardTitle className="mb-4">
                           <h2>₹ {pack.amount}</h2>
                           <h5>{pack.title}</h5>
-                          <Button className='mt-4 text-one' size='lg' outline color='primary'>Contact</Button>
+                          <Button className='mt-4 text-one' size='lg' outline color='primary' onClick={handleChatClick}>Contact</Button>
                         </CardTitle>
                       </CardBody>
                     </Col>
