@@ -253,14 +253,15 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                    
                     <img
                     className="card-img-left"
-                    src={`${baseUrl}/api/public/images/${mentors.id}/profile-pic`}
+                    // src={`${baseUrl}/api/public/images/${mentors.id}/profile-pic`}
+                    src={mentors.imageUrl}
                     alt="Card"
                     style={{ minWidth: '150px', minHeight: '300px' }}
                   />
 
                     <div className='my-5  '>
                         <CardText className='text-primary '>
-                            <span className='text-xlarge font-weight-semibold'>${mentors.price}</span>/month
+                            <span className='text-xlarge font-weight-semibold'>₹{mentors.price}</span>/month
                         </CardText>
                     
                     </div> 
