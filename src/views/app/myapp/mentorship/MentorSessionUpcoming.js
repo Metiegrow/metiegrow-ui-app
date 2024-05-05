@@ -119,9 +119,7 @@ SessionUpcomingHistroy();
 
             <CardBody className='d-flex justify-content-between'>
               <div className='d-flex justify-content-between flex-column'>
-                {/* <NavLink href={`/app/mentorprofile/${up.mentorId}`}>
-                  <h4 className='text-large text-primary'>{up.name}</h4>
-                </NavLink> */}
+              
                 <h4 className='text-large text-primary'>{up.name}</h4>
                 <div className='d-flex'>
                   <Label className='text-one'>Date:</Label>
@@ -164,6 +162,10 @@ SessionUpcomingHistroy();
       const totime = new Date(sh.toTimeStamp);
       const timeOptions = { hour: '2-digit', minute: '2-digit' };
       const shdateformat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      const formatDuration = (durationInMs) => {
+  const durationInMinutes = durationInMs / (1000 * 60);
+  return durationInMinutes.toFixed(2); // Formats the number to two decimal places
+};
 
       return (
         <Card className='my-2' key={sh.menteeId}>
@@ -182,7 +184,8 @@ SessionUpcomingHistroy();
             <div className='d-flex justify-content-around flex-column '>
               <div className='d-flex'>
                 <Label className='text-one mr-2'>Duration:</Label>
-                <h4 className='font-weight-bold'>{sh.duration/60000} minutes</h4>
+                {/* <h4 className='font-weight-bold'>{sh.duration/60000} minutes</h4> */}
+                <h4 className='font-weight-bold'>{formatDuration(sh.duration)} minutes</h4>
               </div>
 
               <div className='d-flex justify-content-between'>

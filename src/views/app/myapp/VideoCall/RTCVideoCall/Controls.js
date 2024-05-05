@@ -41,6 +41,7 @@ const Controls = (props) => {
           <Button
             color={trackState.audio ? "primary" : "secondary"}
             onClick={() => mute("audio")}
+            className="icon-button"
           >
             {trackState.audio ? (
               <i className="simple-icon-microphone " />
@@ -53,6 +54,7 @@ const Controls = (props) => {
           <Button
             color={trackState.video ? "primary" : "secondary"}
             onClick={() => mute("video")}
+            className="icon-button"
           >
             {trackState.video ? (
               <i className="simple-icon-camrecorder " />
@@ -75,7 +77,7 @@ const Controls = (props) => {
           </span> */}
         </Col>
         <Col md={2}>
-          <Button color="danger" onClick={() => leaveChannel()}>
+          <Button color="danger" onClick={() => leaveChannel()}  className="icon-button" >
             <i className="simple-icon-call-end" />{" "}
           </Button>
         </Col>

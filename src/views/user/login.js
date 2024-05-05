@@ -9,7 +9,7 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import IntlMessages from 'helpers/IntlMessages';
 // import axios from 'axios';
 // import { baseUrl } from 'constants/defaultValues';
-import { authService } from 'services/authservice';
+// import { authService } from 'services/authservice';
 
 // import { connect } from 'react-redux';
 
@@ -96,6 +96,8 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   useEffect(() => {
     if (error) {
       NotificationManager.warning(error, 'Login Error', 3000, null, null, '');
+      // console.log("nerror",error.response.data.error.message)
+      // console.log("nerror",error)
     }
   }, [error]);
 
@@ -106,34 +108,43 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   // };
 
   // new 
+  // const onUserLogin = (values) => {
+  //   if (!loading) {
+  //     if (values.email !== '' && values.password !== '') {
+  //       // if (values.email === email && values.password === password) {
+      
+  //       const loginResponse = authService.login(email, password);
+  //       // const loginResponse = authService.login(values.email, values.password);
+
+  //       console.log(loginResponse);
+  //       // axios
+  //       //   .post(`${baseUrl}/signIn`, {
+  //       //     username: 'test.student1', //  values.email,
+  //       //     password: 'student1', // values.password,
+  //       //   })
+  //       //   .then((response) => {
+  //       //     console.log(response);
+  //       //     console.log(response.data.data.token);
+  //       //     localStorage.setItem('AUTH_TOKEN', response.data.data.token);
+  //       //     getStudents();
+  //       //   })
+  //       //   .catch((err) => {
+  //       //     console.log(err);
+  //       //   });
+  //       // console.log(values, history);
+  //       loginUserAction(values, history);
+        
+        
+  //     } 
+  //   }
+  // };
   const onUserLogin = (values) => {
     if (!loading) {
       if (values.email !== '' && values.password !== '') {
-        // if (values.email === email && values.password === password) {
-      
-        const loginResponse = authService.login(email, password);
-        // const loginResponse = authService.login(values.email, values.password);
-
-        console.log(loginResponse);
-        // axios
-        //   .post(`${baseUrl}/signIn`, {
-        //     username: 'test.student1', //  values.email,
-        //     password: 'student1', // values.password,
-        //   })
-        //   .then((response) => {
-        //     console.log(response);
-        //     console.log(response.data.data.token);
-        //     localStorage.setItem('AUTH_TOKEN', response.data.data.token);
-        //     getStudents();
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
-        // console.log(values, history);
         loginUserAction(values, history);
-        
-        
-      } 
+      } else {
+        NotificationManager.warning('Please enter email and password', 'Login Error', 3000, null, null, '');
+      }
     }
   };
 
@@ -164,7 +175,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
             </CardTitle>
 
             <Formik initialValues={initialValues} onSubmit={onUserLogin}>
-              {({ errors, touched }) => (
+              {({ errors, touched, handleSubmit  }) => (
                 <Form className="av-tooltip tooltip-label-bottom">
                   <FormGroup className="form-group has-float-label">
                     <Label>
@@ -207,6 +218,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                         loading ? 'show-spinner' : ''
                       }`}
                       size="lg"
+                      onClick={handleSubmit} 
                     >
                       <span className="spinner d-inline-block">
                         <span className="bounce1" />

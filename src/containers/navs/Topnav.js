@@ -99,8 +99,19 @@ const TopNav = ({
   function getRoleRes() {
     return localStorage.getItem('roleRes');
   }
+  function getExpTime() {
+    return localStorage.getItem('expirationTime');
+  }
 
   const roleRes = getRoleRes();
+  const expTime = getExpTime();
+
+  const timeUntilExpiration = expTime - Date.now();
+    setTimeout(() => {
+    localStorage.clear();
+    logoutUserAction(history);
+      
+    }, timeUntilExpiration);
           
 let session;  
 if (roleRes.includes("MENTOR")) {
@@ -126,6 +137,12 @@ if (roleRes.includes("MENTOR")) {
   };
   const handleMyLawyerJobsClick = () => {
     history.push(`${adminRoot}/jobslist`);
+  };
+  const handleMyClientJobsClick = () => {
+    history.push(`${adminRoot}/lawyerjobslist`);
+  };
+  const handleMySlots = () => {
+    history.push(`${adminRoot}/calendar/mentor/appointment`);
   };
   
   
@@ -153,6 +170,16 @@ if (roleRes.includes("MENTOR")) {
     e.preventDefault();
     clickOnMobileMenuAction(_containerClassnames);
   };
+
+  function getUserName() {
+    return localStorage.getItem('userName');
+  }
+  const userName = getUserName()
+  // function getImage() {
+  //   return localStorage.getItem('imageUrl');
+  // }
+  // const imageUrl = getImage()
+  // console.log("img",imageUrl)
 
   return (
     <nav className="navbar fixed-top">
@@ -242,9 +269,10 @@ if (roleRes.includes("MENTOR")) {
         <div className="user d-inline-block">
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
-              <span className="name mr-1">Mia Sins</span>
+              <span className="name mr-1">{userName}</span>
               <span>
-                <img alt="Profile" src="/assets/img/profiles/l-1.jpg" />
+                <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
+                {/* <img alt="Profile" src={`${baseUrl}/${imageUrl}`} /> */}
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>
@@ -256,6 +284,11 @@ if (roleRes.includes("MENTOR")) {
               <NavLink to={`${adminRoot}/mywallet`}>
                 <DropdownItem onClick={() => handleMyWalletClick()}>
                 <i className="simple-icon-wallet" />  My Wallet
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/calendar/mentor/appointment`}>
+                <DropdownItem onClick={() => handleMySlots()}>
+                <i className="simple-icon-wallet" />  My Slots
                 </DropdownItem>
               </NavLink>
               {/* <NavLink to={`${adminRoot}/mylisting`}> */}
@@ -272,6 +305,11 @@ if (roleRes.includes("MENTOR")) {
               <NavLink to={`${adminRoot}/jobslist`}>
                 <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
                 <i className="iconsminds-scale" />  My Lawyer Jobs
+                </DropdownItem>
+              </NavLink>
+              <NavLink to={`${adminRoot}/lawyerjobslist`}>
+                <DropdownItem onClick={() => handleMyClientJobsClick()}>
+                <i className="iconsminds-scale" />  My Client Jobs
                 </DropdownItem>
               </NavLink>
               <DropdownItem onClick={() => handleMyListingClick()}>

@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-import Rating from 'components/common/Rating';
+// import Rating from 'components/common/Rating';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
 import { Button,   Card,   CardBody,    Col,   NavLink,Row } from 'reactstrap';
 import {useParams} from "react-router-dom";
 // import data from 'data/profileStatuses';
-import ThumbnailLetters from 'components/cards/ThumbnailLetters';
+// import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import LawyerTabCard from './LawyerTabCard';
+import ReviewsComponent from '../Reviews/ReviewsComponent';
 
 
 
@@ -16,27 +17,27 @@ import LawyerTabCard from './LawyerTabCard';
 const LawyerProfile = () => {
   const {pid}=useParams();
     const[lawyerprofile,setLawyerProfile]=useState('');
-    const[reviews,setReviews]=useState('');
+    // const[reviews,setReviews]=useState('');
     const [packages,setPackages]=useState('');
     const [showAll, setShowAll] = useState(false);
     // const [isFixed, setIsFixed] = useState(false);
     const toggleShowAll = () => {
       setShowAll(!showAll);
     };
-    const url=`${baseUrl}/lawyerProfile/${pid}`;
+    // const url=`${baseUrl}/lawyerProfile/${pid}`;
 
     // backend lawyerprofile url 
    
-    // const url=`${baseUrl}/ api/lawyer/${pid}`;
+    const url=`${baseUrl}/api/lawyer/${pid}`;
 
-    const reviewURL=`${baseUrl}/user/reviews`;
+    // const reviewURL=`${baseUrl}/lawyerReviews`;
     // backend  url
-    // const reviewURL=`${baseUrl}/api/rating/lawyer/1`;
+    // const reviewURL=`${baseUrl}/api/law/rating/${pid}`;
 
-    const packageURL=`${baseUrl}/lawyerPackages`;
+    // const packageURL=`${baseUrl}/lawyerPackages`;
     // backend url 
 
-    // const packageURL=`${baseUrl}/api/lawyer/package?lawyerId`
+    const packageURL=`${baseUrl}/api/lawyer/${pid}/package`
     useEffect(()=>{
         const ProfileLawyer=async()=>{
             try {
@@ -48,17 +49,17 @@ const LawyerProfile = () => {
               }
         }
         ProfileLawyer();
-        const UserReviewsToLawyer=async()=>{
-          try {
-              const response = await axios.get(reviewURL);
-              // setReviews(response.data);
-              const lawyerReviews = response.data.filter(review => review.lawyerId === parseInt(pid, 10)); // Specify radix 10
-              setReviews(lawyerReviews);
-            } catch (error) {
-              console.error('Error fetching data:', error);
-            }
-      }
-      UserReviewsToLawyer();
+      //   const UserReviewsToLawyer=async()=>{
+      //     try {
+      //         const response = await axios.get(reviewURL);
+      //         // setReviews(response.data);
+      //         // const lawyerReviews = response.data.filter(review => review.lawyerId === parseInt(pid, 10)); // Specify radix 10
+      //         setReviews(response.data);
+      //       } catch (error) {
+      //         console.error('Error fetching data:', error);
+      //       }
+      // }
+      // UserReviewsToLawyer();
       const LawyerPackage=async()=>{
         try {
             const response = await axios.get(packageURL);
@@ -118,7 +119,8 @@ const LawyerProfile = () => {
              {/* <img src={lawyerprofile.image} className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
              <img 
-              src={lawyerprofile.image} 
+              // src={lawyerprofile.image} 
+              src={`${baseUrl}/${lawyerprofile.imageUrl}`} 
               className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
               alt="" 
             />
@@ -166,7 +168,7 @@ const LawyerProfile = () => {
             {lawyerprofile.services && lawyerprofile.services.slice(0, 3).map((skill) => (
             <div key={skill}>
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                {skill}
+                {skill.serviceName}
               </Button>
             </div>
           ))}
@@ -199,7 +201,7 @@ const LawyerProfile = () => {
               {lawyerprofile.services && lawyerprofile.services.map((skill) => (
                 <div key={skill}>
                   <Button color="light" className="mb-2 font-weight-semibold mx-2" size='sm'>
-                    {skill}
+                    {skill.serviceName}
                   </Button>
                 </div>
               ))}
@@ -231,26 +233,42 @@ const LawyerProfile = () => {
         </Card>
       </Col>
     ))}
+    {/* <Col lg={6}  key={packages.id} className='my-2'>
+        <Card className='pt-5 pb-5 d-flex'>
+          <CardBody className='pt-5 pb-5'>
+            <div className='price-top-part'>
+              <i className='' />
+              <h2 className='mb-0 font-weight-semibold text-primary text-large mb-4'>
+                {packages.title}
+              </h2>
+              <p className='text-large mb-2 text-default'>₹ {packages.amount}</p>
+              <p className='text-muted text-small'>{packages.description}</p>
+              <div className=''>
+                <NavLink>
+                  <Button color='primary'>Purchase</Button>
+                </NavLink>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      </Col> */}
   </Row>
 </Colxx>
       
-              <Colxx className='mt-4' lg={12}>    
+              {/* <Colxx className='mt-4' lg={12}>    
                 <h3 className='font-weight-bold'>Reviews</h3>
                 <div>
-                <h5 className='font-weight-bold'>133 reviews for this gig</h5>
-                <div className='d-flex align-items-center'>
-                <Rating total={5} rating={4.93} interactive={false} />
-          <p className="text-small text-muted mb-0 d-inline-block ml-2">4.93</p>
-              </div>
             
-        
+            
+              <ReviewsComponent  category="law"
+             revieweeId ={pid}/>
               </div>
              
               
               
               
 
-            </Colxx>
+            </Colxx> */}
           
             <Colxx className="mt-4" lg={12}>
             <hr/>
@@ -258,7 +276,7 @@ const LawyerProfile = () => {
           <div className=''>
          
            
-               {reviews&&reviews.map((rv)=>{
+               {/* {reviews&&reviews.map((rv)=>{
                 <hr/>
                return (
                  
@@ -270,7 +288,7 @@ const LawyerProfile = () => {
                 <ThumbnailLetters
                   rounded
                   small
-                  text={rv.imgText}
+                  text={rv.name}
                   className=""
                 />
               </NavLink>
@@ -283,7 +301,7 @@ const LawyerProfile = () => {
               <Rating total={5} rating={rv.star} interactive={false} />
               <p className="text-small  mb-0 d-inline-block ml-2">{rv.star}</p>
               </div>
-              <p>{rv.reviewMsg}</p>
+              <p>{rv.feedBack}</p>
               <div className='d-flex font-weight-medium' >
                     <p>Helpful?</p>
                     <div className='d-flex '>
@@ -302,7 +320,44 @@ const LawyerProfile = () => {
                )
                
             
-               })}
+               })} */}
+               {/* <div className='d-flex  justify-content-start my-4' key={reviews.reviewerId}>
+               
+               <div>
+             
+               <NavLink  className="">
+                   <ThumbnailLetters
+                     rounded
+                     small
+                     text={reviews.imgText}
+                     className=""
+                   />
+                   {reviews && <ThumbnailLetters rounded small text={reviews.name} />}
+
+                 </NavLink>
+               </div>
+                <div className='ml-2'>
+                <h6 className='font-weight-bold'>{reviews.name}</h6>
+                 <h6>{reviews.country}</h6>
+                 
+                 <div className='d-flex align-items-center my-2'>
+                 <Rating total={5} rating={reviews.star} interactive={false} />
+                 <p className="text-small  mb-0 d-inline-block ml-2">{reviews.star}</p>
+                 </div>
+                 <p>{reviews.feedBack}</p>
+                 <div className='d-flex font-weight-medium' >
+                       <p>Helpful?</p>
+                       <div className='d-flex '>
+                       <span className=' ml-2'><i className='simple-icon-like mr-2'/>yes</span>
+                        <span className=' ml-2'><i className='simple-icon-dislike mr-2'/>no</span>
+                       </div>
+                       <hr />
+                       </div>
+                </div>
+                
+              
+             
+               </div> */}
            
           </div>
             
@@ -319,13 +374,15 @@ const LawyerProfile = () => {
     </div>
 )} */}
 <div  style={{width:"40%",position:'fixed',top:'40%',right:'20px'}} className='mt-2 d-lg-block d-xl-block d-none'>
-        <LawyerTabCard />
+        <LawyerTabCard pid={pid}/>
     </div>
     {/* <div    className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none bg-primary'>
         <LawyerTabCard />
     </div> */}
       </Colxx>
      </Row>
+     <ReviewsComponent  category="law"
+             revieweeId ={pid}/>
     </div>
   );
 }

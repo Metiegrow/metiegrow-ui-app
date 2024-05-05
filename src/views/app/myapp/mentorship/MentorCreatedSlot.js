@@ -414,7 +414,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
               
 
                  {getWeekDates().map((date) => (
-  <tr key={date.getTime()} >
+  <tr key={date.getTime()}  >
     {/* <td>{getMonthName(date.getMonth())} {formatDate(date)}</td> */}
     <td > {formatDate(date)}</td>
    
@@ -486,6 +486,151 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
  
  
 ))} */}
+{/* {date>=new Date()&&(
+  <>
+  {
+  mentoravailable.map((availability) => {
+    let hasSlotsForDay = false; // Flag to track if there are slots for the particular day
+
+    const slots = availability.availableSlots.map((avail) => {
+      const availDate = new Date(avail.fromTimeStamp);
+      if (availDate.toDateString() === date.toDateString()) {
+        hasSlotsForDay = true; // Set flag true if there's at least one slot for the day
+
+        const FromDate = new Date(avail.fromTimeStamp);
+        const ToDate = new Date(avail.toTimeStamp);
+        
+        const fromHours = FromDate.getHours() % 12 || 12; 
+        const fromMinutes = String(FromDate.getMinutes()).padStart(2, '0');
+        const fromPeriod = FromDate.getHours() < 12 ? 'AM' : 'PM';
+        
+        const toHours = ToDate.getHours() % 12 || 12; 
+        const toMinutes = String(ToDate.getMinutes()).padStart(2, '0');
+        const toPeriod = ToDate.getHours() < 12 ? 'AM' : 'PM';
+        
+        const fromTime = `${fromHours}:${fromMinutes} ${fromPeriod}`;
+        const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
+
+        const isPastTime = ToDate < new Date();
+
+        return (
+          <div
+            key={avail.fromTimeStamp} // Updated key to use timestamp to ensure it is unique
+            role="button"
+            tabIndex={0}
+            className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 mt-2`}
+            style={{ outline: `1px solid black`, cursor: "pointer" }}
+            onClick={() => handleTimeSlotClick(avail.fromTimeStamp)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleTimeSlotClick(avail.fromTimeStamp);
+              }
+            }}
+            onMouseEnter={(e) => { e.currentTarget.classList.add('bg-primary'); }}
+            onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }}
+          >
+            <span className='d-flex gap-5 justify-content-center align-items-center'>
+              {fromTime} to {toTime} <i className='simple-icon-close ml-4'/>
+            </span> 
+          </div>
+        );
+      }
+      return null;
+    });
+
+    // Add slot button only once per date
+    return (
+      <>
+        {slots}
+        {hasSlotsForDay && (
+          <div className='mt-2 text-center mx-auto' key={`add-slot-${date.getTime()}`}>
+            <Button
+              size='sm'
+              className='text-center mx-auto my-4'
+              onClick={() => handleAddSlotClick(date)}
+              outline
+              color="primary"
+              block
+            >
+              +
+            </Button>
+          </div>
+        )}
+      </>
+    );
+  })
+}
+{mentoravailable.every(availability => (
+        !availability.availableSlots.some(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
+      ))  &&(
+        <div className='mt-2 text-center mx-auto' key={`edit-${date.getTime()}`}>
+          <Button
+            size='sm'
+            className='text-center mx-auto my-4 '
+            onClick={()=>handleAddSlotClick(date)}
+            key={`edit-${date.getTime()}`}
+            outline
+            color="primary"
+            block
+          >
+            +
+          </Button>
+        </div>
+      )}
+
+
+
+{mentoravailable.map((availability) => (
+  availability.bookedSlots.map((avail) => {
+    const availDate = new Date(avail.fromTimeStamp);
+    if (availDate.toDateString() === date.toDateString()) {
+      const FromDate = new Date(avail.fromTimeStamp);
+      const ToDate = new Date(avail.toTimeStamp);
+      
+      const fromHours = FromDate.getHours() % 12 || 12; 
+      const fromMinutes = String(FromDate.getMinutes()).padStart(2, '0');
+      const fromPeriod = FromDate.getHours() < 12 ? 'AM' : 'PM';
+      
+      const toHours = ToDate.getHours() % 12 || 12; 
+      const toMinutes = String(ToDate.getMinutes()).padStart(2, '0');
+      const toPeriod = ToDate.getHours() < 12 ? 'AM' : 'PM';
+      
+      const fromTime = `${fromHours}:${fromMinutes} ${fromPeriod}`;
+      const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
+
+      const isPastTime = ToDate < new Date();
+
+      return (
+        <>
+          
+
+    <div
+      key={date.getTime()}
+      role="button" // Add role attribute for accessibility
+      tabIndex={0}   // Add tabIndex for keyboard accessibility
+      className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} bg-primary py-2 mt-2`}
+      style={{ outline: 'none'}} // Remove default focus outline if needed
+      // onClick={() => handleTimeSlotClick(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleTimeSlotClick(date);
+        }
+      }}
+    >
+      <span className='d-flex gap-5 justify-content-center align-items-center'> {fromTime} to {toTime}<i className='iconsminds-full-view-2 ml-4'/></span> 
+    </div>
+    
+
+         
+        </>
+      );
+    }
+   
+  return null;
+  })
+))}
+  </>
+)} */}
 {
   mentoravailable.map((availability) => {
     let hasSlotsForDay = false; // Flag to track if there are slots for the particular day
@@ -628,6 +773,10 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
   })
 ))}
 
+
+
+
+
  
 
 
@@ -643,16 +792,11 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
   </tr>
 ))}
 
-{/* another */}
 
-
- {/* return `${FromDate.toLocaleTimeString()} to ${ToDate.toLocaleTimeString()} `; */}
 
                </tbody>
              </Table>
-          {/* <div className=''>
-          <Button outline color="primary "  className=''>Save</Button>
-          </div> */}
+          
          
              <div className="mb-4">
            <div>

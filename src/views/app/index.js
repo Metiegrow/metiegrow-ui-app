@@ -219,6 +219,10 @@ const ViewJobList=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/JobList'
 ))
+const ViewLawyerJobList=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerJobList'
+))
 const ViewCallCompleted=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCallCompletedPage'
@@ -455,6 +459,10 @@ const roleRes = getRoleRes();
             <Route
               path={`${match.url}/jobslist`}
               render={(props) => <ViewJobList {...props} />}
+            />
+             <Route
+              path={`${match.url}/lawyerjobslist`}
+              render={(props) => <ViewLawyerJobList {...props} />}
             />
              <Route
               path={`${match.url}/lawyerprofile/:pid`}

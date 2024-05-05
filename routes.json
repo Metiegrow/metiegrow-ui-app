@@ -8,6 +8,7 @@
     "/user/reviews":"/lawyerReviews",
     "lawyer/packages":"/lawyerPackages",
     "/api/lawyer/jobslist":"/lawyerJobList",
+    "/api/lawyer/job/client":"/clientJobList",
     "api/lawyer/jobsdetails":"/lawyerJobsDetails",
     "/countries":"/countries",
     "/mentor/profile":"/mentorProfile",
@@ -49,7 +50,10 @@
     "/api/mentee/connect-to-videocall": "/callStatus",
     "/api/rating": "/rating",
     "/api/calldetails": "/calldetails",
-    "/api/rating/meta/mentor/:id": "/allReviews/:id"
+    "/api/rating/meta/mentor/:id": "/allReviews/:id",
+    "/api/lawyer/job/notes": "/lawyerjobnotes",
+    "/api/lawyer/job/notes/:id": "/lawyerjobnotes/:id",
+    "api/lawyer/jobs/notes/:id/lawyerJobNotes/:id": "/jobs/:id/lawyerJobNotes/:id"
 
 
     
