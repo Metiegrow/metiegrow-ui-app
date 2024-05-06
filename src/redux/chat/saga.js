@@ -41,11 +41,18 @@ function* loadContacts() {
 //     .then((response) => response)
 //     .catch((error) => error);
 // };
+function getRoleRes() {
+  return localStorage.getItem("roleRes");
+}
+const roleRes = getRoleRes();
+
+
 const loadContactsAsync = async () => {
   try {
     const response = await axios.get('http://localhost:3001/contacts');
     const contacts = response.data;
-    const currentUser = contacts[0];
+    const currentUser = roleRes.includes("MENTEE")? contacts[0] : contacts[1];
+    // const currentUser = contacts[0];
     return { contacts, currentUser };
   } catch (error) {
     console.error(error);
@@ -107,7 +114,7 @@ const loadConversationsAsync = async ({ payload }) => {
      return { error: 'Failed to fetch conversations' };
   }
  
-  console.log("fromjson", conversations);
+  // console.log("fromjson", conversations);
   conversations = conversations.filter((x) => x.users.includes(payload));
   const selectedUser = conversations[0].users.find((x) => x !== payload);
  
@@ -157,10 +164,18 @@ const addMessageToConversationAsync = async (
       text: message,
     });
     conversation.lastMessageTime = time;
+    try {
+      await axios.put(`http://localhost:3001/chat/${conversation.id}`, conversation);
+      
+    } catch (error) {
+      console.error('Failed to update conversation:', error);
+    }
+
     const conversations = allConversations.filter(
       (x) => x.id !== conversation.id
     );
     conversations.splice(0, 0, conversation);
+    console.log("saga", conversation)
 
     // eslint-disable-next-line no-return-await
     return await new Promise((success) => {
