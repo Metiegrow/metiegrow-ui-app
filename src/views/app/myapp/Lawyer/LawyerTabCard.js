@@ -26,11 +26,11 @@ import { Colxx } from 'components/common/CustomBootstrap';
 const LawyerTabCard = ({pid}) => {
   const [activeFirstTab, setActiveFirstTab] = useState('1');
   const [packages,setPackages]=useState('');
-  const packageURL=`${baseUrl}/lawyerPackages`;
+  // const packageURL=`${baseUrl}/lawyerPackages`;
   
   // backend url 
 
-    // const packageURL=`${baseUrl}/api/lawyer/{pid}/package`
+    const packageURL=`${baseUrl}/api/lawyer/${pid}/package`
   useEffect(()=>{
    
    
