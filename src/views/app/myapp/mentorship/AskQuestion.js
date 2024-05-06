@@ -7,6 +7,8 @@ import ReactQuill from 'react-quill';
 
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
+import { baseUrl } from 'constants/defaultValues';
+import axios from 'axios';
 
 const quillModules = {
     toolbar: [
@@ -40,6 +42,25 @@ const AskQuestion = () => {
     const [inputkey,setInputKey]=useState('')
     const [inputkey1,setInputKey1]=useState('')
     const [textQuillStandart, setTextQuillStandart] = useState('');
+    const handleSubmit = async () => {
+      try {
+        const doc = new DOMParser().parseFromString(textQuillStandart, "text/html");
+        const strippedAnswerText = doc.body.textContent || "";
+        const response = await axios.post(
+          `${baseUrl}/api/mentee/question`,
+          {
+            questionHeading: inputkey,
+            questionHeadingBrief: strippedAnswerText,
+          }
+        );
+        console.log('Response:', response.data);
+        
+      } catch (error) {
+        console.error('Error:', error);
+        
+      }
+    };
+  
 
   return (
     <div>
@@ -96,7 +117,7 @@ const AskQuestion = () => {
       </Colxx>
      </Card>
      <div className='mt-3'>
-     <Button color="primary " className="default  py-2 " >
+     <Button color="primary " className="default  py-2 " onClick={handleSubmit}>
                         Review your question
               </Button>
               

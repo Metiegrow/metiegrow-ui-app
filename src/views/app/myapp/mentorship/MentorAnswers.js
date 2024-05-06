@@ -45,10 +45,17 @@ const MentorAnswers = () => {
 
  
     const [inputkey,setInputKey]=useState('')
-    const url=`${baseUrl}/mentorAnswers/${questionId}`;
-    const url1=`${baseUrl}/multipleQuestions/${questionId}`;
+    // const url=`${baseUrl}/mentorAnswers/${questionId}`;
+    // const url1=`${baseUrl}/multipleQuestions/${questionId}`;
     // const deleteurl=`${baseUrl}/mentorAnswers/${questionId}/answer/${ansid}`
     // console.log('Params:', { questionId, ansid });
+    // frontend url for post answer url
+    // const answerUrl=`${baseUrl}/mentorAnswers/${questionId}/answer`
+
+
+    // Backend url 
+    const url1=`${baseUrl}/api/mentee/multipleQuestions/${questionId}`;
+    const url=`${baseUrl}/api/mentorAnswers/${questionId}`
     const[answers,setAnswers]=useState([]);
     const[answers1,setAnswers1]=useState([]);
     const [editing, setEditing] = useState(false);
@@ -57,6 +64,7 @@ const MentorAnswers = () => {
   const [editedAnswer1, setEditedAnswer1] = useState('');
 //  const [editedAnswerId, setEditedAnswerId] = useState(null); 
 const [editStates, setEditStates] = useState({});
+// const [editStates, setEditStates] = useState('');
 //  const [newAnswer,setNewAnswer]=useState('')
 
 
@@ -93,7 +101,10 @@ const [editStates, setEditStates] = useState({});
    
     const handleSave = async () => {
       try {
-        await axios.put(`${baseUrl}/multipleQuestions/${questionId}`, { 
+        // await axios.put(`${baseUrl}/multipleQuestions/${questionId}`,
+        await axios.put(`${baseUrl}/api/mentee/question`,
+         { 
+          id: questionId,
          questionHeading: answers.questionHeading,
           questionHeadingBrief: editedQuestion,
           views: answers.views, // Keep the views unchanged
@@ -154,16 +165,24 @@ const [editStates, setEditStates] = useState({});
     //   setEditedAnswerId(null); // Reset editedAnswerId when canceling
     //   setEditing1(false);
     // };
-    const handleEdit1 = (id) => {
-       // Find the answer object with the corresponding id
-  const answerToUpdate = answers1.answer.find(answer => answer.id === id);
-  // Set the initial value of the input field to the current answer text
-  setEditedAnswer1(answerToUpdate.answered);
-      setEditStates(prevState => ({
-        ...prevState,
-        [id]: !prevState[id]
-      }));
-    };
+  //   const handleEdit1 = (id) => {
+  //      // Find the answer object with the corresponding id
+  // const answerToUpdate = answers1.answer.find(answer => answer.id === id);
+  // // Set the initial value of the input field to the current answer text
+  // setEditedAnswer1(answerToUpdate.answered);
+  //     setEditStates(prevState => ({
+  //       ...prevState,
+  //       [id]: !prevState[id]
+  //     }));
+  //   };
+  // const handleEdit1 = (id) => {
+  //   const answerToUpdate = answers1.answer.find(answer => answer.id === id);
+  //   setEditedAnswer1(answerToUpdate.answered);
+  //   setEditStates(prevState => ({
+  //     ...prevState,
+  //     [id]: !prevState[id]
+  //   }));
+  // };
     // const handleEdit1 = (id, answered) => {
     //   console.log("Answered:", answered);
     //   setEditedAnswer1(answered);
@@ -171,29 +190,78 @@ const [editStates, setEditStates] = useState({});
     //   setEditing1(true);
     // };
   
+    // const handleSave1 = async (id) => {
+    //   try {
+    //     const updatedAnswers = answers1.answer.map(ans =>
+    //       ans.id === id ? { ...ans, answerText: editedAnswer1 } : ans
+    //     );
+    //     setAnswers1(prevAnswers => ({
+    //       ...prevAnswers,
+    //       answer: updatedAnswers
+    //     }));
+  
+    //     const updatedAnswer = {
+    //       answer: updatedAnswers
+    //     };
+  
+    //     // await axios.put(`${baseUrl}/mentorAnswers/${questionId}`, updatedAnswer);
+    //     await axios.put(`${baseUrl}/api/mentor/answer`, updatedAnswer);
+    //   } catch (error) {
+    //     console.error('Error updating answered:', error);
+    //   }
+    //   setEditStates(prevState => ({
+    //     ...prevState,
+    //     [id]: false
+    //   }));
+    // };
+    // const handleEdit1 = (id) => {
+    //   const answerToUpdate = answers1.answer.find(answer => answer.id === id);
+    //   setEditedAnswer1(answerToUpdate.answerText);
+    //   setEditStates(prevState => ({
+    //     ...prevState,
+    //     [id]: !prevState[id]
+    //   }));
+    // };
+    const handleEdit1 = (id) => {
+      const answerToUpdate = answers1.answer.find(answer => answer.id === id);
+      setEditedAnswer1(answerToUpdate.answerText); // Update the edited answer text
+      setEditStates(prevState => ({
+        ...prevState,
+        [id]: !prevState[id]
+      }));
+    };
+    
     const handleSave1 = async (id) => {
       try {
         const updatedAnswers = answers1.answer.map(ans =>
-          ans.id === id ? { ...ans, answered: editedAnswer1 } : ans
+          ans.id === id ? { ...ans, answerText: editedAnswer1 } : ans
         );
         setAnswers1(prevAnswers => ({
           ...prevAnswers,
           answer: updatedAnswers
         }));
-  
+    
         const updatedAnswer = {
-          answer: updatedAnswers
+          id,
+          answerText: editedAnswer1
         };
-  
-        await axios.put(`${baseUrl}/mentorAnswers/${questionId}`, updatedAnswer);
+    
+        const response = await axios.put(`${baseUrl}/api/mentor/answer`, updatedAnswer);
+        console.log("Updated answer:", response.data);
       } catch (error) {
         console.error('Error updating answered:', error);
       }
+    
       setEditStates(prevState => ({
         ...prevState,
         [id]: false
       }));
     };
+    
+    
+    
+    
+    
   
     const handleCancel1 = (id) => {
       setEditStates(prevState => ({
@@ -218,7 +286,8 @@ const [editStates, setEditStates] = useState({});
     const handleDeleteAnswer = async (answerId) => {
       try {
         // Construct the URL for deleting the answer
-        const deleteUrl = `${baseUrl}/mentorAnswers/${questionId}/answer/${answerId}`;
+        // const deleteUrl = `${baseUrl}/mentorAnswers/${questionId}/answer/${answerId}`;
+        const deleteUrl = `${baseUrl}/api/mentor/${answerId}/answer`;
         
         // Send a DELETE request to the constructed URL
         await axios.delete(deleteUrl);
@@ -238,9 +307,18 @@ const [editStates, setEditStates] = useState({});
       try {
         console.log("Posting answer...");
         // Make a POST request to the backend to post the new answer
-        await axios.post(`${baseUrl}/mentorAnswers/${questionId}/answer`, { answered: textQuillStandart });
+        // await axios.post(`${baseUrl}/mentorAnswers/${questionId}/answer`, { answered: textQuillStandart });
+        const doc = new DOMParser().parseFromString(textQuillStandart, "text/html");
+        const strippedAnswerText = doc.body.textContent || "";
+        //  backend 
+        await axios.post(`${baseUrl}/api/mentor/${questionId}/answer`, { answerText: strippedAnswerText });
+
         // After posting the answer successfully, fetch the updated answers
-        const updatedResponse = await axios.get(`${baseUrl}/mentorAnswers/${questionId}/answer`);
+        // const updatedResponse = await axios.get(`${baseUrl}/mentorAnswers/${questionId}/answer, { answerText: strippedAnswerText })`);
+
+        // backend
+     const updatedResponse = await axios.get(`${baseUrl}/api/mentorAnswers/${questionId}`);
+
         // Update the state with the updated answers
         setAnswers1(updatedResponse.data.answer);
         // Clear the textQuillStandart state to reset the Quill editor
@@ -300,7 +378,7 @@ const [editStates, setEditStates] = useState({});
     // };
    
     
-    
+  
     
     
   
@@ -415,7 +493,7 @@ const [editStates, setEditStates] = useState({});
       {answers1.answer&&answers1.answer.map((an)=>{
         return (
          
-        <Card key={an.id} className='mt-3'>
+        <Card key={an.id} className='mt-3 '>
         <CardBody>
         <div className='d-flex w-100 justify-content-between'>
         <div className=' '>
@@ -455,6 +533,7 @@ const [editStates, setEditStates] = useState({});
                 />
               ) : (
                 <p>{an.answered}</p>
+               
               )}
                     {/* <div className="d-flex align-items-center">
                       {editing1 ? (

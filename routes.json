@@ -7,7 +7,7 @@
     "/lawyer/profile":"/lawyerProfile",
     "/user/reviews":"/lawyerReviews",
     "lawyer/packages":"/lawyerPackages",
-    "/api/lawyer/jobslist":"/lawyerJobList",
+    "/api/lawyer/job/lawyer":"/lawyerJobList",
     "/api/lawyer/job/client":"/clientJobList",
     "api/lawyer/jobsdetails":"/lawyerJobsDetails",
     "/countries":"/countries",

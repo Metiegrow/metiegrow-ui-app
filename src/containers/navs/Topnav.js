@@ -293,12 +293,12 @@ if (roleRes.includes("MENTOR")) {
               </NavLink>
               <NavLink to={`${adminRoot}/jobslist`}>
                 <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
-                <i className="iconsminds-scale" />  My Lawyer Jobs
+                <i className="iconsminds-scale" />  My Client Jobs
                 </DropdownItem>
               </NavLink>
               <NavLink to={`${adminRoot}/lawyerjobslist`}>
                 <DropdownItem onClick={() => handleMyClientJobsClick()}>
-                <i className="iconsminds-scale" />  My Client Jobs
+                <i className="iconsminds-scale" />  My Lawyer Jobs
                 </DropdownItem>
               </NavLink>
               <DropdownItem onClick={() => handleMyListingClick()}>

@@ -458,11 +458,11 @@ const roleRes = getRoleRes();
             />
             <Route
               path={`${match.url}/jobslist`}
-              render={(props) => <ViewJobList {...props} />}
+              render={(props) => <ViewLawyerJobList {...props} />}
             />
              <Route
               path={`${match.url}/lawyerjobslist`}
-              render={(props) => <ViewLawyerJobList {...props} />}
+              render={(props) => <ViewJobList {...props} />}
             />
              <Route
               path={`${match.url}/lawyerprofile/:pid`}
