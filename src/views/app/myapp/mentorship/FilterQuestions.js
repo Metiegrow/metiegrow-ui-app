@@ -2,12 +2,15 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React,{useState,useEffect} from 'react';
-import { Card, CardBody, NavLink } from 'reactstrap';
+import { Button, Card, CardBody, NavLink } from 'reactstrap';
 
 const FilterQuestions = () => {
     const [inputkey,setInputKey]=useState('')
     // const url=`${baseUrl}/mentor/questions`;
-    const url=`${baseUrl}/multipleQuestions`;
+    // const url=`${baseUrl}/multipleQuestions`;
+
+    // Backend url below
+     const url=`${baseUrl}/api/mentee/multipleQuestions`;
     const[multiquestions,setMultiQuestions]=useState([]);
     
    
@@ -52,8 +55,16 @@ const FilterQuestions = () => {
             value={inputkey}
             onChange={(e) =>setInputKey(e.target.value)}
           />
-       
-      <Card className='my-3'>
+          <NavLink href='/app/askquestions'>
+              <Button color="primary" outline block className="default mt-3 mb-2 text-one py-3 w-100" >
+                Ask a Free Question
+              </Button>
+              
+            
+              </NavLink>
+
+          {multiquestions.length>0?(
+            <Card className='my-3'>
         <CardBody>
             <h1 className='font-weight-semibold'>Recently Answered Questions on topics</h1>
             <hr/>
@@ -90,6 +101,21 @@ const FilterQuestions = () => {
           
         </CardBody>
       </Card>
+          ):(
+           
+            <Card className="my-3">
+           
+            <CardBody>
+           
+              <h1 className="font-weight-semibold">No Answered Questions Found <span className='ml-2'>
+              <i className='simple-icon-ban'/></span></h1>
+              
+              
+            </CardBody>
+          </Card>
+          )}
+       
+    
         </Colxx>
      
     </div>

@@ -21,16 +21,16 @@ const JobDetails = () => {
   const [jobdetails,setJobDetails]=useState('');
   const {jid}=useParams();
   const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
+   const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
  
   
  
 
-  const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
+  // const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
 
 
   // Backedn url 
-  // const url=`${baseUrl}/api/lawyer/job/${jid}`
+  const url=`${baseUrl}/api/lawyer/job/${jid}`
   const LawyerJobsDetails=async()=>{
     try {
         const response = await axios.get(url);
@@ -66,13 +66,18 @@ if (response.data.steps && response.data.steps.length > 0) {
       setEditData({
         stepName: step.stepName,
         description: step.description,
-        doneBy: step.doneBy
+        doneBy: step.doneBy,
       });   
     };
+  
+    
     const handleEditChange = (e) => {
       const { name, value } = e.target;
       setEditData(prev => ({ ...prev, [name]: value }));
     };
+   
+    
+    
    
   
     const saveEdits = async () => {
@@ -312,10 +317,13 @@ if (response.data.steps && response.data.steps.length > 0) {
         <DropzoneExample/>
        
      <div className='mt-4'>
+   
                       {selectedStep.documentList && selectedStep.documentList.map((document) => (
                         <h5 key={document}>{document.name}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
                       ))}
                     </div>
+   
+
         </Col>
         
        </FormGroup>
@@ -338,6 +346,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         </Col>
        
       </FormGroup>
+      
                       <Button color="primary" onClick={saveEdits}>Save</Button>
                     </>
                   ) : (

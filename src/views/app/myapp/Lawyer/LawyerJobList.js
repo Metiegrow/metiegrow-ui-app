@@ -6,7 +6,7 @@ import { Card,CardBody ,NavLink} from 'reactstrap';
 
 const LawyerJobList = () => {
     const [joblist,setJobList]=useState("");
-    // const url=`${baseUrl}/api/lawyer/job/client`;
+    // const url=`${baseUrl}/api/lawyer/job/lawyer`;
 
     // Backend url 
     const url=`${baseUrl}/api/lawyer/job`;
