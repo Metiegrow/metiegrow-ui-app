@@ -469,7 +469,7 @@ const roleRes = getRoleRes();
               render={(props) => <ViewLawyerProfile {...props} />}
             />
              <Route
-              path={`${match.url}/callcompleted/:id`}
+              path={`${match.url}/callcompleted/:id/:sid`}
               render={(props) => <ViewCallCompleted {...props} />}
             />
             

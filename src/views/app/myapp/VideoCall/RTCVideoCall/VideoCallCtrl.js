@@ -8,7 +8,6 @@ import {
   config,
   useClient,
   useMicrophoneAndCameraTracks,
-  channelName,
 } from "./settings";
 
 import Video from "./Video";
@@ -20,19 +19,51 @@ const VideoCallCtrl = (props) => {
   const [start, setStart] = useState(false);
   const [connectionState, setConnectionState] = useState("");
   const [callStartTime, setCallStartTime] = useState(null);
-  const [callEndTime, setCallEndTime] = useState(null);
+  // const [callEndTime, setCallEndTime] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(5 * 60);
+  const [channelName,setChannelName] = useState("")
   const [status, setStatus] = useState("");
+  const [rtcToken, setRtcToken] = useState(null)
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const {userId,id}=useParams();
 
-  console.log(callEndTime)
-  console.log("userid:", userId)
-  console.log("iid",id)
-  console.log("user chk", users);
-  console.log("check status", status);
+  // console.log(callEndTime)
+  // console.log("userid:", userId)
+  // console.log("iid",id)
+  // console.log("user chk", users);
+  // console.log("check status", status);
  const url = `${baseUrl}/api/mentee/connect-to-videocall`;
+
+//  const [rtcToken, setRtcToken] = useState()
+//  console.log("rrtc",rtcToken)
+//  const getToken = async () => {
+//    const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
+//    const response = await axios.get(url2);
+//    console.log("chkchk",response)
+//    setRtcToken(response.data.rtcToken);
+ 
+//  };
+// //  useEffect(() => {
+//  getToken()
+// //  }, []);
+
+useEffect(() => {
+  const getToken = async () => {
+    try {
+      const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
+      const response = await axios.get(url2);
+      setRtcToken(response.data.rtcToken);
+      setChannelName(response.data.channelName);
+    } catch (error) {
+      console.error("Error fetching RTC token:", error);
+    }
+  };
+
+  getToken();
+
+}, []);
+ 
   // useEffect(() => {
   //   const fetchData = async () => {
   //     console.log("fetchedData chk");
@@ -94,7 +125,7 @@ const VideoCallCtrl = (props) => {
           status,
           
         });
-        console.log("status post vid :",response.data);
+        console.log("status post vid :",response.data.remainingDuration);
       }
       } catch (error) {
         console.error('Error:', error);
@@ -111,6 +142,7 @@ const VideoCallCtrl = (props) => {
     // };
   }, [status]);
 
+ 
 
   useEffect(() => {
     const init = async (name) => {
@@ -118,16 +150,16 @@ const VideoCallCtrl = (props) => {
         if (!callStartTime) {
           setCallStartTime(Date.now());
           setStatus("CONNECTED")
-          console.log("user joined cc");
+          // console.log("user joined cc");
         }
       });
 
       client.on("user-left", () => {
         if (users.length === 1) {
           // setCallStartTime(null);
-          setCallEndTime(Date.now());
+          // setCallEndTime(Date.now());
           setStatus("DISCONNECTED")
-          console.log("user left cc");
+          // console.log("user left cc");
         }
       });
 
@@ -166,7 +198,7 @@ const VideoCallCtrl = (props) => {
       });
 
       try {
-        await client.join(config.appId, name, config.token, null);
+        await client.join(config.appId, name, rtcToken, null);
       } catch (error) {
         console.log("error");
       }
@@ -182,7 +214,7 @@ const VideoCallCtrl = (props) => {
         console.log(error);
       }
     }
-  }, [channelName, client, ready, tracks, users.length]);
+  }, [channelName, client, ready, tracks, users.length,rtcToken]);
 
   const iTime = new Date(parseInt(callStartTime, 10));
 
@@ -220,11 +252,11 @@ const VideoCallCtrl = (props) => {
   //   }
   // }, [connectionState]);
 
-  const minutes1 = Math.floor(timeRemaining / 60);
-  const seconds = timeRemaining % 60;
-  const formattedTimeRemaining = `${minutes1}:${
-    seconds < 10 ? "0" : ""
-  }${seconds}`;
+  // const minutes1 = Math.floor(timeRemaining / 60);
+  // const seconds = timeRemaining % 60;
+  // const formattedTimeRemaining = `${minutes1}:${
+  //   seconds < 10 ? "0" : ""
+  // }${seconds}`;
 
   return (
     // <Container fluid style={{ height: "100%" }}>
@@ -244,7 +276,7 @@ const VideoCallCtrl = (props) => {
         <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4>
         <h4>
           Time Remaining :{" "}
-          <span className="text-danger">{formattedTimeRemaining}</span>
+          {/* <span className="text-danger">{formattedTimeRemaining}</span> */}
         </h4>
       </div>
       <div className="row" style={{ height: "90%" }}>
@@ -255,6 +287,7 @@ const VideoCallCtrl = (props) => {
           <>
             <Controls
              id={userId}
+             sid={id}
               tracks={tracks}
               setStart={setStart}
               setInCall={setInCall}

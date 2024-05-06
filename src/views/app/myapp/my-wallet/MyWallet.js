@@ -26,21 +26,18 @@ const MyWallet = () => {
   // const url = `${baseUrl}/wallets`;
   const url1 = `${baseUrl}/api/transactions`;
 
+  const fetchDataFromServer = async () => {
+    try {
+      const response = await axios.get(url1);
+      const walletData = response.data;
+      setBalance(walletData.newBalance);
+      setTransactions(walletData.newTransactions);
+    } catch (error) {
+      console.error("Error while fetching data from the server", error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchDataFromServer = async () => {
-      try {
-        const response = await axios.get(url1);
-
-        const walletData = response.data;
-        // console.log("checkk", walletData)
-        setBalance(walletData.newBalance);
-        setTransactions(walletData.newTransactions);
-
-        // console.log("Fetched data:", walletData);
-      } catch (error) {
-        console.error("Error while fetching data from the server", error);
-      }
-    };
     fetchDataFromServer();
   }, []);
 
@@ -62,12 +59,17 @@ const MyWallet = () => {
   
   const postData = async (amount) => {
     const url2 = `${baseUrl}/api/paytm/makePayment?amount=${amount}`;
-    await axios.post(url2);
-  };
+    try {
+      await axios.post(url2);
+    fetchDataFromServer();
 
+    } catch (error) {
+      console.error("Error making payment", error);
+    }
+  };
   const handleRecharge = () => {
     const amount = parseFloat(rechargeAmount);
-    console.log("rech", amount)
+    // console.log("rech", amount)
 
     // if (!Number.isNaN(amount) && amount > 0) {
     //   const newBalance = balance + amount;

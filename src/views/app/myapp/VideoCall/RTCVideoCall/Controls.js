@@ -5,7 +5,7 @@ import { useClient } from "./settings";
 
 const Controls = (props) => {
   const client = useClient();
-  const { tracks, setStart, setInCall, id, setStatus } = props;
+  const { tracks, setStart, setInCall, id, setStatus, sid } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
 
   const mute = async (type) => {
@@ -30,7 +30,7 @@ const Controls = (props) => {
     tracks[1].close();
     setStart(false);
     setInCall(false);
-    history.push(`/app/callcompleted/${id}`);
+    history.push(`/app/callcompleted/${id}/${sid}`);
   };
 
   return (
