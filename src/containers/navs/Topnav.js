@@ -172,11 +172,11 @@ if (roleRes.includes("MENTOR")) {
               <i className="simple-icon-wallet" />  My Wallet
             </DropdownItem>
         </NavLink>
-        <NavLink to={`${adminRoot}/jobslist`}>
-        <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
-        <i className="iconsminds-scale" />  My Lawyer Jobs
-        </DropdownItem>
-      </NavLink>
+        <NavLink to={`${adminRoot}/lawyerjobslist`}>
+            <DropdownItem onClick={() => handleMyClientJobsClick()}>
+              <i className="iconsminds-scale" />  My Lawyer Jobs
+           </DropdownItem>
+        </NavLink>
       </>
       );
     }
@@ -185,11 +185,12 @@ if (roleRes.includes("MENTOR")) {
   const renderClientJob = () => {
     if (roleRes.includes("LAWYER")) {
       return (
-        <NavLink to={`${adminRoot}/lawyerjobslist`}>
-            <DropdownItem onClick={() => handleMyClientJobsClick()}>
-              <i className="iconsminds-scale" />  My Client Jobs
-           </DropdownItem>
-        </NavLink>
+        <NavLink to={`${adminRoot}/jobslist`}>
+        <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
+        <i className="iconsminds-scale" />  My Client Jobs
+        </DropdownItem>
+      </NavLink>
+        
       );
     }
     return null; 
