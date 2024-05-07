@@ -9,6 +9,7 @@ import {
   CardTitle,
   Col,
 } from "reactstrap";
+import { NotificationManager } from 'components/common/react-notifications';
 import { useParams, useHistory } from "react-router-dom";
 import { Colxx } from "components/common/CustomBootstrap";
 import ReactQuill from "react-quill";
@@ -24,26 +25,41 @@ const VideoCallCompletedPage = () => {
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
-  const [fromTime, setFromTime] = useState("");
-  const [toTime, setToTime] = useState("");
+  const [fromTime, setFromTime] = useState(0);
+  const [toTime, setToTime] = useState(0);
   const [mode, setMode] = useState("");
-  const getUrl = `${baseUrl}/api/calldetails`;
+  const [duration, setDuration] = useState(0)
+  const [post, setPost] = useState(true)
+  const { id, sid } = useParams();
   const history = useHistory();
-  const { id } = useParams();
+  function getRoleRes() {
+    return localStorage.getItem("roleRes");
+  }
+  const roleRes = getRoleRes();
 
-  console.log("id end:", id);
+  let getUrl;
+
+if (roleRes === "MENTEE") {
+  getUrl = `${baseUrl}/api/call-info-mentee/${sid}`;
+} else  {
+  getUrl = `${baseUrl}/api/call-info-mentor/${sid}`;
+} 
+
+
+  // console.log("id end:", id);
 
   useEffect(() => {
     const callEndDetails = async () => {
       try {
         const response = await axios.get(getUrl);
         const reviewData = response.data;
-        console.log("review data:", reviewData);
+        // console.log("review data:", reviewData);
         if (reviewData) {
           setName(reviewData.name);
           setFromTime(reviewData.fromTime);
           setToTime(reviewData.toTime);
           setMode(reviewData.mode);
+          setDuration(reviewData.duration)
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -86,8 +102,8 @@ const VideoCallCompletedPage = () => {
   }
   const token = getTokenRes();
 
-  console.log("rating", rating);
-  console.log("quill", feedBack);
+  // console.log("rating", rating);
+  // console.log("quill", feedBack);
 
   const handleRate = (ratingVal) => {
     setRating(ratingVal.rating);
@@ -119,7 +135,12 @@ const VideoCallCompletedPage = () => {
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
+        console.log(error.response.data.error.message);
+        const er = error.response.data.error.message;
+        NotificationManager.warning(er, 'Error submitting review', 3000, null, null, '');
+
         setSubmissionStatus("success");
+        setPost(false);
         // setSubmissionStatus("failure");
         setIsLoading(false);
       });
@@ -151,10 +172,7 @@ const VideoCallCompletedPage = () => {
   const handleHomeClick = () => {
     history.push("/app/profile");
   };
-  function getRoleRes() {
-    return localStorage.getItem("roleRes");
-  }
-  const roleRes = getRoleRes();
+  
 
   const FromDate = new Date(parseInt(fromTime, 10));
   const ToDate = new Date(parseInt(toTime, 10));
@@ -169,6 +187,9 @@ const VideoCallCompletedPage = () => {
 
   const fromTime1 = `${fromHours}:${fromMinutes} ${fromPeriod}`;
   const toTime1 = `${toHours}:${toMinutes} ${toPeriod}`;
+
+  const msToMin = duration / 60000;
+  const dur = msToMin.toFixed(2);
 
   return (
     <>
@@ -194,6 +215,9 @@ const VideoCallCompletedPage = () => {
                     </Col>
                     <Col>
                       <h4>End time: {toTime1}</h4>
+                    </Col>
+                    <Col>
+                      <h4>Duration: {dur} Min</h4>
                     </Col>
                     <Col>
                       <h4>Mode: {mode}</h4>
@@ -270,6 +294,7 @@ const VideoCallCompletedPage = () => {
                           </>
                         ) : (
                           <>
+                          {post ? (
                             <div className="mt-2">
                               <CardBody>
                                 <CardTitle className="h4">
@@ -279,7 +304,17 @@ const VideoCallCompletedPage = () => {
                                   Your review submitted successfully!
                                 </p>
                               </CardBody>
-                            </div>
+                            </div>) : (
+                            <div className="mt-2">
+                              <CardBody>
+                                <CardTitle className="h4">
+                                  Something went wrong
+                                </CardTitle>
+                                <p className="lead">
+                                  Unable to submit your review 
+                                </p>
+                              </CardBody>
+                            </div>)}
                             <Button
                               color="primary"
                               size="lg"

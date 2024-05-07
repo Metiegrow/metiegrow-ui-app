@@ -151,6 +151,51 @@ if (roleRes.includes("MENTOR")) {
     logoutUserAction(history);
   };
 
+  const renderMySlots = () => {
+    if (roleRes.includes("MENTOR")) {
+      return (
+        <NavLink to={`${adminRoot}/calendar/mentor/appointment`}>
+          <DropdownItem onClick={() => handleMySlots()}>
+            <i className="simple-icon-wallet" /> My Slots
+          </DropdownItem>
+        </NavLink>
+      );
+    }
+    return null; 
+  };
+  const renderMyWallet = () => {
+    if (roleRes.includes("MENTEE")) {
+      return (
+        <>
+        <NavLink to={`${adminRoot}/mywallet`}>
+            <DropdownItem onClick={() => handleMyWalletClick()}>
+              <i className="simple-icon-wallet" />  My Wallet
+            </DropdownItem>
+        </NavLink>
+        <NavLink to={`${adminRoot}/lawyerjobslist`}>
+            <DropdownItem onClick={() => handleMyClientJobsClick()}>
+              <i className="iconsminds-scale" />  My Lawyer Jobs
+           </DropdownItem>
+        </NavLink>
+      </>
+      );
+    }
+    return null; 
+  };
+  const renderClientJob = () => {
+    if (roleRes.includes("LAWYER")) {
+      return (
+        <NavLink to={`${adminRoot}/jobslist`}>
+        <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
+        <i className="iconsminds-scale" />  My Client Jobs
+        </DropdownItem>
+      </NavLink>
+        
+      );
+    }
+    return null; 
+  };
+
   const menuButtonClick = (e, _clickCount, _conClassnames) => {
     e.preventDefault();
 
@@ -281,16 +326,19 @@ if (roleRes.includes("MENTOR")) {
                 <i className="simple-icon-user" />  My Profile
                 </DropdownItem>
               </NavLink>
-              <NavLink to={`${adminRoot}/mywallet`}>
+              {renderMyWallet()}
+              {/* <NavLink to={`${adminRoot}/mywallet`}>
                 <DropdownItem onClick={() => handleMyWalletClick()}>
                 <i className="simple-icon-wallet" />  My Wallet
                 </DropdownItem>
-              </NavLink>
-              <NavLink to={`${adminRoot}/calendar/mentor/appointment`}>
+              </NavLink> */}
+              
+              {/* <NavLink to={`${adminRoot}/calendar/mentor/appointment`}>
                 <DropdownItem onClick={() => handleMySlots()}>
                 <i className="simple-icon-wallet" />  My Slots
                 </DropdownItem>
-              </NavLink>
+              </NavLink> */}
+              {renderMySlots()}
               {/* <NavLink to={`${adminRoot}/mylisting`}> */}
                 <NavLink to={`${adminRoot}/myactivities`}>
                 <DropdownItem onClick={() => handleMyActivitiesClick()}>
@@ -302,16 +350,17 @@ if (roleRes.includes("MENTOR")) {
                 <i className="simple-icon-list" />  Sessions
                 </DropdownItem>
               </NavLink>
-              <NavLink to={`${adminRoot}/jobslist`}>
+              {/* <NavLink to={`${adminRoot}/jobslist`}>
                 <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
                 <i className="iconsminds-scale" />  My Client Jobs
                 </DropdownItem>
-              </NavLink>
-              <NavLink to={`${adminRoot}/lawyerjobslist`}>
+              </NavLink> */}
+              {/* <NavLink to={`${adminRoot}/lawyerjobslist`}>
                 <DropdownItem onClick={() => handleMyClientJobsClick()}>
                 <i className="iconsminds-scale" />  My Lawyer Jobs
                 </DropdownItem>
-              </NavLink>
+              </NavLink> */}
+              {renderClientJob()}
               <DropdownItem onClick={() => handleMyListingClick()}>
                 <i className="simple-icon-list" />  My Listing
                 </DropdownItem>
