@@ -69,7 +69,7 @@ const data = [
     id: "Lawyer",
     icon: "iconsminds-scale",
     label: "Lawyer",
-    to: `${adminRoot}/usercard`,
+    to: `${adminRoot}/lawyer/list`,
     // subs: [
     //   {
     //     icon: 'simple-icon-user',

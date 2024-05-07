@@ -445,11 +445,15 @@ const roleRes = getRoleRes();
             />
            
            <Route
-              path={`${match.url}/lawyer`}
+              path={`${match.url}/lawyerquestions`}
               render={(props) => <ViewLawyer {...props} />}
             />
-            <Route
+            {/* <Route
               path={`${match.url}/usercard`}
+              render={(props) => <ViewUserCard {...props} />}
+            /> */}
+            <Route
+              path={`${match.url}/lawyer/list`}
               render={(props) => <ViewUserCard {...props} />}
             />
              <Route

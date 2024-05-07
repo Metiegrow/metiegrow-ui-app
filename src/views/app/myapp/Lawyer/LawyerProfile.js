@@ -129,7 +129,7 @@ const LawyerProfile = () => {
             <div>
             <NavLink  >
               <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
-                <span className='font-weight-semibold text-primary text-one'>Connect</span>
+                <span className='font-weight-semibold text-primary text-one'>Contact</span>
                 
               </Button>
               </NavLink>
@@ -187,7 +187,7 @@ const LawyerProfile = () => {
            
           </div>
           <div   className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none  ' >
-        <LawyerTabCard  />
+        <LawyerTabCard pid={pid} />
     </div>
         
           <div className='mt-4' >

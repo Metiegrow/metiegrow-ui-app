@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import { Colxx } from 'components/common/CustomBootstrap';
 import DropzoneExample from 'containers/forms/DropzoneExample';
-import React, { useEffect, useState } from 'react';
 import { baseUrl } from 'constants/defaultValues';
 import { Button, Card,CardBody, Col,  Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import Select from 'react-select';
@@ -8,6 +8,13 @@ import CustomSelectInput from 'components/common/CustomSelectInput';
 import axios from 'axios';
 import {useParams} from "react-router-dom";
 import LawyerJobNotes from "../Notes/LawyerJobNotes"
+
+
+
+
+
+
+
 
 const selectData = [
   { label: 'Yet to start', value: 'yet to start', key: 0 },
@@ -21,8 +28,14 @@ const JobDetails = () => {
   const [jobdetails,setJobDetails]=useState('');
   const {jid}=useParams();
   const [editMode, setEditMode] = useState(false);
+
+  
    const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
- 
+  //  const [newStep, setNewStep] = useState({
+  //   stepName: '',
+  //   description: '',
+  //   doneBy: ''
+  // });
   
  
 
@@ -45,10 +58,12 @@ if (response.data.steps && response.data.steps.length > 0) {
     description: response.data.steps[0].description,
     doneBy: response.data.steps[0].doneBy
   });
+  
 }
         
       } catch (error) {
         console.error('Error fetching data:', error);
+        
       }
 }
 
@@ -58,6 +73,9 @@ if (response.data.steps && response.data.steps.length > 0) {
        
     
     },[url])
+  
+
+  
   
 
     const handleStepClick = (step) => {
@@ -75,9 +93,28 @@ if (response.data.steps && response.data.steps.length > 0) {
       const { name, value } = e.target;
       setEditData(prev => ({ ...prev, [name]: value }));
     };
+
+    // const handleNewStepChange = (e) => {
+    //   const { name, value } = e.target;
+    //   setNewStep(prev => ({ ...prev, [name]: value }));
+    // };
    
     
-    
+    // const saveNewStep = async () => {
+    //   try {
+    //     const response = await axios.post(url, newStep);
+    //     if (response.status === 200) {
+    //       LawyerJobsDetails();
+    //       setNewStep({
+    //         stepName: '',
+    //         description: '',
+    //         doneBy: ''
+    //       });
+    //     }
+    //   } catch (error) {
+    //     console.error('Failed to create new step:', error);
+    //   }
+    // };
    
   
     const saveEdits = async () => {
@@ -167,103 +204,21 @@ if (response.data.steps && response.data.steps.length > 0) {
             )
            
           })}
+          <Card>
+            <CardBody className='my-2' style={{cursor:"pointer"}} >
+              <h1 className=' text-center mx-auto w-100' 
+              style={{fontSize:"60px",cursor:"pointer"}}
+              >+</h1>
+            </CardBody>
+          </Card>
       </Colxx>
      
 
 
       <Colxx>
-          {/* {selectedStep && (
-           
-            <Card key={selectedStep.id} className='mb-2'>
-      <CardBody>
-   
-      <Form>
-      <h2 className='text-primary text-center'>Step {selectedStep.stepNumber}</h2>
-      <Button outline color="primary" >
-                <i className='simple-icon-pencil'/>
-                </Button>
-
-       <FormGroup className='py-2'>
-
-       <Col sm={2}>
-       <Label className='text-one'>Name</Label>
-       </Col>
-        <Col>
-        <h3>{selectedStep.stepName}</h3>
-      
-        </Col>
-     
-        
-       </FormGroup>
-       <FormGroup  className='py-2'>
-       <Col sm={2}>
-       <Label className='text-one'>Description</Label>
-       </Col>
-        <Col>
-        <h3 className='text-muted'>{selectedStep.description}</h3>
-        </Col>
-        
-       </FormGroup>
-       <FormGroup className='py-2' >
-       <Col sm={2}>
-       <Label className='text-one'>Done by</Label>
-       </Col>
-        <Col>
-        <h3>{selectedStep.doneBy}</h3>
-        </Col>
-        
-       </FormGroup>
-       <FormGroup  className='py-2'>
-       <Col sm={2}>
-       <Label className='text-one'>Documents</Label>
-       </Col>
-        <Col>
-        <DropzoneExample/>
-       
-     <div className='mt-4'>
-                      {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                        <h5 key={document}>{document.name}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
-                      ))}
-                    </div>
-        </Col>
-        
-       </FormGroup>
-      <FormGroup>
-        <Col sm={2}>
-          <Label className='text-one'>
-            Status
-          </Label>
-        </Col>
-        <Col>
-        <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          value={selectedOption}
-          onChange={setSelectedOption}
-          options={selectData}
-        />
-        </Col>
-       
-      </FormGroup>
-      <FormGroup>
-      <Col>
-      <Button  color="primary" >
-                save
-                </Button>
-      </Col>
-     
-      </FormGroup>
-      
- 
-       </Form>
-      </CardBody>
-      
-      </Card>
-            
-          )} */}
+  
           <Col>
+          {/* right side step details */}
           {selectedStep && (
             <Card className='mb-2'>
               <CardBody>
@@ -319,7 +274,9 @@ if (response.data.steps && response.data.steps.length > 0) {
      <div className='mt-4'>
    
                       {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                        <h5 key={document}>{document.name}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
+                        <h5 key={document}>{document.name}<span className='ml-2 text-primary'>
+                        <i className='iconsminds-download-1 font-weight-bold mx-1'  style={{cursor:"pointer"}}/>
+                        <i className='simple-icon-trash  mx-1' style={{cursor:"pointer"}}/></span></h5>
                       ))}
                     </div>
    
@@ -386,12 +343,16 @@ if (response.data.steps && response.data.steps.length > 0) {
                   <Label className='text-one'>Documents</Label>
                   </Col>
                   <Col>
-                  <DropzoneExample/>
+                  <DropzoneExample />
 
                   <div className='mt-4'>
                                 {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                                  <h5 key={document}>{document.name}<span className='ml-2 text-primary'><i className='iconsminds-download-1 font-weight-bold'/></span></h5>
+                                  <h5 key={document}>{document.name}<span className='ml-2 text-primary'>
+                                  <i className='iconsminds-download-1 mx-1 ' style={{cursor:"pointer"}}/>
+                                  <i className='simple-icon-trash mx-1 ' style={{cursor:"pointer"}}/>
+                                  </span></h5>
                                 ))}
+                
                               </div>
                   </Col>
                     
@@ -416,12 +377,22 @@ if (response.data.steps && response.data.steps.length > 0) {
 
                     </FormGroup>
                     </>
+
+                    
+
+
+                       
                   )}
+
+
+        
+       
                 </Form>
               </CardBody>
             </Card>
           )}
         </Col>
+       
         </Colxx>
       </Row>
       
