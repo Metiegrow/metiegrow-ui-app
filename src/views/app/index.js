@@ -115,6 +115,11 @@ const ViewMylogin = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/my-login/Mylogin'
   )
 );
+const ViewLawyerlogin = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/lawyer-login/LawyerLogin'
+  )
+);
 const ViewMyProfile = React.lazy(() =>
   import(
     /* webpackChunkName: "views-app" */ './myapp/my-profile/MyProfile'
@@ -261,7 +266,7 @@ const roleRes = getRoleRes();
           } else if (roleRes.includes("MENTEE")) {
             redirectTo = `${match.url}/mentor`;
           } else if (roleRes.includes("LAWYER")) {
-            redirectTo = `${match.url}/profile`;
+            redirectTo = `${match.url}/lawyer/apply`;
           } else {
             redirectTo = `${match.url}/profile`; 
           }
@@ -313,6 +318,10 @@ const roleRes = getRoleRes();
             <Route
               path={`${match.url}/mentor/apply`}
               render={(props) => <ViewMylogin {...props} />}
+            />
+             <Route
+              path={`${match.url}/lawyer/apply`}
+              render={(props) => <ViewLawyerlogin {...props} />}
             />
             <Route
               path={`${match.url}/mentor`}

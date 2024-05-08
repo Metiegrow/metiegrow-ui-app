@@ -28,14 +28,12 @@ const JobDetails = () => {
   const [jobdetails,setJobDetails]=useState('');
   const {jid}=useParams();
   const [editMode, setEditMode] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
 
   
    const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
-  //  const [newStep, setNewStep] = useState({
-  //   stepName: '',
-  //   description: '',
-  //   doneBy: ''
-  // });
+  
   
  
 
@@ -75,8 +73,24 @@ if (response.data.steps && response.data.steps.length > 0) {
     },[url])
   
 
-  
-  
+    const handleAddCard = () => {
+      // Check if jobdetails is empty or not
+      if (jobdetails && jobdetails.steps) {
+        const newStepNumber = jobdetails.steps.length + 1;
+        const newCard = {
+          id: newStepNumber,
+          stepNumber: newStepNumber,
+          stepName: 'New Step',
+          description: 'Description',
+          doneBy: 'CLIENT'
+        };
+        const updatedJobDetails = {
+          ...jobdetails,
+          steps: [...jobdetails.steps, newCard]
+        };
+        setJobDetails(updatedJobDetails);
+      }
+    };
 
     const handleStepClick = (step) => {
       setSelectedStep(step);
@@ -94,32 +108,13 @@ if (response.data.steps && response.data.steps.length > 0) {
       setEditData(prev => ({ ...prev, [name]: value }));
     };
 
-    // const handleNewStepChange = (e) => {
-    //   const { name, value } = e.target;
-    //   setNewStep(prev => ({ ...prev, [name]: value }));
-    // };
    
-    
-    // const saveNewStep = async () => {
-    //   try {
-    //     const response = await axios.post(url, newStep);
-    //     if (response.status === 200) {
-    //       LawyerJobsDetails();
-    //       setNewStep({
-    //         stepName: '',
-    //         description: '',
-    //         doneBy: ''
-    //       });
-    //     }
-    //   } catch (error) {
-    //     console.error('Failed to create new step:', error);
-    //   }
-    // };
    
   
     const saveEdits = async () => {
       // Assuming API accepts PATCH request to update steps
-      const updateUrl = `${url}/steps/${selectedStep.id}`;
+      // const updateUrl = `${url}/steps/${selectedStep.id}`;
+      const updateUrl = `${url}/jobDetail/{jid}/step/${selectedStep.id} `;
       try {
         const response = await axios.patch(updateUrl, editData);
         if (response.status === 200) {
@@ -136,7 +131,39 @@ if (response.data.steps && response.data.steps.length > 0) {
 
   return (
     <div>
-        <Row><Col><h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1></Col>
+        <Row>
+        <Col>
+        {/* <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1> */}
+        <div
+          className='font-weight-semibold text-large'
+          style={{ cursor: 'pointer' }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+         
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === 'Space') {
+              // Handle click action here
+              event.preventDefault();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          >
+           <h1>{jobdetails.jobName}</h1>  
+            {isHovered && (
+              <Button outline color="primary" className='ml-2'>
+              <i 
+                className='simple-icon-pencil' 
+                style={{ cursor: 'pointer' }} 
+               
+              />
+              </Button>
+              
+            )}
+          </div>
+
+
+        </Col>
         <Col><LawyerJobNotes jobId={jid}/></Col>
         </Row>
       <Row>
@@ -205,13 +232,14 @@ if (response.data.steps && response.data.steps.length > 0) {
            
           })}
           <Card>
-            <CardBody className='my-2' style={{cursor:"pointer"}} >
+            <CardBody className='my-2' style={{cursor:"pointer"}} onClick={handleAddCard}>
               <h1 className=' text-center mx-auto w-100' 
               style={{fontSize:"60px",cursor:"pointer"}}
               >+</h1>
             </CardBody>
           </Card>
       </Colxx>
+ 
      
 
 
