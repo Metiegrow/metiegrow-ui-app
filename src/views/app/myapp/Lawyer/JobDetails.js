@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Colxx } from 'components/common/CustomBootstrap';
-import DropzoneExample from 'containers/forms/DropzoneExample';
+// import DropzoneExample from 'containers/forms/DropzoneExample';
+
 import { baseUrl } from 'constants/defaultValues';
 import { Button, Card,CardBody, Col,  Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import Select from 'react-select';
 import CustomSelectInput from 'components/common/CustomSelectInput';
 import axios from 'axios';
 import {useParams} from "react-router-dom";
+
 import LawyerJobNotes from "../Notes/LawyerJobNotes"
+import DropzoneExample from './UploadDropZone';
+
+
 
 
 
@@ -29,12 +34,15 @@ const JobDetails = () => {
   const {jid}=useParams();
   const [editMode, setEditMode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [jobeditmode,setJobEditMode]=useState(false);
+  // const [editedJobName, setEditedJobName] = useState('');
 
 
   
-   const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
+  //  const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
   
-  
+  const [editData, setEditData] = useState({ stepName: '', description: '', userStep: '',  "upload":true,
+});
  
 
   // const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
@@ -54,7 +62,10 @@ if (response.data.steps && response.data.steps.length > 0) {
   setEditData({
     stepName: response.data.steps[0].stepName,
     description: response.data.steps[0].description,
-    doneBy: response.data.steps[0].doneBy
+    // userStep: response.data.steps[0].doneBy,
+    userStep:true,
+    upload:true
+   
   });
   
 }
@@ -107,14 +118,30 @@ if (response.data.steps && response.data.steps.length > 0) {
       const { name, value } = e.target;
       setEditData(prev => ({ ...prev, [name]: value }));
     };
-
+    
+    // const handleEditClick = () => {
+    //   setEditMode(true);
+    // };
+    const handleJobNameClick = () => {
+      setJobEditMode(true);
+     
+    };
+  
+    // const handleJobNameChange = (e) => {
+    //   setEditedJobName(e.target.value);
+    // };
+  
+   
+    const handleCancelClick = () => {
+      setJobEditMode(false);
+    };
    
    
   
     const saveEdits = async () => {
-      // Assuming API accepts PATCH request to update steps
       // const updateUrl = `${url}/steps/${selectedStep.id}`;
-      const updateUrl = `${url}/jobDetail/{jid}/step/${selectedStep.id} `;
+      const updateUrl = `${url}/jobDetail/${selectedStep.id} `;
+     
       try {
         const response = await axios.patch(updateUrl, editData);
         if (response.status === 200) {
@@ -125,24 +152,63 @@ if (response.data.steps && response.data.steps.length > 0) {
         console.error('Failed to update step:', error);
       }
     };
-   
-   
+    const saveJobs = async () => {
+      const updateUrl = `${url}/jobDetail/${jid}/step/${selectedStep.id}`;
+      try {
+        const response = await axios.patch(updateUrl, { jobName: jobdetails.jobName }); 
+        if (response.status === 200) {
+          LawyerJobsDetails();
+          setEditMode(false);
+        }
+      } catch (error) {
+        console.error('Failed to update job name:', error);
+      }
+    };
+    
+    const handleSaveJobName = () => {
+      saveJobs();
+      setJobEditMode(false);
+    };
+  
  
 
   return (
     <div>
         <Row>
-        <Col>
+        <Col md={4}>
         {/* <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1> */}
+        {jobeditmode ? (
+          <Row className='d-flex align-items-center'>
+            <Col md={6}>
+            <div className=''>
+          <Input
+              type="text"
+              value={jobdetails.jobName}
+              // onChange={(e) => setJobName(e.target.value)}
+              onChange={(e) => setJobDetails({ ...jobdetails, jobName: e.target.value })}
+            />
+           
+          </div>
+            </Col>
+            <Col md={6}> 
+            <div className='my-3'>
+              <Button color="primary" onClick={handleSaveJobName}>Save</Button>
+              <Button color="secondary" className="ml-2" onClick={handleCancelClick}>Cancel</Button>
+            </div></Col>
+          </Row>
+         
+            
+          ) : (
         <div
-          className='font-weight-semibold text-large'
+          className='font-weight-semibold text-large '
           style={{ cursor: 'pointer' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-         
+         onClick={()=>setJobEditMode(true)}
           onKeyDown={(event) => {
             if (event.key === 'Enter' || event.key === 'Space') {
               // Handle click action here
+              handleJobNameClick();
               event.preventDefault();
             }
           }}
@@ -151,17 +217,20 @@ if (response.data.steps && response.data.steps.length > 0) {
           >
            <h1>{jobdetails.jobName}</h1>  
             {isHovered && (
-              <Button outline color="primary" className='ml-2'>
+              <span className='ml-2 text-primary text-one' >
               <i 
                 className='simple-icon-pencil' 
                 style={{ cursor: 'pointer' }} 
-               
+                size='sm'
               />
-              </Button>
+              </span>
+             
               
             )}
           </div>
-
+          )
+        }
+       
 
         </Col>
         <Col><LawyerJobNotes jobId={jid}/></Col>
@@ -190,7 +259,7 @@ if (response.data.steps && response.data.steps.length > 0) {
           <div className='ml-3'>
           <h3>{s.stepName}</h3>
             <h6 className='text-muted'>{s.description}</h6>
-            <h6>Done by <strong>{s.doneBy}</strong></h6>
+            <h6>By <span className='text-muted'>{s.doneBy}</span></h6>
           </div>
           <div className='text-end'>
     <span 
@@ -248,7 +317,7 @@ if (response.data.steps && response.data.steps.length > 0) {
           <Col>
           {/* right side step details */}
           {selectedStep && (
-            <Card className='mb-2'>
+            <Card className='mb-2  '>
               <CardBody>
                 <Form>
                 <FormGroup>
@@ -312,6 +381,18 @@ if (response.data.steps && response.data.steps.length > 0) {
         </Col>
         
        </FormGroup>
+       <FormGroup>
+       <Col sm={2}>
+       <Label className='text-one'>Comment</Label>
+       </Col>
+       <Col>
+       <Input type="textarea" name="comment" />
+       </Col>
+                        
+                       
+                       
+                       
+                      </FormGroup>
       <FormGroup>
         <Col sm={2}>
           <Label className='text-one'>
@@ -353,7 +434,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                   <Label className='text-one'>Description</Label>
                   </Col>
                   <Col>
-                  <h3 className='text-muted'>{selectedStep.description}</h3>
+                  <h3 className=''>{selectedStep.description}</h3>
                   </Col>
                   
                   </FormGroup>
@@ -387,6 +468,15 @@ if (response.data.steps && response.data.steps.length > 0) {
                     </FormGroup>
                     <FormGroup>
                     <Col sm={2}>
+                    <Label className='text-one'>Comment</Label>
+                    </Col>
+                    <Col>
+                    <Input type="textarea" name="comment" />
+                    </Col>
+                      
+                      </FormGroup>
+                    <FormGroup>
+                    <Col sm={2}>
                       <Label className='text-one'>
                         Status
                       </Label>
@@ -401,6 +491,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                       onChange={setSelectedOption}
                       options={selectData}
                     />
+                    
                     </Col>
 
                     </FormGroup>
@@ -414,7 +505,7 @@ if (response.data.steps && response.data.steps.length > 0) {
 
 
         
-       
+                 
                 </Form>
               </CardBody>
             </Card>

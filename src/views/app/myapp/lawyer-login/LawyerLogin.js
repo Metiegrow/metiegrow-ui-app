@@ -25,8 +25,8 @@ import { baseUrl } from "constants/defaultValues";
 import SliderExamples from "../mentorship/SliderExamples";
 import LawyerJumbotron from "./LawyerJumbotron";
 import {
-  validateLastName,
-  validateFirstName,
+  // validateLastName,
+  // validateFirstName,
   // validateEmail,
   // validatePassword,
   // validateCategory,
@@ -35,7 +35,7 @@ import {
   validatePackageTitle,
   validatePackageTopic,
   validatePackageDescription,
-  validatePackageAmount,
+  // validatePackageAmount,
   // validateCompany,
   // validateJobTitle,
   validateAbout,
@@ -131,8 +131,8 @@ const LawyerLogin = ({ intl }) => {
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState({
     image: "",
-    firstName: "",
-    lastName: "",
+    // firstName: "",
+    // lastName: "",
     topic:"",
     topics:[],
     serviceName:"",
@@ -382,7 +382,7 @@ const token = getTokenRes();
                           </Col>
                         </Row>
                       </FormGroup>
-                      <Row>
+                      {/* <Row>
                         <Col md={6}>
                           <FormGroup className="error-l-75">
                             <Label>First Name*</Label>
@@ -413,7 +413,7 @@ const token = getTokenRes();
                             )}
                           </FormGroup>
                         </Col>
-                      </Row>
+                      </Row> */}
                       {/* <Row>
                         <Col md={6}>
                           <FormGroup>
@@ -687,48 +687,7 @@ const token = getTokenRes();
                           </div>
                         )}
                       </FormGroup> */}
-                      <Row>
-                        <Col md={6}>
-                        <FormGroup className="error-l-75">
-                            <Label>Service Name*</Label>
-                            <Field
-                              className="form-control"
-                              name="serviceName"
-                              validate={validateServiceName}
-                            />
-                            {errors.serviceName && touched.serviceName && (
-                              <div className="invalid-feedback d-block">
-                                {errors.serviceName}
-                              </div>
-                            )}
-                          </FormGroup>
-                        </Col>
-                        <Col md={6}>
-                        <FormGroup className="error-l-75">
-                            <Label>Service Description*</Label>
-                            <Field
-                              className="form-control"
-                              name="servicedescription"
-                              validate={validateServiceDescription}
-                            />
-                            {errors.servicedescription && touched.servicedescription && (
-                              <div className="invalid-feedback d-block">
-                                {errors.servicedescription}
-                              </div>
-                            )}
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                      <Col md={6}>
-                      <FormGroup>
-                        <Label>Service Amount</Label>
-                        
-                        <SliderExamples/>
-                      </FormGroup>
-         
-                      </Col>
-                      </Row>
+                    
                      
                       
                       <FormGroup>
@@ -827,7 +786,7 @@ const token = getTokenRes();
             </Step>
             <Step
               id="step3"
-              name="Package"
+              name="Services"
               desc={messages["wizard.step-desc-3"]}
             >
               <div className="wizard-basic-step">
@@ -860,6 +819,50 @@ const token = getTokenRes();
                         exponentially increase your chances. They also give you
                         a jumpstart once you&apos;re a lawyer.
                       </Alert>
+                    
+
+                      <Row>
+                        <Col md={6}>
+                        <FormGroup className="error-l-75">
+                            <Label>Service Name*</Label>
+                            <Field
+                              className="form-control"
+                              name="serviceName"
+                              validate={validateServiceName}
+                            />
+                            {errors.serviceName && touched.serviceName && (
+                              <div className="invalid-feedback d-block">
+                                {errors.serviceName}
+                              </div>
+                            )}
+                          </FormGroup>
+                        </Col>
+                        <Col md={6}>
+                        <FormGroup className="error-l-75">
+                            <Label>Service Description*</Label>
+                            <Field
+                              className="form-control"
+                              name="servicedescription"
+                              validate={validateServiceDescription}
+                            />
+                            {errors.servicedescription && touched.servicedescription && (
+                              <div className="invalid-feedback d-block">
+                                {errors.servicedescription}
+                              </div>
+                            )}
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                      <Col md={6}>
+                      <FormGroup>
+                        <Label>Service Amount</Label>
+                        
+                        <SliderExamples/>
+                      </FormGroup>
+         
+                      </Col>
+                      </Row>
                       <FormGroup>
                         <Row>
                           {/* <Col md={6}>
@@ -878,7 +881,7 @@ const token = getTokenRes();
                           </Col> */}
                           <Col md={12}>
                           <FormGroup className="error-l-75">
-                            <Label>Title*</Label>
+                            <Label>Package Name*</Label>
                             <Field
                               className="form-control"
                               name="title"
@@ -910,9 +913,9 @@ const token = getTokenRes();
                         </Row>
                       </FormGroup>
                       <FormGroup>
-                        <Label for="topic">Topic*</Label>
+                        <Label for="topic">Headline*</Label>
                         <Field
-                          as="textarea"
+                          
                           name="topic"
                           id="topic"
                           className="form-control"
@@ -941,10 +944,11 @@ const token = getTokenRes();
                         )}
                        
                       </FormGroup>
-                      
-                          <FormGroup className="error-l-75">
+                          <Row>
+                            <Col md={6}>
+                            <FormGroup className="error-l-75">
                             <Label>Amount*</Label>
-                            <Field
+                            {/* <Field
                               className="form-control"
                               name="amount"
                               validate={validatePackageAmount}
@@ -953,8 +957,12 @@ const token = getTokenRes();
                               <div className="invalid-feedback d-block">
                                 {errors.amount}
                               </div>
-                            )}
+                            )} */}
+                            <SliderExamples/>
                           </FormGroup>
+                            </Col>
+                          </Row>
+                         
                        
 
                       {/* <FormGroup>
