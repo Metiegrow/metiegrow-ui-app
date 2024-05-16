@@ -22,13 +22,18 @@ import DropzoneExample from './UploadDropZone';
 
 
 const selectData = [
-  { label: 'Yet to start', value: 'yet to start', key: 0 },
-  { label: 'In progress', value: 'Inprogress', key: 1 },
-  { label: 'Completed', value: 'completed', key: 2 },
+  { label: 'Yet to start', value: 'yet to start', key: 1 },
+  { label: 'In progress', value: 'Inprogress', key: 2 },
+  { label: 'Completed', value: 'completed', key: 4 },
 ];
+const doneByData=[
+  { label: 'Client', value: true, key: 0 },
+  { label: 'Lawyer', value: false, key: 1 },
+]
 
 const JobDetails = () => {
   const [selectedOption, setSelectedOption] = useState('');
+  //  const [selectedOptionDoneBY, setSelectedOptionDoneBy] = useState({ value: true, label: 'Client' }); 
   const [selectedStep, setSelectedStep] = useState(null);
   const [jobdetails,setJobDetails]=useState('');
   const {jid}=useParams();
@@ -37,15 +42,22 @@ const JobDetails = () => {
   const [jobeditmode,setJobEditMode]=useState(false);
   // const [editedJobName, setEditedJobName] = useState('');
 
-
+   const [userstep,setUserStep]=useState(true);
   
   //  const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
   
-  const [editData, setEditData] = useState({ stepName: '', description: '', userStep: '',  "upload":true,
+  const [editData, setEditData] = useState({ stepName: '', description: '', userStep:'', "upload":true,
 });
  
 
   // const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
+
+  const handleUserStepChange = (val) => {
+    console.log('Selected Option:', val);
+    setUserStep(val.value); 
+    console.log('Updated User Step Value:', userstep); 
+  };
+  
 
 
   // Backedn url 
@@ -63,7 +75,7 @@ if (response.data.steps && response.data.steps.length > 0) {
     stepName: response.data.steps[0].stepName,
     description: response.data.steps[0].description,
     // userStep: response.data.steps[0].doneBy,
-    userStep:true,
+    userStep:userstep,
     upload:true
    
   });
@@ -153,9 +165,9 @@ if (response.data.steps && response.data.steps.length > 0) {
       }
     };
     const saveJobs = async () => {
-      const updateUrl = `${url}/jobDetail/${jid}/step/${selectedStep.id}`;
+      const updateUrl1 = `${url}/jobDetail/${jid}/step/${selectedStep.id}`;
       try {
-        const response = await axios.patch(updateUrl, { jobName: jobdetails.jobName }); 
+        const response = await axios.patch(updateUrl1, { jobName: jobdetails.jobName }); 
         if (response.status === 200) {
           LawyerJobsDetails();
           setEditMode(false);
@@ -169,13 +181,25 @@ if (response.data.steps && response.data.steps.length > 0) {
       saveJobs();
       setJobEditMode(false);
     };
-  
+    const saveStatus=async( selectedKey)=>{
+      const updateStatusUrl=`${baseUrl}/api/lawyer/updatedocument-status`
+      try{
+        const response = await axios.patch(updateStatusUrl, { jobId:jid, jobDetailStatus:selectedKey}); 
+        if (response.status === 200) {
+          LawyerJobsDetails();
+          setEditMode(false);
+        }
+      }
+      catch (error) {
+        console.error('Failed to update job status:', error);
+      }
+    }
  
 
   return (
     <div>
         <Row>
-        <Col md={4}>
+        <Col md={12} lg={4}>
         {/* <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1> */}
         {jobeditmode ? (
           <Row className='d-flex align-items-center'>
@@ -231,7 +255,7 @@ if (response.data.steps && response.data.steps.length > 0) {
           )
         }
        
-
+      
         </Col>
         <Col><LawyerJobNotes jobId={jid}/></Col>
         </Row>
@@ -324,10 +348,22 @@ if (response.data.steps && response.data.steps.length > 0) {
                   <Col>
                   <div className='d-flex justify-content-between'>
                 <h2 className='text-primary '>Step {selectedStep.stepNumber}</h2>
-                  <Button outline color="primary" onClick={() => setEditMode(!editMode)}>
-                  {editMode ? <i className='simple-icon-close' /> : <i className='simple-icon-pencil' />}
+                <div>
+                <Button className='mr-2' outline color="primary" onClick={() => setEditMode(!editMode)}>
+                 {editMode ? <i className='simple-icon-close' /> : <i className='simple-icon-pencil ' />
+                  
+                  } 
+                
 
                   </Button>
+                  <Button outline color="primary" >
+                  <i className='simple-icon-trash ' />
+                  </Button>
+                </div>
+                 
+                  
+
+                  
                 </div>
                   </Col>
                 </FormGroup>
@@ -352,13 +388,39 @@ if (response.data.steps && response.data.steps.length > 0) {
 
                         </Col>
                       </FormGroup>
-                      <FormGroup className='py-2'>
+                      {/* <FormGroup className='py-2'>
                       <Col sm={2}>
                       <Label>Done by</Label>
                       </Col>
                         <Col>
                         <Input type="text" value={editData.doneBy} onChange={handleEditChange} name="doneBy" />
 
+                        </Col>
+                      </FormGroup> */}
+                      <FormGroup className='py-2'>
+                      <Col sm={2}>
+                      <Label>Done by</Label>
+                      </Col>
+                        <Col>
+                        <Select
+                 components={{ Input: CustomSelectInput }}
+                   className="react-select"
+                classNamePrefix="react-select"
+                  name="form-field-name"
+          
+                 value={userstep}
+                 onChange={handleUserStepChange}
+                //  onChange={(val) => {
+                // console.log(val);  
+                // setUserStep(val);
+             
+                //   }}
+          // onChange={saveStatus} 
+            options={doneByData}
+          // options={selectData}
+        />
+                    
+                     
                         </Col>
                       </FormGroup>
                       <FormGroup  className='py-2'>
@@ -381,18 +443,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         </Col>
         
        </FormGroup>
-       <FormGroup>
-       <Col sm={2}>
-       <Label className='text-one'>Comment</Label>
-       </Col>
-       <Col>
-       <Input type="textarea" name="comment" />
-       </Col>
-                        
-                       
-                       
-                       
-                      </FormGroup>
+      
       <FormGroup>
         <Col sm={2}>
           <Label className='text-one'>
@@ -405,10 +456,19 @@ if (response.data.steps && response.data.steps.length > 0) {
           className="react-select"
           classNamePrefix="react-select"
           name="form-field-name"
+          // defaultValue={selectedOption}
           value={selectedOption}
-          onChange={setSelectedOption}
-          options={selectData}
+          // onChange={(val)=>setSelectedOption(val)}
+          onChange={(val) => {
+         console.log(val);  
+        setSelectedOption(val);
+        saveStatus(val.key);
+      }}
+          // onChange={saveStatus} 
+            options={selectData}
+          // options={selectData}
         />
+        
         </Col>
        
       </FormGroup>
@@ -466,7 +526,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                   </Col>
                     
                     </FormGroup>
-                    <FormGroup>
+                    {/* <FormGroup>
                     <Col sm={2}>
                     <Label className='text-one'>Comment</Label>
                     </Col>
@@ -474,7 +534,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                     <Input type="textarea" name="comment" />
                     </Col>
                       
-                      </FormGroup>
+                      </FormGroup> */}
                     <FormGroup>
                     <Col sm={2}>
                       <Label className='text-one'>
@@ -482,7 +542,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                       </Label>
                     </Col>
                     <Col>
-                    <Select
+                    {/* <Select
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
@@ -490,11 +550,25 @@ if (response.data.steps && response.data.steps.length > 0) {
                       value={selectedOption}
                       onChange={setSelectedOption}
                       options={selectData}
-                    />
+                    /> */}
+                    <h3>{selectedStep.status}</h3>
                     
                     </Col>
 
                     </FormGroup>
+                    {/* <FormGroup>
+                      <Label>
+                        Status
+                      </Label>
+                      <Input type="select">
+                        
+                        <option>{selectedStep.status}</option>
+                        <option>In Progress</option>
+                        <option>completed</option>
+                        
+                         
+                      </Input>
+                    </FormGroup> */}
                     </>
 
                     

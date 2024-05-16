@@ -22,7 +22,7 @@ import { injectIntl } from "react-intl";
 import { Formik, Form, Field } from "formik";
 import TopNavigation from "components/wizard/TopNavigation";
 import { baseUrl } from "constants/defaultValues";
-import SliderExamples from "../mentorship/SliderExamples";
+import { SliderTooltip } from 'components/common/SliderTooltips';
 import LawyerJumbotron from "./LawyerJumbotron";
 import {
   // validateLastName,
@@ -32,7 +32,7 @@ import {
   // validateCategory,
   validateLanguages,
   validateLocation,
-  validatePackageTitle,
+  // validatePackageTitle,
   validatePackageTopic,
   validatePackageDescription,
   // validatePackageAmount,
@@ -43,12 +43,14 @@ import {
   validateTopics,
   validateBio,
   validateServiceName,
-  validateServiceDescription,
+  // validateServiceDescription,
   // validateLinkedinUrl,
   // validateReasonForMentor,
   // validateAchievement,
   validateFile,
 } from "./ValidationsPart";
+// import SingleRangeSlider from "./SingleRangeSlider";
+
 
 // const CategoryData = [
 //   "Select Category",
@@ -125,7 +127,7 @@ const BottomNavigation = ({
   );
 };
 
-const LawyerLogin = ({ intl }) => {
+const LawyerLogin = ({ intl}) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -133,7 +135,7 @@ const LawyerLogin = ({ intl }) => {
     image: "",
     // firstName: "",
     // lastName: "",
-    topic:"",
+    headline:"",
     topics:[],
     serviceName:"",
     title:"",
@@ -154,18 +156,28 @@ const LawyerLogin = ({ intl }) => {
     // reasonForMentor: "",
     // achievement: "",
     languages:[],
-    shortdescription:"",
-    about:""
+    // shortDescription:"",
+    about:"",
+    // amount:"",
   });
   const [aboutField, setAboutField] = useState({
     image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
+  const [amount, setAmount] = useState(1000);
+  
+  const handleSliderChange = (value) => {
+    setAmount(value);
+    
+  };
 
   // const url = `${baseUrl}/mentor/profile`;
-  const lawyerAboutUrl=`${baseUrl}/api/lawyer`;
-  const lawyerProfileUrl =`${baseUrl}/api/lawyer` ;
-  const packageUrl = `${baseUrl}/api/lawyer/package`;
+  const lawyerAboutUrl=`${baseUrl}/api/lawyer/about`;
+  // const lawyerAboutUrl=`${baseUrl}/lawyerAbout`;
+  const lawyerProfileUrl =`${baseUrl}/api/lawyer/profile` ;
+  // const lawyerProfileUrl =`${baseUrl}/lawyerProfileStep` ;
+  const packageUrl = `${baseUrl}/api/lawyer/services`;
+  // const packageUrl = `${baseUrl}/`;
 
  
   function getTokenRes() {
@@ -206,8 +218,9 @@ const token = getTokenRes();
 
 
   const postDataExperience = async (data) => {
+    const sendData=[{...data,amount}]
     try {
-      const response = await axios.post(packageUrl, data, {
+      const response = await axios.post(packageUrl, sendData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -239,6 +252,8 @@ const token = getTokenRes();
       reader.readAsDataURL(file);
     }
   };
+
+
 
   const onClickNext = (goToNext, steps, step) => {
     if (steps.length - 1 <= steps.indexOf(step)) {
@@ -544,8 +559,7 @@ const token = getTokenRes();
                     // skills: fields.skills,
                     bio: fields.bio,
                     topics:fields.topics,
-                    serviceName:fields.serviceName,
-                    description:fields.servicedescription,
+                   
                     about:fields.about
                     // linkedinUrl: fields.linkedinUrl,
                     // twitterHandle: fields.twitterHandle,
@@ -797,9 +811,12 @@ const token = getTokenRes();
                     // featuredArticle: fields.featuredArticle,
                     // reasonForMentor: fields.reasonForMentor,
                     // achievement: fields.achievement,
-                    title:fields.title,
-                    topic:fields.topic,
-                    shortdescription:fields.description
+                    // title:fields.title,
+                    headline:fields.headline,
+                    // shortDescription:fields.description,
+                    serviceName:fields.serviceName,
+                    description:fields.servicedescription,
+                    // amount:fields.amount
                   }}
                   onSubmit={(values) => {
                     postDataExperience(values);
@@ -822,7 +839,7 @@ const token = getTokenRes();
                     
 
                       <Row>
-                        <Col md={6}>
+                        <Col md={12}>
                         <FormGroup className="error-l-75">
                             <Label>Service Name*</Label>
                             <Field
@@ -837,7 +854,7 @@ const token = getTokenRes();
                             )}
                           </FormGroup>
                         </Col>
-                        <Col md={6}>
+                        {/* <Col md={6}>
                         <FormGroup className="error-l-75">
                             <Label>Service Description*</Label>
                             <Field
@@ -851,17 +868,17 @@ const token = getTokenRes();
                               </div>
                             )}
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                       </Row>
                       <Row>
-                      <Col md={6}>
+                      {/* <Col md={6}>
                       <FormGroup>
                         <Label>Service Amount</Label>
                         
                         <SliderExamples/>
                       </FormGroup>
          
-                      </Col>
+                      </Col> */}
                       </Row>
                       <FormGroup>
                         <Row>
@@ -879,7 +896,7 @@ const token = getTokenRes();
                             </FormText>
                           
                           </Col> */}
-                          <Col md={12}>
+                          {/* <Col md={12}>
                           <FormGroup className="error-l-75">
                             <Label>Package Name*</Label>
                             <Field
@@ -893,7 +910,7 @@ const token = getTokenRes();
                               </div>
                             )}
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                           {/* <Col md={6}>
                             <Label for="featuredArticle">
                               Featured Article
@@ -913,11 +930,11 @@ const token = getTokenRes();
                         </Row>
                       </FormGroup>
                       <FormGroup>
-                        <Label for="topic">Headline*</Label>
+                        <Label for="headline">Headline*</Label>
                         <Field
                           
-                          name="topic"
-                          id="topic"
+                          name="headline"
+                          id="headline"
                           className="form-control"
                           validate={validatePackageTopic}
                         />
@@ -929,11 +946,11 @@ const token = getTokenRes();
                        
                       </FormGroup>
                       <FormGroup>
-                        <Label for="packagedesc">Description*</Label>
+                        <Label for="description">Description*</Label>
                         <Field
                           as="textarea"
-                          name="packagedesc"
-                          id="packagedesc"
+                          name="description"
+                          id="description"
                           className="form-control"
                           validate={validatePackageDescription}
                         />
@@ -948,7 +965,7 @@ const token = getTokenRes();
                             <Col md={6}>
                             <FormGroup className="error-l-75">
                             <Label>Amount*</Label>
-                            {/* <Field
+                             {/* <Field
                               className="form-control"
                               name="amount"
                               validate={validatePackageAmount}
@@ -957,8 +974,19 @@ const token = getTokenRes();
                               <div className="invalid-feedback d-block">
                                 {errors.amount}
                               </div>
-                            )} */}
-                            <SliderExamples/>
+                            )}  */}
+                           {/* <SingleRangeSlider/> */}
+                           <SliderTooltip
+                          min={0}
+                          max={2500}
+                          
+                          defaultValue={amount}
+                          className="mb-5"
+                          step={500}
+                          value={amount} 
+                          onChange={handleSliderChange}
+          
+                 />
                           </FormGroup>
                             </Col>
                           </Row>

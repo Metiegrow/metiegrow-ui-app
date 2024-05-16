@@ -81,6 +81,13 @@ const data = [
     // ]
   },
   {
+    id: "Alumni",
+    icon: "iconsminds-student-hat",
+    label: "Alumni",
+    to: `${adminRoot}/alumni/alumnilists`,
+  
+  },
+  {
     id: "myapplications",
     icon: "iconsminds-folder",
     label: "menu.myapplications",

@@ -233,6 +233,11 @@ import(
   /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCallCompletedPage'
 ))
 
+const ViewAlumniLists=React.lazy(()=>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Alumni/AlumniLists'
+  ))
+
 const App = ({ match }) => {
 const statusRes = getStatusRes();
 const roleRes = getRoleRes();
@@ -486,6 +491,15 @@ const roleRes = getRoleRes();
               render={(props) => <ViewCallCompleted {...props} />}
             />
             
+            { /* alumnini networking routes start */ }
+
+            <Route
+              path={`${match.url}/alumni/alumnilists`}
+              render={(props) => <ViewAlumniLists {...props} />}
+            />
+
+            { /* alumin networking routes ends */ }
+
           
             {/* <Route
               path={`${match.url}/jobs`}

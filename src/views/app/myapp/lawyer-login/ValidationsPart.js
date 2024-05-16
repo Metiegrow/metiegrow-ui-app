@@ -149,7 +149,7 @@ const validateFirstName = (value) => {
   function validatePackageDescription(value) {
     let error;
     if (!value) {
-      error = "Please provide a about";
+      error = "Please provide a service descripiton";
     } else if (value.length < 2) {
         error = "Must be longer than 2 characters";
       }

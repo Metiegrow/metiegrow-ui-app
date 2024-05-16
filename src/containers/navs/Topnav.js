@@ -248,7 +248,7 @@ if (roleRes.includes("MENTOR")) {
           <MobileMenuIcon />
         </NavLink>
 
-        <div className="d-flex align-items-center justify-content-between w-100">
+        {/* <div className="d-flex align-items-center justify-content-between w-100">
           <NavLink to="" className="">
             <span className="">Home</span>
           </NavLink>
@@ -258,7 +258,7 @@ if (roleRes.includes("MENTOR")) {
           <NavLink to="">
             <span className="">Services</span>
           </NavLink>
-          {/* shows only if logged in */}
+          
           <NavLink to="">
             <span className="">Sign up / Login</span>
           </NavLink>
@@ -268,11 +268,12 @@ if (roleRes.includes("MENTOR")) {
           <NavLink to="">
             <span className="">My File</span>
           </NavLink>
-        </div>
+        </div> */}
       </div>
 
       <NavLink className="navbar-logo" to={adminRoot}>
         <span className="logo d-none d-xs-block" />
+        
         <span className="logo-mobile d-block d-xs-none" />
       </NavLink>
 
