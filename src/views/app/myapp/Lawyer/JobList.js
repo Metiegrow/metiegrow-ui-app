@@ -2,10 +2,10 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
-import { Card,CardBody ,NavLink} from 'reactstrap';
+import { Button, Card,CardBody ,NavLink} from 'reactstrap';
 
 const JobList = () => {
-    const [joblist,setJobList]=useState("");
+    const [joblist,setJobList]=useState('');
     // const url=`${baseUrl}/api/lawyer/job/client`;
 
     // Backend url 
@@ -25,21 +25,23 @@ const JobList = () => {
         LawyerJobsList();
        
     
-    },[])
+    },[url])
+    console.log('Job list state:', joblist);
   return (
     <div>
       
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <h1>My Jobs</h1>
-      {joblist&&joblist.map((j)=>{
-      // Convert timestamp to Date object
+      
+       {/* {joblist&&joblist.map((j)=>{
+      
     const createdAtDate = new Date(j.createdAt);
-    // Format date and time
+  
     const formattedDate = `${createdAtDate.toLocaleDateString()} ${createdAtDate.toLocaleTimeString()}`;
 
-    // Convert modifiedAt timestamp to Date object
+    
     const modifiedAtDate = new Date(j.modifiedAt);
-    // Format modifiedAt date and time
+    
     const formattedModifiedAt = `${modifiedAtDate.toLocaleDateString()} ${modifiedAtDate.toLocaleTimeString()}`;
         return(
             <Card key={j.id} className='my-2'>
@@ -61,7 +63,51 @@ const JobList = () => {
        </Card>
         )
       
-      })}
+      })
+       } */}
+
+       {joblist&&joblist.length > 0 ? (
+        joblist.map((j)=>{
+      
+      const createdAtDate = new Date(j.createdAt);
+    
+      const formattedDate = `${createdAtDate.toLocaleDateString()} ${createdAtDate.toLocaleTimeString()}`;
+  
+      
+      const modifiedAtDate = new Date(j.modifiedAt);
+      
+      const formattedModifiedAt = `${modifiedAtDate.toLocaleDateString()} ${modifiedAtDate.toLocaleTimeString()}`;
+          return(
+              <Card key={j.id} className='my-2'>
+          <NavLink href={`/app/jobsdetails/${j.id}`}>
+          <CardBody className=''>
+          <div className='d-flex justify-content-between'>
+          <h2 className='text-primary'>{j.lawyerName}</h2>
+              <h4 className=''>Job Name: <span className='font-weight-bold'>{j.jobName}</span></h4>
+          </div>
+          <div className='d-flex justify-content-between'>
+          
+          <h4> Created at: <span className='font-weight-bold'>{formattedDate}</span></h4>
+              <h4>Modified at: <span className='font-weight-bold'>{formattedModifiedAt}</span></h4>
+          </div>
+              
+          </CardBody>
+          </NavLink>
+         
+         </Card>
+          )
+        
+        })
+         
+       ):(
+        <div>
+        <h1>nooo jobs</h1>
+        <Button>create</Button>
+        </div>
+       
+       )
+       }
+     
       </Colxx>
     </div>
   );

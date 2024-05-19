@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-
-import { Button, Card, CardBody, CardText, NavLink, Row } from 'reactstrap';
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { Button, Card, CardBody, CardText, Col, NavLink, Row } from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import Rating from 'components/common/Rating';
 import MentorDropDown from '../mentorship/MentorDropDown';
+
 
 
 const UserCard = () => {
@@ -67,24 +68,46 @@ const UserCard = () => {
       <Row>
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
             <Card className=" flex-row listing-card-container my-3 p-3 flex-wrap flex-sm-nowrap flex-md-nowrap flex-lg-nowrap flex-xl-nowrap" >
-           
+              <Col md={5} lg={5}>
               <div className='d-flex justify-content-between flex-column  w-100'>
-            
-                <img
-                      className="card-img-left"
-                      // src={users.image}
-                      src={`${baseUrl}/${users.imageUrl}`} 
-                      alt="Card"
-                    />
-                    <div className='my-5  '>
-                        <CardText className='text-primary '>
-                            <span className='text-xlarge font-weight-semibold'>${users.price}</span>/year
-                        </CardText>
-                    
-                    </div> 
-              </div>
              
-              <div className=" d-flex align-items-center">
+             {/* <img
+                   className="card-img-left"
+                   
+                   src={`${baseUrl}/${users.imageUrl}`} 
+                   alt="Card"
+                 /> */}
+                 {users.imageUrl === null ? (
+                  <div className=" w-full h-full mx-auto my-5" style={{height:"100%"}}>
+                  <ThumbnailLetters
+                     rounded
+                     text={users.firstName}
+                     className='text-xlarge my-auto '
+                     style={{height:"100%",width:"100%"}}
+
+                   />
+                  </div>
+                   
+                 ) : (
+                   <img
+                     className="card-img-left"
+                     src={`${baseUrl}/${users.imageUrl}`} 
+                     alt="Card"
+                   />
+                 )}
+                 {/* <img src="/assets/img/profiles/1.jpg" alt='card' className='card-img-left'/> */}
+
+                 <div className='my-5  '>
+                     <CardText className='text-primary '>
+                         <span className='text-xlarge font-weight-semibold'>$200</span>/year
+                     </CardText>
+                 
+                 </div> 
+           </div>
+              </Col>
+            
+             <Col md={6} lg={6}>
+             <div className=" d-flex align-items-center">
               <CardBody className=" " >
                   <div className="min-width-zero">
                     
@@ -141,6 +164,8 @@ const UserCard = () => {
                 </CardBody>
      
               </div>
+             </Col>
+              
          
     
             </Card>

@@ -208,6 +208,10 @@ const ViewLawyerProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerProfile'
 ))
+const ViewLawyerPayment=React.lazy(()=>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Lawyer/PaymentWizard'
+  ))
 function getStatusRes() {
   return localStorage.getItem('status');
 }
@@ -485,6 +489,10 @@ const roleRes = getRoleRes();
              <Route
               path={`${match.url}/lawyerprofile/:pid`}
               render={(props) => <ViewLawyerProfile {...props} />}
+            />
+             <Route
+              path={`${match.url}/lawyer/payment`}
+              render={(props) => <ViewLawyerPayment {...props} />}
             />
              <Route
               path={`${match.url}/callcompleted/:id/:sid`}

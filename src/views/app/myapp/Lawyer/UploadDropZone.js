@@ -2,12 +2,16 @@
 import React, { Component } from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import 'dropzone/dist/min/dropzone.min.css';
+import { baseUrl } from 'constants/defaultValues';
 
 const ReactDOMServer = require('react-dom/server');
 
 const dropzoneComponentConfig = {
-  postUrl: 'https://httpbin.org/post',
+  // postUrl: 'https://httpbin.org/post',
+  postUrl: `${baseUrl}/api/lawyer/job/1/document/1`,
+ 
 };
+
 const dropzoneConfig = {
   thumbnailHeight: 160,
   maxFilesize: 2,
@@ -55,6 +59,19 @@ const dropzoneConfig = {
 };
 
 export default class DropzoneExample extends Component {
+ 
+
+  handleSending = (file, xhr, formData) => {
+    const { jobId, stepNo } = this.props;
+
+    const postUrl1 = `${baseUrl}/api/lawyer/job/${jobId}/document/${stepNo}`;
+    this.myDropzone.options.url = postUrl1;
+
+    formData.append('name', file.name);  
+    formData.append('type', file.type);  
+    formData.append('data', file); 
+  };
+
   clear() {
     this.myDropzone.removeAllFiles(true);
   }
@@ -67,6 +84,7 @@ export default class DropzoneExample extends Component {
         eventHandlers={{
           init: (dropzone) => {
             this.myDropzone = dropzone;
+            dropzone.on('sending', this.handleSending); 
           },
         }}
       />
