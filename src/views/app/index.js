@@ -115,6 +115,11 @@ const ViewMylogin = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/my-login/Mylogin'
   )
 );
+const ViewLawyerlogin = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/lawyer-login/LawyerLogin'
+  )
+);
 const ViewMyProfile = React.lazy(() =>
   import(
     /* webpackChunkName: "views-app" */ './myapp/my-profile/MyProfile'
@@ -203,6 +208,10 @@ const ViewLawyerProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerProfile'
 ))
+const ViewLawyerPayment=React.lazy(()=>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Lawyer/PaymentWizard'
+  ))
 function getStatusRes() {
   return localStorage.getItem('status');
 }
@@ -235,6 +244,11 @@ const ViewLawyerMyProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerMyProfile'
 ))
+
+const ViewAlumniLists=React.lazy(()=>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Alumni/AlumniLists'
+  ))
 
 const App = ({ match }) => {
 const statusRes = getStatusRes();
@@ -269,7 +283,7 @@ const roleRes = getRoleRes();
           } else if (roleRes.includes("MENTEE")) {
             redirectTo = `${match.url}/mentor`;
           } else if (roleRes.includes("LAWYER")) {
-            redirectTo = `${match.url}/profile`;
+            redirectTo = `${match.url}/lawyer/apply`;
           } else {
             redirectTo = `${match.url}/profile`; 
           }
@@ -321,6 +335,10 @@ const roleRes = getRoleRes();
             <Route
               path={`${match.url}/mentor/apply`}
               render={(props) => <ViewMylogin {...props} />}
+            />
+             <Route
+              path={`${match.url}/lawyer/apply`}
+              render={(props) => <ViewLawyerlogin {...props} />}
             />
             <Route
               path={`${match.url}/mentor`}
@@ -453,11 +471,15 @@ const roleRes = getRoleRes();
             />
            
            <Route
-              path={`${match.url}/lawyer`}
+              path={`${match.url}/lawyerquestions`}
               render={(props) => <ViewLawyer {...props} />}
             />
-            <Route
+            {/* <Route
               path={`${match.url}/usercard`}
+              render={(props) => <ViewUserCard {...props} />}
+            /> */}
+            <Route
+              path={`${match.url}/lawyer/list`}
               render={(props) => <ViewUserCard {...props} />}
             />
              <Route
@@ -477,6 +499,10 @@ const roleRes = getRoleRes();
               render={(props) => <ViewLawyerProfile {...props} />}
             />
              <Route
+              path={`${match.url}/lawyer/payment`}
+              render={(props) => <ViewLawyerPayment {...props} />}
+            />
+             <Route
               path={`${match.url}/callcompleted/:id/:sid`}
               render={(props) => <ViewCallCompleted {...props} />}
             />
@@ -489,6 +515,15 @@ const roleRes = getRoleRes();
               render={(props) => <ViewLawyerMyProfile {...props} />}
             />
             
+            { /* alumnini networking routes start */ }
+
+            <Route
+              path={`${match.url}/alumni/alumnilists`}
+              render={(props) => <ViewAlumniLists {...props} />}
+            />
+
+            { /* alumin networking routes ends */ }
+
           
             {/* <Route
               path={`${match.url}/jobs`}

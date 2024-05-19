@@ -321,7 +321,7 @@ const handleChatClick = () =>{
                         setActiveFirstTab(pack.id);
                       }}
                     >
-                     <h6>{pack.title}</h6> 
+                     <h6>{pack.serviceName}</h6> 
                     </NavLink>
                   </NavItem>
                 ))}
@@ -336,7 +336,8 @@ const handleChatClick = () =>{
                       <CardBody>
                         <CardTitle className="mb-4">
                           <h2>₹ {pack.amount}</h2>
-                          <h5>{pack.title}</h5>
+                          <h5>{pack.serviceName}</h5>
+                          <p className='text-muted'>{pack.description}</p>
                           <Button className='mt-4 text-one' size='lg' outline color='primary' onClick={handleChatClick}>Contact</Button>
                         </CardTitle>
                       </CardBody>

@@ -4,18 +4,17 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
 import { Button,   Card,   CardBody,    Col,   NavLink,Row } from 'reactstrap';
-import {useParams} from "react-router-dom";
+import {useParams,useHistory} from "react-router-dom";
 // import data from 'data/profileStatuses';
-// import ThumbnailLetters from 'components/cards/ThumbnailLetters';
+import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import LawyerTabCard from './LawyerTabCard';
 import ReviewsComponent from '../Reviews/ReviewsComponent';
 
 
 
-
-
 const LawyerProfile = () => {
   const {pid}=useParams();
+  const history = useHistory();
     const[lawyerprofile,setLawyerProfile]=useState('');
     // const[reviews,setReviews]=useState('');
     const [packages,setPackages]=useState('');
@@ -24,6 +23,19 @@ const LawyerProfile = () => {
     const toggleShowAll = () => {
       setShowAll(!showAll);
     };
+
+
+    const handlePurchase = (pack) => {
+      history.push(`/app/lawyer/payment`, {
+        firstName: lawyerprofile.firstName,
+        lastName: lawyerprofile.lastName,
+        serviceName: pack.serviceName,
+        amount:pack.amount,
+        packageId:pack.id,
+        lawyerId:lawyerprofile.id
+      });
+    };
+
     // const url=`${baseUrl}/lawyerProfile/${pid}`;
 
     // backend lawyerprofile url 
@@ -84,27 +96,9 @@ const LawyerProfile = () => {
     // const status=5;
 
 
-//     useEffect(() => {
-//       const handleScroll = () => {
-//           const fixedPositionStart = 100; // The scroll position (in pixels) to fix the tab
-//           setIsFixed(window.scrollY > fixedPositionStart);
-//       };
 
-//       window.addEventListener('scroll', handleScroll);
-//       return () => {
-//           window.removeEventListener('scroll', handleScroll);
-//       };
-//   }, []);
 
-//   const fixedTabCardStyle = {
-//     position: 'fixed',
-//     top: '20%',  // Adjust this value based on your needs
-//     right: '20px', // Adjust the distance from the right edge
-//     width: '500px', // Adjust the width as needed
-//     zIndex: 1000 // Ensure it sits above other content
-// };
-
-    const remainingSkillsCount = lawyerprofile.services ? lawyerprofile.services.length - 3 : 0;
+    const remainingSkillsCount = lawyerprofile.topic ? lawyerprofile.topic.length - 3 : 0;
 
   return (
     <div>
@@ -118,18 +112,33 @@ const LawyerProfile = () => {
              rounded-circle img-thumbnail border    ' alt="" /> */}
              {/* <img src={lawyerprofile.image} className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
-             <img 
+            
+              {lawyerprofile.imageUrl === null ? (
+                  <div className="">
+                  <ThumbnailLetters
+                     rounded
+                      small
+                     text={lawyerprofile.firstName}
+                     className="border border-1 mx-2" 
+                   />
+                  
+                     
+                  </div>
+                  
+                 ) : (
+                  <img 
               // src={lawyerprofile.image} 
               src={`${baseUrl}/${lawyerprofile.imageUrl}`} 
               className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
               alt="" 
             />
+                 )}
        
             </div>
             <div>
             <NavLink  >
               <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
-                <span className='font-weight-semibold text-primary text-one'>Connect</span>
+                <span className='font-weight-semibold text-primary text-one'>Contact</span>
                 
               </Button>
               </NavLink>
@@ -165,15 +174,15 @@ const LawyerProfile = () => {
            
             <div className='d-flex align-items-center flex-wrap'>
             <div className='d-flex'>
-            {lawyerprofile.services && lawyerprofile.services.slice(0, 3).map((skill) => (
-            <div key={skill}>
+            {lawyerprofile.topic && lawyerprofile.topic.slice(0, 3).map((skill) => (
+            <div key={skill.id}>
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
-                {skill.serviceName}
+                {skill.topicName}
               </Button>
             </div>
           ))}
         </div>
-        {lawyerprofile.services && lawyerprofile.services.length > 3 && (
+        {lawyerprofile.topic && lawyerprofile.topic.length > 3 && (
           <div className=''>
             <Button color="link" className='text-one font-weight-bold ' style={{textDecoration:"underline"}} onClick={toggleShowAll}>
               + {remainingSkillsCount}more
@@ -187,7 +196,7 @@ const LawyerProfile = () => {
            
           </div>
           <div   className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none  ' >
-        <LawyerTabCard  />
+        <LawyerTabCard pid={pid} />
     </div>
         
           <div className='mt-4' >
@@ -198,10 +207,10 @@ const LawyerProfile = () => {
        
             <h1>Full Topics</h1>
             <div className='d-flex flex-wrap '>
-              {lawyerprofile.services && lawyerprofile.services.map((skill) => (
+              {lawyerprofile.topic && lawyerprofile.topic.map((skill) => (
                 <div key={skill}>
                   <Button color="light" className="mb-2 font-weight-semibold mx-2" size='sm'>
-                    {skill.serviceName}
+                    {skill.topicName}
                   </Button>
                 </div>
               ))}
@@ -219,13 +228,14 @@ const LawyerProfile = () => {
             <div className='price-top-part'>
               <i className='' />
               <h2 className='mb-0 font-weight-semibold text-primary text-large mb-4'>
-                {pack.title}
+                {pack.serviceName}
               </h2>
+              {/* <p className=''>{pack.headline}</p> */}
               <p className='text-large mb-2 text-default'>₹ {pack.amount}</p>
               <p className='text-muted text-small'>{pack.description}</p>
               <div className=''>
-                <NavLink>
-                  <Button color='primary'>Purchase</Button>
+                <NavLink href='/app/lawyer/payment'>
+                  <Button color='primary' onClick={() => handlePurchase(pack)}>Purchase</Button>
                 </NavLink>
               </div>
             </div>
@@ -233,146 +243,21 @@ const LawyerProfile = () => {
         </Card>
       </Col>
     ))}
-    {/* <Col lg={6}  key={packages.id} className='my-2'>
-        <Card className='pt-5 pb-5 d-flex'>
-          <CardBody className='pt-5 pb-5'>
-            <div className='price-top-part'>
-              <i className='' />
-              <h2 className='mb-0 font-weight-semibold text-primary text-large mb-4'>
-                {packages.title}
-              </h2>
-              <p className='text-large mb-2 text-default'>₹ {packages.amount}</p>
-              <p className='text-muted text-small'>{packages.description}</p>
-              <div className=''>
-                <NavLink>
-                  <Button color='primary'>Purchase</Button>
-                </NavLink>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-      </Col> */}
+  
   </Row>
 </Colxx>
       
-              {/* <Colxx className='mt-4' lg={12}>    
-                <h3 className='font-weight-bold'>Reviews</h3>
-                <div>
-            
-            
-              <ReviewsComponent  category="law"
-             revieweeId ={pid}/>
-              </div>
              
-              
-              
-              
-
-            </Colxx> */}
           
             <Colxx className="mt-4" lg={12}>
             <hr/>
             
-          <div className=''>
-         
-           
-               {/* {reviews&&reviews.map((rv)=>{
-                <hr/>
-               return (
-                 
-                  <div className='d-flex  justify-content-start my-4' key={rv.reviewerId}>
-               
-            <div>
           
-            <NavLink  className="">
-                <ThumbnailLetters
-                  rounded
-                  small
-                  text={rv.name}
-                  className=""
-                />
-              </NavLink>
-            </div>
-             <div className='ml-2'>
-             <h6 className='font-weight-bold'>{rv.name}</h6>
-              <h6>{rv.country}</h6>
-              
-              <div className='d-flex align-items-center my-2'>
-              <Rating total={5} rating={rv.star} interactive={false} />
-              <p className="text-small  mb-0 d-inline-block ml-2">{rv.star}</p>
-              </div>
-              <p>{rv.feedBack}</p>
-              <div className='d-flex font-weight-medium' >
-                    <p>Helpful?</p>
-                    <div className='d-flex '>
-                    <span className=' ml-2'><i className='simple-icon-like mr-2'/>yes</span>
-                     <span className=' ml-2'><i className='simple-icon-dislike mr-2'/>no</span>
-                    </div>
-                    <hr />
-                    </div>
-             </div>
-             
-           
-          
-            </div>
-          
-           
-               )
-               
-            
-               })} */}
-               {/* <div className='d-flex  justify-content-start my-4' key={reviews.reviewerId}>
-               
-               <div>
-             
-               <NavLink  className="">
-                   <ThumbnailLetters
-                     rounded
-                     small
-                     text={reviews.imgText}
-                     className=""
-                   />
-                   {reviews && <ThumbnailLetters rounded small text={reviews.name} />}
-
-                 </NavLink>
-               </div>
-                <div className='ml-2'>
-                <h6 className='font-weight-bold'>{reviews.name}</h6>
-                 <h6>{reviews.country}</h6>
-                 
-                 <div className='d-flex align-items-center my-2'>
-                 <Rating total={5} rating={reviews.star} interactive={false} />
-                 <p className="text-small  mb-0 d-inline-block ml-2">{reviews.star}</p>
-                 </div>
-                 <p>{reviews.feedBack}</p>
-                 <div className='d-flex font-weight-medium' >
-                       <p>Helpful?</p>
-                       <div className='d-flex '>
-                       <span className=' ml-2'><i className='simple-icon-like mr-2'/>yes</span>
-                        <span className=' ml-2'><i className='simple-icon-dislike mr-2'/>no</span>
-                       </div>
-                       <hr />
-                       </div>
-                </div>
-                
-              
-             
-               </div> */}
-           
-          </div>
             
             </Colxx>
       </Colxx>
       <Colxx className='mt-4' lg={6} xl={6} md={12}> 
-      {/* {isFixed ? (
-    <div style={fixedTabCardStyle}>
-        <LawyerTabCard />
-    </div>
-) : (
-    <div style={{width:'500px',position:'fixed',top:'40%',right:'20px'}}>
-        <LawyerTabCard />
-    </div>
-)} */}
+  
 <div  style={{width:"40%",position:'fixed',top:'40%',right:'20px'}} className='mt-2 d-lg-block d-xl-block d-none'>
         <LawyerTabCard pid={pid}/>
     </div>
