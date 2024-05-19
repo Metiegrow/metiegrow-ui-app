@@ -19,111 +19,50 @@ import { baseUrl } from "constants/defaultValues";
 
 import { Colxx } from "components/common/CustomBootstrap";
 
-const MyProfile = () => {
+const LawyerMyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [isEditingButton, setIsEditingButton] = useState(false);
-  const [image, setImage] = useState(null)
-  const [firstName, setFirstName] = useState("");
-  const [jobTitle, setJobTitle] = useState("")
-  const [experience, setExperience] = useState("");
-  const [location, setLocation] = useState("");
-  // const [about, setAbout] = useState(
-  //   "I have more than a decade experience in Software Engineering (and related practices including DevOps) and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
-  // );
-  const [newInputSkill, setNewInputSkill] = useState("");
+  const [newInputLanguages, setNewInputLanguages] = useState("");
   const [newInputTopics, setNewInputTopics] = useState("");
-  const [skills, setSkills] = useState([]);
-  const [topics, setTopics] = useState([]);
-  // const [userId, setUserId] = useState("");
-  const [star, setStar] = useState("");
-  // const [lastSceen, setLastseen] = useState("");
-  // const [ratings, setRatings] = useState("")
+  const [imageUrl, setImageUrl] = useState(null);
+  const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  const [company, setCompany] = useState("");
-  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState("");
+  const [languages, setLanguages] = useState([]);
+  const [topic, setTopic] = useState([]);
+  const [ratings, setRatings] = useState("");
   const [bio, setBio] = useState("");
-  const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [twitterHandle, setTwitterHandle] = useState("");
-  const [website, setWebsite] = useState("");
-  const [introVideo, setIntroVideo] = useState("");
-  const [featuredArticle, setFeaturedArticle] = useState("");
-  const [reasonForMentor, setReasonForMentor] = useState("");
-  const [achievement, setAchievement] = useState("");
-  const [reviews, setReviews] = useState("");
-  // const [price, setPrice] =useState("");
+  const [star, setStar] = useState("");
+  const [about, setAbout] = useState("");
 
- // const Id = 1;
+  // console.log("topic", topic)
 
-  // const url = `${baseUrl}/user`;
-  // const url = `${baseUrl}/api/mentor/11/details/profile`;
-  // const url1 = `${baseUrl}/mentor/profile${userId}`;
- // const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
-  // const endUrl = `${baseUrl}/myprofile`;
-  const endUrl = `${baseUrl}/api/mentor/myprofile`;
-  const inputUrl = `${baseUrl}/inputs`
-
+  const endUrl = `${baseUrl}/api/lawyer/myprofile`;
+  //   const inputUrl = `${baseUrl}/inputs`
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
       try {
         const response = await axios.get(endUrl);
         const userData = response.data;
-        // console.log("userData:", userData);
+        // const topicData = response.data.topic
+        // console.log("topic", topicData)
+
+        console.log("userData:", userData.topic.data);
         if (userData) {
-          setImage(userData.imageUrl)
+          setImageUrl(userData.imageUrl);
           setFirstName(userData.firstName);
-          // setJobRole(userData.jobRole);
-          setJobTitle(userData.jobTitle);
-          setCompany(userData.company);
-          setLocation(userData.location);
-          // setAbout(userData.bio);
-          setSkills(userData.skills);
-          // setUserId(userData.id);
-          // setLastseen(userData.lastSeen);
-          // setRatings(userData[0].ratings)
-          // console.log(response)
-          // console.log("Username:", userData[1].jobRole);
           setLastName(userData.lastName);
-          setEmail(userData.email);
-          // setPassword(userData.password);
-          setCategory(userData.category);
+          setLocation(userData.location);
+          // setLanguages(userData.languages);
+          setLanguages(userData.languages.map((lang) => lang.language));
           setBio(userData.bio);
-          setLinkedinUrl(userData.linkedinUrl);
-          setTwitterHandle(userData.twitterHandle);
-          setWebsite(userData.website);
-          setIntroVideo(userData.introVideo);
-          setFeaturedArticle(userData.featuredArticle);
-          setReasonForMentor(userData.reasonForMentor);
-          setAchievement(userData.achievement);
-          // setReviews(userData.reviews)
-          // setPrice(userData.price)
-          // setExperience(userData.experience)
-          // setTopics(userData.topics);
-          // setStar(userData.star);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    mentorProfileDetails();
-  }, []);
-
-  useEffect(() => {
-    const mentorProfileDetails = async () => {
-      try {
-        const response = await axios.get(inputUrl);
-        const inputData = response.data;
-        console.log("inputData:", inputData);
-        if (inputData) {
-          setReviews(inputData.reviews)
-          // setPrice(inputData.price)
-          setExperience(inputData.experience)
-          setTopics(inputData.topics);
-          setStar(inputData.star);
+          setRatings(userData.ratings);
+          // setTopic(topicData);
+          setTopic(userData.topic.map((t) => t.topicName));
+          setStar(userData.star);
+          setAbout(userData.about);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -134,42 +73,28 @@ const MyProfile = () => {
   }, []);
 
   function getTokenRes() {
-    return localStorage.getItem('tokenRes');
-}
-const token = getTokenRes();
-// console.log(token);
+    return localStorage.getItem("tokenRes");
+  }
+  const token = getTokenRes();
+  // console.log(token);
 
   const updateMEntorProfile = async () => {
     try {
       const updatedData = {
-        image,
+        // imageUrl,
         firstName,
         lastName,
-        email,
-        jobTitle,
-        company,
         location,
-        category,
-        skills,
         bio,
-        // password,
-        linkedinUrl,
-        twitterHandle,
-        website,
-        introVideo,
-        featuredArticle,
-        reasonForMentor,
-        achievement,
-        // reviews,
-        // star,
-        // topics,
-        // price,
-        // experience,
+        topic,
+        languages,
+        ratings,
+        star,
+        about,
       };
 
       // console.log("Updated Data:", updatedData);
       // const response =
-
 
       await axios.put(endUrl, updatedData, {
         headers: {
@@ -185,8 +110,8 @@ const token = getTokenRes();
     }
   };
 
-  const handleAddSkill = (newSkill) => {
-    setSkills([...skills, newSkill]);
+  const handleAddLanguages = (newLanguages) => {
+    setLanguages([...languages, newLanguages]);
   };
 
   const handleEditAboutClick = () => {
@@ -227,22 +152,22 @@ const token = getTokenRes();
     setIsEditing(false);
   };
 
-  const handleRemoveSkill = (index) => {
-    setSkills(skills.filter((_, i) => i !== index));
+  const handleRemoveLanguages = (index) => {
+    setLanguages(languages.filter((_, i) => i !== index));
   };
 
   const handleAddTopics = (newTopics) => {
-    setTopics([...topics, newTopics]);
+    setTopic([...topic, newTopics]);
   };
   const handleRemoveTopics = (index) => {
-    setTopics(topics.filter((_, i) => i !== index));
+    setTopic(topic.filter((_, i) => i !== index));
   };
 
-  const handleLinkedInClick = () => {
-    if (linkedinUrl) {
-      window.open(linkedinUrl, "_blank");
-    }
-  };
+  //   const handleLinkedInClick = () => {
+  //     if (linkedinUrl) {
+  //       window.open(linkedinUrl, "_blank");
+  //     }
+  //   };
 
   const [file, setFile] = useState(null);
 
@@ -259,22 +184,24 @@ const token = getTokenRes();
           {/* <div className="h-100"> */}
           <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
             <div className=" ">
-              <img
-                src={`${baseUrl}/${image}`}
-                // "/assets/img/profiles/2.jpg"
-                className=" col-2 mx-2 w-60 rounded-circle img-thumbnail border"
-                alt=""
-              />
-              <Button
+              <div>
+                <img
+                  src={`${baseUrl}/${imageUrl}`}
+                  // "/assets/img/profiles/2.jpg"
+                  className=" col-2 mx-2 w-60 rounded-circle img-thumbnail border"
+                  alt=""
+                />
+              </div>
+              
+              {/* <Button
                 color="light"
                 className=" font-weight-semibold mx-2"
                 size="large"
               >
                 <span className="font-weight-semibold text-one">
-                  <i className="iconsminds-thunder text-primary" /> Quick
-                  Responder
+                  <i className="iconsminds-thunder text-primary" />
                 </span>
-              </Button>
+              </Button> */}
             </div>
             <div>
               <NavLink>
@@ -282,7 +209,7 @@ const token = getTokenRes();
                   color="light"
                   className="font-weight-semibold mx-2"
                   size="large"
-                  onClick={handleLinkedInClick}
+                  //   onClick={handleLinkedInClick}
                 >
                   <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
                 </Button>
@@ -341,46 +268,10 @@ const token = getTokenRes();
                       </Row>
                       <br />
                     </>
-                    <>
-                      <Label for="jobtitle">
-                        <h4>Job Title</h4>
-                      </Label>
-                      <Input
-                        type="text"
-                        id="jobtitle"
-                        value={jobTitle}
-                        onChange={(e) =>setJobTitle(e.target.value)}
-                      />
-                      <br />
-                    </>
-                    <>
-                      <Label for="company">
-                        <h4>Company</h4>
-                      </Label>
-                      <Input
-                        type="text"
-                        id="company"
-                        value={company}
-                        onChange={(e) => setCompany(e.target.value)}
-                      />
-                      <br />
-                    </>
-                    <>
-                      <Label for="experience" className=" text-dark">
-                        <h4>Experience</h4>
-                      </Label>
-                      <Input
-                        type="textarea"
-                        id="experience"
-                        value={experience}
-                        rows="3"
-                        onChange={(e) => setExperience(e.target.value)}
-                      />
-                      <br />
-                    </>
+
                     <>
                       <Label for="location" className="font-weight-medium">
-                        <h4>Country</h4>
+                        <h4>Location</h4>
                       </Label>
                       <Input
                         type="text"
@@ -390,30 +281,13 @@ const token = getTokenRes();
                       />
                       <br />
                     </>
-                    <>
-                      <Label for="email" className="font-weight-medium">
-                        <h4>Email</h4>
-                      </Label>
-                      <Input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                      <br />
-                    </>
                   </div>
                 ) : (
                   <>
                     <h1 className="font-weight-semibold text-large">
                       Name: {firstName} {lastName}
                     </h1>
-                    <h3 className="font-weight-semibold">
-                      Job Title: {jobTitle} - {company}
-                    </h3>
-                    <p className="text-one font-weight-medium text-primary">
-                      Experience: {experience}
-                    </p>
+
                     <h5 className="font-weight-medium">
                       <i className="simple-icon-location-pin text-primary" />
 
@@ -421,7 +295,7 @@ const token = getTokenRes();
                     </h5>
                     <h6 className="">
                       <i className="simple-icon-star text-primary " />
-                      <span className="ml-2">{`${star} (${reviews} reviews)`}</span>
+                      <span className="ml-2">{`${star} (${ratings} ratings)`}</span>
                     </h6>
                     <h6 className="">
                       <i className="simple-icon-clock text-primary" />
@@ -458,31 +332,31 @@ const token = getTokenRes();
             </Col>
 
             <Col lg="6" md="12" className="mt-4">
-              <h2 className="mx-2">Skills</h2>
+              <h2 className="mx-2">Languages</h2>
               {isEditingButton ? (
                 <>
-                  {skills.map((skill, index) => (
+                  {languages.map((language, index) => (
                     <Button
-                      key={skill}
+                      key={language}
                       color="light"
                       className="mb-2 font-weight-semibold mx-2"
                       size="xs"
-                      onClick={() => handleRemoveSkill(index)}
+                      onClick={() => handleRemoveLanguages(index)}
                     >
-                      {skill} <i className="iconsminds-close" />
+                      {language} <i className="iconsminds-close" />
                     </Button>
                   ))}
 
                   <InputGroup className="mb-3">
                     <Input
                       type="text"
-                      placeholder="New skill"
-                      value={newInputSkill}
-                      onChange={(e) => setNewInputSkill(e.target.value)}
+                      placeholder="New language"
+                      value={newInputLanguages}
+                      onChange={(e) => setNewInputLanguages(e.target.value)}
                       onKeyDown={(event) => {
                         if (event.key === "Enter") {
-                          handleAddSkill(newInputSkill);
-                          setNewInputSkill("");
+                          handleAddLanguages(newInputLanguages);
+                          setNewInputLanguages("");
                         }
                       }}
                     />
@@ -491,25 +365,25 @@ const token = getTokenRes();
                         outline
                         color="primary"
                         onClick={() => {
-                          handleAddSkill(newInputSkill);
-                          setNewInputSkill("");
+                          handleAddLanguages(newInputLanguages);
+                          setNewInputLanguages("");
                         }}
                       >
-                        Add Skill
+                        Add Language
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
                 </>
               ) : (
-                skills.map((skill) => (
+                languages.map((language) => (
                   <Button
-                    key={skill}
+                    key={language}
                     color="light"
                     className="mb-2 font-weight-semibold mx-2"
                     size="xs"
                     // onClick={() => handleRemoveSkill(index)}
                   >
-                    {skill}
+                    {language}
                   </Button>
                 ))
               )}
@@ -519,7 +393,7 @@ const token = getTokenRes();
 
                 {isEditingButton ? (
                   <>
-                    {topics.map((newTopics, index) => (
+                    {topic.map((newTopics, index) => (
                       <Button
                         key={newTopics}
                         color="light"
@@ -558,7 +432,7 @@ const token = getTokenRes();
                     </InputGroup>
                   </>
                 ) : (
-                  topics.map((newTopics) => (
+                  topic.map((newTopics) => (
                     <Button
                       key={newTopics}
                       color="light"
@@ -620,12 +494,23 @@ const token = getTokenRes();
                     <Input
                       type="textarea"
                       id="about"
+                      value={about}
+                      onChange={(e) => setAbout(e.target.value)}
+                      className="form-control"
+                      rows="5"
+                    />
+                    <Label for="about" className="font-weight-medium">
+                      <h4>Bio</h4>
+                    </Label>
+                    <Input
+                      type="textarea"
+                      id="bio"
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                       className="form-control"
                       rows="5"
                     />
-                    <br />
+                    {/* <br />
                     <Label for="linkedin" className="font-weight-medium">
                       <h4>LinkedIn URL</h4>
                     </Label>
@@ -635,8 +520,8 @@ const token = getTokenRes();
                       value={linkedinUrl}
                       onChange={(e) => setLinkedinUrl(e.target.value)}
                       className="form-control"
-                    />
-                    <br />
+                    /> */}
+                    {/* <br />
                     <Label for="twitter" className="font-weight-medium">
                       <h4>Twitter URL</h4>
                     </Label>
@@ -646,8 +531,8 @@ const token = getTokenRes();
                       value={twitterHandle}
                       onChange={(e) => setTwitterHandle(e.target.value)}
                     />
-                    <br />
-                    <Label for="personalWebsite" className="font-weight-medium">
+                    <br /> */}
+                    {/* <Label for="personalWebsite" className="font-weight-medium">
                       <h4>Personal Website URL</h4>
                     </Label>
                     <Input
@@ -655,7 +540,7 @@ const token = getTokenRes();
                       id="personalWebsite"
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
-                    />
+                    /> */}
                     <br />
                   </div>
                 ) : (
@@ -707,4 +592,4 @@ const token = getTokenRes();
   );
 };
 
-export default MyProfile;
+export default LawyerMyProfile;

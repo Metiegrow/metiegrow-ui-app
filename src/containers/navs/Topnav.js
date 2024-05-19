@@ -120,6 +120,17 @@ if (roleRes.includes("MENTOR")) {
   session = `${adminRoot}/sessionlists`; 
 }
 
+let myProfile;
+if (roleRes.includes("MENTOR")) {
+  myProfile = `${adminRoot}/myprofile`;
+}else if (roleRes.includes("LAWYER")) {
+  myProfile = `${adminRoot}/lawyermyprofile`; 
+}else {
+  myProfile = `${adminRoot}/myprofile`; 
+}
+
+
+
   const handleMyProfileClick = () => {
     history.push(`${adminRoot}/myprofile`);
   };
@@ -321,7 +332,7 @@ if (roleRes.includes("MENTOR")) {
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>
-              <NavLink to={`${adminRoot}/myprofile`}>
+              <NavLink to={myProfile}>
                 <DropdownItem onClick={() => handleMyProfileClick()}>
                 <i className="simple-icon-user" />  My Profile
                 </DropdownItem>

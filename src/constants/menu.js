@@ -126,7 +126,13 @@ const data = [
     id: "Chat",
     icon: "simple-icon-bubbles",
     label: "Chat",
-    to: `${adminRoot}/chat`,
+    to: `${adminRoot}/chat/10`,
+  },
+  {
+    id: "classroom",
+    icon: "simple-icon-bubbles",
+    label: "Class room",
+    to: `${adminRoot}/classroom`,
   },
 ];
 export default data;

@@ -11,10 +11,8 @@
     ]
   },
   "signIn": {
-
-    "email": "sivanesh@gmail.com",
-    "password": "Sivanesh@1996"
-
+    "email": "anish@gmail.com",
+    "password": "Anish@1996"
   },
   "StudentPersonalInfo": [
     {
@@ -812,8 +810,6 @@
       "clientName": "david warner",
       "createdAt": 1712811600000,
       "modifiedAt": 1713771670282
-<<<<<<< HEAD
-=======
     }
   ],
   "clientJobList": [
@@ -824,7 +820,6 @@
       "lawyerName": "sunil K",
       "createdAt": 1713946788462,
       "modifiedAt": 1713946788462
->>>>>>> 373d7056449d21a4f1115207ad3d58c5a7ddfe8d
     }
   ],
   "lawyerJobsDetails": [
