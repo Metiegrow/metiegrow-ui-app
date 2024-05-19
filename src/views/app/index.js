@@ -283,7 +283,11 @@ const roleRes = getRoleRes();
           } else if (roleRes.includes("MENTEE")) {
             redirectTo = `${match.url}/mentor`;
           } else if (roleRes.includes("LAWYER")) {
-            redirectTo = `${match.url}/lawyer/apply`;
+            if (statusRes === '0') {
+              redirectTo = `${match.url}/lawyer/apply`;
+            } else  {
+              redirectTo = `${match.url}/profile`;
+            }
           } else {
             redirectTo = `${match.url}/profile`; 
           }
