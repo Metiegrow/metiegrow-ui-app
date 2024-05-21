@@ -12,6 +12,7 @@ import {
   InputGroup,
   InputGroupAddon,
   Col,
+  Form,
 } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
@@ -243,6 +244,12 @@ const token = getTokenRes();
     }
   };
 
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
   return (
     <div className="mentor-profile">
       {/* <div className=""> */}
@@ -282,6 +289,26 @@ const token = getTokenRes();
               </NavLink>
             </div>
           </div>
+          {isEditing &&
+              <div className="mt-2">
+                <Button
+                  className="default"
+                  color="light"
+                  onClick={() => document.getElementById("file-upload").click()}
+                >
+                  Change profile pic <i className="iconsminds-upload text-primary" />
+                </Button>
+                <Form>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    className="form-control d-none"
+                    onChange={handleFileChange}
+                  />
+                </Form>
+                {file && <p>Selected file: {file.name}</p>}
+              </div>
+              }
           <Row>
             <Col lg="6" md="12" className="mt-4">
               <div>

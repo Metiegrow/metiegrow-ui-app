@@ -236,6 +236,14 @@ const ViewCallCompleted=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCallCompletedPage'
 ))
+const ViewClassRoom=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Classroom/AgoraClass'
+))
+const ViewLawyerMyProfile=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerMyProfile'
+))
 
 const ViewAlumniLists=React.lazy(()=>
   import(
@@ -275,7 +283,11 @@ const roleRes = getRoleRes();
           } else if (roleRes.includes("MENTEE")) {
             redirectTo = `${match.url}/mentor`;
           } else if (roleRes.includes("LAWYER")) {
-            redirectTo = `${match.url}/lawyer/apply`;
+            if (statusRes === '0') {
+              redirectTo = `${match.url}/lawyer/apply`;
+            } else  {
+              redirectTo = `${match.url}/profile`;
+            }
           } else {
             redirectTo = `${match.url}/profile`; 
           }
@@ -382,7 +394,7 @@ const roleRes = getRoleRes();
             />
             {/* Chat application */}
                    <Route
-              path={`${match.url}/chat`}
+              path={`${match.url}/chat/:pid`}
               render={(props) => <ViewMyChat {...props} />}
             />
             
@@ -406,7 +418,7 @@ const roleRes = getRoleRes();
               render={(props) => <ViewMyProfile {...props} />}
             />
                <Route
-              path={`${match.url}/chat`}
+              path={`${match.url}/chat/:pid`}
               render={(props) => <ViewMyChat {...props} />}
             />
                <Route
@@ -497,6 +509,14 @@ const roleRes = getRoleRes();
              <Route
               path={`${match.url}/callcompleted/:id/:sid`}
               render={(props) => <ViewCallCompleted {...props} />}
+            />
+             <Route
+              path={`${match.url}/classroom`}
+              render={(props) => <ViewClassRoom {...props} />}
+            />
+             <Route
+              path={`${match.url}/lawyermyprofile`}
+              render={(props) => <ViewLawyerMyProfile {...props} />}
             />
             
             { /* alumnini networking routes start */ }

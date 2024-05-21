@@ -1,9 +1,8 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { getCurrentTime } from 'helpers/Utils';
-import axios from 'axios';
 
-// import contactsData from 'data/chat.contacts.json';
-// import conversationsData from 'data/chat.conversations.json';
+import contactsData from 'data/chat.contacts.json';
+import conversationsData from 'data/chat.conversations.json';
 import {
   CHAT_GET_CONTACTS,
   CHAT_GET_CONVERSATIONS,
@@ -29,37 +28,18 @@ function* loadContacts() {
   }
 }
 
-// const loadContactsAsync = async () => {
-//   const contacts = contactsData.data;
-//   const currentUser = contacts[0];
-//   // eslint-disable-next-line no-return-await
-//   return await new Promise((success) => {
-//     setTimeout(() => {
-//       success({ contacts, currentUser });
-//     }, 2000);
-//   })
-//     .then((response) => response)
-//     .catch((error) => error);
-// };
-function getRoleRes() {
-  return localStorage.getItem("roleRes");
-}
-const roleRes = getRoleRes();
-
-
 const loadContactsAsync = async () => {
-  try {
-    const response = await axios.get('http://localhost:3001/contacts');
-    const contacts = response.data;
-    const currentUser = roleRes.includes("MENTEE")? contacts[0] : contacts[1];
-    // const currentUser = contacts[0];
-    return { contacts, currentUser };
-  } catch (error) {
-    console.error(error);
-    return { error: 'Failed to fetch contacts' };
-  }
+  const contacts = contactsData.data;
+  const currentUser = contacts[0];
+  // eslint-disable-next-line no-return-await
+  return await new Promise((success) => {
+    setTimeout(() => {
+      success({ contacts, currentUser });
+    }, 2000);
+  })
+    .then((response) => response)
+    .catch((error) => error);
 };
-
 
 function* loadConversations(userId) {
   try {
@@ -72,59 +52,19 @@ function* loadConversations(userId) {
   }
 }
 
-// axios.get('http://localhost:3001/chat')
-//   .then(response => {
-//     console.log(response.data);
-//     conversations = response.data
-//   })
-//   .catch(error => {
-//     console.error('Error fetching data:', error);
-//   });
-
-
-// const loadConversationsAsync = async ({ payload }) => {
-//   axios.get('http://localhost:3001/chat').then(response => {
-//     console.log(response.data);
-//     conversations = response.data
-//   })
-
-
-//   let conversations = response.data;
-//   console.log("fromjson", conversations)
-//   conversations = conversations.filter((x) => x.users.includes(payload));
-//   const selectedUser = conversations[0].users.find((x) => x !== payload);
-//   // eslint-disable-next-line no-return-await
-//   return await new Promise((success) => {
-//     setTimeout(() => {
-//       success({ conversations, selectedUser });
-//     }, 1000);
-//   })
-//     .then((response) => response)
-//     .catch((error) => error);
-// };
-
 const loadConversationsAsync = async ({ payload }) => {
-  let conversations;
-  try {
-     const response = await axios.get('http://localhost:3001/chat');
-     console.log(response.data);
-     conversations = response.data;
-  } catch (error) {
-     console.error(error);
-     return { error: 'Failed to fetch conversations' };
-  }
- 
-  // console.log("fromjson", conversations);
+  let conversations = conversationsData.data;
   conversations = conversations.filter((x) => x.users.includes(payload));
   const selectedUser = conversations[0].users.find((x) => x !== payload);
- 
-  return new Promise((resolve) => {
-     setTimeout(() => {
-       resolve({ conversations, selectedUser });
-     }, 1000);
-  });
- };
- 
+  // eslint-disable-next-line no-return-await
+  return await new Promise((success) => {
+    setTimeout(() => {
+      success({ conversations, selectedUser });
+    }, 1000);
+  })
+    .then((response) => response)
+    .catch((error) => error);
+};
 
 function* addMessageToConversation({ payload }) {
   try {
@@ -164,18 +104,10 @@ const addMessageToConversationAsync = async (
       text: message,
     });
     conversation.lastMessageTime = time;
-    try {
-      await axios.put(`http://localhost:3001/chat/${conversation.id}`, conversation);
-      
-    } catch (error) {
-      console.error('Failed to update conversation:', error);
-    }
-
     const conversations = allConversations.filter(
       (x) => x.id !== conversation.id
     );
     conversations.splice(0, 0, conversation);
-    console.log("saga", conversation)
 
     // eslint-disable-next-line no-return-await
     return await new Promise((success) => {

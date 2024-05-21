@@ -55,7 +55,7 @@ LawyerPackage();
 //   const [activeSecondTab, setActiveSecondTab] = useState('1');
 const history = useHistory()
 const handleChatClick = () =>{
-  history.push(`${adminRoot}/chat`)
+  history.push(`${adminRoot}/chat/${pid}`)
 }
 
   return (

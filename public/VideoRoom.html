@@ -18,19 +18,19 @@
     <div id="root"></div>
     <script type="text/javascript">
         AgoraEduSDK.config({
-            appId: 'df1444ece7394c15b552b8b906b5f476',
+            appId: '4e6374a1eddd4d20a604fb0513fae8fb',
             region: 'NA'
         });
 
         AgoraEduSDK.launch(document.querySelector('#root'), {
-            userUuid: '10',
+            userUuid: '2',
             userName: 'Student',
             roomUuid: 'room id',
             roleType: 2, // User roles: 1 is teacher, 2 is student.
             roomType: 0, // Room type: 0 is one-on-one, 2 is large class, and 4 is small class.
             roomName: 'room name',
             pretest: true, // Whether to enable pre-class equipment detection.
-            rtmToken: '007eJxTYGBoPM2x0e3qM5uQD+0tMnPVYllnb3KU4rpZsb31w+oXm94qMKSkGZqYmKQmp5obW5okG5ommZoaJVkkWRqYJZmmmZibLUziTRPgY2BQuRuiycjAxMAIhCA+E4OhAQC9ehyn', // In a test environment, you can use a temporary RTM Token; in a production or security environment, it is strongly recommended that you use a server-generated RTM Token.
+            rtmToken: '007eJxTYHgb4TL3x558Xmbn8wt2Mc5d9/jV3W98t0z+JOgYKnIbn2dTYDBJNTM2N0k0TE1JSTFJMTJINDMwSUsyMDU0TktMtUhLanjpltYQyMggmP7EjpGBiYERCEF8RgYjAOT+Hsg=', // In a test environment, you can use a temporary RTM Token; in a production or security environment, it is strongly recommended that you use a server-generated RTM Token.
             language: 'en', // The language of the classroom interface. If the interface is in English, set it to 'en'.
             duration: 60 * 60, // Course time in seconds.
             recordUrl: 'https://solutions-apaas.agora.io/apaas/record/dev/2.8.0/record_page.html',
@@ -49,7 +49,8 @@
                 netlessBoard: FcrBoardWidget
             },
             listener: (evt, args) => {
-                if (evt === 'userExit') {
+                console.log("evt",args)
+                if (evt === 2) {
                     console.log('exit classroom');
                     window.close();
                 }
