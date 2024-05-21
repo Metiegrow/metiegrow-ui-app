@@ -3,21 +3,14 @@ import { Colxx } from 'components/common/CustomBootstrap';
 // import DropzoneExample from 'containers/forms/DropzoneExample';
 
 import { baseUrl } from 'constants/defaultValues';
-import { Button, Card,CardBody, Col,  Form, FormGroup, Input, Label, Row } from 'reactstrap';
+import { Button, Card,CardBody, Col,  Form, FormGroup, Input, Label, NavLink, Row } from 'reactstrap';
 import Select from 'react-select';
 import CustomSelectInput from 'components/common/CustomSelectInput';
 import axios from 'axios';
-import {useParams} from "react-router-dom";
+import {useParams,useHistory,useLocation } from "react-router-dom";
 
 import LawyerJobNotes from "../Notes/LawyerJobNotes"
 import DropzoneExample from './UploadDropZone';
-
-
-
-
-
-
-
 
 
 
@@ -42,37 +35,32 @@ const JobDetails = () => {
   const [isNewStep, setIsNewStep] = useState(false);
 
    const [userstep,setUserStep]=useState(true);
-  
-  //  const [editData, setEditData] = useState({ stepName: '', description: '', doneBy: '' });
-  
+   
+ 
   const [editData, setEditData] = useState({ stepName: '', description: '', doneBy:'', upload:true
 });
 
-// useEffect(() => {
-//   console.log('Updated User Step Value:', userstep);
-//   setEditData(prevData => ({
-//     ...prevData,
-//     doneBy: userstep, // Update the editData object whenever userstep changes
-//     userStep: userstep, // Ensure userStep is updated as well
-//   }));
-// }, [userstep]);
 
-// const dataToSend = {
-//   ...editData,
-//   doneBy: userstep, // Explicitly set doneBy to ensure it has the correct value
-//   userStep: userstep, // Explicitly set userStep to ensure it has the correct value
-// };
-
-// console.log('Payload to send:', dataToSend); // Log the payload to check values
 
   // const url=`${baseUrl}/lawyerJobsDetails/${jid}`;
 
   const handleUserStepChange = (val) => {
     console.log('Selected Option:', val);
     setUserStep(val.value); 
-    // console.log('Updated User old  Step Value:', userstep); 
+  
   };
   
+//   useEffect(() => {
+//     if (jobdetails && jobdetails.steps && jobdetails.steps.length > 0) {
+//         // If selectedStep is not set or if isNewStep is true, set it to the last step
+//         if (!selectedStep || isNewStep) {
+//             setSelectedStep(jobdetails.steps[jobdetails.steps.length - 1]);
+//             setIsNewStep(false); // Reset isNewStep to false after setting selectedStep
+//         }
+//     }
+// }, [jobdetails, isNewStep]);
+
+
 
   // Backedn url 
   const url=`${baseUrl}/api/lawyer/job/${jid}`
@@ -112,7 +100,7 @@ if (response.data.steps && response.data.steps.length > 0) {
   
 
     const handleAddStepCard = () => {
-      // Check if jobdetails is empty or not
+       
       if (jobdetails && jobdetails.steps) {
         const newStepNumber = jobdetails.steps.length + 1;
         const newCard = {
@@ -129,7 +117,8 @@ if (response.data.steps && response.data.steps.length > 0) {
         };
         setJobDetails(updatedJobDetails);
         setIsNewStep(true);
-        
+        setEditMode(true);
+        setSelectedStep(newCard);
       
       }
     };
@@ -164,12 +153,15 @@ if (response.data.steps && response.data.steps.length > 0) {
     return null; 
   };
 
+
+  
+
   const showClientNoJob=()=>{
     
     if(roleRes.includes("MENTEE")){
       return(
         <div>
-           <Card className=''>
+           <Card className='text-center'>
         <CardBody>
           <h1>Your job is working on your lawyer</h1>
         </CardBody>
@@ -182,21 +174,20 @@ if (response.data.steps && response.data.steps.length > 0) {
     return null;
   };
   const token = getTokenRes();
+  const history = useHistory();
+
+    
 
     const handleAddCard = async () => {
-      
       const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
     
-   
       const newStepData = {
-        stepName: "Step name",  
+        stepName: "Step name",
         description: "description",
         upload: true,
-        doneBy:false
-
+        doneBy: false
       };
     
-   
       const addJobUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${newStepNumber}`;
     
       try {
@@ -204,30 +195,36 @@ if (response.data.steps && response.data.steps.length > 0) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(newStepData)
         });
     
-        if (response.ok) {
-          
-          const newCard = await response.json();  
-          const updatedJobDetails = {
-            ...jobdetails,
-            steps: [...(jobdetails.steps || []), newCard]  
-          };
-          setJobDetails(updatedJobDetails);
-          
+        if (response.status===200) {
+          const responseText = await response.text(); 
+          console.log("Raw response text:", responseText);
+          try {
+            const newCard = JSON.parse(responseText); 
+            const updatedJobDetails = {
+              ...jobdetails,
+              steps: [...(jobdetails.steps || []), newCard]
+            };
+            setJobDetails(updatedJobDetails);
+            // Reload the page if the response status is 200 (OK)
+            history.go(0);
+          } catch (jsonError) {
+            console.error("Failed to parse JSON response:", jsonError);
+          }
         } else {
-        
-          console.error("Failed to add new step:", await response.text());
+          const errorText = await response.text();
+          console.error("Failed to add new step:", errorText);
         }
       } catch (error) {
         console.error("Error adding new step:", error);
       }
+    
     };
     
-
     const handleStepClick = (step) => {
       setSelectedStep(step);
       setEditMode(false);
@@ -244,17 +241,13 @@ if (response.data.steps && response.data.steps.length > 0) {
       setEditData(prev => ({ ...prev, [name]: value }));
     };
     
-    // const handleEditClick = () => {
-    //   setEditMode(true);
-    // };
+   
     const handleJobNameClick = () => {
       setJobEditMode(true);
      
     };
   
-    // const handleJobNameChange = (e) => {
-    //   setEditedJobName(e.target.value);
-    // };
+ 
   
    
     const handleCancelClick = () => {
@@ -266,7 +259,7 @@ if (response.data.steps && response.data.steps.length > 0) {
   
     const saveEdits = async () => {
       // const updateUrl = `${url}/steps/${selectedStep.id}`;
-      const updateUrl = `${url}/jobDetail/${selectedStep.id} `;
+      const updateUrl = `${url}/jobDetail/${selectedStep.stepNumber} `;
       const dataToSend = {
         ...editData,
          doneBy:userstep, 
@@ -275,11 +268,16 @@ if (response.data.steps && response.data.steps.length > 0) {
       console.log('Payload to send:', dataToSend); 
      
       try {
+       
         const response = await axios.put(updateUrl,dataToSend);
+       
+     
          
         if (response.status === 200) {
-          LawyerJobsDetails();
+          
+            LawyerJobsDetails();
           setEditMode(false);
+          
         }
       } catch (error) {
         console.error('Failed to update step:', error);
@@ -287,7 +285,7 @@ if (response.data.steps && response.data.steps.length > 0) {
     };
     const saveEdits1 = async () => {
       // const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
-      const updateUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${selectedStep.id} `;
+      const updateUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${selectedStep.stepNumber} `;
       const dataToSend = {
         ...editData,
          doneBy:userstep, 
@@ -301,48 +299,14 @@ if (response.data.steps && response.data.steps.length > 0) {
         if (response.status === 200) {
           LawyerJobsDetails();
           setEditMode(false);
+          // Reload the page if the response status is 200 (OK)
+          history.go(0);
         }
       } catch (error) {
         console.error('Failed to update step:', error);
       }
     };
-    // const saveEdits = async () => {
-    //   let updateUrl;
-    //   let method;
-    //   const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
     
-    //   if (selectedStep && selectedStep.id) {
-    //     // If selectedStep exists and has an id, it means it's an existing step, so update it
-    //     updateUrl = `${url}/jobDetail/${selectedStep.id}`;
-    //     method = 'put';
-    //   } else {
-    //     // If selectedStep doesn't exist or doesn't have an id, it means it's a new step, so create it
-    //     updateUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${newStepNumber}`;
-    //     method = 'post';
-    //   }
-    
-    //   const dataToSend = {
-    //     ...editData,
-    //     doneBy: userstep,
-        
-    //   };
-    //   console.log('Payload to send:', dataToSend);
-    
-    //   try {
-    //     const response = await axios({
-    //        method,
-    //       url: updateUrl,
-    //       data: dataToSend,
-    //     });
-    
-    //     if (response.status === 200) {
-    //       LawyerJobsDetails();
-    //       setEditMode(false);
-    //     }
-    //   } catch (error) {
-    //     console.error('Failed to update/create step:', error);
-    //   }
-    // };
     
    
     const saveJobs = async () => {
@@ -363,13 +327,19 @@ if (response.data.steps && response.data.steps.length > 0) {
       saveJobs();
       setJobEditMode(false);
     };
+
+   
+    
     const saveStatus=async( selectedKey)=>{
-      const updateStatusUrl=`${baseUrl}/api/lawyer/job/${jid}/jobdetail-status/${selectedStep.id}`
+     
+      const updateStatusUrl=`${baseUrl}/api/lawyer/job/${jid}/jobdetail-status/${selectedStep.stepNumber}`
       try{
         const response = await axios.put(updateStatusUrl, {status:selectedKey}); 
         if (response.status === 200) {
           LawyerJobsDetails();
           setEditMode(false);
+          
+         
         }
       }
       catch (error) {
@@ -385,21 +355,92 @@ if (response.data.steps && response.data.steps.length > 0) {
         saveEdits();
       }
     };
+    
+    const showPlusCard = () => {
+      if (roleRes.includes("LAWYER")) {
+        return (
+          <Card>
+            <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddCard}>
+              <h1 className='text-center mx-auto w-100' style={{fontSize: "60px", cursor: "pointer"}}>
+                +
+              </h1>
+            </CardBody>
+          </Card>
+        );
+      }
+    
+      if (roleRes.includes("MENTEE")) {
+        return (
+          <Card className='d-none'>
+            <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddCard}>
+              <h1 className='text-center mx-auto w-100' style={{fontSize: "60px", cursor: "pointer"}}>
+                +
+              </h1>
+            </CardBody>
+          </Card>
+        );
+      }
+    
+      return null; 
+    };
+   
+    
+    const showAddStepCard = () => {
+      if (roleRes.includes("LAWYER")) {
+        return (
+          <>
+          
+            <Card>
+              <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddStepCard}>
+                <h1 className='text-center mx-auto w-100' style={{fontSize: "60px", cursor: "pointer"}}>
+                  +
+                </h1>
+              </CardBody>
+            </Card>
+          </>
+        );
+      }
+    
+      if (roleRes.includes("MENTEE")) {
+        return (
+          <>
+          
+            <Card className='d-none'>
+              <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddStepCard}>
+                <h1 className='text-center mx-auto w-100' style={{fontSize: "60px", cursor: "pointer"}}>
+                  +
+                </h1>
+              </CardBody>
+            </Card>
+          </>
+        );
+      }
+    
+      return null; 
+    };
+    
+    const location = useLocation();
+  const { lawyerName,clientName,lawyerId } = location.state || {};
+    
 
   return (
     <div>
         <Row>
-
-        <Col md={12} lg={4}>
+       
+        <Col md={12} lg={12} sm={12} className='my-2'>
         {jobdetails.steps&&jobdetails.steps.length>0?(
          null
         ):(
           showClientNoJob()
         )}
+        </Col>
+        <Col md={12} lg={4}>
+        
         
         {/* <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1> */}
         {jobeditmode ? (
           <Row className='d-flex align-items-center'>
+           
             <Col md={6}>
             <div className=''>
           <Input
@@ -416,11 +457,12 @@ if (response.data.steps && response.data.steps.length > 0) {
               <Button color="primary" onClick={handleSaveJobName}>Save</Button>
               <Button color="secondary" className="ml-2" onClick={handleCancelClick}>Cancel</Button>
             </div></Col>
+            
           </Row>
          
             
           ) : (
-        <div
+            <div
           className='font-weight-semibold text-large '
           style={{ cursor: 'pointer' }}
           onMouseEnter={() => setIsHovered(true)}
@@ -436,7 +478,7 @@ if (response.data.steps && response.data.steps.length > 0) {
           role="button"
           tabIndex={0}
           >
-           <h1>{jobdetails.jobName}</h1>  
+           <h1 className='ml-1'>{jobdetails.jobName}</h1>  
             {isHovered && (
               <span className='ml-2 text-primary text-one' >
               <i 
@@ -449,10 +491,20 @@ if (response.data.steps && response.data.steps.length > 0) {
               
             )}
           </div>
+       
           )
         }
        
-      
+        <div>
+        {lawyerName ? (
+          <NavLink href={`/app/lawyerprofile/${lawyerId}`}>
+          <h6 className='text-muted'>Lawyer: {lawyerName}</h6>
+          </NavLink>
+       
+      ) : (
+         <h6 className='text-muted'>Client: {clientName}</h6>
+      )}
+        </div>
         </Col>
         <Col><LawyerJobNotes jobId={jid}/></Col>
         </Row>
@@ -526,23 +578,27 @@ if (response.data.steps && response.data.steps.length > 0) {
           
           {jobdetails.steps&&jobdetails.steps.length>0?(
            
-          <Card>
+         
+          showAddStepCard()
+          ):( 
+          showPlusCard() 
+          )}
+          
+          {/* <Card>
             <CardBody className='my-2' style={{cursor:"pointer"}} onClick={handleAddStepCard}>
               <h1 className=' text-center mx-auto w-100' 
               style={{fontSize:"60px",cursor:"pointer"}}
               >+</h1>
             </CardBody>
-          </Card>
-          ):(
-            <Card>
+          </Card> */}
+
+            {/* <Card>
             <CardBody className='my-2' style={{cursor:"pointer"}} onClick={handleAddCard}>
               <h1 className=' text-center mx-auto w-100' 
               style={{fontSize:"60px",cursor:"pointer"}}
               >+</h1>
             </CardBody>
-          </Card>
-           
-          )}
+          </Card> */}
 
           {/* <Card>
             <CardBody className='my-2' style={{cursor:"pointer"}} onClick={handleAddCard}>
@@ -568,7 +624,10 @@ if (response.data.steps && response.data.steps.length > 0) {
                 <FormGroup>
                   <Col>
                   <div className='d-flex justify-content-between'>
-                <h2 className='text-primary '>Step {selectedStep.stepNumber}</h2>
+                <h2 className='text-primary '>Step {selectedStep.stepNumber} 
+                {editMode ? ` : ${editData.stepName}` : ""}
+                </h2>
+               
                 {/* <div>
                 <Button className='mr-2' outline color="primary" onClick={() => setEditMode(!editMode)}>
                 
@@ -648,7 +707,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                       </FormGroup>
                       <FormGroup  className='py-2'>
        <Col sm={2}>
-       <Label className='text-one'>Documents</Label>
+       <Label className=''>Documents</Label>
        </Col>
         <Col>
         <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.id}}`}/>
@@ -669,7 +728,7 @@ if (response.data.steps && response.data.steps.length > 0) {
       
       <FormGroup>
         <Col sm={2}>
-          <Label className='text-one'>
+          <Label className=''>
             Status
           </Label>
         </Col>
@@ -685,6 +744,7 @@ if (response.data.steps && response.data.steps.length > 0) {
           onChange={(val) => {
          console.log(val);  
         setSelectedOption(val);
+        setSelectedStep(val);
         saveStatus(val.key);
       }}
           // onChange={saveStatus} 
@@ -695,14 +755,18 @@ if (response.data.steps && response.data.steps.length > 0) {
         </Col>
        
       </FormGroup>
-      {/* <Button color="primary" onClick={saveEdits}>Save</Button> */}
-      {isNewStep ? (
+      <FormGroup>
+      <Col>   {isNewStep ? (
         // Save button for adding a new step
-        <Button color="primary" onClick={handleSave}>Save</Button>
+        <Button color="primary" onClick={handleSave}>Create</Button>
       ) : (
         // Save button for editing an existing step
         <Button color="primary" onClick={handleSave}>Save</Button>
       )}
+     </Col>
+     </FormGroup>
+    
+     
                      
                     
                     </>

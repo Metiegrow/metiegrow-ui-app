@@ -3,12 +3,12 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import {  Card,CardBody ,NavLink} from 'reactstrap';
-
+import { useHistory } from 'react-router-dom';
 
 const LawyerJobList = () => {
     const [joblist,setJobList]=useState("");
     // const url=`${baseUrl}/api/lawyer/job/lawyer`;
-
+    const history = useHistory();
     // Backend url 
     const url=`${baseUrl}/api/lawyer/job`;
     // this file is logged by lawyer
@@ -76,7 +76,9 @@ const LawyerJobList = () => {
       const formattedModifiedAt = `${modifiedAtDate.toLocaleDateString()} ${modifiedAtDate.toLocaleTimeString()}`;
           return(
               <Card key={j.id} className='my-2'>
-          <NavLink href={`/app/jobsdetails/${j.id}`}>
+          <NavLink href={`/app/jobsdetails/${j.id}`}
+           onClick={() => history.push(`/app/jobsdetails/${j.id}`, { clientName: j.clientName })}
+          >
           <CardBody className=''>
           <div className='d-flex justify-content-between'>
           <h2 className='text-primary'>{j.clientName}</h2>

@@ -8,9 +8,13 @@ const ReactDOMServer = require('react-dom/server');
 
 const dropzoneComponentConfig = {
   // postUrl: 'https://httpbin.org/post',
-  postUrl: `${baseUrl}/api/lawyer/job/1/document/1`,
+  postUrl: `${baseUrl}/api/lawyer/job/10/document/1`,
  
 };
+function getTokenRes() {
+  return localStorage.getItem('tokenRes');
+}
+const token = getTokenRes();
 
 const dropzoneConfig = {
   thumbnailHeight: 160,
@@ -55,27 +59,42 @@ const dropzoneConfig = {
       </a>
     </div>
   ),
-  headers: { 'My-Awesome-Header': 'header value' },
+  headers: {'Authorization': `Bearer ${token}`},
 };
 
 export default class DropzoneExample extends Component {
  
 
-  handleSending = (file, xhr, formData) => {
-    const { jobId, stepNo } = this.props;
+  // handleSending = (file, xhr, formData) => {
+  //   const { jobId, stepNo } = this.props;
+    
+  //   const postUrl1 = `${baseUrl}/api/lawyer/job/${jobId}/document/${stepNo}`;
+  //   this.myDropzone.options.url = postUrl1;
+  //   this.myDropzone
 
-    const postUrl1 = `${baseUrl}/api/lawyer/job/${jobId}/document/${stepNo}`;
-    this.myDropzone.options.url = postUrl1;
-
-    formData.append('name', file.name);  
-    formData.append('type', file.type);  
-    formData.append('data', file); 
-  };
+  //   formData.append('name', file.name);  
+  //   formData.append('type', file.type);  
+  //   formData.append('data', file); 
+  // };
 
   clear() {
     this.myDropzone.removeAllFiles(true);
   }
 
+  // render() {
+  //   return (
+  //     <DropzoneComponent
+  //       config={dropzoneComponentConfig}
+  //       djsConfig={dropzoneConfig}
+  //       eventHandlers={{
+  //         init: (dropzone) => {
+  //           this.myDropzone = dropzone;
+  //           dropzone.on('sending', this.handleSending); 
+  //         },
+  //       }}
+  //     />
+  //   );
+  // }
   render() {
     return (
       <DropzoneComponent
@@ -84,7 +103,6 @@ export default class DropzoneExample extends Component {
         eventHandlers={{
           init: (dropzone) => {
             this.myDropzone = dropzone;
-            dropzone.on('sending', this.handleSending); 
           },
         }}
       />
