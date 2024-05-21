@@ -39,6 +39,8 @@ const LawyerMyProfile = () => {
   // console.log("topic", topic)
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
+  const updateUrl = `${baseUrl}/api/lawyer/updateProfile`;
+  
   //   const inputUrl = `${baseUrl}/inputs`
 
   useEffect(() => {
@@ -88,15 +90,13 @@ const LawyerMyProfile = () => {
         bio,
         topic,
         languages,
-        ratings,
-        star,
         about,
       };
 
       // console.log("Updated Data:", updatedData);
       // const response =
 
-      await axios.put(endUrl, updatedData, {
+      await axios.put(updateUrl, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
