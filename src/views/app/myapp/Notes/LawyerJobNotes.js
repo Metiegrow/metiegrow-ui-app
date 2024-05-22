@@ -27,7 +27,7 @@ const LawyerJobNotes = ({ jobId }) => {
   const [editNoteId, setEditNoteId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
   const [editedText, setEditedText] = useState("");
-  const [update, setUpdate] = useState("")
+  const [update, setUpdate] = useState(false)
 
   const [addModal, setAddModal] = useState(false);
 
@@ -66,7 +66,7 @@ const LawyerJobNotes = ({ jobId }) => {
         .then((response) => {
           const updatedNotes = [...notes, response.data];
           setNotes(updatedNotes);
-          setUpdate("post")
+          setUpdate(!update)
           toggleAddModal();
         })
         .catch((error) => {
@@ -84,7 +84,7 @@ const LawyerJobNotes = ({ jobId }) => {
         const updatedNotes = notes.filter((note) => note.id !== id);
         setNotes(updatedNotes);
         console.log(response);
-        setUpdate("delete")
+        setUpdate(!update)
       })
       .catch((error) => {
         console.error("Error deleting note:", error);
@@ -115,7 +115,7 @@ const LawyerJobNotes = ({ jobId }) => {
           return note;
         });
         setNotes(updatedNotes);
-        setUpdate("put")
+        setUpdate(!update)
         toggleEditModal();
       })
       .catch((error) => {

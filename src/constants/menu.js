@@ -133,7 +133,7 @@ const data = [
     id: "Chat",
     icon: "simple-icon-bubbles",
     label: "Chat",
-    to: `${adminRoot}/chat/10`,
+    to: `${adminRoot}/chat/chat`,
   },
   {
     id: "classroom",
