@@ -185,6 +185,7 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                       className="form-control"
                       name="email"
                       validate={validateEmail}
+                      autoComplete="off"
                     />
                     {errors.email && touched.email && (
                       <div className="invalid-feedback d-block">

@@ -364,7 +364,7 @@ const token = getTokenRes();
                         at those.
                       </Alert>
                       <FormGroup>
-                        <Label for="image">image</Label>
+                        <Label for="image">Image</Label>
                         <Row>
                           <Col md={1}>
                             <ThumbnailImage
@@ -422,6 +422,7 @@ const token = getTokenRes();
                               className="form-control"
                               name="firstName"
                               validate={validateFirstName}
+                              autoComplete="off"
                             />
                             {errors.firstName && touched.firstName && (
                               <div className="invalid-feedback d-block">
@@ -437,6 +438,7 @@ const token = getTokenRes();
                               className="form-control"
                               name="lastName"
                               validate={validateLastName}
+                              autoComplete="off"
                             />
                             {errors.lastName && touched.lastName && (
                               <div className="invalid-feedback d-block">
@@ -455,6 +457,7 @@ const token = getTokenRes();
                               name="email"
                               type="email"
                               validate={validateEmail}
+                              autoComplete="off"
                             />
                             {errors.email && touched.email && (
                               <div className="invalid-feedback d-block">
@@ -489,6 +492,7 @@ const token = getTokenRes();
                               type="text"
                               name="jobTitle"
                               validate={validateJobTitle}
+                              autoComplete="off"
                             />
                             {errors.jobTitle && touched.jobTitle && (
                               <div className="invalid-feedback d-block">
@@ -505,6 +509,7 @@ const token = getTokenRes();
                               type="text"
                               name="company"
                               validate={validateCompany}
+                              autoComplete="off"
                             />
                             {errors.company && touched.company && (
                               <div className="invalid-feedback d-block">
@@ -604,6 +609,7 @@ const token = getTokenRes();
                               .map((skill) => skill.trim());
                             setFieldValue("skills", skillArray);
                           }}
+                          autoComplete="off"
                         />
                         {errors.skills && touched.skills && (
                           <div className="invalid-feedback d-block">
@@ -647,6 +653,7 @@ const token = getTokenRes();
                           id="bio"
                           className="form-control"
                           validate={validateBio}
+                          autoComplete="off"
                         />
                         {errors.bio && touched.bio && (
                           <div className="invalid-feedback d-block">
@@ -669,6 +676,7 @@ const token = getTokenRes();
                               name="linkedinUrl"
                               type="url"
                               validate={validateLinkedinUrl}
+                              autoComplete="off"
                             />
                             {errors.linkedinUrl && touched.linkedinUrl && (
                               <div className="invalid-feedback d-block">
@@ -685,6 +693,7 @@ const token = getTokenRes();
                               name="twitterHandle"
                               id="twitterHandle"
                               className="form-control"
+                              autoComplete="off"
                             />
                             <FormText color="muted">
                               Omit the &ldquo;@&rdquo; -e.g.
@@ -705,6 +714,7 @@ const token = getTokenRes();
                           name="website"
                           id="website"
                           className="form-control"
+                          autoComplete="off"
                         />
                         <FormText color="muted">
                           You can add your blog, GitHub profile or similar here
@@ -761,6 +771,7 @@ const token = getTokenRes();
                               name="introVideo"
                               id="introVideo"
                               className="form-control"
+                              autoComplete="off"
                             />
                             <FormText color="muted">
                               Add a youTube video or record a Loom for your
@@ -781,6 +792,7 @@ const token = getTokenRes();
                               name="featuredArticle"
                               id="featuredArticle"
                               className="form-control"
+                              autoComplete="off"
                             />
                             <FormText color="muted">
                               Link an interview / podcast / piece of writing you
@@ -800,6 +812,7 @@ const token = getTokenRes();
                           id="reasonForMentor"
                           className="form-control"
                           validate={validateReasonForMentor}
+                          autoComplete="off"
                         />
                         {errors.reasonForMentor && touched.reasonForMentor && (
                           <div className="invalid-feedback d-block">
@@ -818,6 +831,7 @@ const token = getTokenRes();
                           id="achievement"
                           className="form-control"
                           validate={validateAchievement}
+                          autoComplete="off"
                         />
                         {errors.achievement && touched.achievement && (
                           <div className="invalid-feedback d-block">

@@ -13,11 +13,13 @@ import {
   InputGroupAddon,
   Col,
   Form,
+  Card,
 } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 
 import { Colxx } from "components/common/CustomBootstrap";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
 
 const LawyerMyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -36,11 +38,11 @@ const LawyerMyProfile = () => {
   const [star, setStar] = useState("");
   const [about, setAbout] = useState("");
 
-  // console.log("topic", topic)
+  console.log("topic", imageUrl);
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
   const updateUrl = `${baseUrl}/api/lawyer/updateProfile`;
-  
+
   //   const inputUrl = `${baseUrl}/inputs`
 
   useEffect(() => {
@@ -182,7 +184,7 @@ const LawyerMyProfile = () => {
       <Colxx sm="12" md="12" lg="12" xxs="12" className="">
         <div className="">
           {/* <div className="h-100"> */}
-          <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
+          {/* <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
             <div className=" ">
               <div>
                 <img
@@ -191,9 +193,9 @@ const LawyerMyProfile = () => {
                   className=" col-2 mx-2 w-60 rounded-circle img-thumbnail border"
                   alt=""
                 />
-              </div>
-              
-              {/* <Button
+              </div> */}
+
+          {/* <Button
                 color="light"
                 className=" font-weight-semibold mx-2"
                 size="large"
@@ -202,7 +204,7 @@ const LawyerMyProfile = () => {
                   <i className="iconsminds-thunder text-primary" />
                 </span>
               </Button> */}
-            </div>
+          {/* </div>
             <div>
               <NavLink>
                 <Button
@@ -215,27 +217,67 @@ const LawyerMyProfile = () => {
                 </Button>
               </NavLink>
             </div>
-          </div>
-          {isEditing &&
-              <div className="mt-2">
-                <Button
-                  className="default"
-                  color="light"
-                  onClick={() => document.getElementById("file-upload").click()}
-                >
-                  Change profile pic <i className="iconsminds-upload text-primary" />
-                </Button>
-                <Form>
-                  <input
-                    id="file-upload"
-                    type="file"
-                    className="form-control d-none"
-                    onChange={handleFileChange}
-                  />
-                </Form>
-                {file && <p>Selected file: {file.name}</p>}
-              </div>
-              }
+          </div> */}
+          
+          <Card style={{ height: "160px", width: "100%", overflow: "hidden" }} className="bg-primary">
+  <div className="d-flex align-items-center justify-content-between" style={{ height: "100%" }}>
+    <div className="mt-4 ml-4 mb-4">
+    {imageUrl === null ? (
+  <ThumbnailLetters
+    small
+    rounded
+    text={firstName}
+    className="mx-2"
+    color="secondary"
+  />
+) : (
+  <img
+    src={`${baseUrl}/${imageUrl}`}
+    // src="/assets/img/profiles/2.jpg"
+    className="mx-2 rounded-circle img-thumbnail border"
+    style={{ width: "110px", height: "110px" }}
+    alt=""
+  />
+)}
+
+    </div>
+    <div className="mr-4">
+      <NavLink>
+        <Button
+          color="light"
+          className="font-weight-semibold"
+          size="large"
+          // onClick={handleLinkedInClick}
+        >
+          <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
+        </Button>
+      </NavLink>
+    </div>
+  </div>
+</Card>
+
+
+          {isEditing && (
+            <div className="mt-2">
+              <Button
+                className="default"
+                color="light"
+                onClick={() => document.getElementById("file-upload").click()}
+              >
+                Change profile pic{" "}
+                <i className="iconsminds-upload text-primary" />
+              </Button>
+              <Form>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="form-control d-none"
+                  onChange={handleFileChange}
+                />
+              </Form>
+              {file && <p>Selected file: {file.name}</p>}
+            </div>
+          )}
           <Row>
             <Col lg="6" md="12" className="mt-4">
               <div>
