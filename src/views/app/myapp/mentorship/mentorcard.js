@@ -233,12 +233,22 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   
       {/* searchbar ends */}
 
+      <div>
       
-      
-   {mentordetails.map((mentors)=>{
+        {mentordetails.length===0?(
+          <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
+      <Card>
+          <CardBody>
+            <h2 className='text-center text-large '>No mentors</h2>
+          </CardBody>
+         </Card>
+      </Colxx>
+        ):(
+          mentordetails.map((mentors)=>{
     return (
       <Colxx xxs="12" key={mentors.id}>
       <Row>
+      
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
             <Card className=" flex-row listing-card-container my-3 p-3 flex-wrap flex-sm-nowrap flex-md-nowrap flex-lg-nowrap flex-xl-nowrap" >
            
@@ -309,14 +319,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
         ))}
                    </CardText>
                   </div>
-                  {/* <div className='d-flex align-items-center justify-content-between my-3  '>
-                        <CardText className='text-primary '>
-                            <span className='text-large font-weight-semibold'>${mentors.price}</span>/month
-                        </CardText>
-                        <Button color="primary " className="default  ">
-                        View Profile
-              </Button>
-                    </div> */}
+                 
                     <div className=''>
                      <NavLink href={`/app/mentorprofile/${mentors.id}`}>
                        <Button color="primary " className="default w-80 py-2  rounded" >
@@ -343,7 +346,11 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       
     )
     
-   })}
+   }))
+        }
+      </div>
+      
+   
       {/* <Colxx xxs="12">
       <Row>
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto'>

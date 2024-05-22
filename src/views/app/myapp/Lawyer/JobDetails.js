@@ -163,7 +163,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         <div>
            <Card className='text-center'>
         <CardBody>
-          <h1>Your job is working on your lawyer</h1>
+          <h1>Your lawyer is working on your job</h1>
         </CardBody>
       </Card>
         </div>

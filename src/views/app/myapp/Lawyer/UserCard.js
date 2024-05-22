@@ -71,19 +71,14 @@ const UserCard = () => {
               <Col md={5} lg={5}>
               <div className='d-flex justify-content-between flex-column  w-100'>
              
-             {/* <img
-                   className="card-img-left"
-                   
-                   src={`${baseUrl}/${users.imageUrl}`} 
-                   alt="Card"
-                 /> */}
+            
                  {users.imageUrl === null ? (
-                  <div className=" w-full h-full mx-auto my-5" style={{height:"100%"}}>
+                  <div className=" w-full h-full my-4 " style={{height:"100%"}}>
                   <ThumbnailLetters
                      rounded
                      text={users.firstName}
-                     className='text-xlarge my-auto '
-                     style={{height:"100%",width:"100%"}}
+                     className='text-xlarge  '
+                     
 
                    />
                   </div>
@@ -133,7 +128,7 @@ const UserCard = () => {
                   
               
             {users.services && users.services.slice(0,3).map((skill) => (
-          <div key={skill} className='m-2 ' id='btn.rounded'>
+          <div key={skill} className='my-2 ' id='btn.rounded'>
           
               <Button color="light" className="mb-2 font-weight-semibold" size='xs'>
                 {skill}

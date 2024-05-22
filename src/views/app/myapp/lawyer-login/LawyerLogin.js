@@ -962,7 +962,7 @@ const token = getTokenRes();
                        
                       </FormGroup>
                           <Row>
-                            <Col md={6}>
+                            <Col md={12}>
                             <FormGroup className="error-l-75">
                             <Label>Amount*</Label>
                              {/* <Field
@@ -978,7 +978,7 @@ const token = getTokenRes();
                            {/* <SingleRangeSlider/> */}
                            <SliderTooltip
                           min={0}
-                          max={2500}
+                          max={500000}
                           
                           defaultValue={amount}
                           className="mb-5"
@@ -1056,7 +1056,7 @@ const token = getTokenRes();
           <BottomNavigation
             onClickNext={onClickNext}
             onClickPrev={onClickPrev}
-            className={`justify-content-center ${
+            className={`justify-content-center mt-3 ${
               bottomNavHidden && "invisible"
             }`}
             prevLabel="Previous Step"

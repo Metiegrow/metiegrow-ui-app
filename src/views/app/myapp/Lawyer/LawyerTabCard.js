@@ -23,12 +23,13 @@ import classnames from 'classnames';
 import { Colxx } from 'components/common/CustomBootstrap';
 
 
-const LawyerTabCard = ({pid}) => {
+const LawyerTabCard = ({pid, handlePurchase}) => {
   const [activeFirstTab, setActiveFirstTab] = useState('1');
   const [packages,setPackages]=useState('');
   // const packageURL=`${baseUrl}/lawyerPackages`;
   
   // backend url 
+
 
     const packageURL=`${baseUrl}/api/lawyer/${pid}/package`
   useEffect(()=>{
@@ -338,7 +339,14 @@ LawyerPackage();
                           <h2>₹ {pack.amount}</h2>
                           <h5>{pack.serviceName}</h5>
                           <p className='text-muted'>{pack.description}</p>
-                          <Button className='mt-4 text-one' size='lg' outline color='primary'>Contact</Button>
+                          <div className='d-flex '>
+                          <Button className=' text-one'  outline color='primary' onClick={handleChatClick}>Contact</Button>
+                            
+                          <Button color='primary' className='text-one ml-2'  onClick={() => handlePurchase(pack)}>Purchase</Button>
+                          
+                          </div>
+                         
+                          
                         </CardTitle>
                       </CardBody>
                     </Col>
