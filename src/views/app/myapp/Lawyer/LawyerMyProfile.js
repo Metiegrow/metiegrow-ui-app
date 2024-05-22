@@ -41,7 +41,7 @@ const LawyerMyProfile = () => {
   console.log("topic", imageUrl);
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
-  const updateUrl = `${baseUrl}/api/lawyer/updateProfile`;
+  // const updateUrl = `${baseUrl}/api/lawyer/updateProfile`;
 
   //   const inputUrl = `${baseUrl}/inputs`
 
@@ -98,7 +98,7 @@ const LawyerMyProfile = () => {
       // console.log("Updated Data:", updatedData);
       // const response =
 
-      await axios.put(updateUrl, updatedData, {
+      await axios.put(endUrl, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -224,7 +224,7 @@ const LawyerMyProfile = () => {
     <div className="mt-4 ml-4 mb-4">
     {imageUrl === null ? (
   <ThumbnailLetters
-    small
+    // small
     rounded
     text={firstName}
     className="mx-2"
