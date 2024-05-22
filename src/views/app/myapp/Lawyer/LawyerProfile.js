@@ -61,17 +61,7 @@ const LawyerProfile = () => {
               }
         }
         ProfileLawyer();
-      //   const UserReviewsToLawyer=async()=>{
-      //     try {
-      //         const response = await axios.get(reviewURL);
-      //         // setReviews(response.data);
-      //         // const lawyerReviews = response.data.filter(review => review.lawyerId === parseInt(pid, 10)); // Specify radix 10
-      //         setReviews(response.data);
-      //       } catch (error) {
-      //         console.error('Error fetching data:', error);
-      //       }
-      // }
-      // UserReviewsToLawyer();
+    
       const LawyerPackage=async()=>{
         try {
             const response = await axios.get(packageURL);
@@ -169,7 +159,7 @@ const LawyerProfile = () => {
           </div>
          
           <div className=' mt-4'>
-            <h2 className='mx-2'>Topics</h2>
+            <h2 className=''>Topics</h2>
            
            
             <div className='d-flex align-items-center flex-wrap'>
@@ -196,17 +186,18 @@ const LawyerProfile = () => {
            
           </div>
           <div   className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none  ' >
-        <LawyerTabCard pid={pid} />
+        <LawyerTabCard pid={pid} handlePurchase={handlePurchase}/>
     </div>
         
           <div className='mt-4' >
-                    <h2 className='text-large'>About</h2>
+                    <h2 className=''>About</h2>
                     <p className='text-one'>{lawyerprofile.about}</p>
                 </div>
-                <Colxx lg={10}   className="my-4" id="skillsSection">
-       
-            <h1>Full Topics</h1>
-            <div className='d-flex flex-wrap '>
+                <div>
+                
+                <div   className="my-4 " id="skillsSection">
+                <h2 className='text-start mr-2'>All Topics</h2>
+                <div className='d-flex flex-wrap '>
               {lawyerprofile.topic && lawyerprofile.topic.map((skill) => (
                 <div key={skill}>
                   <Button color="light" className="mb-2 font-weight-semibold mx-2" size='sm'>
@@ -215,11 +206,14 @@ const LawyerProfile = () => {
                 </div>
               ))}
             </div>
-          </Colxx>
+            
+          </div>
+                </div>
+                </Colxx>
           
          <Colxx lg={12} xl={12}  className='mt-4'>
          <hr/>
-  <h5 className='font-weight-bold'>Compare Packages</h5>
+  <h2 className=''>Compare Packages</h2>
   <Row className='d-flex'>
     {packages && packages.map((pack) => (
       <Col lg={6}  key={pack.id} className='my-2'>
@@ -235,7 +229,7 @@ const LawyerProfile = () => {
               <p className='text-muted text-small'>{pack.description}</p>
               <div className=''>
                 <NavLink href='/app/lawyer/payment'>
-                  <Button color='primary' onClick={() => handlePurchase(pack)}>Purchase</Button>
+                  <Button color='primary  text-one' onClick={() => handlePurchase(pack)}>Purchase</Button>
                 </NavLink>
               </div>
             </div>
@@ -255,11 +249,11 @@ const LawyerProfile = () => {
           
             
             </Colxx>
-      </Colxx>
+      
       <Colxx className='mt-4' lg={6} xl={6} md={12}> 
   
 <div  style={{width:"40%",position:'fixed',top:'40%',right:'20px'}} className='mt-2 d-lg-block d-xl-block d-none'>
-        <LawyerTabCard pid={pid}/>
+        <LawyerTabCard pid={pid} handlePurchase={handlePurchase}/>
     </div>
     {/* <div    className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none bg-primary'>
         <LawyerTabCard />

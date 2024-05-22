@@ -36,7 +36,7 @@ const SingleRangeSlider = () => {
        
         <SliderTooltip
           min={0}
-          max={2500}
+          max={500000}
           defaultValue={sliderValue}
           className="mb-5"
           step={500}
