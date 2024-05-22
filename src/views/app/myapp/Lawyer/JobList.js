@@ -3,6 +3,8 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
 import { Button, Card,CardBody ,NavLink} from 'reactstrap';
+import { useHistory } from 'react-router-dom';
+
 
 const JobList = () => {
     const [joblist,setJobList]=useState('');
@@ -10,7 +12,7 @@ const JobList = () => {
 
     // Backend url 
     const url=`${baseUrl}/api/lawyer/job/client`;
-    
+    const history = useHistory();
   // this file is logged by client
     useEffect(()=>{
         const LawyerJobsList=async()=>{
@@ -79,7 +81,9 @@ const JobList = () => {
       const formattedModifiedAt = `${modifiedAtDate.toLocaleDateString()} ${modifiedAtDate.toLocaleTimeString()}`;
           return(
               <Card key={j.id} className='my-2'>
-          <NavLink href={`/app/jobsdetails/${j.id}`}>
+          <NavLink href={`/app/jobsdetails/${j.id}`}
+          onClick={() => history.push(`/app/jobsdetails/${j.id}`, { lawyerName: j.lawyerName ,lawyerId:j.lawyerId})}
+          >
           <CardBody className=''>
           <div className='d-flex justify-content-between'>
           <h2 className='text-primary'>{j.lawyerName}</h2>

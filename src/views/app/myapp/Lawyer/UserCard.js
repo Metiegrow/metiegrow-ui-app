@@ -99,7 +99,7 @@ const UserCard = () => {
 
                  <div className='my-5  '>
                      <CardText className='text-primary '>
-                         <span className='text-xlarge font-weight-semibold'>$200</span>/year
+                         <span className='text-xlarge font-weight-semibold'>₹{users.price}</span>
                      </CardText>
                  
                  </div> 

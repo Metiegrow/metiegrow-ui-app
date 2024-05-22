@@ -6,6 +6,7 @@ import { baseUrl } from 'constants/defaultValues';
 import React from 'react';
 import { WithWizard } from 'react-albus';
 import { Button } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
 
 
 const  BottomNavigationWizard = ({
@@ -43,19 +44,66 @@ const  BottomNavigationWizard = ({
   //     // Handle error here
   //   }
   // };
+
+  const history = useHistory();
+
+  const handlePayFullyFromOnline = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/api/lawyer/${lawyerId}/service/${packageId}/purchase`, {
+        paymentMethod: 'ONLINE'
+      });
+      if (response.status === 200) {
+        console.log('Payment success:', response.data);
+        history.push('/app/lawyerjobslist');
+      } else {
+        console.error('Payment failed. Unexpected status code:', response.status);
+      }
+     
+     
+    } catch (error) {
+      console.error('Payment failed:', error);
+      
+    }
+  };
+  
   return (
     <WithWizard
       render={({ next, previous, step, steps }) => (
         
+        // default previous button
         <div className={`wizard-buttons ${className}`}>
-          <Button
+          {/* <Button
             color="primary"
-            className={`mr-1 ${steps.indexOf(step) <= 0 ? 'disabled' : ''}`}
+            className={`mr-1 ${steps.indexOf(step) <= 1 ? 'disabled' : ''}`}
             onClick={() => {
               onClickPrev(previous, steps, step);
             }}
           >
             {prevLabel}
+          </Button> */}
+          {steps.indexOf(step) > 0 && (
+    <Button
+      color="primary"
+      className={`mr-2 ${steps.indexOf(step) <= 1 ? 'disabled' : ''}`}
+      onClick={() => {
+        onClickPrev(previous, steps, step);
+      }}
+    >
+      {prevLabel}
+    </Button>
+  )}
+
+         {/* first step pay from online button */}
+          <Button 
+            color='primary'
+
+            className={`mx-2 ${steps.indexOf(step) === 0 ? '' : 'd-none'}`}
+            onClick={() => {
+              onClickPrev(previous, steps, step);
+              handlePayFullyFromOnline();
+            }}
+          >
+            pay fully online
           </Button>
 
           <Button
@@ -99,7 +147,7 @@ const  BottomNavigationWizard = ({
               
             }}
           >
-            {paymentButtonType === 'payFromWallet' ? 'Pay from Wallet' : 'Pay remaining online'}
+            {paymentButtonType === 'payFromWallet' ? 'Proceed to payment' : 'Pay remaining online'}
           </Button>
 
 
