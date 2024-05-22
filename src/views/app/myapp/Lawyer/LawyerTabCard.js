@@ -340,7 +340,7 @@ LawyerPackage();
                           <h5>{pack.serviceName}</h5>
                           <p className='text-muted'>{pack.description}</p>
                           <div className='d-flex '>
-                          <Button className=' text-one'  outline color='primary' onClick={handleChatClick}>Contact</Button>
+                          <Button className=' text-one'  outline color='primary' >Contact</Button>
                             
                           <Button color='primary' className='text-one ml-2'  onClick={() => handlePurchase(pack)}>Purchase</Button>
                           
