@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 // import Rating from 'components/common/Rating';
-import { baseUrl } from 'constants/defaultValues';
+import { adminRoot, baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
 import { Button,   Card,   CardBody,    Col,   NavLink,Row } from 'reactstrap';
 import {useParams,useHistory} from "react-router-dom";
@@ -90,6 +90,10 @@ const LawyerProfile = () => {
 
     const remainingSkillsCount = lawyerprofile.topic ? lawyerprofile.topic.length - 3 : 0;
 
+const handleChatClick = () =>{
+  history.push(`${adminRoot}/chat/${lawyerprofile.chatUserName}`)
+}
+
   return (
     <div>
     
@@ -127,7 +131,7 @@ const LawyerProfile = () => {
             </div>
             <div>
             <NavLink  >
-              <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
+              <Button onClick={handleChatClick} color="light" className=" font-weight-semibold mx-2 " size='large'>
                 <span className='font-weight-semibold text-primary text-one'>Contact</span>
                 
               </Button>

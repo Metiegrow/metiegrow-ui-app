@@ -13,6 +13,7 @@ import {
   Row,
   Card,
 } from "reactstrap";
+import { NotificationManager } from 'components/common/react-notifications';
 import TimestampConverter from "../Calculation/TimestampConverter";
 // check
 
@@ -60,11 +61,17 @@ const MyWallet = () => {
   const postData = async (amount) => {
     const url2 = `${baseUrl}/api/paytm/makePayment?amount=${amount}`;
     try {
-      await axios.post(url2);
+      const response = await axios.post(url2);
+
     fetchDataFromServer();
+    // console.log("recharge",response)
+    NotificationManager.success(response.data, 'Great!', 3000, null, null, '');
 
     } catch (error) {
+      NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
       console.error("Error making payment", error);
+
+
     }
   };
   const handleRecharge = () => {

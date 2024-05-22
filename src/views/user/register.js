@@ -227,6 +227,7 @@ const OnRegisterButtonclick = async () => {
                     errorMessage: 'First name must contain only alphabetic characters',
                   },
                 }}
+                autoComplete="off"
               />
 
               </Col>
@@ -244,6 +245,7 @@ const OnRegisterButtonclick = async () => {
                     errorMessage: 'Last name must contain only alphabetic characters',
                   },
                 }}
+                autoComplete="off"
               />
 
               </Col>
@@ -257,10 +259,11 @@ const OnRegisterButtonclick = async () => {
                   validate={{
                     required: { value: true, errorMessage: 'Username cannot be empty' },
                     pattern: {
-                      value: '^(?=.*[a-zA-Z0-9_@])(?=.*\\d{1,4})[a-zA-Z0-9_@]{3,20}$',
-                      errorMessage: 'Username must contain 3-20 characters, at least one alphanumeric character, and 1-4 digits',
+                      value: '^[a-zA-Z0-9_@]{3,20}$',
+                      errorMessage: 'Username must contain 3-20 characters and may include alphanumeric characters, underscores, and the @ symbol',
                     },
                   }}
+                  autoComplete="off"
                 />
 
 
@@ -275,6 +278,7 @@ const OnRegisterButtonclick = async () => {
                     required: { value: true, errorMessage: 'Email cannot be empty' },
                     email: { value: true, errorMessage: 'Please provide a valid email address' },
                   }}
+                  autoComplete="off"
                 />
 
              <AvField
@@ -290,6 +294,7 @@ const OnRegisterButtonclick = async () => {
                     errorMessage: 'Please enter a valid mobile number',
                   },
                 }}
+                autoComplete="off"
               />
 
               <Row>

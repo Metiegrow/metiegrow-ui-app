@@ -5,11 +5,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Button, Card, CardBody, Row } from 'reactstrap';
+import { Card, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import AC from 'agora-chat';
 
 
 import { Colxx } from 'components/common/CustomBootstrap';
+import {useParams} from "react-router-dom";
 
 import {
   getContacts,
@@ -17,18 +18,22 @@ import {
   changeConversation,
   addMessageToConversation,
 } from 'redux/actions';
-import ChatApplicationMenu from 'containers/applications/ChatApplicationMenu';
-import ChatHeading from 'components/applications/ChatHeading';
+// import ChatApplicationMenu from 'containers/applications/ChatApplicationMenu';
+// import ChatHeading from 'components/applications/ChatHeading';
 // import MessageCard from 'components/applications/MessageCard';
 import SaySomething from 'components/applications/SaySomething';
 import TimestampConverter from '../Calculation/TimestampConverter';
 import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
+import ApplicationMenu from 'components/common/ApplicationMenu';
+import ChatHeading from './ChatHeading';
+import ThumbnailLetters from './ThumbnailLetters';
+// import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 // import MessageCard from './MessageCard';
 
 const ChatApp = ({
   // intl,
-  allContacts,
+  // allContacts,
   conversations,
   loadingConversations,
   loadingContacts,
@@ -77,39 +82,36 @@ const ChatApp = ({
     selectedUserId,
   ]);
 
-  useEffect(() => {
-    focusScrollBottom();
-  }, [selectedUserId]);
 
-  const handleChatInputPress = (e) => {
-    if (e.key === 'Enter') {
-      if (messageInput.length > 0) {
-        addMessageToConversationAction(
-          currentUser.id,
-          selectedUser.id,
-          messageInput,
-          conversations
-        );
-        setMessageInput('');
-        setActiveTab('messages');
-        focusScrollBottom();
-      }
-    }
-  };
+  // const handleChatInputPress = (e) => {
+  //   if (e.key === 'Enter') {
+  //     if (messageInput.length > 0) {
+  //       addMessageToConversationAction(
+  //         currentUser.id,
+  //         selectedUser.id,
+  //         messageInput,
+  //         conversations
+  //       );
+  //       setMessageInput('');
+  //       setActiveTab('messages');
+  //       focusScrollBottom();
+  //     }
+  //   }
+  // };
 
-  const handleSendButtonClick = () => {
-    if (messageInput.length > 0) {
-      addMessageToConversationAction(
-        currentUser.id,
-        selectedUser.id,
-        messageInput,
-        conversations
-      );
-      setMessageInput('');
-      setActiveTab('messages');
-      focusScrollBottom();
-    }
-  };
+  // const handleSendButtonClick = () => {
+  //   if (messageInput.length > 0) {
+  //     addMessageToConversationAction(
+  //       currentUser.id,
+  //       selectedUser.id,
+  //       messageInput,
+  //       conversations
+  //     );
+  //     setMessageInput('');
+  //     setActiveTab('messages');
+  //     focusScrollBottom();
+  //   }
+  // };
 
   // const { messages } = intl;
 
@@ -123,23 +125,28 @@ const ChatApp = ({
       : null;
 
       // const role = localStorage.getItem("roleRes");
+  const {pid}=useParams();
+
       const [connection, setConnection] = useState(null);
       const [userId, setUserId] = useState("");
       const [token, setToken] = useState("");
-      const [peerId] = useState('sivanesh');
+      const [peerId, setPeerId] = useState(pid);
       const tokenRes = localStorage.getItem("tokenRes")
+      console.log("peer", peerId)
       useEffect(() => {
         const fetchData = async () => {
           try {
             
             const response = await axios.get(`${baseUrl}/api/chat/usertoken`, {
+            // const response = await axios.get(`${baseUrl}/api/chat/lawyer/${pid}/usertoken`, {
               headers: {
                 'Authorization': `Bearer ${tokenRes}`, 
               }
             });
             setToken(response.data.token);
             setUserId(response.data.chatUserName)
-            console.log("run",response)
+            // setPeerId(response.data.targetChatUserName)
+            // console.log("run",response)
           } catch (err) {
             console.error(err);
           }
@@ -147,34 +154,16 @@ const ChatApp = ({
     
         fetchData();
       }, []); 
+
       
-
-
-      // useEffect(() => {
-      //   if (role === 'LAWYER') {
-      //     setUserId('mahalingam');
-      //     setToken("007eJxTYFjVabzz+9yU93W/uJ5tqH/feSO8mL85wOeg39OKwtmuJ5cpMBiZm5kbpiUbpVomJZokGhlamBsYp6almpqlmJsYGBibfLnjkdYQyMjw4TO7KSMDKwMjEIL4KgwmyWYpponmBrqGpoZJuoaGqWm6iSaGlroGKQamScaGBqkpaSkAt/Yqpg==");
-      //     setPeerId("mahalingam")
-      //   } else if (role === 'MENTEE') {
-      //     setUserId('mahalingam');
-      //     setToken("007eJxTYBCseiW56Wu5uJKzxPaidJf7lceidJ+fmJh1vvfu3rf5t8oUGIzMzcwN05KNUi2TEk0SjQwtzA2MU9NSTc1SzE0MDIxN3O96pDUEMjLMFvtsxMjAysAIhCC+CoNJslmKaaK5ga6hqWGSrqFhappuoomhpa5BioFpkrGhQWpKWgoA3xcopQ==");
-      //     setPeerId("sivanesh")
-      //   }
-      // }, []);
+ 
       
-
-  //     const [connection, setConnection] = useState(null);
-  // const [userId] = useState('kumar123');
-  // const [token] = useState('007eJxTYLh2JvOrbUmVuM/28LbDaSImEfufXNladiOKoXzKjVzjhB0KDEbmZuaGaclGqZZJiSaJRoYW5gbGqWmppmYp5iYGBsYmQnEeaQ2BjAyG58+yMDKwMjACIYivwmBsCdRiaGmga5BqYKlraJiapptonGqia5JilmpgYJGSkppqAQCJ5Cdb');
-  // const [peerId] = useState('arun123');
+      
   const [peerMessage, setPeerMessage] = useState('');
   const [logs, setLogs] = useState([]);
+  const [serverConversations, setServerConversations] = useState([]);
   const [historyMessages, setHistoryMessages] = useState([]); 
 
-  // const startTime = new Date('2024,05,17').getTime(); // The start timestamp for query. The unit is millisecond.
-  //   const endTime = Date.now();
-  //   console.log("timefrom",startTime)
-  //   console.log("timeto",endTime)
 
 
   console.log("log",logs)
@@ -187,7 +176,7 @@ const ChatApp = ({
     });
     
 
-
+// ok
 
 
     conn.addEventHandler('connection&message', {
@@ -196,7 +185,8 @@ const ChatApp = ({
         fetchHistoryMessages(); 
         conn.getServerConversations({ pageSize: 50, cursor: '' })
         .then((res) => {
-          console.log("conversation", res.data.conversations);
+          // console.log("conversation", res.data.conversations);
+          setServerConversations(res.data.conversations)
         // addLog("");
           
         })
@@ -204,24 +194,37 @@ const ChatApp = ({
           console.log('Error fetching server conversations:', error);
         });
         conn.getHistoryMessages({
-          targetId: "sivanesh", // The user ID of the peer user for one-to-one chat or group ID for group chat.
+          targetId: peerId , // The user ID of the peer user for one-to-one chat or group ID for group chat.
           chatType: 'singleChat', // The chat type: `singleChat` for one-to-one chat or `groupChat` for group chat.
           pageSize: 20, // The number of messages to retrieve per page. The value range is [1,50] and the default value is 20.
           searchDirection: 'down', // The message search direction: `up` means to retrieve messages in the descending order of the message timestamp and `down` means to retrieve messages in the ascending order of the message timestamp.
           searchOptions: {
-            from: "mahalingam", // The user ID of the message sender. This parameter is used only for group chat.
+            // from: "mahalingam", // The user ID of the message sender. This parameter is used only for group chat.
             msgTypes: ['txt'], // An array of message types for query. If no value is passed in, all types of message will be queried.
             startTime: new Date('2024,05,17').getTime(), // The start timestamp for query. The unit is millisecond.
             // endTime: new Date('2024,05,18').getTime(), // The end timestamp for query. The unit is millisecond.
             endTime: Date.now(),
           },
         }).then((res) => {
+          console.log("ppid",peerId)
         console.log("Historical messages", res);
         addLog("Historical messages fetched successfully");
+  //       const newLogs = res.messages.map((message) => message.msg);
+  // setLogs((prevLogs) => [...prevLogs, ...newLogs]);
+  const newLogs = res.messages.map((message) => (
+    <>
+      {message.from}: {message.msg} -{" "}
+      <TimestampConverter timeStamp={message.time} format="datetime" />
+    </>
+  ));
+
+  setLogs((prevLogs) => [...prevLogs, ...newLogs]);
       })
       .catch((error) => {
+        console.log("pp2id",peerId)
         console.log('Error fetching historical messages:', error);
         addLog('Error fetching historical messages');
+        
       });
       },
       onDisconnected: () => {
@@ -232,12 +235,14 @@ const ChatApp = ({
         const time = message.time
         
         // addLog( `${message.from} : ${message.msg} - <TimestampConverter timeStamp={time} format="datetime" />`);
+        if (message.from === peerId) {
         addLog(
           <>
             {message.from} : {message.msg} - 
             <TimestampConverter timeStamp={time} format="datetime" />
           </>
         );
+      }
       },
       onTokenWillExpire: () => {
         addLog('Token is about to expire');
@@ -253,7 +258,11 @@ const ChatApp = ({
     });
 
     setConnection(conn);
-  }, []);
+    conn.open({
+      user: userId,
+      agoraToken: token,
+    });
+  }, [peerId,userId,token]);
 
 //   connection.getServerConversations({pageSize:50, cursor: ''}).then((res)=>{
 //     console.log("res",res)
@@ -272,7 +281,7 @@ const ChatApp = ({
         msgTypes: ['txt'],
         startTime: new Date('2024-05-17').getTime(),
         endTime: new Date('2024-05-18').getTime(),
-      },
+      },                                                                // check the name and add log
     };
 
     connection.getHistoryMessages(options).then((messages) => {
@@ -290,29 +299,10 @@ const ChatApp = ({
     setLogs((prevLogs) => [...prevLogs, message]);
   };
 
-  const handleLogin = () => {
-    // addLog('Logging in...');
-    connection.open({
-      user: userId,
-      agoraToken: token,
-    });
-  };
-
-  // useEffect(() => {
-  //   handleLogin();
-  // }, []);
-  // useEffect(()=>{
-  //   // addLog('Logging in...');
-  //   connection.open({
-  //     user: userId,
-  //     agoraToken: token,
-  //   });
-  // },[]);
-
-  const handleLogout = () => {
-    connection.close();
-    addLog('Logout');
-  };
+  // const handleLogout = () => {
+  //   connection.close();
+  //   addLog('Logout');
+  // };
 
   const handleSendMessage = () => {
     const option = {
@@ -325,12 +315,10 @@ const ChatApp = ({
     connection
       .send(msg)
       .then(() => {
-        console.log("sms", msg);
+        // console.log("sms", msg);
       
-        // Ensure msg.time exists and is properly accessed
         const time = msg.time;
       
-        // Ensure addLog is a valid function that can accept JSX
         addLog(
           <>
             {"You"}: {peerMessage} - 
@@ -338,27 +326,37 @@ const ChatApp = ({
           </>
         );
       
-        // Clear the peerMessage state after logging
         setPeerMessage('');
+      focusScrollBottom();
+
       })
-      // .then(() => {
-      //   console.log("sms",msg)
-      //   time = msg.time
-      //   addLog(
-          
-      //       <>
-      //         {"You"} : {peerMessage} - 
-      //         <TimestampConverter timeStamp={time} format="datetime" />
-      //       </>
-         
-      //     // `You: ${peerMessage}`
-      //   );
-      //   setPeerMessage('')
-      // })
+      
       .catch(() => {
         console.log('send private text fail');
       });
   };
+
+  const handleConversationClick = (selectedUserId) => {
+    setPeerId(selectedUserId);
+    setLogs([]);
+    
+  };
+
+  const handleChatInputPress = (e) => {
+    if (e.key === 'Enter') {
+      if (peerMessage.length > 0) {
+        handleSendMessage();
+        setPeerMessage('');
+        setActiveTab('messages');
+        focusScrollBottom();
+      }
+    }
+  };
+
+  useEffect(() => {
+    focusScrollBottom();
+  }, [peerId, addLog]);
+ 
 
   // return loadingConversations && loadingContacts ? (
   return  (
@@ -368,7 +366,7 @@ const ChatApp = ({
           {loadingConversations && selectedUser && (
             <ChatHeading
               name={peerId}
-              thumb={selectedUser.thumb}
+              thumb={peerId}
               lastSeenDate={selectedUser.lastSeenDate}
             />
           )}
@@ -430,7 +428,10 @@ const ChatApp = ({
           )}
         </Colxx>
       </Row>
-      <Button onClick={handleLogin}>login</Button>
+      {/* <Button className='mb-3' onClick={handleLogin}>Connect</Button> */}
+      <div className="d-flex justify-content-center">
+  {/* <Button className='mb-3' onClick={handleLogin}>Connect</Button> */}
+</div>
       <SaySomething
         // placeholder={messages['chat.saysomething']}
         placeholder="Say something..."
@@ -441,7 +442,84 @@ const ChatApp = ({
         }}
         handleSendButtonClick={handleSendMessage}
       />
-      <ChatApplicationMenu activeTab={activeTab} toggleAppMenu={setActiveTab} />
+      {/* <ChatApplicationMenu activeTab={activeTab} toggleAppMenu={setActiveTab} /> */}
+      <ApplicationMenu>
+      <TabContent activeTab={activeTab} className="chat-app-tab-content">
+
+      <TabPane tabId="messages" className="chat-app-tab-pane">
+          <PerfectScrollbar
+            options={{ suppressScrollX: true, wheelPropagation: false }}
+          >
+            <div className="pt-2 pr-4 pl-4 pb-2">
+            <h3>Contacts</h3>
+
+            {serverConversations.map((conversation) => (
+          //     <>
+          // <li key={conversation.conversationId}>
+          //   {conversation.conversationId}
+          // </li>
+        
+                      // <NavLink
+                      // key={conversation.conversationId}
+                      //   className="d-flex"
+                      //   to="#"
+                      //   location={{}}
+                      //   onClick={(e) =>
+                      //     handleConversationClick(conversation.conversationId)
+                      //   }
+                      // >
+                      <NavLink
+                          className="d-flex"
+                          key={conversation.conversationId}
+                          to="#"
+                          location={{}}
+                          onClick={() => handleConversationClick(conversation.conversationId)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {/* <img
+                            alt={item.name}
+                            src={item.thumb}
+                            className="img-thumbnail border-0 rounded-circle mr-3 list-thumbnail align-self-center xsmall"
+                          /> */}
+                          <ThumbnailLetters
+                          extraSmall 
+                  rounded
+                  text={conversation.conversationId}
+                  className="m-1"
+                />
+                          <div className="d-flex flex-grow-1 min-width-zero">
+                            <div className="m-2 pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                              <div className="min-width-zero">
+                                <p className="mb-0 truncate">{conversation.conversationId}</p>
+                              </div>
+                               <div className="separator mb-2" />
+                            </div>
+                          </div>
+
+                        </NavLink>
+                      
+                        // <div className="d-flex flex-grow-1 min-width-zero"  key={conversation.conversationId}>
+                        //   <Col lg={12} className="pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                        //     <Card className="min-width-zero p-2 mb-2">
+                        //       <p className=" mb-0 truncate" onClick={() =>
+                        //   handleConversationClick(conversation.conversationId)
+                        // }>{conversation.conversationId}</p>
+                        //       {/* <p className="mb-1 text-muted text-small">
+                        //         {item.lastMessageTime}
+                        //       </p> */}
+                        //     </Card>
+                        //   </Col>
+                        // </div>
+                      // </NavLink>
+                      // </>
+                ))}
+            </div>
+          </PerfectScrollbar>
+        </TabPane>
+        </TabContent>
+    </ApplicationMenu>
+
+
     </>
   ) 
 };

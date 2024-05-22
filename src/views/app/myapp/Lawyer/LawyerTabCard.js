@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { adminRoot, baseUrl } from 'constants/defaultValues';
+import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {
   Row,
@@ -15,7 +15,7 @@ import {
   Button,
  
 } from 'reactstrap';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 
 import classnames from 'classnames';
@@ -54,10 +54,10 @@ const LawyerTabCard = ({pid, handlePurchase}) => {
 LawyerPackage();
 },[])
 //   const [activeSecondTab, setActiveSecondTab] = useState('1');
-const history = useHistory()
-const handleChatClick = () =>{
-  history.push(`${adminRoot}/chat/${pid}`)
-}
+// const history = useHistory()
+// const handleChatClick = () =>{
+//   history.push(`${adminRoot}/chat/${pid}`)
+// }
 
   return (
     // <Row>
