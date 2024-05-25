@@ -32,9 +32,9 @@ const MyProfile = () => {
   //   "I have more than a decade experience in Software Engineering (and related practices including DevOps) and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
   // );
   const [newInputSkill, setNewInputSkill] = useState("");
-  const [newInputTopics, setNewInputTopics] = useState("");
+  // const [newInputTopics, setNewInputTopics] = useState("");
   const [skills, setSkills] = useState([]);
-  const [topics, setTopics] = useState([]);
+  // const [topics, setTopics] = useState([]);
   // const [userId, setUserId] = useState("");
   const [star, setStar] = useState("");
   // const [lastSceen, setLastseen] = useState("");
@@ -122,7 +122,7 @@ const MyProfile = () => {
           setReviews(inputData.reviews)
           // setPrice(inputData.price)
           setExperience(inputData.experience)
-          setTopics(inputData.topics);
+          // setTopics(inputData.topics);
           setStar(inputData.star);
         }
       } catch (error) {
@@ -231,12 +231,12 @@ const token = getTokenRes();
     setSkills(skills.filter((_, i) => i !== index));
   };
 
-  const handleAddTopics = (newTopics) => {
-    setTopics([...topics, newTopics]);
-  };
-  const handleRemoveTopics = (index) => {
-    setTopics(topics.filter((_, i) => i !== index));
-  };
+  // const handleAddTopics = (newTopics) => {
+  //   setTopics([...topics, newTopics]);
+  // };
+  // const handleRemoveTopics = (index) => {
+  //   setTopics(topics.filter((_, i) => i !== index));
+  // };
 
   const handleLinkedInClick = () => {
     if (linkedinUrl) {
@@ -515,9 +515,9 @@ const token = getTokenRes();
               )}
 
               <div className="mt-2">
-                <h2 className="mx-2">Topics</h2>
+                {/* <h2 className="mx-2">Topics</h2> */}
 
-                {isEditingButton ? (
+                {/* {isEditingButton ? (
                   <>
                     {topics.map((newTopics, index) => (
                       <Button
@@ -569,8 +569,8 @@ const token = getTokenRes();
                       {newTopics}
                     </Button>
                   ))
-                )}
-                <br />
+                )} */}
+                {/* <br /> */}
                 {!isEditingButton && (
                   <Button
                     color="primary"

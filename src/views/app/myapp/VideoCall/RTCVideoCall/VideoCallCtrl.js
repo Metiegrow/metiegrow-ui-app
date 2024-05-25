@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {useParams} from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 // import { Container, Row, Col } from "reactstrap";
 // import AgoraRTC from "agora-rtc-react"
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
-import {
-  config,
-  useClient,
-  useMicrophoneAndCameraTracks,
-} from "./settings";
+import { Button } from "reactstrap";
+import { config, useClient, useMicrophoneAndCameraTracks } from "./settings";
 
 import Video from "./Video";
 import Controls from "./Controls";
@@ -19,51 +16,64 @@ const VideoCallCtrl = (props) => {
   const [start, setStart] = useState(false);
   const [connectionState, setConnectionState] = useState("");
   const [callStartTime, setCallStartTime] = useState(null);
+  // const [startTime, setStartTime] = useState(0)
+  const [endTime, setEndTime] = useState(0);
   // const [callEndTime, setCallEndTime] = useState(null);
-  const [timeRemaining, setTimeRemaining] = useState(5 * 60);
-  const [channelName,setChannelName] = useState("")
+  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [channelName, setChannelName] = useState("");
   const [status, setStatus] = useState("");
-  const [rtcToken, setRtcToken] = useState(null)
+  const [rtcToken, setRtcToken] = useState(null);
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
-  const {userId,id}=useParams();
+  const { userId, id } = useParams();
+  const history = useHistory();
+
+  // const currentTime = Date.now();
+
+  //     const durationMs = currentTime - endTime;
+
+  //     const durationSec = durationMs / 1000;
+
+  //     setTimeRemaining(durationSec);
 
   // console.log(callEndTime)
   // console.log("userid:", userId)
   // console.log("iid",id)
   // console.log("user chk", users);
   // console.log("check status", status);
- const url = `${baseUrl}/api/mentee/connect-to-videocall`;
+  const url = `${baseUrl}/api/mentee/connect-to-videocall`;
 
-//  const [rtcToken, setRtcToken] = useState()
-//  console.log("rrtc",rtcToken)
-//  const getToken = async () => {
-//    const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
-//    const response = await axios.get(url2);
-//    console.log("chkchk",response)
-//    setRtcToken(response.data.rtcToken);
- 
-//  };
-// //  useEffect(() => {
-//  getToken()
-// //  }, []);
+  //  const [rtcToken, setRtcToken] = useState()
+  //  console.log("rrtc",rtcToken)
+  //  const getToken = async () => {
+  //    const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
+  //    const response = await axios.get(url2);
+  //    console.log("chkchk",response)
+  //    setRtcToken(response.data.rtcToken);
 
-useEffect(() => {
-  const getToken = async () => {
-    try {
-      const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
-      const response = await axios.get(url2);
-      setRtcToken(response.data.rtcToken);
-      setChannelName(response.data.channelName);
-    } catch (error) {
-      console.error("Error fetching RTC token:", error);
-    }
-  };
+  //  };
+  // //  useEffect(() => {
+  //  getToken()
+  // //  }, []);
 
-  getToken();
+  useEffect(() => {
+    const getToken = async () => {
+      try {
+        const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
+        const response = await axios.get(url2);
+        // console.log("resp",response)
+        setRtcToken(response.data.rtcToken);
+        setChannelName(response.data.channelName);
+        // setStartTime(response.data.startTime)
+        setEndTime(response.data.endTime);
+      } catch (error) {
+        console.error("Error fetching RTC token:", error);
+      }
+    };
 
-}, []);
- 
+    getToken();
+  }, []);
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     console.log("fetchedData chk");
@@ -104,35 +114,32 @@ useEffect(() => {
   // }, [callStartTime]);
 
   function getRoleRes() {
-    return localStorage.getItem('roleRes');
+    return localStorage.getItem("roleRes");
   }
 
   const roleRes = getRoleRes();
 
   useEffect(() => {
-  if (roleRes.includes("MENTOR")) {
-
-    const postData = async () => {
-      console.log("fetchedData chk");
-      try {
-
-        if (callStartTime) {
-          const endTime = Date.now();
-          const duration = endTime - callStartTime;
-          console.log("Call duration:", duration);
-        const response = await axios.post(url, {
-          id,
-          status,
-          
-        });
-        console.log("status post vid :",response.data.remainingDuration);
-      }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    postData();
-  }
+    if (roleRes.includes("MENTOR")) {
+      const postData = async () => {
+        console.log("fetchedData chk");
+        try {
+          if (callStartTime) {
+            const endTime1 = Date.now();
+            const duration = endTime1 - callStartTime;
+            console.log("Call duration:", duration);
+            const response = await axios.post(url, {
+              id,
+              status,
+            });
+            console.log("status post vid :", response.data.remainingDuration);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+      postData();
+    }
     // const intervalId = setInterval(() => {
     //   postData();
     // }, 300000);
@@ -142,23 +149,22 @@ useEffect(() => {
     // };
   }, [status]);
 
- 
-
   useEffect(() => {
     const init = async (name) => {
       client.on("user-joined", () => {
         if (!callStartTime) {
           setCallStartTime(Date.now());
-          setStatus("CONNECTED")
+          setStatus("CONNECTED");
           // console.log("user joined cc");
         }
       });
 
       client.on("user-left", () => {
         if (users.length === 1) {
+          client.leave();
           // setCallStartTime(null);
           // setCallEndTime(Date.now());
-          setStatus("DISCONNECTED")
+          setStatus("DISCONNECTED");
           // console.log("user left cc");
         }
       });
@@ -191,11 +197,32 @@ useEffect(() => {
         }
       });
 
+      const disconnectRemainingUser = () => {
+        setStatus("DISCONNECTED");
+        client.leave();
+        client.removeAllListeners();
+        tracks[0].close();
+        tracks[1].close();
+        setStart(false);
+        setInCall(false);
+        history.push(`/app/callcompleted/${userId}/${id}`);
+      };
+
+      // client.on("user-left", (user) => {
+      //   setUsers((prevUsers) => {
+      //     return prevUsers.filter((User) => User.uid !== user.uid);
+      //   });
+      // });
       client.on("user-left", (user) => {
-        setUsers((prevUsers) => {
-          return prevUsers.filter((User) => User.uid !== user.uid);
-        });
+        setUsers((prevUsers) => prevUsers.filter((User) => User.uid !== user.uid));
+      
+        if (users.length === 1) {
+          // Only one user is left, disconnect the remaining user
+          disconnectRemainingUser();
+        }
       });
+
+     
 
       try {
         await client.join(config.appId, name, rtcToken, null);
@@ -214,7 +241,7 @@ useEffect(() => {
         console.log(error);
       }
     }
-  }, [channelName, client, ready, tracks, users.length,rtcToken]);
+  }, [channelName, client, ready, tracks, users.length, rtcToken]);
 
   const iTime = new Date(parseInt(callStartTime, 10));
 
@@ -257,6 +284,32 @@ useEffect(() => {
   // const formattedTimeRemaining = `${minutes1}:${
   //   seconds < 10 ? "0" : ""
   // }${seconds}`;
+  // const callCurrentTime = Date.now()
+
+  // const callTimeRemaining = endTime - callCurrentTime
+  // const minutesRemaining = Math.floor(callTimeRemaining / 1000 / 60);
+
+  const [minutesRemaining1, setMinutesRemaining1] = useState(null);
+
+  useEffect(() => {
+    // const endTime = 1716544815000; // Example end time
+    const updateRemainingTime = () => {
+      const callCurrentTime = Date.now();
+      const callTimeRemaining = endTime - callCurrentTime;
+      const minutesRemaining = Math.max(
+        0,
+        Math.floor(callTimeRemaining / 1000 / 60)
+      );
+      setMinutesRemaining1(minutesRemaining);
+    };
+
+    // Update the time remaining initially and then every minute
+    updateRemainingTime();
+    const intervalId = setInterval(updateRemainingTime, 60000); // 60000 milliseconds = 1 minute
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => clearInterval(intervalId);
+  }, [endTime]);
 
   return (
     // <Container fluid style={{ height: "100%" }}>
@@ -273,11 +326,30 @@ useEffect(() => {
     // </Container>
     <div className="container-fluid" style={{ height: "75vh" }}>
       <div className="row p-0 d-flex justify-content-between">
-        <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4>
-        <h4>
+        {/* <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4> */}
+        {callStartTime && (
+          <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4>
+        )}
+        {/* <h4>
           Time Remaining :{" "}
-          {/* <span className="text-danger">{formattedTimeRemaining}</span> */}
-        </h4>
+          <span className="text-danger">{minutesRemaining1}</span>
+        </h4> */}
+        {minutesRemaining1 > 0 && minutesRemaining1 <= 10 ? (
+          // <div>Time Remaining : {minutesRemaining1} minutes</div>
+          <h4>
+            Time Remaining :{" "}
+            <span className="text-danger">{minutesRemaining1} minutes</span>{" "}{roleRes.includes("MENTEE") ? (<span>Extend by 15 minutes? <Button color="primary">Pay from wallet</Button></span>) : null }
+          </h4>
+        ) : (
+          <></>
+        )}
+        {roleRes.includes("MENTEE") && minutesRemaining1 === 0 ? (
+          <div>
+            <h4>
+            Extend by 15 minutes? <Button color="primary">Pay from wallet</Button>
+            </h4>
+          </div>
+        ) : null}
       </div>
       <div className="row" style={{ height: "90%" }}>
         {start && tracks && <Video tracks={tracks} users={users} />}
@@ -286,8 +358,8 @@ useEffect(() => {
         {ready && tracks && (
           <>
             <Controls
-             id={userId}
-             sid={id}
+              id={userId}
+              sid={id}
               tracks={tracks}
               setStart={setStart}
               setInCall={setInCall}
@@ -302,3 +374,24 @@ useEffect(() => {
 };
 
 export default VideoCallCtrl;
+
+// import React from 'react'
+
+// const [minutesRemaining, setMinutesRemaining] = useState(0);
+
+//   useEffect(() => {
+//     const endTime = 1716544815000; // Example end time
+//     const updateRemainingTime = () => {
+//       const callCurrentTime = Date.now();
+//       const callTimeRemaining = endTime - callCurrentTime;
+//       const minutesRemaining = Math.max(0, Math.floor(callTimeRemaining / 1000 / 60));
+//       setMinutesRemaining(minutesRemaining);
+//     };
+
+//     // Update the time remaining initially and then every minute
+//     updateRemainingTime();
+//     const intervalId = setInterval(updateRemainingTime, 60000); // 60000 milliseconds = 1 minute
+
+//     // Cleanup function to clear the interval when component unmounts
+//     return () => clearInterval(intervalId);
+//   }, []);

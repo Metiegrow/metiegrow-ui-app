@@ -213,8 +213,8 @@ const ChatApp = ({
   // setLogs((prevLogs) => [...prevLogs, ...newLogs]);
   const newLogs = res.messages.map((message) => (
     <>
-      {message.from}: {message.msg} -{" "}
-      <TimestampConverter timeStamp={message.time} format="datetime" />
+      <strong><h4>{message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
+      <span className='text-muted text-right'><TimestampConverter timeStamp={message.time} format="datetime" /></span>
     </>
   ));
 
@@ -238,8 +238,8 @@ const ChatApp = ({
         if (message.from === peerId) {
         addLog(
           <>
-            {message.from} : {message.msg} - 
-            <TimestampConverter timeStamp={time} format="datetime" />
+            <strong><h4>{message.from}</h4></strong>  <span className='text-muted'>{message.msg}</span>  
+            <span className='text-muted text-right'><TimestampConverter timeStamp={time} format="datetime" /></span>
           </>
         );
       }
@@ -321,8 +321,8 @@ const ChatApp = ({
       
         addLog(
           <>
-            {"You"}: {peerMessage} - 
-            <TimestampConverter timeStamp={time} format="datetime" />
+            <strong><h4>{"You"}</h4></strong> <br /> <span className='text-muted'>{peerMessage}</span>  
+           <span className='text-muted text-right'> <TimestampConverter timeStamp={time} format="datetime" /></span>
           </>
         );
       
@@ -391,7 +391,7 @@ const ChatApp = ({
               })} */}
               <div>
         {logs.map((log, index) => (
-          <Card className=' mb-3  p-2' key={index}>{log}</Card>
+          <Card className=' mb-3  p-3' key={index}>{log}</Card>
       //     <Card
       //     index={index}
       //   // className="d-inline-block mb-3 float-right"

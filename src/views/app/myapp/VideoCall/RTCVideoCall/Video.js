@@ -9,7 +9,7 @@ export default function Video(props) {
    
     <div className="container-fluid" style={{ height: "100%" }}>
       <div className="row" style={{ height: "100%" }}>
-        <div className='col-xs-8'>
+        <div className='col-xs-6'>
           <AgoraVideoPlayer
             videoTrack={tracks[1]}
             style={{ height: "100%", width: "100%" }}
@@ -19,7 +19,7 @@ export default function Video(props) {
           users.map((user) => {
             if (user.videoTrack) {
               return (
-                <div className='col-xs-4' key={user.uid}>
+                <div className='col-xs-6' key={user.uid}>
                   <AgoraVideoPlayer
                     videoTrack={user.videoTrack}
                     style={{ height: "100%", width: "100%" }}

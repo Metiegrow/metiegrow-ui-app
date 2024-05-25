@@ -11,28 +11,32 @@ import {
   Col,
   FormText,
   Alert,
-  CustomInput,
-  InputGroupAddon,
+  // CustomInput,
+  // InputGroupAddon,
   InputGroup,
+  Input,
 } from "reactstrap";
 import axios from "axios";
-import ThumbnailImage from "components/cards/ThumbnailImage";
+// import ThumbnailImage from "components/cards/ThumbnailImage";
 import { Wizard, Steps, Step, WithWizard } from "react-albus";
 import { injectIntl } from "react-intl";
 import { Formik, Form, Field } from "formik";
+import { SliderTooltip } from 'components/common/SliderTooltips';
+
 // import IntlMessages from "helpers/IntlMessages";
 // import BottomNavigation from "components/wizard/BottomNavigation";
 import TopNavigation from "components/wizard/TopNavigation";
 // import { AvField, AvForm } from "availity-reactstrap-validation";
 // import Experience from "./Experience";
 // import { FormikTagsInput } from "containers/form-validations/FormikFields";
+// import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
 import JumbotronUi from "./JumbotronUi";
 import {
-  validateLastName,
-  validateFirstName,
-  validateEmail,
-  validatePassword,
+  // validateLastName,
+  // validateFirstName,
+  // validateEmail,
+  // validatePassword,
   validateCategory,
   validateLocation,
   validateCompany,
@@ -44,6 +48,8 @@ import {
   validateAchievement,
   validateFile,
 } from "./validation";
+import country from "./Country";
+
 
 const CategoryData = [
   "Select Category",
@@ -52,13 +58,13 @@ const CategoryData = [
   "Category3",
   "Category4",
 ];
-const LocationData = [
-  "Select Location",
-  "Location1",
-  "Location2",
-  "Location3",
-  "Location4",
-];
+// const LocationData = [
+//   "Select Location",
+//   "Location1",
+//   "Location2",
+//   "Location3",
+//   "Location4",
+// ];
 
 const BottomNavigation = ({
   className,
@@ -117,12 +123,15 @@ const Mylogin = ({ intl }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [file1, setFile1] = useState(null);
+  const [amount, setAmount] = useState(250);
+
   const [fields, setFields] = useState({
     image: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
+    // firstName: "Raj",
+    // lastName: "dd",
+    // email: "raj@gmail.com",
+    // password: "Raj@1996",
     jobTitle: "",
     company: "",
     location: "",
@@ -141,11 +150,17 @@ const Mylogin = ({ intl }) => {
     image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
+  // const [nextStep, setNextStep] = useState(false)
 
   // const url = `${baseUrl}/mentor/profile`;
   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
   const mentorProfileUrl =`${baseUrl}/api/mentor/details/profile` ;
   const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
+
+  const handleSliderChange = (value) => {
+    setAmount(value);
+    
+  };
 
   // const mentorAboutUrl = `${baseUrl}/mentorAbout`;
   //  const mentorProfileUrl = `${baseUrl}/mentorProfile`;
@@ -196,6 +211,7 @@ const token = getTokenRes();
           Authorization: `Bearer ${token}`,
         },
       });
+      // setNextStep(true)
       console.log(`resres ${response.status}`);
     } catch (error) {
       console.error(error);
@@ -210,6 +226,7 @@ const token = getTokenRes();
         Authorization: `Bearer ${token}`,
       },
     });
+    // setNextStep(true)
     console.log(`resres ${response.status}`);
   } catch (error) {
     console.error(error);
@@ -226,13 +243,15 @@ const token = getTokenRes();
   // };
 
   const postDataExperience = async (data) => {
+    const postDataExp = {...data, price: amount}
     try {
-      const response = await axios.post(experienceUrl, data, {
+      await axios.post(experienceUrl, postDataExp, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+      // setNextStep(true)
+      // console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -256,6 +275,8 @@ const token = getTokenRes();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    setFile1(event.target.files[0]);
+    
 
     if (file) {
       const reader = new FileReader();
@@ -303,6 +324,15 @@ const token = getTokenRes();
 
         goToNext();
         step.isDone = true;
+        
+      // if(nextStep){
+      //   goToNext();
+      //   step.isDone = true;
+      //   setNextStep(false);
+      // }else{
+      // NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
+
+      // }
       }
     });
   };
@@ -319,7 +349,7 @@ const token = getTokenRes();
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
         <h1 className="mt-4 font-weight-bold">Apply as a mentor</h1>
-        <Wizard>
+        <Wizard >
           <TopNavigation className="justify-content-center" disableNav />
           <Steps>
             <Step
@@ -332,10 +362,10 @@ const token = getTokenRes();
                   innerRef={forms[0]}
                   initialValues={{
                     // image: aboutField.image,
-                    firstName: fields.firstName,
-                    lastName: fields.lastName,
-                    email: fields.email,
-                    password: fields.password,
+                    // firstName: fields.firstName,
+                    // lastName: fields.lastName,
+                    // email: fields.email,
+                    // password: fields.password,
                     jobTitle: fields.jobTitle,
                     company: fields.company,
                     location: fields.location,
@@ -345,7 +375,7 @@ const token = getTokenRes();
                     // postDataAbout(values,aboutField.image);
                     postDataAbout({ ...values, image: aboutField.image });
 
-                    console.log(aboutField.image);
+                    // console.log(aboutField.image);
                   }}
                 >
                   {({ errors, touched }) => (
@@ -364,10 +394,10 @@ const token = getTokenRes();
                         at those.
                       </Alert>
                       <FormGroup>
-                        <Label for="image">Image</Label>
+                        <Label for="image">Image*</Label>
                         <Row>
-                          <Col md={1}>
-                            <ThumbnailImage
+                          <Col md={2} className="">
+                            {/* <ThumbnailImage
                               rounded
                               small
                               src={
@@ -375,14 +405,23 @@ const token = getTokenRes();
                                 // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
                               }
                               alt="image"
+                            /> */}
+                            <img
+                             src={
+                              selectedFile || "/assets/img/profiles/l-1.jpg"
+                              // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
+                            }
+                              className="mx-2 rounded-circle img-thumbnail border"
+                              style={{ width: "70px", height: "70px" }}
+                              alt=""
                             />
                           </Col>
-                          <Col md={5} className="mt-3">
-                            <Label for="image" className="d-md-none">
+                          <Col md={5} className="mt-3 ">
+                            {/* <Label for="image" className="d-md-none">
                               Photo
-                            </Label>
+                            </Label> */}
                             <InputGroup className="mb-3">
-                              <InputGroupAddon
+                              {/* <InputGroupAddon
                                 addonType="prepend"
                                 className="cursor-pointer"
                               >
@@ -396,7 +435,7 @@ const token = getTokenRes();
                                 // onChange={() => {
                                 //   handleFileChange()}}
                                 validate={validateFile}
-                              />
+                              /> */}
                               {/* <Field
                                 className="form-control"
                                 type="file"
@@ -410,11 +449,33 @@ const token = getTokenRes();
                                   {errors.image}
                                 </div>
                               )}
+                              <div className="mt-2">
+                              <Button
+                                className="default"
+                                color="primary"
+                                onClick={() => document.getElementById("file-upload").click()}
+                              >
+                                Upload profile pic <i className="iconsminds-upload " />
+                              </Button>
+                              {/* <Form> */}
+                                <Input
+                                  id="file-upload"
+                                  type="file"
+                                  className="form-control d-none"
+                                  onChange={handleFileChange}
+                                  validate={validateFile}
+                                />
+                              {/* </Form> */}
+                              {file1 && <p className="mt-2">Selected file: {file1.name}</p>}
+                              {errors.image && touched.image && (
+    <div className="invalid-feedback d-block">{errors.image}</div>
+  )}
+                            </div>
                             </InputGroup>
                           </Col>
                         </Row>
                       </FormGroup>
-                      <Row>
+                      {/* <Row>
                         <Col md={6}>
                           <FormGroup className="error-l-75">
                             <Label>First Name*</Label>
@@ -482,7 +543,7 @@ const token = getTokenRes();
                             )}
                           </FormGroup>
                         </Col>
-                      </Row>
+                      </Row> */}
                       <Row>
                         <Col md={6}>
                           <FormGroup className="error-l-75">
@@ -527,9 +588,12 @@ const token = getTokenRes();
                           validate={validateLocation}
                           className="form-control"
                         >
-                          {LocationData.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
+                          <option disabled value="">
+                              Select Location
+                            </option>
+                          {country.map((option) => (
+                            <option key={option.iso_code} value={option.iso_code}>
+                              {option.name}
                             </option>
                           ))}
                         </Field>
@@ -762,6 +826,27 @@ const token = getTokenRes();
                         exponentially increase your chances. They also give you
                         a jumpstart once you&apos;re a mentor.
                       </Alert>
+                      <FormGroup>
+                      <Row>
+                            <Col md={12}>
+                            <FormGroup className="error-l-75">
+                            <Label>Amount*</Label>
+                             
+                           <SliderTooltip
+                          min={250}
+                          max={500000}
+                          
+                          defaultValue={250}
+                          className="mb-5"
+                          step={500}
+                          value={amount} 
+                          onChange={handleSliderChange}
+          
+                 />
+                          </FormGroup>
+                            </Col>
+                          </Row>
+                      </FormGroup>
                       <FormGroup>
                         <Row>
                           <Col md={6}>
