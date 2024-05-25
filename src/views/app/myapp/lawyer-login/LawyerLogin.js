@@ -131,6 +131,27 @@ const LawyerLogin = ({ intl}) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const [services, setServices] = useState([
+  //   {
+  //     id:1,
+  //     serviceName: '',
+  //     description: '',
+  //     amount: 1000,
+  //     headline: '',
+  //   }
+  // ]);
+  // const addService = () => {
+  //   setServices([
+  //     ...services,
+  //     {
+  //       id:services.length + 1,
+  //       serviceName: '',
+  //       description: '',
+  //       amount: 1000,
+  //       headline: '',
+  //     }
+  //   ]);
+  // };
   const [fields, setFields] = useState({
     image: "",
     // firstName: "",
@@ -168,6 +189,7 @@ const LawyerLogin = ({ intl}) => {
   
   const handleSliderChange = (value) => {
     setAmount(value);
+   
     
   };
 
@@ -219,6 +241,7 @@ const token = getTokenRes();
 
   const postDataExperience = async (data) => {
     const sendData=[{...data,amount}]
+  
     try {
       const response = await axios.post(packageUrl, sendData, {
         headers: {
@@ -230,6 +253,7 @@ const token = getTokenRes();
       console.error(error);
     }
   };
+  
   
 
   
@@ -804,7 +828,129 @@ const token = getTokenRes();
               desc={messages["wizard.step-desc-3"]}
             >
               <div className="wizard-basic-step">
-                <Formik
+              {/* {services&&services.map((service,index)=>{
+                return(
+                  <Formik key={service.id}
+                  className='my-4'
+                  innerRef={forms[2]}
+                  initialValues={{
+                    serviceName: service.serviceName,
+              description: service.description,
+              // amount: service.amount,
+              headline: service.headline,
+                 
+            
+                    
+                  }}
+                  onSubmit={(values) => {
+                    const submitData = {
+                ...values,
+                amount: services[index].amount,
+              };
+                    postDataExperience(submitData);
+                  }}
+                  validateOnMount
+                >
+                  {({ errors, touched }) => (
+                    <Form className="av-tooltip tooltip-label-right my-4">
+                      <Alert color="primary">
+                        <strong>Almost there!</strong> <br /> You&apos;re just
+                        one last step away from being a lawyer and connecting
+                        with mentees all over the world! in this step, shows off
+                        your accomplishments and how you can help others.
+                        <br />
+                        <br /> Many of these fields are optional, but will help
+                        us get better insights into your work - and therefore
+                        exponentially increase your chances. They also give you
+                        a jumpstart once you&apos;re a lawyer.
+                      </Alert>
+                    
+
+                      <Row >
+                        <Col md={12}>
+                        <FormGroup className="error-l-75">
+                            <Label>Service Name*</Label>
+                            <Field
+                              className="form-control"
+                              name="serviceName"
+                              validate={validateServiceName}
+                            />
+                            {errors.serviceName && touched.serviceName && (
+                              <div className="invalid-feedback d-block">
+                                {errors.serviceName}
+                              </div>
+                            )}
+                          </FormGroup>
+                        </Col>
+                       
+                      </Row>
+                      
+                      
+                      <FormGroup>
+                        <Label for="headline">Headline*</Label>
+                        <Field
+                          
+                          name="headline"
+                          id="headline"
+                          className="form-control"
+                          validate={validatePackageTopic}
+                        />
+                        {errors.topic && touched.topic && (
+                          <div className="invalid-feedback d-block">
+                            {errors.topic}
+                          </div>
+                        )}
+                       
+                      </FormGroup>
+                      <FormGroup>
+                        <Label for="description">Description*</Label>
+                        <Field
+                          as="textarea"
+                          name="description"
+                          id="description"
+                          className="form-control"
+                          validate={validatePackageDescription}
+                        />
+                        {errors.desc && touched.desc && (
+                          <div className="invalid-feedback d-block">
+                            {errors.desc}
+                          </div>
+                        )}
+                       
+                      </FormGroup>
+                          <Row>
+                            <Col md={12}>
+                            <FormGroup className="error-l-75">
+                            <Label>Amount*</Label>
+                            
+                           <SliderTooltip
+                          min={0}
+                          max={500000}
+                          
+                          defaultValue={service.amount}
+                          className="mb-5"
+                          step={500}
+                          value={amount} 
+                          onChange={handleSliderChange}
+                          // onChange={(value) => handleSliderChange(index, value)}
+          
+                 />
+                          </FormGroup>
+                            </Col>
+                          </Row>
+                         
+                       
+
+                     
+                    </Form>
+                  )}
+                </Formik>
+                )
+              
+                
+              })} */}
+
+              <Formik
                   innerRef={forms[2]}
                   initialValues={{
                     // introVideo: fields.introVideo,
@@ -1032,7 +1178,13 @@ const token = getTokenRes();
                     </Form>
                   )}
                 </Formik>
+
+              
+         
+                
+                {/* <Button  color="primary" className="my-5" onClick={addService}>Add more services</Button> */}
               </div>
+              
             </Step>
             <Step id="step4" hideTopNav>
               <div className="wizard-basic-step text-center pt-3">

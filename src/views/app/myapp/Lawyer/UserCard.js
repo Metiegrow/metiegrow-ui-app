@@ -73,11 +73,11 @@ const UserCard = () => {
              
             
                  {users.imageUrl === null ? (
-                  <div className=" w-full h-full my-4 " style={{height:"100%"}}>
+                  <div className=" w-full h-full my-4 mx-auto" style={{height:"100%"}}>
                   <ThumbnailLetters
                      rounded
                      text={users.firstName}
-                     className='text-xlarge  '
+                     className='text-xlarge  my-auto'
                      
 
                    />

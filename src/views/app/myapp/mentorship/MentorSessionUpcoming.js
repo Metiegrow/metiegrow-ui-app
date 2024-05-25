@@ -145,7 +145,11 @@ SessionUpcomingHistroy();
       );
     })
   ) : (
-    <p>No upcoming sessions</p>
+    <Card>
+      <CardBody>
+        <h3>No upcoming sessions</h3>
+      </CardBody>
+    </Card>
   )}
 </div>
        
@@ -207,7 +211,12 @@ SessionUpcomingHistroy();
       );
     })
   ) : (
-    <p>No session history</p>
+    
+    <Card>
+      <CardBody>
+        <h3>No session history</h3>
+      </CardBody>
+    </Card>
   )}
 </div>
 

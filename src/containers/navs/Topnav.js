@@ -359,7 +359,7 @@ if (roleRes.includes("MENTOR")) {
               </NavLink>
               <NavLink to={session}>
                 <DropdownItem onClick={() => handleMySessionsClick()}>
-                <i className="simple-icon-list" />  Sessions
+                <i className="simple-icon-list" /> Mentor Sessions
                 </DropdownItem>
               </NavLink>
               {/* <NavLink to={`${adminRoot}/jobslist`}>

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
-import { Button, Card,CardBody ,NavLink} from 'reactstrap';
+import {  Card,CardBody } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 
 
@@ -80,10 +80,12 @@ const JobList = () => {
       
       const formattedModifiedAt = `${modifiedAtDate.toLocaleDateString()} ${modifiedAtDate.toLocaleTimeString()}`;
           return(
-              <Card key={j.id} className='my-2'>
-          <NavLink href={`/app/jobsdetails/${j.id}`}
-          onClick={() => history.push(`/app/jobsdetails/${j.id}`, { lawyerName: j.lawyerName ,lawyerId:j.lawyerId})}
-          >
+              <Card key={j.id} className='my-2' style={{cursor:"pointer"}}
+              onClick={() => history.push(`/app/jobsdetails/${j.id}`, { lawyerName: j.lawyerName ,lawyerId:j.lawyerId})}
+              >
+          
+          
+          
           <CardBody className=''>
           <div className='d-flex justify-content-between'>
           <h2 className='text-primary'>{j.lawyerName}</h2>
@@ -96,7 +98,7 @@ const JobList = () => {
           </div>
               
           </CardBody>
-          </NavLink>
+         
          
          </Card>
           )
@@ -105,8 +107,13 @@ const JobList = () => {
          
        ):(
         <div>
-        <h1>nooo jobs</h1>
-        <Button>create</Button>
+        <Card>
+          <CardBody>
+          <h1>There is no joblists</h1>
+          </CardBody>
+        </Card>
+       
+        
         </div>
        
        )
