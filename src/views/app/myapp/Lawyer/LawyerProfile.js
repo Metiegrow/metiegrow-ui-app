@@ -93,7 +93,6 @@ const LawyerProfile = () => {
 const handleChatClick = () =>{
   history.push(`${adminRoot}/chat/${lawyerprofile.chatUserName}`)
 }
-
   return (
     <div>
     
@@ -193,7 +192,7 @@ const handleChatClick = () =>{
            
           </div>
           <div   className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none  ' >
-        <LawyerTabCard pid={pid} handlePurchase={handlePurchase}/>
+        <LawyerTabCard pid={pid} handlePurchase={handlePurchase} userId={lawyerprofile.chatUserName}/>
     </div>
         
           <div className='mt-4' >

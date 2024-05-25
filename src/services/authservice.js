@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import axios from 'axios';
-import { NotificationManager } from 'components/common/react-notifications';
+// import { NotificationManager } from 'components/common/react-notifications';
 
 import { baseUrl } from '../constants/defaultValues';
 
@@ -26,17 +26,17 @@ export const authService = {
           return res;
         })
         .catch((error) => {
-          // console.log('ERR:: ', error);
-          NotificationManager.warning(error, 'Error', 3000, null, null, '');
+          console.log('ERR:: ', error);
+          // NotificationManager.warning(error, 'Error', 3000, null, null, '');
           if (error.response) {
-            // console.log('ERR:response: ', error);
-          NotificationManager.warning(error, 'Error', 3000, null, null, '');
+            console.log('ERR:response: ', error);
+          // NotificationManager.warning(error, 'Error', 3000, null, null, '');
           } else if (error.request) {
-            // console.log('ERR:request: ', error);
-            NotificationManager.warning(error, 'Error', 3000, null, null, '');
+            console.log('ERR:request: ', error);
+            // NotificationManager.warning(error, 'Error', 3000, null, null, '');
           } else if (error.message) {
-            // console.log('ERR:message: ', error);
-            NotificationManager.warning(error, 'Error', 3000, null, null, '');
+            console.log('ERR:message: ', error);
+            // NotificationManager.warning(error, 'Error', 3000, null, null, '');
           }
           throw error;
         });

@@ -130,14 +130,17 @@ const OnRegisterButtonclick = async () => {
       );
       if (signUpResponse && signUpResponse.status === 201) {
         setIsSubmitted(true)
+        // console.log("signupsuccess")
         // history.push('/login');
     } else {
         console.error('Signup Failed:', signUpResponse);
-        NotificationManager.warning(signUpResponse.data.error.message, 'Sign Up Error', 3000, null, null, '');
+
+        // console.log("su",signUpResponse)
+        NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
     }
     } catch (error) {
-      // console.error('Error registering user:', error);
-      NotificationManager.warning(error, 'SignUp Error', 3000, null, null, '');
+      console.error('Error registering user:', error);
+      NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
 
     }
   }
@@ -186,7 +189,7 @@ const OnRegisterButtonclick = async () => {
         <Card className="auth-card">
         <div className="position-relative image-side ">
             <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
-            {isSubmitted? (
+            {isSubmitted ? (
               <div />
             ) : (
             <p className="white mb-0">
@@ -382,7 +385,7 @@ const OnRegisterButtonclick = async () => {
                 </Label>
               </FormGroup>
               </Row>
-              {roleError && <p className="text-danger">Please select at least one role</p>} {/* Validation message */}
+              {roleError && <p className="text-danger">Please select at least one role</p>}
               <div className="d-flex justify-content-end align-items-center">
                 <Button
                  color="primary"

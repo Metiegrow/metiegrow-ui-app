@@ -120,6 +120,18 @@ const validateFirstName = (value) => {
     return error;
 }
 
+// function validateLinkedinUrl(value) {
+//   let error;
+  
+//   if (!value) {
+//       error = "Please provide your LinkedIn URL";
+//   } else if (!/^linkedin\.(com|in)\/(in|pub|profile|company)\/[a-zA-Z0-9_-]+\/?$/i.test(value)) {
+//       error = "Invalid LinkedIn URL format";
+//   }
+//   return error;
+// }
+
+
 
   function validateReasonForMentor(value) {
     let error;
@@ -147,20 +159,29 @@ const validateFirstName = (value) => {
   //   // }
   //   return error;
   // }
-  function validateFile(value) {
+  // function validateFile(value) {
+  //   let error;
+  
+  //   if (!value) {
+  //     error = "This field is required.";
+  //   } else {
+  //     const fileType = value.type;
+  //     if (!["image/jpeg", "image/png"].includes(fileType)) {
+  //       error = "Unsupported file type. Only JPEG and PNG images are allowed";
+  //     }
+  //   }
+  
+  //   return error;
+  // }
+  const validateFile = (value) => {
     let error;
-  
     if (!value) {
-      error = "This field is required.";
-    } else {
-      const fileType = value.type;
-      if (!["image/jpeg", "image/png"].includes(fileType)) {
-        error = "Unsupported file type. Only JPEG and PNG images are allowed";
-      }
+      error = "Please select an image file";
+    } else if (!value.type.startsWith("image/")) {
+      error = "Please select a valid image file";
     }
-  
     return error;
-  }
+  };
   
   export {
     validateLastName,

@@ -38,7 +38,7 @@ const LawyerMyProfile = () => {
   const [star, setStar] = useState("");
   const [about, setAbout] = useState("");
 
-  console.log("topic", imageUrl);
+  // console.log("topic", imageUrl);
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
   // const updateUrl = `${baseUrl}/api/lawyer/updateProfile`;
@@ -221,28 +221,32 @@ const LawyerMyProfile = () => {
           
           <Card style={{ height: "160px", width: "100%", overflow: "hidden" }} className="bg-primary">
   <div className="d-flex align-items-center justify-content-between" style={{ height: "100%" }}>
-    <div className="mt-4 ml-4 mb-4">
-    {imageUrl === null ? (
-  <ThumbnailLetters
-    // small
-    rounded
-    text={firstName}
-    className="mx-2"
-    color="secondary"
-  />
-) : (
-  <img
-    src={`${baseUrl}/${imageUrl}`}
-    // src="/assets/img/profiles/2.jpg"
-    className="mx-2 rounded-circle img-thumbnail border"
-    style={{ width: "110px", height: "110px" }}
-    alt=""
-  />
-)}
-
+    <div className="d-flex align-items-center mt-4 ml-4 mb-4">
+      {imageUrl === null ? (
+        <ThumbnailLetters
+          // small
+          rounded
+          text={firstName}
+          className="mx-2"
+          color="secondary"
+        />
+      ) : (
+        <img
+          src={`${baseUrl}/${imageUrl}`}
+          // src="/assets/img/profiles/2.jpg"
+          className="mx-2 rounded-circle img-thumbnail border"
+          style={{ width: "110px", height: "110px" }}
+          alt=""
+        />
+      )}
+      <div className="ml-4 mt-2">
+        <h1 className="font-weight-semibold text-large">
+          {firstName} {lastName}
+        </h1>
+      </div>
     </div>
     <div className="mr-4">
-      <NavLink>
+      <NavLink className="d-none d-md-inline-block">
         <Button
           color="light"
           className="font-weight-semibold"
@@ -278,8 +282,8 @@ const LawyerMyProfile = () => {
               {file && <p>Selected file: {file.name}</p>}
             </div>
           )}
-          <Row>
-            <Col lg="6" md="12" className="mt-4">
+          <Row lg={10} md={8}>
+            <Col lg="5" md="12" className="mt-4 ml-4" >
               <div>
                 {isEditing ? (
                   <div>
@@ -326,9 +330,9 @@ const LawyerMyProfile = () => {
                   </div>
                 ) : (
                   <>
-                    <h1 className="font-weight-semibold text-large">
+                    {/* <h1 className="font-weight-semibold text-large">
                       Name: {firstName} {lastName}
-                    </h1>
+                    </h1> */}
 
                     <h5 className="font-weight-medium">
                       <i className="simple-icon-location-pin text-primary" />
@@ -339,10 +343,10 @@ const LawyerMyProfile = () => {
                       <i className="simple-icon-star text-primary " />
                       <span className="ml-2">{`${star} (${ratings} ratings)`}</span>
                     </h6>
-                    <h6 className="">
+                    {/* <h6 className="">
                       <i className="simple-icon-clock text-primary" />
                       <span className="ml-2">Last seen</span>
-                    </h6>
+                    </h6> */}
                   </>
                 )}
               </div>
@@ -373,7 +377,7 @@ const LawyerMyProfile = () => {
               )}
             </Col>
 
-            <Col lg="6" md="12" className="mt-4">
+            <Col lg="5" md="12" className="mt-4 ml-4">
               <h2 className="mx-2">Languages</h2>
               {isEditingButton ? (
                 <>
@@ -524,7 +528,7 @@ const LawyerMyProfile = () => {
           <hr />
           {/* <Colxx sm="12" md="12" lg="12" xxs="12" className="mt-5"> */}
           <Row>
-            <Col lg="12" md="12">
+            <Col lg="12" md="12" className="ml-4">
               <h1 className="font-weight-semibold text-large">About</h1>
 
               <div>
@@ -541,7 +545,7 @@ const LawyerMyProfile = () => {
                       className="form-control"
                       rows="5"
                     />
-                    <Label for="about" className="font-weight-medium">
+                    <Label for="about" className="font-weight-medium mt-2">
                       <h4>Bio</h4>
                     </Label>
                     <Input
