@@ -5,8 +5,9 @@ import Rating from "components/common/Rating";
 import { Card, CardBody, Col, NavLink, Progress, Row } from "reactstrap";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
-import ThumbnailLetters from "components/cards/ThumbnailLetters";
+// import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import TimestampConverter from "../Calculation/TimestampConverter";
+import ThumbnailLetters from "../Chat/ThumbnailLetters";
 
 const ReviewsComponent = ({revieweeId,category}) => {
   // console.log("prop chk", props);
@@ -87,7 +88,7 @@ const ReviewsComponent = ({revieweeId,category}) => {
   return (
     <Colxx xl="4" lg="6" md="12" className="mb-4">
       {totalRatings > 0 && (
-        <Card>
+        <Card className="mb-3">
           <CardBody>
             <h3 className="fw-bold">Ratings & Reviews</h3>
 
@@ -159,51 +160,89 @@ const ReviewsComponent = ({revieweeId,category}) => {
           reviews.map((rv) => {
             <hr />;
             return (
+
               <div
-                className="d-flex  justify-content-start my-4"
-                key={rv.reviewerId}
-              >
-                <div>
-                  <NavLink className="">
-                    <ThumbnailLetters
+                  key={rv.reviewerId}
+                  className="d-flex flex-row   border-bottom "
+                >
+                  <NavLink to='#'>
+                  <ThumbnailLetters
                       rounded
-                      small
+                      extraSmall
                       text={rv.name}
                       className=""
                     />
-                  </NavLink>
-                </div>
-                <div className="ml-2">
-                  <h6 className="font-weight-bold">{rv.name}</h6>
-                  {/* <h6>country</h6> */}
+                    {/* <img
+                      src={item.thumb}
+                      alt={item.title}
+                      className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                    /> */}
 
-                  <div className="d-flex align-items-center my-2">
-                    <Rating total={5} rating={rv.star} interactive={false} />
-                    <p className="text-small  mb-0 d-inline-block ml-2">
-                      {rv.star}
-                    </p>
-                  </div>
-                  {/* <p>{rv.feedBack}</p> */}
-                  {/* <div>{rv.feedBack}</div> */}
-                  <div>{removeTags(rv.feedBack)}</div>
-                  {/* <p>{timeConvert(rv.time)}</p> */}
-                  <p><TimestampConverter timeStamp={rv.time} format="datetime" /></p>
-                  <div className="d-flex font-weight-medium">
-                    <p>Helpful?</p>
-                    <div className="d-flex ">
-                      <span className=" ml-2">
-                        <i className="simple-icon-like mr-2" />
-                        yes
+                  </NavLink>
+
+                  <div className=" pr-2">
+                    <NavLink to='#'>
+                      <p className="font-weight-medium mb-0">{removeTags(rv.feedBack)}</p>
+                      <p className="text-muted mb-0 text-small">
+                      {rv.name} | {" "}
+                      <span>
+                        <TimestampConverter timeStamp={rv.time} format="datetime" />
                       </span>
-                      <span className=" ml-2">
-                        <i className="simple-icon-dislike mr-2" />
-                        no
-                      </span>
-                    </div>
-                    <hr />
+                      </p>
+                      {/* {displayRate && ( */}
+                        <div className="form-group mb-1 mt-2">
+                          <Rating total={5} rating={rv.star} interactive={false} />
+                        </div>
+                      {/* )} */}
+                    </NavLink>
                   </div>
                 </div>
-              </div>
+
+              // <div
+              //   className="d-flex  justify-content-start my-4"
+              //   key={rv.reviewerId}
+              // >
+              //   <div>
+              //     <NavLink className="">
+              //       <ThumbnailLetters
+              //         rounded
+              //         small
+              //         text={rv.name}
+              //         className=""
+              //       />
+              //     </NavLink>
+              //   </div>
+              //   <div className="ml-2">
+              //     <h6 className="font-weight-bold">{rv.name}</h6>
+              //     {/* <h6>country</h6> */}
+
+              //     <div className="d-flex align-items-center my-2">
+              //       <Rating total={5} rating={rv.star} interactive={false} />
+              //       <p className="text-small  mb-0 d-inline-block ml-2">
+              //         {rv.star}
+              //       </p>
+              //     </div>
+              //     {/* <p>{rv.feedBack}</p> */}
+              //     {/* <div>{rv.feedBack}</div> */}
+              //     <div>{removeTags(rv.feedBack)}</div>
+              //     {/* <p>{timeConvert(rv.time)}</p> */}
+              //     <p><TimestampConverter timeStamp={rv.time} format="datetime" /></p>
+              //     <div className="d-flex font-weight-medium">
+              //       <p>Helpful?</p>
+              //       <div className="d-flex ">
+              //         <span className=" ml-2">
+              //           <i className="simple-icon-like mr-2" />
+              //           yes
+              //         </span>
+              //         <span className=" ml-2">
+              //           <i className="simple-icon-dislike mr-2" />
+              //           no
+              //         </span>
+              //       </div>
+              //       <hr />
+              //     </div>
+              //   </div>
+              // </div>
             );
           })}
       </div>

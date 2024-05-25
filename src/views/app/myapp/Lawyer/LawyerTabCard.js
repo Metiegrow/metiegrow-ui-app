@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { baseUrl } from 'constants/defaultValues';
+import { adminRoot, baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {
   Row,
@@ -15,7 +15,7 @@ import {
   Button,
  
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 
 import classnames from 'classnames';
@@ -23,13 +23,14 @@ import classnames from 'classnames';
 import { Colxx } from 'components/common/CustomBootstrap';
 
 
-const LawyerTabCard = ({pid, handlePurchase}) => {
+const LawyerTabCard = ({pid, handlePurchase, userId}) => {
   const [activeFirstTab, setActiveFirstTab] = useState('1');
   const [packages,setPackages]=useState('');
   // const packageURL=`${baseUrl}/lawyerPackages`;
   
   // backend url 
-
+// console.log("ck",userId)
+// console.log("pk",pid)
 
     const packageURL=`${baseUrl}/api/lawyer/${pid}/package`
   useEffect(()=>{
@@ -54,10 +55,10 @@ const LawyerTabCard = ({pid, handlePurchase}) => {
 LawyerPackage();
 },[])
 //   const [activeSecondTab, setActiveSecondTab] = useState('1');
-// const history = useHistory()
-// const handleChatClick = () =>{
-//   history.push(`${adminRoot}/chat/${pid}`)
-// }
+const history = useHistory()
+const handleChatClick = () =>{
+  history.push(`${adminRoot}/chat/${userId}`)
+}
 
   return (
     // <Row>

@@ -37,7 +37,7 @@ const Controls = (props) => {
     <Container fluid>
       <Row md={6} className="align-items-center mt-2">
         <Col md={3} />
-        <Col md={2}>
+        <Col md={2} xs={4}>
           <Button
             color={trackState.audio ? "primary" : "secondary"}
             onClick={() => mute("audio")}
@@ -50,7 +50,7 @@ const Controls = (props) => {
             )}
           </Button>
         </Col>
-        <Col md={2}>
+        <Col md={2} xs={4}>
           <Button
             color={trackState.video ? "primary" : "secondary"}
             onClick={() => mute("video")}
@@ -76,7 +76,7 @@ const Controls = (props) => {
             <i className="simple-icon-camrecorder" />
           </span> */}
         </Col>
-        <Col md={2}>
+        <Col md={2} xs={4}>
           <Button color="danger" onClick={() => leaveChannel()}  className="icon-button" >
             <i className="simple-icon-call-end" />{" "}
           </Button>
