@@ -482,6 +482,55 @@ if (response.data.steps && response.data.steps.length > 0) {
       return null; 
     };
     
+    const downloadDocument = async (documentId) => {
+      
+      const updateUrl1 = `${baseUrl}/api/lawyer/job/document/${documentId}`;
+      try {
+        const response = await axios.get(updateUrl1); 
+        console.log("document response",response);
+        
+        if (response.status === 200) {
+          // const documentUrl = updateUrl1;
+          window.open(updateUrl1, '_blank');
+    
+
+     
+          // if (documentUrl) {
+          //   window.open(documentUrl, '_blank');
+          // } else {
+          //   console.error('Document URL is missing in the response');
+          // }
+        } else {
+          console.error('Failed to fetch the document');
+        }
+      }
+      
+      catch (error) {
+        console.error('Failed to update job name:', error);
+      }
+    };
+
+    const deleteDocument = async (documentId) => {
+      const deleteUrl = `${baseUrl}/api/lawyer/job/document/${documentId}`;
+      try {
+        const response = await axios.delete(deleteUrl);
+        if (response.status === 200) {
+          console.log('Document deleted successfully');
+          
+        } else {
+          console.error('Failed to delete the document');
+        }
+      } catch (error) {
+        console.error('Failed to delete the document:', error);
+      }
+    };
+    const handleKeyDown = (event, action, documentId) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        action(documentId);
+      }
+    };
+
     const location = useLocation();
   const { lawyerName,clientName,lawyerId } = location.state || {};
     
@@ -808,14 +857,27 @@ if (response.data.steps && response.data.steps.length > 0) {
                   <Label>Documents</Label>
                 </Col>
                 <Col>
-                <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.id}}`}/>
+                <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.stepNumber}`}/>
                   <div className='mt-4'>
-                    {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                      <h5 key={document.id}>{document.name}<span className='ml-2 text-primary'>
-                        <i className='iconsminds-download-1 font-weight-bold mx-1' style={{cursor: "pointer"}}/>
-                        <i className='simple-icon-trash mx-1' style={{cursor: "pointer"}}/>
-                      </span></h5>
-                    ))}
+                  {selectedStep.documentList && selectedStep.documentList.map((document) => (
+                                  <h5 key={document.id}>{document.name}
+                                  <span className='ml-2 text-primary' role="button"
+                                 tabIndex="0" 
+                               onKeyDown={(e) => handleKeyDown(e, downloadDocument, document.id)}
+                               onClick={() => downloadDocument(document.id)}>
+
+                                <i className='iconsminds-download-1 mx-1 '  
+                                  style={{cursor:"pointer"}}/>
+                               </span>
+                                  <span  tabIndex="0" role='button'
+                               onKeyDown={(e) => handleKeyDown(e, deleteDocument, document.id)}
+                               onClick={() => deleteDocument(document.id)}>
+                                  
+                                  
+                                  
+                                  <i className='simple-icon-trash mx-1 ' style={{cursor:"pointer"}}/>
+                                  </span></h5>
+                                ))}
                   </div>
                 </Col>
               </FormGroup>
@@ -931,12 +993,23 @@ if (response.data.steps && response.data.steps.length > 0) {
                   <Label className='text-one'>Documents</Label>
                   </Col>
                   <Col>
-                  <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.id}}`}/>
+                  <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.stepNumber}`}/>
 
                   <div className='mt-4'>
                                 {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                                  <h5 key={document.id}>{document.name}<span className='ml-2 text-primary'>
-                                  <i className='iconsminds-download-1 mx-1 ' style={{cursor:"pointer"}}/>
+                                  <h5 key={document.id}>{document.name}
+                                  <span className='ml-2 text-primary' role="button"
+                                 tabIndex="0" 
+                               onKeyDown={(e) => handleKeyDown(e, downloadDocument, document.id)}
+                               onClick={() => downloadDocument(document.id)}>
+                               <i className='iconsminds-download-1 mx-1 '  
+                                  style={{cursor:"pointer"}}/>
+                                  </span>
+                                  <span  tabIndex="0" role='button'
+                               onKeyDown={(e) => handleKeyDown(e, deleteDocument, document.id)}
+                               onClick={() => deleteDocument(document.id)}>
+                                  
+                                  
                                   <i className='simple-icon-trash mx-1 ' style={{cursor:"pointer"}}/>
                                   </span></h5>
                                 ))}
