@@ -35,8 +35,8 @@ const MyProfile = () => {
   // const [newInputTopics, setNewInputTopics] = useState("");
   const [skills, setSkills] = useState([]);
   // const [topics, setTopics] = useState([]);
-  // const [userId, setUserId] = useState("");
-  const [star, setStar] = useState("");
+  const [userId, setUserId] = useState(null);
+  // const [star, setStar] = useState("");
   // const [lastSceen, setLastseen] = useState("");
   // const [ratings, setRatings] = useState("")
   const [lastName, setLastName] = useState("");
@@ -81,7 +81,7 @@ const MyProfile = () => {
           setLocation(userData.location);
           // setAbout(userData.bio);
           setSkills(userData.skills);
-          // setUserId(userData.id);
+          setUserId(userData.id);
           // setLastseen(userData.lastSeen);
           // setRatings(userData[0].ratings)
           // console.log(response)
@@ -111,6 +111,22 @@ const MyProfile = () => {
 
     mentorProfileDetails();
   }, []);
+  useEffect(() => {
+
+  const mentorReviews = async () => {
+    const ratingUrl=`${baseUrl}/api/mentorship/rating/meta/${userId}`
+
+      
+    try {
+      const response = await axios.get(ratingUrl);
+      setReviews(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  mentorReviews();
+}, [userId]);
+
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
@@ -119,11 +135,11 @@ const MyProfile = () => {
         const inputData = response.data;
         console.log("inputData:", inputData);
         if (inputData) {
-          setReviews(inputData.reviews)
+          // setReviews(inputData.reviews)
           // setPrice(inputData.price)
           setExperience(inputData.experience)
           // setTopics(inputData.topics);
-          setStar(inputData.star);
+          // setStar(inputData.star);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -406,12 +422,12 @@ const token = getTokenRes();
                 ) : (
                   <>
                     <h1 className="font-weight-semibold text-large">
-                      Name: {firstName} {lastName}
+                      {firstName} {lastName}
                     </h1>
                     <h3 className="font-weight-semibold">
                       Job Title: {jobTitle} - {company}
                     </h3>
-                    <p className="text-one font-weight-medium text-primary">
+                    <p className="text-one font-weight-medium ">
                       Experience: {experience}
                     </p>
                     <h5 className="font-weight-medium">
@@ -421,12 +437,12 @@ const token = getTokenRes();
                     </h5>
                     <h6 className="">
                       <i className="simple-icon-star text-primary " />
-                      <span className="ml-2">{`${star} (${reviews} reviews)`}</span>
+                      <span className="ml-2">{`${reviews.averageStar} (${reviews.totalRatings} reviews)`}</span>
                     </h6>
-                    <h6 className="">
+                    {/* <h6 className="">
                       <i className="simple-icon-clock text-primary" />
                       <span className="ml-2">Last seen</span>
-                    </h6>
+                    </h6> */}
                   </>
                 )}
               </div>
