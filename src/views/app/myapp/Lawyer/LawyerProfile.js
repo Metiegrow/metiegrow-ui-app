@@ -147,14 +147,17 @@ const handleChatClick = () =>{
           </div>
       </div>
      <Row>
-      <Colxx>
+      <Colxx lg={6}>
    
           <div className=' mt-4'>
           <h1 className='font-weight-semibold text-xlarge'>{lawyerprofile.firstName} {lawyerprofile.lastName}</h1>
           {/* <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1> */}
           <h3 className='text-large  text-muted  '>{lawyerprofile.jobTitle}</h3>
             <h2 className='text-one  text-primary'>{lawyerprofile.company}</h2>
-            <p  className='text-one font-weight-medium text-primary'>{lawyerprofile.bio}</p>
+            
+            <p  className='text-one font-weight-medium text-primary '>{lawyerprofile.bio}</p>
+           
+           
             
             <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{lawyerprofile.location}</span></h5>
             <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{lawyerprofile.star} ({lawyerprofile.ratings} reviews)</span></h6>

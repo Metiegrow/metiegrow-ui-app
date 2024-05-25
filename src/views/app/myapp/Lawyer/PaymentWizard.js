@@ -247,14 +247,14 @@ const calculateRemainingAmountToPay = () => {
             </Step> */}
             <Step id="step4" hideTopNav>
             <div className="wizard-basic-step text-center">
-                <h2 className="mb-2">
+                <h2 className="mt-4">
                  
-                  Payment successfull
+                Your Payment is successfull
                 </h2>
-                <p>
+                {/* <p>
                  
                   Thank you
-                </p>
+                </p> */}
               </div>
             </Step>
           </Steps>

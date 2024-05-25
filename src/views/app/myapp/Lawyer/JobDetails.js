@@ -122,16 +122,18 @@ if (response.data.steps && response.data.steps.length > 0) {
       
       }
     };
-    function getTokenRes() {
-      return localStorage.getItem('tokenRes');
-  }
+  //   function getTokenRes() {
+  //     return localStorage.getItem('tokenRes');
+  // }
   function getRoleRes() {
     return localStorage.getItem('roleRes');
   }
   const roleRes = getRoleRes();
   const showEdit = () => {
 
-    if (roleRes.includes("LAWYER")) {
+    
+
+    if (!isNewStep && roleRes.includes("LAWYER")) {
       return (
          <div>
                 <Button className='mr-2' outline color="primary" onClick={() => setEditMode(!editMode)}>
@@ -156,74 +158,59 @@ if (response.data.steps && response.data.steps.length > 0) {
 
   
 
-  const showClientNoJob=()=>{
-    
-    if(roleRes.includes("MENTEE")){
-      return(
-        <div>
-           <Card className='text-center'>
-        <CardBody>
-          <h1>Your lawyer is working on your job</h1>
-        </CardBody>
-      </Card>
-        </div>
-       
-      );
-     
-    }
-    return null;
-  };
-  const token = getTokenRes();
+  // const token = getTokenRes();
   const history = useHistory();
 
     
 
-    const handleAddCard = async () => {
-      const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
+    // const handleAddCard = async () => {
+    //   const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
     
-      const newStepData = {
-        stepName: "Step name",
-        description: "description",
-        upload: true,
-        doneBy: false
-      };
+    //   const newStepData = {
+    //     stepName: "Step name",
+    //     description: "description",
+    //     upload: true,
+    //     doneBy: false
+    //   };
     
-      const addJobUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${newStepNumber}`;
+    //   const addJobUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${newStepNumber}`;
     
-      try {
-        const response = await fetch(addJobUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(newStepData)
-        });
+    //   try {
+    //     const response = await fetch(addJobUrl, {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': `Bearer ${token}`
+    //       },
+    //       body: JSON.stringify(newStepData)
+    //     });
     
-        if (response.status===200) {
-          const responseText = await response.text(); 
-          console.log("Raw response text:", responseText);
-          try {
-            const newCard = JSON.parse(responseText); 
-            const updatedJobDetails = {
-              ...jobdetails,
-              steps: [...(jobdetails.steps || []), newCard]
-            };
-            setJobDetails(updatedJobDetails);
-            // Reload the page if the response status is 200 (OK)
-            history.go(0);
-          } catch (jsonError) {
-            console.error("Failed to parse JSON response:", jsonError);
-          }
-        } else {
-          const errorText = await response.text();
-          console.error("Failed to add new step:", errorText);
-        }
-      } catch (error) {
-        console.error("Error adding new step:", error);
-      }
+    //     if (response.status===200) {
+    //       const responseText = await response.text(); 
+    //       console.log("Raw response text:", responseText);
+    //       try {
+    //         const newCard = JSON.parse(responseText); 
+    //         const updatedJobDetails = {
+    //           ...jobdetails,
+    //           steps: [...(jobdetails.steps || []), newCard]
+    //         };
+    //         setJobDetails(updatedJobDetails);
+           
+    //         history.go(0);
+    //       } catch (jsonError) {
+    //         console.error("Failed to parse JSON response:", jsonError);
+    //       }
+    //     } else {
+    //       const errorText = await response.text();
+    //       console.error("Failed to add new step:", errorText);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error adding new step:", error);
+    //   }
     
-    };
+    // };
+    
+
     
     const handleStepClick = (step) => {
       setSelectedStep(step);
@@ -247,7 +234,33 @@ if (response.data.steps && response.data.steps.length > 0) {
      
     };
   
- 
+   
+  const showClientNoJob=()=>{
+    
+    if(roleRes.includes("MENTEE")){
+      return(
+        <div>
+           <Card className='text-center'>
+        <CardBody>
+          <h3>Your lawyer is working on your job<span className='mx-2'>
+          <i className='iconsminds-information'/></span></h3>
+        </CardBody>
+      </Card>
+        </div>
+       
+      );
+     
+    }
+  
+     return  <div>
+     <Card className='text-center'>
+  <CardBody>
+    <h3>You didnt created step yet <span className='mx-2'>
+    <i className='iconsminds-information'/></span></h3>
+  </CardBody>
+</Card>
+  </div>;
+  };
   
    
     const handleCancelClick = () => {
@@ -360,10 +373,19 @@ if (response.data.steps && response.data.steps.length > 0) {
       if (roleRes.includes("LAWYER")) {
         return (
           <Card>
-            <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddCard}>
-              <h1 className='text-center mx-auto w-100' style={{fontSize: "60px", cursor: "pointer"}}>
+            {/* <CardBody className='my-2 ' style={{cursor: "pointer"}} onClick={handleAddCard}> */}
+            
+          <CardBody className='my-2 ' style={{cursor: "pointer"}} onClick={handleAddStepCard}>
+            <div className=''>
+            <h5 className='text-center mx-auto w-100' style={{ cursor: "pointer"}}>
+                Create your first step
+              </h5>
+              <h2 className='text-center mx-auto w-100' style={{ cursor: "pointer"}}>
                 +
-              </h1>
+              </h2>
+            </div>
+              
+
             </CardBody>
           </Card>
         );
@@ -372,7 +394,8 @@ if (response.data.steps && response.data.steps.length > 0) {
       if (roleRes.includes("MENTEE")) {
         return (
           <Card className='d-none'>
-            <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddCard}>
+            {/* <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddCard}> */}
+            <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddStepCard}>
               <h1 className='text-center mx-auto w-100' style={{fontSize: "60px", cursor: "pointer"}}>
                 +
               </h1>
@@ -383,6 +406,46 @@ if (response.data.steps && response.data.steps.length > 0) {
     
       return null; 
     };
+    const showJobEditIcon = () => {
+
+      // if (!jobdetails || !jobdetails.jobName) {
+      //   return <h1 className='ml-1'>Loading job name...</h1>;  // Provide a loading or default placeholder
+      // }
+      if (roleRes.includes("LAWYER")) {
+        return (
+          <div
+            className='font-weight-semibold text-large'
+            style={{ cursor: 'pointer' }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => setJobEditMode(true)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === 'Space') {
+                handleJobNameClick();
+                event.preventDefault();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            <h1 className='ml-1'>{jobdetails.jobName}</h1>
+            
+            {isHovered && (
+              <span className='ml-2 text-primary text-one'>
+                <i 
+                  className='simple-icon-pencil' 
+                  style={{ cursor: 'pointer' }} 
+                  size='sm'
+                />
+              </span>
+            )}
+          </div>
+        );
+      }
+      
+      return <h1 className='ml-1'>{jobdetails.jobName} </h1>;
+    };
+    
    
     
     const showAddStepCard = () => {
@@ -419,6 +482,55 @@ if (response.data.steps && response.data.steps.length > 0) {
       return null; 
     };
     
+    const downloadDocument = async (documentId) => {
+      
+      const updateUrl1 = `${baseUrl}/api/lawyer/job/document/${documentId}`;
+      try {
+        const response = await axios.get(updateUrl1); 
+        console.log("document response",response);
+        
+        if (response.status === 200) {
+          // const documentUrl = updateUrl1;
+          window.open(updateUrl1, '_blank');
+    
+
+     
+          // if (documentUrl) {
+          //   window.open(documentUrl, '_blank');
+          // } else {
+          //   console.error('Document URL is missing in the response');
+          // }
+        } else {
+          console.error('Failed to fetch the document');
+        }
+      }
+      
+      catch (error) {
+        console.error('Failed to update job name:', error);
+      }
+    };
+
+    const deleteDocument = async (documentId) => {
+      const deleteUrl = `${baseUrl}/api/lawyer/job/document/${documentId}`;
+      try {
+        const response = await axios.delete(deleteUrl);
+        if (response.status === 200) {
+          console.log('Document deleted successfully');
+          
+        } else {
+          console.error('Failed to delete the document');
+        }
+      } catch (error) {
+        console.error('Failed to delete the document:', error);
+      }
+    };
+    const handleKeyDown = (event, action, documentId) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        action(documentId);
+      }
+    };
+
     const location = useLocation();
   const { lawyerName,clientName,lawyerId } = location.state || {};
     
@@ -426,6 +538,20 @@ if (response.data.steps && response.data.steps.length > 0) {
   return (
     <div>
         <Row>
+        <Col>
+        <div>
+     
+        {lawyerName ? (
+          <NavLink href={`/app/lawyerprofile/${lawyerId}`}>
+          <h6 className='text-muted'>Lawyer: {lawyerName}</h6>
+          </NavLink>
+       
+      ) : (
+         <h6 className='text-muted'>Client: {clientName}</h6>
+      )}
+        </div>
+        </Col>
+        
        
         <Col md={12} lg={12} sm={12} className='my-2'>
         {jobdetails.steps&&jobdetails.steps.length>0?(
@@ -437,7 +563,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         <Col md={12} lg={4}>
         
         
-        {/* <h1 className='font-weight-semibold text-large'>{jobdetails.jobName}</h1> */}
+      
         {jobeditmode ? (
           <Row className='d-flex align-items-center'>
            
@@ -462,7 +588,18 @@ if (response.data.steps && response.data.steps.length > 0) {
          
             
           ) : (
-            <div
+           
+
+          showJobEditIcon()
+          
+          
+       
+          )
+        }
+
+
+
+        {/* <div
           className='font-weight-semibold text-large '
           style={{ cursor: 'pointer' }}
           onMouseEnter={() => setIsHovered(true)}
@@ -470,7 +607,7 @@ if (response.data.steps && response.data.steps.length > 0) {
          onClick={()=>setJobEditMode(true)}
           onKeyDown={(event) => {
             if (event.key === 'Enter' || event.key === 'Space') {
-              // Handle click action here
+              
               handleJobNameClick();
               event.preventDefault();
             }
@@ -490,21 +627,8 @@ if (response.data.steps && response.data.steps.length > 0) {
              
               
             )}
-          </div>
-       
-          )
-        }
-       
-        <div>
-        {lawyerName ? (
-          <NavLink href={`/app/lawyerprofile/${lawyerId}`}>
-          <h6 className='text-muted'>Lawyer: {lawyerName}</h6>
-          </NavLink>
-       
-      ) : (
-         <h6 className='text-muted'>Client: {clientName}</h6>
-      )}
-        </div>
+          </div> */}
+      
         </Col>
         <Col><LawyerJobNotes jobId={jid}/></Col>
         </Row>
@@ -689,7 +813,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                    className="react-select"
                 classNamePrefix="react-select"
                   name="userstep"
-                  value={doneByData.find(option => option.value === userstep)}
+                  // value={doneByData.find(option => option.value === userstep)}
             
                  onChange={handleUserStepChange}
                 //  onChange={(val) => {
@@ -705,7 +829,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                      
                         </Col>
                       </FormGroup>
-                      <FormGroup  className='py-2'>
+                      {/* <FormGroup  className='py-2'>
        <Col sm={2}>
        <Label className=''>Documents</Label>
        </Col>
@@ -724,9 +848,71 @@ if (response.data.steps && response.data.steps.length > 0) {
 
         </Col>
         
-       </FormGroup>
-      
-      <FormGroup>
+       </FormGroup> */}
+
+       {isNewStep ? null : (
+            <>
+              <FormGroup className='py-2'>
+                <Col sm={2}>
+                  <Label>Documents</Label>
+                </Col>
+                <Col>
+                <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.stepNumber}`}/>
+                  <div className='mt-4'>
+                  {selectedStep.documentList && selectedStep.documentList.map((document) => (
+                                  <h5 key={document.id}>{document.name}
+                                  <span className='ml-2 text-primary' role="button"
+                                 tabIndex="0" 
+                               onKeyDown={(e) => handleKeyDown(e, downloadDocument, document.id)}
+                               onClick={() => downloadDocument(document.id)}>
+
+                                <i className='iconsminds-download-1 mx-1 '  
+                                  style={{cursor:"pointer"}}/>
+                               </span>
+                                  <span  tabIndex="0" role='button'
+                               onKeyDown={(e) => handleKeyDown(e, deleteDocument, document.id)}
+                               onClick={() => deleteDocument(document.id)}>
+                                  
+                                  
+                                  
+                                  <i className='simple-icon-trash mx-1 ' style={{cursor:"pointer"}}/>
+                                  </span></h5>
+                                ))}
+                  </div>
+                </Col>
+              </FormGroup>
+            </>
+          )}
+
+          {isNewStep ? null : (
+            <FormGroup className='py-2'>
+              <Col sm={2}>
+                <Label>Status</Label>
+              </Col>
+              <Col>
+              <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          
+          value={selectedOption}
+          
+          onChange={(val) => {
+         console.log(val);  
+          setSelectedOption(val);
+          setSelectedStep(val);
+          saveStatus(val.key);
+      }}
+          
+            options={selectData}
+          
+        />
+        
+              </Col>
+            </FormGroup>
+          )}
+      {/* <FormGroup>
         <Col sm={2}>
           <Label className=''>
             Status
@@ -738,26 +924,26 @@ if (response.data.steps && response.data.steps.length > 0) {
           className="react-select"
           classNamePrefix="react-select"
           name="form-field-name"
-          // defaultValue={selectedOption}
+          
           value={selectedOption}
-          // onChange={(val)=>setSelectedOption(val)}
+          
           onChange={(val) => {
          console.log(val);  
         setSelectedOption(val);
         setSelectedStep(val);
         saveStatus(val.key);
       }}
-          // onChange={saveStatus} 
+          
             options={selectData}
-          // options={selectData}
+          
         />
         
         </Col>
        
-      </FormGroup>
+      </FormGroup> */}
       <FormGroup>
       <Col>   {isNewStep ? (
-        // Save button for adding a new step
+        
         <Button color="primary" onClick={handleSave}>Create</Button>
       ) : (
         // Save button for editing an existing step
@@ -807,12 +993,23 @@ if (response.data.steps && response.data.steps.length > 0) {
                   <Label className='text-one'>Documents</Label>
                   </Col>
                   <Col>
-                  <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.id}}`}/>
+                  <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.stepNumber}`}/>
 
                   <div className='mt-4'>
                                 {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                                  <h5 key={document.id}>{document.name}<span className='ml-2 text-primary'>
-                                  <i className='iconsminds-download-1 mx-1 ' style={{cursor:"pointer"}}/>
+                                  <h5 key={document.id}>{document.name}
+                                  <span className='ml-2 text-primary' role="button"
+                                 tabIndex="0" 
+                               onKeyDown={(e) => handleKeyDown(e, downloadDocument, document.id)}
+                               onClick={() => downloadDocument(document.id)}>
+                               <i className='iconsminds-download-1 mx-1 '  
+                                  style={{cursor:"pointer"}}/>
+                                  </span>
+                                  <span  tabIndex="0" role='button'
+                               onKeyDown={(e) => handleKeyDown(e, deleteDocument, document.id)}
+                               onClick={() => deleteDocument(document.id)}>
+                                  
+                                  
                                   <i className='simple-icon-trash mx-1 ' style={{cursor:"pointer"}}/>
                                   </span></h5>
                                 ))}

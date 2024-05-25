@@ -2,7 +2,7 @@ import React,{ useEffect, useState } from 'react'
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
-import {  Card,CardBody ,NavLink} from 'reactstrap';
+import {  Card,CardBody } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 
 const LawyerJobList = () => {
@@ -75,10 +75,9 @@ const LawyerJobList = () => {
       
       const formattedModifiedAt = `${modifiedAtDate.toLocaleDateString()} ${modifiedAtDate.toLocaleTimeString()}`;
           return(
-              <Card key={j.id} className='my-2'>
-          <NavLink href={`/app/jobsdetails/${j.id}`}
-           onClick={() => history.push(`/app/jobsdetails/${j.id}`, { clientName: j.clientName })}
-          >
+              <Card key={j.id} className='my-2'  style={{cursor:"pointer"}}
+              onClick={() => history.push(`/app/jobsdetails/${j.id}`, { clientName: j.clientName })}>
+            
           <CardBody className=''>
           <div className='d-flex justify-content-between'>
           <h2 className='text-primary'>{j.clientName}</h2>
@@ -91,7 +90,7 @@ const LawyerJobList = () => {
           </div>
               
           </CardBody>
-          </NavLink>
+         
          
          </Card>
           )
@@ -103,9 +102,7 @@ const LawyerJobList = () => {
         <Card>
           <CardBody>
           <h2>There is no jobs</h2>
-          
-        
-          
+           
           </CardBody>
         </Card>
         

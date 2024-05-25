@@ -5,7 +5,7 @@ import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
 import React from 'react';
 import { WithWizard } from 'react-albus';
-import { Button } from 'reactstrap';
+import { Button, NavLink } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 
 
@@ -81,7 +81,7 @@ const  BottomNavigationWizard = ({
           >
             {prevLabel}
           </Button> */}
-          {steps.indexOf(step) > 0 && (
+          {steps.indexOf(step) > 0 && steps.indexOf(step) < steps.length - 1 &&(
     <Button
       color="primary"
       className={`mr-2 ${steps.indexOf(step) <= 1 ? 'disabled' : ''}`}
@@ -110,7 +110,7 @@ const  BottomNavigationWizard = ({
             color="primary"
             className={
               // steps.indexOf(step) >= steps.length - 1 ? 'disabled' : ''
-              steps.indexOf(step) <=1  ? 'd-none' : ''
+              steps.indexOf(step) <=steps.length-1 ? 'd-none' : ''
             }
             onClick={() => {
               onClickNext(next, steps, step);
@@ -119,7 +119,18 @@ const  BottomNavigationWizard = ({
             {nextLabel}
           </Button>
          
-    
+
+          {/* hide last step button */}
+         {/* <Button
+           color="primary"
+            className={`${steps.indexOf(step) === 2 ? 'd-none' : ''}`}
+            onClick={() => {
+              onClickNext(next, steps, step);
+             
+            }}
+          >
+            {nextLabel}
+          </Button>   */}
 
 
             <Button 
@@ -149,6 +160,21 @@ const  BottomNavigationWizard = ({
           >
             {paymentButtonType === 'payFromWallet' ? 'Proceed to payment' : 'Pay remaining online'}
           </Button>
+
+
+
+           <NavLink href='/app/lawyerjobslist'>
+           <Button 
+            color='primary'
+            className={steps.indexOf(step) === steps.length-1 ? '' : 'd-none'}
+            onClick={() => {
+              onClickNext(next, steps, step);
+            }}
+          >
+            Close
+          </Button>
+           </NavLink>
+         
 
 
           
