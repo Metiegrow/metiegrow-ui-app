@@ -23,6 +23,8 @@ import { Formik, Form, Field } from "formik";
 import TopNavigation from "components/wizard/TopNavigation";
 import { baseUrl } from "constants/defaultValues";
 import { SliderTooltip } from 'components/common/SliderTooltips';
+import TagsInput from "react-tagsinput";
+import 'react-tagsinput/react-tagsinput.css';
 import LawyerJumbotron from "./LawyerJumbotron";
 import {
   // validateLastName,
@@ -30,7 +32,7 @@ import {
   // validateEmail,
   // validatePassword,
   // validateCategory,
-  validateLanguages,
+  // validateLanguages,
   validateLocation,
   // validatePackageTitle,
   validatePackageTopic,
@@ -40,7 +42,7 @@ import {
   // validateJobTitle,
   validateAbout,
   // validateSkills,
-  validateTopics,
+  // validateTopics,
   validateBio,
   validateServiceName,
   // validateServiceDescription,
@@ -130,6 +132,8 @@ const BottomNavigation = ({
 const LawyerLogin = ({ intl}) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
+  const [languagesTag, setLanguagesTag] = useState([]);
+  const [topicsTag, setTopicsTag] = useState([]);
   const [loading, setLoading] = useState(false);
   // const [services, setServices] = useState([
   //   {
@@ -320,6 +324,13 @@ const token = getTokenRes();
     goToPrev();
   };
 
+  const handleLanguagesTagsChange = (newLanguages) => {
+    setLanguagesTag(newLanguages);
+  };
+  const handleTopicsTagsChange = (newTopics) => {
+    setTopicsTag(newTopics);
+  };
+
   const { messages } = intl;
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
@@ -345,17 +356,17 @@ const token = getTokenRes();
                     // jobTitle: fields.jobTitle,
                     // company: fields.company,
                     location: fields.location,
-                    languages:fields.languages
+                    // languages:fields.languages
                   }}
                   validateOnMount
                   onSubmit={(values) => {
                     // postDataAbout(values,aboutField.image);
-                    postDataAbout({ ...values, image: aboutField.image });
+                    postDataAbout({ ...values, image: aboutField.image, languages:languagesTag});
 
                     console.log(aboutField.image);
                   }}
                 >
-                  {({ errors, touched , setFieldValue,}) => (
+                  {({ errors, touched }) => (
                     <Form className="av-tooltip tooltip-label-right ">
                       <Alert color="primary">
                         <strong>Lovely to see you!</strong>
@@ -543,7 +554,7 @@ const token = getTokenRes();
                       </FormGroup>
                       <FormGroup className="error-l-75">
                         <Label>Languages*</Label>
-                        <Field
+                        {/* <Field
                           
                           type="text"
                           name="languages"
@@ -556,7 +567,13 @@ const token = getTokenRes();
                               .map((languages) => languages.trim());
                             setFieldValue("languages", languagesArray);
                           }}
-                        />
+                        /> */}
+                        <TagsInput
+                        value={languagesTag}
+                        onChange={handleLanguagesTagsChange}
+                        inputProps={{ placeholder: "Add Languages " }}
+                        // validate={validateLanguages}
+                      />
                           
                         
                         {errors.languages && touched.languages && (
@@ -582,7 +599,7 @@ const token = getTokenRes();
                     // category: fields.category,
                     // skills: fields.skills,
                     bio: fields.bio,
-                    topics:fields.topics,
+                    // topics:fields.topics,
                    
                     about:fields.about
                     // linkedinUrl: fields.linkedinUrl,
@@ -590,7 +607,8 @@ const token = getTokenRes();
                     // website: fields.website,
                   }}
                   onSubmit={(values) => {
-                    postDataProfile(values);
+                    const profileData ={...values, topics:topicsTag}
+                    postDataProfile(profileData);
                   }}
                   validateOnMount
                 >
@@ -598,7 +616,7 @@ const token = getTokenRes();
                     errors,
                     touched,
                     // values,
-                     setFieldValue,
+                    //  setFieldValue,
                     // setFieldTouched,
                   }) => (
                     <Form className="av-tooltip tooltip-label-right">
@@ -678,7 +696,7 @@ const token = getTokenRes();
                       </FormGroup> */}
                       <FormGroup>
                         <Label for="topics">Topics*</Label>
-                        <Field
+                        {/* <Field
                           type="text"
                           name="topics"
                           id="topics"
@@ -691,7 +709,14 @@ const token = getTokenRes();
                               .map((topics) => topics.trim());
                             setFieldValue("topics", topicArray);
                           }}
-                        />
+                        /> */}
+
+                      <TagsInput
+                        value={topicsTag}
+                        onChange={handleTopicsTagsChange}
+                        inputProps={{ placeholder: "Add topics " }}
+                        // validate={validateLanguages}
+                      />
                         {errors.topics && touched.topics && (
                           <div className="invalid-feedback d-block">
                             {errors.topics}

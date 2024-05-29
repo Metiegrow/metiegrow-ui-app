@@ -396,6 +396,11 @@ const OnRegisterButtonclick = async () => {
                  <IntlMessages id="user.register-button" />
                 </Button>
               </div>
+              <div>Already a registered user? {" "}
+              <NavLink to="/login" >
+                login
+              </NavLink>
+              </div>
             </AvForm>
             )}
           </div>

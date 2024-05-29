@@ -72,9 +72,11 @@ const BottomNavigation = ({
   prevLabel,
   onClickNext,
   // nextLabel,
+  initialStep,
 }) => {
   return (
     <WithWizard
+    initialStep={initialStep}
       render={({ next, previous, step, steps }) => {
         if (steps.indexOf(step) === 3) {
           return null;
@@ -961,6 +963,7 @@ const token = getTokenRes();
             }`}
             prevLabel="Previous Step"
             // nextLabel="Next Step"
+            initialStep="step2"
           />
         </Wizard>
       </CardBody>

@@ -206,14 +206,14 @@ const ChatApp = ({
             endTime: Date.now(),
           },
         }).then((res) => {
-          console.log("ppid",peerId)
-        console.log("Historical messages", res);
-        addLog("Historical messages fetched successfully");
+          // console.log("ppid",peerId)
+        // console.log("Historical messages", res);
+        // addLog("Historical messages fetched successfully");
   //       const newLogs = res.messages.map((message) => message.msg);
   // setLogs((prevLogs) => [...prevLogs, ...newLogs]);
   const newLogs = res.messages.map((message) => (
     <>
-      <strong><h4>{message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
+      <strong><h4>{message.from === userId ? "You" : message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
       <span className='text-muted text-right'><TimestampConverter timeStamp={message.time} format="datetime" /></span>
     </>
   ));
@@ -363,7 +363,7 @@ const ChatApp = ({
   <>
       <Row className="app-row">
         <Colxx xxs="12" className="chat-app">
-          {loadingConversations && selectedUser && (
+          {peerId && loadingConversations && selectedUser && (
             <ChatHeading
               name={peerId}
               thumb={peerId}
@@ -371,7 +371,16 @@ const ChatApp = ({
             />
           )}
 
-          {selectedConversation && (
+        {!peerId && (
+          <>
+          <div className="d-flex justify-content-center align-items-center vh-70">
+          <i className="simple-icon-bubbles display-1" />
+        </div>
+          <h2 className='d-flex justify-content-center align-items-center'>Chat</h2>
+          </>
+        )}
+
+          {peerId && selectedConversation && (
             <PerfectScrollbar
               ref={scrollBarRef}
               // containerRef={(ref) => {}}
@@ -432,7 +441,7 @@ const ChatApp = ({
       <div className="d-flex justify-content-center">
   {/* <Button className='mb-3' onClick={handleLogin}>Connect</Button> */}
 </div>
-      <SaySomething
+      { peerId && (<SaySomething
         // placeholder={messages['chat.saysomething']}
         placeholder="Say something..."
         messageInput={peerMessage}
@@ -441,7 +450,7 @@ const ChatApp = ({
           setPeerMessage(e.target.value);
         }}
         handleSendButtonClick={handleSendMessage}
-      />
+      />)}
       {/* <ChatApplicationMenu activeTab={activeTab} toggleAppMenu={setActiveTab} /> */}
       <ApplicationMenu>
       <TabContent activeTab={activeTab} className="chat-app-tab-content">
@@ -451,7 +460,10 @@ const ChatApp = ({
             options={{ suppressScrollX: true, wheelPropagation: false }}
           >
             <div className="pt-2 pr-4 pl-4 pb-2">
-            <h3>Contacts</h3>
+            <h3 className="font-weight-bold">Contacts</h3>
+            {serverConversations.length === 0 && (
+              <p>There is no contacts</p>
+            )}
 
             {serverConversations.map((conversation) => (
           //     <>

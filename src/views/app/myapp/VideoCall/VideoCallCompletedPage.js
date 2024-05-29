@@ -18,6 +18,7 @@ import Rating from "components/common/Rating";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import { baseUrl } from "constants/defaultValues";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 const VideoCallCompletedPage = () => {
   const [feedBack, setFeedBack] = useState("");
@@ -25,7 +26,7 @@ const VideoCallCompletedPage = () => {
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
-  const [fromTime, setFromTime] = useState(0);
+  const [fromTime, setFromTime] = useState(null);
   const [toTime, setToTime] = useState(0);
   const [mode, setMode] = useState("");
   const [duration, setDuration] = useState(0)
@@ -135,7 +136,7 @@ if (roleRes === "MENTEE") {
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
-        console.log(error.response.data.error.message);
+        // console.log(error.response.data.error.message);
         const er = error.response.data.error.message;
         NotificationManager.warning(er, 'Error submitting review', 3000, null, null, '');
 
@@ -174,20 +175,19 @@ if (roleRes === "MENTEE") {
   };
   
 
-  const FromDate = new Date(parseInt(fromTime, 10));
-  const ToDate = new Date(parseInt(toTime, 10));
+  // const FromDate = new Date(parseInt(fromTime, 10));
+  // const ToDate = new Date(parseInt(toTime, 10));
 
-  const fromHours = FromDate.getHours() % 12 || 12;
-  const fromMinutes = String(FromDate.getMinutes()).padStart(2, "0");
-  const fromPeriod = FromDate.getHours() < 12 ? "AM" : "PM";
+  // const fromHours = FromDate.getHours() % 12 || 12;
+  // const fromMinutes = String(FromDate.getMinutes()).padStart(2, "0");
+  // const fromPeriod = FromDate.getHours() < 12 ? "AM" : "PM";
 
-  const toHours = ToDate.getHours() % 12 || 12;
-  const toMinutes = String(ToDate.getMinutes()).padStart(2, "0");
-  const toPeriod = ToDate.getHours() < 12 ? "AM" : "PM";
+  // const toHours = ToDate.getHours() % 12 || 12;
+  // const toMinutes = String(ToDate.getMinutes()).padStart(2, "0");
+  // const toPeriod = ToDate.getHours() < 12 ? "AM" : "PM";
 
-  const fromTime1 = `${fromHours}:${fromMinutes} ${fromPeriod}`;
-  const toTime1 = `${toHours}:${toMinutes} ${toPeriod}`;
-
+  // const fromTime1 = `${fromHours}:${fromMinutes} ${fromPeriod}`;
+  // const toTime1 = `${toHours}:${toMinutes} ${toPeriod}`;
   const msToMin = duration / 60000;
   const dur = msToMin.toFixed(2);
 
@@ -211,10 +211,11 @@ if (roleRes === "MENTEE") {
                   {/* <h4 className=''>Duration: {up.duration}</h4> */}
                   <Row className="mt-2">
                     <Col>
-                      <h4 className="mr-2">Start time: {fromTime1}</h4>
+                      {/* <h4 className="mr-2">Start time: {fromTime1}</h4> */}
+                      <h4 className="mr-2">Start time: {fromTime ? (<TimestampConverter timeStamp={fromTime} format="time" />) : (null)} </h4>
                     </Col>
                     <Col>
-                      <h4>End time: {toTime1}</h4>
+                      <h4>End time: {toTime ? (<TimestampConverter timeStamp={toTime} format="time" />) : (null)}</h4>
                     </Col>
                     <Col>
                       <h4>Duration: {dur} Min</h4>

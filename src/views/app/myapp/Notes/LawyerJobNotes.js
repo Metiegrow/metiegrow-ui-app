@@ -14,6 +14,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Badge,
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 
@@ -134,9 +135,17 @@ const LawyerJobNotes = ({ jobId }) => {
               {/* <h1 className="mb-4">Lawyer job notes</h1> */}
             </Col>
             <Col xs="auto">
-              <Button color="primary" onClick={toggleModal} size="sm">
-                Notes
+              <Button color="primary" onClick={toggleModal} size="sm" className="header-icon notificationButton position-relative">
+                Notes {" "}
+                {/* <span className="count">{notes.length}</span> */}
+                <Badge  color="light" className=" ">{notes.length}</Badge>
               </Button>
+              {/* <Button color="primary" onClick={toggleModal} size="sm" className="header-icon notificationButton position-relative">
+                Notes
+                <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-secondary">
+                  {notes.length}
+                </span>
+              </Button> */}
             </Col>
           </Row>
           <Modal

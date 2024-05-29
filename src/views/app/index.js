@@ -112,7 +112,7 @@ import (
 // );
 const ViewMylogin = React.lazy(() =>
   import(
-    /* webpackChunkName: "views-app" */ './myapp/my-login/Mylogin'
+    /* webpackChunkName: "views-app" */ './myapp/my-login/ApplyMentor'
   )
 );
 const ViewLawyerlogin = React.lazy(() =>
@@ -419,6 +419,10 @@ const roleRes = getRoleRes();
             />
                <Route
               path={`${match.url}/chat/:pid`}
+              render={(props) => <ViewMyChat {...props} />}
+            />
+               <Route
+              path={`${match.url}/chat`}
               render={(props) => <ViewMyChat {...props} />}
             />
                <Route

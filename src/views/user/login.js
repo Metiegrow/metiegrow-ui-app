@@ -213,6 +213,11 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                     <NavLink to="/forgot-password">
                       <IntlMessages id="user.forgot-password-question" />
                     </NavLink>
+                    {/* <div>Not a registered user? {" "}
+                    <NavLink to="/user/register" className="">
+                      register
+                    </NavLink>
+                    </div> */}
                     <Button type='submit'
                       color="primary"
                       className={`btn-shadow btn-multiple-state ${
@@ -231,6 +236,11 @@ const Login = ({ history, loading, error, loginUserAction }) => {
                       </span>
                     </Button>
                   </div>
+                    <div>Not a registered user? {" "}
+                    <NavLink to="/user/register" className="">
+                      register
+                    </NavLink>
+                    </div>
                 </Form>
               )}
             </Formik>

@@ -15,8 +15,9 @@ export default function Video(props) {
             style={{ height: "100%", width: "100%" }}
           />
         </div>
-        {users.length > 0 &&
+        {/* {users.length > 0 &&
           users.map((user) => {
+            console.log("uuser", users)
             if (user.videoTrack) {
               return (
                 <div className='col-xs-6' key={user.uid}>
@@ -28,7 +29,17 @@ export default function Video(props) {
               );
                       // eslint-disable-next-line
             } else return null;
-          })}
+          }
+          )} */}
+          {users.length > 0 && users[0].videoTrack && (
+            <div className='col-xs-6' key={users[0].uid}>
+              <AgoraVideoPlayer
+                videoTrack={users[0].videoTrack}
+                style={{ height: "100%", width: "100%" }}
+              />
+            </div>
+          )}
+
       </div>
     </div>
   );
