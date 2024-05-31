@@ -31,6 +31,7 @@ const VideoCallCompletedPage = () => {
   const [mode, setMode] = useState("");
   const [duration, setDuration] = useState(0)
   const [post, setPost] = useState(true)
+  const [waitingForData, setWaitingForData] = useState(true)
   const { id, sid } = useParams();
   const history = useHistory();
   function getRoleRes() {
@@ -66,8 +67,13 @@ if (roleRes === "MENTEE") {
         console.error("Error fetching data:", error);
       }
     };
+    const timer = setTimeout(() => {
+      callEndDetails();
+      setWaitingForData(false)
+    }, 3000);
 
-    callEndDetails();
+    return () => clearTimeout(timer);
+
   }, []);
 
   // const location = useLocation();
@@ -194,9 +200,13 @@ if (roleRes === "MENTEE") {
   return (
     <>
       <Row>
+      {waitingForData ? (
+                <div className="loading" />
+              ) : (
         <Colxx xxs="12" className="mb-2">
           <Card className="mx-auto my-4 " style={{ maxWidth: "1000px" }}>
             <CardBody className="text-center">
+              
               <Jumbotron className="text-center">
                 <i
                   alt=""
@@ -227,7 +237,7 @@ if (roleRes === "MENTEE") {
                 </div>
                 <hr className="my-4" />
 
-                <p className="lead mb-0 ">
+                <div className="lead mb-0 ">
                   <Row className="mb-4">
                     {roleRes.includes("MENTOR") ? (
                        <Col className="text-center">
@@ -330,11 +340,13 @@ if (roleRes === "MENTEE") {
                     )}
                     
                   </Row>
-                </p>
+                </div>
               </Jumbotron>
+              
             </CardBody>
           </Card>
         </Colxx>
+        )}
       </Row>
     </>
   );

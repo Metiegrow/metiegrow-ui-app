@@ -23,6 +23,8 @@ const VideoCallCtrl = (props) => {
   const [channelName, setChannelName] = useState("");
   const [status, setStatus] = useState("");
   const [rtcToken, setRtcToken] = useState(null);
+  const [bookedByName, setBookedByName] =useState("");
+  const [createdByName, setCreatedByName] = useState("");
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const { userId, id } = useParams();
@@ -66,6 +68,8 @@ const VideoCallCtrl = (props) => {
         setChannelName(response.data.channelName);
         // setStartTime(response.data.startTime)
         setEndTime(response.data.endTime);
+        setCreatedByName(response.data.createdByName);
+        setBookedByName(response.data.bookedByName);
       } catch (error) {
         console.error("Error fetching RTC token:", error);
       }
@@ -217,7 +221,6 @@ const VideoCallCtrl = (props) => {
         setUsers((prevUsers) => prevUsers.filter((User) => User.uid !== user.uid));
       
         if (users.length === 1) {
-          // Only one user is left, disconnect the remaining user
           disconnectRemainingUser();
         }
       });
@@ -251,7 +254,7 @@ const VideoCallCtrl = (props) => {
 
   const initiatedTime = `${hours}:${minutes} ${period}`;
 
-  console.log(initiatedTime);
+  // console.log(initiatedTime);
 
   useEffect(() => {
     let timerId;
@@ -292,7 +295,7 @@ const VideoCallCtrl = (props) => {
   const [minutesRemaining1, setMinutesRemaining1] = useState(null);
 
   useEffect(() => {
-    // const endTime = 1716544815000; // Example end time
+    // const endTime = 1716544815000; 
     const updateRemainingTime = () => {
       const callCurrentTime = Date.now();
       const callTimeRemaining = endTime - callCurrentTime;
@@ -303,11 +306,9 @@ const VideoCallCtrl = (props) => {
       setMinutesRemaining1(minutesRemaining);
     };
 
-    // Update the time remaining initially and then every minute
     updateRemainingTime();
-    const intervalId = setInterval(updateRemainingTime, 60000); // 60000 milliseconds = 1 minute
+    const intervalId = setInterval(updateRemainingTime, 60000); 
 
-    // Cleanup function to clear the interval when component unmounts
     return () => clearInterval(intervalId);
   }, [endTime]);
 
@@ -352,7 +353,7 @@ const VideoCallCtrl = (props) => {
         ) : null}
       </div>
       <div className="row" style={{ height: "90%" }}>
-        {start && tracks && <Video tracks={tracks} users={users} />}
+        {start && tracks && <Video tracks={tracks} users={users} createdByName={createdByName} bookedByName={bookedByName} />}
       </div>
       <div className="row ml-2" style={{ height: "10%" }}>
         {ready && tracks && (

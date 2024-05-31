@@ -87,10 +87,11 @@ const ReviewsComponent = ({revieweeId,category}) => {
 
   return (
     <Colxx xl="4" lg="6" md="12" className="mb-4">
+            <h1 className="fw-bold mb-4">Ratings & Reviews</h1>
       {totalRatings > 0 && (
         <Card className="mb-3">
           <CardBody>
-            <h3 className="fw-bold">Ratings & Reviews</h3>
+            {/* <h3 className="fw-bold">Ratings & Reviews</h3> */}
 
             <Row xxs="12" sm="6">
               <Col>
@@ -247,7 +248,8 @@ const ReviewsComponent = ({revieweeId,category}) => {
           })}
       </div>
       ): (
-        <div>No reviews available</div> 
+        // <Button>Be the first to write a review</Button>
+        <div className="ml-4">No reviews available</div>    
       )}
     </Colxx>
   );

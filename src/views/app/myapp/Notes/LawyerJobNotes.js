@@ -126,6 +126,8 @@ const LawyerJobNotes = ({ jobId }) => {
 
   const sortedNotes = [...notes].sort((a, b) => b.createdOn - a.createdOn);
 
+  const userName = localStorage.getItem('userName');
+
   return (
     <Container>
       <Row className="justify-content-center ">
@@ -223,6 +225,7 @@ const LawyerJobNotes = ({ jobId }) => {
                           <Col xs="auto">
                             <h5>{note.title}</h5>
                           </Col>
+                            {userName === note.name && (
                           <Col xs="auto" className="ml-auto" lg={2}>
                             <Button
                               outline
@@ -233,12 +236,13 @@ const LawyerJobNotes = ({ jobId }) => {
                               <i className="simple-icon-pencil" />
                             </Button>
                           </Col>
+                        )}
                         </Row>
 
                         <p>{note.details}</p>
                         <Row className="">
-                          <Col className="" lg={6}>
-                            <p className="text-muted">
+                        <Col className="d-flex flex-column justify-content-end" lg={6}>
+                            <p className="text-muted mb-0">
                               Created at -{" "}
                               <TimestampConverter
                                 timeStamp={note.createdAt}
@@ -253,12 +257,12 @@ const LawyerJobNotes = ({ jobId }) => {
                               />
                             </p> */}
                           </Col>
-                          <Col className="">
-                            <p className="text-muted">
+                          <Col className="d-flex flex-column justify-content-end">
+                            <p className="text-muted mb-0">
                               Created by - {note.name}
                             </p>
                           </Col>
-
+                          {userName === note.name && (
                           <Col className="" lg={2}>
                             <Button
                               outline
@@ -271,6 +275,7 @@ const LawyerJobNotes = ({ jobId }) => {
                             {/* <Button color="primary" size="sm" onClick={() => handleEditNote(note.id)}>Edit</Button>{' '} */}
                             {/* <Button color="danger" size="sm" onClick={() => handleDeleteNote(note.id)}>Delete</Button> */}
                           </Col>
+                          )}
                         </Row>
                       </div>
                     </Card>

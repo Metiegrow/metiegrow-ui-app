@@ -80,6 +80,15 @@ SessionHistroy();
 SessionUpcomingHistroy();
 },[])
 
+const [currentTime, setCurrentTime] = useState(new Date())
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    setCurrentTime(new Date());
+  }, 30000); 
+
+  return () => clearInterval(intervalId); 
+}, []);
+
   return (
     <div>
    
@@ -112,7 +121,7 @@ SessionUpcomingHistroy();
 
       const isWithinFiveMinutes = (fromTimeStamp) => {
         const fiveMinutesInMs = 5 * 60 * 1000; 
-        const currentTime = new Date().getTime();
+        // const currentTime = new Date().getTime();
         const fromTime = new Date(fromTimeStamp).getTime();
         const timeDiff = fromTime - currentTime;
       
