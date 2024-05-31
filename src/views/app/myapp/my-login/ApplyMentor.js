@@ -211,12 +211,12 @@ const ApplyMentor = () => {
     setAmount(value);
   };
 
-  useEffect(() => {
-    axios.get(mentorAboutUrl).then((response) => {
-      console.log("reslog", response.data);
-      // setLoading(false);
-    });
-  }, [currentStep]);
+  // useEffect(() => {
+  //   axios.get(mentorAboutUrl).then((response) => {
+  //     console.log("reslog", response.data);
+  //     // setLoading(false);
+  //   });
+  // }, [currentStep]);
 
   const handleTagsChange = (newSkills) => {
     setSkillsTag(newSkills);
