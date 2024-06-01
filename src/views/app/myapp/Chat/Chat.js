@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Card, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import { Card, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap';
 import AC from 'agora-chat';
 
 
@@ -132,7 +132,7 @@ const ChatApp = ({
       const [token, setToken] = useState("");
       const [peerId, setPeerId] = useState(pid);
       const tokenRes = localStorage.getItem("tokenRes")
-      const [appKey, setAppKey] = useState("611104323#1329874")
+      const [appKey, setAppKey] = useState("")
       // console.log("peer", peerId)
       useEffect(() => {
         const fetchData = async () => {
@@ -164,6 +164,9 @@ const ChatApp = ({
   const [peerMessage, setPeerMessage] = useState('');
   const [logs, setLogs] = useState([]);
   const [serverConversations, setServerConversations] = useState([]);
+  const [loading, setLoading] = useState(true)
+  const [loadingConversation, setLoadingConversation] = useState(true)
+  const [chatLoading, setChatLoading] =useState(true)
   // const [historyMessages, setHistoryMessages] = useState([]); 
 
 
@@ -173,6 +176,7 @@ const ChatApp = ({
   // const appKey = '611104323#1329874';
 
   useEffect(() => {
+    const timeoutId = setTimeout(() => {
     const conn = new AC.connection({
       appKey: appKey,
     });
@@ -183,12 +187,14 @@ const ChatApp = ({
 
     conn.addEventHandler('connection&message', {
       onConnected: () => {
-        addLog('Connect success!');
+        // addLog('Connect success!');
         // fetchHistoryMessages(); 
         conn.getServerConversations({ pageSize: 50, cursor: '' })
         .then((res) => {
           // console.log("conversation", res.data.conversations);
+
           setServerConversations(res.data.conversations)
+          setLoadingConversation(false)
         // addLog("");
           
         })
@@ -221,6 +227,8 @@ const ChatApp = ({
   ));
 
   setLogs((prevLogs) => [...prevLogs, ...newLogs]);
+  setChatLoading(false)
+
       })
       .catch((error) => {
         // console.log("pp2id",peerId)
@@ -230,7 +238,8 @@ const ChatApp = ({
       });
       },
       onDisconnected: () => {
-        addLog('Logout success!');
+        addLog('Logout!');
+        // addLog('Logout success!');
       },
       onTextMessage: (message) => {
         console.log("msg",message)
@@ -264,6 +273,10 @@ const ChatApp = ({
       user: userId,
       agoraToken: token,
     });
+    setLoading(false)
+  }, 3000);
+
+  return () => clearTimeout(timeoutId);
   }, [peerId,userId,token,appKey]);
 
 //   connection.getServerConversations({pageSize:50, cursor: ''}).then((res)=>{
@@ -339,6 +352,7 @@ const ChatApp = ({
   };
 
   const handleConversationClick = (selectedUserId) => {
+    setChatLoading(true)
     setPeerId(selectedUserId);
     setLogs([]);
     
@@ -363,6 +377,12 @@ const ChatApp = ({
   // return loadingConversations && loadingContacts ? (
   return  (
   <>
+  {loading ? (
+    <div className='loading' />
+    // <div className="d-flex justify-content-center align-items-center vh-70">
+    //   <Spinner color="primary" className="" />
+    // </div>
+  ) : (
       <Row className="app-row">
         <Colxx xxs="12" className="chat-app">
           {peerId && loadingConversations && selectedUser && (
@@ -400,6 +420,12 @@ const ChatApp = ({
                   />
                 );
               })} */}
+              {chatLoading ? ( 
+                // <div className='loading' />
+                <div className="d-flex justify-content-center mt-4">
+              <Spinner color="primary" className="mb-1" />
+            </div>
+              ) : (
               <div>
         {logs.map((log, index) => (
           <Card className=' mb-3  p-3' key={index}>{log}</Card>
@@ -435,10 +461,12 @@ const ChatApp = ({
       // </Card>
         ))}
       </div>
+      )}
             </PerfectScrollbar>
           )}
         </Colxx>
       </Row>
+      )}
       {/* <Button className='mb-3' onClick={handleLogin}>Connect</Button> */}
       <div className="d-flex justify-content-center">
   {/* <Button className='mb-3' onClick={handleLogin}>Connect</Button> */}
@@ -463,6 +491,12 @@ const ChatApp = ({
           >
             <div className="pt-2 pr-4 pl-4 pb-2">
             <h3 className="font-weight-bold mt-2">Contacts</h3>
+            {loadingConversation ? (
+              <div className="d-flex justify-content-center mt-4">
+              <Spinner color="primary" className="mb-1" />
+            </div>
+                  ) :(
+            <>
             {serverConversations.length === 0 && (
               <p>There is no contacts</p>
             )}
@@ -527,6 +561,8 @@ const ChatApp = ({
                       // </NavLink>
                       // </>
                 ))}
+                </>
+              )}
             </div>
           </PerfectScrollbar>
         </TabPane>
