@@ -116,7 +116,7 @@ const TopNav = ({
 let session;  
 if (roleRes.includes("MENTOR")) {
   session = `${adminRoot}/sessionmentor`;
-}else {
+}else if (roleRes.includes("MENTEE")) {
   session = `${adminRoot}/sessionlists`; 
 }
 
@@ -201,6 +201,19 @@ if (roleRes.includes("MENTOR")) {
         <i className="iconsminds-scale" />  My Client Jobs
         </DropdownItem>
       </NavLink>
+        
+      );
+    }
+    return null; 
+  };
+  const renderMentorSession = () => {
+    if (roleRes.includes("MENTEE") || roleRes.includes("MENTOR")) {
+      return (
+        <NavLink to={session}>
+              <DropdownItem onClick={() => handleMySessionsClick()}>
+              <i className="simple-icon-list" /> Mentor Sessions
+              </DropdownItem>
+          </NavLink>
         
       );
     }
@@ -357,11 +370,12 @@ if (roleRes.includes("MENTOR")) {
                 <i className="simple-icon-question" />  My Activities
                 </DropdownItem>
               </NavLink>
-              <NavLink to={session}>
+              {renderMentorSession()}
+              {/* <NavLink to={session}>
                 <DropdownItem onClick={() => handleMySessionsClick()}>
                 <i className="simple-icon-list" /> Mentor Sessions
                 </DropdownItem>
-              </NavLink>
+              </NavLink> */}
               {/* <NavLink to={`${adminRoot}/jobslist`}>
                 <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
                 <i className="iconsminds-scale" />  My Client Jobs

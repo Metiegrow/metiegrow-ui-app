@@ -20,6 +20,7 @@ import { baseUrl } from "constants/defaultValues";
 
 import { Colxx } from "components/common/CustomBootstrap";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import country from "../my-login/Country";
 
 const LawyerMyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -176,6 +177,7 @@ const LawyerMyProfile = () => {
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
+  const countryName = country.find(c => c.iso_code === location)?.name;
 
   return (
     <div className="mentor-profile">
@@ -319,12 +321,30 @@ const LawyerMyProfile = () => {
                       <Label for="location" className="font-weight-medium">
                         <h4>Location</h4>
                       </Label>
-                      <Input
+                      {/* <Input
                         type="text"
                         id="location"
-                        value={location}
+                        value={countryName}
                         onChange={(e) => setLocation(e.target.value)}
-                      />
+                      /> */}
+
+                    <Input
+                      type="select"
+                      name="location"
+                      // validate={validateLocation}
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="form-control"
+                    >
+                      <option disabled value="">
+                        Select Location
+                      </option>
+                      {country.map((option) => (
+                        <option key={option.iso_code} value={option.iso_code}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </Input>
                       <br />
                     </>
                   </div>
@@ -337,7 +357,7 @@ const LawyerMyProfile = () => {
                     <h5 className="font-weight-medium">
                       <i className="simple-icon-location-pin text-primary" />
 
-                      <span className="ml-2">{location}</span>
+                      <span className="ml-2">{countryName}</span>
                     </h5>
                     <h6 className="">
                       <i className="simple-icon-star text-primary " />

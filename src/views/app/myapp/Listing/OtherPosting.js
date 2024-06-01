@@ -99,6 +99,7 @@ const OtherPosting = ({ closeModal }) => {
                     <Field
                       className="form-control"
                       name="title"
+                      value={title}
                       onChange={(e) => setTitle(e.target.value)}
                         validate={validate}
                     />
@@ -117,6 +118,7 @@ const OtherPosting = ({ closeModal }) => {
                     <Field
                       className="form-control"
                       name="job"
+                      value={job}
                       onChange={(e) => setJob(e.target.value)}
                       //   validate={}
                     />

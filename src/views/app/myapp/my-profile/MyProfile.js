@@ -13,11 +13,14 @@ import {
   InputGroupAddon,
   Col,
   Form,
+  Card,
 } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 
 import { Colxx } from "components/common/CustomBootstrap";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import country from "../my-login/Country";
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -52,7 +55,9 @@ const MyProfile = () => {
   const [featuredArticle, setFeaturedArticle] = useState("");
   const [reasonForMentor, setReasonForMentor] = useState("");
   const [achievement, setAchievement] = useState("");
-  const [reviews, setReviews] = useState("");
+  const [totalRatings,setTotalRatings] = useState(0)
+  const [averageStar, setAverageStar] = useState(0)
+  // const [reviews, setReviews] = useState("");
   // const [price, setPrice] =useState("");
 
  // const Id = 1;
@@ -119,7 +124,8 @@ const MyProfile = () => {
       
     try {
       const response = await axios.get(ratingUrl);
-      setReviews(response.data);
+      setTotalRatings(response.data.totalRatings);
+      setAverageStar(response.data.averageStar);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -168,7 +174,6 @@ const token = getTokenRes();
         category,
         skills,
         bio,
-        // password,
         linkedinUrl,
         twitterHandle,
         website,
@@ -195,7 +200,7 @@ const token = getTokenRes();
 
       // console.log("Response", response.data);
 
-      console.log("Profile updated successfully");
+      // console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile", error);
     }
@@ -266,6 +271,8 @@ const token = getTokenRes();
     setFile(event.target.files[0]);
   };
 
+  const countryName = country.find(c => c.iso_code === location)?.name;
+
   return (
     <div className="mentor-profile">
       {/* <div className=""> */}
@@ -273,7 +280,7 @@ const token = getTokenRes();
       <Colxx sm="12" md="12" lg="12" xxs="12" className="">
         <div className="">
           {/* <div className="h-100"> */}
-          <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
+          {/* <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
             <div className=" ">
               <img
                 src={`${baseUrl}/${image}`}
@@ -304,7 +311,48 @@ const token = getTokenRes();
                 </Button>
               </NavLink>
             </div>
-          </div>
+          </div> */}
+
+          <Card style={{ height: "160px", width: "100%", overflow: "hidden" }} className="bg-primary">
+            <div className="d-flex align-items-center justify-content-between" style={{ height: "100%" }}>
+              <div className="d-flex align-items-center mt-4 ml-4 mb-4">
+                {image === null ? (
+                  <ThumbnailLetters
+                    // small
+                    rounded
+                    text={firstName}
+                    className="mx-2"
+                    color="secondary"
+                  />
+                ) : (
+                  <img
+                    src={`${baseUrl}/${image}`}
+                    // src="/assets/img/profiles/2.jpg"
+                    className="mx-2 rounded-circle img-thumbnail border"
+                    style={{ width: "110px", height: "110px" }}
+                    alt=""
+                  />
+                )}
+                <div className="ml-4 mt-2">
+                  <h1 className="font-weight-semibold text-large">
+                    {firstName} {lastName}
+                  </h1>
+                </div>
+              </div>
+              <div className="mr-4">
+                <NavLink className="d-none d-md-inline-block">
+                  <Button
+                    color="light"
+                    className="font-weight-semibold icon-button"
+                    size="large"
+                    onClick={handleLinkedInClick}
+                  >
+                    <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
+                  </Button>
+                </NavLink>
+              </div>
+            </div>
+          </Card>
           {isEditing &&
               <div className="mt-2">
                 <Button
@@ -398,12 +446,29 @@ const token = getTokenRes();
                       <Label for="location" className="font-weight-medium">
                         <h4>Country</h4>
                       </Label>
-                      <Input
+                      {/* <Input
                         type="text"
                         id="location"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                      />
+                      /> */}
+                      <Input
+                      type="select"
+                      name="location"
+                      value={location}
+                      // validate={validateLocation}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="form-control"
+                    >
+                      <option disabled value="">
+                        Select Location
+                      </option>
+                      {country.map((option) => (
+                        <option key={option.iso_code} value={option.iso_code}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </Input>
                       <br />
                     </>
                     <>
@@ -421,23 +486,23 @@ const token = getTokenRes();
                   </div>
                 ) : (
                   <>
-                    <h1 className="font-weight-semibold text-large">
+                    {/* <h1 className="font-weight-semibold text-large">
                       {firstName} {lastName}
-                    </h1>
+                    </h1> */}
                     <h3 className="font-weight-semibold">
-                      Job Title: {jobTitle} - {company}
+                       {jobTitle} @ {" "} {company}
                     </h3>
                     <p className="text-one font-weight-medium ">
-                      Experience: {experience}
+                       {experience}
                     </p>
                     <h5 className="font-weight-medium">
                       <i className="simple-icon-location-pin text-primary" />
 
-                      <span className="ml-2">{location}</span>
+                      <span className="ml-2">{countryName}</span>
                     </h5>
                     <h6 className="">
                       <i className="simple-icon-star text-primary " />
-                      <span className="ml-2">{`${reviews.averageStar} (${reviews.totalRatings} reviews)`}</span>
+                      <span className="ml-2">{`${averageStar} (${totalRatings} reviews)`}</span>
                     </h6>
                     {/* <h6 className="">
                       <i className="simple-icon-clock text-primary" />

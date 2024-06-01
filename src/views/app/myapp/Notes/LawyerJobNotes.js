@@ -14,6 +14,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Badge,
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 
@@ -125,6 +126,8 @@ const LawyerJobNotes = ({ jobId }) => {
 
   const sortedNotes = [...notes].sort((a, b) => b.createdOn - a.createdOn);
 
+  const userName = localStorage.getItem('userName');
+
   return (
     <Container>
       <Row className="justify-content-center ">
@@ -134,9 +137,17 @@ const LawyerJobNotes = ({ jobId }) => {
               {/* <h1 className="mb-4">Lawyer job notes</h1> */}
             </Col>
             <Col xs="auto">
-              <Button color="primary" onClick={toggleModal} size="sm">
-                Notes
+              <Button color="primary" onClick={toggleModal} size="sm" className="header-icon notificationButton position-relative">
+                Notes {" "}
+                {/* <span className="count">{notes.length}</span> */}
+                <Badge  color="light" className=" ">{notes.length}</Badge>
               </Button>
+              {/* <Button color="primary" onClick={toggleModal} size="sm" className="header-icon notificationButton position-relative">
+                Notes
+                <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-secondary">
+                  {notes.length}
+                </span>
+              </Button> */}
             </Col>
           </Row>
           <Modal
@@ -214,6 +225,7 @@ const LawyerJobNotes = ({ jobId }) => {
                           <Col xs="auto">
                             <h5>{note.title}</h5>
                           </Col>
+                            {userName === note.name && (
                           <Col xs="auto" className="ml-auto" lg={2}>
                             <Button
                               outline
@@ -224,12 +236,13 @@ const LawyerJobNotes = ({ jobId }) => {
                               <i className="simple-icon-pencil" />
                             </Button>
                           </Col>
+                        )}
                         </Row>
 
                         <p>{note.details}</p>
                         <Row className="">
-                          <Col className="" lg={6}>
-                            <p className="text-muted">
+                        <Col className="d-flex flex-column justify-content-end" lg={6}>
+                            <p className="text-muted mb-0">
                               Created at -{" "}
                               <TimestampConverter
                                 timeStamp={note.createdAt}
@@ -244,12 +257,12 @@ const LawyerJobNotes = ({ jobId }) => {
                               />
                             </p> */}
                           </Col>
-                          <Col className="">
-                            <p className="text-muted">
+                          <Col className="d-flex flex-column justify-content-end">
+                            <p className="text-muted mb-0">
                               Created by - {note.name}
                             </p>
                           </Col>
-
+                          {userName === note.name && (
                           <Col className="" lg={2}>
                             <Button
                               outline
@@ -262,6 +275,7 @@ const LawyerJobNotes = ({ jobId }) => {
                             {/* <Button color="primary" size="sm" onClick={() => handleEditNote(note.id)}>Edit</Button>{' '} */}
                             {/* <Button color="danger" size="sm" onClick={() => handleDeleteNote(note.id)}>Delete</Button> */}
                           </Col>
+                          )}
                         </Row>
                       </div>
                     </Card>

@@ -90,15 +90,33 @@ const validateFirstName = (value) => {
   //     }
   //   return error;
   // }
-  function validateSkills(value) {
-    let error;
-    if (!value || value.length === 0) {
-       error = "Please specify a skill";
-    } else if (value.some(tag => tag.length < 2)) {
-       error = "Each skill must be longer than 2 characters";
+  // function validateSkills(value) {
+  //   let error;
+  //   if (!value || value.length === 0) {
+  //      error = "Please specify a skill";
+  //   } else if (value.some(tag => tag.length < 2)) {
+  //      error = "Each skill must be longer than 2 characters";
+  //   }
+  //   return error;
+  //  }
+
+  const validateSkills = (value) => {
+    if (!Array.isArray(value)) {
+      return "Skills must be an array of strings";
     }
-    return error;
-   }
+  
+    if (value.length === 0) {
+      return "Please add at least one skill";
+    }
+  
+    const isString = value.every((skill) => typeof skill === "string");
+    if (!isString) {
+      return "Skills must be strings";
+    }
+  
+  
+    return null; 
+  };
    
   function validateBio(value) {
     let error;

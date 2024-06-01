@@ -132,7 +132,8 @@ const ChatApp = ({
       const [token, setToken] = useState("");
       const [peerId, setPeerId] = useState(pid);
       const tokenRes = localStorage.getItem("tokenRes")
-      console.log("peer", peerId)
+      const [appKey, setAppKey] = useState("611104323#1329874")
+      // console.log("peer", peerId)
       useEffect(() => {
         const fetchData = async () => {
           try {
@@ -145,6 +146,7 @@ const ChatApp = ({
             });
             setToken(response.data.token);
             setUserId(response.data.chatUserName)
+            setAppKey(response.data.appKey)
             // setPeerId(response.data.targetChatUserName)
             // console.log("run",response)
           } catch (err) {
@@ -162,13 +164,13 @@ const ChatApp = ({
   const [peerMessage, setPeerMessage] = useState('');
   const [logs, setLogs] = useState([]);
   const [serverConversations, setServerConversations] = useState([]);
-  const [historyMessages, setHistoryMessages] = useState([]); 
+  // const [historyMessages, setHistoryMessages] = useState([]); 
 
 
 
-  console.log("log",logs)
+  // console.log("log",logs)
 
-  const appKey = '611104323#1329874';
+  // const appKey = '611104323#1329874';
 
   useEffect(() => {
     const conn = new AC.connection({
@@ -182,7 +184,7 @@ const ChatApp = ({
     conn.addEventHandler('connection&message', {
       onConnected: () => {
         addLog('Connect success!');
-        fetchHistoryMessages(); 
+        // fetchHistoryMessages(); 
         conn.getServerConversations({ pageSize: 50, cursor: '' })
         .then((res) => {
           // console.log("conversation", res.data.conversations);
@@ -206,14 +208,14 @@ const ChatApp = ({
             endTime: Date.now(),
           },
         }).then((res) => {
-          console.log("ppid",peerId)
-        console.log("Historical messages", res);
-        addLog("Historical messages fetched successfully");
+          // console.log("ppid",peerId)
+        // console.log("Historical messages", res);
+        // addLog("Historical messages fetched successfully");
   //       const newLogs = res.messages.map((message) => message.msg);
   // setLogs((prevLogs) => [...prevLogs, ...newLogs]);
   const newLogs = res.messages.map((message) => (
     <>
-      <strong><h4>{message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
+      <strong><h4>{message.from === userId ? "You" : message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
       <span className='text-muted text-right'><TimestampConverter timeStamp={message.time} format="datetime" /></span>
     </>
   ));
@@ -221,7 +223,7 @@ const ChatApp = ({
   setLogs((prevLogs) => [...prevLogs, ...newLogs]);
       })
       .catch((error) => {
-        console.log("pp2id",peerId)
+        // console.log("pp2id",peerId)
         console.log('Error fetching historical messages:', error);
         addLog('Error fetching historical messages');
         
@@ -262,38 +264,38 @@ const ChatApp = ({
       user: userId,
       agoraToken: token,
     });
-  }, [peerId,userId,token]);
+  }, [peerId,userId,token,appKey]);
 
 //   connection.getServerConversations({pageSize:50, cursor: ''}).then((res)=>{
 //     console.log("res",res)
 // })
 
-  const fetchHistoryMessages = () => {
-    if (!connection) return;
+  // const fetchHistoryMessages = () => {
+  //   if (!connection) return;
 
-    const options = {
-      targetId: peerId,
-      chatType: "singleChat",
-      pageSize: 20,
-      searchDirection: 'down',
-      searchOptions: {
-        from: userId,
-        msgTypes: ['txt'],
-        startTime: new Date('2024-05-17').getTime(),
-        endTime: new Date('2024-05-18').getTime(),
-      },                                                                // check the name and add log
-    };
+  //   const options = {
+  //     targetId: peerId,
+  //     chatType: "singleChat",
+  //     pageSize: 20,
+  //     searchDirection: 'down',
+  //     searchOptions: {
+  //       from: userId,
+  //       msgTypes: ['txt'],
+  //       startTime: new Date('2024-05-17').getTime(),
+  //       endTime: new Date('2024-05-18').getTime(),
+  //     },                                                                // check the name and add log
+  //   };
 
-    connection.getHistoryMessages(options).then((messages) => {
-      console.log("Fetched historical messages", messages);
-      setHistoryMessages(messages);
-      messages.forEach(message => {
-        addLog(`Historical message from: ${message.from} Message: ${message.msg}`);
-      });
-    }).catch((error) => {
-      console.log('Error fetching historical messages', error);
-    });
-  };
+  //   connection.getHistoryMessages(options).then((messages) => {
+  //     console.log("Fetched historical messages", messages);
+  //     setHistoryMessages(messages);
+  //     messages.forEach(message => {
+  //       addLog(`Historical message from: ${message.from} Message: ${message.msg}`);
+  //     });
+  //   }).catch((error) => {
+  //     console.log('Error fetching historical messages', error);
+  //   });
+  // };
 
   const addLog = (message) => {
     setLogs((prevLogs) => [...prevLogs, message]);
@@ -363,7 +365,7 @@ const ChatApp = ({
   <>
       <Row className="app-row">
         <Colxx xxs="12" className="chat-app">
-          {loadingConversations && selectedUser && (
+          {peerId && loadingConversations && selectedUser && (
             <ChatHeading
               name={peerId}
               thumb={peerId}
@@ -371,7 +373,16 @@ const ChatApp = ({
             />
           )}
 
-          {selectedConversation && (
+        {!peerId && (
+          <>
+          <div className="d-flex justify-content-center align-items-center vh-70">
+          <i className="simple-icon-bubbles display-1" />
+        </div>
+          <h2 className='d-flex justify-content-center align-items-center'>Chat</h2>
+          </>
+        )}
+
+          {peerId && selectedConversation && (
             <PerfectScrollbar
               ref={scrollBarRef}
               // containerRef={(ref) => {}}
@@ -432,7 +443,7 @@ const ChatApp = ({
       <div className="d-flex justify-content-center">
   {/* <Button className='mb-3' onClick={handleLogin}>Connect</Button> */}
 </div>
-      <SaySomething
+      { peerId && (<SaySomething
         // placeholder={messages['chat.saysomething']}
         placeholder="Say something..."
         messageInput={peerMessage}
@@ -441,7 +452,7 @@ const ChatApp = ({
           setPeerMessage(e.target.value);
         }}
         handleSendButtonClick={handleSendMessage}
-      />
+      />)}
       {/* <ChatApplicationMenu activeTab={activeTab} toggleAppMenu={setActiveTab} /> */}
       <ApplicationMenu>
       <TabContent activeTab={activeTab} className="chat-app-tab-content">
@@ -451,7 +462,10 @@ const ChatApp = ({
             options={{ suppressScrollX: true, wheelPropagation: false }}
           >
             <div className="pt-2 pr-4 pl-4 pb-2">
-            <h3>Contacts</h3>
+            <h3 className="font-weight-bold mt-2">Contacts</h3>
+            {serverConversations.length === 0 && (
+              <p>There is no contacts</p>
+            )}
 
             {serverConversations.map((conversation) => (
           //     <>
