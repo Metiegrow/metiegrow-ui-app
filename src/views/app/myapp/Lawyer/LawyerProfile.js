@@ -259,7 +259,7 @@ const handleChatClick = () =>{
       <Colxx className='mt-4' lg={6} xl={6} md={12}> 
   
 <div  style={{width:"40%",position:'fixed',top:'40%',right:'20px'}} className='mt-2 d-lg-block d-xl-block d-none'>
-        <LawyerTabCard pid={pid} handlePurchase={handlePurchase}/>
+        <LawyerTabCard pid={pid} handlePurchase={handlePurchase} userId={lawyerprofile.chatUserName}/>
     </div>
     {/* <div    className='mt-2 d-md-block d-sm-block d-lg-none d-xl-none bg-primary'>
         <LawyerTabCard />
