@@ -40,7 +40,7 @@ import {
   // validateEmail,
   // validatePassword,
   // validateCategory,
-  // validateLanguages,
+  validateLanguages,
   validateLocation,
   // validatePackageTitle,
   validatePackageTopic,
@@ -149,7 +149,7 @@ const LawyerLogin = ({ intl}) => {
  
   // const forms = Array.from({ length: stepsCount }, () => createRef());
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
-  const [languagesTag, setLanguagesTag] = useState([]);
+  // const [languagesTag, setLanguagesTag] = useState([]);
   const [topicsTag, setTopicsTag] = useState([]);
   const [loading, setLoading] = useState(false);
   // const [services, setServices] = useState([
@@ -389,9 +389,9 @@ const token = getTokenRes();
     goToPrev();
   };
 
-  const handleLanguagesTagsChange = (newLanguages) => {
-    setLanguagesTag(newLanguages);
-  };
+  // const handleLanguagesTagsChange = (newLanguages) => {
+  //   setLanguagesTag(newLanguages);
+  // };
   const handleTopicsTagsChange = (newTopics) => {
     setTopicsTag(newTopics);
   };
@@ -421,12 +421,12 @@ const token = getTokenRes();
                     // jobTitle: fields.jobTitle,
                     // company: fields.company,
                     location: fields.location,
-                    // languages:fields.languages
+                    languages:fields.languages
                   }}
                   validateOnMount
                   onSubmit={(values) => {
                     // postDataAbout(values,aboutField.image);
-                    postDataAbout({ ...values, image: aboutField.image, languages:languagesTag});
+                    postDataAbout({ ...values, image: aboutField.image});
 
                     console.log(aboutField.image);
                   }}
