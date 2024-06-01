@@ -15,12 +15,12 @@ const MyQandA = () => {
   const [myquestions,setMyQuestions]=useState('');
   // const[activities,setActivities]=useState('');
   // const [pagination,setPagination]=useState('');
-  const url=`${baseUrl}/myActivitiesAnswers`;
-  const url1=`${baseUrl}/myActivitiesQuestions`;
+  const url=`${baseUrl}/api/mentor/myAnswers`;
+  const url1=`${baseUrl}/api/mentee/myQuestions`;
   // const url2=`${baseUrl}/myActivities`;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   // const [totalPage] = useState(4);
-  const [currentPage1, setCurrentPage1] = useState(1);
+  const [currentPage1, setCurrentPage1] = useState(0);
   const [totalPage1] = useState(4);
   const [pagination,setPagination]=useState('');
  
@@ -30,7 +30,7 @@ const MyQandA = () => {
       try {
         const response = await axios.get(`${url}?_page=${currentPage}&_limit=5`);
         // const response = await axios.get(url);
-        setMyAnswers(response.data.data.myAnswers);
+        setMyAnswers(response.data.data);
         
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -39,28 +39,20 @@ const MyQandA = () => {
     MyAnswers();
     const MyQuestions = async () => {
       try {
-        const response = await axios.get(`${url1}?_page=${currentPage}&_limit=8`);
+        const response = await axios.get(`${url1}?_page=${currentPage}&_size=3`);
         // const response = await axios.get(url1);
-        setMyQuestions(response.data.data.myQuestions);
+        // const response = await axios.get(url1);
+        // setMyQuestions(response.data.data.myQuestions);
+        setMyQuestions(response.data.data);
+        
         setPagination(response.data.paginationMeta);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     MyQuestions();
-// const MyAnswersAndQuestions = async () => {
-//   try {
-//     const response = await axios.get(`${url2}?_page=${currentPage}&_limit=5`);
-//     // const response = await axios.get(url2);
-//     setActivities(response.data.data);
-//     // setPagination(response.data.paginationMeta);
-//     console.log(response.data.paginationMeta);
-    
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//   }
-// };
-// MyAnswersAndQuestions();
+
+
   },[])
 
 
@@ -81,15 +73,7 @@ const MyQandA = () => {
     <div className='d-flex justify-content-between'>
     <h2 className='font-weight-semibold'>Questions</h2>
     </div>
-    {myquestions&&myquestions.map((num)=>{
-       return(
-        <div key={num.totalQuestions}>
-        <h3>view all <span className='font-weight-semibold'>{num.totalQuestions}</span> Questions</h3>
-    
-        </div>
-       )
-      })}
-      {/* {activities.myQuestions&&activities.myQuestions.map((num)=>{
+    {/* {myquestions&&myquestions.map((num)=>{
        return(
         <div key={num.totalQuestions}>
         <h3>view all <span className='font-weight-semibold'>{num.totalQuestions}</span> Questions</h3>
@@ -97,51 +81,23 @@ const MyQandA = () => {
         </div>
        )
       })} */}
+      
     
+      {myquestions&&myquestions.totalQuestions === null ? (
+      null
+    ) : (
+      <h3 className='my-2'>
+        View all <span className="font-weight-bold">{myquestions.totalQuestions}</span> questions
+      </h3>
+    )}
+
     
       
     </div>
       
-       <Card className='mt-3'>
-        <CardBody>
+    <div className=''>
          <div className=''>
-         <div className=''>
-         {myquestions&&myquestions.map((qs)=>{
-            return (
-              <div key={qs.totalAnswers}>
-                
-                <div className='' key={qs.totalAnswers}>
-             
-              <h3>{qs.questions.map((s)=>{
-                const qdate=new Date(s.timestamp);
-                const qsdateformat = `${qdate.getDate()}/${qdate.getMonth()+1}/${qdate.getFullYear()}`;
-                return (
-                  <div key={s.questionId}>
-                 
-                    <div className='d-flex   justify-content-between'>
-                    <NavLink href={`/app/questions/${s.questionId}`} className='d-flex justify-content-between'>
-                    <h3>{s.question}</h3>
-                   
-                   
-                    </NavLink>
-                    <h3>{qsdateformat}</h3>
-                   
-                   
-                    </div>
-                   <hr/>
-                  
-                 
-                  </div>
-                )
-              })}</h3>
-             
-         </div>
-               
-              </div>
-            
-            )
-          })}
-          {/* {activities.myQuestions&&activities.myQuestions.map((qs)=>{
+         {/* {myquestions&&myquestions.map((qs)=>{
             return (
               <div key={qs.totalAnswers}>
                 
@@ -176,14 +132,51 @@ const MyQandA = () => {
             
             )
           })} */}
+          {/* {myquestions && myquestions.questions && myquestions.map((qs) => {
+  return (
+    <div key={qs.questionId}>
+      <div className='' >
+      <h3>{qs.question}</h3>
+      </div>
+    </div>
+  )
+})} */}
+
+{myquestions && myquestions.questions && myquestions.questions.length > 0 ? (
+  myquestions.questions.map((qs) => {
+    const qdate = new Date(qs.timestamp);
+    const qsdateformat = `${qdate.getDate()}/${qdate.getMonth() + 1}/${qdate.getFullYear()}`;    
+    return (
+      
+      <Card key={qs.questionId} className='mb-3'>
+      <NavLink href={`/app/questions/${qs.questionId}`} className='d-flex justify-content-between'>
+      <CardBody>
+          <div className='d-flex justify-content-between'>
+            <NavLink href={`/app/questions/${qs.questionId}`} className='d-flex justify-content-between'>
+              <h3>{qs.question}</h3>         
+            </NavLink>
+            <h3>{qsdateformat}</h3>
+          </div>
+        </CardBody>   
+            </NavLink>
+       
+      </Card>
+    );
+  })
+) : (
+  <Card>
+    <CardBody>
+      <h3>No questions</h3>
+    </CardBody>
+  </Card>
+)}
+
+
         
          </div>
         
           
          </div>
-         
-        </CardBody>
-       </Card>
    
     </div>
     </Colxx>
@@ -207,14 +200,24 @@ const MyQandA = () => {
     <h2 className='font-weight-semibold'>Answers</h2>
    
     </div>
-      {myanswers&&myanswers.map((num)=>{
+      {/* {myanswers&&myanswers.map((num)=>{
        return(
         <div key={num.totalAnswers}>
         <h3>view all <span className="font-weight-semibold">{num.totalAnswers}</span> answers</h3>
     
         </div>
        )
-      })}
+      })} */}
+      {/* <h3 className='my-2'>view all <span className="font-weight-bold">{myanswers.totalAnswers}</span> answers</h3> */}
+      
+      
+      {myanswers&&myanswers.totalAnswers === null ? (
+      null
+    ) : (
+      <h3 className='my-2'>
+        View all <span className="font-weight-bold">{myanswers.totalAnswers}</span> answers
+      </h3>
+    )}
       {/* {activities.myAnswers&&activities.myAnswers.map((num)=>{
        return(
         <div key={num.totalAnswers}>
@@ -226,7 +229,7 @@ const MyQandA = () => {
    
       
     </div>
-       <Card className='mt-3'>
+       {/* <Card className='mt-3'>
         <CardBody>
          <div className=''>
          <div className=''>
@@ -268,51 +271,40 @@ const MyQandA = () => {
             
             )
           })}
-          {/* {activities.myAnswers&&activities.myAnswers.map((ans)=>{
-         
-         return (
-           
-           <div key={ans.totalAnswers}>
-             
-             <div className='' key={ans.totalAnswers}>
-        
-           <h3>{ans.answers.map((s)=>{
-             const ansdate=new Date(s.timestamp);
-             const ansdateformat = `${ansdate.getDate()}/${ansdate.getMonth()+1}/${ansdate.getFullYear()}`;
-             return (
-               <div key={s.questionId}>
-              
-                 <div className='d-flex   justify-content-between'>
-                 <NavLink href={`/app/questions/${s.questionId}`} className='d-flex justify-content-between'>
-                 <h3>{s.question}</h3>
-           
-                
-                 </NavLink>
-               
-                 <h3>{ansdateformat}</h3>
-                
-                
-                 </div>
-                <hr/>
-               
-              
-               </div>
-             )
-           })}</h3>
           
-      </div>
-            
-           </div>
-         
-         )
-       })} */}
         
          </div>
          
          </div>
          
         </CardBody>
-       </Card>
+       </Card> */}
+       {myanswers && myanswers.questions && myanswers.questions.length > 0 ? (
+  myanswers.questions.map((qs) => {
+    const qdate = new Date(qs.timestamp);
+    const qsdateformat = `${qdate.getDate()}/${qdate.getMonth() + 1}/${qdate.getFullYear()}`;    
+    return (
+      <Card key={qs.questionId} className='mb-3'>
+      <NavLink href={`/app/questions/${qs.questionId}`} className='d-flex justify-content-between'>
+      <CardBody>
+          <div className='d-flex justify-content-between'>
+          <h3>{qs.question}</h3>  
+            <h3>{qsdateformat}</h3>
+          </div>
+        </CardBody> 
+            </NavLink>
+        
+      </Card>
+    );
+  })
+) : (
+  <Card>
+    <CardBody>
+      <h3>No answers</h3>
+    </CardBody>
+  </Card>
+)}
+
      
     </div>
     </Colxx>

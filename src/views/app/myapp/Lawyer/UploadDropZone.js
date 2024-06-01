@@ -77,6 +77,7 @@ export default class DropzoneExample extends Component {
     const dropzoneComponentConfig = {
       // postUrl: 'https://httpbin.org/post',
       postUrl: `${baseUrl}/api/lawyer/job/${jobId}/document/${stepNo}`,
+      
      
     };
     return (
@@ -86,6 +87,12 @@ export default class DropzoneExample extends Component {
         eventHandlers={{
           init: (dropzone) => {
             this.myDropzone = dropzone;
+          },
+          success: (response) => {
+            console.log("document upload sucesss",response);
+            if (response.status === "success") {
+              window.location.reload();
+            }
           },
         }}
       />

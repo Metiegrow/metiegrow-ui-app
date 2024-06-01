@@ -62,7 +62,18 @@ const UserCard = () => {
         </div>
         </div>
       </Colxx>
-      {userdetails&&userdetails.map((users)=>{
+      {userdetails.length===0?(
+        <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
+      <Card>
+          <CardBody>
+            <h2 className='text-center text-large '>No Lawyers</h2>
+          </CardBody>
+         </Card>
+      </Colxx>
+      ):(
+
+        
+        userdetails.map((users)=>{
     return (
       <Colxx xxs="12" key={users.id}>
       <Row>
@@ -127,8 +138,8 @@ const UserCard = () => {
                    <CardText className='d-flex'>
                   
               
-            {users.services && users.services.slice(0,3).map((skill) => (
-          <div key={skill} className='my-2 ' id='btn.rounded'>
+            {users.topic && users.topic.slice(0,3).map((skill) => (
+          <div key={skill} className='my-2 ml-2 ' id='btn.rounded'>
           
               <Button color="light" className="mb-2 font-weight-semibold" size='xs'>
                 {skill}
@@ -176,7 +187,9 @@ const UserCard = () => {
       
     )
     
-   })}
+   }))
+      }
+   
    
     </div>
   );

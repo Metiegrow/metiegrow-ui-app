@@ -4,7 +4,7 @@ import { Colxx } from 'components/common/CustomBootstrap'
 import { baseUrl } from 'constants/defaultValues'
 import React,{useState,useEffect} from 'react'
 import { Button, Card, CardBody,NavLink, Row} from 'reactstrap'
-import {useParams} from "react-router-dom";
+import {useParams,useHistory} from "react-router-dom";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
@@ -41,6 +41,7 @@ const quillFormats = [
 
 const MentorAnswers = () => {
   const {questionId}=useParams();
+  const history = useHistory();
 //  const {ansid}=useParams();
 
  
@@ -98,7 +99,15 @@ const [editStates, setEditStates] = useState({});
       setEditing(true);
     };
    
-   
+    function getRoleRes() {
+      return localStorage.getItem('roleRes');
+    }
+    const roleRes = getRoleRes();
+
+  
+    
+    
+
     const handleSave = async () => {
       try {
         // await axios.put(`${baseUrl}/multipleQuestions/${questionId}`,
@@ -126,102 +135,7 @@ const [editStates, setEditStates] = useState({});
       setEditing(false);
     };
    
-    // answer edit
-    // const handleEdit1 = (id, answered) => { // Updated handleEdit1 to accept id parameter
-    //   console.log("Answered:", answered);
-    //   setEditedAnswerId(id); // Set editedAnswerId when editing
-    //   setEditedAnswer1(answered);
-    //   setEditing1(true);
-    // };
-  
-   
-    // const handleSave1 = async () => {
-    //   try {
-    //     // Update the state with the edited answer text
-    //     const updatedAnswers = answers1.answer.map(ans =>
-    //       ans.id === editedAnswerId ? { ...ans, answered: editedAnswer1 } : ans
-    //     );
-    //     setAnswers1(prevAnswers => ({
-    //       ...prevAnswers,
-    //       answer: updatedAnswers
-    //     }));
     
-    //     // Prepare the updated answer object to send to the server
-    //     const updatedAnswer = {
-    //       answer: updatedAnswers
-    //     };
-    
-    //     await axios.put(`${baseUrl}/mentorAnswers/${questionId}`, updatedAnswer);
-    //   } catch (error) {
-    //     console.error('Error updating answered:', error);
-    //   }
-    //   setEditedAnswerId(null); // Reset editedAnswerId after saving
-    //   setEditing1(false);
-    // };
-    
-    
-    //  const handleCancel1 = () => {
-    //   setEditedAnswer1('');
-    //   setEditedAnswerId(null); // Reset editedAnswerId when canceling
-    //   setEditing1(false);
-    // };
-  //   const handleEdit1 = (id) => {
-  //      // Find the answer object with the corresponding id
-  // const answerToUpdate = answers1.answer.find(answer => answer.id === id);
-  // // Set the initial value of the input field to the current answer text
-  // setEditedAnswer1(answerToUpdate.answered);
-  //     setEditStates(prevState => ({
-  //       ...prevState,
-  //       [id]: !prevState[id]
-  //     }));
-  //   };
-  // const handleEdit1 = (id) => {
-  //   const answerToUpdate = answers1.answer.find(answer => answer.id === id);
-  //   setEditedAnswer1(answerToUpdate.answered);
-  //   setEditStates(prevState => ({
-  //     ...prevState,
-  //     [id]: !prevState[id]
-  //   }));
-  // };
-    // const handleEdit1 = (id, answered) => {
-    //   console.log("Answered:", answered);
-    //   setEditedAnswer1(answered);
-    //   // Assuming 'setEditing1' is defined elsewhere, use it to set the edit state
-    //   setEditing1(true);
-    // };
-  
-    // const handleSave1 = async (id) => {
-    //   try {
-    //     const updatedAnswers = answers1.answer.map(ans =>
-    //       ans.id === id ? { ...ans, answerText: editedAnswer1 } : ans
-    //     );
-    //     setAnswers1(prevAnswers => ({
-    //       ...prevAnswers,
-    //       answer: updatedAnswers
-    //     }));
-  
-    //     const updatedAnswer = {
-    //       answer: updatedAnswers
-    //     };
-  
-    //     // await axios.put(`${baseUrl}/mentorAnswers/${questionId}`, updatedAnswer);
-    //     await axios.put(`${baseUrl}/api/mentor/answer`, updatedAnswer);
-    //   } catch (error) {
-    //     console.error('Error updating answered:', error);
-    //   }
-    //   setEditStates(prevState => ({
-    //     ...prevState,
-    //     [id]: false
-    //   }));
-    // };
-    // const handleEdit1 = (id) => {
-    //   const answerToUpdate = answers1.answer.find(answer => answer.id === id);
-    //   setEditedAnswer1(answerToUpdate.answerText);
-    //   setEditStates(prevState => ({
-    //     ...prevState,
-    //     [id]: !prevState[id]
-    //   }));
-    // };
     const handleEdit1 = (id) => {
       const answerToUpdate = answers1.answer.find(answer => answer.id === id);
       setEditedAnswer1(answerToUpdate.answerText); // Update the edited answer text
@@ -289,11 +203,10 @@ const [editStates, setEditStates] = useState({});
         // const deleteUrl = `${baseUrl}/mentorAnswers/${questionId}/answer/${answerId}`;
         const deleteUrl = `${baseUrl}/api/mentor/${answerId}/answer`;
         
-        // Send a DELETE request to the constructed URL
+        
         await axios.delete(deleteUrl);
         
-        // After successfully deleting the answer from the backend, update the state
-        // to reflect the change in the UI.
+        
         setAnswers1(prevState => ({
           ...prevState,
           answer: prevState.answer.filter(answer => answer.id !== answerId)
@@ -302,6 +215,28 @@ const [editStates, setEditStates] = useState({});
         console.error('Error deleting answer:', error);
       }
     };
+    const handleDeleteQuestion = async () => {
+      try {
+        
+        const deleteUrl = `${baseUrl}/api/mentee/${questionId}/question`;
+        
+        
+       const response= await axios.delete(deleteUrl);
+        if (response.status === 200){
+          // setAnswers1(prevState => ({
+          //   ...prevState,
+          //   question: prevState.question.filter(question => question.id !== questionsId)
+          // }));
+          history.push('/app/questions');
+        }
+        
+       
+      
+      } catch (error) {
+        console.error('Error deleting question:', error);
+      }
+    };
+    
   
     const handlePostAnswer = async () => {
       try {
@@ -329,56 +264,6 @@ const [editStates, setEditStates] = useState({});
       }
     };
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // const handlePostAnswer = async () => {
-    //   try {
-    //     console.log("Posting answer...");
-    //     await axios.post(`${baseUrl}/mentorAnswers/${questionId}/answer`, { answered: newAnswer });
-    //     const updatedResponse = await axios.get(`${baseUrl}/mentorAnswers/${questionId}/answer`);
-    //     setAnswers1(updatedResponse.data.answer);
-    //     setNewAnswer('');
-    //     console.log("Answer posted successfully!");
-    //   } catch (error) {
-    //     console.error('Error posting answer:', error);
-    //   }
-    // };
-    
-    
-   
-   
- 
-
- 
-
-
-
-
-
-
-    // const handleDeleteAnswer = async (id) => {
-    //   try {
-    //     // Send a request to delete the answer with the given id
-    //     await axios.delete(`${baseUrl}/mentorAnswers/${questionId}/${id}`);
-    //     // Update the state to remove the deleted answer
-    //     setAnswers1(prevState => ({
-    //       ...prevState,
-    //       answer: prevState.answer.filter(answer => answer.id !== id)
-    //     }));
-    //   } catch (error) {
-    //     console.error('Error deleting answer:', error);
-    //   }
-    // };
-   
-    
-  
     
     
   
@@ -413,28 +298,34 @@ const [editStates, setEditStates] = useState({});
         <div className='d-flex justify-content-between'>
         <h3 className='font-weight-semibold'>{answers.questionHeading}</h3>
          {/* <Button outline color="primary"><i className='simple-icon-pencil'/></Button> */}
-         <div className='d-flex '>
+         {roleRes.includes("MENTEE")&&(
+          <div className='d-flex '>
+      
          {editing ? (
                 <>
                   <Button outline color="primary" onClick={handleSave} className='mr-2'>
                     Save
                   </Button>
-                  <Button outline color="primary" onClick={handleCancel}>
+                  <Button outline color="primary" onClick={handleCancel} className='mr-2'>
                     Cancel
                   </Button>
                 </>
               ) : (
-                <Button outline color="primary" onClick={handleEdit}>
+                <Button outline color="primary" className='mr-2' onClick={handleEdit}>
                 <i className='simple-icon-pencil'/>
                 </Button>
               )}
+              <Button outline color="primary" onClick={()=>handleDeleteQuestion(questionId)}   ><i className='simple-icon-trash' /></Button>
+
          </div>
+        )}
+         
         
         
         </div>
         
         
-         <h6 className='text-muted'>Asked by</h6>
+         {/* <h6 className='text-muted'>Asked by</h6> */}
          {/* <p className='text-one'>How do I become better at public speaking?<br/>
          What do you do to avoid nervousness when speaking in public?</p> */}
          {/* <p className='text-one'>{answers.questionHeadingBrief}</p> */}
@@ -529,6 +420,8 @@ const [editStates, setEditStates] = useState({});
                   type="text"
                   className="form-control py-2 my-2"
                   value={editedAnswer1}
+                  
+               
                   onChange={(e) => setEditedAnswer1(e.target.value)}
                 />
               ) : (
@@ -619,7 +512,7 @@ const [editStates, setEditStates] = useState({});
                
                       <Button outline color="primary" ><i className='simple-icon-trash'/></Button>
                       </div> */}
-                      <div className="d-flex align-items-center">
+                      {/* <div className="d-flex align-items-center">
                 {editStates[an.id] ? (
                   <>
                     <Button
@@ -647,9 +540,52 @@ const [editStates, setEditStates] = useState({});
                     <i className="simple-icon-pencil" />
                   </Button>
                 )}
+                
                 <Button outline color="primary" onClick={()=>handleDeleteAnswer(an.id)} ><i className='simple-icon-trash' /></Button>
-              </div>
-       
+              </div> */}
+              <div className="d-flex align-items-center">
+              {roleRes.includes("MENTOR") && (
+                <>
+                  {editStates[an.id] ? (
+                    <>
+                      <Button
+                        outline
+                        color="primary"
+                        onClick={() => handleSave1(an.id)}
+                        className="mr-2"
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        className='mr-2'
+                        outline
+                        color="primary"
+                        onClick={() => handleCancel1(an.id)}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      className='mr-2'
+                      outline
+                      color="primary"
+                      onClick={() => handleEdit1(an.id)}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  )}
+                  <Button
+                    outline
+                    color="primary"
+                    onClick={() => handleDeleteAnswer(an.id)}
+                  >
+                    <i className='simple-icon-trash' />
+                  </Button>
+                </>
+              )}
+         </div>
+
         </div>
               </div>
        

@@ -156,7 +156,7 @@ const MentorProfile = () => {
             <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{mentorprofiledetails1.location}</span></h5>
             {/* <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{mentorprofiledetails1.star} ({mentorprofiledetails1.ratings} reviews)</span></h6> */}
             <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{reviews.averageStar} ({reviews.totalRatings} reviews)</span></h6>
-           <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6>
+           {/* <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6> */}
           </div>
          
           <div className='col-7 mt-4'>

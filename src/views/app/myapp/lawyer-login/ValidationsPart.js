@@ -55,11 +55,16 @@ const validateFirstName = (value) => {
     return error;
   }
   function validateLanguages(value) {
+    // let error;
+    // if (!value || value.length === 0) {
+    //    error = "Please specify a languages";
+    // } else if (value.some(tag => tag.length < 2)) {
+    //    error = "Each language must be longer than 2 characters";
+    // }
+    // return error;
     let error;
-    if (!value || value.length === 0) {
-       error = "Please specify a languages";
-    } else if (value.some(tag => tag.length < 2)) {
-       error = "Each language must be longer than 2 characters";
+    if (!value) {
+      error = "Please select a languages";
     }
     return error;
    }

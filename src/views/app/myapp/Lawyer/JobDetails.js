@@ -515,7 +515,8 @@ if (response.data.steps && response.data.steps.length > 0) {
       try {
         const response = await axios.delete(deleteUrl);
         if (response.status === 200) {
-          console.log('Document deleted successfully');
+          window.location.reload();
+          
           
         } else {
           console.error('Failed to delete the document');

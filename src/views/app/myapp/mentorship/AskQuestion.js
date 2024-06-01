@@ -2,13 +2,12 @@ import React,{useState} from 'react';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { Row, Card, Button } from 'reactstrap';
 import ReactQuill from 'react-quill';
-
-
-
+import { useHistory } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
+
 
 const quillModules = {
     toolbar: [
@@ -40,8 +39,9 @@ const quillModules = {
 
 const AskQuestion = () => {
     const [inputkey,setInputKey]=useState('')
-    const [inputkey1,setInputKey1]=useState('')
+    // const [inputkey1,setInputKey1]=useState('')
     const [textQuillStandart, setTextQuillStandart] = useState('');
+    const history=useHistory();
     const handleSubmit = async () => {
       try {
         const doc = new DOMParser().parseFromString(textQuillStandart, "text/html");
@@ -53,6 +53,9 @@ const AskQuestion = () => {
             questionHeadingBrief: strippedAnswerText,
           }
         );
+        if(response.status===201){
+          history.push('/app/questions')
+        }
         console.log('Response:', response.data);
         
       } catch (error) {
@@ -102,7 +105,7 @@ const AskQuestion = () => {
 
      
      </div>
-     <div className='mt-2'>
+     {/* <div className='mt-2'>
         <h6 className='font-weight-semibold'>Tags</h6>
         <p className='text-muted'>Add up to 5 tags to decribe what your question is about</p>
         <input
@@ -112,7 +115,7 @@ const AskQuestion = () => {
             value={inputkey1}
             onChange={(e) =>setInputKey1(e.target.value)}
           />
-       </div>
+       </div> */}
       
       </Colxx>
      </Card>

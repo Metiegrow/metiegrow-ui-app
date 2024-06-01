@@ -14,6 +14,7 @@ import {
   CustomInput,
   InputGroupAddon,
   InputGroup,
+  
 } from "reactstrap";
 import axios from "axios";
 import ThumbnailImage from "components/cards/ThumbnailImage";
@@ -23,7 +24,14 @@ import { Formik, Form, Field } from "formik";
 import TopNavigation from "components/wizard/TopNavigation";
 import { baseUrl } from "constants/defaultValues";
 import { SliderTooltip } from 'components/common/SliderTooltips';
+import Select from 'react-select';
 import LawyerJumbotron from "./LawyerJumbotron";
+import country from "../my-login/Country";
+import language from "../my-login/Languages";
+
+
+
+
 import {
   // validateLastName,
   // validateFirstName,
@@ -49,6 +57,9 @@ import {
   // validateAchievement,
   validateFile,
 } from "./ValidationsPart";
+
+
+
 // import SingleRangeSlider from "./SingleRangeSlider";
 
 
@@ -66,13 +77,17 @@ import {
 //   "ML"
 
 // ]
-const LocationData = [
-  "Select Location",
-  "Location1",
-  "Location2",
-  "Location3",
-  "Location4",
-];
+// const LocationData = [
+//   "Select Location",
+//   "Location1",
+//   "Location2",
+//   "Location3",
+//   "Location4",
+// ];
+const languageOptions = language.map(option => ({
+  value: option.iso_code,
+  label: option.name
+}));
 
 const BottomNavigation = ({
   className,
@@ -129,6 +144,8 @@ const BottomNavigation = ({
 
 const LawyerLogin = ({ intl}) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
+ 
+  // const forms = Array.from({ length: stepsCount }, () => createRef());
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
   // const [services, setServices] = useState([
@@ -185,13 +202,14 @@ const LawyerLogin = ({ intl}) => {
     image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
-  const [amount, setAmount] = useState(1000);
+  const [amount,setAmount] = useState(1000);
   
   const handleSliderChange = (value) => {
     setAmount(value);
    
     
   };
+  
 
   // const url = `${baseUrl}/mentor/profile`;
   const lawyerAboutUrl=`${baseUrl}/api/lawyer/about`;
@@ -209,6 +227,7 @@ const token = getTokenRes();
 // console.log(token);
 
   
+
 
 
   const postDataAbout = async (data) => {
@@ -240,10 +259,13 @@ const token = getTokenRes();
 
 
   const postDataExperience = async (data) => {
+    
     const sendData=[{...data,amount}]
+    // const sendData=[{...data}]
   
     try {
       const response = await axios.post(packageUrl, sendData, {
+     
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -253,6 +275,7 @@ const token = getTokenRes();
       console.error(error);
     }
   };
+ 
   
   
 
@@ -277,7 +300,47 @@ const token = getTokenRes();
     }
   };
 
-
+  // const onClickNext = (goToNext, steps, step) => {
+  //   if (steps.length - 1 <= steps.indexOf(step)) {
+  //     return;
+  //   }
+    
+  //   const formIndex = steps.indexOf(step);
+  //   const form = forms[formIndex]?.current; // Null check added here
+  
+  //   if (form) {
+  //     form.submitForm().then(async () => {
+  //       if (!form.isDirty && form.isValid) {
+  //         const newFields = { ...fields, ...form.values };
+  //         setFields(newFields);
+  
+  //         if (steps.length - 2 <= steps.indexOf(step)) {
+  //           // done
+  //           setBottomNavHidden(true);
+  //           setLoading(true);
+  
+  //           try {
+  //             // await postData(newFields);
+  //             console.log("Posting data:", newFields);
+  //             await postDataExperience(newFields);
+  //             setTimeout(() => {
+  //               setLoading(false);
+  //             }, 3000);
+  //           } catch (error) {
+  //             console.error("Error posting data:", error);
+  //             setLoading(false);
+  //           }
+  //         }
+  
+  //         goToNext();
+  //         step.isDone = true;
+  //       }
+  //     });
+  //   } else {
+  //     console.error("Form is null.");
+  //   }
+  // };
+  
 
   const onClickNext = (goToNext, steps, step) => {
     if (steps.length - 1 <= steps.indexOf(step)) {
@@ -298,6 +361,8 @@ const token = getTokenRes();
 
           try {
             // await postData(newFields);
+            console.log("Posting data:", newFields);
+            // await postDataExperience(newFields);
             setTimeout(() => {
               setLoading(false);
             }, 3000);
@@ -355,7 +420,7 @@ const token = getTokenRes();
                     console.log(aboutField.image);
                   }}
                 >
-                  {({ errors, touched , setFieldValue,}) => (
+                  {({setFieldValue, errors, touched }) => (
                     <Form className="av-tooltip tooltip-label-right ">
                       <Alert color="primary">
                         <strong>Lovely to see you!</strong>
@@ -528,10 +593,20 @@ const token = getTokenRes();
                           name="location"
                           validate={validateLocation}
                           className="form-control"
+                         
                         >
-                          {LocationData.map((option) => (
+                          {/* {LocationData.map((option) => (
                             <option key={option} value={option}>
                               {option}
+                            </option>
+                          ))} */}
+
+                          <option disabled value="">
+                              Select Location
+                            </option>
+                          {country.map((option) => (
+                            <option key={option.iso_code} value={option.iso_code}>
+                              {option.name}
                             </option>
                           ))}
                         </Field>
@@ -541,7 +616,7 @@ const token = getTokenRes();
                           </div>
                         )}
                       </FormGroup>
-                      <FormGroup className="error-l-75">
+                      {/* <FormGroup className="error-l-75">
                         <Label>Languages*</Label>
                         <Field
                           
@@ -559,6 +634,38 @@ const token = getTokenRes();
                         />
                           
                         
+                        {errors.languages && touched.languages && (
+                          <div className="invalid-feedback d-block">
+                            {errors.languages}
+                          </div>
+                        )}
+                      </FormGroup> */}
+                      <FormGroup className="error-l-75">
+                        <Label>Languages*</Label>
+                        <Select
+                          placeholder="Select Languages"
+                          name="languages"
+                          isMulti
+                          options={languageOptions}
+                          validate={validateLanguages}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          onChange={selectedOptions => {
+                          const languagesArray = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                          setFieldValue('languages', languagesArray);
+                  }}
+                        >
+                        
+                          {/* <option disabled value="">
+                              Select Languages
+                            </option>
+                          {language.map((option) => (
+                            <option key={option.iso_code} value={option.iso_code}>
+                              {option.name}
+                            </option>
+                          ))} */}
+                          
+                        </Select>
                         {errors.languages && touched.languages && (
                           <div className="invalid-feedback d-block">
                             {errors.languages}
@@ -688,7 +795,7 @@ const token = getTokenRes();
                           onChange={(e) => {
                             const topicArray = e.target.value
                               .split(",")
-                              .map((topics) => topics.trim());
+                              .map((topic) => topic.trim());
                             setFieldValue("topics", topicArray);
                           }}
                         />
@@ -827,7 +934,7 @@ const token = getTokenRes();
               name="Services"
               desc={messages["wizard.step-desc-3"]}
             >
-              <div className="wizard-basic-step">
+          <div className="wizard-basic-step">
               {/* {services&&services.map((service,index)=>{
                 return(
                   <Formik key={service.id}
