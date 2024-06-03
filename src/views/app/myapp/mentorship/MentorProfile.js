@@ -6,6 +6,7 @@ import axios from 'axios';
 import {useParams,useHistory} from "react-router-dom";
 import MentorTabCard from './MentorTabCard';
 import ReviewsComponent from '../Reviews/ReviewsComponent';
+import country from '../my-login/Country';
 
 const MentorProfile = () => {
   const {mid}=useParams();
@@ -100,6 +101,8 @@ const MentorProfile = () => {
     // Open the mentor's LinkedIn profile in a new tab/window
     window.open(linkedInUrl, '_blank');
   };
+  const countryName = country.find(c => c.iso_code === mentorprofiledetails1.location)?.name;
+
 
   return (
     <div  className='mentor-profile'>
@@ -153,7 +156,7 @@ const MentorProfile = () => {
             <h2 className='text-one  text-primary'>{mentorprofiledetails1.company}</h2>
             <p  className='text-one font-weight-medium text-primary'>{mentorprofiledetails1.bio}</p>
             
-            <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{mentorprofiledetails1.location}</span></h5>
+            <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{countryName}</span></h5>
             {/* <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{mentorprofiledetails1.star} ({mentorprofiledetails1.ratings} reviews)</span></h6> */}
             <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{reviews.averageStar} ({reviews.totalRatings} reviews)</span></h6>
            {/* <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6> */}
