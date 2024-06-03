@@ -93,6 +93,8 @@ const LawyerProfile = () => {
 const handleChatClick = () =>{
   history.push(`${adminRoot}/chat/${lawyerprofile.chatUserName}`)
 }
+const role = localStorage.getItem("roleRes");
+
   return (
     <div>
     
@@ -129,12 +131,14 @@ const handleChatClick = () =>{
        
             </div>
             <div>
+              {role.includes("MENTEE") && (
             <NavLink  >
               <Button onClick={handleChatClick} color="light" className=" font-weight-semibold mx-2 " size='large'>
                 <span className='font-weight-semibold text-primary text-one'>Contact</span>
                 
               </Button>
               </NavLink>
+              )}
             </div>
             <div>
               <NavLink>
@@ -161,7 +165,7 @@ const handleChatClick = () =>{
             
             <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{lawyerprofile.location}</span></h5>
             <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{lawyerprofile.star} ({lawyerprofile.ratings} reviews)</span></h6>
-           <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6>
+           {/* <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6> */}
           </div>
          
           <div className=' mt-4'>
@@ -234,9 +238,11 @@ const handleChatClick = () =>{
               <p className='text-large mb-2 text-default'>₹ {pack.amount}</p>
               <p className='text-muted text-small'>{pack.description}</p>
               <div className=''>
+                {role.includes("MENTEE") && (
                 <NavLink href='/app/lawyer/payment'>
                   <Button color='primary  text-one' onClick={() => handlePurchase(pack)}>Purchase</Button>
                 </NavLink>
+                )}
               </div>
             </div>
           </CardBody>

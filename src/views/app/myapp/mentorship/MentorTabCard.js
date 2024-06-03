@@ -19,7 +19,7 @@ import { Colxx } from 'components/common/CustomBootstrap';
 
 const MentorTabCard = ({ handleConnectClick }) => {
   const [activeFirstTab, setActiveFirstTab] = useState('1');
-
+  const role = localStorage.getItem("roleRes")
 
   return (
     <Row  className="mt-4">
@@ -118,10 +118,12 @@ const MentorTabCard = ({ handleConnectClick }) => {
                           <h5>Basic package</h5>
                           <div className='mt-4 '>
                             <div className=''  >
+                              {role.includes("MENTEE") && (
                             <Button onClick={handleConnectClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
                                 <span className='font-weight-semibold  text-one'>Connect</span>
                               
                             </Button>
+                            )}
                             </div>
                             </div>
                         </CardTitle>

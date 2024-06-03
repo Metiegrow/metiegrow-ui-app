@@ -59,6 +59,7 @@ const history = useHistory()
 const handleChatClick = () => {
     history.push(`${adminRoot}/chat/${userId}`);
 }
+const role = localStorage.getItem("roleRes")
 
   return (
     // <Row>
@@ -341,10 +342,13 @@ const handleChatClick = () => {
                           <h5>{pack.serviceName}</h5>
                           <p className='text-muted'>{pack.description}</p>
                           <div className='d-flex '>
+                            {role.includes("MENTEE") && (
+                              <>
                           <Button className=' text-one'  outline color='primary' onClick={handleChatClick} >Contact</Button>
                             
                           <Button color='primary' className='text-one ml-2'  onClick={() => handlePurchase(pack)}>Purchase</Button>
-                          
+                              </>
+                            )}
                           </div>
                          
                           
