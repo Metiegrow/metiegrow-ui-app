@@ -89,12 +89,14 @@ async login(email, password , history) {
         const roleRes = res.data.roles.map(role => role.role);
         const userName = res.data.userName;
         const imageUrl = res.data.imageUrl;
+        const userId = res.data.userId;
       // console.log("role res from auth", roleRes)
       const expirationTime = new Date(Date.now() + 6 * 60 * 60 * 1000);
 
       localStorage.setItem('expirationTime', expirationTime.getTime());
       localStorage.setItem('userName', userName);
       localStorage.setItem('imageUrl', imageUrl);
+      localStorage.setItem("userId", userId)
       //const statusRes = "3"; 
       // console.log(res.data.token);
       // console.log("status response", statusRes);

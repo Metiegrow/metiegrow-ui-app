@@ -25,7 +25,8 @@ const MyComponent = () => {
 
   return (
     <div>
-     <h4> Opening classroom...</h4>
+     {/* <h4> Opening classroom...</h4> */}
+     <div className='loading' />
     </div>
   );
 };
