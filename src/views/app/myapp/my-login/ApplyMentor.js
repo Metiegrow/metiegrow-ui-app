@@ -481,6 +481,7 @@ const ApplyMentor = () => {
                         {errors.skills}
                       </div>
                     )}
+                    <FormText>Add skill and press Enter </FormText>
                     <FormText color="muted">
                       Describe your expertise to connect with mentees who have
                       similar interests.

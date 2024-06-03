@@ -821,7 +821,7 @@ const token = getTokenRes();
                       <TagsInput
                         value={topicsTag}
                         onChange={handleTopicsTagsChange}
-                        inputProps={{ placeholder: "Add topics " }}
+                        inputProps={{ placeholder: "Add topic" }}
                         // validate={validateLanguages}
                       />
                         {errors.topics && touched.topics && (
@@ -829,6 +829,7 @@ const token = getTokenRes();
                             {errors.topics}
                           </div>
                         )}
+                        <FormText>Add topic and press Enter </FormText>
                         <FormText color="muted">
                           Describe your expertise to connect with mentees who
                           have similar interests.
