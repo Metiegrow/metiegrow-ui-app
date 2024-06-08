@@ -11,13 +11,14 @@ import {
   Col,
   FormText,
   Alert,
-  CustomInput,
-  InputGroupAddon,
+  // CustomInput,
+  // InputGroupAddon,
   InputGroup,
+  Input,
   
 } from "reactstrap";
 import axios from "axios";
-import ThumbnailImage from "components/cards/ThumbnailImage";
+// import ThumbnailImage from "components/cards/ThumbnailImage";
 import { Wizard, Steps, Step, WithWizard } from "react-albus";
 import { injectIntl } from "react-intl";
 import { Formik, Form, Field } from "formik";
@@ -152,6 +153,7 @@ const LawyerLogin = ({ intl}) => {
   // const [languagesTag, setLanguagesTag] = useState([]);
   const [topicsTag, setTopicsTag] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [file1, setFile1] = useState(null);
   // const [services, setServices] = useState([
   //   {
   //     id:1,
@@ -206,14 +208,32 @@ const LawyerLogin = ({ intl}) => {
     image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
-  const [amount,setAmount] = useState(1000);
+  // const [amount,setAmount] = useState(1000);
   
-  const handleSliderChange = (value) => {
-    setAmount(value);
+  // const handleSliderChange = (value) => {
+  //   setAmount(value);
    
     
+  // };
+  // const [amount,setAmount]=useState(1000); 
+
+  const [services, setServices] = useState([{ serviceName: '', description: '', headline: '',amount:1000}]);
+
+  //   const handleSliderChange = (index, value) => {
+  //   const newServices = [...services];
+  //   newServices[index].amount = value;
+  //   setServices(newServices);
+  //   console.log("added",newServices);
+  // };
+
+
+  const handleSliderChange = (index, value) => {
+    const newServices = [...services];
+    newServices[index].amount = value;
+    setServices(newServices);
+    console.log("added",newServices);
+   
   };
-  
 
   // const url = `${baseUrl}/mentor/profile`;
   const lawyerAboutUrl=`${baseUrl}/api/lawyer/about`;
@@ -262,24 +282,49 @@ const token = getTokenRes();
 };
 
 
-  const postDataExperience = async (data) => {
+  // const postDataExperience = async (data) => {
     
-    const sendData=[{...data,amount}]
-    // const sendData=[{...data}]
+  //   // const sendData=[{...data,amount}]
+  //   // const sendData=[{...data}]
+    
   
-    try {
-      const response = await axios.post(packageUrl, sendData, {
+  //   try {
+  //     // const response = await axios.post(packageUrl, sendData, {
+  //     const response = await axios.post(packageUrl, data, {
      
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  
+ 
+  const postDataExperience = async (data) => {
+    // const payload = {
+    //  ...data,
+    //   services: data.services.map(service => ({...service, })),
+    // };
+
+    try {
+      const response = await axios.post(packageUrl, data, {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        Authorization: `Bearer ${token}`,
+      },
       });
-      console.log(response);
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
- 
+
+
+  const addService = () => {
+    setServices([...services, { serviceName: '', description: '', headline: '', amount: 1000 }]);
+  };
   
   
 
@@ -287,6 +332,7 @@ const token = getTokenRes();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    setFile1(event.target.files[0]);
 
     if (file) {
       const reader = new FileReader();
@@ -447,6 +493,62 @@ const token = getTokenRes();
                         at those.
                       </Alert>
                       <FormGroup>
+                    <Label for="image">Image*</Label>
+                    <Row>
+                      <Col md={2} className="">
+                        <img
+                          src={
+                            selectedFile || "/assets/img/profiles/l-1.jpg"
+                            // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
+                          }
+                          className="mx-2 rounded-circle img-thumbnail border"
+                          style={{ width: "70px", height: "70px" }}
+                          alt=""
+                        />
+                      </Col>
+                      <Col md={5} className="mt-3 ">
+                        <InputGroup className="mb-3">
+                          {errors.image && touched.image && (
+                            <div className="invalid-feedback d-block">
+                              {errors.image}
+                            </div>
+                          )}
+                          <div className="mt-2">
+                            <Button
+                              className="default"
+                              color="primary"
+                              onClick={() =>
+                                document.getElementById("file-upload").click()
+                              }
+                            >
+                              Upload profile pic{" "}
+                              <i className="iconsminds-upload " />
+                            </Button>
+                            {/* <Form> */}
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              className="form-control d-none"
+                              onChange={handleFileChange}
+                              validate={validateFile}
+                            />
+                            {/* </Form> */}
+                            {file1 && (
+                              <p className="mt-2">
+                                Selected file: {file1.name}
+                              </p>
+                            )}
+                            {errors.image && touched.image && (
+                              <div className="invalid-feedback d-block">
+                                {errors.image}
+                              </div>
+                            )}
+                          </div>
+                        </InputGroup>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                      {/* <FormGroup>
                         <Label for="image">image</Label>
                         <Row>
                           <Col md={1}>
@@ -479,7 +581,7 @@ const token = getTokenRes();
                                 // onChange={() => {
                                 //   handleFileChange()}}
                                 validate={validateFile}
-                              />
+                              /> */}
                               {/* <Field
                                 className="form-control"
                                 type="file"
@@ -488,7 +590,7 @@ const token = getTokenRes();
                                 validate={validateFile}
                                 onChange={handleFileChange}
                               /> */}
-                              {errors.image && touched.image && (
+                              {/* {errors.image && touched.image && (
                                 <div className="invalid-feedback d-block">
                                   {errors.image}
                                 </div>
@@ -496,7 +598,7 @@ const token = getTokenRes();
                             </InputGroup>
                           </Col>
                         </Row>
-                      </FormGroup>
+                      </FormGroup> */}
                       {/* <Row>
                         <Col md={6}>
                           <FormGroup className="error-l-75">
@@ -821,7 +923,7 @@ const token = getTokenRes();
                       <TagsInput
                         value={topicsTag}
                         onChange={handleTopicsTagsChange}
-                        inputProps={{ placeholder: "Add topic" }}
+                        inputProps={{ placeholder: "Add topics " }}
                         // validate={validateLanguages}
                       />
                         {errors.topics && touched.topics && (
@@ -829,7 +931,6 @@ const token = getTokenRes();
                             {errors.topics}
                           </div>
                         )}
-                        <FormText>Add topic and press Enter </FormText>
                         <FormText color="muted">
                           Describe your expertise to connect with mentees who
                           have similar interests.
@@ -955,370 +1056,125 @@ const token = getTokenRes();
                 </Formik>
               </div>
             </Step>
-            <Step
-              id="step3"
-              name="Services"
-              desc={messages["wizard.step-desc-3"]}
-            >
-          <div className="wizard-basic-step">
-              {/* {services&&services.map((service,index)=>{
-                return(
-                  <Formik key={service.id}
-                  className='my-4'
-                  innerRef={forms[2]}
-                  initialValues={{
-                    serviceName: service.serviceName,
-              description: service.description,
-              // amount: service.amount,
-              headline: service.headline,
-                 
+           
+            <Step id="step3" name="Services" desc="Step Description">
+      <div className="wizard-basic-step">
+        <Formik
+          innerRef={forms[2]}
+          initialValues={{ services }}
+          onSubmit={(values) => {
+            // postDataExperience(values.services);
             
-                    
-                  }}
-                  onSubmit={(values) => {
-                    const submitData = {
-                ...values,
-                amount: services[index].amount,
-              };
-                    postDataExperience(submitData);
-                  }}
-                  validateOnMount
-                >
-                  {({ errors, touched }) => (
-                    <Form className="av-tooltip tooltip-label-right my-4">
-                      <Alert color="primary">
-                        <strong>Almost there!</strong> <br /> You&apos;re just
-                        one last step away from being a lawyer and connecting
-                        with mentees all over the world! in this step, shows off
-                        your accomplishments and how you can help others.
-                        <br />
-                        <br /> Many of these fields are optional, but will help
-                        us get better insights into your work - and therefore
-                        exponentially increase your chances. They also give you
-                        a jumpstart once you&apos;re a lawyer.
-                      </Alert>
-                    
-
-                      <Row >
-                        <Col md={12}>
-                        <FormGroup className="error-l-75">
-                            <Label>Service Name*</Label>
-                            <Field
-                              className="form-control"
-                              name="serviceName"
-                              validate={validateServiceName}
-                            />
-                            {errors.serviceName && touched.serviceName && (
-                              <div className="invalid-feedback d-block">
-                                {errors.serviceName}
-                              </div>
-                            )}
-                          </FormGroup>
-                        </Col>
-                       
-                      </Row>
-                      
-                      
+            postDataExperience(values);
+            console.log("my services",services);
+            console.log("values",values);
+          }}
+          validateOnMount
+        >
+          {({ errors, touched }) => (
+            <Form className="av-tooltip tooltip-label-right my-4">
+              <Alert color="primary">
+                <strong>Almost there!</strong> <br /> You&apos;re just
+                one last step away from being a lawyer and connecting
+                with mentees all over the world! In this step, show off
+                your accomplishments and how you can help others.
+                <br />
+                <br /> Many of these fields are optional, but will help
+                us get better insights into your work - and therefore
+                exponentially increase your chances. They also give you
+                a jumpstart once you&apos;re a lawyer.
+              </Alert>
+              
+              {services.map((service, index) => (
+                <div key={service.serviceName}>
+                  <Row>
+                    <Col md={12}>
+                      <FormGroup className="error-l-75">
+                        <Label>Service Name*</Label>
+                        <Input
+                        type="text"
+                          className="form-control"
+                          name={`services[${index}].serviceName`}
+                          validate={validateServiceName}
+                          value={services.serviceName}
+                          onChange={(e) => {
+                            const newServices = [...services];
+                            newServices[index].serviceName = e.target.value; 
+                            setServices(newServices); 
+                          }}
+                        />
+                        {errors.services?.[index]?.serviceName && touched.services?.[index]?.serviceName && (
+                          <div className="invalid-feedback d-block">
+                            {errors.services[index].serviceName}
+                          </div>
+                        )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={12}>
                       <FormGroup>
-                        <Label for="headline">Headline*</Label>
+                        <Label for={`services[${index}].headline`}>Headline*</Label>
                         <Field
-                          
-                          name="headline"
-                          id="headline"
+                          name={`services[${index}].headline`}
+                          id={`services[${index}].headline`}
                           className="form-control"
                           validate={validatePackageTopic}
                         />
-                        {errors.topic && touched.topic && (
+                        {errors.services?.[index]?.headline && touched.services?.[index]?.headline && (
                           <div className="invalid-feedback d-block">
-                            {errors.topic}
+                            {errors.services[index].headline}
                           </div>
                         )}
-                       
                       </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={12}>
                       <FormGroup>
-                        <Label for="description">Description*</Label>
+                        <Label for={`services[${index}].description`}>Description*</Label>
                         <Field
                           as="textarea"
-                          name="description"
-                          id="description"
+                          name={`services[${index}].description`}
+                          id={`services[${index}].description`}
                           className="form-control"
                           validate={validatePackageDescription}
                         />
-                        {errors.desc && touched.desc && (
+                        {errors.services?.[index]?.description && touched.services?.[index]?.description && (
                           <div className="invalid-feedback d-block">
-                            {errors.desc}
+                            {errors.services[index].description}
                           </div>
                         )}
-                       
                       </FormGroup>
-                          <Row>
-                            <Col md={12}>
-                            <FormGroup className="error-l-75">
-                            <Label>Amount*</Label>
-                            
-                           <SliderTooltip
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={12}>
+                      <FormGroup className="error-l-75">
+                        <Label>Amount*</Label>
+                        <SliderTooltip
                           min={0}
                           max={500000}
-                          
                           defaultValue={service.amount}
                           className="mb-5"
                           step={500}
-                          value={amount} 
-                          onChange={handleSliderChange}
-                          // onChange={(value) => handleSliderChange(index, value)}
-          
-                 />
-                          </FormGroup>
-                            </Col>
-                          </Row>
-                         
-                       
-
-                     
-                    </Form>
-                  )}
-                </Formik>
-                )
+                          value={service.amount}
+                          onChange={(value) => handleSliderChange(index, value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <hr />
+                </div>
+              ))}
               
-                
-              })} */}
-
-              <Formik
-                  innerRef={forms[2]}
-                  initialValues={{
-                    // introVideo: fields.introVideo,
-                    // featuredArticle: fields.featuredArticle,
-                    // reasonForMentor: fields.reasonForMentor,
-                    // achievement: fields.achievement,
-                    // title:fields.title,
-                    headline:fields.headline,
-                    // shortDescription:fields.description,
-                    serviceName:fields.serviceName,
-                    description:fields.servicedescription,
-                    // amount:fields.amount
-                  }}
-                  onSubmit={(values) => {
-                    postDataExperience(values);
-                  }}
-                  validateOnMount
-                >
-                  {({ errors, touched }) => (
-                    <Form className="av-tooltip tooltip-label-right">
-                      <Alert color="primary">
-                        <strong>Almost there!</strong> <br /> You&apos;re just
-                        one last step away from being a lawyer and connecting
-                        with mentees all over the world! in this step, shows off
-                        your accomplishments and how you can help others.
-                        <br />
-                        <br /> Many of these fields are optional, but will help
-                        us get better insights into your work - and therefore
-                        exponentially increase your chances. They also give you
-                        a jumpstart once you&apos;re a lawyer.
-                      </Alert>
-                    
-
-                      <Row>
-                        <Col md={12}>
-                        <FormGroup className="error-l-75">
-                            <Label>Service Name*</Label>
-                            <Field
-                              className="form-control"
-                              name="serviceName"
-                              validate={validateServiceName}
-                            />
-                            {errors.serviceName && touched.serviceName && (
-                              <div className="invalid-feedback d-block">
-                                {errors.serviceName}
-                              </div>
-                            )}
-                          </FormGroup>
-                        </Col>
-                        {/* <Col md={6}>
-                        <FormGroup className="error-l-75">
-                            <Label>Service Description*</Label>
-                            <Field
-                              className="form-control"
-                              name="servicedescription"
-                              validate={validateServiceDescription}
-                            />
-                            {errors.servicedescription && touched.servicedescription && (
-                              <div className="invalid-feedback d-block">
-                                {errors.servicedescription}
-                              </div>
-                            )}
-                          </FormGroup>
-                        </Col> */}
-                      </Row>
-                      <Row>
-                      {/* <Col md={6}>
-                      <FormGroup>
-                        <Label>Service Amount</Label>
-                        
-                        <SliderExamples/>
-                      </FormGroup>
-         
-                      </Col> */}
-                      </Row>
-                      <FormGroup>
-                        <Row>
-                          {/* <Col md={6}>
-                            <Label for="introVideo">Intro Video</Label>
-                            <Field
-                              type="url"
-                              name="introVideo"
-                              id="introVideo"
-                              className="form-control"
-                            />
-                            <FormText color="muted">
-                              Add a youTube video or record a Loom for your
-                              future mentees
-                            </FormText>
-                          
-                          </Col> */}
-                          {/* <Col md={12}>
-                          <FormGroup className="error-l-75">
-                            <Label>Package Name*</Label>
-                            <Field
-                              className="form-control"
-                              name="title"
-                              validate={validatePackageTitle}
-                            />
-                            {errors.title && touched.title && (
-                              <div className="invalid-feedback d-block">
-                                {errors.title}
-                              </div>
-                            )}
-                          </FormGroup>
-                        </Col> */}
-                          {/* <Col md={6}>
-                            <Label for="featuredArticle">
-                              Featured Article
-                            </Label>
-                            <Field
-                              type="url"
-                              name="featuredArticle"
-                              id="featuredArticle"
-                              className="form-control"
-                            />
-                            <FormText color="muted">
-                              Link an interview / podcast / piece of writing you
-                              are proud of or were featured in.
-                            </FormText>
-                          </Col> */}
-                          
-                        </Row>
-                      </FormGroup>
-                      <FormGroup>
-                        <Label for="headline">Headline*</Label>
-                        <Field
-                          
-                          name="headline"
-                          id="headline"
-                          className="form-control"
-                          validate={validatePackageTopic}
-                        />
-                        {errors.topic && touched.topic && (
-                          <div className="invalid-feedback d-block">
-                            {errors.topic}
-                          </div>
-                        )}
-                       
-                      </FormGroup>
-                      <FormGroup>
-                        <Label for="description">Description*</Label>
-                        <Field
-                          as="textarea"
-                          name="description"
-                          id="description"
-                          className="form-control"
-                          validate={validatePackageDescription}
-                        />
-                        {errors.desc && touched.desc && (
-                          <div className="invalid-feedback d-block">
-                            {errors.desc}
-                          </div>
-                        )}
-                       
-                      </FormGroup>
-                          <Row>
-                            <Col md={12}>
-                            <FormGroup className="error-l-75">
-                            <Label>Amount*</Label>
-                             {/* <Field
-                              className="form-control"
-                              name="amount"
-                              validate={validatePackageAmount}
-                            />
-                            {errors.amount && touched.amount && (
-                              <div className="invalid-feedback d-block">
-                                {errors.amount}
-                              </div>
-                            )}  */}
-                           {/* <SingleRangeSlider/> */}
-                           <SliderTooltip
-                          min={0}
-                          max={500000}
-                          
-                          defaultValue={amount}
-                          className="mb-5"
-                          step={500}
-                          value={amount} 
-                          onChange={handleSliderChange}
-          
-                 />
-                          </FormGroup>
-                            </Col>
-                          </Row>
-                         
-                       
-
-                      {/* <FormGroup>
-                        <Label>
-                          Why do you want to become a mentor?(Not publicly
-                          visible)*
-                        </Label>
-                        <Field
-                          as="textarea"
-                          name="reasonForMentor"
-                          id="reasonForMentor"
-                          className="form-control"
-                          validate={validateReasonForMentor}
-                        />
-                        {errors.reasonForMentor && touched.reasonForMentor && (
-                          <div className="invalid-feedback d-block">
-                            {errors.reasonForMentor}
-                          </div>
-                        )}
-                      </FormGroup> */}
-                      {/* <FormGroup>
-                        <Label>
-                          What, in your opinion, has been your greatest
-                          achievement so far?(Not publicly visible)*
-                        </Label>
-                        <Field
-                          as="textarea"
-                          name="achievement"
-                          id="achievement"
-                          className="form-control"
-                          validate={validateAchievement}
-                        />
-                        {errors.achievement && touched.achievement && (
-                          <div className="invalid-feedback d-block">
-                            {errors.achievement}
-                          </div>
-                        )}
-                      </FormGroup> */}
-                    </Form>
-                  )}
-                </Formik>
-
-              
-         
-                
-                {/* <Button  color="primary" className="my-5" onClick={addService}>Add more services</Button> */}
-              </div>
-              
-            </Step>
+              <Button color="primary" className="my-5" onClick={addService}>Add more services</Button>
+             
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </Step>
             <Step id="step4" hideTopNav>
               <div className="wizard-basic-step text-center pt-3">
                 {loading ? (
