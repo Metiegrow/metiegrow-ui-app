@@ -11,16 +11,21 @@ import {
   TabPane,
  Button
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import classnames from 'classnames';
 
 import { Colxx } from 'components/common/CustomBootstrap';
+import { adminRoot } from 'constants/defaultValues';
 
-const MentorTabCard = ({ handleConnectClick }) => {
+const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
   const [activeFirstTab, setActiveFirstTab] = useState('1');
   const role = localStorage.getItem("roleRes")
-
+  
+  const history = useHistory();
+  const handleChatClick = () => {
+    history.push(`${adminRoot}/chat/${chatUserId}`)
+  }
   return (
     <Row  className="mt-4">
       <Colxx xxs="12">
@@ -119,10 +124,16 @@ const MentorTabCard = ({ handleConnectClick }) => {
                           <div className='mt-4 '>
                             <div className=''  >
                               {role.includes("MENTEE") && (
+                                <Row>
                             <Button onClick={handleConnectClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
                                 <span className='font-weight-semibold  text-one'>Connect</span>
                               
                             </Button>
+                            <Button onClick={handleChatClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
+                                <span className='font-weight-semibold  text-one'>Chat</span>
+                              
+                            </Button>
+                            </Row>
                             )}
                             </div>
                             </div>

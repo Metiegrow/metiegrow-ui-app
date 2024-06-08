@@ -50,7 +50,7 @@ const OtherPosting = ({ closeModal }) => {
   const [description, setDescription] = useState("");
   // const [skills, setSkills] = useState([]);
 
-  const url = `${baseUrl}/api/posts/other-post`;
+  const url = `${baseUrl}/api/posts/other-post/`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");

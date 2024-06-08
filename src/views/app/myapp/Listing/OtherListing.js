@@ -15,7 +15,8 @@ import {
 import { Colxx } from "components/common/CustomBootstrap";
 import DesktopNotifications from "../notifications/DesktopNotifications";
 
-const url = `${baseUrl}/otherlistingcard`;
+// const url = `${baseUrl}/otherlistingcard`;
+const url = `${baseUrl}/api/posts/other-post/7`;
 
 const JobListing = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -42,9 +43,9 @@ const JobListing = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
         // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
-        console.log(res);
+        const res = await axios.get(url);
+        console.log("other data",res);
         const { data } = res;
         const sortedData = data
           .map((x) => ({ ...x }))

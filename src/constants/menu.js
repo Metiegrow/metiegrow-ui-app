@@ -11,7 +11,7 @@ const data = [
     id: "Mentor",
     icon: "simple-icon-people",
     label: "MentorShip",
-    to: `${adminRoot}/mentor`,
+    to: `${adminRoot}/mentor/list`,
     // subs: [
     //   {
     //     icon: 'simple-icon-user',

@@ -122,17 +122,17 @@ if (roleRes.includes("MENTOR")) {
 
 let myProfile;
 if (roleRes.includes("MENTOR")) {
-  myProfile = `${adminRoot}/myprofile`;
+  myProfile = `${adminRoot}/mentor/myprofile`;
 }else if (roleRes.includes("LAWYER")) {
-  myProfile = `${adminRoot}/lawyermyprofile`; 
-}else {
-  myProfile = `${adminRoot}/myprofile`; 
+  myProfile = `${adminRoot}/lawyer/myprofile`; 
+}else if (roleRes.includes("MENTEE")) {
+  myProfile = `${adminRoot}/mentee/myprofile`; 
 }
 
 
 
   const handleMyProfileClick = () => {
-    history.push(`${adminRoot}/myprofile`);
+    history.push(myProfile);
   };
   const handleMyWalletClick = () => {
     history.push(`${adminRoot}/mywallet`);

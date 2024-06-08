@@ -102,7 +102,7 @@ const MentorProfile = () => {
     window.open(linkedInUrl, '_blank');
   };
   const countryName = country.find(c => c.iso_code === mentorprofiledetails1.location)?.name;
-
+  const chatUserId = mentorprofiledetails1.username;
 
   return (
     <div  className='mentor-profile'>
@@ -219,7 +219,7 @@ const MentorProfile = () => {
               </Button>
               </NavLink>
             </div> */}
-            <MentorTabCard  handleConnectClick={handleConnectClick}/>
+            <MentorTabCard  handleConnectClick={handleConnectClick} chatUserId={chatUserId}/>
           </div>
           </Row>
           <hr/>
