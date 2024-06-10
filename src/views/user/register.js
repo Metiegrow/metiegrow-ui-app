@@ -128,7 +128,7 @@ const OnRegisterButtonclick = async () => {
         userRoles,
         username
       );
-      if (signUpResponse && signUpResponse.status === 201) {
+      if (signUpResponse && signUpResponse.status === 200) {
         setIsSubmitted(true)
         // console.log("signupsuccess")
         // history.push('/login');

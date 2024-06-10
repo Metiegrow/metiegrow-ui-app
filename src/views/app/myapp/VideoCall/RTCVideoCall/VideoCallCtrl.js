@@ -5,7 +5,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 import { Button } from "reactstrap";
-import { config, useClient, useMicrophoneAndCameraTracks } from "./settings";
+import { useClient, useMicrophoneAndCameraTracks } from "./settings";
 
 import Video from "./Video";
 import Controls from "./Controls";
@@ -23,6 +23,7 @@ const VideoCallCtrl = (props) => {
   const [channelName, setChannelName] = useState("");
   const [status, setStatus] = useState("");
   const [rtcToken, setRtcToken] = useState(null);
+  const [appId, setAppId] = useState(null)
   const [bookedByName, setBookedByName] =useState("");
   const [createdByName, setCreatedByName] = useState("");
   const client = useClient();
@@ -63,9 +64,10 @@ const VideoCallCtrl = (props) => {
       try {
         const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
         const response = await axios.get(url2);
-        // console.log("resp",response)
+        console.log("resp",response)
         setRtcToken(response.data.rtcToken);
         setChannelName(response.data.channelName);
+        setAppId(response.data.appId);
         // setStartTime(response.data.startTime)
         setEndTime(response.data.endTime);
         setCreatedByName(response.data.createdByName);
@@ -228,7 +230,7 @@ const VideoCallCtrl = (props) => {
      
 
       try {
-        await client.join(config.appId, name, rtcToken, null);
+        await client.join(appId, name, rtcToken, null);
       } catch (error) {
         console.log("error");
       }
