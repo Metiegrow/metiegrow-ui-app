@@ -199,7 +199,7 @@ const MentorProfile = () => {
           </div>
         )}
             </div>
-            <div className='mt-2'>
+            {/* <div className='mt-2'>
             <h2 className='mx-2'>Topics</h2>
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
                 Change jobs
@@ -210,7 +210,7 @@ const MentorProfile = () => {
               <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
                 Grow your career
               </Button>
-            </div>
+            </div> */}
             {/* <div className='mt-2 '>
             <NavLink className=''  onClick={handleConnectClick}>
               <Button outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
@@ -233,19 +233,22 @@ const MentorProfile = () => {
              
             </Row>
             <hr/>
-            <Colxx className='sm="12" md="12" lg="12" xxs="12" mt-5 '>
-              <Row>
-              <div className=''>
-          <h1>Get to know arun prasad</h1>
-          </div>
-                {/* <h3 className='font-weight-semibold text-large'>Get to Know Arun Prasad</h3> */}
-              </Row>
-            </Colxx>
+            {(mentorprofiledetails1.featuredArticle || mentorprofiledetails1.introVideo) && (
+              <Colxx className='sm="12" md="12" lg="12" xxs="12" mt-5'>
+                <Row>
+                  <div>
+                    <h1>Get to know {mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1>
+                  </div>
+                  {/* <h3 className='font-weight-semibold text-large'>Get to Know Arun Prasad</h3> */}
+                </Row>
+              </Colxx>
+            )}
             <Colxx xxs="12">
            
         <Row>
+            {mentorprofiledetails1 && mentorprofiledetails1.featuredArticle && 
           <Colxx xxs="12" xs="6" lg="4">
-          <NavLink href='www.google.com'>
+          <NavLink href={mentorprofiledetails1.featuredArticle}>
          
         
          
@@ -262,7 +265,7 @@ const MentorProfile = () => {
            <CardBody>
           
              <h4 className='color-theme-2'>LINK</h4>
-             <h4 className='font-weight-semibold text-one'>JOB TITLES DONT MATTER!</h4>
+             <h4 className='font-weight-semibold text-one'>JOB TITLES DON&apos;T MATTER!</h4>
              <CardSubtitle className="mb-4 text-one text-muted">
              Yeah, you read that right. Titles are not something which should
               drive your decision to join a new company.
@@ -276,8 +279,10 @@ const MentorProfile = () => {
            
             </NavLink>
           </Colxx>
+            }
+          { mentorprofiledetails1 && mentorprofiledetails1.introVideo && 
           <Colxx xxs="12" xs="6" lg="4">
-          <NavLink href='www.youtube.com'>
+          <NavLink href={mentorprofiledetails1.introVideo}>
        
             <Card className="mb-4 w-80">
           
@@ -308,6 +313,7 @@ const MentorProfile = () => {
             </NavLink>
             
           </Colxx>
+}
           {/* <Colxx xxs="12" xs="6" lg="4">
             <Card className="mb-4">
               <CardBody>
