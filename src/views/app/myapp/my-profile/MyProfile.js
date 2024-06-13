@@ -31,20 +31,11 @@ const MyProfile = () => {
   const [jobTitle, setJobTitle] = useState("")
   const [experience, setExperience] = useState("");
   const [location, setLocation] = useState("");
-  // const [about, setAbout] = useState(
-  //   "I have more than a decade experience in Software Engineering (and related practices including DevOps) and I have been lucky enough to have worked with a bunch of great minds in the big tech giants. I have got a couple of MAANG companies in my kitty and after attending (and cracking) interviews for the"
-  // );
   const [newInputSkill, setNewInputSkill] = useState("");
-  // const [newInputTopics, setNewInputTopics] = useState("");
   const [skills, setSkills] = useState([]);
-  // const [topics, setTopics] = useState([]);
   const [userId, setUserId] = useState(null);
-  // const [star, setStar] = useState("");
-  // const [lastSceen, setLastseen] = useState("");
-  // const [ratings, setRatings] = useState("")
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
   const [company, setCompany] = useState("");
   const [category, setCategory] = useState("");
   const [bio, setBio] = useState("");
@@ -55,10 +46,10 @@ const MyProfile = () => {
   const [featuredArticle, setFeaturedArticle] = useState("");
   const [reasonForMentor, setReasonForMentor] = useState("");
   const [achievement, setAchievement] = useState("");
-  const [totalRatings,setTotalRatings] = useState(0)
-  const [averageStar, setAverageStar] = useState(0)
-  // const [reviews, setReviews] = useState("");
-  // const [price, setPrice] =useState("");
+  const [totalRatings,setTotalRatings] = useState(0);
+  const [averageStar, setAverageStar] = useState(0);
+  const [profileLoading, setProfileLoading] = useState(true);
+
 
  // const Id = 1;
 
@@ -68,7 +59,7 @@ const MyProfile = () => {
  // const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
   // const endUrl = `${baseUrl}/myprofile`;
   const endUrl = `${baseUrl}/api/mentor/myprofile`;
-  const inputUrl = `${baseUrl}/inputs`
+  const inputUrl = `${baseUrl}/inputs`;
 
 
   useEffect(() => {
@@ -103,6 +94,7 @@ const MyProfile = () => {
           setFeaturedArticle(userData.featuredArticle);
           setReasonForMentor(userData.reasonForMentor);
           setAchievement(userData.achievement);
+          setProfileLoading(false);
           // setReviews(userData.reviews)
           // setPrice(userData.price)
           // setExperience(userData.experience)
@@ -353,6 +345,10 @@ const token = getTokenRes();
               </div>
             </div>
           </Card>
+          {profileLoading ? (
+            <div className="loading" />
+          ) : (
+          <>
           {isEditing &&
               <div className="mt-2">
                 <Button
@@ -781,6 +777,8 @@ const token = getTokenRes();
           </Row>
           <hr />
           {/* </Colxx> */}
+          </>
+        )}
         </div>
       </Colxx>
     </div>

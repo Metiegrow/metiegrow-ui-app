@@ -126,7 +126,7 @@ if (roleRes.includes("MENTOR")) {
 }else if (roleRes.includes("LAWYER")) {
   myProfile = `${adminRoot}/lawyer/myprofile`; 
 }else if (roleRes.includes("MENTEE")) {
-  myProfile = `${adminRoot}/mentee/myprofile`; 
+  myProfile = `${adminRoot}/user/myprofile`; 
 }
 
 

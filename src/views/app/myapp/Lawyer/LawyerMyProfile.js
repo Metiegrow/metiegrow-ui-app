@@ -38,6 +38,7 @@ const LawyerMyProfile = () => {
   const [bio, setBio] = useState("");
   const [star, setStar] = useState("");
   const [about, setAbout] = useState("");
+  const [profileLoading, setProfileLoading] = useState(true)
 
   // console.log("topic", imageUrl);
 
@@ -54,7 +55,7 @@ const LawyerMyProfile = () => {
         // const topicData = response.data.topic
         // console.log("topic", topicData)
 
-        console.log("userData:", userData.topic.data);
+        // console.log("userData:", userData.topic.data);
         if (userData) {
           setImageUrl(userData.imageUrl);
           setFirstName(userData.firstName);
@@ -68,6 +69,7 @@ const LawyerMyProfile = () => {
           setTopic(userData.topic.map((t) => t.topicName));
           setStar(userData.star);
           setAbout(userData.about);
+          setProfileLoading(false);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -262,7 +264,9 @@ const LawyerMyProfile = () => {
   </div>
 </Card>
 
-
+{profileLoading ? (
+  <div className="loading" /> ) : (
+    <>
           {isEditing && (
             <div className="mt-2">
               <Button
@@ -651,6 +655,8 @@ const LawyerMyProfile = () => {
           </Row>
           <hr />
           {/* </Colxx> */}
+          </>
+  )}
         </div>
       </Colxx>
     </div>

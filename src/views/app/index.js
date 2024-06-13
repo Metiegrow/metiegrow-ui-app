@@ -244,9 +244,13 @@ const ViewLawyerMyProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerMyProfile'
 ))
-const ViewMenteeMyProfile=React.lazy(()=>
+const ViewUserMyProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Mentee/MenteeMyProfile'
+))
+const ViewUserApply=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Mentee/UserApply'
 ))
 
 const ViewAlumniLists=React.lazy(()=>
@@ -527,8 +531,12 @@ const roleRes = getRoleRes();
               render={(props) => <ViewLawyerMyProfile {...props} />}
             />
              <Route
-              path={`${match.url}/mentee/myprofile`}
-              render={(props) => <ViewMenteeMyProfile {...props} />}
+              path={`${match.url}/user/myprofile`}
+              render={(props) => <ViewUserMyProfile {...props} />}
+            />
+             <Route
+              path={`${match.url}/user/apply`}
+              render={(props) => <ViewUserApply {...props} />}
             />
             
             { /* alumnini networking routes start */ }

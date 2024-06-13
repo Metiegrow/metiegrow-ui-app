@@ -41,6 +41,7 @@ import {
 } from "./validation";
 
 import country from "./Country";
+import CategoryData from "./CategoryData";
 
 const ApplyMentor = () => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -88,13 +89,13 @@ const ApplyMentor = () => {
     achievement: "",
   });
 
-  const CategoryData = [
-    "Select Category",
-    "Engineering & Data",
-    "UX & Design",
-    "Business & Management",
-    "Product & Marketing",
-  ];
+  // const CategoryData = [
+  //   "Select Category",
+  //   "Engineering & Data",
+  //   "UX & Design",
+  //   "Business & Management",
+  //   "Product & Marketing",
+  // ];
 //   console.log("step", currentStep);
 
   const handleNextStep = () => {
@@ -439,9 +440,12 @@ const ApplyMentor = () => {
                       validate={validateCategory}
                       className="form-control"
                     >
+                      <option disabled value="">
+                      Select Category
+                        </option>
                       {CategoryData.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                        <option key={option.short} value={option.short}>
+                          {option.name}
                         </option>
                       ))}
                     </Field>

@@ -64,7 +64,7 @@ const VideoCallCtrl = (props) => {
       try {
         const url2 = `${baseUrl}/api/generate-rtc-token/${id}`;
         const response = await axios.get(url2);
-        console.log("resp",response)
+        // console.log("resp",response)
         setRtcToken(response.data.rtcToken);
         setChannelName(response.data.channelName);
         setAppId(response.data.appId);
