@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-import {useParams,useLocation} from "react-router-dom";
+import {useParams,useLocation,useHistory} from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
-import { baseUrl } from 'constants/defaultValues';
+import { adminRoot, baseUrl } from 'constants/defaultValues';
 import React, { useState ,useEffect} from 'react';
 import {  Button, Card, CardBody, CardText,    NavLink, Row } from 'reactstrap'
 // import RatingExamples from './RatingExamples';
@@ -94,7 +94,11 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
     mentorCardDetails();
   }, [location.search]);
 
- 
+  const history = useHistory();
+  const handleMySlotsClick = () =>{
+    history.push(`${adminRoot}/calendar/mentor/appointment`)
+  }
+  const role = localStorage.getItem("roleRes");
  
   
   // useEffect(() => {
@@ -189,6 +193,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
      
        <div className="">
         <div className="form-group">
+          
        <div className='input-group'>
        <input
             type="text"
@@ -205,8 +210,14 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
         
           
            
+       {role === "MENTOR" && (
+       
+       <Button color='primary' className='ml-3' onClick={handleMySlotsClick}>My slots</Button>
+       
+       )}
        </div>
-        
+      
+      
   
        {/* <div className="container">
    
@@ -244,7 +255,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
          </Card>
       </Colxx>
         ):(
-          mentordetails.map((mentors)=>{
+          Array.isArray(mentordetails) && mentordetails.map((mentors)=>{
     return (
       <Colxx xxs="12" key={mentors.id}>
       <Row>
@@ -272,7 +283,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
 
                     <div className='my-5  '>
                         <CardText className='text-primary '>
-                            <span className='text-xlarge font-weight-semibold'>₹{mentors.price}</span>/month
+                            <span className='text-xlarge font-weight-semibold'>₹{mentors.price}</span>/Hour
                         </CardText>
                     
                     </div> 

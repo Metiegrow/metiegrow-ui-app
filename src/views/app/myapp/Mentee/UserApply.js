@@ -13,8 +13,12 @@ import {
   InputGroup,
   FormText,
   Jumbotron,
+  Alert,
 } from "reactstrap";
+import axios from "axios";
+import { NotificationManager } from "components/common/react-notifications";
 import { Colxx } from "components/common/CustomBootstrap";
+import { baseUrl } from "constants/defaultValues";
 import country from "../my-login/Country";
 import {
   validateJobTitle,
@@ -28,20 +32,78 @@ const UserApply = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const onSubmit = (values) => {
-    setIsLoading(true);
-    const menteeData = { ...values, image: selectedFile };
-    console.log(menteeData);
+  const url = `${baseUrl}/api/mentee/profile`;
+  const token = localStorage.getItem("tokenRes");
 
-    setTimeout(() => {
-      setIsLoading(false);
+  const onSubmit = async (values) => {
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append("image", file1);
+
+    const menteeProfile = {
+      jobTitle: values.jobTitle,
+      location: values.location,
+      linkedIn: values.linkedinUrl,
+      twitterHandle: values.twitterHandle || "",
+    };
+    formData.append("menteeProfile",new Blob([JSON.stringify(menteeProfile)], { type: "application/json" }));
+
+    try {
+      const response = await axios.post(url, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data);
       setSubmitted(true);
-    }, 3000);
+    } catch (error) {
+      console.error("There was an error while submitting ", error);
+      NotificationManager.error(
+        "Error submitting",
+        "Oops!",
+        3000,
+        null,
+        null,
+        ""
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // const onSubmit = async (values) => {
+  //   setIsLoading(true);
+  //   // const menteeData = { ...values, image: selectedFile };
+  //   // console.log(menteeData);
+
+  //   try {
+  //     const response = await axios.post(url, values, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     console.log(response.data);
+  //     setSubmitted(true);
+  //   } catch (error) {
+  //     console.error("There was an error while submitting ", error.statuses);
+  //     NotificationManager.error(
+  //       "Error submitting",
+  //       "Oops!",
+  //       3000,
+  //       null,
+  //       null,
+  //       ""
+  //     );
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setFile1(event.target.files[0]);
+    setFile1(file);
 
     if (file) {
       const reader = new FileReader();
@@ -73,6 +135,17 @@ const UserApply = () => {
               >
                 {({ errors, touched }) => (
                   <Form className="av-tooltip tooltip-label-right">
+                    <Alert color="primary">
+                      <strong>Tips</strong><br />
+                      <ul>
+                     <li>Adding your photo and social media profiles helps mentors
+                      feel confident that you’re a real person (e.g. not a bot).</li> 
+                     <li>Your profile is only visible to mentors that you send
+                      applications to. It is not indexed on search engines like
+                      Google.</li> 
+                      </ul>
+                     
+                    </Alert>
                     <FormGroup>
                       <Label for="image">Image*</Label>
                       <Row>
@@ -80,7 +153,7 @@ const UserApply = () => {
                           <img
                             src={selectedFile || "/assets/img/profiles/l-1.jpg"}
                             className="mx-2 rounded-circle img-thumbnail border"
-                            style={{ width: "70px", height: "70px" }}
+                            style={{ width: "70px", height: "70px", objectFit: "cover"  }}
                             alt=""
                           />
                         </Col>

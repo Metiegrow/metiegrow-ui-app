@@ -68,7 +68,10 @@ const MyWallet = () => {
       
       setTimeout(() => {
           fetchDataFromServer();
-          NotificationManager.success(response.data, 'Great!', 3000, null, null, '');
+          // NotificationManager.success(response.data.statuses[0].message, 'Great!', 3000, null, null, '');
+          response.data.statuses.forEach((status) => {
+            NotificationManager.success(status.message, status.status, 3000, null, null, '');
+        });
           setIsLoading(false);
     }, 3000);
 

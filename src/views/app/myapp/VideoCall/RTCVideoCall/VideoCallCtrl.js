@@ -30,7 +30,6 @@ const VideoCallCtrl = (props) => {
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const { userId, id } = useParams();
   const history = useHistory();
-
   // const currentTime = Date.now();
 
   //     const durationMs = currentTime - endTime;

@@ -132,7 +132,7 @@ export function* watchForgotPassword() {
 
 const forgotPasswordAsync = async (email) => {
   // eslint-disable-next-line no-return-await
-  return await auth
+  return await authService
     .sendPasswordResetEmail(email)
     .then((user) => user)
     .catch((error) => error);

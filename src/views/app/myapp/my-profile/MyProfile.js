@@ -15,9 +15,10 @@ import {
   Form,
   Card,
 } from "reactstrap";
+import { ReactSortable } from 'react-sortablejs';
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
-
+import { NotificationManager } from 'components/common/react-notifications';
 import { Colxx } from "components/common/CustomBootstrap";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
@@ -184,14 +185,17 @@ const token = getTokenRes();
       // const response =
 
 
-      await axios.put(endUrl, updatedData, {
+      const response = await axios.put(endUrl, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      // console.log("Response", response.data);
-
+      
+      // console.log("Response", response.data.statuses[0].message);
+      response.data.statuses.forEach((status) => {
+       const responseMessage = status.message;
+        NotificationManager.success(responseMessage, 'Great!', 3000, null, null, '');
+    });
       // console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile", error);
@@ -257,6 +261,24 @@ const token = getTokenRes();
     }
   };
 
+  const handleTwitterClick = () => {
+    if (twitterHandle) {
+      const twitterUrl = `https://x.com/${twitterHandle}`
+      window.open(twitterUrl, "_blank");
+    }
+  }
+  const handlePersonalWebsiteClick = () => {
+    if (website) {
+      let url = website;
+      if (!url.startsWith("https://")) {
+        url = `https://${url}`;
+      }
+      window.open(url, "_blank");
+    }
+  }
+  
+
+
   const [file, setFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -321,8 +343,8 @@ const token = getTokenRes();
                     src={`${baseUrl}/${image}`}
                     // src="/assets/img/profiles/2.jpg"
                     className="mx-2 rounded-circle img-thumbnail border"
-                    style={{ width: "110px", height: "110px" }}
-                    alt=""
+                    style={{ width: "110px", height: "110px", objectFit: "cover", overflow: "hidden"  }}
+                    alt="img"
                   />
                 )}
                 <div className="ml-4 mt-2">
@@ -332,6 +354,7 @@ const token = getTokenRes();
                 </div>
               </div>
               <div className="mr-4">
+                {linkedinUrl && (
                 <NavLink className="d-none d-md-inline-block">
                   <Button
                     color="light"
@@ -342,6 +365,31 @@ const token = getTokenRes();
                     <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
                   </Button>
                 </NavLink>
+                )}
+                {twitterHandle && (
+                <NavLink className="d-none d-md-inline-block">
+                  <Button
+                    color="light"
+                    className="font-weight-semibold icon-button"
+                    size="large"
+                    onClick={handleTwitterClick}
+                  >
+                    <i className="simple-icon-social-twitter text-primary font-weight-semibold text-one" />
+                  </Button>
+                </NavLink>
+                )}
+                {website && (
+                <NavLink className="d-none d-md-inline-block">
+                  <Button
+                    color="light"
+                    className="font-weight-semibold icon-button"
+                    size="large"
+                    onClick={handlePersonalWebsiteClick}
+                  >
+                    <i className="simple-icon-globe text-primary font-weight-semibold text-one" />
+                  </Button>
+                </NavLink>
+                )}
               </div>
             </div>
           </Card>
@@ -538,10 +586,17 @@ const token = getTokenRes();
               <h2 className="mx-2">Skills</h2>
               {isEditingButton ? (
                 <>
+                <ReactSortable
+                    list={skills}
+                    setList={setSkills}
+                    options={{ handle: '.handle' }}
+                    className="row"
+                  >
                   {skills.map((skill, index) => (
                     <Button
-                      key={skill}
-                      color="light"
+                     // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      color={index < 3 ? 'primary' : 'light'}
                       className="mb-2 font-weight-semibold mx-2"
                       size="xs"
                       onClick={() => handleRemoveSkill(index)}
@@ -549,7 +604,8 @@ const token = getTokenRes();
                       {skill} <i className="iconsminds-close" />
                     </Button>
                   ))}
-
+                </ReactSortable>
+                <p className="text-muted">Drag skills to set top 3 (the top 3 skills will be displayed on mentor cards)</p>
                   <InputGroup className="mb-3">
                     <Input
                       type="text"
@@ -578,10 +634,11 @@ const token = getTokenRes();
                   </InputGroup>
                 </>
               ) : (
-                skills.map((skill) => (
+                skills.map((skill, index) => (
                   <Button
-                    key={skill}
-                    color="light"
+                   // eslint-disable-next-line react/no-array-index-key
+                    key={index}
+                    color={index < 3 ? 'primary' : 'light'}
                     className="mb-2 font-weight-semibold mx-2"
                     size="xs"
                     // onClick={() => handleRemoveSkill(index)}
@@ -715,7 +772,7 @@ const token = getTokenRes();
                     />
                     <br />
                     <Label for="twitter" className="font-weight-medium">
-                      <h4>Twitter URL</h4>
+                      <h4>Twitter handle</h4>
                     </Label>
                     <Input
                       type="url"
@@ -723,7 +780,10 @@ const token = getTokenRes();
                       value={twitterHandle}
                       onChange={(e) => setTwitterHandle(e.target.value)}
                     />
-                    <br />
+                     <p className="text-muted">
+                          Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
+                        </p>
+                    {/* <br /> */}
                     <Label for="personalWebsite" className="font-weight-medium">
                       <h4>Personal Website URL</h4>
                     </Label>
@@ -733,6 +793,9 @@ const token = getTokenRes();
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
                     />
+                    <p className="text-muted">
+                           e.g. www.arun.com
+                        </p>
                     <br />
                   </div>
                 ) : (
@@ -749,7 +812,7 @@ const token = getTokenRes();
                   onClick={handleEditAboutClick}
                   className="ml-2"
                 >
-                  <i className="simple-icon-pencil" /> Edit about
+                  <i className="simple-icon-pencil" /> Edit 
                 </Button>
               )}
 

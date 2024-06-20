@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="container-fluid">
           <Row>
             <Colxx xxs="12" sm="6">
-              <p className="mb-0 text-muted">Management System</p>
+              <p className="mb-0 text-muted">Metiegrow LLC</p>
             </Colxx>
           </Row>
         </div>

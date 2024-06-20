@@ -39,7 +39,7 @@ const Controls = (props) => {
         <Col md={3} />
         <Col md={2} xs={4}>
           <Button
-            color={trackState.audio ? "primary" : "secondary"}
+            color="primary"
             onClick={() => mute("audio")}
             className="icon-button"
           >
@@ -60,7 +60,7 @@ const Controls = (props) => {
         </Col>
         <Col md={2} xs={4}>
           <Button
-            color={trackState.video ? "primary" : "secondary"}
+            color="primary"
             onClick={() => mute("video")}
             className="icon-button"
           >

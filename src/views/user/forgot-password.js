@@ -101,8 +101,8 @@ const ForgotPassword = ({
                   </FormGroup>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <NavLink to="/user/forgot-password">
-                      <IntlMessages id="user.forgot-password-question" />
+                    <NavLink to="/login">
+                    Back to login
                     </NavLink>
                     <Button
                       color="primary"

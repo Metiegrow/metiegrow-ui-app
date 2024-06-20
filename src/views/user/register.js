@@ -385,7 +385,10 @@ const OnRegisterButtonclick = async () => {
                 </Label>
               </FormGroup>
               </Row>
-              {roleError && <p className="text-danger">Please select at least one role</p>}
+              {roleError && <div className="invalid-feedback d-block mt-2 ml-4">
+                  Please select at least one role
+                              </div>}
+              {/* {roleError && <p className="text-danger">Please select at least one role</p>} */}
               <div className="d-flex justify-content-end align-items-center">
                 <Button
                  color="primary"

@@ -114,7 +114,7 @@ async login(email, password , history) {
   } catch (error) {
       throw error;
   }
-}
+},
 
 
 
@@ -192,6 +192,17 @@ async login(email, password , history) {
   //     return e;
   //   }
   // },
+  async sendPasswordResetEmail(email) {
+    const bodyData = JSON.stringify({ email: email});  
+    const url = `${baseUrl}/api/forgot-password`;
+    try {
+        const res = await axios.put(url, bodyData);
+  console.log(res);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+  }
 };
 
 export default authService;

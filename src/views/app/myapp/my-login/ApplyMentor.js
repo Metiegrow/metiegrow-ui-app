@@ -19,6 +19,7 @@ import {
 } from "reactstrap";
 import { injectIntl } from "react-intl";
 import { Colxx } from "components/common/CustomBootstrap";
+import Select from 'react-select';
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
 import { NotificationManager } from "components/common/react-notifications";
@@ -34,7 +35,7 @@ import {
   validateJobTitle,
   validateSkills,
   validateBio,
-  validateLinkedinUrl,
+  // validateLinkedinUrl,
   validateReasonForMentor,
   validateAchievement,
   validateFile,
@@ -42,6 +43,7 @@ import {
 
 import country from "./Country";
 import CategoryData from "./CategoryData";
+import language from "./Languages";
 
 const ApplyMentor = () => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -51,6 +53,11 @@ const ApplyMentor = () => {
   const [amount, setAmount] = useState(250);
   const [loading, setLoading] = useState(false);
   const [skillsTag, setSkillsTag] = useState([]);
+  const [imageError, setImageError] = useState(false);
+  const [skillError,setSkillError] = useState(false);
+  const [imageErrorMessage, setImageErrorMessage] = useState(null);
+  const [skillErrorMessage,setSkillErrorMessage] = useState(null);
+  const [languages, setLanguages] = useState([]);
   const [aboutField, setAboutField] = useState({
     image: "",
   });
@@ -97,6 +104,10 @@ const ApplyMentor = () => {
   //   "Product & Marketing",
   // ];
 //   console.log("step", currentStep);
+const languageOptions = language.map(option => ({
+  value: option.iso_code,
+  label: option.name
+}));
 
   const handleNextStep = () => {
     setCurrentStep(currentStep + 1);
@@ -112,7 +123,7 @@ const ApplyMentor = () => {
 
     if (file) {
       const reader = new FileReader();
-
+      setImageError(false);
       reader.onloadend = () => {
         const base64Image = reader.result;
         // .split(",")[1];
@@ -145,15 +156,24 @@ const ApplyMentor = () => {
       //   console.log(`resres ${response.status}`);
       handleNextStep();
     } catch (error) {
-      console.error(error);
-      NotificationManager.warning(
-        "Something went wrong",
-        "Oops!",
-        3000,
-        null,
-        null,
-        ""
-      );
+      setImageError(false);
+      // console.error(error);
+      error.response.data.statuses.forEach((status) => {
+         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
+         if(status.code === 40327){
+           setImageErrorMessage(status.message)
+            setImageError(true);
+         }
+     });
+      // console.log("er",error.response.data.statuses)
+      // NotificationManager.warning(
+      //   "Something went wrong",
+      //   "Oops!",
+      //   3000,
+      //   null,
+      //   null,
+      //   ""
+      // );
     }
   };
 
@@ -168,15 +188,14 @@ const ApplyMentor = () => {
       //   console.log(`resres ${response.status}`);
       handleNextStep();
     } catch (error) {
-      console.error(error);
-      NotificationManager.warning(
-        "Something went wrong",
-        "Oops!",
-        3000,
-        null,
-        null,
-        ""
-      );
+      setSkillError(false);
+      error.response.data.statuses.forEach((status) => {
+         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
+         if(status.code === 40110){
+          setSkillErrorMessage(status.message)
+           setSkillError(true);
+        }
+     });
     }
   };
 
@@ -196,15 +215,9 @@ const ApplyMentor = () => {
         setLoading(false);
       }, 3000);
     } catch (error) {
-      console.error(error);
-      NotificationManager.warning(
-        "Something went wrong",
-        "Oops!",
-        3000,
-        null,
-        null,
-        ""
-      );
+      error.response.data.statuses.forEach((status) => {
+        NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
+    });
     }
   };
 
@@ -220,6 +233,7 @@ const ApplyMentor = () => {
   // }, [currentStep]);
 
   const handleTagsChange = (newSkills) => {
+    setSkillError(false);
     setSkillsTag(newSkills);
   };
 
@@ -261,7 +275,7 @@ const ApplyMentor = () => {
               validateOnMount
               onSubmit={(values) => {
                 // postDataAbout(values,aboutField.image);
-                postDataAbout({ ...values, image: aboutField.image });
+                postDataAbout({ ...values, image: aboutField.image, language: languages });
 
                 // console.log(aboutField.image);
               }}
@@ -282,6 +296,11 @@ const ApplyMentor = () => {
                   </Alert>
                   <FormGroup>
                     <Label for="image">Image*</Label>
+                    { imageError && (
+                              <div className="invalid-feedback d-block">
+                              {imageErrorMessage}
+                              </div>
+                            )}
                     <Row>
                       <Col md={2} className="">
                         <img
@@ -290,17 +309,13 @@ const ApplyMentor = () => {
                             // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
                           }
                           className="mx-2 rounded-circle img-thumbnail border"
-                          style={{ width: "70px", height: "70px" }}
-                          alt=""
+                          style={{ width: "70px", height: "70px", objectFit: "cover"  }}
+                          alt="img"
                         />
                       </Col>
                       <Col md={5} className="mt-3 ">
                         <InputGroup className="mb-3">
-                          {errors.image && touched.image && (
-                            <div className="invalid-feedback d-block">
-                              {errors.image}
-                            </div>
-                          )}
+                       
                           <div className="mt-2">
                             <Button
                               className="default"
@@ -326,11 +341,7 @@ const ApplyMentor = () => {
                                 Selected file: {file1.name}
                               </p>
                             )}
-                            {errors.image && touched.image && (
-                              <div className="invalid-feedback d-block">
-                                {errors.image}
-                              </div>
-                            )}
+                            
                           </div>
                         </InputGroup>
                       </Col>
@@ -396,6 +407,38 @@ const ApplyMentor = () => {
                       </div>
                     )}
                   </FormGroup>
+                  <FormGroup className="error-l-75">
+                        <Label>Languages*</Label>
+                        <Select
+                          placeholder="Select Languages"
+                          name="languages"
+                          isMulti
+                          options={languageOptions}
+                          // validate={validateLanguages}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          onChange={selectedOptions => {
+                          const languagesArray = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                          setLanguages( languagesArray);
+                            }}
+                         > 
+                        
+                          {/* <option disabled value="">
+                              Select Languages
+                            </option>
+                          {language.map((option) => (
+                            <option key={option.iso_code} value={option.iso_code}>
+                              {option.name}
+                            </option>
+                          ))} */}
+                          
+                          </Select>
+                        {/* {errors.languages && touched.languages && (
+                          <div className="invalid-feedback d-block">
+                            {errors.languages}
+                          </div>
+                        )} */}
+                      </FormGroup>
                   <Row>
                     <Col className="text-center">
                       <Button color="primary" type="submit">
@@ -480,9 +523,9 @@ const ApplyMentor = () => {
                         inputProps={{ placeholder: "Add skills " }}
                         validate={validateSkills}
                       />
-                    {errors.skills && touched.skills && (
+                    {skillError && (
                       <div className="invalid-feedback d-block">
-                        {errors.skills}
+                        {skillErrorMessage}
                       </div>
                     )}
                     <FormText>Add skill and press Enter </FormText>
@@ -525,7 +568,7 @@ const ApplyMentor = () => {
                           className="form-control"
                           name="linkedinUrl"
                           type="url"
-                          validate={validateLinkedinUrl}
+                          // validate={validateLinkedinUrl}
                           autoComplete="off"
                         />
                         {errors.linkedinUrl && touched.linkedinUrl && (

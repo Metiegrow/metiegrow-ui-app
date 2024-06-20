@@ -103,7 +103,16 @@ const MentorProfile = () => {
   };
   const countryName = country.find(c => c.iso_code === mentorprofiledetails1.location)?.name;
   const chatUserId = mentorprofiledetails1.username;
-
+  const videoUrl = mentorprofiledetails1.introVideo;
+  let thumbnailUrl = '';
+  if (videoUrl) {
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+    const match = videoUrl.match(regex);
+    if (match && match[1]) {
+      const videoID = match[1];
+      thumbnailUrl = `https://img.youtube.com/vi/${videoID}/0.jpg`;
+    }
+  }
   return (
     <div  className='mentor-profile'>
       <div className=''>
@@ -289,7 +298,7 @@ const MentorProfile = () => {
               <div className="position-relative">
                 <CardImg
                   top
-                  src="/assets/img/profiles/2.jpg"
+                  src={thumbnailUrl}
                   alt="Card image cap"
                   className=''
                 />

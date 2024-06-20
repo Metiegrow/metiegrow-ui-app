@@ -47,10 +47,10 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                         setActiveFirstTab('1');
                       }}
                     >
-                      Basic
+                      6 months
                     </NavLink>
                   </NavItem>
-                  {/* <NavItem>
+                  <NavItem>
                     <NavLink
                       to="#"
                       location={{}}
@@ -62,7 +62,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                         setActiveFirstTab('2');
                       }}
                     >
-                      Standard
+                      3 months
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -77,10 +77,10 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                         setActiveFirstTab('3');
                       }}
                     >
-                      Premium
+                      monthly plan
                     </NavLink>
                   </NavItem>
-                  <NavItem>
+                  {/* <NavItem>
                     <NavLink
                       to="#"
                       location={{}}
@@ -115,7 +115,33 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
 
               <TabContent activeTab={activeFirstTab}>
                 <TabPane tabId="1">
+                <Row>
+                    <Colxx sm="12">
+                      <CardBody>
+                        <CardTitle className="mb-4">
+                        <h2>₹12500</h2>
+                          <h5>Premium package</h5>
+                        </CardTitle>
+                       
+                      </CardBody>
+                    </Colxx>
+                  </Row>
+                </TabPane>
+                <TabPane tabId="2">
                   <Row>
+                    <Colxx sm="12">
+                      <CardBody>
+                        <CardTitle className="mb-4">
+                        <h2>₹8500</h2>
+                          <h5>Standard package</h5>
+                        </CardTitle>
+                       
+                      </CardBody>
+                    </Colxx>
+                  </Row>
+                </TabPane>
+                <TabPane tabId="3">
+                <Row>
                     <Colxx sm="12">
                       <CardBody>
                         <CardTitle className="mb-4">
@@ -130,7 +156,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                               
                             </Button>
                             <Button onClick={handleChatClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
-                                <span className='font-weight-semibold  text-one'>Chat</span>
+                                <span className='font-weight-semibold  text-one'>Contact</span>
                               
                             </Button>
                             </Row>
@@ -143,33 +169,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                     </Colxx>
                   </Row>
                 </TabPane>
-                {/* <TabPane tabId="2">
-                  <Row>
-                    <Colxx sm="12">
-                      <CardBody>
-                        <CardTitle className="mb-4">
-                        <h2>₹8500</h2>
-                          <h5>Standard package</h5>
-                        </CardTitle>
-                       
-                      </CardBody>
-                    </Colxx>
-                  </Row>
-                </TabPane>
-                <TabPane tabId="3">
-                  <Row>
-                    <Colxx sm="12">
-                      <CardBody>
-                        <CardTitle className="mb-4">
-                        <h2>₹12500</h2>
-                          <h5>Premium package</h5>
-                        </CardTitle>
-                       
-                      </CardBody>
-                    </Colxx>
-                  </Row>
-                </TabPane>
-                <TabPane tabId="4">
+                {/* <TabPane tabId="4">
                   <Row>
                     <Colxx sm="12">
                       <CardBody>

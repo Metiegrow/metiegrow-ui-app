@@ -155,6 +155,9 @@ if (roleRes.includes("MENTOR")) {
   const handleMySlots = () => {
     history.push(`${adminRoot}/calendar/mentor/appointment`);
   };
+  const handleSettingsClick = () => {
+    history.push(`${adminRoot}/settings`);
+  };
   
   
 
@@ -211,7 +214,7 @@ if (roleRes.includes("MENTOR")) {
       return (
         <NavLink to={session}>
               <DropdownItem onClick={() => handleMySessionsClick()}>
-              <i className="simple-icon-list" /> Mentor Sessions
+              <i className="simple-icon-list" /> My Mentor Sessions
               </DropdownItem>
           </NavLink>
         
@@ -391,7 +394,7 @@ if (roleRes.includes("MENTOR")) {
                 <i className="simple-icon-list" />  My Listing
                 </DropdownItem>
               {/* </NavLink> */}
-              <DropdownItem >
+              <DropdownItem onClick={handleSettingsClick}>
               <i className="simple-icon-settings" />  Settings
               </DropdownItem>
               <DropdownItem divider />

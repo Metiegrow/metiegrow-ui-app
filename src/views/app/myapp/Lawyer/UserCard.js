@@ -5,7 +5,7 @@ import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { Button, Card, CardBody, CardText, Col, NavLink, Row } from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import Rating from 'components/common/Rating';
-import MentorDropDown from '../mentorship/MentorDropDown';
+import LawyerCardFilter from './LawyerCardFilter';
 
 
 
@@ -55,8 +55,7 @@ const UserCard = () => {
        </div>
         
   
-      
-          <MentorDropDown/>
+        <LawyerCardFilter />
         </div>
     
         </div>
