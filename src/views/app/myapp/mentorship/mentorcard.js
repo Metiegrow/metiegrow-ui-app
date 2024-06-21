@@ -40,7 +40,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   // const[mentorfilter,setMentorFilter]=useState([]);
   // const [image]=useState('');
   const [inputkey,setInputKey]=useState('')
-
+  const [filteredMentors, setFilteredMentors] = useState([]);
   const truncateBio = (bio, lineCount) => {
    
     const words = bio.split(' ');
@@ -93,6 +93,20 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
     };
     mentorCardDetails();
   }, [location.search]);
+
+  useEffect(() => {
+    const filterMentors = () => {
+      const filtered = mentordetails.filter((mentor) => {
+        const lowercasedFilter = inputkey.toLowerCase();
+        return (
+          mentor.jobTitle.toLowerCase().includes(lowercasedFilter) ||
+          mentor.skills.some(skill => skill.toLowerCase().includes(lowercasedFilter))
+        );
+      });
+      setFilteredMentors(filtered);
+    };
+    filterMentors();
+  }, [inputkey, mentordetails]);
 
   const history = useHistory();
   const handleMySlotsClick = () =>{
@@ -246,7 +260,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
 
       <div>
       
-        {mentordetails.length===0?(
+        {filteredMentors.length===0?(
           <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <Card>
           <CardBody>
@@ -255,7 +269,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
          </Card>
       </Colxx>
         ):(
-          Array.isArray(mentordetails) && mentordetails.map((mentors)=>{
+          Array.isArray(filteredMentors) && filteredMentors.map((mentors)=>{
     return (
       <Colxx xxs="12" key={mentors.id}>
       <Row>
