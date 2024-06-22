@@ -40,7 +40,8 @@ const Register = () => {
   const [userRoles,setUserRoles] = useState(["MENTOR"]);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [roleError, setRoleError] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
@@ -118,6 +119,7 @@ const OnRegisterButtonclick = async () => {
         return;
       }
       setRoleError(false);
+      setLoading(true);
 
        const signUpResponse = await authService.signUp(
         email,
@@ -130,11 +132,12 @@ const OnRegisterButtonclick = async () => {
       );
       if (signUpResponse && signUpResponse.status === 200) {
         setIsSubmitted(true)
+        setLoading(false)
         // console.log("signupsuccess")
         // history.push('/login');
     } else {
         console.error('Signup Failed:', signUpResponse);
-
+        setLoading(false)
         // console.log("su",signUpResponse)
         NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
     }
@@ -392,11 +395,22 @@ const OnRegisterButtonclick = async () => {
               <div className="d-flex justify-content-end align-items-center">
                 <Button
                  color="primary"
-                 className="btn-shadow"
-                 size="lg"
+                //  className="btn-shadow"
+                //  size="lg"
                  type="submit"
+                 className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
+                size="lg"
                 >
-                 <IntlMessages id="user.register-button" />
+                  <span className="spinner d-inline-block">
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">
+                          <IntlMessages id="user.register-button" />
+                      </span>
                 </Button>
               </div>
               <div>Already a registered user? {" "}

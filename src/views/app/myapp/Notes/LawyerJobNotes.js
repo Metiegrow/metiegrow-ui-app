@@ -131,13 +131,13 @@ const LawyerJobNotes = ({ jobId }) => {
   return (
     <Container>
       <Row className="justify-content-center ">
-        <Col xs={12} sm={8} md={6} lg={12}>
+        <Col xs={12} sm={12} md={12} lg={12}>
           <Row className="justify-content-between  mb-4">
             <Col xs="auto">
               {/* <h1 className="mb-4">Lawyer job notes</h1> */}
             </Col>
             <Col xs="auto">
-              <Button color="primary" onClick={toggleModal} size="sm" className="header-icon notificationButton position-relative">
+              <Button color="primary" onClick={toggleModal} size="sm" className="mt-4 header-icon notificationButton position-relative">
                 Notes {" "}
                 {/* <span className="count">{notes.length}</span> */}
                 <Badge  color="light" className=" ">{notes.length}</Badge>

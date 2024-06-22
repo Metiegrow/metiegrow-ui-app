@@ -53,6 +53,7 @@ const ApplyMentor = () => {
   const [amount, setAmount] = useState(250);
   const [loading, setLoading] = useState(false);
   const [skillsTag, setSkillsTag] = useState([]);
+  const [toolsTag, setToolsTag] = useState([]);
   const [imageError, setImageError] = useState(false);
   const [skillError,setSkillError] = useState(false);
   const [imageErrorMessage, setImageErrorMessage] = useState(null);
@@ -236,6 +237,10 @@ const languageOptions = language.map(option => ({
     setSkillError(false);
     setSkillsTag(newSkills);
   };
+  const handleToolsTagsChange = (newTools) => {
+    setSkillError(false);
+    setToolsTag(newTools);
+  };
 
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
@@ -271,6 +276,8 @@ const languageOptions = language.map(option => ({
                 jobTitle: fields.jobTitle,
                 company: fields.company,
                 location: fields.location,
+                linkedinUrl: fields.linkedinUrl,
+                twitterHandle: fields.twitterHandle,
               }}
               validateOnMount
               onSubmit={(values) => {
@@ -407,6 +414,7 @@ const languageOptions = language.map(option => ({
                       </div>
                     )}
                   </FormGroup>
+                 
                   <FormGroup className="error-l-75">
                         <Label>Languages*</Label>
                         <Select
@@ -439,6 +447,45 @@ const languageOptions = language.map(option => ({
                           </div>
                         )} */}
                       </FormGroup>
+                      <FormGroup className="error-l-125">
+                    <Row>
+                      <Col md={6}>
+                        <Label for="linkedinUrl">LinkedIn URL*</Label>
+                        <Field
+                          className="form-control"
+                          name="linkedinUrl"
+                          type="url"
+                          // validate={validateLinkedinUrl}
+                          autoComplete="off"
+                        />
+                        {errors.linkedinUrl && touched.linkedinUrl && (
+                          <div className="invalid-feedback d-block">
+                            {errors.linkedinUrl}
+                          </div>
+                        )}
+                      </Col>
+                      <Col md={6}>
+                        <Label for="twitterHandle">
+                          Twitter Handle (optional)
+                        </Label>
+                        <Field
+                          type="text"
+                          name="twitterHandle"
+                          id="twitterHandle"
+                          className="form-control"
+                          autoComplete="off"
+                        />
+                        <FormText color="muted">
+                          Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
+                        </FormText>
+                        {/* {errors.twitterHandle && touched.twitterHandle && (
+                        <div className="invalid-feedback d-block">
+                          {errors.twitterHandle}
+                        </div>
+                      )} */}
+                      </Col>
+                    </Row>
+                  </FormGroup>
                   <Row>
                     <Col className="text-center">
                       <Button color="primary" type="submit">
@@ -457,12 +504,12 @@ const languageOptions = language.map(option => ({
                 category: fields.category,
                 skills: fields.skills,
                 bio: fields.bio,
-                linkedinUrl: fields.linkedinUrl,
-                twitterHandle: fields.twitterHandle,
+                // linkedinUrl: fields.linkedinUrl,
+                // twitterHandle: fields.twitterHandle,
                 website: fields.website,
               }}
               onSubmit={(values) => {
-                const profileData = {...values, skills:skillsTag}
+                const profileData = {...values, skills:skillsTag, tools:toolsTag}
                 postDataProfile(profileData);
               }}
               validateOnMount
@@ -538,6 +585,25 @@ const languageOptions = language.map(option => ({
                       Mentees will use this to find you.
                     </FormText>
                   </FormGroup>
+                  <FormGroup>
+                    <Label for="tools">Tools*</Label>
+                   
+                    
+                    <TagsInput
+                        value={toolsTag}
+                        onChange={handleToolsTagsChange}
+                        inputProps={{ placeholder: "Add Tools " }}
+                        // validate={validateSkills}
+                      />
+                    {skillError && (
+                      <div className="invalid-feedback d-block">
+                        {/* {skillErrorMessage} */}
+                        Required
+                      </div>
+                    )}
+                    <FormText>Add Tools and press Enter </FormText>
+                    
+                  </FormGroup>
 
                   <FormGroup>
                     <Label for="bio">Bio*</Label>
@@ -560,7 +626,7 @@ const languageOptions = language.map(option => ({
                       directly talk to a mentee. This will be public.
                     </FormText>
                   </FormGroup>
-                  <FormGroup className="error-l-125">
+                  {/* <FormGroup className="error-l-125">
                     <Row>
                       <Col md={6}>
                         <Label for="linkedinUrl">LinkedIn URL*</Label>
@@ -591,14 +657,14 @@ const languageOptions = language.map(option => ({
                         <FormText color="muted">
                           Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
                         </FormText>
-                        {/* {errors.twitterHandle && touched.twitterHandle && (
+                        {errors.twitterHandle && touched.twitterHandle && (
                         <div className="invalid-feedback d-block">
                           {errors.twitterHandle}
                         </div>
-                      )} */}
+                      )}
                       </Col>
                     </Row>
-                  </FormGroup>
+                  </FormGroup> */}
                   <FormGroup>
                     <Label for="website">Personal Website (optional)</Label>
                     <Field
@@ -662,6 +728,44 @@ const languageOptions = language.map(option => ({
                     exponentially increase your chances. They also give you a
                     jumpstart once you&apos;re a mentor.
                   </Alert>
+                  {/* <FormGroup>
+                    <Row>
+                      <Col md={12}>
+                        <FormGroup className="error-l-75">
+                          <Label>6 month price*</Label>
+
+                          <SliderTooltip
+                            min={2000}
+                            max={100000}
+                            defaultValue={500}
+                            className="mb-5"
+                            step={500}
+                            value={amount}
+                            onChange={handleSliderChange}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                  <FormGroup>
+                    <Row>
+                      <Col md={12}>
+                        <FormGroup className="error-l-75">
+                          <Label>3 month price*</Label>
+
+                          <SliderTooltip
+                            min={1000}
+                            max={100000}
+                            defaultValue={500}
+                            className="mb-5"
+                            step={500}
+                            value={amount}
+                            onChange={handleSliderChange}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </FormGroup> */}
                   <FormGroup>
                     <Row>
                       <Col md={12}>

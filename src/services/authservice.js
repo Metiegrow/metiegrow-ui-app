@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import axios from 'axios';
-// import { NotificationManager } from 'components/common/react-notifications';
+import { NotificationManager } from 'components/common/react-notifications';
 
 import { baseUrl } from '../constants/defaultValues';
 
@@ -74,7 +74,7 @@ export const authService = {
 
 // with backend
 
-async login(email, password , history) {
+async login(email, password ) {
   const bodyData = JSON.stringify({ email: email, password: password });  
   const url = `${baseUrl}/api/authenticate`;
   try {
@@ -196,8 +196,27 @@ async login(email, password , history) {
     const bodyData = JSON.stringify({ email: email});  
     const url = `${baseUrl}/api/forgot-password`;
     try {
-        const res = await axios.put(url, bodyData);
-  console.log(res);
+        const res = await axios.post(url, bodyData);
+            res.data.statuses.forEach((status) => {
+              NotificationManager.success(status.message, "Great!", 5000, null, null, '');
+          });
+  // console.log(res);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+  },
+
+  async confirmPasswordReset({newPassword, confirmPassword, email}) {
+    const bodyData = JSON.stringify({ email: email, newPassword: newPassword, confirmPassword : confirmPassword});  
+    const url = `${baseUrl}/api/reset-password`;
+    try {
+        const res = await axios.post(url, bodyData);
+          //   res.data.statuses.forEach((status) => {
+          //     NotificationManager.success(status.message, "Great!", 5000, null, null, '');
+          // });
+  // console.log(res);
+        //  window.location.href = '/login';
         return res;
     } catch (error) {
         throw error;
