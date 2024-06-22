@@ -126,6 +126,9 @@ const ResetPassword = ({
               null,
               ""
             );
+            setTimeout(() =>{
+              setResetLoading(false);
+            },3000);
           }
         }
       } catch (er) {

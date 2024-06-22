@@ -420,7 +420,7 @@ const addService = () => {
                         )}
                       </FormGroup>
                       <FormGroup className="error-l-75">
-                        <Label>Languages*</Label>
+                        <Label>Languages known*</Label>
                         <Select
                           placeholder="Select Languages"
                           name="languages"

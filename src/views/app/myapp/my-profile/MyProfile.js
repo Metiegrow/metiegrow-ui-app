@@ -14,14 +14,19 @@ import {
   Col,
   Form,
   Card,
+  FormGroup,
 } from "reactstrap";
 import { ReactSortable } from 'react-sortablejs';
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 import { NotificationManager } from 'components/common/react-notifications';
 import { Colxx } from "components/common/CustomBootstrap";
+import Select from "react-select";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
+import language from "../my-login/Languages";
+import CategoryData from "../my-login/CategoryData";
+
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -50,6 +55,7 @@ const MyProfile = () => {
   const [totalRatings,setTotalRatings] = useState(0);
   const [averageStar, setAverageStar] = useState(0);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [languages, setLanguages] = useState([]);
 
 
  // const Id = 1;
@@ -165,6 +171,7 @@ const token = getTokenRes();
         company,
         location,
         category,
+        languages,
         skills,
         bio,
         linkedinUrl,
@@ -276,6 +283,30 @@ const token = getTokenRes();
       window.open(url, "_blank");
     }
   }
+
+  const handleAddLanguages = (newLanguages) => {
+    setLanguages([...languages, newLanguages]);
+  };
+
+  const handleRemoveLanguages = (index) => {
+    setLanguages(languages.filter((_, i) => i !== index));
+  };
+
+  const languageOptions = language.map((option) => ({
+    value: option.iso_code,
+    label: option.name,
+  }));
+
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+
+  const handleChange = (selectedOptions) => {
+    const languagesArray = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
+    // console.log("arraychk", languagesArray);
+    handleAddLanguages(languagesArray[0]);
+    setSelectedLanguages([]);
+  };
   
 
 
@@ -516,6 +547,35 @@ const token = getTokenRes();
                       <br />
                     </>
                     <>
+                      <Label for="location" className="font-weight-medium">
+                        <h4>category</h4>
+                      </Label>
+                      {/* <Input
+                        type="text"
+                        id="location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                      /> */}
+                      <Input
+                      type="select"
+                      name="category"
+                      value={category}
+                      // validate={validateLocation}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="form-control"
+                    >
+                      <option disabled value="">
+                        Select category
+                      </option>
+                      {CategoryData.map((option) => (
+                        <option key={option.short} value={option.short}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </Input>
+                      <br />
+                    </>
+                    {/* <>
                       <Label for="email" className="font-weight-medium">
                         <h4>Email</h4>
                       </Label>
@@ -526,7 +586,7 @@ const token = getTokenRes();
                         onChange={(e) => setEmail(e.target.value)}
                       />
                       <br />
-                    </>
+                    </> */}
                   </div>
                 ) : (
                   <>
@@ -581,8 +641,54 @@ const token = getTokenRes();
                 </>
               )}
             </Col>
-
             <Col lg="6" md="12" className="mt-4">
+                  <h2 className="mx-2">Languages known</h2>
+            {isEditingButton ? (
+                    <>
+                      {languages.map((lang, index) => (
+                        <Button
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={index}
+                          color="light"
+                          className="mb-2 font-weight-semibold mx-2"
+                          size="xs"
+                          onClick={() => handleRemoveLanguages(index)}
+                        >
+                          {language.find((l) => l.iso_code === lang)?.name}{" "}
+                          <i className="iconsminds-close" />
+                        </Button>
+                      ))}
+
+                      <FormGroup className="error-l-75">
+                        <Select
+                          placeholder="Select Languages"
+                          name="languages"
+                          isMulti
+                          options={languageOptions}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          value={selectedLanguages}
+                          onChange={(selectedOptions) => {
+                            setSelectedLanguages(selectedOptions);
+                            handleChange(selectedOptions);
+                          }}
+                        />
+                      </FormGroup>
+                    </>
+                  ) : (
+                    languages.map((lang, index) => (
+                      <Button
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        color="light"
+                        className="mb-2 font-weight-semibold mx-2"
+                        size="xs"
+                      >
+                        {language.find((l) => l.iso_code === lang)?.name}
+                      </Button>
+                    ))
+                  )}
+
               <h2 className="mx-2">Skills</h2>
               {isEditingButton ? (
                 <>

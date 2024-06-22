@@ -155,7 +155,7 @@ SessionUpcomingHistroy();
                   <Label className='text-one mr-2'>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                 </div>
-                <Button outline color='primary' className='mt-2 text-one text-primary' onClick={() => handleJoinCall(up.menteeId, up.id)}>Join Call</Button> 
+                <Button outline color='primary' className='mt-2 text-one ' onClick={() => handleJoinCall(up.menteeId, up.id)}>Join Call</Button> 
               </div>
             </CardBody>
           </Card>

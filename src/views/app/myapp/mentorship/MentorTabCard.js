@@ -19,7 +19,7 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import { adminRoot } from 'constants/defaultValues';
 
 const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
-  const [activeFirstTab, setActiveFirstTab] = useState('1');
+  const [activeFirstTab, setActiveFirstTab] = useState('3');
   const role = localStorage.getItem("roleRes")
   
   const history = useHistory();
@@ -35,7 +35,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
             <Card className="mb-4 ">
               <CardHeader>
                 <Nav tabs className="card-header-tabs ">
-                  <NavItem>
+                  {/* <NavItem>
                     <NavLink
                       to="#"
                       location={{}}
@@ -64,7 +64,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                     >
                       3 months
                     </NavLink>
-                  </NavItem>
+                  </NavItem> */}
                   <NavItem>
                     <NavLink
                       to="#"
@@ -77,7 +77,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                         setActiveFirstTab('3');
                       }}
                     >
-                      monthly plan
+                      Hourly plan
                     </NavLink>
                   </NavItem>
                   {/* <NavItem>
@@ -114,7 +114,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
               </CardHeader>
 
               <TabContent activeTab={activeFirstTab}>
-                <TabPane tabId="1">
+                {/* <TabPane tabId="1">
                 <Row>
                     <Colxx sm="12">
                       <CardBody>
@@ -139,7 +139,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                       </CardBody>
                     </Colxx>
                   </Row>
-                </TabPane>
+                </TabPane> */}
                 <TabPane tabId="3">
                 <Row>
                     <Colxx sm="12">

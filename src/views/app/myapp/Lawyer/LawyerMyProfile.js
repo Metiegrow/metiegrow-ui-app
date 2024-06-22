@@ -179,7 +179,7 @@ const LawyerMyProfile = () => {
     const languagesArray = selectedOptions
       ? selectedOptions.map((option) => option.value)
       : [];
-    console.log("arraychk", languagesArray);
+    // console.log("arraychk", languagesArray);
     handleAddLanguages(languagesArray[0]);
     setSelectedLanguages([]);
   };
@@ -370,7 +370,7 @@ const LawyerMyProfile = () => {
                 </Col>
 
                 <Col lg="5" md="12" className="mt-4 ml-4">
-                  <h2 className="mx-2">Languages</h2>
+                  <h2 className="mx-2">Languages known</h2>
                   {isEditingButton ? (
                     <>
                       {languages.map((lang, index) => (

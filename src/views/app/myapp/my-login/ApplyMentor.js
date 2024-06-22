@@ -415,8 +415,51 @@ const languageOptions = language.map(option => ({
                     )}
                   </FormGroup>
                  
+                 
+                      <FormGroup className="error-l-125">
+                    <Row>
+                      <Col md={6}>
+                        <Label for="linkedinUrl">LinkedIn URL*</Label>
+                        <Field
+                          className="form-control"
+                          name="linkedinUrl"
+                          type="url"
+                          // validate={validateLinkedinUrl}
+                          autoComplete="off"
+                        />
+                        <FormText color="muted" className="">
+                          e.g. https://www.linkedin.com/in/username/
+                        </FormText>
+                        {errors.linkedinUrl && touched.linkedinUrl && (
+                          <div className="invalid-feedback d-block">
+                            {errors.linkedinUrl}
+                          </div>
+                        )}
+                      </Col>
+                      <Col md={6}>
+                        <Label for="twitterHandle">
+                          Twitter Handle (optional)
+                        </Label>
+                        <Field
+                          type="text"
+                          name="twitterHandle"
+                          id="twitterHandle"
+                          className="form-control"
+                          autoComplete="off"
+                        />
+                        <FormText color="muted" className="">
+                          Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
+                        </FormText>
+                        {/* {errors.twitterHandle && touched.twitterHandle && (
+                        <div className="invalid-feedback d-block">
+                          {errors.twitterHandle}
+                        </div>
+                      )} */}
+                      </Col>
+                    </Row>
+                  </FormGroup>
                   <FormGroup className="error-l-75">
-                        <Label>Languages*</Label>
+                        <Label for="languages">Languages known*</Label>
                         <Select
                           placeholder="Select Languages"
                           name="languages"
@@ -447,45 +490,6 @@ const languageOptions = language.map(option => ({
                           </div>
                         )} */}
                       </FormGroup>
-                      <FormGroup className="error-l-125">
-                    <Row>
-                      <Col md={6}>
-                        <Label for="linkedinUrl">LinkedIn URL*</Label>
-                        <Field
-                          className="form-control"
-                          name="linkedinUrl"
-                          type="url"
-                          // validate={validateLinkedinUrl}
-                          autoComplete="off"
-                        />
-                        {errors.linkedinUrl && touched.linkedinUrl && (
-                          <div className="invalid-feedback d-block">
-                            {errors.linkedinUrl}
-                          </div>
-                        )}
-                      </Col>
-                      <Col md={6}>
-                        <Label for="twitterHandle">
-                          Twitter Handle (optional)
-                        </Label>
-                        <Field
-                          type="text"
-                          name="twitterHandle"
-                          id="twitterHandle"
-                          className="form-control"
-                          autoComplete="off"
-                        />
-                        <FormText color="muted">
-                          Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
-                        </FormText>
-                        {/* {errors.twitterHandle && touched.twitterHandle && (
-                        <div className="invalid-feedback d-block">
-                          {errors.twitterHandle}
-                        </div>
-                      )} */}
-                      </Col>
-                    </Row>
-                  </FormGroup>
                   <Row>
                     <Col className="text-center">
                       <Button color="primary" type="submit">

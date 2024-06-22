@@ -50,9 +50,9 @@ const TopnavNotifications = () => {
 
     fetchNotifications(); 
 
-    // const intervalId = setInterval(fetchNotifications, 5000); 
+    const intervalId = setInterval(fetchNotifications, 30000); 
 
-    // return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId);
   }, [url,clicked]);
   const handleClick = () =>{
     setClicked(!clicked)

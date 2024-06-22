@@ -66,14 +66,14 @@ const ForgotPassword = ({
         );
         setIsFormSubmitted(false);
       } else if (!loading && forgotUserMail === "success") {
-        NotificationManager.success(
-          "Please check your email.",
-          "Forgot Password Success",
-          3000,
-          null,
-          null,
-          ""
-        );
+        // NotificationManager.success(
+        //   "Please check your email.",
+        //   "Forgot Password Success",
+        //   3000,
+        //   null,
+        //   null,
+        //   ""
+        // );
         setIsSubmitted(true);
         setIsFormSubmitted(false);
       }
@@ -86,16 +86,39 @@ const ForgotPassword = ({
       const data = { email, otp };
       const url = `${baseUrl}/api/verifyotp`;
       const response = await axios.post(url, data);
-      setOtpLoading(false);
       if (response.data.statuses[0].status === "success") {
-        setOtpSubmitted(true);
+        setTimeout(() => {
+          setOtpSubmitted(true);
+          setOtpLoading(false);
+          response.data.statuses.forEach((status) => {
+            NotificationManager.success(
+              status.message,
+              "Great!",
+              6000,
+              null,
+              null,
+              ""
+            );
+          });
+        }, 3000);
       }
     } catch (er) {
       console.error(
-        "Error sending OTP:",
+        "Error Submitting OTP:",
         er.response ? er.response.data : er.message
       );
-      setOtpLoading(false);
+
+      setTimeout(() => {
+        NotificationManager.warning(
+          "Error Submitting OTP",
+          "Oops!",
+          3000,
+          null,
+          null,
+          ""
+        );
+        setOtpLoading(false);
+      }, 3000);
     }
   };
 
