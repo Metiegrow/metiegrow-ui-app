@@ -166,7 +166,7 @@ const ReviewsComponent = ({revieweeId,category}) => {
                   key={rv.reviewerId}
                   className="d-flex flex-row   border-bottom "
                 >
-                  <NavLink to='#'>
+                  <NavLink to={`/app/user/${rv.reviewerId}`}>
                   <ThumbnailLetters
                       rounded
                       extraSmall
@@ -174,8 +174,8 @@ const ReviewsComponent = ({revieweeId,category}) => {
                       className=""
                     />
                     {/* <img
-                      src={item.thumb}
-                      alt={item.title}
+                      src={`${baseUrl}/${rv.imageUrl}`}
+                      alt={rv.name}
                       className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
                     /> */}
 

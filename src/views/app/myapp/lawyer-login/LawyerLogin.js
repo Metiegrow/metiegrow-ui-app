@@ -142,11 +142,29 @@ const addService = () => {
   const lawyerAboutUrl = `${baseUrl}/api/lawyer/about`;
   const lawyerProfileUrl = `${baseUrl}/api/lawyer/profile`;
   const packageUrl = `${baseUrl}/api/lawyer/services`;
+  const lawyerImagePostUrl = `${baseUrl}/api/lawyer/lawyer-profile-images`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
   }
   const token = getTokenRes();
+
+  const postImageData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file1);
+  
+      
+       await axios.post(lawyerImagePostUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(`resres ${response.status}`);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const postDataAbout = async (data) => {
     try {
@@ -198,7 +216,7 @@ const addService = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setFile1(event.target.files[0]);
+    setFile1(file);
 
     if (file) {
       const reader = new FileReader();
@@ -307,16 +325,17 @@ const addService = () => {
                 <Formik
                   innerRef={forms[0]}
                   initialValues={{
-                    firstName: fields.firstName,
-                    lastName: fields.lastName,
+                    // firstName: fields.firstName,
+                    // lastName: fields.lastName,
                     location: fields.location,
                     languages: fields.languages,
                   }}
                   validateOnMount
                   onSubmit={(values) => {
-                    postDataAbout({ ...values, image: aboutField.image });
+                    postDataAbout(values);
+                    postImageData();
 
-                    console.log(aboutField.image);
+                    // console.log(aboutField.image);
                   }}
                 >
                   {({ setFieldValue, errors, touched }) => (

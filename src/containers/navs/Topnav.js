@@ -25,6 +25,7 @@ import {
   searchPath,
   isDarkSwitchActive,
   adminRoot,
+  baseUrl,
 } from "constants/defaultValues";
 
 import { MobileMenuIcon, MenuIcon } from "components/svg";
@@ -243,14 +244,10 @@ if (roleRes.includes("MENTOR")) {
     clickOnMobileMenuAction(_containerClassnames);
   };
 
-  function getUserName() {
-    return localStorage.getItem('userName');
-  }
-  const userName = getUserName()
-  // function getImage() {
-  //   return localStorage.getItem('imageUrl');
-  // }
-  // const imageUrl = getImage()
+  
+  const userName = localStorage.getItem('userName');
+  
+  const imageUrl = localStorage.getItem('imageUrl');
   // console.log("img",imageUrl)
 
   return (
@@ -344,8 +341,13 @@ if (roleRes.includes("MENTOR")) {
             <DropdownToggle className="p-0" color="empty">
               <span className="name mr-1">{userName}</span>
               <span>
-                <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
-                {/* <img alt="Profile" src={`${baseUrl}/${imageUrl}`} /> */}
+                  {
+                    imageUrl === "null" ? (
+                      <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
+                    ) : (
+                      <img alt="Profile" src={`${baseUrl}/${imageUrl}`} />
+                    )
+                  }
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>

@@ -14,7 +14,7 @@ const VideoCallCtrl = (props) => {
   const { setInCall } = props;
   const [users, setUsers] = useState([]);
   const [start, setStart] = useState(false);
-  const [connectionState, setConnectionState] = useState("");
+  // const [connectionState, setConnectionState] = useState("");
   const [callStartTime, setCallStartTime] = useState(null);
   // const [startTime, setStartTime] = useState(0)
   const [endTime, setEndTime] = useState(0);
@@ -176,7 +176,7 @@ const VideoCallCtrl = (props) => {
 
       client.on("connection-state-change", (state) => {
         console.log("Connection state changed:", state);
-        setConnectionState(state);
+        // setConnectionState(state);
       });
 
       client.on("user-published", async (user, mediaType) => {
@@ -367,7 +367,7 @@ const VideoCallCtrl = (props) => {
               setInCall={setInCall}
               setStatus={setStatus}
             />
-            <p>Connection State: {connectionState}</p>
+            {/* <p>Connection State: {connectionState}</p> */}
           </>
         )}
       </div>

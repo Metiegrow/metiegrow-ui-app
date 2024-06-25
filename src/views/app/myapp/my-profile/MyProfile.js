@@ -56,6 +56,7 @@ const MyProfile = () => {
   const [averageStar, setAverageStar] = useState(0);
   const [profileLoading, setProfileLoading] = useState(true);
   const [languages, setLanguages] = useState([]);
+  const [skillValidationMessage,setSkillValidationMessage] = useState("");
 
 
  // const Id = 1;
@@ -210,7 +211,12 @@ const token = getTokenRes();
   };
 
   const handleAddSkill = (newSkill) => {
+    if (!newSkill.trim()) {
+      setSkillValidationMessage("Skill cannot be empty");
+  } else {
+    setSkillValidationMessage("")
     setSkills([...skills, newSkill]);
+  }
   };
 
   const handleEditAboutClick = () => {
@@ -230,12 +236,20 @@ const token = getTokenRes();
     setIsEditingButton(true);
   };
   const handleSaveButton = () => {
+    if (skills.length === 0) {
+      setSkillValidationMessage('At least one skill is required.');
+    } else {
     setIsEditingButton(false);
     updateMEntorProfile();
+    }
   };
 
   const handleCancelButton = () => {
+    if (skills.length === 0) {
+      setSkillValidationMessage('At least one skill is required.');
+    } else {
     setIsEditingButton(false);
+    }
   };
 
   const handleEditClick = () => {
@@ -642,7 +656,7 @@ const token = getTokenRes();
               )}
             </Col>
             <Col lg="6" md="12" className="mt-4">
-                  <h2 className="mx-2">Languages known</h2>
+                  {(languages.length > 0 || isEditingButton) && <h2 className="mx-2">Languages known</h2>}
             {isEditingButton ? (
                     <>
                       {languages.map((lang, index) => (
@@ -738,6 +752,11 @@ const token = getTokenRes();
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
+                  {skillValidationMessage && (
+                      <div className="invalid-feedback d-block">
+                        {skillValidationMessage}
+                      </div>
+                    )}
                 </>
               ) : (
                 skills.map((skill, index) => (

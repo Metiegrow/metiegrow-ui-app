@@ -39,6 +39,7 @@ const LawyerMyProfile = () => {
   const [star, setStar] = useState("");
   const [about, setAbout] = useState("");
   const [profileLoading, setProfileLoading] = useState(true);
+  const [topicValidationMessage, setTopicValidationMessage] = useState("");
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
 
@@ -123,12 +124,20 @@ const LawyerMyProfile = () => {
     setIsEditingButton(true);
   };
   const handleSaveButton = () => {
+    if (topic.length === 0) {
+      setTopicValidationMessage('At least one topic is required.');
+    } else {
     setIsEditingButton(false);
     updateMEntorProfile();
+    }
   };
 
   const handleCancelButton = () => {
+    if (topic.length === 0) {
+      setTopicValidationMessage('At least one topic is required.');
+    } else {
     setIsEditingButton(false);
+    }
   };
 
   const handleEditClick = () => {
@@ -149,7 +158,12 @@ const LawyerMyProfile = () => {
   };
 
   const handleAddTopics = (newTopics) => {
+    if (!newTopics.trim()) {
+      setTopicValidationMessage("Topic cannot be empty");
+  } else {
+    setTopicValidationMessage("")
     setTopic([...topic, newTopics]);
+  }
   };
   const handleRemoveTopics = (index) => {
     setTopic(topic.filter((_, i) => i !== index));
@@ -370,7 +384,7 @@ const LawyerMyProfile = () => {
                 </Col>
 
                 <Col lg="5" md="12" className="mt-4 ml-4">
-                  <h2 className="mx-2">Languages known</h2>
+                {(languages.length > 0 || isEditingButton) && <h2 className="mx-2">Languages known</h2>}
                   {isEditingButton ? (
                     <>
                       {languages.map((lang, index) => (
@@ -468,6 +482,11 @@ const LawyerMyProfile = () => {
                             </Button>
                           </InputGroupAddon>
                         </InputGroup>
+                        {topicValidationMessage && (
+                      <div className="invalid-feedback d-block">
+                        {topicValidationMessage}
+                      </div>
+                    )}
                       </>
                     ) : (
                       topic.map((newTopics,index) => (

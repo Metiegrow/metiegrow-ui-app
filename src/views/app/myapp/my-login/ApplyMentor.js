@@ -120,7 +120,7 @@ const languageOptions = language.map(option => ({
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setFile1(event.target.files[0]);
+    setFile1(file);
 
     if (file) {
       const reader = new FileReader();
@@ -146,9 +146,25 @@ const languageOptions = language.map(option => ({
     return localStorage.getItem("tokenRes");
   }
   const token = getTokenRes();
+
+
   const postDataAbout = async (data) => {
+
+    const formData = new FormData();
+    formData.append("image", file1);
+
+    const mentorProfile = {
+      jobTitle: data.jobTitle,
+    company: data.company,
+    location: data.location,
+    linkedinUrl: data.linkedinUrl,
+    twitterHandle: data.twitterHandle,
+    language: data.language
+    };
+    formData.append("mentorProfile",new Blob([JSON.stringify(mentorProfile)], { type: "application/json" }));
+
     try {
-      await axios.post(mentorAboutUrl, data, {
+      await axios.post(mentorAboutUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -282,7 +298,7 @@ const languageOptions = language.map(option => ({
               validateOnMount
               onSubmit={(values) => {
                 // postDataAbout(values,aboutField.image);
-                postDataAbout({ ...values, image: aboutField.image, language: languages });
+                postDataAbout({ ...values, language: languages });
 
                 // console.log(aboutField.image);
               }}

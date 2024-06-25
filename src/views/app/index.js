@@ -256,6 +256,10 @@ const ViewSettings=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Settings/Settings'
 ))
+const ViewUserProfile=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Mentee/MenteeProfile'
+))
 
 const ViewAlumniLists=React.lazy(()=>
   import(
@@ -545,6 +549,10 @@ const roleRes = getRoleRes();
              <Route
               path={`${match.url}/settings`}
               render={(props) => <ViewSettings {...props} />}
+            />
+             <Route
+              path={`${match.url}/user/:uid`}
+              render={(props) => <ViewUserProfile {...props} />}
             />
             
             { /* alumnini networking routes start */ }

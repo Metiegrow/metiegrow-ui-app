@@ -34,3 +34,5 @@ export {
   getConversationsSuccess,
   searchContact,
 } from './chat/actions';
+
+export {setAppId} from "./agora/actions";
