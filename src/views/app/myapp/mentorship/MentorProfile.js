@@ -133,8 +133,10 @@ const MentorProfile = () => {
           <div className=' '>
             {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
-             <img src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`}  className=' col-2 mx-2 w-60 rounded-circle
-              img-thumbnail border    ' alt="" />
+             <img src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`} 
+              // className=' col-2 mx-2 w-60 rounded-circle img-thumbnail border' 
+              className="mx-2 rounded-circle img-thumbnail border"
+              alt="" style={{width: "110px", height: "110px", objectFit: "cover"}} />
               {/* <img  src={`${baseUrl}/api/public/images/${mid}/profile-pic`} className=' col-2 mx-2 w-60 rounded-circle
               img-thumbnail border    ' alt="" /> */}
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
@@ -228,7 +230,7 @@ const MentorProfile = () => {
               </Button>
               </NavLink>
             </div> */}
-            <MentorTabCard  handleConnectClick={handleConnectClick} chatUserId={chatUserId}/>
+            <MentorTabCard  handleConnectClick={handleConnectClick} chatUserId={chatUserId} price={mentorprofiledetails1.price}/>
           </div>
           </Row>
           <hr/>

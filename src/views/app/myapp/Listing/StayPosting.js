@@ -21,6 +21,7 @@ import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { ApartmentTypeData, BHKData, FloorData, RoomMateType, RoomTypeData, parkingOptions } from "./ListingData";
 
 const quillModules = {
   toolbar: [
@@ -49,32 +50,51 @@ const quillFormats = [
   "image",
 ];
 
-const ApartmentTypeData = [
-  "Independent House/Villa",
-  "Gated Community Villa",
-  "Apartment",
-];
-const BHKData = ["1 BHK", "2 BHK", "3 BHK"];
-const FloorData = ["Ground Floor", "1", "2", "3", "4", "5", "6"];
-const RoomTypeData = ["Single Room", "Shared Room"];
+// const ApartmentTypeData = [
+//   { label: "Independent House/Villa", value: 0 },
+//   { label: "Gated Community Villa", value: 1 },
+//   { label: "Apartment", value: 2 },
+// ];
+
+// const BHKData = [
+//   { label: "1 BHK", value: 0 },
+//   { label: "2 BHK", value: 1 },
+//   { label: "3 BHK", value: 2 },
+// ];
+
+// const FloorData = [
+//   { label: "Ground Floor", value: 0 },
+//   { label: "1", value: 1 },
+//   { label: "2", value: 2 },
+//   { label: "3", value: 3 },
+//   { label: "4", value: 4 },
+//   { label: "5", value: 5 },
+//   { label: "6", value: 6 },
+// ];
+
+// const RoomTypeData = [
+//   { label: "Single Room", value: 0 },
+//   { label: "Shared Room", value: 1 },
+// ];
+
 
 const StayPosting = ({ closeModal }) => {
   const [availableFrom, setAvailableFrom] = useState(new Date());
   const [title, setTitle] = useState("");
-  const [apartmentType, setApartmentType] = useState("");
-  const [BHKType, setBHKType] = useState("");
-  const [floor, setFloor] = useState("");
-  const [roomType, setRoomType] = useState("");
-  const [roomMate, setRoomMate] = useState("");
-  const [expectedRent, setExpectedRent] = useState("");
-  const [expectedDeposit, setExpectedDeposit] = useState("");
-  const [monthlyMaintenance, setMonthlyMaintenance] = useState(false);
-  const [maintenanceAmount, setMaintenanceAmount] = useState("");
-  const [parking, setParking] = useState("");
+  const [apartmentType, setApartmentType] = useState(null);
+  const [BHKType, setBHKType] = useState(null);
+  const [floor, setFloor] = useState(null);
+  const [roomType, setRoomType] = useState(null);
+  const [roomMate, setRoomMate] = useState(null);
+  const [expectedRent, setExpectedRent] = useState(null);
+  const [expectedDeposit, setExpectedDeposit] = useState(null);
+  const [monthlyMaintenance, setMonthlyMaintenance] = useState(true);
+  const [maintenanceAmount, setMaintenanceAmount] = useState(null);
+  const [parking, setParking] = useState(null);
   const [contact, setContact] = useState("");
   const [description, setDescription] = useState("");
 
-  const url = `${baseUrl}/api/posts/stay-post`;
+  const url = `${baseUrl}/api/posts/stay-post/`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
@@ -86,7 +106,7 @@ const StayPosting = ({ closeModal }) => {
       const Data = {
         title,
         apartmentType,
-        BHKType,
+        bhkType : BHKType,
         floor,
         roomType,
         roomMate,
@@ -104,11 +124,19 @@ const StayPosting = ({ closeModal }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      closeModal();
       console.log("job posted successfully");
     } catch (error) {
       console.error("Error posting job:", error);
     }
+  };
+
+  const handleDateChange = (date) => {
+    // setAvailableFrom(date);
+    const timestampInSeconds = date ? Math.floor(date.getTime() / 1000) : null;
+    // console.log(timestampInSeconds); 
+    setAvailableFrom(timestampInSeconds);
+
   };
 
   return (
@@ -152,9 +180,10 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select BHK type
                       </option>
-                      {BHKData.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                      {BHKData.map((option,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
                         </option>
                       ))}
                     </Field>
@@ -181,9 +210,10 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Floor
                       </option>
-                      {FloorData.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                      {FloorData.map((option,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
                         </option>
                       ))}
                     </Field>
@@ -208,9 +238,10 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Apartment type
                       </option>
-                      {ApartmentTypeData.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                      {ApartmentTypeData.map((option,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
                         </option>
                       ))}
                     </Field>
@@ -238,9 +269,10 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Room Type
                       </option>
-                      {RoomTypeData.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                      {RoomTypeData.map((option,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
                         </option>
                       ))}
                     </Field>
@@ -265,12 +297,12 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Room Mate
                       </option>
-                      <option key="Male" value="Male">
-                        Male
-                      </option>
-                      <option key="Female" value="Female">
-                        Female
-                      </option>
+                      {RoomMateType.map((option,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </Field>
 
                     {/* {errors.floor && touched.floor && (
@@ -321,10 +353,11 @@ const StayPosting = ({ closeModal }) => {
                     <Field
                       as="select"
                       name="monthlyMaintenance"
-                      onChange={(e) => setMonthlyMaintenance(e.target.value)}
+                      // onChange={(e) => setMonthlyMaintenance(e.target.value)}
+                      onChange={(e) => setMonthlyMaintenance(e.target.value === "true")}
                       //   validate={}
                       className="form-control"
-                      value={monthlyMaintenance || ""}
+                      value={monthlyMaintenance ? "true" : "false"}
                     >
                       <option key="" value="" disabled>
                         Select
@@ -346,7 +379,7 @@ const StayPosting = ({ closeModal }) => {
                       <Input
                         type="number"
                         placeholder="Enter Amount"
-                        disabled={!monthlyMaintenance}
+                        disabled={monthlyMaintenance}
                         //   value={}
                         onChange={(e) => setMaintenanceAmount(e.target.value)}
                         //   className="col-12 col-md-3"
@@ -378,7 +411,7 @@ const StayPosting = ({ closeModal }) => {
                     <Label>Available From</Label>
                     <DatePicker
                       selected={availableFrom}
-                      onChange={setAvailableFrom}
+                      onChange={handleDateChange}
                       // placeholderText={messages['forms.date']}
                     />
                   </FormGroup>
@@ -399,18 +432,13 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select
                       </option>
-                      <option key="Car" value="Car">
-                        Car
-                      </option>
-                      <option key="Bike" value="Bike">
-                        Bike
-                      </option>
-                      <option key="Car and Bike" value="Car and Bike">
-                        Car and Bike
-                      </option>
-                      <option key="No" value="No">
-                        No
-                      </option>
+                      
+                      {parkingOptions.map((option,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </Field>
                     {/* {errors.company && touched.company && (
                               <div className="invalid-feedback d-block">
@@ -442,7 +470,7 @@ const StayPosting = ({ closeModal }) => {
                   className="default  py-2 "
                   onClick={() => {
                     handleSubmit();
-                    closeModal();
+                    // closeModal();
                   }}
                 >
                   List a Room

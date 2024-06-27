@@ -11,6 +11,7 @@ import {
   Button,
 } from "reactstrap";
 import { Colxx } from "components/common/CustomBootstrap";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 const ViewOtherListing = () => {
   const [data, setData] = useState();
@@ -65,7 +66,7 @@ const ViewOtherListing = () => {
                       <NavLink to="#" location={{}}>
                         <p className="font-weight-medium mb-0 ">Name</p>
                         <p className="text-muted mb-0 text-small">
-                          {new Date(data.postedOn).toLocaleString()}
+                    Posted on <TimestampConverter timeStamp={data.postedOn} format="datetime" />
                         </p>
                       </NavLink>
                     </div>
@@ -137,9 +138,11 @@ const ViewOtherListing = () => {
                 <div className="mt-2">{data.description}</div>
                 <Row className="">
                   <Col className="">
+                  {data.interestedCount && (
                     <div className="text-muted mt-2">
                       {data.interestedCount} people have shown interest
                     </div>
+                    )}
                   </Col>
                   <Col className="text-right">
                     <Button

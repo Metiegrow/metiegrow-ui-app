@@ -75,21 +75,23 @@ const ReviewsComponent = ({revieweeId,category}) => {
     return (starCount / totalRatings) * 100;
   };
 
-  function removeTags(str) {
-    if (str === null || str === '') {
-        return false;
-    }
-    const newStr = str.toString();
-    return newStr.replace(/(<([^>]+)>)/ig, '');
-}
+
+  
+//   function removeTags(str) {
+//     if (str === null || str === '') {
+//         return false;
+//     }
+//     const newStr = str.toString();
+//     return newStr.replace(/(<([^>]+)>)/ig, '');
+// }
 
 
 
   return (
-    <Colxx xl="4" lg="6" md="12" className="mb-4">
+    <Colxx xl="12" lg="12" md="12" className="mb-4">
             <h1 className="fw-bold mb-4">Ratings & Reviews</h1>
       {totalRatings > 0 && (
-        <Card className="mb-3">
+        <Card className="mb-3 col-lg-4 col-12" >
           <CardBody>
             {/* <h3 className="fw-bold">Ratings & Reviews</h3> */}
 
@@ -166,24 +168,27 @@ const ReviewsComponent = ({revieweeId,category}) => {
                   key={rv.reviewerId}
                   className="d-flex flex-row   border-bottom "
                 >
-                  <NavLink to={`/app/user/${rv.reviewerId}`}>
+                  <NavLink href={`/app/user/${rv.reviewerId}`}>
+                  {!rv.imageUrl ? (
                   <ThumbnailLetters
                       rounded
                       extraSmall
                       text={rv.name}
                       className=""
                     />
-                    {/* <img
+                    ) : (
+                     <img
                       src={`${baseUrl}/${rv.imageUrl}`}
                       alt={rv.name}
                       className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
-                    /> */}
-
+                    /> 
+                    )}
                   </NavLink>
 
                   <div className=" pr-2">
                     <NavLink to='#'>
-                      <p className="font-weight-medium mb-0">{removeTags(rv.feedBack)}</p>
+                      {/* <p className="font-weight-medium mb-0">{removeTags(rv.feedBack)}</p> */}
+                      <div className=""  dangerouslySetInnerHTML={{ __html: rv.feedBack }} />
                       <p className="text-muted mb-0 text-small">
                       {rv.name} | {" "}
                       <span>

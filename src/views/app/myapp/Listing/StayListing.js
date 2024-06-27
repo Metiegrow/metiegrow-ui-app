@@ -14,21 +14,25 @@ import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 import Pagination from "containers/pages/Pagination";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 
 const StayListing = () => {
-  const url = `${baseUrl}/staylistingcard`;
+  
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage] = useState(2);
   const history = useHistory();
-
+  
+  const url = `${baseUrl}/api/posts/stay-post/`;
+  const interestedClickUrl = `${baseUrl}/api/posts/stay-post/interested`;
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
       try {
-        const res = await axios.get(`${url}?_page=${currentPage}&_limit=4`);
+        // const res = await axios.get(`${url}?_page=${currentPage}&_limit=4`);
+        const res = await axios.get(url);
         const { data } = res;
         const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
         setItems(sortedData);
@@ -55,6 +59,19 @@ const StayListing = () => {
     history.push(`/app/listing/staylisting/view/${id}`);
   };
 
+  const handleInterestedButtonClick = async (id) => {
+    const data = {
+      jobListingId: id,
+      interested: true
+    };
+  
+    try {
+      await axios.post(interestedClickUrl, data);
+    } catch (error) {
+      console.error('Error sending interest:', error);
+    }
+  };
+
   return (
     <>
       {items.map((data, index) => (
@@ -71,7 +88,7 @@ const StayListing = () => {
 
                   <Col className="text-right">
                     <p className="text-muted">
-                    Posted on {new Date(data.postedOn).toLocaleString()} 
+                    Posted on <TimestampConverter timeStamp={data.postedOn} format="datetime" />
                     </p>
                   </Col>
                 </Row>
@@ -108,7 +125,7 @@ const StayListing = () => {
                 <Row>
                   <Col md={5}>
                     <i className="iconsminds-office text-primary" />{" "}
-                    <span data-toggle="tooltip" title="Apartment Type">{data.apartmentType}</span> | <span data-toggle="tooltip" title="Floor">{data.floor}</span> |  <span data-toggle="tooltip" title="BHK Type">{data.BHKType}</span>
+                    <span data-toggle="tooltip" title="Apartment Type">{data.apartmentType}</span> | <span data-toggle="tooltip" title="Floor">{data.floor}</span> |  <span data-toggle="tooltip" title="BHK Type">{data.bhkType}</span>
                   </Col>
                   {/* <Col>
                     <i className="iconsminds-engineering text-primary" />{" "}
@@ -162,7 +179,7 @@ const StayListing = () => {
                     >
                       <i className="iconsminds-sharethis text-primary" />
                     </Button>
-                    <Button outline color="primary" size="xs">
+                    <Button onClick={handleInterestedButtonClick(data.id)} outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>
                   </Col>

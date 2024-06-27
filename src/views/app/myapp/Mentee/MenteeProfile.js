@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  NavLink,
-  Row,
-  Col,
-  Card,
-} from "reactstrap";
+import { Button, NavLink, Row, Col, Card } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 import { useParams } from "react-router-dom";
@@ -14,7 +8,7 @@ import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
 
 const UserProfile = () => {
-  const {uid}=useParams();
+  const { uid } = useParams();
 
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
@@ -26,7 +20,7 @@ const UserProfile = () => {
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
-  const url = `${baseUrl}/mentee/profile/${uid}`
+  const url = `${baseUrl}/api/mentee/profile/${uid}`;
 
   useEffect(() => {
     const mentorProfileDetails = async () => {

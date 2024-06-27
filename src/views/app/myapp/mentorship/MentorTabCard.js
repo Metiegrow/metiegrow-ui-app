@@ -18,7 +18,7 @@ import classnames from 'classnames';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { adminRoot } from 'constants/defaultValues';
 
-const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
+const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
   const [activeFirstTab, setActiveFirstTab] = useState('3');
   const role = localStorage.getItem("roleRes")
   
@@ -145,7 +145,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId }) => {
                     <Colxx sm="12">
                       <CardBody>
                         <CardTitle className="mb-4">
-                          <h2>₹4500</h2>
+                          {price && <h2>₹{price}</h2>}
                           <h5>Basic package</h5>
                           <div className='mt-4 '>
                             <div className=''  >

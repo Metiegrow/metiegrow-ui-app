@@ -127,8 +127,10 @@ const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.na
                   <img 
               // src={lawyerprofile.image} 
               src={`${baseUrl}/${lawyerprofile.imageUrl}`} 
-              className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
+              // className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
+              className="mx-2 rounded-circle img-thumbnail border"
               alt="" 
+              style={{width: "110px", height: "110px", objectFit: "cover"}}
             />
                  )}
        

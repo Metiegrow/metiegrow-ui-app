@@ -330,7 +330,7 @@ const VideoCallCtrl = (props) => {
       <div className="row p-0 d-flex justify-content-between">
         {/* <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4> */}
         {callStartTime && (
-          <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4>
+          <h4 className="mr-auto text-muted">Initiated Time: {initiatedTime}</h4>
         )}
         {/* <h4>
           Time Remaining :{" "}

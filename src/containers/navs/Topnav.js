@@ -345,7 +345,7 @@ if (roleRes.includes("MENTOR")) {
                     imageUrl === "null" ? (
                       <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
                     ) : (
-                      <img alt="Profile" src={`${baseUrl}/${imageUrl}`} />
+                      <img alt="Profile" src={`${baseUrl}/${imageUrl}`} style={{width: "40px", height: "40px",objectFit:"cover"}}/>
                     )
                   }
               </span>

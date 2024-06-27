@@ -14,26 +14,30 @@ import {
 } from "reactstrap";
 import { Colxx } from "components/common/CustomBootstrap";
 import DesktopNotifications from "../notifications/DesktopNotifications";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
-// const url = `${baseUrl}/otherlistingcard`;
-const url = `${baseUrl}/api/posts/other-post/7`;
 
-const JobListing = () => {
+const JobListing = ({modal}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage] = useState(2);
   const [items, setItems] = useState([]);
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [clickedCardTitle, setClickedCardTitle] = useState("");
+  // const [copied, setCopied] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
+  
+  const url = `${baseUrl}/api/posts/other-post/`;
+  const interestedClickUrl = `${baseUrl}/api/posts/other-post/interested`;
 
   const history = useHistory();
-
+  
   const toggleExpand = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
   };
-  const handleInterest = (title) => {
-    setClickedCardTitle(title);
-  };
+  // const handleInterest = (title) => {
+  //   setClickedCardTitle(title);
+  // };
   // const handleInterest = (title) => {
   //   // setClickedCardTitle(title);
   //   // DesktopNotifications({ title });
@@ -59,11 +63,48 @@ const JobListing = () => {
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, modal]);
 
   const handleClick = (id) => {
     history.push(`/app/listing/otherlisting/view/${id}`);
   };
+
+const removeTags = (str) => {
+  if (str === null || str === '') {
+      return false;
+  }
+  const newStr = str.toString();
+  return newStr.replace(/<\/?[^>]+(>|$)/g, ' ').trim().replace(/\s+/g, ' ');
+};
+
+
+const handleInterestedButtonClick = async (id, title) => {
+  const data = {
+    jobListingId: id,
+    interested: true
+  };
+
+  try {
+    await axios.post(interestedClickUrl, data);
+    setClickedCardTitle(title);
+  } catch (error) {
+    console.error('Error sending interest:', error);
+  }
+};
+
+const handleShareButtonClick = async (id) => {
+  try {
+    
+      await navigator.clipboard.writeText(`${window.location.href}/otherlisting/view/${id}`);
+      setCopiedId(id);
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 3000);
+  } catch (error) {
+    console.error("Error copying link:", error);
+  }
+};
+
 
   return !isLoaded ? (
     <div className="loading" />
@@ -83,15 +124,16 @@ const JobListing = () => {
                   <Col className="text-right">
                     <p className="text-muted">
                       {/* Posted on {new Date(data.postedOn).toLocaleDateString()}{" "} */}
-                      Posted on {new Date(data.postedOn).toLocaleString()}
+                      {/* Posted on {new Date(data.postedOn).toLocaleString()} */}
+                      Posted on <TimestampConverter timeStamp={data.postedOn} format="datetime" />
                     </p>
                   </Col>
                 </Row>
                 {expandedIndex === index ? (
-                  <CardSubtitle>{data.description}</CardSubtitle>
+                  <CardSubtitle>{removeTags(data.description)}</CardSubtitle>
                 ) : (
                   <CardSubtitle>
-                    {`${data.description.slice(0, 100)}...`}
+                    {`${removeTags(data.description).slice(0, 100)}...`}
                     {data.description.length > 100 && (
                       <Button
                         color="link"
@@ -106,9 +148,11 @@ const JobListing = () => {
 
                 <Row className="">
                   <Col className="">
+                  {data.interestedCount && (
                     <div className="text-muted mt-2">
                       {data.interestedCount} people have shown interest
                     </div>
+                    )}
                   </Col>
                   <Col className="text-right">
                   <Button
@@ -120,12 +164,17 @@ const JobListing = () => {
                       >
                         <i className="simple-icon-size-fullscreen text-primary" />
                       </Button>
+                      {copiedId === data.id && (
+                      <span className="text-success mr-2">
+                        Link copied to clipboard!
+                      </span>
+                    )}
                     <Button
                       outline
                       color="primary"
                       className="mr-2"
                       size="xs"
-                      // onClick={}
+                      onClick={() => handleShareButtonClick(data.id)}
                     >
                       <i className="iconsminds-sharethis text-primary" />
                     </Button>
@@ -133,7 +182,8 @@ const JobListing = () => {
                       outline
                       color="primary"
                       size="xs"
-                      onClick={() => handleInterest(data.title)}
+                      // onClick={() => handleInterest(data.title)}
+                      onClick={() => handleInterestedButtonClick(data.id,data.title)}
                     >
                       I&apos;m interested
                     </Button>

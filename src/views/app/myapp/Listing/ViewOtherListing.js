@@ -11,12 +11,13 @@ import {
   Button,
 } from "reactstrap";
 import { Colxx } from "components/common/CustomBootstrap";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 const ViewOtherListing = () => {
   const [data, setData] = useState();
   const [copied, setCopied] = useState(false);
   const { id } = useParams();
-  const url = `${baseUrl}/otherlistingcard/${id}`;
+  const url = `${baseUrl}/api/posts/other-post/${id}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +66,7 @@ const ViewOtherListing = () => {
                       <NavLink to="#" location={{}}>
                         <p className="font-weight-medium mb-0 ">Name</p>
                         <p className="text-muted mb-0 text-small">
-                          {new Date(data.postedOn).toLocaleString()}
+                    Posted on <TimestampConverter timeStamp={data.postedOn} format="datetime" />
                         </p>
                       </NavLink>
                     </div>
@@ -90,12 +91,15 @@ const ViewOtherListing = () => {
 
                 <h1>{data.title}</h1>
 
-                <div>{data.description}</div>
+                {/* <div>{data.description}</div> */}
+                <div dangerouslySetInnerHTML={{ __html: data.description }} />
                 <Row className="">
                   <Col className="">
+                    {data.interestedCount && (
                     <div className="text-muted mt-2">
                       {data.interestedCount} people have shown interest
                     </div>
+                    )}
                   </Col>
                   <Col className="text-right">
                     <Button
