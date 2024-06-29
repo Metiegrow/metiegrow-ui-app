@@ -337,7 +337,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                     </div> 
               </div>
              
-              <div className=" d-flex align-items-center col-9">
+              <div className=" d-flex  col-9">
               <CardBody className=" " >
                   <div className="min-width-zero">
                     

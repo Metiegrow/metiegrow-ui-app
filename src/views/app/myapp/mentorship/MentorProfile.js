@@ -1,6 +1,6 @@
 import { Colxx } from 'components/common/CustomBootstrap';
 import React ,{useState,useEffect} from 'react';
-import {  Button,Row} from 'reactstrap';
+import {  Button,Row,Card,CardBody,CardSubtitle,CardImg,NavLink} from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {useParams,useHistory} from "react-router-dom";

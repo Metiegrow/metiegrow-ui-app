@@ -144,7 +144,7 @@ SessionUpcomingHistroy();
               </div> */}
               <Row  className=''> 
               <Col className='d-flex'> 
-                <NavLink href=''
+                <NavLink href={`/app/user/${up.menteeId}`}
                 className='d-flex align-items-center'>
                   <ThumbnailLetters
                   rounded

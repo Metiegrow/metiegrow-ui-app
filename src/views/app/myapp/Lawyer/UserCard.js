@@ -120,7 +120,7 @@ const UserCard = () => {
            </div>
               </Col>
             
-             <Col md={6} lg={6}>
+             <Col md={7} lg={7}>
              <div className=" d-flex align-items-center">
               <CardBody className=" " >
                   <div className="min-width-zero">
