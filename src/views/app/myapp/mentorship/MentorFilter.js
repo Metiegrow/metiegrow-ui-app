@@ -21,6 +21,9 @@ const MentorFilter = ({
   onIndustryChange,
   onPriceChange,
   onLocationChange,
+  selectedSkills,
+  selectedLocation,
+  selectedIndustry,
 }) => {
   const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
@@ -76,6 +79,9 @@ const MentorFilter = ({
                   Skills
                 </DropdownToggle>
                 <DropdownMenu>
+                 {selectedSkills[0] &&  <DropdownItem onClick={() => handleSkillSelect("")}>
+                    <span>{selectedSkills}</span><i className="iconsminds-close" />
+                  </DropdownItem>}
                   <DropdownItem onClick={() => handleSkillSelect("HTML")}>
                     <span>HTML</span>
                   </DropdownItem>
@@ -124,7 +130,9 @@ const MentorFilter = ({
                       Amazon
                     </Label>
                   </FormGroup> */}
-
+                  {selectedIndustry &&  <DropdownItem onClick={() => handleIndustrySelect("")}>
+                    <span>{selectedIndustry}</span><i className="iconsminds-close" />
+                  </DropdownItem>}
                   <DropdownItem onClick={() => handleIndustrySelect("Amazon")}>
                     <span>Amazon</span>
                   </DropdownItem>
@@ -171,7 +179,7 @@ const MentorFilter = ({
                 className="mb-5 mx-2"
               >
                 <DropdownToggle caret color="primary" outline>
-                  Location
+                 {selectedLocation ? (country.find(c => c.iso_code === selectedLocation)?.name) : ( <span>Location</span> )}
                 </DropdownToggle>
                 {/* <DropdownMenu
                   style={{
@@ -206,6 +214,9 @@ const MentorFilter = ({
                     />
                   </div>
                   <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}>
+                    <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close" />
+                  </DropdownItem>}
                     {filteredCountry.map((c) => (
                       <DropdownItem key={c.iso_code} onClick={() => handleLocationSelect(c.iso_code)}>
                         {c.name}

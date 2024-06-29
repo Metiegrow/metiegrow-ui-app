@@ -118,11 +118,22 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   }, [location.search]);
   useEffect(() => {
     const mentorCardDetails = async () => {
-      const params = {
-        company: selectedIndustry,
-        location: selectedLocation,
-        skills: selectedSkills,
-      };
+      // const params = {
+      //   company: selectedIndustry,
+      //   location: selectedLocation,
+      //   skills: selectedSkills,
+      // };
+      const params = {};
+
+    if (selectedIndustry) {
+      params.company = selectedIndustry;
+    }
+    if (selectedLocation) {
+      params.location = selectedLocation;
+    }
+    if (selectedSkills) {
+      params.skills = selectedSkills;
+    }
       try {
         const response = await axios.get(url2,{params});
         setMentorDetails(response.data);
@@ -295,6 +306,9 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
             onIndustryChange={handleIndustryChange}
             onPriceChange={handlePriceChange}
             onLocationChange={handleLocationChange}
+            selectedSkills={selectedSkills}
+            selectedLocation={selectedLocation}
+            selectedIndustry={selectedIndustry}
           />
         </div>
     
