@@ -15,7 +15,7 @@ export default function Video(props) {
         <div className='col-xs-6' style={{ position: "relative" }}>
           <AgoraVideoPlayer
             videoTrack={tracks[1]}
-            style={{ height: "100%", width: "100%" }}
+            style={{ height: "100%", width: "100%", border: "5px solid white" }}
           />
           <div style={{ position: "absolute", bottom: 10, left: 10, color: "white", backgroundColor: "rgba(0,0,0,0.5)", padding: "5px" }}>
             {currentUser}
@@ -41,7 +41,7 @@ export default function Video(props) {
             <div className='col-xs-6'  style={{ position: "relative" }} key={users[0].uid}>
               <AgoraVideoPlayer
                 videoTrack={users[0].videoTrack}
-                style={{ height: "100%", width: "100%" }}
+                style={{ height: "100%", width: "100%", border: "5px solid white" }}
               />
               <div style={{ position: "absolute", bottom: 10, left: 10, color: "white", backgroundColor: "rgba(0,0,0,0.5)", padding: "5px" }}>
               {otherUser}

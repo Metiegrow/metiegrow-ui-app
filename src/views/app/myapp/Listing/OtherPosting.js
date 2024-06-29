@@ -35,13 +35,13 @@ const quillFormats = [
   "link",
   "image",
 ];
-const validate = (values) => {
-  const errors = {};
-  if (!values.title) {
-    errors.title = "Title is required";
-  }
-  return errors;
-};
+// const validate = (values) => {
+//   const errors = {};
+//   if (!values.title) {
+//     errors.title = "Title is required";
+//   }
+//   return errors;
+// };
 
 
 const OtherPosting = ({ closeModal }) => {
@@ -50,7 +50,7 @@ const OtherPosting = ({ closeModal }) => {
   const [description, setDescription] = useState("");
   // const [skills, setSkills] = useState([]);
 
-  const url = `${baseUrl}/api/posts/other-post`;
+  const url = `${baseUrl}/api/posts/other-post/`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
@@ -84,11 +84,11 @@ const OtherPosting = ({ closeModal }) => {
         <Colxx sm="12" md="12" lg="12" xxs="12" className="mx-auto ">
           <Formik
           initialValues={{
-            title: "",
-            job: "",
-            description: "",
+            title,
+            job,
+            description,
           }}
-          validate={validate}
+          // validate={validate}
           >
             {({ errors, touched }) => (
             <Form className="av-tooltip tooltip-label-right ">
@@ -101,7 +101,7 @@ const OtherPosting = ({ closeModal }) => {
                       name="title"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                        validate={validate}
+                        // validate={validate}
                     />
                     {errors.title && touched.title && (
                               <div className="invalid-feedback d-block">

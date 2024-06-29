@@ -11,7 +11,7 @@ const data = [
     id: "Mentor",
     icon: "simple-icon-people",
     label: "MentorShip",
-    to: `${adminRoot}/mentor`,
+    to: `${adminRoot}/mentor/list`,
     // subs: [
     //   {
     //     icon: 'simple-icon-user',
@@ -87,30 +87,30 @@ const data = [
     to: `${adminRoot}/alumni/alumnilists`,
   
   },
-  {
-    id: "myapplications",
-    icon: "iconsminds-folder",
-    label: "menu.myapplications",
-    to: `${adminRoot}/myapplications`,
-  },
-  {
-    id: "mydetails",
-    icon: "iconsminds-folder",
-    label: "menu.mydetails",
-    to: `${adminRoot}/mydetails`,
-  },
-  {
-    id: "mydocuments",
-    icon: "iconsminds-folder",
-    label: "menu.mydocuments",
-    to: `${adminRoot}/mydocuments`,
-  },
-  {
-    id: "App",
-    icon: "iconsminds-folder",
-    label: "menu.myapp",
-    to: `${adminRoot}/myapp`,
-  },
+  // {
+  //   id: "myapplications",
+  //   icon: "iconsminds-folder",
+  //   label: "menu.myapplications",
+  //   to: `${adminRoot}/myapplications`,
+  // },
+  // {
+  //   id: "mydetails",
+  //   icon: "iconsminds-folder",
+  //   label: "menu.mydetails",
+  //   to: `${adminRoot}/mydetails`,
+  // },
+  // {
+  //   id: "mydocuments",
+  //   icon: "iconsminds-folder",
+  //   label: "menu.mydocuments",
+  //   to: `${adminRoot}/mydocuments`,
+  // },
+  // {
+  //   id: "App",
+  //   icon: "iconsminds-folder",
+  //   label: "menu.myapp",
+  //   to: `${adminRoot}/myapp`,
+  // },
   // {
   //   id: "Login",
   //   icon: "iconsminds-folder",

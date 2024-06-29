@@ -1,27 +1,50 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-import {useParams,useLocation,useHistory} from "react-router-dom";
+import {useLocation,useHistory} from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
-import { baseUrl } from 'constants/defaultValues';
+import { adminRoot, baseUrl } from 'constants/defaultValues';
 import React, { useState ,useEffect} from 'react';
 import {  Button, Card, CardBody, CardText, Row } from 'reactstrap'
 // import RatingExamples from './RatingExamples';
 import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import Rating from 'components/common/Rating';
-import MentorDropDown from './MentorDropDown';
+import MentorFilter from './MentorFilter';
+// import MentorDropDown from './MentorDropDown';
 
 
 
 
 const MentorCard = () => {
+
+
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [selectedTools, setSelectedTools] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState("");
+  const [selectedPrice, setSelectedPrice] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
+
+  const handleSkillsChange = (skills) => setSelectedSkills(skills);
+  const handleToolsChange = (tools) => setSelectedTools(tools);
+  const handleIndustryChange = (industry) => setSelectedIndustry(industry);
+  const handlePriceChange = (price) => setSelectedPrice(price);
+  const handleLocationChange = (location) => setSelectedLocation(location);
+
+  console.log("skills",selectedSkills)
+  console.log("selectedTools",selectedTools)
+  console.log("selectedIndustry",selectedIndustry)
+  console.log("selectedPrice",selectedPrice)
+  console.log("selectedLocation",selectedLocation)
+
+	
   // const url1=`${baseUrl}/mentorDetails`
   const url1=`${baseUrl}/api/mentor`
+  const url2 = `${baseUrl}/api/mentor/cards`
   // const imageUrl = `${baseUrl}/api/public/images`;
   // To change to backend api url uncomment the below line
   // const url1=`${baseUrl}/api/mentor`
   const history = useHistory();
 
-  const {category}=useParams();
+  // const {category}=useParams();
   const location = useLocation();
 const firstNameParam = new URLSearchParams(location.search).get('firstName');
 const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
@@ -33,7 +56,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   // if (jobTitleParam) filteredUrl += `jobTitle=${jobTitleParam}&`;
   // Add more conditions for other parameters
   // const age = searchParams.get('age');
-  console.log('Category:', category);
+  // console.log('Category:', category);
   // const url=`${baseUrl}/mentor/cards`;
   // const url=`${baseUrl}/mentorDetails/?${firstNameParam}&jobTitle=${jobTitleParam}`;
   // const url1=`${baseUrl}/mentorDetails/${category}`;
@@ -42,7 +65,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   // const[mentorfilter,setMentorFilter]=useState([]);
   // const [image]=useState('');
   const [inputkey,setInputKey]=useState('')
-
+  const [filteredMentors, setFilteredMentors] = useState([]);
   const truncateBio = (bio, lineCount) => {
    
     const words = bio.split(' ');
@@ -95,8 +118,53 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
     };
     mentorCardDetails();
   }, [location.search]);
+  useEffect(() => {
+    const mentorCardDetails = async () => {
+      // const params = {
+      //   company: selectedIndustry,
+      //   location: selectedLocation,
+      //   skills: selectedSkills,
+      // };
+      const params = {};
 
- 
+    if (selectedIndustry) {
+      params.company = selectedIndustry;
+    }
+    if (selectedLocation) {
+      params.location = selectedLocation;
+    }
+    if (selectedSkills) {
+      params.skills = selectedSkills;
+    }
+      try {
+        const response = await axios.get(url2,{params});
+        setMentorDetails(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    mentorCardDetails();
+  }, [selectedLocation,selectedIndustry,selectedSkills]);
+
+  useEffect(() => {
+    const filterMentors = () => {
+      const filtered = mentordetails.filter((mentor) => {
+        const lowercasedFilter = inputkey.toLowerCase();
+        return (
+          mentor.jobTitle.toLowerCase().includes(lowercasedFilter) ||
+          mentor.skills.some(skill => skill.toLowerCase().includes(lowercasedFilter))
+        );
+      });
+      setFilteredMentors(filtered);
+    };
+    filterMentors();
+  }, [inputkey, mentordetails]);
+
+  // const history = useHistory();
+  const handleMySlotsClick = () =>{
+    history.push(`${adminRoot}/calendar/mentor/appointment`)
+  }
+  const role = localStorage.getItem("roleRes");
  
   
   // useEffect(() => {
@@ -162,6 +230,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
      
        <div className="">
         <div className="form-group">
+          
        <div className='input-group'>
        <input
             type="text"
@@ -178,12 +247,28 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
         
           
            
+       {role === "MENTOR" && (
+       
+       <Button color='primary' className='ml-3' onClick={handleMySlotsClick}>My slots</Button>
+       
+       )}
        </div>
-        
+      
+      
   
        
           
-          <MentorDropDown/>
+          {/* <MentorDropDown/> */}
+          <MentorFilter
+            onSkillsChange={handleSkillsChange}
+            onToolsChange={handleToolsChange}
+            onIndustryChange={handleIndustryChange}
+            onPriceChange={handlePriceChange}
+            onLocationChange={handleLocationChange}
+            selectedSkills={selectedSkills}
+            selectedLocation={selectedLocation}
+            selectedIndustry={selectedIndustry}
+          />
         </div>
     
         </div>
@@ -194,7 +279,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
 
       <div>
       
-        {mentordetails.length===0?(
+        {filteredMentors.length===0?(
           <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <Card>
           <CardBody>
@@ -203,7 +288,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
          </Card>
       </Colxx>
         ):(
-          mentordetails.map((mentors)=>{
+          Array.isArray(filteredMentors) && filteredMentors.map((mentors)=>{
     return (
       <Colxx xxs="12" key={mentors.id}>
       <Row>
@@ -246,7 +331,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
 
                     <div className='my-5  '>
                         <CardText className='text-primary '>
-                            <span className='text-xlarge font-weight-semibold'>₹{mentors.price}</span>/month
+                            <span className='text-xlarge font-weight-semibold'>₹{mentors.price}</span>/Hour
                         </CardText>
                     
                     </div> 

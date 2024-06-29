@@ -9,6 +9,7 @@ import {useParams,useHistory} from "react-router-dom";
 import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import LawyerTabCard from './LawyerTabCard';
 import ReviewsComponent from '../Reviews/ReviewsComponent';
+import country from '../my-login/Country';
 
 
 
@@ -94,6 +95,8 @@ const handleChatClick = () =>{
   history.push(`${adminRoot}/chat/${lawyerprofile.chatUserName}`)
 }
 const role = localStorage.getItem("roleRes");
+const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.name;
+
 
   return (
     <div>
@@ -124,8 +127,10 @@ const role = localStorage.getItem("roleRes");
                   <img 
               // src={lawyerprofile.image} 
               src={`${baseUrl}/${lawyerprofile.imageUrl}`} 
-              className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
+              // className='col-2 col-sm-4 col-xs-4  mx-2 mx-sm-2 w-100 col-lg-2 col-xl-2 rounded-circle img-thumbnail border' 
+              className="mx-2 rounded-circle img-thumbnail border"
               alt="" 
+              style={{width: "110px", height: "110px", objectFit: "cover"}}
             />
                  )}
        
@@ -163,7 +168,7 @@ const role = localStorage.getItem("roleRes");
            
            
             
-            <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{lawyerprofile.location}</span></h5>
+            <h5 className='font-weight-medium'><i className='simple-icon-location-pin text-primary'/><span className='ml-2'>{countryName}</span></h5>
             <h6 className=''><i className='simple-icon-star text-primary '/><span className='ml-2'>{lawyerprofile.star} ({lawyerprofile.ratings} reviews)</span></h6>
            {/* <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6> */}
           </div>

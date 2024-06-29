@@ -72,14 +72,14 @@ SessionHistroy();
 SessionUpcomingHistroy();
 },[])
 
-const [currentTime, setCurrentTime] = useState(new Date())
-useEffect(() => {
-  const intervalId = setInterval(() => {
-    setCurrentTime(new Date());
-  }, 30000); 
+// const [currentTime, setCurrentTime] = useState(new Date())
+// useEffect(() => {
+//   const intervalId = setInterval(() => {
+//     setCurrentTime(new Date());
+//   }, 30000); 
 
-  return () => clearInterval(intervalId); 
-}, []);
+//   return () => clearInterval(intervalId); 
+// }, []);
 
 
   return (
@@ -173,14 +173,14 @@ useEffect(() => {
       const updateformat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       const timeOptions = { hour: '2-digit', minute: '2-digit' };
 
-      const isWithinFiveMinutes = (fromTimeStamp) => {
-        const fiveMinutesInMs = 5 * 60 * 1000; 
-        // const currentTime = new Date().getTime();
-        const fromTime = new Date(fromTimeStamp).getTime();
-        const timeDiff = fromTime - currentTime;
+      // const isWithinFiveMinutes = (fromTimeStamp) => {
+      //   const fiveMinutesInMs = 5 * 60 * 1000; 
+      //   // const currentTime = new Date().getTime();
+      //   const fromTime = new Date(fromTimeStamp).getTime();
+      //   const timeDiff = fromTime - currentTime;
       
-        return timeDiff >= 0 && timeDiff <= fiveMinutesInMs;
-      };
+      //   return timeDiff >= 0 && timeDiff <= fiveMinutesInMs;
+      // };
 
       return (
         <div key={up.mentorId}>
@@ -242,7 +242,7 @@ useEffect(() => {
                   <Label className='text-one mr-2'>Mode:</Label>
                   <h4 className='font-weight-bold'>{up.mode}</h4>
                 </div>
-                <Button disabled={!isWithinFiveMinutes(up.fromTimeStamp)} outline color='primary' className='mt-2 text-one text-primary' onClick={() => handleJoinCall(up.mentorId,up.id)}>Join Call</Button> 
+                <Button  outline color='primary' className='mt-2 text-one ' onClick={() => handleJoinCall(up.mentorId,up.id)}>Join Call</Button> 
               </div>
             </CardBody>
           </Card>

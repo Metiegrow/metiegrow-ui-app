@@ -125,31 +125,31 @@ function* logout({ payload }) {
   yield call(logoutAsync, history);
 }
 
-export function* watchForgotPassword() {
-  // eslint-disable-next-line no-use-before-define
-  yield takeEvery(FORGOT_PASSWORD, forgotPassword);
-}
+
 
 const forgotPasswordAsync = async (email) => {
-  // eslint-disable-next-line no-return-await
-  return await auth
+  // eslint-disable-next-line
+  return await authService
     .sendPasswordResetEmail(email)
     .then((user) => user)
     .catch((error) => error);
 };
 
 function* forgotPassword({ payload }) {
-  const { email } = payload.forgotUserMail;
+  const { forgotUserMail } = payload;
   try {
-    const forgotPasswordStatus = yield call(forgotPasswordAsync, email);
-    if (!forgotPasswordStatus) {
+    const forgotPasswordStatus = yield call(forgotPasswordAsync, forgotUserMail);
+    if (forgotPasswordStatus && forgotPasswordStatus.status === 200) {
       yield put(forgotPasswordSuccess('success'));
     } else {
-      yield put(forgotPasswordError(forgotPasswordStatus.message));
+      yield put(forgotPasswordError(forgotPasswordStatus.message || 'Unknown error occurred'));
     }
   } catch (error) {
-    yield put(forgotPasswordError(error));
+    yield put(forgotPasswordError(error.message || 'Unknown error occurred'));
   }
+}
+export function* watchForgotPassword() {
+  yield takeEvery(FORGOT_PASSWORD, forgotPassword);
 }
 
 export function* watchResetPassword() {
@@ -157,29 +157,31 @@ export function* watchResetPassword() {
   yield takeEvery(RESET_PASSWORD, resetPassword);
 }
 
-const resetPasswordAsync = async (resetPasswordCode, newPassword) => {
+const resetPasswordAsync = async ( newPassword, confirmPassword, email) => {
   // eslint-disable-next-line no-return-await
-  return await auth
-    .confirmPasswordReset(resetPasswordCode, newPassword)
+  return await authService
+    .confirmPasswordReset( newPassword, confirmPassword, email)
     .then((user) => user)
     .catch((error) => error);
 };
 
 function* resetPassword({ payload }) {
-  const { newPassword, resetPasswordCode } = payload;
+  const { newPassword, confirmPassword, email } = payload;
   try {
     const resetPasswordStatus = yield call(
       resetPasswordAsync,
-      resetPasswordCode,
-      newPassword
+      confirmPassword,
+      newPassword,
+      email
     );
-    if (!resetPasswordStatus) {
+    if (resetPasswordStatus && resetPasswordStatus.status === 200) {
+      console.log("vv",resetPasswordStatus)
       yield put(resetPasswordSuccess('success'));
     } else {
-      yield put(resetPasswordError(resetPasswordStatus.message));
+      yield put(resetPasswordError(resetPasswordStatus.message || 'Unknown error occurred'));
     }
   } catch (error) {
-    yield put(resetPasswordError(error));
+    yield put(resetPasswordError(error || 'Unknown error occurred'));
   }
 }
 

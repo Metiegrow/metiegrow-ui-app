@@ -22,7 +22,7 @@ const MyWallet = () => {
   // const [transactionIdCounter, setTransactionIdCounter] = useState(1);
   const [transactions, setTransactions] = useState([]);
   const [rechargeAmount, setRechargeAmount] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false)
   // const url = `${baseUrl}/wallets`;
   // const url = `${baseUrl}/wallets`;
   const url1 = `${baseUrl}/api/transactions`;
@@ -61,16 +61,26 @@ const MyWallet = () => {
   const postData = async (amount) => {
     const url2 = `${baseUrl}/api/paytm/makePayment?amount=${amount}`;
     try {
+      setIsLoading(true);
       const response = await axios.post(url2);
 
-    fetchDataFromServer();
-    // console.log("recharge",response)
-    NotificationManager.success(response.data, 'Great!', 3000, null, null, '');
+      // console.log("recharge",response)
+      
+      setTimeout(() => {
+          fetchDataFromServer();
+          // NotificationManager.success(response.data.statuses[0].message, 'Great!', 3000, null, null, '');
+          response.data.statuses.forEach((status) => {
+            NotificationManager.success(status.message, status.status, 3000, null, null, '');
+        });
+          setIsLoading(false);
+    }, 3000);
 
     } catch (error) {
-      NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
       console.error("Error making payment", error);
-
+      setTimeout(() => {
+        NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
+        setIsLoading(false);
+      }, 3000);
 
     }
   };
@@ -162,12 +172,20 @@ const MyWallet = () => {
             type="submit"
             color="primary"
             onClick={handleRecharge}
-            className="col-12 col-md-3"
+            className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
+              isLoading ? "show-spinner" : ""
+            }`}
           >
-            Add money to Wallet
+            <span className="spinner d-inline-block">
+                                <span className="bounce1" />
+                                <span className="bounce2" />
+                                <span className="bounce3" />
+                              </span>
+                              <span className="label">Add money to Wallet</span>
+
           </Button>
         </Form>
-
+        
         <div className="mt-4">
           <h2>Recent Transactions</h2>
           {/* <ListGroup> */}

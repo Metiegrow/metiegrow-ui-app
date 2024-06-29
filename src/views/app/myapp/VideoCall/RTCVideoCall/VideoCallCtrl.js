@@ -5,7 +5,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 import { Button } from "reactstrap";
-import { config, useClient, useMicrophoneAndCameraTracks } from "./settings";
+import { useClient, useMicrophoneAndCameraTracks } from "./settings";
 
 import Video from "./Video";
 import Controls from "./Controls";
@@ -14,7 +14,7 @@ const VideoCallCtrl = (props) => {
   const { setInCall } = props;
   const [users, setUsers] = useState([]);
   const [start, setStart] = useState(false);
-  const [connectionState, setConnectionState] = useState("");
+  // const [connectionState, setConnectionState] = useState("");
   const [callStartTime, setCallStartTime] = useState(null);
   // const [startTime, setStartTime] = useState(0)
   const [endTime, setEndTime] = useState(0);
@@ -23,13 +23,13 @@ const VideoCallCtrl = (props) => {
   const [channelName, setChannelName] = useState("");
   const [status, setStatus] = useState("");
   const [rtcToken, setRtcToken] = useState(null);
+  const [appId, setAppId] = useState(null)
   const [bookedByName, setBookedByName] =useState("");
   const [createdByName, setCreatedByName] = useState("");
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const { userId, id } = useParams();
   const history = useHistory();
-
   // const currentTime = Date.now();
 
   //     const durationMs = currentTime - endTime;
@@ -66,6 +66,7 @@ const VideoCallCtrl = (props) => {
         // console.log("resp",response)
         setRtcToken(response.data.rtcToken);
         setChannelName(response.data.channelName);
+        setAppId(response.data.appId);
         // setStartTime(response.data.startTime)
         setEndTime(response.data.endTime);
         setCreatedByName(response.data.createdByName);
@@ -175,7 +176,7 @@ const VideoCallCtrl = (props) => {
 
       client.on("connection-state-change", (state) => {
         console.log("Connection state changed:", state);
-        setConnectionState(state);
+        // setConnectionState(state);
       });
 
       client.on("user-published", async (user, mediaType) => {
@@ -228,7 +229,7 @@ const VideoCallCtrl = (props) => {
      
 
       try {
-        await client.join(config.appId, name, rtcToken, null);
+        await client.join(appId, name, rtcToken, null);
       } catch (error) {
         console.log("error");
       }
@@ -329,7 +330,7 @@ const VideoCallCtrl = (props) => {
       <div className="row p-0 d-flex justify-content-between">
         {/* <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4> */}
         {callStartTime && (
-          <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4>
+          <h4 className="mr-auto text-muted">Initiated Time: {initiatedTime}</h4>
         )}
         {/* <h4>
           Time Remaining :{" "}
@@ -366,7 +367,7 @@ const VideoCallCtrl = (props) => {
               setInCall={setInCall}
               setStatus={setStatus}
             />
-            <p>Connection State: {connectionState}</p>
+            {/* <p>Connection State: {connectionState}</p> */}
           </>
         )}
       </div>

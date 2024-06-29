@@ -31,7 +31,7 @@
             .then(response => response.json())
             .then(data => {
                 const rtmToken = data.rtmToken;
-                console.log("tmToken",rtmToken)
+                // console.log("tmToken",rtmToken)
                 AgoraEduSDK.config({
                     appId: '27671fc2e9ba4a218703efe56d740034',
                     region: 'NA'
@@ -46,10 +46,11 @@
                     pretest: true, // Whether to enable pre-class equipment detection.
                     rtmToken: rtmToken, 
                     language: 'en', // The language of the classroom interface. If the interface is in English, set it to 'en'.
+                    startTime: new Date().getTime(),
                     duration: 60 * 60, // Course time in seconds.
                     recordUrl: 'https://solutions-apaas.agora.io/apaas/record/dev/2.8.0/record_page.html',
                     courseWareList: [],
-                    virtualBackgroundImages: ["src/assets/img/details/1.jpg"], // Virtual background image resource list.
+                    virtualBackgroundImages: [".src/assets/img/details/1.jpg"], // Virtual background image resource list.
                     webrtcExtensionBaseUrl: 'https://solutions-apaas.agora.io/static', // WebRTC Plug-in deployment address.
                     uiMode: 'light', // Set the classroom interface to bright mode. If you want the interface to be in dark mode, set it to 'dark'.
                     widgets: {

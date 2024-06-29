@@ -1,79 +1,148 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Card, CardTitle, Label, FormGroup, Button } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import { connect } from 'react-redux';
-import { Colxx } from 'components/common/CustomBootstrap';
-import IntlMessages from 'helpers/IntlMessages';
-import { resetPassword } from 'redux/actions';
-import { NotificationManager } from 'components/common/react-notifications';
+import React, { useState, useEffect } from "react";
+import { Row, Card, CardTitle, Label, FormGroup, Button } from "reactstrap";
+import { NavLink, useHistory } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
+import { connect } from "react-redux";
+import { Colxx } from "components/common/CustomBootstrap";
+import IntlMessages from "helpers/IntlMessages";
+import { resetPassword } from "redux/actions";
+import { NotificationManager } from "components/common/react-notifications";
+import { authService } from "services/authservice";
 
 const validateNewPassword = (values) => {
-  const { newPassword, newPasswordAgain } = values;
+  const { newPassword, confirmPassword } = values;
   const errors = {};
-  if (newPasswordAgain && newPassword !== newPasswordAgain) {
-    errors.newPasswordAgain = 'Please check your new password';
+  if (confirmPassword && newPassword !== confirmPassword) {
+    errors.confirmPassword = "Please check your new password";
   }
   return errors;
 };
 
 const ResetPassword = ({
-  location,
-  history,
+  // location,
+  // history,
   loading,
   error,
-  resetPasswordAction,
+  // resetPasswordAction,
+  email,
 }) => {
-  const [newPassword] = useState('');
-  const [newPasswordAgain] = useState('');
+  const [newPassword] = useState("");
+  const [confirmPassword] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
+  // console.log("emailv",email)
+  const history = useHistory();
 
   useEffect(() => {
     if (error) {
       NotificationManager.warning(
         error,
-        'Forgot Password Error',
+        "Forgot Password Error",
         3000,
         null,
         null,
-        ''
+        ""
       );
-    } else if (!loading && newPassword === 'success')
+    } else if (!loading && newPassword === "success")
       NotificationManager.success(
-        'Please login with your new password.',
-        'Reset Password Success',
+        "Please login with your new password.",
+        "Reset Password Success",
         3000,
         null,
         null,
-        ''
+        ""
       );
+    // history.push("/login")
   }, [error, loading, newPassword]);
 
-  const onResetPassword = (values) => {
+  // const onResetPassword = (values) => {
+  //   if (!loading) {
+  //     // const params = new URLSearchParams(location.search);
+  //     // const oobCode = params.get('oobCode');
+
+  //       if (values.newPassword !== '') {
+  //       //   resetPasswordAction({
+  //       //     newPassword: values.newPassword,
+  //       //     confirmPassword: values.confirmPassword,
+  //       //     email,
+  //       //     // history
+  //       //   });
+  //       // }
+  //       const response = await authService.confirmPasswordReset(
+  //         newPassword,
+  //           confirmPassword,
+  //           email,
+  //       ) ;if (response && response.status === 200) {
+  //         setIsSubmitted(true)
+  //         console.log("resetsuccess")
+  //         // history.push('/login');
+  //     }
+  //      else {
+  //       NotificationManager.warning(
+  //         'Please check your email url.',
+  //         'Reset Password Error',
+  //         3000,
+  //         null,
+  //         null,
+  //         ''
+  //       );
+  //     }
+  //   }
+  // };
+  const onResetPassword = async (values) => {
+    setResetLoading(true);
     if (!loading) {
-      const params = new URLSearchParams(location.search);
-      const oobCode = params.get('oobCode');
-      if (oobCode) {
-        if (values.newPassword !== '') {
-          resetPasswordAction({
+      try {
+        if (values.newPassword !== "") {
+          const response = await authService.confirmPasswordReset({
             newPassword: values.newPassword,
-            resetPasswordCode: oobCode,
-            history,
+            confirmPassword: values.confirmPassword,
+            email,
           });
+
+          if (response && response.status === 200) {
+            // setIsSubmitted(true);
+            // console.log("Reset success");
+            // history.push("/login");
+            setTimeout(() => {
+              response.data.statuses.forEach((status) => {
+                NotificationManager.success(
+                  status.message,
+                  "Great!",
+                  6000,
+                  null,
+                  null,
+                  ""
+                );
+              });
+              history.push("/login");
+              setResetLoading(false);
+            }, 3000);
+          } else {
+            NotificationManager.warning(
+              "Please check your email url.",
+              "Reset Password Error",
+              3000,
+              null,
+              null,
+              ""
+            );
+          }
         }
-      } else {
-        NotificationManager.warning(
-          'Please check your email url.',
-          'Reset Password Error',
+      } catch (er) {
+        console.error("An error occurred during password reset:", er);
+        NotificationManager.error(
+          "An unexpected error occurred.",
+          "Reset Password Error",
           3000,
           null,
           null,
-          ''
+          ""
         );
       }
     }
   };
 
-  const initialValues = { newPassword, newPasswordAgain };
+  const initialValues = { newPassword, confirmPassword };
 
   return (
     <Row className="h-100">
@@ -83,7 +152,7 @@ const ResetPassword = ({
             <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
             <p className="white mb-0">
               Please use your e-mail to reset your password. <br />
-              If you are not a member, please{' '}
+              If you are not a member, please{" "}
               <NavLink to="/register" className="white">
                 register
               </NavLink>
@@ -94,9 +163,7 @@ const ResetPassword = ({
             <NavLink to="/" className="white">
               <span className="logo-single" />
             </NavLink>
-            <CardTitle className="mb-4">
-              <IntlMessages id="user.reset-password" />
-            </CardTitle>
+            <CardTitle className="mb-4">Reset password</CardTitle>
 
             <Formik
               validate={validateNewPassword}
@@ -106,9 +173,7 @@ const ResetPassword = ({
               {({ errors, touched }) => (
                 <Form className="av-tooltip tooltip-label-bottom">
                   <FormGroup className="form-group has-float-label">
-                    <Label>
-                      <IntlMessages id="user.new-password" />
-                    </Label>
+                    <Label>New password</Label>
                     <Field
                       className="form-control"
                       name="newPassword"
@@ -116,29 +181,25 @@ const ResetPassword = ({
                     />
                   </FormGroup>
                   <FormGroup className="form-group has-float-label">
-                    <Label>
-                      <IntlMessages id="user.new-password-again" />
-                    </Label>
+                    <Label>Confirm new password</Label>
                     <Field
                       className="form-control"
-                      name="newPasswordAgain"
+                      name="confirmPassword"
                       type="password"
                     />
-                    {errors.newPasswordAgain && touched.newPasswordAgain && (
+                    {errors.confirmPassword && touched.confirmPassword && (
                       <div className="invalid-feedback d-block">
-                        {errors.newPasswordAgain}
+                        {errors.confirmPassword}
                       </div>
                     )}
                   </FormGroup>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <NavLink to="/user/login">
-                      <IntlMessages id="user.login-title" />
-                    </NavLink>
+                    <NavLink to="/login">Back to login</NavLink>
                     <Button
                       color="primary"
                       className={`btn-shadow btn-multiple-state ${
-                        loading ? 'show-spinner' : ''
+                        resetLoading ? "show-spinner" : ""
                       }`}
                       size="lg"
                     >

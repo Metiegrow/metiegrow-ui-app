@@ -11,12 +11,13 @@ import {
   Button,
 } from "reactstrap";
 import { Colxx } from "components/common/CustomBootstrap";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 const ViewJobListing = () => {
   const [copied, setCopied] = useState(false);
   const [data, setData] = useState();
   const { id } = useParams();
-  const url = `${baseUrl}/joblistingcard/${id}`;
+  const url = `${baseUrl}/api/posts/job-post/${id}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +66,7 @@ const ViewJobListing = () => {
                       <NavLink to="#" location={{}}>
                         <p className="font-weight-medium mb-0 ">Name</p>
                         <p className="text-muted mb-0 text-small">
-                          {new Date(data.postedOn).toLocaleString()}
+                    Posted on <TimestampConverter timeStamp={data.postedOn} format="datetime" />
                         </p>
                       </NavLink>
                     </div>
@@ -128,7 +129,7 @@ const ViewJobListing = () => {
                     ))}
                   </Col>
                 </Row>
-                <div className="mt-2">{data.description}</div>
+                <div className="mt-2" dangerouslySetInnerHTML={{ __html: data.description }} />
                 <Row className="">
                   <Col className="">
                     <div className="text-muted mt-2">

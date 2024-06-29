@@ -1089,22 +1089,23 @@ if (response.data.steps && response.data.steps.length > 0) {
       )}
      </Col>
      </FormGroup>
-     
-                </>
-              ) : (
-                <>
-                        <FormGroup className='py-2'>
+    
+   
+                    </>
+                  ) : (
+                    <>
+                            <FormGroup className='py-2'>
 
-                  <Col sm={2}>
-                  <Label className='text-one'>Name</Label>
-                  </Col>
-                  <Col>
-                  <h3>{selectedStep.stepName}</h3>
+                      <Col sm={2}>
+                      <Label className='text-one'>Name</Label>
+                      </Col>
+                      <Col>
+                      <h3>{selectedStep.stepName}</h3>
 
-                  </Col>
+                      </Col>
 
-                      
-                      </FormGroup>
+                          
+                          </FormGroup>
                   <FormGroup  className='py-2'>
                   <Col sm={2}>
                   <Label className='text-one'>Description</Label>
@@ -1160,7 +1161,15 @@ if (response.data.steps && response.data.steps.length > 0) {
                   </Col>
                     
                     </FormGroup>
-                    
+                    {/* <FormGroup>
+                    <Col sm={2}>
+                    <Label className='text-one'>Comment</Label>
+                    </Col>
+                    <Col>
+                    <Input type="textarea" name="comment" />
+                    </Col>
+                      
+                      </FormGroup> */}
                   <FormGroup>
                     <Col sm={2}>
                       <Label className='text-one'>
@@ -1169,7 +1178,25 @@ if (response.data.steps && response.data.steps.length > 0) {
                     </Col>
                     <Col>
                     
+                    {/* <h3>{selectedStep.status}</h3> */}
+                    {/* <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name"
                     
+                    value={selectedStep.status}
+                    
+                    onChange={(val) => {
+                  console.log(val);  
+                    setSelectedOption(val);
+                    setSelectedStep(val);
+                    saveStatus(val.key);
+                }}
+                    
+                      options={selectData}
+                    
+                  /> */}
 
                   {(selectedStep.doneBy === 'LAWYER' && isLawyer) || selectedStep.doneBy === 'CLIENT' ? (
                   <Select
@@ -1191,7 +1218,21 @@ if (response.data.steps && response.data.steps.length > 0) {
                 )}
 
 
-                 
+                  {/* <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name"
+                    value={selectData.find(option => option.value === selectedStep.status)}
+                    placeholder={selectedStep.status ? selectedStep.status : 'Select status'}
+                    onChange={(val) => {
+                      console.log(val);
+                      setSelectedStep({ ...selectedStep, status: val.value });
+                      saveStatus(val.key);
+                    }}
+                    options={selectData}
+                  /> */}
+                    
 
                     
                     
@@ -1201,7 +1242,45 @@ if (response.data.steps && response.data.steps.length > 0) {
 
 
 
-                    
+                    {/* <FormGroup className='py-2'>
+                    <Col sm={2}>
+                      <Label>Status</Label>
+                    </Col>
+                    <Col>
+                    <Select
+                  components={{ Input: CustomSelectInput }}
+                  className="react-select"
+                  classNamePrefix="react-select"
+                  name="form-field-name"
+                  
+                  value={selectedStep.status}
+                  
+                  onChange={(val) => {
+                console.log(val);  
+                setSelectedOption(val);
+                setSelectedStep(val);
+                saveStatus(val.key);
+            }}
+                
+                  options={selectData}
+                
+              />
+              
+              </Col>
+            </FormGroup> */}
+                    {/* <FormGroup>
+                      <Label>
+                        Status
+                      </Label>
+                      <Input type="select">
+                        
+                        <option>{selectedStep.status}</option>
+                        <option>In Progress</option>
+                        <option>completed</option>
+                        
+                         
+                      </Input>
+                    </FormGroup> */}
                     </>
 
                     

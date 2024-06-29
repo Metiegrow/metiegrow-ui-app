@@ -6,9 +6,10 @@ import { Button, Card, CardBody, CardText, Col, Row } from 'reactstrap';
 import {useHistory} from "react-router-dom";
 import { baseUrl } from 'constants/defaultValues';
 import Rating from 'components/common/Rating';
-import MentorDropDown from '../mentorship/MentorDropDown';
+// import MentorDropDown from '../mentorship/MentorDropDown';
 import './ThumbnailImage.css'
 
+import LawyerCardFilter from './LawyerCardFilter';
 
 
 
@@ -61,8 +62,7 @@ const UserCard = () => {
        </div>
         
   
-      
-          <MentorDropDown/>
+        <LawyerCardFilter />
         </div>
     
         </div>
@@ -106,6 +106,7 @@ const UserCard = () => {
                      className="card-img-left"
                      src={`${baseUrl}/${users.imageUrl}`} 
                      alt="Card"
+                    style={{ minWidth: '150px', minHeight: '300px' }}
                    />
                  )}
                  {/* <img src="/assets/img/profiles/1.jpg" alt='card' className='card-img-left'/> */}

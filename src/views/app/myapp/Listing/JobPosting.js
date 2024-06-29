@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Colxx } from "components/common/CustomBootstrap";
-import { Row, Card, Button, FormGroup, Label, Col, Form } from "reactstrap";
+import { Row, Card, Button, FormGroup, Label, Col, Form, FormText } from "reactstrap";
 import ReactQuill from "react-quill";
 
 import "react-quill/dist/quill.snow.css";
@@ -8,6 +8,9 @@ import "react-quill/dist/quill.bubble.css";
 import { Field, Formik } from "formik";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
+import TagsInput from "react-tagsinput";
+import 'react-tagsinput/react-tagsinput.css';
+import { EmploymentTypeData, WorkPlaceTypeData } from "./ListingData";
 
 const quillModules = {
   toolbar: [
@@ -36,23 +39,29 @@ const quillFormats = [
   "image",
 ];
 
-const WorkPlaceTypeData = ["Onsite", "Hybrid", "Remote"];
-const EmploymentTypeData = [
-  "Full time",
-  "Part time",
-  "Temporary",
-  "Volunteer",
-  "Internship",
-  "Contract",
-];
+// const WorkPlaceTypeData = [
+//   { label: "Onsite", value: 0 },
+//   { label: "Hybrid", value: 1 },
+//   { label: "Remote", value: 2 },
+// ];
 
-const validateJobTitle = (value) => {
-  let error;
-  if (!value) {
-     error = 'Job title is required';
-  }
-  return error;
- };
+// const EmploymentTypeData = [
+//   { label: "Full time", value: 0 },
+//   { label: "Part time", value: 1 },
+//   { label: "Temporary", value: 2 },
+//   { label: "Volunteer", value: 3 },
+//   { label: "Internship", value: 4 },
+//   { label: "Contract", value: 5 },
+// ];
+
+
+// const validateJobTitle = (value) => {
+//   let error;
+//   if (!value) {
+//      error = 'Job title is required';
+//   }
+//   return error;
+//  };
  
  const validateDescription = (value) => {
   let error;
@@ -64,42 +73,50 @@ const validateJobTitle = (value) => {
  
 
 const JobPosting = ({ closeModal }) => {
-  // const [jobTitle, setJobTitle] = useState("");
-  // const [company, setCompany] = useState("");
-  // const [workPlaceType, setWorkPlaceType] = useState("");
-  // const [jobLocation, setJobLocation] = useState("");
-  // const [employmentType, setEmploymentType] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [skills, setSkills] = useState([]);
+  const [title, setTitle] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [company, setCompany] = useState("");
+  const [workPlaceType, setWorkPlaceType] = useState(null);
+  const [jobLocation, setJobLocation] = useState("");
+  const [employmentType, setEmploymentType] = useState(null);
+  const [description, setDescription] = useState("");
+  const [skillsTag, setSkillsTag] = useState([]);
 
-  const url = `${baseUrl}/api/posts/job-post`;
+  const url = `${baseUrl}/api/posts/job-post/`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
   }
   const token = getTokenRes();
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async () => {
+    console.log("jobpostsubmit")
     try {
-      // const Data = {
-      //   jobTitle,
-      //   company,
-      //   workPlaceType,
-      //   jobLocation,
-      //   employmentType,
-      //   description,
-      //   skills,
-      // };
-      await axios.post(url, values, {
+      const data = {
+        title,
+        jobTitle,
+        company,
+        workPlaceType,
+        jobLocation,
+        employmentType,
+        description,
+        skills: skillsTag,
+      };
+      await axios.post(url, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      closeModal(); 
       console.log("job posted successfully");
     } catch (error) {
       console.error("Error posting job:", error);
     }
+  };
+
+  const handleTagsChange = (newSkills) => {
+    // setSkillError(false);
+    setSkillsTag(newSkills);
   };
 
   return (
@@ -109,6 +126,7 @@ const JobPosting = ({ closeModal }) => {
         <Colxx sm="12" md="12" lg="12" xxs="12" className="mx-auto ">
           <Formik
           initialValues={{
+            title: "",
             jobTitle: "",
         company: "",
         workPlaceType: "",
@@ -129,13 +147,33 @@ const JobPosting = ({ closeModal }) => {
         //     }
         //     return errors;
         //  }}
-         onSubmit={(values) => {
-            handleSubmit(values);
-            closeModal(); 
-          }}
+        //  onSubmit={(values) => {
+        //     handleSubmit(values);
+        //     closeModal(); 
+        //   }}
           >
              {({ isValid, errors, touched  }) => (
             <Form className="av-tooltip tooltip-label-right ">
+              <Row>
+                <Col md={12}>
+                  <FormGroup className="error-l-75">
+                    <Label>Title*</Label>
+                    <Field
+                      className="form-control"
+                      name="title"
+                      onChange={(e) => setTitle(e.target.value)}
+                        // validate={validateJobTitle}
+                        value={title}
+                    />
+                    {errors.title && touched.title && (
+                              <div className="invalid-feedback d-block">
+                                {errors.title}
+                              </div>
+                            )}
+                  </FormGroup>
+                </Col>
+                
+              </Row>
               <Row>
                 <Col md={6}>
                   <FormGroup className="error-l-75">
@@ -143,8 +181,9 @@ const JobPosting = ({ closeModal }) => {
                     <Field
                       className="form-control"
                       name="jobTitle"
-                      // onChange={(e) => setJobTitle(e.target.value)}
-                        validate={validateJobTitle}
+                      onChange={(e) => setJobTitle(e.target.value)}
+                        // validate={validateJobTitle}
+                        value={jobTitle}
                     />
                     {errors.jobTitle && touched.jobTitle && (
                               <div className="invalid-feedback d-block">
@@ -159,8 +198,9 @@ const JobPosting = ({ closeModal }) => {
                     <Field
                       className="form-control"
                       name="company"
-                      // onChange={(e) => setCompany(e.target.value)}
+                      onChange={(e) => setCompany(e.target.value)}
                       //   validate={}
+                      value={company}
                     />
                     {/* {errors.company && touched.company && (
                               <div className="invalid-feedback d-block">
@@ -178,17 +218,18 @@ const JobPosting = ({ closeModal }) => {
                     <Field
                       as="select"
                       name="workPlaceType"
-                      // onChange={(e) => setWorkPlaceType(e.target.value)}
+                      onChange={(e) => setWorkPlaceType(e.target.value)}
                       //   validate={}
                       className="form-control"
-                      // value={workPlaceType || ""}
+                      value={workPlaceType || ""}
                     >
                       <option key="" value="" disabled>
                         Select Work place Type
                       </option>
-                      {WorkPlaceTypeData.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                      {WorkPlaceTypeData.map((option,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
                         </option>
                       ))}
                     </Field>
@@ -205,8 +246,9 @@ const JobPosting = ({ closeModal }) => {
                     <Field
                       className="form-control"
                       name="jobLocation"
-                      // onChange={(e) => setJobLocation(e.target.value)}
+                      onChange={(e) => setJobLocation(e.target.value)}
                       //   validate={}
+                      value={jobLocation}
                     />
                     {/* {errors.jobLocation && touched.jobLocation && (
                               <div className="invalid-feedback d-block">
@@ -221,17 +263,18 @@ const JobPosting = ({ closeModal }) => {
                 <Field
                   as="select"
                   name="employmentType"
-                  // onChange={(e) => setEmploymentType(e.target.value)}
+                  onChange={(e) => setEmploymentType(e.target.value)}
                   //   validate={}
                   className="form-control"
-                  // value={employmentType || ""}
+                  value={employmentType || ""}
                 >
                   <option key="" value="" disabled>
                     Select Employment type
                   </option>
-                  {EmploymentTypeData.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {EmploymentTypeData.map((option,index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <option key={index} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
                 </Field>
@@ -248,8 +291,8 @@ const JobPosting = ({ closeModal }) => {
                   <Colxx xxs="12">
                     <ReactQuill
                       theme="snow"
-                      // value={description}
-                      // onChange={(val) => setDescription(val)}
+                      value={description}
+                      onChange={(val) => setDescription(val)}
                       modules={quillModules}
                       formats={quillFormats}
                       validate={validateDescription}
@@ -273,7 +316,7 @@ const JobPosting = ({ closeModal }) => {
                   onChange={(e) => setSkills(e.target.value)}
                 />
               </div> */}
-              <FormGroup>
+              {/* <FormGroup>
                 <Label for="skills">Skills</Label>
                 <Field
                   type="text"
@@ -282,24 +325,56 @@ const JobPosting = ({ closeModal }) => {
                   className="form-control"
                   placeholder="Enter skills (comma-separated)"
                   // validate={validateSkills}
-                  // onChange={(e) => {
-                  //   const skillArray = e.target.value
-                  //     .split(",")
-                  //     .map((skill) => skill.trim());
-                  //   setSkills("skills", skillArray);
-                  // }}
+                  value={skills}
+                  onChange={(e) => {
+                    const skillArray = e.target.value
+                      .split(",")
+                      .map((skill) => skill.trim());
+                    setSkills("skills", skillArray);
+                  }}
                 />
                 
-              </FormGroup>
+              </FormGroup> */}
+              <FormGroup>
+                    <Label for="skills">Skills</Label>
+                    {/* <Field
+                      type="text"
+                      name="skills"
+                      id="skills"
+                      className="form-control"
+                      placeholder="Enter your skills (comma-separated)"
+                      validate={validateSkills}
+                      onChange={(e) => {
+                        const skillArray = e.target.value
+                          .split(",")
+                          .map((skill) => skill.trim());
+                        setFieldValue("skills", skillArray);
+                      }}
+                      autoComplete="off"
+                    /> */}
+                    
+                    <TagsInput
+                        value={skillsTag}
+                        onChange={handleTagsChange}
+                        inputProps={{ placeholder: "Add skills " }}
+                        // validate={validateSkills}
+                      />
+                    {/* {skillError && (
+                      <div className="invalid-feedback d-block">
+                        {skillErrorMessage}
+                      </div>
+                    )} */}
+                    <FormText>Add skill and press Enter </FormText>
+                    
+                  </FormGroup>
               <div className="mt-3">
                 <Button
                   color="primary "
                   className="default  py-2 "
-                  // onClick={() => {
-                  //   handleSubmit();
-                  //   closeModal(); 
-                  // }}
-                  type="submit"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  // type="submit"
                   disabled={!isValid}
                 >
                   Post a job

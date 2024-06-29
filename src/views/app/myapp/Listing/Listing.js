@@ -182,13 +182,13 @@ const DetailsAltPages = () => {
               <All />
             </TabPane>
             <TabPane tabId="job">
-              <JobListing />
+              <JobListing modal={modal} />
             </TabPane>
             <TabPane tabId="stay">
-              <StayListing />
+              <StayListing modal={modal} />
             </TabPane>
             <TabPane tabId="others">
-              <OtherListing />
+              <OtherListing modal={modal} />
             </TabPane>
           </TabContent>
         </Colxx>

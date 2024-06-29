@@ -23,7 +23,7 @@ import TimestampConverter from "../Calculation/TimestampConverter";
 const VideoCallCompletedPage = () => {
   const [feedBack, setFeedBack] = useState("");
   const [rating, setRating] = useState(0);
-  const [submissionStatus, setSubmissionStatus] = useState(null);
+  const [submissionStatus, setSubmissionStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [fromTime, setFromTime] = useState(null);
@@ -76,32 +76,6 @@ if (roleRes === "MENTEE") {
 
   }, []);
 
-  // const location = useLocation();
-  // const searchParams = new URLSearchParams(location.search);
-  // const name = searchParams.get("name");
-  // const fromeTime = searchParams.get("fromeTime");
-  // const totime = searchParams.get("totime");
-  // const mode = searchParams.get("mode");
-  // //   const dateString = "Thu Feb 21 56222 17:30:00 GMT 0530 (India Standard Time)";
-  // const dateParts = fromeTime.split(" ");
-  // const timeParts = dateParts[4].split(":");
-  // const hours = timeParts[0];
-  // const minutes = timeParts[1];
-  // const seconds = timeParts[2];
-
-  // const extractedfromeTime = `${hours}:${minutes}:${seconds}`;
-  // console.log(extractedfromeTime);
-  // const dateParts2 = totime.split(" ");
-  // const timeParts2 = dateParts2[4].split(":");
-  // const hours2 = timeParts2[0];
-  // const minutes2 = timeParts2[1];
-  // const seconds2 = timeParts2[2];
-
-  // const extractedToTime = `${hours2}:${minutes2}:${seconds2}`;
-  // console.log(extractedToTime);
-
-  // const revieweeId = 2;
-  // const url = `${baseUrl}/api/rating`;
   const url = `${baseUrl}/api/mentorship/rating`;
 
   function getTokenRes() {
@@ -117,7 +91,7 @@ if (roleRes === "MENTEE") {
   };
 
   const handleSubmit = () => {
-    setSubmissionStatus("success");
+    // setSubmissionStatus(true);
     setIsLoading(true);
     axios
       .post(
@@ -133,23 +107,26 @@ if (roleRes === "MENTEE") {
           },
         }
       )
-      .then((response) => {
-        console.log(response.data);
-        setSubmissionStatus("success");
+      .then(() => {
+        // console.log(response.data);
         setTimeout(() => {
+          setSubmissionStatus(true);
           setIsLoading(false);
         }, 3000);
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
         // console.log(error.response.data.error.message);
-        const er = error.response.data.error.message;
-        NotificationManager.warning(er, 'Error submitting review', 3000, null, null, '');
+        // const er = error.response.data.error.message;
+        setTimeout(() => {
+          NotificationManager.warning("Error submitting review", 'Oops!', 3000, null, null, '');
 
-        setSubmissionStatus("success");
+        setSubmissionStatus(true);
         setPost(false);
         // setSubmissionStatus("failure");
         setIsLoading(false);
+      }, 3000);
+
       });
   };
 
@@ -252,7 +229,7 @@ if (roleRes === "MENTEE") {
                      </Col>
                      ) : (
                       <Colxx xxs="12">
-                        {submissionStatus !== "success" ? (
+                        {!submissionStatus ? (
                           <>
                             <div className="p-2 justify-content-center">
                               <Row>

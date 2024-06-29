@@ -11,16 +11,21 @@ import {
   TabPane,
  Button
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import classnames from 'classnames';
 
 import { Colxx } from 'components/common/CustomBootstrap';
+import { adminRoot } from 'constants/defaultValues';
 
-const MentorTabCard = ({ handleConnectClick }) => {
-  const [activeFirstTab, setActiveFirstTab] = useState('1');
+const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
+  const [activeFirstTab, setActiveFirstTab] = useState('3');
   const role = localStorage.getItem("roleRes")
-
+  
+  const history = useHistory();
+  const handleChatClick = () => {
+    history.push(`${adminRoot}/chat/${chatUserId}`)
+  }
   return (
     <Row  className="mt-4">
       <Colxx xxs="12">
@@ -30,7 +35,7 @@ const MentorTabCard = ({ handleConnectClick }) => {
             <Card className="mb-4 ">
               <CardHeader>
                 <Nav tabs className="card-header-tabs ">
-                  <NavItem>
+                  {/* <NavItem>
                     <NavLink
                       to="#"
                       location={{}}
@@ -42,10 +47,10 @@ const MentorTabCard = ({ handleConnectClick }) => {
                         setActiveFirstTab('1');
                       }}
                     >
-                      Basic
+                      6 months
                     </NavLink>
                   </NavItem>
-                  {/* <NavItem>
+                  <NavItem>
                     <NavLink
                       to="#"
                       location={{}}
@@ -57,9 +62,9 @@ const MentorTabCard = ({ handleConnectClick }) => {
                         setActiveFirstTab('2');
                       }}
                     >
-                      Standard
+                      3 months
                     </NavLink>
-                  </NavItem>
+                  </NavItem> */}
                   <NavItem>
                     <NavLink
                       to="#"
@@ -72,10 +77,10 @@ const MentorTabCard = ({ handleConnectClick }) => {
                         setActiveFirstTab('3');
                       }}
                     >
-                      Premium
+                      Hourly plan
                     </NavLink>
                   </NavItem>
-                  <NavItem>
+                  {/* <NavItem>
                     <NavLink
                       to="#"
                       location={{}}
@@ -109,44 +114,8 @@ const MentorTabCard = ({ handleConnectClick }) => {
               </CardHeader>
 
               <TabContent activeTab={activeFirstTab}>
-                <TabPane tabId="1">
-                  <Row>
-                    <Colxx sm="12">
-                      <CardBody>
-                        <CardTitle className="mb-4">
-                          <h2>₹4500</h2>
-                          <h5>Basic package</h5>
-                          <div className='mt-4 '>
-                            <div className=''  >
-                              {role.includes("MENTEE") && (
-                            <Button onClick={handleConnectClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
-                                <span className='font-weight-semibold  text-one'>Connect</span>
-                              
-                            </Button>
-                            )}
-                            </div>
-                            </div>
-                        </CardTitle>
-                       
-                      </CardBody>
-                    </Colxx>
-                  </Row>
-                </TabPane>
-                {/* <TabPane tabId="2">
-                  <Row>
-                    <Colxx sm="12">
-                      <CardBody>
-                        <CardTitle className="mb-4">
-                        <h2>₹8500</h2>
-                          <h5>Standard package</h5>
-                        </CardTitle>
-                       
-                      </CardBody>
-                    </Colxx>
-                  </Row>
-                </TabPane>
-                <TabPane tabId="3">
-                  <Row>
+                {/* <TabPane tabId="1">
+                <Row>
                     <Colxx sm="12">
                       <CardBody>
                         <CardTitle className="mb-4">
@@ -158,7 +127,49 @@ const MentorTabCard = ({ handleConnectClick }) => {
                     </Colxx>
                   </Row>
                 </TabPane>
-                <TabPane tabId="4">
+                <TabPane tabId="2">
+                  <Row>
+                    <Colxx sm="12">
+                      <CardBody>
+                        <CardTitle className="mb-4">
+                        <h2>₹8500</h2>
+                          <h5>Standard package</h5>
+                        </CardTitle>
+                       
+                      </CardBody>
+                    </Colxx>
+                  </Row>
+                </TabPane> */}
+                <TabPane tabId="3">
+                <Row>
+                    <Colxx sm="12">
+                      <CardBody>
+                        <CardTitle className="mb-4">
+                          {price && <h2>₹{price}</h2>}
+                          <h5>Basic package</h5>
+                          <div className='mt-4 '>
+                            <div className=''  >
+                              {role.includes("MENTEE") && (
+                                <Row>
+                            <Button onClick={handleConnectClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
+                                <span className='font-weight-semibold  text-one'>Connect</span>
+                              
+                            </Button>
+                            <Button onClick={handleChatClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
+                                <span className='font-weight-semibold  text-one'>Contact</span>
+                              
+                            </Button>
+                            </Row>
+                            )}
+                            </div>
+                            </div>
+                        </CardTitle>
+                       
+                      </CardBody>
+                    </Colxx>
+                  </Row>
+                </TabPane>
+                {/* <TabPane tabId="4">
                   <Row>
                     <Colxx sm="12">
                       <CardBody>

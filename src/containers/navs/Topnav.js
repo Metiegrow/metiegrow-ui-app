@@ -25,6 +25,7 @@ import {
   searchPath,
   isDarkSwitchActive,
   adminRoot,
+  baseUrl,
 } from "constants/defaultValues";
 
 import { MobileMenuIcon, MenuIcon } from "components/svg";
@@ -122,17 +123,17 @@ if (roleRes.includes("MENTOR")) {
 
 let myProfile;
 if (roleRes.includes("MENTOR")) {
-  myProfile = `${adminRoot}/myprofile`;
+  myProfile = `${adminRoot}/mentor/myprofile`;
 }else if (roleRes.includes("LAWYER")) {
-  myProfile = `${adminRoot}/lawyermyprofile`; 
-}else {
-  myProfile = `${adminRoot}/myprofile`; 
+  myProfile = `${adminRoot}/lawyer/myprofile`; 
+}else if (roleRes.includes("MENTEE")) {
+  myProfile = `${adminRoot}/user/myprofile`; 
 }
 
 
 
   const handleMyProfileClick = () => {
-    history.push(`${adminRoot}/myprofile`);
+    history.push(myProfile);
   };
   const handleMyWalletClick = () => {
     history.push(`${adminRoot}/mywallet`);
@@ -154,6 +155,9 @@ if (roleRes.includes("MENTOR")) {
   };
   const handleMySlots = () => {
     history.push(`${adminRoot}/calendar/mentor/appointment`);
+  };
+  const handleSettingsClick = () => {
+    history.push(`${adminRoot}/settings`);
   };
   
   
@@ -211,7 +215,7 @@ if (roleRes.includes("MENTOR")) {
       return (
         <NavLink to={session}>
               <DropdownItem onClick={() => handleMySessionsClick()}>
-              <i className="simple-icon-list" /> Mentor Sessions
+              <i className="simple-icon-list" /> My Mentor Sessions
               </DropdownItem>
           </NavLink>
         
@@ -240,14 +244,10 @@ if (roleRes.includes("MENTOR")) {
     clickOnMobileMenuAction(_containerClassnames);
   };
 
-  function getUserName() {
-    return localStorage.getItem('userName');
-  }
-  const userName = getUserName()
-  // function getImage() {
-  //   return localStorage.getItem('imageUrl');
-  // }
-  // const imageUrl = getImage()
+  
+  const userName = localStorage.getItem('userName');
+  
+  const imageUrl = localStorage.getItem('imageUrl');
   // console.log("img",imageUrl)
 
   return (
@@ -341,8 +341,13 @@ if (roleRes.includes("MENTOR")) {
             <DropdownToggle className="p-0" color="empty">
               <span className="name mr-1">{userName}</span>
               <span>
-                <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
-                {/* <img alt="Profile" src={`${baseUrl}/${imageUrl}`} /> */}
+                  {
+                    imageUrl === "null" ? (
+                      <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
+                    ) : (
+                      <img alt="Profile" src={`${baseUrl}/${imageUrl}`} style={{width: "40px", height: "40px",objectFit:"cover"}}/>
+                    )
+                  }
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>
@@ -391,7 +396,7 @@ if (roleRes.includes("MENTOR")) {
                 <i className="simple-icon-list" />  My Listing
                 </DropdownItem>
               {/* </NavLink> */}
-              <DropdownItem >
+              <DropdownItem onClick={handleSettingsClick}>
               <i className="simple-icon-settings" />  Settings
               </DropdownItem>
               <DropdownItem divider />

@@ -248,6 +248,22 @@ const ViewLawyerMyProfile=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerMyProfile'
 ))
+const ViewUserMyProfile=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Mentee/MenteeMyProfile'
+))
+const ViewUserApply=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Mentee/UserApply'
+))
+const ViewSettings=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Settings/Settings'
+))
+const ViewUserProfile=React.lazy(()=>
+import(
+  /* webpackChunkName: "views-app" */ './myapp/Mentee/MenteeProfile'
+))
 
 const ViewAlumniLists=React.lazy(()=>
   import(
@@ -290,7 +306,7 @@ const roleRes = getRoleRes();
               redirectTo =  `${match.url}/profile`;
             }
           } else if (roleRes.includes("MENTEE")) {
-            redirectTo = `${match.url}/mentor`;
+            redirectTo = `${match.url}/mentor/list`;
           } else if (roleRes.includes("LAWYER")) {
             if (statusRes === '0') {
               redirectTo = `${match.url}/lawyer/apply`;
@@ -354,7 +370,7 @@ const roleRes = getRoleRes();
               render={(props) => <ViewLawyerlogin {...props} />}
             />
             <Route
-              path={`${match.url}/mentor`}
+              path={`${match.url}/mentor/list`}
               render={(props) => <MentorCard {...props} />}
             />
             
@@ -423,7 +439,7 @@ const roleRes = getRoleRes();
               render={(props) => <CalendarGoogle {...props} />}
             /> */}
                <Route
-              path={`${match.url}/myprofile`}
+              path={`${match.url}/mentor/myprofile`}
               render={(props) => <ViewMyProfile {...props} />}
             />
                <Route
@@ -528,12 +544,28 @@ const roleRes = getRoleRes();
               render={(props) => <ViewClassRoom {...props} />}
             />
              <Route
-              path={`${match.url}/lawyermyprofile`}
+              path={`${match.url}/lawyer/myprofile`}
               render={(props) => <ViewLawyerMyProfile {...props} />}
             />
              <Route
               path={`${match.url}/lawyer/reviews`}
               render={(props) => <ViewLawyerReviews {...props} />}
+            />
+            <Route
+            path={`${match.url}/user/myprofile`}
+            render={(props) => <ViewUserMyProfile {...props} />}
+            />
+             <Route
+              path={`${match.url}/user/apply`}
+              render={(props) => <ViewUserApply {...props} />}
+            />
+             <Route
+              path={`${match.url}/settings`}
+              render={(props) => <ViewSettings {...props} />}
+            />
+             <Route
+              path={`${match.url}/user/:uid`}
+              render={(props) => <ViewUserProfile {...props} />}
             />
             
             { /* alumnini networking routes start */ }

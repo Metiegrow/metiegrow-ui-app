@@ -13,15 +13,20 @@ import {
   Row,
 } from "reactstrap";
 import { Colxx } from "components/common/CustomBootstrap";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
-const url = `${baseUrl}/joblistingcard`;
 
-const JobListing = () => {
+const JobListing = ({modal}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage] = useState(2);
+  const [totalPage, setTotalPage] = useState(1);
   const [items, setItems] = useState([]);
   const [expandedIndex, setExpandedIndex] = useState(-1);
+  const [isFirst, setIsFirst] = useState(true);
+  const [isLast, setIsLast] = useState(true);
+  
+  const url = `${baseUrl}/api/posts/job-post/`;
+  const interestedClickUrl = `${baseUrl}/api/posts/job-post/interested`;
 
   const history = useHistory();
 
@@ -31,13 +36,21 @@ const JobListing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const params = {
+        page: currentPage,
+        size: 20,
+        sort: [""]
+      };
       try {
-        const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
+        // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
+        const res = await axios.get(url, { params });
         // console.log(res);
         const { data } = res;
-        const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+        const sortedData = data.jobLists.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
         setItems(sortedData);
-        //   setTotalPage(data.totalPage);
+          setTotalPage(data.pagination.totalPage);
+          setIsFirst(data.pagination.first);
+          setIsLast(data.pagination.last);
         // setItems(data.map((x) => ({ ...x })));
         setIsLoaded(true);
       } catch (error) {
@@ -47,11 +60,32 @@ const JobListing = () => {
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, modal]);
 
   const handleClick = (id) => {
     history.push(`/app/listing/joblisting/view/${id}`);
   };
+
+    function removeTags(str) {
+    if (str === null || str === '') {
+        return false;
+    }
+    const newStr = str.toString();
+    return newStr.replace(/(<([^>]+)>)/ig, '');
+}
+
+const handleInterestedButtonClick = async (id) => {
+  const data = {
+    jobListingId: id,
+    interested: true
+  };
+
+  try {
+    await axios.post(interestedClickUrl, data);
+  } catch (error) {
+    console.error('Error sending interest:', error);
+  }
+};
 
  
   return !isLoaded ? (
@@ -71,15 +105,15 @@ const JobListing = () => {
                   </Col>
                   <Col className="text-right">
                     <p className="text-muted">
-                    Posted on {new Date(data.postedOn).toLocaleString()} 
+                    Posted on <TimestampConverter timeStamp={data.postedOn} format="datetime" />
                     </p>
                   </Col>
                 </Row>
                 {expandedIndex === index ? (
-                  <CardSubtitle>{data.description}</CardSubtitle>
+                  <CardSubtitle>{removeTags(data.description)}</CardSubtitle>
                 ) : (
                   <CardSubtitle>
-                    {`${data.description.slice(0, 100)}...`}
+                    {`${removeTags(data.description).slice(0, 100)}`}
                     {data.description.length > 100 && (
                       <Button
                         color="link"
@@ -155,7 +189,7 @@ const JobListing = () => {
                     >
                       <i className="iconsminds-sharethis text-primary" />
                     </Button>
-                    <Button outline color="primary" size="xs">
+                    <Button onClick={handleInterestedButtonClick(data.id)} outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>
                   </Col>
@@ -169,6 +203,8 @@ const JobListing = () => {
         currentPage={currentPage}
         totalPage={totalPage}
         onChangePage={(i) => setCurrentPage(i)}
+        lastIsActive = {isFirst}
+        firstIsActive = {isLast}
       />
     </div>
   );
