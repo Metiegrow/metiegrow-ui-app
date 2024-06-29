@@ -699,6 +699,133 @@
       "price": 20000
     }
   ],
+  "alumniCard":[
+    {
+      "id":1,
+      "firstName": "siva",
+      "lastName": "kumar",
+      "email": "aa@gffghn.com",
+      "password": "jfyjgffg",
+      "jobTitle": "student",
+      "company": "kcs",
+      "location": "Location1",
+      "skills": [
+        "skill 1",
+        "skill 2",
+        "skill 3",
+        "skill 4",
+        "skill 5",
+        "skill 6",
+        "skill 7",
+        "skill 8",
+        "skill 9",
+        "skill 10",
+        "skill 11",
+        "skill 12"
+      ],
+      "image": "",
+      "star": 5,
+      "ratings": 200,
+      "bio":"I want to become an entrepreneur so that I can take my many talents to the next level and take control of my economic future"
+    },
+    {
+      "firstName": "naveen",
+      "lastName": "raj",
+      "email": "aa@gffghn.com",
+      "password": "jfyjgffg",
+      "jobTitle": "student",
+      "company": "Tcs",
+      "location": "Location1",
+      "skills": [
+        "skill 1",
+        "skill 2",
+        "skill 3",
+        "skill 4",
+        "skill 5",
+        "skill 6",
+        "skill 7",
+        "skill 8",
+        "skill 9",
+        "skill 10",
+        "skill 11",
+        "skill 12"
+      ],
+      "image": "",
+      "id": 2,
+      "star": 5,
+      "ratings": 200,
+      "bio":"I want to become an entrepreneur so that I can take my many talents to the next level and take control of my economic future"
+    }
+  ],
+
+  "alumniProfile":[
+    {
+      "firstName": "siva",
+      "lastName": "kumar",
+      "email": "siva@gmail.com",
+      "jobTitle": "student",
+      "company": "kcs",
+      "location": "Location4",
+      "category": "executive",
+      "skills": [
+        "skill 1",
+        "skill 2",
+        "skill 3",
+        "skill 4",
+        "skill 5",
+        "skill 6",
+        "skill 7",
+        "skill 8",
+        "skill 9",
+        "skill 10",
+        "skill 11",
+        "skill 12"
+      ],
+      
+      "bio": "a collective group of former students graduating from or having some kind of connection with a particular institution who ventured into their own professional and personal aspirations.",
+      "linkedinUrl": "https://www.linkedin.com/in/sivakumar/",
+      "twitterHandle": "srihith",
+      "website": "https://www.srihith.com/",
+      "introVideo": "https://www.youtube.com/watch?abc",
+      "featuredArticle": "https://wordpress.com/posts/srihith.wordpress.com",
+      "reasonForMentor": "Let's make it shine",
+      "achievement": "Top Holder",
+      "id": 1,
+      "bachelorDegree":"Bsc",
+      "masterDegree":"Msc",
+      "course":"Web Development",
+      "school":"pak",
+      "yearGraduatedUg":2020,
+      "yearGraduatedPg":2022,
+      "universityUg":"madras university",
+      "universityPg":"anna university",
+      "education":[
+        {
+          "schoolName":"kcs"
+              
+        },
+        {
+          "Degree":[
+            {
+              "degree":"Bachelor in science",
+              "DegreeType":"Bachelors" ,
+              "university":"madras university",
+              "startYear":2016,
+              "endYear":2019
+            },
+            {
+              "degree":"Master in science",
+              "masterDegree":"Msc",
+              "DegreeType":"Masters" ,
+              "university":"anna university",
+              "startYear":2019,
+              "endYear":2021
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "lawyerPackages": [
     {
       "id": 1,
@@ -772,54 +899,126 @@
   ],
   "lawyerJobList": [
     {
-      "id": "100",
-      "jobName": "job 1",
-      "clientUserId": 10,
-      "clientName": "sivanesh a",
-      "createdAt": 1712811600000,
-      "modifiedAt": 1713771670282
-    },
-    {
-      "id": "101",
-      "jobName": "job 2",
-      "clientUserId": 11,
-      "clientName": "browin",
-      "createdAt": 1712811600000,
-      "modifiedAt": 1713771670282
-    },
-    {
-      "id": "460",
-      "jobName": "job 3",
-      "clientUserId": 12,
-      "clientName": "Arun",
-      "createdAt": 1712811600000,
-      "modifiedAt": 1713771670282
-    },
-    {
-      "id": "477",
-      "jobName": "job 4",
-      "clientUserId": 13,
-      "clientName": "bala",
-      "createdAt": 1712811600000,
-      "modifiedAt": 1713771670282
-    },
-    {
-      "id": "479",
-      "jobName": "job 5",
-      "clientUserId": 14,
-      "clientName": "david warner",
-      "createdAt": 1712811600000,
-      "modifiedAt": 1713771670282
+      "inProgressJobs": [
+        {
+          "id": 1,
+          "status": "YET_TO_START",
+          "jobName": "Divorce Case",
+          "clientUserId": 1001,
+          "clientName": "John Doe",
+          "createdAt": 1622520000000,
+          "modifiedAt": 1622610000000
+        },
+        {
+          "id": 2,
+          "status": "IN_PROGRESS",
+          "jobName": "Real Estate Deal",
+          "clientUserId": 1002,
+          "clientName": "Jane Smith",
+          "createdAt": 1622600000000,
+          "modifiedAt": 1622700000000
+        },
+       {
+          "id": 3,
+          "status": "LAWYER_COMPLETED",
+          "jobName": "Real Estate Deal",
+          "clientUserId": 1002,
+          "clientName": "Jane Smith",
+          "createdAt": 1622600000000,
+          "modifiedAt": 1622700000000
+        },
+       {
+          "id": 4,
+          "status": "RAISE_DISPUTE",
+          "jobName": "Real Estate Deal",
+          "clientUserId": 1002,
+          "clientName": "Jane Smith",
+          "createdAt": 1622600000000,
+          "modifiedAt": 1622700000000
+        }
+      ],
+      "completedJobs": [
+        {
+          "id": 3,
+          "status": "COMPLETED",
+          "jobName": "Criminal Defense",
+          "clientUserId": 1003,
+          "clientName": "Bob Brown",
+          "createdAt": 1622400000000,
+          "modifiedAt": 1622500000000
+        },
+        {
+          "id": 4,
+          "status": "COMPLETED",
+          "jobName": "Contract Review",
+          "clientUserId": 1004,
+          "clientName": "Alice Green",
+          "createdAt": 1622300000000,
+          "modifiedAt": 1622400000000
+    }
+  ]
     }
   ],
   "clientJobList": [
     {
-      "id": 100,
-      "jobName": "UNTITLED_JOB",
-      "lawyerId": 1,
-      "lawyerName": "sunil K",
-      "createdAt": 1713946788462,
-      "modifiedAt": 1713946788462
+      "inProgressJobs": [
+        {
+          "id": 1,
+          "status": "YET_TO_START",
+          "jobName": "Divorce Case",
+          "lawyerId": 1001,
+          "lawyerName": "John Doe",
+          "createdAt": 1622520000000,
+          "modifiedAt": 1622610000000
+        },
+        {
+          "id": 2,
+          "status": "IN_PROGRESS",
+          "jobName": "Real Estate Deal",
+          "lawyerId": 1002,
+          "lawyerName": "Jane Smith",
+          "createdAt": 1622600000000,
+          "modifiedAt": 1622700000000
+        },
+       {
+          "id": 3,
+          "status": "LAWYER_COMPLETED",
+          "jobName": "Real Estate Deal",
+          "lawyerId": 1002,
+          "lawyerName": "Jane Smith",
+          "createdAt": 1622600000000,
+          "modifiedAt": 1622700000000
+        },
+       {
+          "id": 4,
+          "status": "RAISE_DISPUTE",
+          "jobName": "Real Estate Deal",
+          "lawyerId": 1002,
+          "lawyerName": "Jane Smith",
+          "createdAt": 1622600000000,
+          "modifiedAt": 1622700000000
+        }
+      ],
+      "completedJobs": [
+        {
+          "id": 3,
+          "status": "COMPLETED",
+          "jobName": "Criminal Defense",
+          "lawyerId": 1003,
+          "lawyerName": "Bob Brown",
+          "createdAt": 1622400000000,
+          "modifiedAt": 1622500000000
+        },
+        {
+          "id": 4,
+          "status": "COMPLETED",
+          "jobName": "Contract Review",
+          "lawyerId": 1004,
+          "lawyerName": "Alice Green",
+          "createdAt": 1622300000000,
+          "modifiedAt": 1622400000000
+    }
+  ]
     }
   ],
   "lawyerJobsDetails": [

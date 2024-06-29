@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
-import { Button, Card, CardBody, CardText, Col, NavLink, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardText, Col, Row } from 'reactstrap';
+import {useHistory} from "react-router-dom";
 import { baseUrl } from 'constants/defaultValues';
 import Rating from 'components/common/Rating';
 import MentorDropDown from '../mentorship/MentorDropDown';
+import './ThumbnailImage.css'
+
 
 
 
@@ -13,6 +16,7 @@ const UserCard = () => {
   const [userdetails,setUserDetails]=useState('')
   const [inputkey,setInputKey]=useState('');
   // const url=`${baseUrl}/user/cards`
+  const history=useHistory();
 
   // Backend url below 
   const url =`${baseUrl}/api/lawyer`
@@ -28,6 +32,8 @@ const UserCard = () => {
     };
     UserList();
   },[])
+
+ 
   
   return (
     <div>
@@ -80,16 +86,17 @@ const UserCard = () => {
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
             <Card className=" flex-row listing-card-container my-3 p-3 flex-wrap flex-sm-nowrap flex-md-nowrap flex-lg-nowrap flex-xl-nowrap" >
               <Col md={5} lg={5}>
-              <div className='d-flex justify-content-between flex-column  w-100'>
+              <div className='d-flex justify-content-between flex-column    w-100'>
              
             
                  {users.imageUrl === null ? (
-                  <div className=" w-full h-full my-4 mx-auto" style={{height:"100%"}}>
+                  <div className="h-100 my-4 mx-auto thumbnail-image bg-primary
+                   d-flex align-items-center justify-content-center ">
                   <ThumbnailLetters
                      rounded
                      text={users.firstName}
-                     className='text-xlarge  my-auto'
-                     
+                     className='text-xlarge border border-1'
+                     style={{textAlign:"center"}}
 
                    />
                   </div>
@@ -138,8 +145,8 @@ const UserCard = () => {
                    <CardText className='d-flex'>
                   
               
-            {users.topic && users.topic.slice(0,3).map((skill) => (
-          <div key={skill} className='my-2 ml-2 ' id='btn.rounded'>
+            {users.topic && users.topic.slice(0,3).map((skill,index) => (
+          <div key={skill} className={index!==0?`my-2 ml-2`:'my-2'} id='btn.rounded'>
           
               <Button color="light" className="mb-2 font-weight-semibold" size='xs'>
                 {skill}
@@ -159,11 +166,15 @@ const UserCard = () => {
                         View Profile
               </Button>
               </NavLink> */}
-              <NavLink href={`/app/lawyerprofile/${users.id}`}>
+              {/* <NavLink href={`/app/lawyerprofile/${users.id}`}>
               <Button color="primary " className="default w-80 py-2  rounded" >
                         View Profile
               </Button>
-              </NavLink>
+              </NavLink> */}
+
+              <Button color="primary " onClick={()=>history.push(`/app/lawyerprofile/${users.id}`)} className="default w-80 py-2  rounded" >
+                        View Profile
+              </Button>
               
               
                     </div>

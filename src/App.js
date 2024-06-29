@@ -36,6 +36,7 @@ const ViewUnauthorized = React.lazy(() =>
   import(/* webpackChunkName: "views-error" */ './views/unauthorized')
 );
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -94,6 +95,7 @@ class App extends React.Component {
                     exact
                     render={(props) => <ViewHome {...props} />}
                   />
+                  
 
                   <Route path="" render={(props) => <ViewUser {...props} />} />
                   {/*

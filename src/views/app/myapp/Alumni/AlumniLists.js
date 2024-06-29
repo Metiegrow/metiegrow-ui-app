@@ -1,9 +1,11 @@
 import React from 'react';
+import CommonCard from '../CommonCardList/CommonCard';
 
 const AlumniLists = () => {
   return (
     <div>
-      <h1>cards</h1>
+
+      <CommonCard type="alumni" showPrice={false} noneText="alumnis"/>
     </div>
   );
 }

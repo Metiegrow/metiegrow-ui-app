@@ -1,6 +1,6 @@
 import { Colxx } from 'components/common/CustomBootstrap';
 import React ,{useState,useEffect} from 'react';
-import {  Button, NavLink, Row,Card,CardBody,CardSubtitle,CardImg} from 'reactstrap';
+import {  Button,Row} from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {useParams,useHistory} from "react-router-dom";
@@ -121,8 +121,11 @@ const MentorProfile = () => {
           <div className=' '>
             {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
              rounded-circle img-thumbnail border    ' alt="" /> */}
-             <img src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`}  className=' col-2 mx-2 w-60 rounded-circle
-              img-thumbnail border    ' alt="" />
+             {/* <img src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`}  className=' col-2 mx-2 w-60 rounded-circle
+              img-thumbnail border    ' alt="" /> */}
+             <img src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`} 
+              className="mx-2 rounded-circle img-thumbnail border"
+              style={{ width: "110px", height: "110px" }} alt="" />
               {/* <img  src={`${baseUrl}/api/public/images/${mid}/profile-pic`} className=' col-2 mx-2 w-60 rounded-circle
               img-thumbnail border    ' alt="" /> */}
             <Button color="light" className=" font-weight-semibold mx-2" size='large'>
@@ -224,148 +227,33 @@ const MentorProfile = () => {
             <Row>
             <div className='w-40 '>
             <h1 className='font-weight-semibold text-large'>About</h1>
-            {/* <p className='text-one font-weight-medium w-40'>{mentorprofiledetails1.about}</p> */}
+          
             <p className='text-one font-weight-medium '>{mentorprofiledetails1.bio}</p>
             </div>
              
             </Row>
             <hr/>
-            <Colxx className='sm="12" md="12" lg="12" xxs="12" mt-5 '>
-              <Row>
-              <div className=''>
-          <h1>Get to know arun prasad</h1>
-          </div>
-                {/* <h3 className='font-weight-semibold text-large'>Get to Know Arun Prasad</h3> */}
-              </Row>
-            </Colxx>
-            <Colxx xxs="12">
-           
-        <Row>
-          <Colxx xxs="12" xs="6" lg="4">
-          <NavLink href='www.google.com'>
-         
-        
-         
-          <Card className="mb-4 w-80">
-           
-           <div className="position-relative">
-             <CardImg
-               top
-               src="/assets/img/profiles/2.jpg"
-               alt="Card image cap"
-             />
-            
-           </div>
-           <CardBody>
           
-             <h4 className='color-theme-2'>LINK</h4>
-             <h4 className='font-weight-semibold text-one'>JOB TITLES DONT MATTER!</h4>
-             <CardSubtitle className="mb-4 text-one text-muted">
-             Yeah, you read that right. Titles are not something which should
-              drive your decision to join a new company.
-             </CardSubtitle>
- 
-          
-         
-           </CardBody>
-         </Card>
-         
-           
-            </NavLink>
-          </Colxx>
-          <Colxx xxs="12" xs="6" lg="4">
-          <NavLink href='www.youtube.com'>
-       
-            <Card className="mb-4 w-80">
-          
-              <div className="position-relative">
-                <CardImg
-                  top
-                  src="/assets/img/profiles/2.jpg"
-                  alt="Card image cap"
-                  className=''
-                />
-               
-              </div>
-              <CardBody>
-             
-                <h4 className='color-theme-2'>VIDEO</h4>
-                <h4 className='font-weight-semibold text-one'>Concatenating Strings
-                 Mock Interview (Senior MAANG Engineer)
-                </h4>
-                <CardSubtitle className="mb-4 text-one text-muted">
-                Dont leave your software engineering career to chance. 
-                Sign up for Exponents SWE interview course today:Concatenating strings is …
-                </CardSubtitle>
-    
-             
-            
-              </CardBody>
-            </Card>
-            </NavLink>
-            
-          </Colxx>
-          {/* <Colxx xxs="12" xs="6" lg="4">
-            <Card className="mb-4">
-              <CardBody>
-                <CardSubtitle className="mb-4">
-                  Homemade Cheesecake with Fresh Berries and Mint
-                </CardSubtitle>
-                <CardText className="text-muted text-small mb-0 font-weight-light">
-                  09.04.2018
-                </CardText>
-              </CardBody>
-              <div className="position-relative">
-                <CardImg
-                  bottom
-                  src="/assets/img/cards/thumb-1.jpg"
-                  alt="Card image cap"
-                />
-                <Badge
-                  color="primary"
-                  pill
-                  className="position-absolute badge-top-left"
-                >
-                  NEW
-                </Badge>
-                <Badge
-                  color="secondary"
-                  pill
-                  className="position-absolute badge-top-left-2"
-                >
-                  TRENDING
-                </Badge>
-              </div>
-            </Card>
-          </Colxx> */}
-          {/* {showAll && (
-          <Colxx  lg={7} className="my-4" id="skillsSection">
-            <h1>Skills</h1>
-            <div className='d-flex flex-wrap '>
-              {mentorprofiledetails.skills && mentorprofiledetails.skills.map((skill) => (
-                <div key={skill}>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='md'>
-                {skill}
-              </Button>
-            </div>
-              ))}
-            </div>
-          </Colxx>
-        )} */}
+            <Row>
         <Colxx  lg={7} className="my-4" id="skillsSection">
-            <h1>Skills </h1>
+        <Row>
+        <h1 className='font-weight-semibold text-large'>Skills </h1>
+        </Row>
+        <Row>
+      
             <div className='d-flex flex-wrap '>
               {mentorprofiledetails1.skills && mentorprofiledetails1.skills.map((skill) => (
                 <div key={skill}>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='md'>
+              <Button color="light" className="mb-2 font-weight-semibold mr-2" size='md'>
                 {skill}
               </Button>
             </div>
               ))}
             </div>
+        </Row>
+            
           </Colxx>
         </Row>
-      </Colxx>
           </Colxx>
           </div>
         </Colxx>

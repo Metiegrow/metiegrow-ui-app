@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-import {useParams,useLocation} from "react-router-dom";
+import {useParams,useLocation,useHistory} from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useState ,useEffect} from 'react';
-import {  Button, Card, CardBody, CardText,    NavLink, Row } from 'reactstrap'
+import {  Button, Card, CardBody, CardText, Row } from 'reactstrap'
 // import RatingExamples from './RatingExamples';
+import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import Rating from 'components/common/Rating';
 import MentorDropDown from './MentorDropDown';
 
-// import SearchBar from './SearchBar';
+
 
 
 const MentorCard = () => {
@@ -18,6 +19,7 @@ const MentorCard = () => {
   // const imageUrl = `${baseUrl}/api/public/images`;
   // To change to backend api url uncomment the below line
   // const url1=`${baseUrl}/api/mentor`
+  const history = useHistory();
 
   const {category}=useParams();
   const location = useLocation();
@@ -156,36 +158,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
      
       <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <div>
-      {/* <div className="search input-group">
-       
-       <Input
-         name="searchKeyword"
-         id="searchKeyword"
-         placeholder="Search"
-     
-       />
-       <span
-         className="search-icon btn-primary">
-         <i className="simple-icon-magnifier" />
-       </span>
-     </div> */}
-     {/* <h3>Age is {age} </h3>
-   <h3>City is {city}</h3> */}
-   <div>
-    {/* Your other components */}
-    {/* <h3>firstName is {firstNameParam}</h3>
-    <h3>jobTitle is {jobTitleParam}</h3> */}
-    {/* <Button onClick={()=>setFirstName('defaultname')}>set firstName</Button> */}
-    {/* <input
-            type="text"
-            className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
-            placeholder='query'
-            value={inputkey}
-            onChange={(e) =>setFirstName(e.target.value)}
-            // onChange={handleInputChange}
-          /> */}
-  </div>
-
+      
      
        <div className="">
         <div className="form-group">
@@ -208,21 +181,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
        </div>
         
   
-       {/* <div className="container">
-   
-    <div className="input-group">
-        <input className="form-control  col-12 col-lg-8 col-md-8 py-3" 
-         placeholder='Search by skill or job title'
-         value={inputkey}
-            onChange={(e) =>setInputKey(e.target.value)}
-         />
-        <span className="input-group-append bg-white border-left-0">
-            <span className="input-group-text bg-transparent">
-            <i className="simple-icon-magnifier" />
-            </span>
-        </span>
-    </div>
-    </div> */}
+       
           
           <MentorDropDown/>
         </div>
@@ -260,8 +219,21 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                       alt="Card"
                       style={{minWidth:'150px',minHeight:"300px"}}
                     /> */}
-                   
-                    <img
+                    {mentors.imageUrl==null?(
+                      <div className='card-img-left bg-primary 
+                 d-flex align-items-center justify-content-center'
+                 style={{ minWidth: '150px', minHeight: '300px' }}
+                 >
+                <ThumbnailLetters
+                     rounded
+                     text={mentors.firstName}
+                     className='text-xlarge border border-1'
+                     style={{textAlign:"center"}}
+
+                   />
+                   </div>
+                    ):(
+                      <img
                     className="card-img-left"
                     // src={`${baseUrl}/api/public/images/${mentors.id}/profile-pic`}
                     src={`${baseUrl}/${mentors.imageUrl}`}
@@ -269,6 +241,8 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                     alt="Card"
                     style={{ minWidth: '150px', minHeight: '300px' }}
                   />
+                    )}
+                   
 
                     <div className='my-5  '>
                         <CardText className='text-primary '>
@@ -306,8 +280,8 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                    {/* {mentordetails.skills&&mentordetails.skills.map((skill) => (
               <span key={skill} className="">{skill}</span>
             ))} */}
-            {mentors.skills && mentors.skills.slice(0, 3).map((skill) => (
-          <div key={skill} className='m-2 ' id='btn.rounded'>
+            {mentors.skills && mentors.skills.slice(0, 3).map((skill,index) => (
+          <div key={skill} className={index !== 0 ? 'm-2' : `my-2 mr-2`} id='btn.rounded'>
           
               <Button color="light" className="mb-2 font-weight-semibold" size='xs'>
                 {skill}
@@ -321,11 +295,14 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
                   </div>
                  
                     <div className=''>
-                     <NavLink href={`/app/mentorprofile/${mentors.id}`}>
+                     {/* <NavLink href={`/app/mentorprofile/${mentors.id}`}>
                        <Button color="primary " className="default w-80 py-2  rounded" >
                         View Profile
               </Button>
-              </NavLink>
+              </NavLink> */}
+              <Button color="primary " onClick={()=>history.push(`/app/mentorprofile/${mentors.id}`)} className="default w-80 py-2  rounded" >
+                        View Profile
+              </Button>
               
                     </div>
                 </CardBody>

@@ -232,6 +232,10 @@ const ViewLawyerJobList=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/Lawyer/LawyerJobList'
 ))
+const ViewLawyerReviews=React.lazy(()=>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Lawyer/AddReview'
+  ))
 const ViewCallCompleted=React.lazy(()=>
 import(
   /* webpackChunkName: "views-app" */ './myapp/VideoCall/VideoCallCompletedPage'
@@ -248,6 +252,11 @@ import(
 const ViewAlumniLists=React.lazy(()=>
   import(
     /* webpackChunkName: "views-app" */ './myapp/Alumni/AlumniLists'
+  ))
+  
+const ViewAlumniProfile=React.lazy(()=>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Alumni/AlumniProfile'
   ))
 
 const App = ({ match }) => {
@@ -522,12 +531,20 @@ const roleRes = getRoleRes();
               path={`${match.url}/lawyermyprofile`}
               render={(props) => <ViewLawyerMyProfile {...props} />}
             />
+             <Route
+              path={`${match.url}/lawyer/reviews`}
+              render={(props) => <ViewLawyerReviews {...props} />}
+            />
             
             { /* alumnini networking routes start */ }
 
             <Route
               path={`${match.url}/alumni/alumnilists`}
               render={(props) => <ViewAlumniLists {...props} />}
+            />
+             <Route
+              path={`${match.url}/alumni/profile/:mid`}
+              render={(props) => <ViewAlumniProfile {...props} />}
             />
 
             { /* alumin networking routes ends */ }

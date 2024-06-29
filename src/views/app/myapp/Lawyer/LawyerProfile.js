@@ -176,7 +176,7 @@ const role = localStorage.getItem("roleRes");
             <div className='d-flex'>
             {lawyerprofile.topic && lawyerprofile.topic.slice(0, 3).map((skill) => (
             <div key={skill.id}>
-              <Button color="light" className="mb-2 font-weight-semibold mx-2" size='xs'>
+              <Button color="light" className="mb-2 font-weight-semibold mr-2" size='xs'>
                 {skill.topicName}
               </Button>
             </div>
@@ -210,7 +210,7 @@ const role = localStorage.getItem("roleRes");
                 <div className='d-flex flex-wrap '>
               {lawyerprofile.topic && lawyerprofile.topic.map((skill) => (
                 <div key={skill}>
-                  <Button color="light" className="mb-2 font-weight-semibold mx-2" size='sm'>
+                  <Button color="light" className="mb-2 font-weight-semibold mr-2" size='sm'>
                     {skill.topicName}
                   </Button>
                 </div>
@@ -239,9 +239,7 @@ const role = localStorage.getItem("roleRes");
               <p className='text-muted text-small'>{pack.description}</p>
               <div className=''>
                 {role.includes("MENTEE") && (
-                <NavLink href='/app/lawyer/payment'>
-                  <Button color='primary  text-one' onClick={() => handlePurchase(pack)}>Purchase</Button>
-                </NavLink>
+                <Button color='primary  text-one' onClick={() => handlePurchase(pack)}>Purchase</Button>
                 )}
               </div>
             </div>

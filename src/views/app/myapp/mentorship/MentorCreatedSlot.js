@@ -2,17 +2,19 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import React,{useState,useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import {  Button, Card, CardBody, Modal, ModalBody, Table ,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  Form,
+  Col,
+  // Form,
   Label,
   Row,
-  FormGroup,
-
-  // FormGroup,  CustomInput, Form 
+  // FormGroup,
+//   Dropdown,
+  // DropdownToggle,
+  // DropdownItem,
+  // DropdownMenu,CustomInput, 
+  FormGroup,  Form 
   } from 'reactstrap';
+  import Select from 'react-select';
+  import CustomSelectInput from 'components/common/CustomSelectInput';
   import { useHistory } from 'react-router-dom/cjs/react-router-dom';
   import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
@@ -42,12 +44,12 @@ const MentorCreatedSlot = () => {
   const [selectedDate, setSelectedDate] = useState(null); 
   // const [selectedDate, setSelectedDate] = useState(''); 
   // const [selectedDates, setSelectedDates] = useState([]); 
-  const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
-  const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
-  const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
-  const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
-  const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
-  const [dropdownBasicOpen5, setDropdownBasicOpen5] = useState(false);
+  // const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
+  // const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
+  // const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
+  // const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
+  // const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
+  // const [dropdownBasicOpen5, setDropdownBasicOpen5] = useState(false);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
    const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
   //  const [upcomingSessions] = useState([]); 
@@ -57,7 +59,7 @@ const MentorCreatedSlot = () => {
   const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
   const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
 
-
+ 
 
   const redirectToSessionLists1 = () => {
     // Redirect to the specified URL with the query parameter
@@ -66,6 +68,31 @@ const MentorCreatedSlot = () => {
 
 
 
+ 
+  
+  
+
+  // Function to get the start date of the current week
+  const getStartOfWeek = () => {
+    const currentDate = new Date();
+    const day = currentDate.getDay();
+    const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+    return new Date(currentDate.setDate(diff));
+  };
+
+ 
+  const fetchMentorSlotsCreate = async (fromTime, toTime) => {
+    try {
+      const response = await axios.get(`${url}?&fromTime=${fromTime}&toTime=${toTime}`);
+      
+      const availability = response.data;
+      setMentorAvailable(availability);
+      // console.log(availability);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
   const handleOkButtonClick = async () => {
     // Ensure selectedDate is not null
     if (!selectedDate) {
@@ -96,41 +123,26 @@ const MentorCreatedSlot = () => {
     // Make the POST request
     try {
       const response = await axios.post(url, [slot]);
-      // Handle success response
+    
       console.log('Data saved successfully:', response.data);
     } catch (error) {
-      // Handle error
+      
       console.error('Error saving data:', error);
     }
   
-    // Optionally, close the modal
+   
     setModalSmall(false);
 
-    window.location.reload();
-  };
+    // window.location.reload();
+    const startOfWeekTimestamp = new Date(currentWeekStart);
+    startOfWeekTimestamp.setHours(0, 0, 0, 0);
+    const endOfWeekTimestamp = new Date(currentWeekStart);
+    endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6);
+    endOfWeekTimestamp.setHours(23, 59, 59, 999);
+    fetchMentorSlotsCreate(startOfWeekTimestamp.getTime(), endOfWeekTimestamp.getTime());
   
-  
-
-  // Function to get the start date of the current week
-  const getStartOfWeek = () => {
-    const currentDate = new Date();
-    const day = currentDate.getDay();
-    const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-    return new Date(currentDate.setDate(diff));
   };
 
- 
-  const fetchMentorSlotsCreate = async (fromTime, toTime) => {
-    try {
-      const response = await axios.get(`${url}?&fromTime=${fromTime}&toTime=${toTime}`);
-      const availability = response.data;
-      setMentorAvailable(availability);
-      // console.log(availability);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-  
   useEffect(() => {
     // Set the time of currentWeekStart to 12:00 PM (noon)
     const startOfWeekTimestamp = new Date(currentWeekStart);
@@ -157,116 +169,222 @@ const MentorCreatedSlot = () => {
 
   
   
-  const handleDropdownItemClick = (selectedHour) => {
-    // Handle the selected hour as needed
-    setSelectedHourDropdown(selectedHour);
+  // const handleDropdownItemClick = (selectedHour) => {
+  //   // Handle the selected hour as needed
+  //   setSelectedHourDropdown(selectedHour);
     
-    console.log(`Selected hour: ${selectedHour}`);
-    // setSelectedHourDropdown(selectedHour); 
-  };
-  const handleDropdownItemClick1 = (selectedMinute) => {
-    // Handle the selected minutes as needed
-    setMinutedrop(selectedMinute);
-  //  setMinutedrop1(selectedMinute);
-    // console.log(`Selected minute: ${selectedMinute}`);
-    // setMinuteDrop(selectedMinute); 
-  };
-  const handleDropdownItemClick2 = (selectedHour) => {
-    // Handle the selected hour as needed
-    setSelectedHourDropdown1(selectedHour)
-    // console.log(`Selected hour: ${selectedHour}`);
-    // setSelectedHourDropdown(selectedHour); 
-  };
-  const handleDropdownItemClick3 = (selectedMinute) => {
-    // Handle the selected minutes as needed
-    setMinutedrop1(selectedMinute);
-    // console.log(`Selected minute: ${selectedMinute}`);
-    // setMinuteDrop(selectedMinute); 
-  };
-  const handleDropdownItemClick4 = (selectedAmPmFrom) => {
-    // Handle the selected minutes as needed
-    setSelectedFromAmPm(selectedAmPmFrom);
-    // console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
-    // setMinuteDrop(selectedMinute); 
-  };
-  const handleDropdownItemClick5 = (selectedAmPmTo) => {
-    // Handle the selected minutes as needed
-    setSelectedFromAmPm1(selectedAmPmTo);
+  //   console.log(`Selected hour: ${selectedHour}`);
+  //   // setSelectedHourDropdown(selectedHour); 
+  // };
+  // const handleDropdownItemClick1 = (selectedMinute) => {
+  //   // Handle the selected minutes as needed
+  //   setMinutedrop(selectedMinute);
+  // //  setMinutedrop1(selectedMinute);
+  //   // console.log(`Selected minute: ${selectedMinute}`);
+  //   // setMinuteDrop(selectedMinute); 
+  // };
+  // const handleDropdownItemClick2 = (selectedHour) => {
+  //   // Handle the selected hour as needed
+  //   setSelectedHourDropdown1(selectedHour)
+  //   // console.log(`Selected hour: ${selectedHour}`);
+  //   // setSelectedHourDropdown(selectedHour); 
+  // };
+  // const handleDropdownItemClick3 = (selectedMinute) => {
+  //   // Handle the selected minutes as needed
+  //   setMinutedrop1(selectedMinute);
+  //   // console.log(`Selected minute: ${selectedMinute}`);
+  //   // setMinuteDrop(selectedMinute); 
+  // };
+  // const handleDropdownItemClick4 = (selectedAmPmFrom) => {
+  //   // Handle the selected minutes as needed
+  //   setSelectedFromAmPm(selectedAmPmFrom);
+  //   // console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
+  //   // setMinuteDrop(selectedMinute); 
+  // };
+  // const handleDropdownItemClick5 = (selectedAmPmTo) => {
+  //   // Handle the selected minutes as needed
+  //   setSelectedFromAmPm1(selectedAmPmTo);
    
-    // setMinuteDrop(selectedMinute); 
-  };
-  const generateDropdownItems = () => {
-    const items = [];
-    for (let i = 1; i <= 12; i+=1) {
-      const formattedHour = i < 10 ? `0${i}` : i;
-      items.push(
-        <DropdownItem key={i} onClick={() => handleDropdownItemClick(i)} >
-          {formattedHour}
-        </DropdownItem>
-      );
-    }
-    return items;
-  };
-  const generateMinuteDropdownItems = () => {
-    const minutes = [0, 15, 30, 45];
-    const items = minutes.map((minute) => {
-      const formattedMinute = minute < 10 ? `0${minute}` : minute;
-      return (
-        <DropdownItem key={minute} onClick={() => handleDropdownItemClick1(minute)}>
-          {formattedMinute}
-        </DropdownItem>
-      );
-    });
-    return items;
-  };
-  const generateDropdownItems1 = () => {
-    const items = [];
-    for (let i = 1; i <= 12; i+=1) {
-      const formattedHour = i < 10 ? `0${i}` : i;
-      items.push(
-        <DropdownItem key={i} onClick={() => handleDropdownItemClick2(i)} >
-          {formattedHour}
-        </DropdownItem>
-      );
-    }
-    return items;
-  };
+  //   // setMinuteDrop(selectedMinute); 
+  // };
+  // const generateDropdownItems = () => {
+  //   const items = [];
+  //   for (let i = 1; i <= 12; i+=1) {
+  //     const formattedHour = i < 10 ? `0${i}` : i;
+  //     items.push(
+  //       <DropdownItem key={i} onClick={() => handleDropdownItemClick(i)} >
+  //         {formattedHour}
+  //       </DropdownItem>
+  //     );
+  //   }
+  //   return items;
+  // };
+  // const generateMinuteDropdownItems = () => {
+  //   const minutes = [0, 15, 30, 45];
+  //   const items = minutes.map((minute) => {
+  //     const formattedMinute = minute < 10 ? `0${minute}` : minute;
+  //     return (
+  //       <DropdownItem key={minute} onClick={() => handleDropdownItemClick1(minute)}>
+  //         {formattedMinute}
+  //       </DropdownItem>
+  //     );
+  //   });
+  //   return items;
+  // };
+  // const generateDropdownItems1 = () => {
+  //   const items = [];
+  //   for (let i = 1; i <= 12; i+=1) {
+  //     const formattedHour = i < 10 ? `0${i}` : i;
+  //     items.push(
+  //       <DropdownItem key={i} onClick={() => handleDropdownItemClick2(i)} >
+  //         {formattedHour}
+  //       </DropdownItem>
+  //     );
+  //   }
+  //   return items;
+  // };
 
 
   
-  const generateMinuteDropdownItems1 = () => {
-    const minutes = [0, 15, 30, 45];
-    const items = minutes.map((minute) => {
-      const formattedMinute = minute < 10 ? `0${minute}` : minute;
-      return (
-        <DropdownItem key={minute} onClick={() => handleDropdownItemClick3(minute)}>
-          {formattedMinute}
-        </DropdownItem>
-      );
-    });
-    return items;
-  };
-  const generateAmPmDropdownItems = () => {
-    const amPmOptions = ['AM', 'PM'];
-    return amPmOptions.map((amPm) => (
-      <DropdownItem key={amPm} onClick={() => handleDropdownItemClick4(amPm)}>
-        {amPm}
-      </DropdownItem>
-    ));
-  };
-  const generateAmPmDropdownItems1 = () => {
-    const amPmOptions = ['AM', 'PM'];
-    return amPmOptions.map((amPm) => (
-      <DropdownItem key={amPm} onClick={() => handleDropdownItemClick5(amPm)}>
-        {amPm}
-      </DropdownItem>
-    ));
-  };
+  // const generateMinuteDropdownItems1 = () => {
+  //   const minutes = [0, 15, 30, 45];
+  //   const items = minutes.map((minute) => {
+  //     const formattedMinute = minute < 10 ? `0${minute}` : minute;
+  //     return (
+  //       <DropdownItem key={minute} onClick={() => handleDropdownItemClick3(minute)}>
+  //         {formattedMinute}
+  //       </DropdownItem>
+  //     );
+  //   });
+  //   return items;
+  // };
+  // const generateAmPmDropdownItems = () => {
+  //   const amPmOptions = ['AM', 'PM'];
+  //   return amPmOptions.map((amPm) => (
+  //     <DropdownItem key={amPm} onClick={() => handleDropdownItemClick4(amPm)}>
+  //       {amPm}
+  //     </DropdownItem>
+  //   ));
+  // };
+  // const generateAmPmDropdownItems1 = () => {
+  //   const amPmOptions = ['AM', 'PM'];
+  //   return amPmOptions.map((amPm) => (
+  //     <DropdownItem key={amPm} onClick={() => handleDropdownItemClick5(amPm)}>
+  //       {amPm}
+  //     </DropdownItem>
+  //   ));
+  // };
  
  
  
 
   // weeklist functions start
+  const handleDropdownItemClick = (selectedHour) => {
+   
+    setSelectedHourDropdown(selectedHour.value);
+    
+    console.log(`Selected hour: ${selectedHour.value}`);
+    
+  };
+
+  const handleDropdownItemClick1 = (selectedMinute) => {
+   
+    setMinutedrop(selectedMinute.value);
+ 
+  };
+
+
+  
+
+
+  const handleDropdownItemClick2=(selectedHour) => {
+    
+    setSelectedHourDropdown1(selectedHour.value);
+  
+  };
+  const handleDropdownItemClick3 = (selectedMinute) => {
+    
+    setMinutedrop1(selectedMinute.value);
+   
+  };
+
+
+  
+
+  const handleDropdownItemClick4 = (selectedAmPmFrom) => {
+    
+    setSelectedFromAmPm(selectedAmPmFrom.value);
+    console.log(`Selected from AM/PM: ${selectedAmPmFrom.value}`);
+     
+  };
+  const handleDropdownItemClick5 = (selectedAmPmTo) => {
+   
+    setSelectedFromAmPm1(selectedAmPmTo.value);
+    console.log(`Selected from AM/PM: ${selectedAmPmTo.value}`);
+    
+  };
+  const generateDropdownItemsSelect = () => {
+    const items = [];
+    for (let i = 1; i <= 12; i += 1) {
+      const formattedHour = i < 10 ? `0${i}` : i;
+      items.push({ value: formattedHour, label: formattedHour });
+    }
+    return items;
+  };
+  const generateMinuteDropdownItems=()=>{
+    const minutes = [0, 15, 30, 45];
+    const items = [];
+
+    minutes.forEach((minute) => {
+    const formattedMinute = minute < 10 ? `0${minute}` : `${minute}`;
+    items.push({ value: formattedMinute, label: formattedMinute });
+  });
+
+  return items;
+  };
+  const generateAmPmDropdownItems1 = () => {
+    const amPmOptions = ['AM', 'PM'];
+    const items = [];
+  
+    amPmOptions.forEach((amPm) => {
+      items.push({ value: amPm, label: amPm });
+    });
+  
+    return items;
+  };
+  const generateDropdownItems1 = () => {
+    const items = [];
+    for (let i = 1; i <= 12; i += 1) {
+      const formattedHour = i < 10 ? `0${i}` : i;
+      items.push({ value: formattedHour, label: formattedHour });
+    }
+    return items;
+  };
+  const generateMinuteDropdownItems1 = () => {
+    const minutes = [0, 15, 30, 45];
+    const items = [];
+
+    minutes.forEach((minute) => {
+    const formattedMinute = minute < 10 ? `0${minute}` : `${minute}`;
+    items.push({ value: formattedMinute, label: formattedMinute });
+  });
+
+  return items;
+  };
+
+
+  
+  const generateAmPmDropdownItems = () => {
+    const amPmOptions = ['AM', 'PM'];
+    const items = [];
+  
+    amPmOptions.forEach((amPm) => {
+      items.push({ value: amPm, label: amPm });
+    });
+  
+    return items;
+  };
+  
   const goToPreviousWeek = () => {
     const newStartDate = new Date(currentWeekStart);
     newStartDate.setDate(newStartDate.getDate() - 7);
@@ -342,6 +460,13 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
     setSelectedDate(date); // Set the selected date
     setModalSmall(true); // Show the modal
   };
+
+  const selectData = generateDropdownItemsSelect();
+  const minutesSelectData=generateMinuteDropdownItems();
+  const toHoursSelectData=generateDropdownItems1();
+  const toMinutesSelectData=generateMinuteDropdownItems1();
+  const fromAmPmSelectData=generateAmPmDropdownItems();
+  const toAmPmSelectData=generateAmPmDropdownItems1();
  
  
 
@@ -694,8 +819,9 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
               outline
               color="primary"
               block
+              style={{borderRadius:"0px"}}
             >
-              +
+             +
             </Button>
           </div>
         )}
@@ -706,15 +832,16 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
 {mentoravailable.every(availability => (
         !availability.availableSlots.some(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
       ))  &&(
-        <div className='mt-2 text-center mx-auto' key={`edit-${date.getTime()}`}>
+        <div className='mt-2 text-center mx-auto' key={`edit-${date.getTime()}`} >
           <Button
             size='sm'
-            className='text-center mx-auto my-4 '
+            className='text-center mx-auto my-4'
             onClick={()=>handleAddSlotClick(date)}
             key={`edit-${date.getTime()}`}
             outline
             color="primary"
             block
+            style={{borderRadius:"0px"}}
           >
             +
           </Button>
@@ -810,7 +937,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
                >
                  
                  <ModalBody >
-                 <div className='text-right p-2'>
+                 {/* <div className='text-right p-2'>
                   
                    <span style={{cursor:'pointer'}} 
             className='mt-2'
@@ -852,7 +979,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
  
 >
 
-  <DropdownToggle caret color="secondary" outline className=''>
+  <DropdownToggle caret color="primary" outline className=''>
     
     
     {selectedHourDropdown !== null ? selectedHourDropdown : 'Hours'} 
@@ -867,7 +994,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
             className="mb-5 ml-3"
            
           >
-            <DropdownToggle caret color="secondary" outline>
+            <DropdownToggle caret color="primary" outline>
            
               {minutedrop !== null ? minutedrop : 'Minutes'} 
    
@@ -883,7 +1010,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
   
  
 >
-<DropdownToggle caret color="secondary" outline className='ml-3'>
+<DropdownToggle caret color="primary" outline className='ml-3'>
 {selectedfromampm !==null ? selectedfromampm : 'AM /PM' }
 <DropdownMenu className=''>
   { generateAmPmDropdownItems ()}
@@ -911,7 +1038,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
  
 >
 
-  <DropdownToggle caret color="secondary" outline className='' >
+  <DropdownToggle caret color="primary" outline className='' >
     
     
     {selectedHourDropdown1 !== null ? selectedHourDropdown1 : 'Hours'} 
@@ -926,7 +1053,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
             className="mb-5 ml-3"
            
           >
-            <DropdownToggle caret color="secondary" outline>
+            <DropdownToggle caret color="primary" outline>
            
               {minutedrop1 !== null ? minutedrop1 : 'Minutes'} 
    
@@ -942,7 +1069,7 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
   
  
 >
-<DropdownToggle caret color="secondary" outline className='ml-3'>
+<DropdownToggle caret color="primary" outline className='ml-3'>
 {selectedfromampm1 !==null ? selectedfromampm1 : 'AM /PM' }
 <DropdownMenu className=''>
   { generateAmPmDropdownItems1 ()}
@@ -951,13 +1078,205 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
       
   </Dropdown>
        </div>
-       <Button onClick={handleOkButtonClick}>OK</Button>
+       <Button onClick={handleOkButtonClick} color='primary'>OK</Button>
      </div>
                   </Colxx>
                 </FormGroup>
             </Form>
           </div>
-                 </div>
+                 </div> */}
+
+                 <div className=''>
+      <div>
+      <span style={{cursor:'pointer'}} 
+            className='mt-2'
+            role='button'
+            tabIndex={0}
+            onClick={() => setModalSmall(false)}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    setModalSmall(false);
+                }
+            }}
+        >
+            <i className='simple-icon-close text-large' />
+        </span>
+          
+          <div>
+            <Form className='mt-4'>
+            <FormGroup row className=''>
+                  <Label  sm={2} className='font-weight-bold'>
+                    Date
+                  </Label>
+                  <Colxx sm={10}>
+                  <DateRangePicker  selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+                  </Colxx>
+                </FormGroup>
+                </Form>
+                </div>
+      
+       
+       <Label className='text-one font-weight-bold'>From</Label>
+       <Row>
+        <Col md={4} sm={12} lg={4}>
+        <div className="form-group has-float-label">
+ 
+          <Label>
+          Hours
+          </Label>
+
+          <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          value={generateDropdownItemsSelect().find(option => option.value === selectedHourDropdown)}
+          onChange={handleDropdownItemClick}
+          options={[
+            { value: '', label: 'Hours', isDisabled: true }, 
+            ...selectData
+          ]}
+          />
+          </div>
+        </Col>
+        <Col md={4} sm={12} lg={4}>
+        <div className="form-group has-float-label">
+ 
+          <Label>
+          Minutes
+          </Label>
+
+          <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          value={generateMinuteDropdownItems().find(option => option.value === minutedrop)}
+          onChange={handleDropdownItemClick1}
+          options={[
+            { value: '', label: 'Minutes', isDisabled: true }, 
+            ...minutesSelectData
+          ]}
+          />
+          </div>
+        </Col>
+        <Col md={4} sm={12} lg={4}>
+        <div className="form-group has-float-label">
+ 
+          <Label>
+           AM/PM
+          </Label>
+
+          <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          // value={selectedfromampm}
+          value={fromAmPmSelectData.find(option => option.value === selectedfromampm)}
+          onChange={handleDropdownItemClick4}
+          options={[
+            { value: '', label: 'AM/PM', isDisabled: true }, 
+            ...fromAmPmSelectData
+          ]}
+          />
+          </div>
+          
+        </Col>
+        
+       </Row>
+       
+     </div>
+
+     <div className=''>
+  
+       <Label className='text-one font-weight-bold'>To</Label>
+       <div className=''>
+       <Row>
+        <Col md={4} lg={4} sm={12}>
+       
+      <div className="form-group has-float-label">
+ 
+          <Label>
+          Hours
+          </Label>
+
+          <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          value={generateDropdownItems1().find(option => option.value === selectedHourDropdown1)}
+          onChange={handleDropdownItemClick2}
+          options={[
+            { value: '', label: 'Hours', isDisabled: true }, 
+            ...toHoursSelectData
+          ]}
+          />
+          </div>
+        </Col>
+        <Col md={4} lg={4} sm={12}>
+        <div className="form-group has-float-label">
+ 
+          <Label>
+          Minutes
+          </Label>
+
+          <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          value={generateMinuteDropdownItems1().find(option => option.value === selectedHourDropdown1)}
+          onChange={handleDropdownItemClick3}
+          options={[
+            { value: '', label: 'Minutes', isDisabled: true }, 
+            ...toMinutesSelectData
+          ]}
+          />
+          </div>
+        </Col>
+        <Col md={4} lg={4} sm={12}>
+         <div>
+        
+        <div className="form-group has-float-label">
+ 
+          <Label>
+           AM/PM
+          </Label>
+
+          <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          // value={selectedfromampm}
+          value={toAmPmSelectData.find(option => option.value === selectedfromampm1)}
+          onChange={handleDropdownItemClick5}
+          options={[
+            { value: '', label: 'AM/PM', isDisabled: true }, 
+            ...toAmPmSelectData
+          ]}
+          />
+          </div>
+         
+         </div>
+         
+        </Col>
+        
+       </Row>
+       <Row>
+          <Col>
+          <Button onClick={handleOkButtonClick} color='primary'>OK</Button>
+          </Col>
+        </Row>
+      
+
+         
+        
+       </div>
+     </div>
+      </div>
                 
        
          
@@ -975,7 +1294,13 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
             
            </CardBody>
          </Card>
-         <Button className='' onClick={redirectToSessionLists1}>My Sessions</Button>
+
+         <Card style={{cursor:"pointer"}} className='my-2 text-center'>
+          <CardBody onClick={redirectToSessionLists1}>
+            <h5 className='font-weight-bold text-primary'>My Mentorship Sessions</h5>
+          </CardBody>
+         </Card>
+         {/* <Button className='' onClick={redirectToSessionLists1}>My Sessions</Button> */}
         
       {/* <PopupWizard/> */}
        </Colxx>

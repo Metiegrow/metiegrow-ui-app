@@ -2,8 +2,9 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import { baseUrl } from 'constants/defaultValues';
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, CardBody,  Label,  Row } from 'reactstrap';
+import { Badge, Button, Card, CardBody,  Col,  Label,  NavLink,  Row } from 'reactstrap';
 import { useLocation, useHistory } from 'react-router-dom'
+import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 
 
 
@@ -136,15 +137,30 @@ useEffect(() => {
             </Badge>
 
             <CardBody className='d-flex justify-content-between'>
-              <div className='d-flex justify-content-between flex-column'>
+              {/* <div className='d-flex justify-content-between flex-column'>
               
                 <h4 className='text-large text-primary'>{up.name}</h4>
-                <div className='d-flex'>
+                
+              </div> */}
+              <Row  className=''> 
+              <Col className='d-flex'> 
+                <NavLink href=''
+                className='d-flex align-items-center'>
+                  <ThumbnailLetters
+                  rounded
+                  text={up.name}
+                  alt="Card image cap"
+                  className="m-4"
+                />
+                  <h4 className='text-large text-primary ml-2'>{up.name}</h4>
+                </NavLink>
+              </Col>
+            </Row>
+              <div className='d-flex justify-content-around flex-column '>
+              <div className='d-flex'>
                   <Label className='text-one'>Date:</Label>
                   <h4 className='ml-2 font-weight-bold'>{updateformat}</h4>
                 </div>
-              </div>
-              <div className='d-flex justify-content-around flex-column '>
                 <div className='d-flex justify-content-between'>
                   <h4 className='mr-2'>From:</h4>
                   <h4 className='mr-2 font-weight-bold'>{fromtime.toLocaleTimeString([], timeOptions)}</h4>
@@ -192,20 +208,36 @@ useEffect(() => {
       return (
         <Card className='my-2' key={sh.menteeId}>
           <CardBody className='d-flex justify-content-between'>
-            <div className='d-flex justify-content-between flex-column'>
+            {/* <div className='d-flex justify-content-between flex-column'> */}
               {/* <NavLink href={`/app/mentorprofile/${sh.mentorId}`}>
                 <h4 className='text-large text-primary'>{sh.name}</h4>
               </NavLink> */}
-              <h4 className='text-large text-primary'>{sh.name}</h4>
-              <div className='d-flex'>
+              {/* <h4 className='text-large text-primary'>{sh.name}</h4> */}
+              
+            {/* </div> */}
+
+            <Row  className=''> 
+              <Col className='d-flex'> 
+                <NavLink href=''
+                className='d-flex align-items-center'>
+                  <ThumbnailLetters
+                  rounded
+                  text={sh.name}
+                  alt="Card image cap"
+                  className="m-4"
+                />
+                  <h4 className='text-large text-primary ml-2'>{sh.name}</h4>
+                </NavLink>
+              </Col>
+            </Row>
+
+            <div className='d-flex justify-content-around flex-column '>
+            <div className='d-flex'>
                 <Label className='text-one'>Date:</Label>
                 <h4 className='ml-2 font-weight-bold'>{shdateformat}</h4>
               </div>
-            </div>
-
-            <div className='d-flex justify-content-around flex-column '>
               <div className='d-flex'>
-                <Label className='text-one mr-2'>Duration:</Label>
+              <Label className='text-one mr-2'>Duration:</Label>
                 {/* <h4 className='font-weight-bold'>{sh.duration/60000} minutes</h4> */}
                 <h4 className='font-weight-bold'>{formatDuration(sh.duration)} minutes</h4>
               </div>

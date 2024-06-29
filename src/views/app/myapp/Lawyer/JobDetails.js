@@ -3,7 +3,7 @@ import { Colxx } from 'components/common/CustomBootstrap';
 // import DropzoneExample from 'containers/forms/DropzoneExample';
 
 import { baseUrl } from 'constants/defaultValues';
-import { Button, Card,CardBody, Col,  Form, FormGroup, Input, Label, NavLink, Row } from 'reactstrap';
+import { Button, Card,CardBody, Col,  Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import Select from 'react-select';
 import CustomSelectInput from 'components/common/CustomSelectInput';
 import axios from 'axios';
@@ -23,18 +23,28 @@ const doneByData=[
   { label: 'Client', value: true, key: 0 },
   { label: 'Lawyer', value: false, key: 1 },
 ]
+const jobStatusData=[
+  {label:'Yet to start',value:'YET_TO_START',key:1},
+  {label:'InProgress',value:'IN_PROGRESS',key:2},
+  {label:'Completed',value:'LAWYER_COMPLETED',key:4}
+]
 
 const JobDetails = () => {
-  const [selectedOption, setSelectedOption] = useState('');
+  // const [selectedOption, setSelectedOption] = useState('');
   const [selectedStep, setSelectedStep] = useState(null);
   const [jobdetails,setJobDetails]=useState('');
   const {jid}=useParams();
   const [editMode, setEditMode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHovered1, setIsHovered1] = useState(false);
   const [jobeditmode,setJobEditMode]=useState(false);
   const [isNewStep, setIsNewStep] = useState(false);
+  const [jobstatuseditmode,setJobStatusEditMode]=useState(false)
 
    const [userstep,setUserStep]=useState(true);
+   const [jobstatuschange,setJobStatusChange]=useState(true);
+ 
+
    
  
   const [editData, setEditData] = useState({ stepName: '', description: '', doneBy:'', upload:true
@@ -49,17 +59,6 @@ const JobDetails = () => {
     setUserStep(val.value); 
   
   };
-  
-//   useEffect(() => {
-//     if (jobdetails && jobdetails.steps && jobdetails.steps.length > 0) {
-//         // If selectedStep is not set or if isNewStep is true, set it to the last step
-//         if (!selectedStep || isNewStep) {
-//             setSelectedStep(jobdetails.steps[jobdetails.steps.length - 1]);
-//             setIsNewStep(false); // Reset isNewStep to false after setting selectedStep
-//         }
-//     }
-// }, [jobdetails, isNewStep]);
-
 
 
   // Backedn url 
@@ -72,6 +71,7 @@ const JobDetails = () => {
 
   
 if (response.data.steps && response.data.steps.length > 0) {
+  // jobdetails.steps = jobdetails.steps.sort((a, b) => a.stepNumber - b.stepNumber);
   setSelectedStep(response.data.steps[0]);
   setEditData({
     stepName: response.data.steps[0].stepName,
@@ -82,7 +82,8 @@ if (response.data.steps && response.data.steps.length > 0) {
     
    
   });
-  
+ 
+ 
 }
         
       } catch (error) {
@@ -97,6 +98,15 @@ if (response.data.steps && response.data.steps.length > 0) {
        
     
     },[url])
+
+
+    const isFormFilled = () => {
+      return (
+        editData.stepName.trim() !== '' &&
+        editData.description.trim() !== '' &&
+        userstep !== ''
+      );
+    };
   
 
     const handleAddStepCard = () => {
@@ -111,20 +121,31 @@ if (response.data.steps && response.data.steps.length > 0) {
           doneBy: 'CLIENT',
           
         };
+
         const updatedJobDetails = {
           ...jobdetails,
           steps: [...jobdetails.steps, newCard]
+          // steps: updatedSteps,
         };
         setJobDetails(updatedJobDetails);
         setIsNewStep(true);
         setEditMode(true);
         setSelectedStep(newCard);
+        setEditData({
+          stepName: '',
+          description: '',
+          doneBy: '',
+        });
+    
       
       }
     };
+
+    
   //   function getTokenRes() {
   //     return localStorage.getItem('tokenRes');
   // }
+ 
   function getRoleRes() {
     return localStorage.getItem('roleRes');
   }
@@ -155,63 +176,10 @@ if (response.data.steps && response.data.steps.length > 0) {
     return null; 
   };
 
-
-  
-
   // const token = getTokenRes();
   const history = useHistory();
 
-    
-
-    // const handleAddCard = async () => {
-    //   const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
-    
-    //   const newStepData = {
-    //     stepName: "Step name",
-    //     description: "description",
-    //     upload: true,
-    //     doneBy: false
-    //   };
-    
-    //   const addJobUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${newStepNumber}`;
-    
-    //   try {
-    //     const response = await fetch(addJobUrl, {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${token}`
-    //       },
-    //       body: JSON.stringify(newStepData)
-    //     });
-    
-    //     if (response.status===200) {
-    //       const responseText = await response.text(); 
-    //       console.log("Raw response text:", responseText);
-    //       try {
-    //         const newCard = JSON.parse(responseText); 
-    //         const updatedJobDetails = {
-    //           ...jobdetails,
-    //           steps: [...(jobdetails.steps || []), newCard]
-    //         };
-    //         setJobDetails(updatedJobDetails);
-           
-    //         history.go(0);
-    //       } catch (jsonError) {
-    //         console.error("Failed to parse JSON response:", jsonError);
-    //       }
-    //     } else {
-    //       const errorText = await response.text();
-    //       console.error("Failed to add new step:", errorText);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error adding new step:", error);
-    //   }
-    
-    // };
-    
-
-    
+  
     const handleStepClick = (step) => {
       setSelectedStep(step);
       setEditMode(false);
@@ -233,6 +201,9 @@ if (response.data.steps && response.data.steps.length > 0) {
       setJobEditMode(true);
      
     };
+    const handleJobStatusClick=()=>{
+      setJobStatusEditMode(true);
+    }
   
    
   const showClientNoJob=()=>{
@@ -257,18 +228,69 @@ if (response.data.steps && response.data.steps.length > 0) {
   <CardBody>
     <h3>You didnt created step yet <span className='mx-2'>
     <i className='iconsminds-information'/></span></h3>
+    <Button color='primary' onClick={handleAddStepCard}>Create your first step </Button>
   </CardBody>
 </Card>
   </div>;
   };
+
+  const ApproveJobStatusByClient=async()=>{
+    const approveUrl=`${baseUrl}/api/lawyer/job/${jid}/status/client`
+    try{
+      const response= await axios.put(approveUrl,{status:"COMPLETED"});
+      if(response.status===200){
+        LawyerJobsDetails();
+      }
+    }
+    catch(error){
+      console.error('Failed to update job status:', error);
+    }
+  }
+  const RejectJobStatusByClient=async()=>{
+    const approveUrl=`${baseUrl}/api/lawyer/job/${jid}/status/client`
+    try{
+      const response= await axios.put(approveUrl,{status:"IN_DISPUTE"});
+      if(response.status===200){
+        LawyerJobsDetails();
+      }
+    }
+    catch(error){
+      console.error('Failed to update job status:', error);
+    }
+  }
   
-   
+  const clientJobApproveInfo=()=>{
+    if(roleRes.includes("MENTEE")&&jobdetails.jobStatus==="LAWYER_COMPLETED"){
+      return(
+          <Row>
+          <Col  className='text-center my-2'  style={{ position: 'relative', top: '50%', bottom:'-50%'  }}>
+          <Card className='mx-auto '>
+          <CardBody>
+            <h3>Your lawyer has marked the job as completed</h3>
+            <p>Do you agree ?</p>
+            <Button className='mr-2' color='primary' onClick={ApproveJobStatusByClient}>Accept</Button>
+            <Button className='' outline onClick={RejectJobStatusByClient}>Raise a dispute</Button>
+          </CardBody>
+         
+          </Card>
+        </Col>
+        </Row> 
+      )
+    }
+    return null;
+  }
+  
+
+ 
     const handleCancelClick = () => {
       setJobEditMode(false);
     };
+    const handleCancelStatusClick = () => {
+      setJobStatusEditMode(false);
+    };
    
    
- 
+    
   
     const saveEdits = async () => {
       // const updateUrl = `${url}/steps/${selectedStep.id}`;
@@ -290,35 +312,102 @@ if (response.data.steps && response.data.steps.length > 0) {
           
             LawyerJobsDetails();
           setEditMode(false);
+
+
+            // Reassign step numbers to be sequential
+      // const updatedSteps = reassignStepNumbers(jobdetails.steps);
+
+      // const updatedJobDetails = {
+      //   ...jobdetails,
+      //   steps: updatedSteps,
+      // };
+
+      // setJobDetails(updatedJobDetails);
+      // Reassign step numbers to be sequential
+    
+      
+      
           
         }
       } catch (error) {
         console.error('Failed to update step:', error);
       }
     };
+    // const saveEdits1 = async () => {
+    //   // const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
+    //   const updateUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${selectedStep.stepNumber} `;
+    //   const dataToSend = {
+    //     ...editData,
+    //      doneBy:userstep, 
+        
+    //   };
+    //   console.log('Payload to send:', dataToSend); 
+     
+    //   try {
+    //     const response = await axios.post(updateUrl,dataToSend);
+         
+    //     if (response.status === 200) {
+    //       LawyerJobsDetails();
+    //       setEditMode(false);
+
+
+    //       // Reassign step numbers to be sequential
+    //   // const updatedSteps = reassignStepNumbers(jobdetails.steps);
+
+    //   // const updatedJobDetails = {
+    //   //   ...jobdetails,
+    //   //   steps: updatedSteps,
+    //   // };
+
+    //   // setJobDetails(updatedJobDetails);
+      
+    //   // setIsNewStep(false); // Reset the new step flag after creation
+
+
+      
+          
+    //     }
+    //   } catch (error) {
+    //     console.error('Failed to update step:', error);
+    //   }
+    // };
     const saveEdits1 = async () => {
-      // const newStepNumber = jobdetails && jobdetails.steps ? jobdetails.steps.length + 1 : 1;
       const updateUrl = `${baseUrl}/api/lawyer/job/${jid}/jobDetail/step/${selectedStep.stepNumber} `;
       const dataToSend = {
         ...editData,
-         doneBy:userstep, 
-        
+        doneBy: userstep,
       };
+    
       console.log('Payload to send:', dataToSend); 
-     
+    
       try {
-        const response = await axios.post(updateUrl,dataToSend);
          
-        if (response.status === 200) {
-          LawyerJobsDetails();
-          setEditMode(false);
-          // Reload the page if the response status is 200 (OK)
-          history.go(0);
+        const response = await axios.get(`${baseUrl}/api/lawyer/job/${jid}`);
+        const existingSteps = response.data.steps;
+        const existingStepNumbers = existingSteps.map(step => step.stepNumber);
+    
+        const selectedStepNumber = selectedStep.stepNumber;
+    
+        // Check if all steps up to selectedStepNumber - 1 are in existingStepNumbers
+        const allPreviousStepsOccupied = [...Array(selectedStepNumber - 1).keys()].every(stepNumber => existingStepNumbers.includes(stepNumber + 1));
+    
+        if (allPreviousStepsOccupied) {
+          // Post the current step
+          const postResponse = await axios.post(updateUrl, dataToSend);
+    
+          if (postResponse.status === 200) {
+            LawyerJobsDetails();
+            setEditMode(false);
+          }
+        } else {
+          alert('Please fill out all previous steps before creating or updating this step.');
         }
       } catch (error) {
         console.error('Failed to update step:', error);
       }
     };
+    
+    
     
     
    
@@ -340,7 +429,10 @@ if (response.data.steps && response.data.steps.length > 0) {
       saveJobs();
       setJobEditMode(false);
     };
-
+    
+    // const handleSaveJobStatus=()=>{
+    //   setJobStatusEditMode(false);
+    // }
    
     
     const saveStatus=async( selectedKey)=>{
@@ -350,6 +442,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         const response = await axios.put(updateStatusUrl, {status:selectedKey}); 
         if (response.status === 200) {
           LawyerJobsDetails();
+          
           setEditMode(false);
           
          
@@ -359,35 +452,52 @@ if (response.data.steps && response.data.steps.length > 0) {
         console.error('Failed to update job status:', error);
       }
     }
+
+    const saveJobStatus=async(selectedKey)=>{
+      const updateJobStatusUrl=`${baseUrl}/api/lawyer/job/${jid}/status/lawyer`
+      try{
+        const response= await axios.put(updateJobStatusUrl,{status:selectedKey});
+        if (response.status === 200) {
+          LawyerJobsDetails();
+          setJobStatusEditMode(false);
+          
+         
+        }
+      }
+      catch(error){
+        console.error('Failed to update job status:', error);
+      }
+    }
+
+
+   
+
+    // const handleSave = () => {
+    //   if (isNewStep) {
+        
+    //     saveEdits1();
+    //   } else {
+        
+    //     saveEdits();
+    //   }
+    // };
     const handleSave = () => {
       if (isNewStep) {
-        
-        saveEdits1();
+        if (isFormFilled()) {
+          saveEdits1();
+        } else {
+          console.warn('Please fill all required fields.');
+        }
       } else {
-        
         saveEdits();
       }
     };
     
+
     const showPlusCard = () => {
       if (roleRes.includes("LAWYER")) {
         return (
-          <Card>
-            {/* <CardBody className='my-2 ' style={{cursor: "pointer"}} onClick={handleAddCard}> */}
-            
-          <CardBody className='my-2 ' style={{cursor: "pointer"}} onClick={handleAddStepCard}>
-            <div className=''>
-            <h5 className='text-center mx-auto w-100' style={{ cursor: "pointer"}}>
-                Create your first step
-              </h5>
-              <h2 className='text-center mx-auto w-100' style={{ cursor: "pointer"}}>
-                +
-              </h2>
-            </div>
-              
-
-            </CardBody>
-          </Card>
+          null
         );
       }
     
@@ -414,7 +524,7 @@ if (response.data.steps && response.data.steps.length > 0) {
       if (roleRes.includes("LAWYER")) {
         return (
           <div
-            className='font-weight-semibold text-large'
+            className='font-weight-semibold text-large '
             style={{ cursor: 'pointer' }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -428,7 +538,7 @@ if (response.data.steps && response.data.steps.length > 0) {
             role="button"
             tabIndex={0}
           >
-            <h1 className='ml-1'>{jobdetails.jobName}</h1>
+            <h1 className=''>{jobdetails.jobName}</h1>
             
             {isHovered && (
               <span className='ml-2 text-primary text-one'>
@@ -443,10 +553,44 @@ if (response.data.steps && response.data.steps.length > 0) {
         );
       }
       
-      return <h1 className='ml-1'>{jobdetails.jobName} </h1>;
+      return <h1 className=''>{jobdetails.jobName} </h1>;
     };
     
-   
+   const showJobStatusEditIcon=()=>{
+    if (roleRes.includes("LAWYER")) {
+      return (
+        <div
+          className='font-weight-semibold text-large d-flex'
+          style={{ cursor: 'pointer' }}
+          onMouseEnter={() => setIsHovered1(true)}
+          onMouseLeave={() => setIsHovered1(false)}
+          onClick={() => setJobStatusEditMode(true)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === 'Space') {
+              handleJobStatusClick();
+              event.preventDefault();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <h6 className='text-muted'>job status : {jobdetails.jobStatus}</h6>
+          
+          {isHovered1 && (
+            <span className='ml-2 text-primary text-one'>
+              <i 
+                className='simple-icon-pencil' 
+                style={{ cursor: 'pointer' }} 
+                size='sm'
+              />
+            </span>
+          )}
+        </div>
+      );
+    }
+    
+    return <h6 className='text-muted'>job status : {jobdetails.jobStatus}</h6>;
+   }
     
     const showAddStepCard = () => {
       if (roleRes.includes("LAWYER")) {
@@ -533,34 +677,27 @@ if (response.data.steps && response.data.steps.length > 0) {
     };
 
     const location = useLocation();
-  const { lawyerName,clientName,lawyerId } = location.state || {};
+  const { lawyerName,clientName,lawyerId ,clientId} = location.state || {};
+  const isLawyer = roleRes.includes("LAWYER");
+
+  const navigateToProfile = () => {
+    history.push(`/app/lawyerprofile/${lawyerId}`);
+  };
+  
     
 
   return (
     <div>
+ 
         <Row>
-        <Col>
-        <div>
-     
-        {lawyerName ? (
-          <NavLink href={`/app/lawyerprofile/${lawyerId}`}>
-          <h6 className='text-muted'>Lawyer: {lawyerName}</h6>
-          </NavLink>
-       
-      ) : (
-         <h6 className='text-muted'>Client: {clientName}</h6>
-      )}
-        </div>
-        </Col>
-        
-       
-        <Col md={12} lg={12} sm={12} className='my-2'>
+
+        {/* <Col md={12} lg={12} sm={12} className='my-2'>
         {jobdetails.steps&&jobdetails.steps.length>0?(
          null
         ):(
           showClientNoJob()
         )}
-        </Col>
+        </Col> */}
         <Col md={12} lg={4}>
         
         
@@ -586,7 +723,7 @@ if (response.data.steps && response.data.steps.length > 0) {
             </div></Col>
             
           </Row>
-         
+          
             
           ) : (
            
@@ -597,44 +734,147 @@ if (response.data.steps && response.data.steps.length > 0) {
        
           )
         }
+        <Row>
+        <Col>
+        <div>
+         
+         {/* <NavLink href={`/app/lawyerprofile/${lawyerId}`}>
+          <h6 className='text-muted'>Lawyer: {lawyerName}</h6>
+          </NavLink> */}
+     
+        {lawyerName ? (
+         
+          
+      <div role='button' tabIndex={0}  onClick={navigateToProfile} 
+       onKeyPress={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          navigateToProfile();
+        }
+      }}
+      style={{ cursor: 'pointer' }}>
+      <h6 className='text-muted'>Lawyer: {lawyerName}</h6>
+    </div>
+          
+       
+      ) : (
+         <h6 className='text-muted'>Client: {clientName}</h6>
+      )}
+        </div>
+        </Col>
+         
+        </Row>
+        <Row>
+        <Col>
+            
+            {jobstatuseditmode ? (
+          <Row className='d-flex align-items-center'>
+           
+            <Col md={6}>
+            <div className=''>
+           <Select
+          components={{ Input: CustomSelectInput }}
+          className="react-select"
+          classNamePrefix="react-select"
+          name="form-field-name"
+          
+          // value={selectedOption}
+          value={jobstatuschange}
+          
+          onChange={(val) => {
+         console.log(val);  
+          // setSelectedOption(val);
+          setJobStatusChange(val);
+          // handleJobStatusChange
+          // setSelectedStep(val);
+          // saveJobStatus(val.key);
+          saveJobStatus(val.value);
+      }}
+          
+            options={jobStatusData}
+          
+        />
+           
+          </div>
+            </Col>
+            <Col md={6}> 
+            <div className='my-3'>
+              {/* <Button color="primary" onClick={handleSaveJobStatus}>Save</Button> */}
+              <Button color="secondary" className="ml-2" onClick={handleCancelStatusClick}>Cancel</Button>
+            </div></Col>
+            
+          </Row>
+          
+            
+          ) : (
+           
+
+          showJobStatusEditIcon()
+          
+          
+       
+          )
+        }
+          </Col>
+        </Row>
+       
 
 
-
-        {/* <div
-          className='font-weight-semibold text-large '
-          style={{ cursor: 'pointer' }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-         onClick={()=>setJobEditMode(true)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === 'Space') {
-              
-              handleJobNameClick();
-              event.preventDefault();
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          >
-           <h1 className='ml-1'>{jobdetails.jobName}</h1>  
-            {isHovered && (
-              <span className='ml-2 text-primary text-one' >
-              <i 
-                className='simple-icon-pencil' 
-                style={{ cursor: 'pointer' }} 
-                size='sm'
-              />
-              </span>
-             
-              
-            )}
-          </div> */}
+          {clientJobApproveInfo()}
       
         </Col>
-        <Col><LawyerJobNotes jobId={jid}/></Col>
+        {/* <Col className=''>
+        <LawyerJobNotes jobId={jid}/></Col> */}
+       
+
+        <Col className=''>
+        <div className='d-flex justify-content-end align-items-center '>
+        <div className=''>
+        {roleRes.includes("MENTEE") ? (
+          <Button 
+            className='mr-2'  
+            outline 
+            color='primary' 
+            onClick={() => history.push({
+              pathname: '/app/lawyer/reviews',
+              state: { lawyerName, clientId, clientName, lawyerId } 
+            })}
+          >
+            Add Reviews
+          </Button>
+        ) : null}
+        
+        
+  
+        </div>
+        <div className=''>
+        <LawyerJobNotes jobId={jid} />
+        </div>
+        </div>
+        
+       
+       </Col>
+
+       
+
+
+        </Row>
+        
+        <Row>
+        <Col md={12} lg={12} sm={12} className='my-2'>
+
+        
+        
+        {jobdetails.steps&&jobdetails.steps.length>0?(
+         null
+        ):(
+          showClientNoJob()
+        )}
+        </Col>
         </Row>
       <Row>
+      
       <Colxx lg={4}>
+     
       {jobdetails.steps&&jobdetails.steps.map((s)=>{
             return(
               <div key={s.id}>
@@ -708,39 +948,14 @@ if (response.data.steps && response.data.steps.length > 0) {
           ):( 
           showPlusCard() 
           )}
-          
-          {/* <Card>
-            <CardBody className='my-2' style={{cursor:"pointer"}} onClick={handleAddStepCard}>
-              <h1 className=' text-center mx-auto w-100' 
-              style={{fontSize:"60px",cursor:"pointer"}}
-              >+</h1>
-            </CardBody>
-          </Card> */}
-
-            {/* <Card>
-            <CardBody className='my-2' style={{cursor:"pointer"}} onClick={handleAddCard}>
-              <h1 className=' text-center mx-auto w-100' 
-              style={{fontSize:"60px",cursor:"pointer"}}
-              >+</h1>
-            </CardBody>
-          </Card> */}
-
-          {/* <Card>
-            <CardBody className='my-2' style={{cursor:"pointer"}} onClick={handleAddCard}>
-              <h1 className=' text-center mx-auto w-100' 
-              style={{fontSize:"60px",cursor:"pointer"}}
-              >+</h1>
-            </CardBody>
-          </Card> */}
       </Colxx>
  
-     
-
-
       <Colxx>
-  
+     
+      
           <Col>
           {/* right side step details */}
+         
           {selectedStep && (
             
             <Card className='mb-2  '>
@@ -752,22 +967,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                 <h2 className='text-primary '>Step {selectedStep.stepNumber} 
                 {editMode ? ` : ${editData.stepName}` : ""}
                 </h2>
-               
-                {/* <div>
-                <Button className='mr-2' outline color="primary" onClick={() => setEditMode(!editMode)}>
-                
-                
-                 {editMode ? <i className='simple-icon-close' /> : <i className='simple-icon-pencil ' />
-                  
-                  } 
-                
-
-                  </Button>
-                  <Button outline color="primary" >
-                  <i className='simple-icon-trash ' />
-                  </Button>
-                </div> */}
-                 
+              
                   {showEdit()}
 
                   
@@ -830,26 +1030,7 @@ if (response.data.steps && response.data.steps.length > 0) {
                      
                         </Col>
                       </FormGroup>
-                      {/* <FormGroup  className='py-2'>
-       <Col sm={2}>
-       <Label className=''>Documents</Label>
-       </Col>
-        <Col>
-        <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.id}}`}/>
-       
-     <div className='mt-4'>
-   
-                      {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                        <h5 key={document}>{document.name}<span className='ml-2 text-primary'>
-                        <i className='iconsminds-download-1 font-weight-bold mx-1'  style={{cursor:"pointer"}}/>
-                        <i className='simple-icon-trash  mx-1' style={{cursor:"pointer"}}/></span></h5>
-                      ))}
-                    </div>
-   
-
-        </Col>
-        
-       </FormGroup> */}
+                     
 
        {isNewStep ? null : (
             <>
@@ -885,92 +1066,45 @@ if (response.data.steps && response.data.steps.length > 0) {
             </>
           )}
 
-          {isNewStep ? null : (
-            <FormGroup className='py-2'>
-              <Col sm={2}>
-                <Label>Status</Label>
-              </Col>
-              <Col>
-              <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          
-          value={selectedOption}
-          
-          onChange={(val) => {
-         console.log(val);  
-          setSelectedOption(val);
-          setSelectedStep(val);
-          saveStatus(val.key);
-      }}
-          
-            options={selectData}
-          
-        />
         
-              </Col>
-            </FormGroup>
-          )}
-      {/* <FormGroup>
-        <Col sm={2}>
-          <Label className=''>
-            Status
-          </Label>
-        </Col>
-        <Col>
-        <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          
-          value={selectedOption}
-          
-          onChange={(val) => {
-         console.log(val);  
-        setSelectedOption(val);
-        setSelectedStep(val);
-        saveStatus(val.key);
-      }}
-          
-            options={selectData}
-          
-        />
-        
-        </Col>
-       
-      </FormGroup> */}
       <FormGroup>
-      <Col>   {isNewStep ? (
+      <Col>   
+      {/* {isNewStep ? (
         
         <Button color="primary" onClick={handleSave}>Create</Button>
       ) : (
         // Save button for editing an existing step
         <Button color="primary" onClick={handleSave}>Save</Button>
+      )} */}
+      {isNewStep ? (
+        <Button 
+          color="primary" 
+          onClick={handleSave}
+          disabled={!isFormFilled()} 
+        >
+          Create
+        </Button>
+      ) : (
+        <Button color="primary" onClick={handleSave}>Save</Button>
       )}
      </Col>
      </FormGroup>
-    
      
-                     
-                    
-                    </>
-                  ) : (
-                    <>
-                            <FormGroup className='py-2'>
+                </>
+              ) : (
+                <>
+                        <FormGroup className='py-2'>
 
-                      <Col sm={2}>
-                      <Label className='text-one'>Name</Label>
-                      </Col>
-                      <Col>
-                      <h3>{selectedStep.stepName}</h3>
+                  <Col sm={2}>
+                  <Label className='text-one'>Name</Label>
+                  </Col>
+                  <Col>
+                  <h3>{selectedStep.stepName}</h3>
 
-                      </Col>
+                  </Col>
 
-                          
-                          </FormGroup>
+                      
+                      </FormGroup>
                   <FormGroup  className='py-2'>
                   <Col sm={2}>
                   <Label className='text-one'>Description</Label>
@@ -990,78 +1124,84 @@ if (response.data.steps && response.data.steps.length > 0) {
                   
                   </FormGroup>
                   <FormGroup  className='py-2'>
-                  <Col sm={2}>
+                  {(selectedStep.doneBy === 'CLIENT' || (selectedStep.doneBy === 'LAWYER' && isLawyer)) && (
+                    <Col sm={2}>
                   <Label className='text-one'>Documents</Label>
                   </Col>
+                  )}
+                 
                   <Col>
-                  <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.stepNumber}`}/>
+                  {(selectedStep.doneBy === 'CLIENT' || (selectedStep.doneBy === 'LAWYER' && isLawyer)) && (
+                    <DropzoneExample jobId={`${jid}`} stepNo={`${selectedStep.stepNumber}`} />
+                  )}
+                  {/* <DropzoneExample   jobId={`${jid}`} stepNo={`${selectedStep.stepNumber}`}/> */}
+                 
 
                   <div className='mt-4'>
-                                {selectedStep.documentList && selectedStep.documentList.map((document) => (
-                                  <h5 key={document.id}>{document.name}
-                                  <span className='ml-2 text-primary' role="button"
-                                 tabIndex="0" 
-                               onKeyDown={(e) => handleKeyDown(e, downloadDocument, document.id)}
-                               onClick={() => downloadDocument(document.id)}>
-                               <i className='iconsminds-download-1 mx-1 '  
-                                  style={{cursor:"pointer"}}/>
-                                  </span>
-                                  <span  tabIndex="0" role='button'
-                               onKeyDown={(e) => handleKeyDown(e, deleteDocument, document.id)}
-                               onClick={() => deleteDocument(document.id)}>
-                                  
-                                  
-                                  <i className='simple-icon-trash mx-1 ' style={{cursor:"pointer"}}/>
-                                  </span></h5>
-                                ))}
-                
-                              </div>
+                      {selectedStep.documentList && selectedStep.documentList.map((document) => (
+                        <h5 key={document.id}>{document.name}
+                        <span className='ml-2 text-primary' role="button"
+                        tabIndex="0" 
+                      onKeyDown={(e) => handleKeyDown(e, downloadDocument, document.id)}
+                      onClick={() => downloadDocument(document.id)}>
+                      <i className='iconsminds-download-1 mx-1 '  
+                        style={{cursor:"pointer"}}/>
+                        </span>
+                        <span  tabIndex="0" role='button'
+                      onKeyDown={(e) => handleKeyDown(e, deleteDocument, document.id)}
+                      onClick={() => deleteDocument(document.id)}>
+                        
+                        
+                        <i className='simple-icon-trash mx-1 ' style={{cursor:"pointer"}}/>
+                        </span></h5>
+                      ))}
+      
+                    </div>
                   </Col>
                     
                     </FormGroup>
-                    {/* <FormGroup>
-                    <Col sm={2}>
-                    <Label className='text-one'>Comment</Label>
-                    </Col>
-                    <Col>
-                    <Input type="textarea" name="comment" />
-                    </Col>
-                      
-                      </FormGroup> */}
-                    <FormGroup>
+                    
+                  <FormGroup>
                     <Col sm={2}>
                       <Label className='text-one'>
-                        Status
+                        Status 
                       </Label>
                     </Col>
                     <Col>
-                    {/* <Select
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      name="form-field-name"
-                      value={selectedOption}
-                      onChange={setSelectedOption}
-                      options={selectData}
-                    /> */}
-                    <h3>{selectedStep.status}</h3>
+                    
+                    
+
+                  {(selectedStep.doneBy === 'LAWYER' && isLawyer) || selectedStep.doneBy === 'CLIENT' ? (
+                  <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name"
+                    value={selectData.find(option => option.value === selectedStep.status)}
+                    placeholder={selectedStep.status ? selectedStep.status : 'Select status'}
+                    onChange={(val) => {
+                      console.log(val);
+                      setSelectedStep({ ...selectedStep, status: val.value });
+                      saveStatus(val.key);
+                    }}
+                    options={selectData}
+                  />
+                ) : (
+                  <h3>{selectedStep.status}</h3>
+                )}
+
+
+                 
+
+                    
                     
                     </Col>
 
-                    </FormGroup>
-                    {/* <FormGroup>
-                      <Label>
-                        Status
-                      </Label>
-                      <Input type="select">
-                        
-                        <option>{selectedStep.status}</option>
-                        <option>In Progress</option>
-                        <option>completed</option>
-                        
-                         
-                      </Input>
-                    </FormGroup> */}
+                    </FormGroup>  
+
+
+
+                    
                     </>
 
                     
