@@ -1,6 +1,6 @@
 import { Colxx } from 'components/common/CustomBootstrap';
 import React ,{useState,useEffect} from 'react';
-import {  Button,Row,Card,CardBody,CardSubtitle,CardImg,NavLink} from 'reactstrap';
+import {  Button,Row,Card,CardBody,CardImg,NavLink} from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
 import {useParams,useHistory} from "react-router-dom";
@@ -245,15 +245,15 @@ const MentorProfile = () => {
             </Row>
             <hr/>
             {(mentorprofiledetails1.featuredArticle || mentorprofiledetails1.introVideo) && (
-              <Colxx className='sm="12" md="12" lg="12" xxs="12" mt-5'>
+              // <Colxx className='sm="12" md="12" lg="12" xxs="12" mt-5'>
                 <Row>
                   <div>
                     <h1>Get to know {mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1>
                   </div>
                   {/* <h3 className='font-weight-semibold text-large'>Get to Know Arun Prasad</h3> */}
                 </Row>
-              </Colxx>
             )}
+              {/* </Colxx> */}
             {/* <Colxx xxs="12"> */}
            
         <Row>
@@ -265,21 +265,21 @@ const MentorProfile = () => {
          
           <Card className="mb-4 w-80">
            
-           <div className="position-relative">
+           {/* <div className="position-relative">
              <CardImg
                top
                src="/assets/img/profiles/2.jpg"
                alt="Card image cap"
              />
             
-           </div>
+           </div> */}
            <CardBody>
-             <h4 className='color-theme-2'>LINK</h4>
-             <h4 className='font-weight-semibold text-one'>JOB TITLES DON&apos;T MATTER!</h4>
-             <CardSubtitle className="mb-4 text-one text-muted">
+             <h4 className='font-weight-semibold text-one text-center'>Featured Article</h4>
+             <h4 className='color-theme-2 mt-4 text-center'>LINK</h4>
+             {/* <CardSubtitle className="mb-4 text-one text-muted">
              Yeah, you read that right. Titles are not something which should
               drive your decision to join a new company.
-             </CardSubtitle>
+             </CardSubtitle> */}
  
           
          
@@ -295,7 +295,7 @@ const MentorProfile = () => {
           <NavLink href={mentorprofiledetails1.introVideo}>
        
             <Card className="mb-4 w-80">
-          
+              {thumbnailUrl && (
               <div className="position-relative">
                 <CardImg
                   top
@@ -305,16 +305,18 @@ const MentorProfile = () => {
                 />
                
               </div>
+              )}
               <CardBody>
              
-                <h4 className='color-theme-2'>VIDEO</h4>
-                <h4 className='font-weight-semibold text-one'>Concatenating Strings
+             {!thumbnailUrl && <h4 className='font-weight-semibold text-one text-center mb-4'>Intro video</h4>}
+                <h4 className='color-theme-2  text-center'>VIDEO</h4>
+                {/* <h4 className='font-weight-semibold text-one'>Concatenating Strings
                  Mock Interview (Senior MAANG Engineer)
                 </h4>
                 <CardSubtitle className="mb-4 text-one text-muted">
                 Dont leave your software engineering career to chance. 
                 Sign up for Exponents SWE interview course today:Concatenating strings is …
-                </CardSubtitle>
+                </CardSubtitle> */}
     
              
             

@@ -1,7 +1,8 @@
 import { Colxx } from "components/common/CustomBootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import {
+  Button,
   // CustomInput,
   Dropdown,
   DropdownItem,
@@ -70,6 +71,22 @@ const LawyerCardFilter = ({
   const [searchLanguage, setSearchLanguage] = useState('');
   const [filteredTopics, setFilteredTopics] = useState(topics);
   const [searchTopics, setSearchTopics] = useState('');
+  const [viewFilters, setViewFilters] = useState(false)
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 992); 
+    };
+
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   const handleSearchChange = (event) => {
     const newText = event.target.value.toLowerCase();
@@ -88,18 +105,51 @@ const LawyerCardFilter = ({
     setFilteredTopics(topics.filter((t) => t.toLowerCase().includes(newText)));
   };
 
+  const handleViewFilters = () => {
+    setViewFilters(!viewFilters)
+  };
+
   return (
     <div>
       <Row className="mb-4">
         <Colxx xxs="12" sm="12" md="12" lg="12" className=" ">
           <div className="">
             <div className="d-flex flex-wrap  my-3">
+            {isMobile && (
+                <Button
+                  size="sm"
+                  color="primary"
+                  outline
+                  className="d-block d-lg-none col-sm-12 mb-3 position-relative"
+                  onClick={handleViewFilters}
+                >
+                  {viewFilters ? (
+                    <span>
+                      Close filters
+                      <i
+                        className="simple-icon-arrow-up mr-0 icon-right"
+                        style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                      />
+                    </span>
+                  ) : (
+                    <span>
+                      View filters
+                      <i
+                        className="simple-icon-arrow-down icon-right"
+                        style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                      />
+                    </span>
+                  )}
+                </Button>
+              )}
+               {(!isMobile || viewFilters) && (
+                <>
               <Dropdown
                 isOpen={dropdownBasicOpen}
                 toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
-                className="mb-5 mx-2"
+                className="mb-3 col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
+                <DropdownToggle size="sm" caret color="primary" outline className="col-lg-auto col-sm-12 ">
                   Topics
                 </DropdownToggle>
                 <DropdownMenu>
@@ -113,8 +163,8 @@ const LawyerCardFilter = ({
                     />
                   </div>
                   <PerfectScrollbar style={{ maxHeight: '200px' }}>
-                  {selectedTopics[0] &&  <DropdownItem onClick={() => handleTopicsSelect("")}>
-                    <span>{selectedTopics}</span><i className="iconsminds-close" />
+                  {selectedTopics[0] &&  <DropdownItem onClick={() => handleTopicsSelect("")} className="bg-light d-flex justify-content-between align-items-center">
+                    <span>{selectedTopics}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
                   {filteredTopics.map((t) => (
                       <DropdownItem key={t} onClick={() => handleTopicsSelect(t)}>
@@ -128,9 +178,9 @@ const LawyerCardFilter = ({
               <Dropdown
                 isOpen={dropdownBasicOpen1}
                 toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
-                className="mb-5 mx-2"
+                className="mb-3 col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
+                <DropdownToggle size="sm" caret color="primary" outline className="col-lg-auto col-sm-12 ">
                  Languages
                 </DropdownToggle>
                 <DropdownMenu>
@@ -144,8 +194,8 @@ const LawyerCardFilter = ({
                     />
                   </div>
                   <PerfectScrollbar style={{ maxHeight: '200px' }}>
-                 {selectedLanguage[0] &&  <DropdownItem onClick={() => handleLanguageSelect("")}>
-                    <span>{language.find(c => c.iso_code === selectedLanguage)?.name}</span><i className="iconsminds-close" />
+                 {selectedLanguage[0] &&  <DropdownItem onClick={() => handleLanguageSelect("")} className="bg-light d-flex justify-content-between align-items-center">
+                    <span>{language.find(c => c.iso_code === selectedLanguage)?.name}</span><i className="iconsminds-close  ml-auto" />
                   </DropdownItem>}
                   {filteredLanguage.map((l) => (
                   <DropdownItem key={l.iso_code} onClick={() => handleLanguageSelect(l.iso_code)}>
@@ -159,9 +209,9 @@ const LawyerCardFilter = ({
               <Dropdown
                 isOpen={dropdownBasicOpen2}
                 toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
-                className="mb-5 mx-2"
+                className="mb-3 col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
+                <DropdownToggle size="sm" caret color="primary" outline className="col-lg-auto col-sm-12 ">
                   Price
                 </DropdownToggle>
                 <DropdownMenu>
@@ -187,9 +237,9 @@ const LawyerCardFilter = ({
               <Dropdown
                 isOpen={dropdownBasicOpen3}
                 toggle={() => setDropdownBasicOpen3(!dropdownBasicOpen3)}
-                className="mb-5 mx-2"
+                className="mb-3 col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
+                <DropdownToggle size="sm" caret color="primary" outline className="col-lg-auto col-sm-12 ">
                  {selectedLocation ? (country.find(c => c.iso_code === selectedLocation)?.name) : ( <span>Location</span> )}
                 </DropdownToggle>
                
@@ -205,8 +255,8 @@ const LawyerCardFilter = ({
                     />
                   </div>
                   <PerfectScrollbar style={{ maxHeight: '200px' }}>
-                  {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}>
-                    <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close" />
+                  {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")} className="bg-light d-flex justify-content-between align-items-center">
+                    <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close  ml-auto" />
                   </DropdownItem>}
                     {filteredCountry.map((c) => (
                       <DropdownItem key={c.iso_code} onClick={() => handleLocationSelect(c.iso_code)}>
@@ -230,6 +280,8 @@ const LawyerCardFilter = ({
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown> */}
+              </>
+               )}
             </div>
           </div>
         </Colxx>
