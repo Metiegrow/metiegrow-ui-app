@@ -112,6 +112,10 @@ async login(email, password ) {
     }
       return res;
   } catch (error) {
+    error.response.data.statuses.forEach((status) => {
+      NotificationManager.warning(status.message, status.status, 5000, null, null, '');
+  });
+  // console.log("login error",error.response.data.statuses[0])
       throw error;
   }
 },
@@ -203,6 +207,9 @@ async login(email, password ) {
   // console.log(res);
         return res;
     } catch (error) {
+      error.response.data.statuses.forEach((status) => {
+        NotificationManager.warning(status.message, status.status, 5000, null, null, '');
+    });
         throw error;
     }
   },

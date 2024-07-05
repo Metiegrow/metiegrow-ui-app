@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Row, Card, CardTitle, Label, FormGroup, Button } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -60,7 +60,7 @@ const validateEmail = (value) => {
   return error;
 };
 
-const Login = ({ history, loading, error, loginUserAction }) => {
+const Login = ({ history, loading, loginUserAction }) => {
   // const [user, setUser] = useState({
   //   username: '',
   //   password: '',
@@ -93,13 +93,13 @@ const Login = ({ history, loading, error, loginUserAction }) => {
   const [email] = useState('');
   const [password] = useState('');
 
-  useEffect(() => {
-    if (error) {
-      NotificationManager.warning(error, 'Login Error', 3000, null, null, '');
-      // console.log("nerror",error.response.data.error.message)
-      // console.log("nerror",error)
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     NotificationManager.warning(error, 'Login Errorrr', 3000, null, null, '');
+  //     console.log("nerror",error.response.data.error.message)
+  //     console.log("nerror",error)
+  //   }
+  // }, [error]);
 
   // const getStudents = () => {
   //   axios.get(`${baseUrl}/student/personal/info`).then((res) => {

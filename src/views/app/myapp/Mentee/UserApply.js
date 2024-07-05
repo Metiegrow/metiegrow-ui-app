@@ -16,7 +16,7 @@ import {
   Alert,
 } from "reactstrap";
 import axios from "axios";
-import { NotificationManager } from "components/common/react-notifications";
+// import { NotificationManager } from "components/common/react-notifications";
 import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import country from "../my-login/Country";
@@ -25,6 +25,7 @@ import {
   validateLinkedinUrl,
   validateLocation,
 } from "../my-login/validation";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const UserApply = () => {
   const [file1, setFile1] = useState(null);
@@ -56,18 +57,14 @@ const UserApply = () => {
           // "Content-Type": "application/json",
         },
       });
-      console.log(response.data);
+      ToasterComponent('success', response.data.statuses);
       setSubmitted(true);
     } catch (error) {
+      if(error.response){
+        ToasterComponent('error', error.response.data.statuses);
+      } else{
       console.error("There was an error while submitting ", error);
-      NotificationManager.error(
-        "Error submitting",
-        "Oops!",
-        3000,
-        null,
-        null,
-        ""
-      );
+      }
     } finally {
       setIsLoading(false);
     }

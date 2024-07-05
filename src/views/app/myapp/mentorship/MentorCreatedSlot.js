@@ -19,6 +19,7 @@ import {  Button, Card, CardBody, Modal, ModalBody, Table ,
   import axios from 'axios';
 import { baseUrl } from 'constants/defaultValues';
 import DateRangePicker from '../BigCalendar/DateRangePicker';
+import ToasterComponent from '../notifications/ToasterComponent';
 
 
 
@@ -123,10 +124,12 @@ const MentorCreatedSlot = () => {
     // Make the POST request
     try {
       const response = await axios.post(url, [slot]);
-    
-      console.log('Data saved successfully:', response.data);
+      ToasterComponent('success', response.data.statuses);
+      // console.log('Data saved successfully:', response.data);
     } catch (error) {
-      
+      if(error.response){
+      ToasterComponent('error', error.response.data.statuses);
+      } 
       console.error('Error saving data:', error);
     }
   

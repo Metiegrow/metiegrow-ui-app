@@ -6,6 +6,7 @@ import { baseUrl } from 'constants/defaultValues';
 
 import { useHistory } from 'react-router-dom';
 import { Card, CardBody } from 'reactstrap';
+import ToasterComponent from '../notifications/ToasterComponent';
 
 
 
@@ -25,7 +26,11 @@ const LawyerJobList = () => {
                 
                 
               } catch (error) {
-                console.error('Error fetching data:', error);
+                if(error.response){
+                  ToasterComponent('error', error.response.data.statuses);
+                } else{
+                  console.error('Error fetching data:', error);
+                }
               }
         }
         LawyerJobsList();

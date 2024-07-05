@@ -191,29 +191,27 @@ const MyWallet = () => {
           {/* <ListGroup> */}
           {transactions.map((transaction) => (
             <Card key={transaction.id} className="mb-4 p-2">
-              <div className="d-flex">
-                <span className="mr-2">
-                  <strong>Transaction id:</strong> {transaction.id}
-                </span>
-                
-                <span className="mr-2">
-                  <strong>Amount:</strong> ₹{Math.abs(transaction.amount)}
-                </span>
-                <span className="mr-2">
-                  <strong>Status:</strong> {transaction.status}
-                </span>
-                <span className="mr-2">
-                  <strong>Payment Method:</strong> {transaction.paymentmethod}
-                </span>
-                <span className="mr-2">
-                  <strong>Date:</strong> <TimestampConverter timeStamp={transaction.date} format="datetime" />
-                </span>
-                <span className="mr-2">
-                  <strong>Description:</strong>{" "}
-                  {transaction.description}
-                </span>
+            <div className="d-flex flex-wrap"> 
+              <div className="mr-2">
+                <strong>Transaction id:</strong> {transaction.id}
               </div>
-            </Card>
+              <div className="mr-2">
+                <strong>Amount:</strong> ₹{Math.abs(transaction.amount)}
+              </div>
+              <div className="mr-2">
+                <strong>Status:</strong> {transaction.status}
+              </div>
+              <div className=" mr-2"> 
+                <strong>Payment Method:</strong> {transaction.paymentmethod}
+              </div>
+              <div className=" mr-2"> 
+                <strong>Date:</strong> <TimestampConverter timeStamp={transaction.date} format="datetime" />
+              </div>
+              <div className="mr-2">
+                <strong>Description:</strong> {transaction.description}
+              </div>
+            </div>
+          </Card>
           ))}
           {/* </ListGroup> */}
         </div>

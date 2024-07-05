@@ -254,7 +254,7 @@ const MentorProfile = () => {
                 </Row>
               </Colxx>
             )}
-            <Colxx xxs="12">
+            {/* <Colxx xxs="12"> */}
            
         <Row>
             {mentorprofiledetails1 && mentorprofiledetails1.featuredArticle && 
@@ -274,7 +274,6 @@ const MentorProfile = () => {
             
            </div>
            <CardBody>
-          
              <h4 className='color-theme-2'>LINK</h4>
              <h4 className='font-weight-semibold text-one'>JOB TITLES DON&apos;T MATTER!</h4>
              <CardSubtitle className="mb-4 text-one text-muted">
@@ -391,7 +390,7 @@ const MentorProfile = () => {
             
           </Colxx>
         </Row>
-          </Colxx>
+          {/* </Colxx> */}
           </Colxx>
           </div>
         </Colxx>

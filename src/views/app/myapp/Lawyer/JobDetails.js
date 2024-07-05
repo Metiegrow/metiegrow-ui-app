@@ -11,6 +11,7 @@ import {useParams,useHistory,useLocation } from "react-router-dom";
 
 import LawyerJobNotes from "../Notes/LawyerJobNotes"
 import DropzoneExample from './UploadDropZone';
+import ToasterComponent from '../notifications/ToasterComponent';
 
 
 
@@ -395,6 +396,7 @@ if (response.data.steps && response.data.steps.length > 0) {
           // Post the current step
           const postResponse = await axios.post(updateUrl, dataToSend);
     
+          ToasterComponent('success', postResponse.data.statuses);
           if (postResponse.status === 200) {
             LawyerJobsDetails();
             setEditMode(false);

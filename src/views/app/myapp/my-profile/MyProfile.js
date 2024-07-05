@@ -19,13 +19,14 @@ import {
 import { ReactSortable } from 'react-sortablejs';
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
-import { NotificationManager } from 'components/common/react-notifications';
+// import { NotificationManager } from 'components/common/react-notifications';
 import { Colxx } from "components/common/CustomBootstrap";
 import Select from "react-select";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
 import CategoryData from "../my-login/CategoryData";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 
 const MyProfile = () => {
@@ -57,6 +58,7 @@ const MyProfile = () => {
   const [profileLoading, setProfileLoading] = useState(true);
   const [languages, setLanguages] = useState([]);
   const [skillValidationMessage,setSkillValidationMessage] = useState("");
+  const [isProfileUpdated, setIsProfileUpdated ] = useState(false)
 
 
  // const Id = 1;
@@ -115,7 +117,7 @@ const MyProfile = () => {
     };
 
     mentorProfileDetails();
-  }, []);
+  }, [isProfileUpdated]);
   useEffect(() => {
 
   const mentorReviews = async () => {
@@ -200,13 +202,20 @@ const token = getTokenRes();
       });
       
       // console.log("Response", response.data.statuses[0].message);
-      response.data.statuses.forEach((status) => {
-       const responseMessage = status.message;
-        NotificationManager.success(responseMessage, 'Great!', 3000, null, null, '');
-    });
+    //   response.data.statuses.forEach((status) => {
+    //    const responseMessage = status.message;
+    //     NotificationManager.success(responseMessage, 'Great!', 3000, null, null, '');
+    // });
+    setIsProfileUpdated(!isProfileUpdated);
+    ToasterComponent('success', response.data.statuses);
       // console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile", error);
+      if (error.response && error.response.data.statuses[0]) {
+        ToasterComponent('warning', error.response.data.statuses);
+      } else {
+        ToasterComponent('error', [{ message: "An unexpected error occurred" }]);
+      }
     }
   };
 
@@ -868,7 +877,7 @@ const token = getTokenRes();
           {/* <Colxx sm="12" md="12" lg="12" xxs="12" className="mt-5"> */}
           <Row>
             <Col lg="12" md="12">
-              <h1 className="font-weight-semibold text-large">About</h1>
+              <h2 className="font-weight-semibold mx-2">About</h2>
 
               <div>
                 {isEditingAbout ? (
@@ -924,7 +933,7 @@ const token = getTokenRes();
                     <br />
                   </div>
                 ) : (
-                  <div className="col-lg-6 col-12">
+                  <div className="col-lg-12 col-12">
                     <p className="text-one font-weight-medium">{bio}</p>
                   </div>
                 )}

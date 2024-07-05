@@ -117,7 +117,7 @@ const ViewMylogin = React.lazy(() =>
 );
 const ViewLawyerlogin = React.lazy(() =>
   import(
-    /* webpackChunkName: "views-app" */ './myapp/lawyer-login/LawyerLogin'
+    /* webpackChunkName: "views-app" */ './myapp/lawyer-login/ApplyAsLawyer'
   )
 );
 const ViewMyProfile = React.lazy(() =>
@@ -171,7 +171,27 @@ const ViewVideoCall = React.lazy(() =>
 //     /* webpackChunkName: "views-app" */ './myapp/Listing/OtherListing'
 //   )
 // );
-const ViewListing = React.lazy(() =>
+// const ViewListing = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
+//   )
+// );
+const ViewListingTab = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
+  )
+);
+const ViewStayListingTab = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
+  )
+);
+const ViewJobListingTab = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
+  )
+);
+const ViewOtherListingTab = React.lazy(() =>
   import(
     /* webpackChunkName: "views-app" */ './myapp/Listing/Listing'
   )
@@ -306,11 +326,20 @@ const roleRes = getRoleRes();
               redirectTo =  `${match.url}/profile`;
             }
           } else if (roleRes.includes("MENTEE")) {
-            redirectTo = `${match.url}/mentor/list`;
+            // redirectTo = `${match.url}/mentor/list`;
+            if (statusRes === '0') {
+              redirectTo = `${match.url}/user/apply`;
+            } else  {
+              redirectTo = `${match.url}/mentor/list`;
+            } 
           } else if (roleRes.includes("LAWYER")) {
             if (statusRes === '0') {
               redirectTo = `${match.url}/lawyer/apply`;
-            } else  {
+            } else if (statusRes === '1') {
+              redirectTo = `${match.url}/lawyer/apply`;
+            }else if (statusRes === '3') {
+              redirectTo = `${match.url}/lawyer/apply`;
+            }else  {
               redirectTo = `${match.url}/profile`;
             }
           } else {
@@ -458,16 +487,37 @@ const roleRes = getRoleRes();
               path={`${match.url}/mylisting`}
               render={(props) => <ViewMyListing {...props} />}
             />
-               <Route
-              path={`${match.url}/listing/otherlisting/view/:id`}
-              render={(props) => <ViewOtherListing {...props} />}
+            <Route
+               exact 
+              path={`${match.url}/listing`}
+              render={(props) => <ViewListingTab {...props} />}
             />
                <Route
-              path={`${match.url}/listing/joblisting/view/:id`}
+               exact
+              path={`${match.url}/listing/others`}
+              render={(props) => <ViewStayListingTab {...props} />}
+            />
+               <Route
+               exact
+              path={`${match.url}/listing/job`}
+              render={(props) => <ViewJobListingTab {...props} />}
+            />
+               <Route
+               exact
+              path={`${match.url}/listing/stay`}
+              render={(props) => <ViewOtherListingTab {...props} />}
+            />
+               <Route
+              path={`${match.url}/listing/others/view/:id`}
+              render={(props) => <ViewOtherListing {...props} />}
+            />
+               
+               <Route
+              path={`${match.url}/listing/job/view/:id`}
               render={(props) => <ViewJobListing {...props} />}
             />
                <Route
-              path={`${match.url}/listing/staylisting/view/:id`}
+              path={`${match.url}/listing/stay/view/:id`}
               render={(props) => <ViewStayListing {...props} />}
             />
                <Route
@@ -498,10 +548,10 @@ const roleRes = getRoleRes();
               path={`${match.url}/other/listing`}
               render={(props) => <ViewOtherListing {...props} />}
             /> */}
-               <Route
+               {/* <Route
               path={`${match.url}/listing`}
               render={(props) => <ViewListing {...props} />}
-            />
+            /> */}
            
            <Route
               path={`${match.url}/lawyerquestions`}

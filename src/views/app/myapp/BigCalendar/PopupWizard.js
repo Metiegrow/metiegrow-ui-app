@@ -18,6 +18,7 @@ import { injectIntl } from 'react-intl';
 import TopNavigation from 'components/wizard/TopNavigation';
 import DateRangePicker from './DateRangePicker';
 import BottomNavigation from '../my-login/BottomNavigation';
+import ToasterComponent from '../notifications/ToasterComponent';
 
 
 // const PopupWizard = ({ selectedDate,setSelectedDate,upcomingsession,mentorId,mentorName})
@@ -103,6 +104,9 @@ const LicenseDetails = async () => {
     setLicense(response.data);
   } catch (error) {
     console.error('Error fetching data:', error);
+    if(error.response){
+    ToasterComponent('error', error.response.data.statuses);
+    }
   }
 };
 
@@ -148,11 +152,15 @@ const handleNextButtonClick = () => {
     .then(response => {
       // Handle successful response, such as redirecting the user
       console.log('Post request successful:', response.data);
+      ToasterComponent('success', response.data.statuses);
       // redirectToSessionLists(); // Redirect to the specified URL
     })
     .catch(error => {
       // Handle error
       console.error('Error posting data:', error);
+      if(error.response){
+        ToasterComponent('error', error.response.data.statuses);
+        }
     });
 };
 

@@ -14,6 +14,25 @@ import LawyerCardFilter from './LawyerCardFilter';
 
 
 const UserCard = () => {
+
+
+  const [selectedTopics, setSelectedTopics] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+
+  const handleTopicsChange = (topics) => setSelectedTopics(topics);
+  const handlePriceChange = (price) => setSelectedPrice(price);
+  const handleLocationChange = (location) => setSelectedLocation(location);
+  const handleLanguageChange = (language) => setSelectedLanguage(language);
+  
+  console.log("selectedTopics",selectedTopics)
+  console.log("selectedLanguage",selectedLanguage)
+  console.log("selectedPrice",selectedPrice)
+  console.log("selectedLocation",selectedLocation)
+
+
+
   const [userdetails,setUserDetails]=useState('')
   const [inputkey,setInputKey]=useState('');
   // const url=`${baseUrl}/user/cards`
@@ -62,7 +81,15 @@ const UserCard = () => {
        </div>
         
   
-        <LawyerCardFilter />
+        <LawyerCardFilter
+        onTopicsChange={handleTopicsChange}
+        onPriceChange={handlePriceChange}
+        onLocationChange={handleLocationChange}
+        onLanguageChange={handleLanguageChange}
+        selectedTopics={selectedTopics}
+        selectedLocation={selectedLocation}
+        selectedLanguage={selectedLanguage}
+        />
         </div>
     
         </div>

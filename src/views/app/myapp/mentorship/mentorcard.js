@@ -268,6 +268,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
             selectedSkills={selectedSkills}
             selectedLocation={selectedLocation}
             selectedIndustry={selectedIndustry}
+            selectedTools={selectedTools}
           />
         </div>
     
