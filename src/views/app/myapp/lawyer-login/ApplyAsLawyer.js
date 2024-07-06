@@ -50,6 +50,9 @@ const ApplyAsLawyer = () => {
   const [file1, setFile1] = useState(null);
   const [topicsTag, setTopicsTag] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [AboutLoading, setAboutLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [servicesLoading, setServicesLoading] = useState(false);
 
   const [aboutField, setAboutField] = useState({
     image: "",
@@ -151,15 +154,18 @@ const ApplyAsLawyer = () => {
   };
 
   const postDataAbout = async (data) => {
+    setAboutLoading(true);
     try {
       const response = await axios.post(lawyerAboutUrl, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      setAboutLoading(false);
       handleNextStep();
       console.log(`resres ${response.status}`);
     } catch (error) {
+      setAboutLoading(false);
       if (error.response) {
         ToasterComponent("error", error.response.data.statuses);
       }
@@ -168,15 +174,18 @@ const ApplyAsLawyer = () => {
   };
 
   const postDataProfile = async (data) => {
+    setProfileLoading(true);
     try {
       const response = await axios.post(lawyerProfileUrl, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      setProfileLoading(false);
       handleNextStep();
       console.log(`resres ${response.status}`);
     } catch (error) {
+      setProfileLoading(false);
       if (error.response) {
         ToasterComponent("error", error.response.data.statuses);
       }
@@ -201,13 +210,15 @@ const ApplyAsLawyer = () => {
       )
     );
   };
-  const postDataExperience = async (services1) => {
+  const postServices = async (services1) => {
+    setServicesLoading(true);
     try {
       const response = await axios.post(packageUrl, services1, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      setServicesLoading(false);
       handleNextStep();
       setLoading(true);
       setTimeout(() => {
@@ -215,6 +226,7 @@ const ApplyAsLawyer = () => {
       }, 3000);
       console.log(response.data);
     } catch (error) {
+      setServicesLoading(false)
       if (error.response) {
         ToasterComponent("error", error.response.data.statuses);
       }
@@ -390,8 +402,17 @@ const ApplyAsLawyer = () => {
                   </FormGroup>
                   <Row>
                     <Col className="text-center">
-                      <Button color="primary" type="submit">
-                        Next
+                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                      AboutLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      Next
+                    </span>
                       </Button>
                     </Col>
                   </Row>
@@ -478,8 +499,17 @@ const ApplyAsLawyer = () => {
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit">
-                        Next
+                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                      profileLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      Next
+                    </span>
                       </Button>
                     </Col>
                   </Row>
@@ -501,7 +531,7 @@ const ApplyAsLawyer = () => {
                 ],
               }}
               onSubmit={() => {
-                postDataExperience(services);
+                postServices(services);
                 console.log("my services", services);
                 // console.log("values", values);
               }}
@@ -679,8 +709,17 @@ const ApplyAsLawyer = () => {
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit">
-                        Next
+                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                      servicesLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      Submit
+                    </span>
                       </Button>
                     </Col>
                   </Row>

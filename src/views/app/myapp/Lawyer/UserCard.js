@@ -31,6 +31,8 @@ const UserCard = () => {
   console.log("selectedPrice",selectedPrice)
   console.log("selectedLocation",selectedLocation)
 
+const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
+
 
 
   const [userdetails,setUserDetails]=useState('')
@@ -41,13 +43,15 @@ const UserCard = () => {
   // Backend url below 
   const url =`${baseUrl}/api/lawyer`
   useEffect(()=>{
-
+    setIsLawyerCardFetched(false);
     const UserList = async () => {
       try {
         const response = await axios.get(url);
         setUserDetails(response.data);
+        setIsLawyerCardFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setIsLawyerCardFetched(true);
       }
     };
     UserList();
@@ -95,6 +99,10 @@ const UserCard = () => {
         </div>
         </div>
       </Colxx>
+      {!isLawyerCardFetched ? (
+        <div className='loading' />
+      ) : (
+      <>
       {userdetails.length===0?(
         <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <Card>
@@ -226,9 +234,11 @@ const UserCard = () => {
       
     )
     
-   }))
-      }
+  }))
+}
    
+</>
+      )}
    
     </div>
   );
