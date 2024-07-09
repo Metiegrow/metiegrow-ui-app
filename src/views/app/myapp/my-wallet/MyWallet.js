@@ -13,7 +13,7 @@ import {
   Row,
   Card,
 } from "reactstrap";
-import { NotificationManager } from 'components/common/react-notifications';
+import { NotificationManager } from "components/common/react-notifications";
 import TimestampConverter from "../Calculation/TimestampConverter";
 // check
 
@@ -22,7 +22,7 @@ const MyWallet = () => {
   // const [transactionIdCounter, setTransactionIdCounter] = useState(1);
   const [transactions, setTransactions] = useState([]);
   const [rechargeAmount, setRechargeAmount] = useState("");
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   // const url = `${baseUrl}/wallets`;
   // const url = `${baseUrl}/wallets`;
   const url1 = `${baseUrl}/api/transactions`;
@@ -37,12 +37,10 @@ const MyWallet = () => {
       console.error("Error while fetching data from the server", error);
     }
   };
-  
+
   useEffect(() => {
     fetchDataFromServer();
   }, []);
-
-  
 
   // const updateBalance = async () => {
   //     try {
@@ -57,7 +55,6 @@ const MyWallet = () => {
   //     }
   //   };
 
-  
   const postData = async (amount) => {
     const url2 = `${baseUrl}/api/paytm/makePayment?amount=${amount}`;
     try {
@@ -65,23 +62,35 @@ const MyWallet = () => {
       const response = await axios.post(url2);
 
       // console.log("recharge",response)
-      
-      setTimeout(() => {
-          fetchDataFromServer();
-          // NotificationManager.success(response.data.statuses[0].message, 'Great!', 3000, null, null, '');
-          response.data.statuses.forEach((status) => {
-            NotificationManager.success(status.message, status.status, 3000, null, null, '');
-        });
-          setIsLoading(false);
-    }, 3000);
 
+      // setTimeout(() => {
+      fetchDataFromServer();
+      // NotificationManager.success(response.data.statuses[0].message, 'Great!', 3000, null, null, '');
+      response.data.statuses.forEach((status) => {
+        NotificationManager.success(
+          status.message,
+          status.status,
+          3000,
+          null,
+          null,
+          ""
+        );
+      });
+      setIsLoading(false);
+      // }, 3000);
     } catch (error) {
       console.error("Error making payment", error);
-      setTimeout(() => {
-        NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
-        setIsLoading(false);
-      }, 3000);
-
+      // setTimeout(() => {
+      NotificationManager.warning(
+        "Something went wrong",
+        "Oops!",
+        3000,
+        null,
+        null,
+        ""
+      );
+      setIsLoading(false);
+      // }, 3000);
     }
   };
   const handleRecharge = () => {
@@ -103,14 +112,13 @@ const MyWallet = () => {
     //   setTransactions((prevTransactions) => [
     //     newTransactions,
     //     ...prevTransactions,
-      // ]);
+    // ]);
     //   setTransactionIdCounter((prevCounter) => prevCounter + 1);
-      setRechargeAmount("");
-      //   updateBalance()
+    setRechargeAmount("");
+    //   updateBalance()
 
-      postData(amount);
-    }
-  
+    postData(amount);
+  };
 
   const handleRechargeSubmit = (e) => {
     e.preventDefault();
@@ -122,7 +130,6 @@ const MyWallet = () => {
       (parseFloat(prevAmount || 0) + amount).toString()
     );
   };
-  
 
   return (
     <Card className="mt-4">
@@ -177,41 +184,44 @@ const MyWallet = () => {
             }`}
           >
             <span className="spinner d-inline-block">
-                                <span className="bounce1" />
-                                <span className="bounce2" />
-                                <span className="bounce3" />
-                              </span>
-                              <span className="label">Add money to Wallet</span>
-
+              <span className="bounce1" />
+              <span className="bounce2" />
+              <span className="bounce3" />
+            </span>
+            <span className="label">Add money to Wallet</span>
           </Button>
         </Form>
-        
+
         <div className="mt-4">
           <h2>Recent Transactions</h2>
           {/* <ListGroup> */}
           {transactions.map((transaction) => (
             <Card key={transaction.id} className="mb-4 p-2">
-            <div className="d-flex flex-wrap"> 
-              <div className="mr-2">
-                <strong>Transaction id:</strong> {transaction.id}
+              <div className="d-flex flex-wrap">
+                <div className="mr-2">
+                  <strong>Transaction id:</strong> {transaction.id}
+                </div>
+                <div className="mr-2">
+                  <strong>Amount:</strong> ₹{Math.abs(transaction.amount)}
+                </div>
+                <div className="mr-2">
+                  <strong>Status:</strong> {transaction.status}
+                </div>
+                <div className=" mr-2">
+                  <strong>Payment Method:</strong> {transaction.paymentmethod}
+                </div>
+                <div className=" mr-2">
+                  <strong>Date:</strong>{" "}
+                  <TimestampConverter
+                    timeStamp={transaction.date}
+                    format="datetime"
+                  />
+                </div>
+                <div className="mr-2">
+                  <strong>Description:</strong> {transaction.description}
+                </div>
               </div>
-              <div className="mr-2">
-                <strong>Amount:</strong> ₹{Math.abs(transaction.amount)}
-              </div>
-              <div className="mr-2">
-                <strong>Status:</strong> {transaction.status}
-              </div>
-              <div className=" mr-2"> 
-                <strong>Payment Method:</strong> {transaction.paymentmethod}
-              </div>
-              <div className=" mr-2"> 
-                <strong>Date:</strong> <TimestampConverter timeStamp={transaction.date} format="datetime" />
-              </div>
-              <div className="mr-2">
-                <strong>Description:</strong> {transaction.description}
-              </div>
-            </div>
-          </Card>
+            </Card>
           ))}
           {/* </ListGroup> */}
         </div>

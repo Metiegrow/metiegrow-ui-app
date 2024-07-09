@@ -21,7 +21,14 @@ import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { ApartmentTypeData, BHKData, FloorData, RoomMateType, RoomTypeData, parkingOptions } from "./ListingData";
+import {
+  ApartmentTypeData,
+  BHKData,
+  FloorData,
+  RoomMateType,
+  RoomTypeData,
+  parkingOptions,
+} from "./ListingData";
 
 const quillModules = {
   toolbar: [
@@ -77,7 +84,6 @@ const quillFormats = [
 //   { label: "Shared Room", value: 1 },
 // ];
 
-
 const StayPosting = ({ closeModal }) => {
   const [availableFrom, setAvailableFrom] = useState(new Date());
   const [title, setTitle] = useState("");
@@ -93,6 +99,7 @@ const StayPosting = ({ closeModal }) => {
   const [parking, setParking] = useState(null);
   const [contact, setContact] = useState("");
   const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const url = `${baseUrl}/api/posts/stay-post/`;
 
@@ -102,11 +109,12 @@ const StayPosting = ({ closeModal }) => {
   const token = getTokenRes();
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     try {
       const Data = {
         title,
         apartmentType,
-        bhkType : BHKType,
+        bhkType: BHKType,
         floor,
         roomType,
         roomMate,
@@ -125,18 +133,19 @@ const StayPosting = ({ closeModal }) => {
         },
       });
       closeModal();
-      console.log("job posted successfully");
+      setIsLoading(false);
+      // console.log("job posted successfully");
     } catch (error) {
       console.error("Error posting job:", error);
+      setIsLoading(false);
     }
   };
 
   const handleDateChange = (date) => {
     // setAvailableFrom(date);
     const timestampInSeconds = date ? Math.floor(date.getTime() / 1000) : null;
-    // console.log(timestampInSeconds); 
+    // console.log(timestampInSeconds);
     setAvailableFrom(timestampInSeconds);
-
   };
 
   return (
@@ -180,7 +189,7 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select BHK type
                       </option>
-                      {BHKData.map((option,index) => (
+                      {BHKData.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={index} value={option.value}>
                           {option.label}
@@ -210,7 +219,7 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Floor
                       </option>
-                      {FloorData.map((option,index) => (
+                      {FloorData.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={index} value={option.value}>
                           {option.label}
@@ -238,7 +247,7 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Apartment type
                       </option>
-                      {ApartmentTypeData.map((option,index) => (
+                      {ApartmentTypeData.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={index} value={option.value}>
                           {option.label}
@@ -269,7 +278,7 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Room Type
                       </option>
-                      {RoomTypeData.map((option,index) => (
+                      {RoomTypeData.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={index} value={option.value}>
                           {option.label}
@@ -297,7 +306,7 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select Room Mate
                       </option>
-                      {RoomMateType.map((option,index) => (
+                      {RoomMateType.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={index} value={option.value}>
                           {option.label}
@@ -354,7 +363,9 @@ const StayPosting = ({ closeModal }) => {
                       as="select"
                       name="monthlyMaintenance"
                       // onChange={(e) => setMonthlyMaintenance(e.target.value)}
-                      onChange={(e) => setMonthlyMaintenance(e.target.value === "true")}
+                      onChange={(e) =>
+                        setMonthlyMaintenance(e.target.value === "true")
+                      }
                       //   validate={}
                       className="form-control"
                       value={monthlyMaintenance ? "true" : "false"}
@@ -432,8 +443,8 @@ const StayPosting = ({ closeModal }) => {
                       <option key="" value="" disabled>
                         Select
                       </option>
-                      
-                      {parkingOptions.map((option,index) => (
+
+                      {parkingOptions.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={index} value={option.value}>
                           {option.label}
@@ -464,19 +475,24 @@ const StayPosting = ({ closeModal }) => {
                   </Colxx>
                 </Row>
               </div>
-              <div className="mt-3">
+              <div className="mt-3 d-flex justify-content-end">
                 <Button
                   color="primary "
-                  className="default  py-2 "
+                  className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
+                    isLoading ? "show-spinner" : ""
+                  }`}
                   onClick={() => {
                     handleSubmit();
                     // closeModal();
                   }}
                 >
-                  List a Room
+                  <span className="spinner d-inline-block">
+                    <span className="bounce1" />
+                    <span className="bounce2" />
+                    <span className="bounce3" />
+                  </span>
+                  <span className="label">List a Room</span>
                 </Button>
-                
-
               </div>
             </Form>
           </Formik>

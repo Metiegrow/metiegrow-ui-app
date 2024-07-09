@@ -26,7 +26,8 @@ const JobListing = ({isPosted}) => {
   const [clickedCardTitle, setClickedCardTitle] = useState("");
   // const [copied, setCopied] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
-  
+  const [noData,setNoData] = useState(false)
+  console.log("data",noData)
   const url = `${baseUrl}/api/posts/other-post/`;
   const interestedClickUrl = `${baseUrl}/api/posts/other-post/interested`;
 
@@ -49,7 +50,7 @@ const JobListing = ({isPosted}) => {
       try {
         // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
         const res = await axios.get(url);
-        console.log("other data",res);
+        // console.log("other data",res);
         const { data } = res;
         const sortedData = data
           .map((x) => ({ ...x }))
@@ -58,12 +59,17 @@ const JobListing = ({isPosted}) => {
         setIsLoaded(true);
       } catch (error) {
         console.error("Error fetching data:", error);
+        console.log("ck",error.response.data.statuses[0].code)
         setIsLoaded(true);
+        if (error.response && error.response.data && error.response.data.statuses && error.response.data.statuses[0].code === 40348) {
+          setNoData(true);
+        }
+        
       }
     };
     setTimeout(() =>{
       fetchData();
-    },1000)
+    },3000)
   }, [currentPage, isPosted]);
 
   const handleClick = (id) => {
@@ -109,6 +115,9 @@ const handleShareButtonClick = async (id) => {
 
   return !isLoaded ? (
     <div className="loading" />
+  ) : (<>
+  {noData ? (
+    <Card className="d-flex justify-content-center align-items-center "><h2 className="mt-4 mb-4">There are no posts available</h2></Card>
   ) : (
     <div className="disable-text-selection">
       {items.map((data, index) => (
@@ -211,6 +220,8 @@ const handleShareButtonClick = async (id) => {
       />
       {clickedCardTitle && <DesktopNotifications title={clickedCardTitle} />}
     </div>
+    )}
+    </>
   );
 };
 

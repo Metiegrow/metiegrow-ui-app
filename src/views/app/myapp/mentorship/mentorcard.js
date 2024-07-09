@@ -20,7 +20,7 @@ const MentorCard = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedTools, setSelectedTools] = useState("");
   const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [selectedPrice, setSelectedPrice] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState("");
 
   const handleSkillsChange = (skills) => setSelectedSkills(skills);
@@ -29,11 +29,11 @@ const MentorCard = () => {
   const handlePriceChange = (price) => setSelectedPrice(price);
   const handleLocationChange = (location) => setSelectedLocation(location);
 
-  console.log("skills",selectedSkills)
-  console.log("selectedTools",selectedTools)
-  console.log("selectedIndustry",selectedIndustry)
-  console.log("selectedPrice",selectedPrice)
-  console.log("selectedLocation",selectedLocation)
+  // console.log("skills",selectedSkills)
+  // console.log("selectedTools",selectedTools)
+  // console.log("selectedIndustry",selectedIndustry)
+  // console.log("selectedPrice",selectedPrice)
+  // console.log("selectedLocation",selectedLocation)
 
   const [isMentorCardFetched, setIsMentorCardFetched] = useState(false)
 
@@ -142,6 +142,12 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
     if (selectedSkills) {
       params.skills = selectedSkills;
     }
+    if (selectedTools) {
+      params.tools = selectedTools;
+    }
+    if (selectedPrice) {
+      params.price = selectedPrice;
+    }
       try {
         const response = await axios.get(url2,{params});
         setMentorDetails(response.data);
@@ -152,7 +158,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       }
     };
     mentorCardDetails();
-  }, [selectedLocation,selectedIndustry,selectedSkills]);
+  }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice]);
 
   useEffect(() => {
     const filterMentors = () => {

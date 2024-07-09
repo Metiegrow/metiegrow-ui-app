@@ -39,7 +39,7 @@ const MentorFilter = ({
   };
 
   const handleToolSelect = (tool) => {
-    onToolsChange([tool]);
+    onToolsChange(tool);
   };
 
   const handleIndustrySelect = (industry) => {
@@ -51,7 +51,7 @@ const MentorFilter = ({
   };
 
   const handleSliderChange = ( value) => {
-    onPriceChange([value]);
+    onPriceChange(value);
     setPriceRange(value);
     // console.log("priceChange",value)
    

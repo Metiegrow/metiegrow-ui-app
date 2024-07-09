@@ -30,9 +30,9 @@ const VideoCallCompletedPage = () => {
   const [fromTime, setFromTime] = useState(null);
   const [toTime, setToTime] = useState(0);
   const [mode, setMode] = useState("");
-  const [duration, setDuration] = useState(0)
-  const [post, setPost] = useState(true)
-  const [waitingForData, setWaitingForData] = useState(true)
+  const [duration, setDuration] = useState(0);
+  const [post, setPost] = useState(true);
+  const [waitingForData, setWaitingForData] = useState(true);
   const { id, sid } = useParams();
   const history = useHistory();
   function getRoleRes() {
@@ -50,31 +50,40 @@ if (roleRes === "MENTEE") {
 
 
   // console.log("id end:", id);
-
   useEffect(() => {
-    const callEndDetails = async () => {
+    let intervalId;
+    let attempts = 0;
+    const maxAttempts = 10; 
+    
+    const fetchData = async () => {
       try {
         const response = await axios.get(getUrl);
         const reviewData = response.data;
-        // console.log("review data:", reviewData);
         if (reviewData) {
           setName(reviewData.name);
           setFromTime(reviewData.fromTime);
           setToTime(reviewData.toTime);
           setMode(reviewData.mode);
-          setDuration(reviewData.duration)
+          setDuration(reviewData.duration);
+          clearInterval(intervalId);
+          setWaitingForData(false);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        attempts += 1; 
+        if (attempts >= maxAttempts) {
+          clearInterval(intervalId);
+          setWaitingForData(false);
+          console.error("Max attempts reached. Unable to fetch data.");
+        }
       }
     };
-    const timer = setTimeout(() => {
-      callEndDetails();
-      setWaitingForData(false)
+  
+    intervalId = setInterval(() => {
+      fetchData();
     }, 3000);
-
-    return () => clearTimeout(timer);
-
+  
+    return () => clearInterval(intervalId);
   }, []);
 
   const url = `${baseUrl}/api/mentorship/rating`;

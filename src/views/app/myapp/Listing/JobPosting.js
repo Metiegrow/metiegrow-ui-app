@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Colxx } from "components/common/CustomBootstrap";
-import { Row, Card, Button, FormGroup, Label, Col, Form, FormText } from "reactstrap";
+import {
+  Row,
+  Card,
+  Button,
+  FormGroup,
+  Label,
+  Col,
+  Form,
+  FormText,
+} from "reactstrap";
 import ReactQuill from "react-quill";
 
 import "react-quill/dist/quill.snow.css";
@@ -9,7 +18,7 @@ import { Field, Formik } from "formik";
 import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
 import TagsInput from "react-tagsinput";
-import 'react-tagsinput/react-tagsinput.css';
+import "react-tagsinput/react-tagsinput.css";
 import { EmploymentTypeData, WorkPlaceTypeData } from "./ListingData";
 
 const quillModules = {
@@ -54,7 +63,6 @@ const quillFormats = [
 //   { label: "Contract", value: 5 },
 // ];
 
-
 // const validateJobTitle = (value) => {
 //   let error;
 //   if (!value) {
@@ -62,15 +70,14 @@ const quillFormats = [
 //   }
 //   return error;
 //  };
- 
- const validateDescription = (value) => {
+
+const validateDescription = (value) => {
   let error;
   if (!value) {
-     error = 'Description is required';
+    error = "Description is required";
   }
   return error;
- };
- 
+};
 
 const JobPosting = ({ closeModal }) => {
   const [title, setTitle] = useState("");
@@ -81,6 +88,7 @@ const JobPosting = ({ closeModal }) => {
   const [employmentType, setEmploymentType] = useState(null);
   const [description, setDescription] = useState("");
   const [skillsTag, setSkillsTag] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const url = `${baseUrl}/api/posts/job-post/`;
 
@@ -90,7 +98,8 @@ const JobPosting = ({ closeModal }) => {
   const token = getTokenRes();
 
   const handleSubmit = async () => {
-    console.log("jobpostsubmit")
+    setIsLoading(true);
+    // console.log("jobpostsubmit")
     try {
       const data = {
         title,
@@ -107,10 +116,12 @@ const JobPosting = ({ closeModal }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      closeModal(); 
-      console.log("job posted successfully");
+      closeModal();
+      // console.log("job posted successfully");
+      setIsLoading(false);
     } catch (error) {
       console.error("Error posting job:", error);
+      setIsLoading(false);
     }
   };
 
@@ -125,187 +136,186 @@ const JobPosting = ({ closeModal }) => {
         {/* <h1 className="font-weight-semibold">Create a job post</h1> */}
         <Colxx sm="12" md="12" lg="12" xxs="12" className="mx-auto ">
           <Formik
-          initialValues={{
-            title: "",
-            jobTitle: "",
-        company: "",
-        workPlaceType: "",
-        jobLocation: "",
-        employmentType: "",
-        description: "",
-        skills: []
-         }}
-        //  validate={(values) => {
-        //     const errors = {};
-        //     const jobTitleError = validateJobTitle(values.jobTitle);
-        //     if (jobTitleError) {
-        //       errors.jobTitle = jobTitleError;
-        //     }
-        //     const descriptionError = validateDescription(values.description);
-        //     if (descriptionError) {
-        //       errors.description = descriptionError;
-        //     }
-        //     return errors;
-        //  }}
-        //  onSubmit={(values) => {
-        //     handleSubmit(values);
-        //     closeModal(); 
-        //   }}
+            initialValues={{
+              title: "",
+              jobTitle: "",
+              company: "",
+              workPlaceType: "",
+              jobLocation: "",
+              employmentType: "",
+              description: "",
+              skills: [],
+            }}
+            //  validate={(values) => {
+            //     const errors = {};
+            //     const jobTitleError = validateJobTitle(values.jobTitle);
+            //     if (jobTitleError) {
+            //       errors.jobTitle = jobTitleError;
+            //     }
+            //     const descriptionError = validateDescription(values.description);
+            //     if (descriptionError) {
+            //       errors.description = descriptionError;
+            //     }
+            //     return errors;
+            //  }}
+            //  onSubmit={(values) => {
+            //     handleSubmit(values);
+            //     closeModal();
+            //   }}
           >
-             {({ isValid, errors, touched  }) => (
-            <Form className="av-tooltip tooltip-label-right ">
-              <Row>
-                <Col md={12}>
-                  <FormGroup className="error-l-75">
-                    <Label>Title*</Label>
-                    <Field
-                      className="form-control"
-                      name="title"
-                      onChange={(e) => setTitle(e.target.value)}
+            {({ isValid, errors, touched }) => (
+              <Form className="av-tooltip tooltip-label-right ">
+                <Row>
+                  <Col md={12}>
+                    <FormGroup className="error-l-75">
+                      <Label>Title*</Label>
+                      <Field
+                        className="form-control"
+                        name="title"
+                        onChange={(e) => setTitle(e.target.value)}
                         // validate={validateJobTitle}
                         value={title}
-                    />
-                    {errors.title && touched.title && (
-                              <div className="invalid-feedback d-block">
-                                {errors.title}
-                              </div>
-                            )}
-                  </FormGroup>
-                </Col>
-                
-              </Row>
-              <Row>
-                <Col md={6}>
-                  <FormGroup className="error-l-75">
-                    <Label>Job title*</Label>
-                    <Field
-                      className="form-control"
-                      name="jobTitle"
-                      onChange={(e) => setJobTitle(e.target.value)}
+                      />
+                      {errors.title && touched.title && (
+                        <div className="invalid-feedback d-block">
+                          {errors.title}
+                        </div>
+                      )}
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Job title*</Label>
+                      <Field
+                        className="form-control"
+                        name="jobTitle"
+                        onChange={(e) => setJobTitle(e.target.value)}
                         // validate={validateJobTitle}
                         value={jobTitle}
-                    />
-                    {errors.jobTitle && touched.jobTitle && (
-                              <div className="invalid-feedback d-block">
-                                {errors.jobTitle}
-                              </div>
-                            )}
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup className="error-l-75">
-                    <Label>Company</Label>
-                    <Field
-                      className="form-control"
-                      name="company"
-                      onChange={(e) => setCompany(e.target.value)}
-                      //   validate={}
-                      value={company}
-                    />
-                    {/* {errors.company && touched.company && (
+                      />
+                      {errors.jobTitle && touched.jobTitle && (
+                        <div className="invalid-feedback d-block">
+                          {errors.jobTitle}
+                        </div>
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Company</Label>
+                      <Field
+                        className="form-control"
+                        name="company"
+                        onChange={(e) => setCompany(e.target.value)}
+                        //   validate={}
+                        value={company}
+                      />
+                      {/* {errors.company && touched.company && (
                               <div className="invalid-feedback d-block">
                                 {errors.company}
                               </div>
                             )} */}
-                  </FormGroup>
-                </Col>
-              </Row>
+                    </FormGroup>
+                  </Col>
+                </Row>
 
-              <Row>
-                <Col md={6}>
-                  <FormGroup className="error-l-75">
-                    <Label>Workplace type</Label>
-                    <Field
-                      as="select"
-                      name="workPlaceType"
-                      onChange={(e) => setWorkPlaceType(e.target.value)}
-                      //   validate={}
-                      className="form-control"
-                      value={workPlaceType || ""}
-                    >
-                      <option key="" value="" disabled>
-                        Select Work place Type
-                      </option>
-                      {WorkPlaceTypeData.map((option,index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.value}>
-                          {option.label}
+                <Row>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Workplace type</Label>
+                      <Field
+                        as="select"
+                        name="workPlaceType"
+                        onChange={(e) => setWorkPlaceType(e.target.value)}
+                        //   validate={}
+                        className="form-control"
+                        value={workPlaceType || ""}
+                      >
+                        <option key="" value="" disabled>
+                          Select Work place Type
                         </option>
-                      ))}
-                    </Field>
-                    {/* {errors.workPlaceType && touched.workPlaceType && (
+                        {WorkPlaceTypeData.map((option, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={index} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </Field>
+                      {/* {errors.workPlaceType && touched.workPlaceType && (
                           <div className="invalid-feedback d-block">
                             {errors.workPlaceType}
                           </div>
                         )} */}
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup className="error-l-75">
-                    <Label>Job location</Label>
-                    <Field
-                      className="form-control"
-                      name="jobLocation"
-                      onChange={(e) => setJobLocation(e.target.value)}
-                      //   validate={}
-                      value={jobLocation}
-                    />
-                    {/* {errors.jobLocation && touched.jobLocation && (
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Job location</Label>
+                      <Field
+                        className="form-control"
+                        name="jobLocation"
+                        onChange={(e) => setJobLocation(e.target.value)}
+                        //   validate={}
+                        value={jobLocation}
+                      />
+                      {/* {errors.jobLocation && touched.jobLocation && (
                               <div className="invalid-feedback d-block">
                                 {errors.jobLocation}
                               </div>
                             )} */}
-                  </FormGroup>
-                </Col>
-              </Row>
-              <FormGroup className="error-l-75">
-                <Label>Employment type</Label>
-                <Field
-                  as="select"
-                  name="employmentType"
-                  onChange={(e) => setEmploymentType(e.target.value)}
-                  //   validate={}
-                  className="form-control"
-                  value={employmentType || ""}
-                >
-                  <option key="" value="" disabled>
-                    Select Employment type
-                  </option>
-                  {EmploymentTypeData.map((option,index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <option key={index} value={option.value}>
-                      {option.label}
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <FormGroup className="error-l-75">
+                  <Label>Employment type</Label>
+                  <Field
+                    as="select"
+                    name="employmentType"
+                    onChange={(e) => setEmploymentType(e.target.value)}
+                    //   validate={}
+                    className="form-control"
+                    value={employmentType || ""}
+                  >
+                    <option key="" value="" disabled>
+                      Select Employment type
                     </option>
-                  ))}
-                </Field>
-                {/* {errors.employmentType && touched.employmentType && (
+                    {EmploymentTypeData.map((option, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <option key={index} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Field>
+                  {/* {errors.employmentType && touched.employmentType && (
                           <div className="invalid-feedback d-block">
                             {errors.employmentType}
                           </div>
                         )} */}
-              </FormGroup>
-              <div className="mt-4">
-                <h6 className="font-weight-semibold">Add a description*</h6>
-                {/* <p className='text-muted'>Include all the information would need to answer your question</p> */}
-                <Row className="mb-4">
-                  <Colxx xxs="12">
-                    <ReactQuill
-                      theme="snow"
-                      value={description}
-                      onChange={(val) => setDescription(val)}
-                      modules={quillModules}
-                      formats={quillFormats}
-                      validate={validateDescription}
-                    />
-                    {errors.description && touched.description && (
-        <div className="invalid-feedback d-block">
-          {errors.description}
-        </div>
-      )}
-                  </Colxx>
-                </Row>
-              </div>
-              {/* <div className="mt-2">
+                </FormGroup>
+                <div className="mt-4">
+                  <h6 className="font-weight-semibold">Add a description*</h6>
+                  {/* <p className='text-muted'>Include all the information would need to answer your question</p> */}
+                  <Row className="mb-4">
+                    <Colxx xxs="12">
+                      <ReactQuill
+                        theme="snow"
+                        value={description}
+                        onChange={(val) => setDescription(val)}
+                        modules={quillModules}
+                        formats={quillFormats}
+                        validate={validateDescription}
+                      />
+                      {errors.description && touched.description && (
+                        <div className="invalid-feedback d-block">
+                          {errors.description}
+                        </div>
+                      )}
+                    </Colxx>
+                  </Row>
+                </div>
+                {/* <div className="mt-2">
                 <h6 className="font-weight-semibold">Add Skills</h6>
                 
                 <input
@@ -316,7 +326,7 @@ const JobPosting = ({ closeModal }) => {
                   onChange={(e) => setSkills(e.target.value)}
                 />
               </div> */}
-              {/* <FormGroup>
+                {/* <FormGroup>
                 <Label for="skills">Skills</Label>
                 <Field
                   type="text"
@@ -335,9 +345,9 @@ const JobPosting = ({ closeModal }) => {
                 />
                 
               </FormGroup> */}
-              <FormGroup>
-                    <Label for="skills">Skills</Label>
-                    {/* <Field
+                <FormGroup>
+                  <Label for="skills">Skills</Label>
+                  {/* <Field
                       type="text"
                       name="skills"
                       id="skills"
@@ -352,37 +362,42 @@ const JobPosting = ({ closeModal }) => {
                       }}
                       autoComplete="off"
                     /> */}
-                    
-                    <TagsInput
-                        value={skillsTag}
-                        onChange={handleTagsChange}
-                        inputProps={{ placeholder: "Add skills " }}
-                        // validate={validateSkills}
-                      />
-                    {/* {skillError && (
+
+                  <TagsInput
+                    value={skillsTag}
+                    onChange={handleTagsChange}
+                    inputProps={{ placeholder: "Add skills " }}
+                    // validate={validateSkills}
+                  />
+                  {/* {skillError && (
                       <div className="invalid-feedback d-block">
                         {skillErrorMessage}
                       </div>
                     )} */}
-                    <FormText>Add skill and press Enter </FormText>
-                    
-                  </FormGroup>
-              <div className="mt-3">
-                <Button
-                  color="primary "
-                  className="default  py-2 "
-                  onClick={() => {
-                    handleSubmit();
-                  }}
-                  // type="submit"
-                  disabled={!isValid}
-                >
-                  Post a job
-                </Button>
-
-              </div>
-            </Form>
-             )}
+                  <FormText>Add skill and press Enter </FormText>
+                </FormGroup>
+                <div className="mt-3 d-flex justify-content-end">
+                  <Button
+                    color="primary "
+                    className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
+                      isLoading ? "show-spinner" : ""
+                    }`}
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                    // type="submit"
+                    disabled={!isValid}
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">Post a job</span>
+                  </Button>
+                </div>
+              </Form>
+            )}
           </Formik>
         </Colxx>
       </Card>
