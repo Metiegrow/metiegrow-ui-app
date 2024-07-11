@@ -250,7 +250,8 @@ console.log("pagination", paginationMeta);
                       onChange={handleSearchSkills}
                     />
                   </div>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}
+                  options={{ suppressScrollX: true, wheelPropagation: false }}>
                  {selectedSkills[0] &&  <DropdownItem onClick={() => handleSkillSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedSkills}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
@@ -285,7 +286,8 @@ console.log("pagination", paginationMeta);
                       onChange={handleSearchTools}
                     />
                   </div>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}
+                  options={{ suppressScrollX: true, wheelPropagation: false }}>
                   {selectedTools[0] && <DropdownItem onClick={() => handleToolSelect("")} className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedTools}</span>
                     <i className="iconsminds-close ml-auto" />
@@ -318,7 +320,8 @@ console.log("pagination", paginationMeta);
                       onChange={handleSearchCompanies}
                     />
                   </div>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}
+                  options={{ suppressScrollX: true, wheelPropagation: false }}>
                   {selectedIndustry &&  <DropdownItem onClick={() => handleIndustrySelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedIndustry}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
@@ -402,7 +405,8 @@ console.log("pagination", paginationMeta);
                       onChange={handleSearchChange}
                     />
                   </div>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}
+                  options={{ suppressScrollX: true, wheelPropagation: false }}>
                   {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}

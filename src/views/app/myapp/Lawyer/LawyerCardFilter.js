@@ -162,7 +162,8 @@ const LawyerCardFilter = ({
                       onChange={handleSearchTopics}
                     />
                   </div>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}
+                  options={{ suppressScrollX: true, wheelPropagation: false }}>
                   {selectedTopics[0] &&  <DropdownItem onClick={() => handleTopicsSelect("")} className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedTopics}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
@@ -193,7 +194,8 @@ const LawyerCardFilter = ({
                       onChange={handleSearchLanguage}
                     />
                   </div>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}
+                  options={{ suppressScrollX: true, wheelPropagation: false }}>
                  {selectedLanguage[0] &&  <DropdownItem onClick={() => handleLanguageSelect("")} className="bg-light d-flex justify-content-between align-items-center">
                     <span>{language.find(c => c.iso_code === selectedLanguage)?.name}</span><i className="iconsminds-close  ml-auto" />
                   </DropdownItem>}
@@ -254,7 +256,8 @@ const LawyerCardFilter = ({
                       onChange={handleSearchChange}
                     />
                   </div>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}
+                  options={{ suppressScrollX: true, wheelPropagation: false }}>
                   {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")} className="bg-light d-flex justify-content-between align-items-center">
                     <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close  ml-auto" />
                   </DropdownItem>}

@@ -25,9 +25,10 @@ const MentorCard = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
-console.log(paginationMeta.totalPage)
-console.log(paginationMeta.first)
-console.log(paginationMeta.last)
+  // const [pageSize, setPageSize] = useState(2)
+// console.log(paginationMeta.totalPage)
+// console.log(paginationMeta.first)
+// console.log(paginationMeta.last)
 
   const handleSkillsChange = (skills) => setSelectedSkills(skills);
   const handleToolsChange = (tools) => setSelectedTools(tools);
@@ -154,7 +155,7 @@ console.log(paginationMeta.last)
     if (selectedPrice) {
       params.price = selectedPrice;
     }
-    params.size = 2;
+    params.size = 3;
     params.page = currentPage - 1;
       try {
         const response = await axios.get(url2,{params});
@@ -168,6 +169,30 @@ console.log(paginationMeta.last)
     };
     mentorCardDetails();
   }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice,currentPage]);
+
+//   useEffect(() => {
+//     if (!paginationMeta.last) {
+//    const handleScroll = (e) => {
+//   const { documentElement, defaultView } = e.target;
+//   const { innerHeight } = defaultView || window;
+//   const { scrollHeight, scrollTop } = documentElement;
+
+//   const currentHeight = scrollTop + innerHeight;
+
+//   if (currentHeight + 1 >= scrollHeight) {
+//     setPageSize((prevPageSize) => prevPageSize + 5);
+//   }
+// };
+
+//       window.addEventListener("scroll", handleScroll);
+
+//       return () => {
+//         window.removeEventListener("scroll", handleScroll);
+//       };
+//     }
+
+//     return undefined;
+//   }, [paginationMeta]);
 
   useEffect(() => {
     const filterMentors = () => {
