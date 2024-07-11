@@ -23,7 +23,7 @@
         const userName = localStorage.getItem("userName");
         const type = role.includes("MENTEE") ? 2 : 1;
 
-        fetch('http://localhost:9091/api/mentee/generate-rtm-token', {
+        fetch('http://ec2-51-20-42-40.eu-north-1.compute.amazonaws.com:9091/api/mentee/generate-rtm-token', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

@@ -26,8 +26,8 @@ const MyProfile = () => {
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
 
-  const userId = localStorage.getItem("userId");
-  const endUrl = `${baseUrl}/api/mentee/profile/${userId}`;
+  // const userId = localStorage.getItem("userId");
+  const endUrl = `${baseUrl}/api/mentee/myprofile`;
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);

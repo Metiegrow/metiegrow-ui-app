@@ -30,6 +30,7 @@ const VideoCallCtrl = (props) => {
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const { userId, id } = useParams();
   const history = useHistory();
+  const [readyForCall, setReadyForCall] = useState(false);
   // const currentTime = Date.now();
 
   //     const durationMs = currentTime - endTime;
@@ -71,6 +72,7 @@ const VideoCallCtrl = (props) => {
         setEndTime(response.data.endTime);
         setCreatedByName(response.data.createdByName);
         setBookedByName(response.data.bookedByName);
+        setReadyForCall(true);
       } catch (error) {
         console.error("Error fetching RTC token:", error);
       }
@@ -245,7 +247,7 @@ const VideoCallCtrl = (props) => {
         console.log(error);
       }
     }
-  }, [channelName, client, ready, tracks, users.length, rtcToken]);
+  }, [readyForCall,channelName, client, ready, tracks, users.length, rtcToken]);
 
   const iTime = new Date(parseInt(callStartTime, 10));
 

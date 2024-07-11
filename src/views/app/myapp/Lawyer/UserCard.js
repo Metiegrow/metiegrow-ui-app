@@ -4,6 +4,7 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { Button, Card, CardBody, CardText, Col, Row } from 'reactstrap';
 import {useHistory} from "react-router-dom";
+import Pagination from "containers/pages/Pagination";
 import { baseUrl } from 'constants/defaultValues';
 import Rating from 'components/common/Rating';
 // import MentorDropDown from '../mentorship/MentorDropDown';
@@ -20,16 +21,22 @@ const UserCard = () => {
   const [selectedPrice, setSelectedPrice] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isFirst, setIsFirst] = useState(true);
+  const [isLast, setIsLast] = useState(true);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const url = `${baseUrl}/api/lawyer/lawyercards`
 
   const handleTopicsChange = (topics) => setSelectedTopics(topics);
   const handlePriceChange = (price) => setSelectedPrice(price);
   const handleLocationChange = (location) => setSelectedLocation(location);
   const handleLanguageChange = (language) => setSelectedLanguage(language);
   
-  console.log("selectedTopics",selectedTopics)
-  console.log("selectedLanguage",selectedLanguage)
-  console.log("selectedPrice",selectedPrice)
-  console.log("selectedLocation",selectedLocation)
+  // console.log("selectedTopics",selectedTopics)
+  // console.log("selectedLanguage",selectedLanguage)
+  // console.log("selectedPrice",selectedPrice)
+  // console.log("selectedLocation",selectedLocation)
 
 const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
 
@@ -41,21 +48,62 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
   const history=useHistory();
 
   // Backend url below 
-  const url =`${baseUrl}/api/lawyer`
-  useEffect(()=>{
+  // const url =`${baseUrl}/api/lawyer`
+  // useEffect(()=>{
+  //   setIsLawyerCardFetched(false);
+  //   const UserList = async () => {
+  //     try {
+  //       const response = await axios.get(url);
+  //       setUserDetails(response.data);
+  //       setIsLawyerCardFetched(true);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setIsLawyerCardFetched(true);
+  //     }
+  //   };
+  //   UserList();
+  // },[])
+
+  useEffect(() => {
     setIsLawyerCardFetched(false);
-    const UserList = async () => {
+    const LawyerCardDetails = async () => {
+      // const params = {
+      //   company: selectedIndustry,
+      //   location: selectedLocation,
+      //   skills: selectedSkills,
+      // };
+      const params = {};
+
+    
+    if (selectedLocation) {
+      params.location = selectedLocation;
+    }
+    if (selectedPrice) {
+      params.price = selectedPrice;
+    }
+    if (selectedLanguage) {
+      params.languages = selectedLanguage;
+    }
+    if (selectedTopics) {
+      params.topic = selectedTopics;
+    }
+    params.size = 2;
+    params.page = currentPage - 1;
       try {
-        const response = await axios.get(url);
-        setUserDetails(response.data);
+        const response = await axios.get(url,{params});
+        setUserDetails(response.data.data);
+        // setCurrentPage(response.data.paginationMeta.pageNumber);
+        setTotalPage(response.data.paginationMeta.totalPage);
+        setIsFirst(response.data.paginationMeta.first);
+        setIsLast(response.data.paginationMeta.last);
         setIsLawyerCardFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
         setIsLawyerCardFetched(true);
       }
     };
-    UserList();
-  },[])
+    LawyerCardDetails();
+  }, [selectedLocation,selectedLanguage,selectedTopics,currentPage]);
 
  
   
@@ -239,6 +287,13 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
    
 </>
       )}
+      <Pagination
+        currentPage={currentPage}
+        totalPage={totalPage}
+        onChangePage={(i) => setCurrentPage(i)}
+        lastIsActive = {isFirst}
+        firstIsActive = {isLast}
+      />
    
     </div>
   );
