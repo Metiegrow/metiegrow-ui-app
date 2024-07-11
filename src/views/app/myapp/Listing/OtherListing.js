@@ -17,7 +17,7 @@ import DesktopNotifications from "../notifications/DesktopNotifications";
 import TimestampConverter from "../Calculation/TimestampConverter";
 
 
-const JobListing = ({modal}) => {
+const JobListing = ({isPosted}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage] = useState(2);
@@ -61,12 +61,13 @@ const JobListing = ({modal}) => {
         setIsLoaded(true);
       }
     };
-
-    fetchData();
-  }, [currentPage, modal]);
+    setTimeout(() =>{
+      fetchData();
+    },1000)
+  }, [currentPage, isPosted]);
 
   const handleClick = (id) => {
-    history.push(`/app/listing/otherlisting/view/${id}`);
+    history.push(`/app/listing/others/view/${id}`);
   };
 
 const removeTags = (str) => {
@@ -111,7 +112,7 @@ const handleShareButtonClick = async (id) => {
   ) : (
     <div className="disable-text-selection">
       {items.map((data, index) => (
-        <Row key={data.title} className="mb-2">
+        <Row key={data.id} className="mb-2">
           <Colxx xxs="12">
             <Card className="mx-auto" style={{ maxWidth: "900px" }}>
               <CardBody className="p-4">
@@ -146,7 +147,7 @@ const handleShareButtonClick = async (id) => {
                   </CardSubtitle>
                 )}
 
-                <Row className="">
+                <Row className="align-items-center">
                   <Col className="">
                   {data.interestedCount && (
                     <div className="text-muted mt-2">
@@ -154,7 +155,7 @@ const handleShareButtonClick = async (id) => {
                     </div>
                     )}
                   </Col>
-                  <Col className="text-right">
+                  <Col className="text-md-right mt-2 mt-md-0 d-flex justify-content-end">
                   <Button
                         outline
                         color="primary"
@@ -181,9 +182,18 @@ const handleShareButtonClick = async (id) => {
                     <Button
                       outline
                       color="primary"
+                      className="d-block d-lg-none"
                       size="xs"
-                      // onClick={() => handleInterest(data.title)}
-                      onClick={() => handleInterestedButtonClick(data.id,data.title)}
+                      onClick={() => handleInterestedButtonClick(data.id, data.title)}
+                    >
+                      <i className="iconsminds-like text-primary" />
+                    </Button>
+                    <Button
+                      outline
+                      color="primary"
+                      size="xs"
+                      className="d-none d-lg-block"
+                      onClick={() => handleInterestedButtonClick(data.id, data.title)}
                     >
                       I&apos;m interested
                     </Button>

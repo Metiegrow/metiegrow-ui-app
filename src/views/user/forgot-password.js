@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Row,
   Card,
@@ -15,6 +15,7 @@ import { Colxx } from "components/common/CustomBootstrap";
 import IntlMessages from "helpers/IntlMessages";
 import { forgotPassword } from "redux/actions";
 import { NotificationManager } from "components/common/react-notifications";
+import { authService } from "services/authservice";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 import ResetPassword from "./reset-password";
@@ -30,42 +31,57 @@ const validateEmail = (value) => {
 };
 
 const ForgotPassword = ({
-  history,
-  forgotUserMail,
+  // history,
+  // forgotUserMail,
   loading,
-  error,
-  forgotPasswordAction,
+  // error,
+  // forgotPasswordAction,
 }) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  // const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpSubmitted, setOtpSubmitted] = useState(false);
 
-  const onForgotPassword = (values) => {
+  const onForgotPassword = async (values) => {
     if (!loading) {
       setEmail(values.email);
       if (values.email !== "") {
-        setIsFormSubmitted(true);
-        forgotPasswordAction(values.email, history);
+        // setIsFormSubmitted(true);
+        // forgotPasswordAction(values.email, history);
+        const response = await authService.sendPasswordResetEmail(
+           values.email
+        );
+        if (response && response.status === 200) {
+          setIsSubmitted(true);
+          // setIsFormSubmitted(false);
+        } else {
+          console.error("forgot email post Failed:", response);
+          // setIsFormSubmitted(false);
+          response.data.statuses.forEach((status) => {
+            NotificationManager.warning(status.message, status.status, 5000, null, null, '');
+        });
+          
+        }
+      } 
       }
-    }
+    
   };
 
-  useEffect(() => {
-    if (isFormSubmitted) {
-      if (error) {
-        NotificationManager.warning(
-          error,
-          "Forgot Password Error",
-          3000,
-          null,
-          null,
-          ""
-        );
-        setIsFormSubmitted(false);
-      } else if (!loading && forgotUserMail === "success") {
+  // useEffect(() => {
+  //   if (isFormSubmitted) {
+  //     if (error) {
+        // NotificationManager.warning(
+        //   error,
+        //   "Forgot Password Error",
+        //   3000,
+        //   null,
+        //   null,
+        //   ""
+        // );
+      //   setIsFormSubmitted(false);
+      // } else if (!loading && forgotUserMail === "success") {
         // NotificationManager.success(
         //   "Please check your email.",
         //   "Forgot Password Success",
@@ -74,11 +90,11 @@ const ForgotPassword = ({
         //   null,
         //   ""
         // );
-        setIsSubmitted(true);
-        setIsFormSubmitted(false);
-      }
-    }
-  }, [error, forgotUserMail, loading, isFormSubmitted]);
+  //       setIsSubmitted(true);
+  //       setIsFormSubmitted(false);
+  //     }
+  //   }
+  // }, [error, forgotUserMail, loading, isFormSubmitted]);
 
   const handleOtpSend = async () => {
     setOtpLoading(true);
@@ -87,20 +103,18 @@ const ForgotPassword = ({
       const url = `${baseUrl}/api/verifyotp`;
       const response = await axios.post(url, data);
       if (response.data.statuses[0].status === "success") {
-        setTimeout(() => {
           setOtpSubmitted(true);
           setOtpLoading(false);
           response.data.statuses.forEach((status) => {
             NotificationManager.success(
               status.message,
-              "Great!",
+              status.status,
               6000,
               null,
               null,
               ""
             );
           });
-        }, 3000);
       }
     } catch (er) {
       console.error(

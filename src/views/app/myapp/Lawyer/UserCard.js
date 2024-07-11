@@ -14,6 +14,27 @@ import LawyerCardFilter from './LawyerCardFilter';
 
 
 const UserCard = () => {
+
+
+  const [selectedTopics, setSelectedTopics] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+
+  const handleTopicsChange = (topics) => setSelectedTopics(topics);
+  const handlePriceChange = (price) => setSelectedPrice(price);
+  const handleLocationChange = (location) => setSelectedLocation(location);
+  const handleLanguageChange = (language) => setSelectedLanguage(language);
+  
+  console.log("selectedTopics",selectedTopics)
+  console.log("selectedLanguage",selectedLanguage)
+  console.log("selectedPrice",selectedPrice)
+  console.log("selectedLocation",selectedLocation)
+
+const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
+
+
+
   const [userdetails,setUserDetails]=useState('')
   const [inputkey,setInputKey]=useState('');
   // const url=`${baseUrl}/user/cards`
@@ -22,13 +43,15 @@ const UserCard = () => {
   // Backend url below 
   const url =`${baseUrl}/api/lawyer`
   useEffect(()=>{
-
+    setIsLawyerCardFetched(false);
     const UserList = async () => {
       try {
         const response = await axios.get(url);
         setUserDetails(response.data);
+        setIsLawyerCardFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setIsLawyerCardFetched(true);
       }
     };
     UserList();
@@ -62,12 +85,24 @@ const UserCard = () => {
        </div>
         
   
-        <LawyerCardFilter />
+        <LawyerCardFilter
+        onTopicsChange={handleTopicsChange}
+        onPriceChange={handlePriceChange}
+        onLocationChange={handleLocationChange}
+        onLanguageChange={handleLanguageChange}
+        selectedTopics={selectedTopics}
+        selectedLocation={selectedLocation}
+        selectedLanguage={selectedLanguage}
+        />
         </div>
     
         </div>
         </div>
       </Colxx>
+      {!isLawyerCardFetched ? (
+        <div className='loading' />
+      ) : (
+      <>
       {userdetails.length===0?(
         <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <Card>
@@ -199,9 +234,11 @@ const UserCard = () => {
       
     )
     
-   }))
-      }
+  }))
+}
    
+</>
+      )}
    
     </div>
   );

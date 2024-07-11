@@ -40,6 +40,7 @@ const LawyerMyProfile = () => {
   const [about, setAbout] = useState("");
   const [profileLoading, setProfileLoading] = useState(true);
   const [topicValidationMessage, setTopicValidationMessage] = useState("");
+  const [isPosted, setIsPosted] = useState(false)
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
 
@@ -69,7 +70,7 @@ const LawyerMyProfile = () => {
     };
 
     mentorProfileDetails();
-  }, []);
+  }, [isPosted]);
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
@@ -97,6 +98,7 @@ const LawyerMyProfile = () => {
       response.data.statuses.forEach((status) => {
          NotificationManager.success(status.message, 'Great!', 3000, null, null, '');
      });
+     setIsPosted(!isPosted)
       // console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile", error);
@@ -384,7 +386,7 @@ const LawyerMyProfile = () => {
                 </Col>
 
                 <Col lg="5" md="12" className="mt-4 ml-4">
-                {(languages.length > 0 || isEditingButton) && <h2 className="mx-2">Languages known</h2>}
+                {(languages.length > 0 || isEditingButton) && <h2 className="mx-2 font-weight-semibold">Languages known</h2>}
                   {isEditingButton ? (
                     <>
                       {languages.map((lang, index) => (
@@ -432,7 +434,7 @@ const LawyerMyProfile = () => {
                   )}
 
                   <div className="mt-2">
-                    <h2 className="mx-2">Topics</h2>
+                    <h2 className="font-weight-semibold mx-2">Topics</h2>
 
                     {isEditingButton ? (
                       <>
@@ -537,7 +539,7 @@ const LawyerMyProfile = () => {
               <hr />
               <Row>
                 <Col lg="12" md="12" className="ml-4">
-                  <h1 className="font-weight-semibold text-large">About</h1>
+                  <h2 className="font-weight-semibold mx-2">About</h2>
 
                   <div>
                     {isEditingAbout ? (
@@ -568,8 +570,8 @@ const LawyerMyProfile = () => {
                         <br />
                       </div>
                     ) : (
-                      <div className="col-lg-6 col-12">
-                        <p className="text-one font-weight-medium">{bio}</p>
+                      <div className="col-lg-12 col-12">
+                        <p className="text-one font-weight-medium">{about}</p>
                       </div>
                     )}
                   </div>
@@ -581,7 +583,7 @@ const LawyerMyProfile = () => {
                       onClick={handleEditAboutClick}
                       className="ml-2"
                     >
-                      <i className="simple-icon-pencil" /> Edit about
+                      <i className="simple-icon-pencil" /> Edit
                     </Button>
                   )}
 

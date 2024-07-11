@@ -9,7 +9,7 @@ import {
   CardTitle,
   Col,
 } from "reactstrap";
-import { NotificationManager } from 'components/common/react-notifications';
+// import { NotificationManager } from 'components/common/react-notifications';
 import { useParams, useHistory } from "react-router-dom";
 import { Colxx } from "components/common/CustomBootstrap";
 import ReactQuill from "react-quill";
@@ -19,6 +19,7 @@ import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import { baseUrl } from "constants/defaultValues";
 import TimestampConverter from "../Calculation/TimestampConverter";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const VideoCallCompletedPage = () => {
   const [feedBack, setFeedBack] = useState("");
@@ -115,17 +116,19 @@ if (roleRes === "MENTEE") {
         }, 3000);
       })
       .catch((error) => {
-        console.error("Error submitting data:", error);
+        // console.error("Error submitting data:", error);
         // console.log(error.response.data.error.message);
         // const er = error.response.data.error.message;
-        setTimeout(() => {
-          NotificationManager.warning("Error submitting review", 'Oops!', 3000, null, null, '');
-
+          // NotificationManager.warning("Error submitting review", 'Oops!', 3000, null, null, '');
+          if(error.response){
+            ToasterComponent('error', error.response.data.statuses);
+          } else{
+          console.error("There was an error while submitting ", error);
+          }
         setSubmissionStatus(true);
         setPost(false);
         // setSubmissionStatus("failure");
         setIsLoading(false);
-      }, 3000);
 
       });
   };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   //   Card,
@@ -17,7 +17,7 @@ import {
   ModalHeader,
   ModalBody,
 } from "reactstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useHistory } from "react-router-dom";
 import classnames from "classnames";
 import { injectIntl } from "react-intl";
 // import Rating from 'components/common/Rating';
@@ -34,10 +34,15 @@ import StayPosting from "./StayPosting";
 import OtherPosting from "./OtherPosting";
 
 const DetailsAltPages = () => {
+
+  
+  const location = useLocation();
+  const history = useHistory();
   const [activeTab, setActiveTab] = useState("all");
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [listingType, setListingType] = useState("");
+  const [isPosted,setIsPosted] = useState(false)
 
   const toggleModal = (title, type) => {
     setModalTitle(title);
@@ -48,6 +53,18 @@ const DetailsAltPages = () => {
 
   const toggleModalState = () => {
     setModal(false);
+    setIsPosted(!isPosted);
+  };
+
+
+  useEffect(() => {
+    const path = location.pathname.split('/').pop();
+    setActiveTab(path === 'listing' ? 'all' : path);
+  }, [location]);
+
+  const changeTab = (tab) => {
+    setActiveTab(tab);
+    history.push(`/app/listing${tab === 'all' ? '' : `/${tab}`}`);
   };
   
 
@@ -127,7 +144,7 @@ const DetailsAltPages = () => {
                   active: activeTab === "all",
                   "nav-link": true,
                 })}
-                onClick={() => setActiveTab("all")}
+                onClick={() => changeTab("all")}
               >
                 <i className="iconsminds-align-justify-all text-primary" />
                 All
@@ -141,7 +158,7 @@ const DetailsAltPages = () => {
                   active: activeTab === "job",
                   "nav-link": true,
                 })}
-                onClick={() => setActiveTab("job")}
+                onClick={() => changeTab("job")}
               >
                 <i className="iconsminds-management text-primary" />
                 Job
@@ -155,7 +172,7 @@ const DetailsAltPages = () => {
                   active: activeTab === "stay",
                   "nav-link": true,
                 })}
-                onClick={() => setActiveTab("stay")}
+                onClick={() => changeTab("stay")}
               >
                 <i className="iconsminds-building text-primary" />
                 Stay
@@ -169,7 +186,7 @@ const DetailsAltPages = () => {
                   active: activeTab === "others",
                   "nav-link": true,
                 })}
-                onClick={() => setActiveTab("others")}
+                onClick={() => changeTab("others")}
               >
                 <i className="iconsminds-testimonal text-primary" />
                 Others
@@ -182,13 +199,13 @@ const DetailsAltPages = () => {
               <All />
             </TabPane>
             <TabPane tabId="job">
-              <JobListing modal={modal} />
+              <JobListing isPosted={isPosted} />
             </TabPane>
             <TabPane tabId="stay">
-              <StayListing modal={modal} />
+              <StayListing isPosted={isPosted} />
             </TabPane>
             <TabPane tabId="others">
-              <OtherListing modal={modal} />
+              <OtherListing isPosted={isPosted} />
             </TabPane>
           </TabContent>
         </Colxx>

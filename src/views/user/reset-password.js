@@ -103,11 +103,10 @@ const ResetPassword = ({
             // setIsSubmitted(true);
             // console.log("Reset success");
             // history.push("/login");
-            setTimeout(() => {
               response.data.statuses.forEach((status) => {
                 NotificationManager.success(
                   status.message,
-                  "Great!",
+                  status.status,
                   6000,
                   null,
                   null,
@@ -116,7 +115,6 @@ const ResetPassword = ({
               });
               history.push("/login");
               setResetLoading(false);
-            }, 3000);
           } else {
             NotificationManager.warning(
               "Please check your email url.",

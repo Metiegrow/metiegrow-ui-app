@@ -16,7 +16,7 @@ import { Colxx } from "components/common/CustomBootstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 
 
-const JobListing = ({modal}) => {
+const JobListing = ({isPosted}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -58,12 +58,13 @@ const JobListing = ({modal}) => {
         setIsLoaded(true);
       }
     };
-
-    fetchData();
-  }, [currentPage, modal]);
+    setTimeout(() => {
+      fetchData();
+    },1000)
+  }, [currentPage, isPosted]);
 
   const handleClick = (id) => {
-    history.push(`/app/listing/joblisting/view/${id}`);
+    history.push(`/app/listing/job/view/${id}`);
   };
 
     function removeTags(str) {

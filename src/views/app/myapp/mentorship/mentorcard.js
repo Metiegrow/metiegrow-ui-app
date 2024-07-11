@@ -35,6 +35,8 @@ const MentorCard = () => {
   console.log("selectedPrice",selectedPrice)
   console.log("selectedLocation",selectedLocation)
 
+  const [isMentorCardFetched, setIsMentorCardFetched] = useState(false)
+
 	
   // const url1=`${baseUrl}/mentorDetails`
   const url1=`${baseUrl}/api/mentor`
@@ -104,6 +106,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   //   mentorCardDetails();
   // },[location.search])   
   useEffect(() => {
+    setIsMentorCardFetched(false);
     const mentorCardDetails = async () => {
       try {
         let url = url1;
@@ -112,13 +115,16 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
         }
         const response = await axios.get(url);
         setMentorDetails(response.data);
+        setIsMentorCardFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setIsMentorCardFetched(true);
       }
     };
     mentorCardDetails();
   }, [location.search]);
   useEffect(() => {
+    setIsMentorCardFetched(false);
     const mentorCardDetails = async () => {
       // const params = {
       //   company: selectedIndustry,
@@ -139,8 +145,10 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       try {
         const response = await axios.get(url2,{params});
         setMentorDetails(response.data);
+        setIsMentorCardFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setIsMentorCardFetched(true);
       }
     };
     mentorCardDetails();
@@ -268,6 +276,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
             selectedSkills={selectedSkills}
             selectedLocation={selectedLocation}
             selectedIndustry={selectedIndustry}
+            selectedTools={selectedTools}
           />
         </div>
     
@@ -276,7 +285,10 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       </Colxx>
   
       {/* searchbar ends */}
-
+      {!isMentorCardFetched ? (
+        <div className='loading' />
+      ) : (
+       <>
       <div>
       
         {filteredMentors.length===0?(
@@ -408,10 +420,12 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       
     )
     
-   }))
-        }
+  }))
+}
       </div>
       
+</>
+      )}
    
       {/* <Colxx xxs="12">
       <Row>

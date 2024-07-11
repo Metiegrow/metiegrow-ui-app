@@ -1,8 +1,9 @@
 import { Colxx } from "components/common/CustomBootstrap";
 import { RangeTooltip } from "components/common/SliderTooltips";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import {
+  Button,
   // CustomInput,
   Dropdown,
   DropdownItem,
@@ -24,13 +25,14 @@ const MentorFilter = ({
   selectedSkills,
   selectedLocation,
   selectedIndustry,
+  selectedTools,
 }) => {
   const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
   const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
-  const [priceRange,setPriceRange] = useState([800, 1200])
+  const [priceRange,setPriceRange] = useState([800, 1200]);
 
   const handleSkillSelect = (skill) => {
     onSkillsChange(skill);
@@ -55,8 +57,71 @@ const MentorFilter = ({
    
   };
 
+  const companies = [
+    "Apple",
+    "Microsoft",
+    "Google",
+    "Amazon",
+    "Facebook",
+    "Tesla",
+    "IBM ",
+    "Intel",
+    "Netflix",
+    "Adobe"
+  ]
+
+  const tools = [
+    "VSCode",
+    "Git",
+    "GitHub",
+    "Docker",
+    "Postman",
+    "Jenkins",
+    "Webpack",
+    "ESLint",
+    "Sublime Text",
+    "JIRA",
+    "Slack",
+    "Figma"
+  ]
+
+  
+  const skills = [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "Python",
+    "Java",
+    "React",
+    "Node.js",
+    "SQL",
+    "TypeScript",
+    "GraphQL"
+  ]
   const [searchText, setSearchText] = useState('');
+  const [searchCompanies, setSearchCompanies] = useState('');
+  const [searchTools, setSearchTools] = useState('');
+  const [searchSkills, setSearchSkills] = useState('');
   const [filteredCountry, setFilteredCountry] = useState(country);
+  const [filteredTools, setFilteredTools] = useState(tools);
+  const [filteredCompanies, setFilteredCompanies] = useState(companies);
+  const [filteredSkills, setFilteredSkills] = useState(skills);
+  const [viewFilters, setViewFilters] = useState(false)
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 992); 
+    };
+
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   const handleSearchChange = (event) => {
     const newText = event.target.value.toLowerCase();
@@ -64,82 +129,162 @@ const MentorFilter = ({
     setFilteredCountry(country.filter((c) => c.name.toLowerCase().includes(newText)));
   };
 
+  const handleSearchCompanies = (event) => {
+    const newText = event.target.value.toLowerCase();
+    setSearchCompanies(newText);
+    setFilteredCompanies(companies.filter((c) => c.toLowerCase().includes(newText)));
+  };
+  const handleSearchTools = (event) => {
+    const newText = event.target.value.toLowerCase();
+    setSearchTools(newText);
+    setFilteredTools(tools.filter((t) => t.toLowerCase().includes(newText)));
+  };
+  const handleSearchSkills = (event) => {
+    const newText = event.target.value.toLowerCase();
+    setSearchSkills(newText);
+    setFilteredSkills(skills.filter((s) => s.toLowerCase().includes(newText)));
+  };
+
+  const handleViewFilters = () => {
+    setViewFilters(!viewFilters)
+  };
+
+
   return (
     <div>
       <Row className="mb-4">
         <Colxx xxs="12" sm="12" md="12" lg="12" className=" ">
           <div className="">
             <div className="d-flex flex-wrap my-3">
+            {/* <Dropdown
+                isOpen={dropdownBasicOpen}
+                toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
+                className="mb-5 mx-2 col-lg-auto col-sm-12 "
+              ><DropdownToggle className="col-lg-auto col-sm-12" caret color="primary" outline>
+              Check
+              </DropdownToggle></Dropdown> */}
+               {isMobile && (
+                <Button
+                  size="sm"
+                  color="primary"
+                  outline
+                  className="d-block d-lg-none col-sm-12 mb-3 position-relative"
+                  onClick={handleViewFilters}
+                >
+                  {viewFilters ? (
+                    <span>
+                      Close filters
+                      <i
+                        className="simple-icon-arrow-up mr-0 icon-right"
+                        style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                      />
+                    </span>
+                  ) : (
+                    <span>
+                      View filters
+                      <i
+                        className="simple-icon-arrow-down icon-right"
+                        style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                      />
+                    </span>
+                  )}
+                </Button>
+              )}
+
+              {(!isMobile || viewFilters) && (
+              <>
               <Dropdown
                 isOpen={dropdownBasicOpen}
                 toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
-                className="mb-5 mx-2"
+                className="mb-3  col-lg-auto col-sm-12 "
               >
-                <DropdownToggle caret color="primary" outline>
-                  Skills
+                <DropdownToggle size="sm" className="col-lg-auto col-sm-12 " caret color="primary" outline>
+                {selectedSkills[0] ? selectedSkills : <span>Skills</span>}
                 </DropdownToggle>
                 <DropdownMenu>
-                 {selectedSkills[0] &&  <DropdownItem onClick={() => handleSkillSelect("")}>
-                    <span>{selectedSkills}</span><i className="iconsminds-close" />
+                <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                    <input
+                      type="text"
+                      className="form-control "
+                      placeholder="Search skills"
+                      value={searchSkills}
+                      onChange={handleSearchSkills}
+                    />
+                  </div>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                 {selectedSkills[0] &&  <DropdownItem onClick={() => handleSkillSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
+                    <span>{selectedSkills}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                  <DropdownItem onClick={() => handleSkillSelect("HTML")}>
-                    <span>HTML</span>
-                  </DropdownItem>
-                  <DropdownItem onClick={() => handleSkillSelect("CSS")}>
-                    <span>CSS</span>
-                  </DropdownItem>
-                  <DropdownItem onClick={() => handleSkillSelect("Java")}>
-                    <span>Java</span>
-                  </DropdownItem>
+                  {filteredSkills.map((s) => (
+                      <DropdownItem key={s} onClick={() => handleSkillSelect(s)}>
+                        {s}
+                      </DropdownItem>
+                    ))}
+                 </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
 
               <Dropdown
                 isOpen={dropdownBasicOpen1}
                 toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
-                className="mb-5 mx-2"
+                className="mb-3  col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
-                  Tools
+                <DropdownToggle size="sm" className="col-lg-auto col-sm-12" caret color="primary" outline>
+                {selectedTools[0] ? selectedTools :  <span>Tools</span>}
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem onClick={() => handleToolSelect("Git")}>
-                    <span>Git</span>
-                  </DropdownItem>
-                  <DropdownItem onClick={() => handleToolSelect("VS Code")}>
-                    <span>VS Code</span>
-                  </DropdownItem>
-                  <DropdownItem onClick={() => handleToolSelect("Postman")}>
-                    <span>Postman</span>
-                  </DropdownItem>
+                <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                    <input
+                      type="text"
+                      className="form-control "
+                      placeholder="Search tools"
+                      value={searchTools}
+                      onChange={handleSearchTools}
+                    />
+                  </div>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  {selectedTools[0] && <DropdownItem onClick={() => handleToolSelect("")} className="bg-light d-flex justify-content-between align-items-center">
+                    <span>{selectedTools}</span>
+                    <i className="iconsminds-close ml-auto" />
+                  </DropdownItem>}
+                  {filteredTools.map((t) => (
+                      <DropdownItem key={t} onClick={() => handleToolSelect(t)}>
+                        {t}
+                      </DropdownItem>
+                    ))}
+                 </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
 
               <Dropdown
                 isOpen={dropdownBasicOpen2}
                 toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
-                className="mb-5 mx-2"
+                className="mb-3  col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
-                  Companies
+                <DropdownToggle size="sm" className="col-lg-auto col-sm-12" caret color="primary" outline>
+                {selectedIndustry || <span>Companies</span>}
                 </DropdownToggle>
-                <DropdownMenu className="">
-                  {/* <FormGroup className="d-flex">
-                    <CustomInput type="checkbox" id="" />
-                    <Label onClick={() => handleIndustrySelect("Amazon")}>
-                      Amazon
-                    </Label>
-                  </FormGroup> */}
-                  {selectedIndustry &&  <DropdownItem onClick={() => handleIndustrySelect("")}>
-                    <span>{selectedIndustry}</span><i className="iconsminds-close" />
-                  </DropdownItem>}
-                  <DropdownItem onClick={() => handleIndustrySelect("Amazon")}>
-                    <span>Amazon</span>
-                  </DropdownItem>
-                  <DropdownItem onClick={() => handleIndustrySelect("TCS")}>
-                    <span>TCS</span>
-                  </DropdownItem>
+                <DropdownMenu className="col-lg-auto col-sm-12">
                  
+                  <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                    <input
+                      type="text"
+                      className="form-control "
+                      placeholder="Search Company"
+                      value={searchCompanies}
+                      onChange={handleSearchCompanies}
+                    />
+                  </div>
+                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
+                  {selectedIndustry &&  <DropdownItem onClick={() => handleIndustrySelect("")}  className="bg-light d-flex justify-content-between align-items-center">
+                    <span>{selectedIndustry}</span><i className="iconsminds-close ml-auto" />
+                  </DropdownItem>}
+                  {filteredCompanies.map((c) => (
+                      <DropdownItem key={c} onClick={() => handleIndustrySelect(c)}>
+                        {c}
+                      </DropdownItem>
+                    ))}
+                 </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
               
@@ -147,9 +292,9 @@ const MentorFilter = ({
               <Dropdown
                 isOpen={dropdownBasicOpen3}
                 toggle={() => setDropdownBasicOpen3(!dropdownBasicOpen3)}
-                className="mb-5 mx-2"
+                className="mb-3  col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
+                <DropdownToggle size="sm" className="col-lg-auto col-sm-12" caret color="primary" outline>
                   Price
                 </DropdownToggle>
                 <DropdownMenu>
@@ -176,9 +321,9 @@ const MentorFilter = ({
               <Dropdown
                 isOpen={dropdownBasicOpen4}
                 toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
-                className="mb-5 mx-2"
+                className="mb-3  col-lg-auto col-sm-12"
               >
-                <DropdownToggle caret color="primary" outline>
+                <DropdownToggle size="sm" className="col-lg-auto col-sm-12" caret color="primary" outline >
                  {selectedLocation ? (country.find(c => c.iso_code === selectedLocation)?.name) : ( <span>Location</span> )}
                 </DropdownToggle>
                 {/* <DropdownMenu
@@ -214,8 +359,8 @@ const MentorFilter = ({
                     />
                   </div>
                   <PerfectScrollbar style={{ maxHeight: '200px' }}>
-                  {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}>
-                    <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close" />
+                  {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
+                    <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
                     {filteredCountry.map((c) => (
                       <DropdownItem key={c.iso_code} onClick={() => handleLocationSelect(c.iso_code)}>
@@ -225,6 +370,8 @@ const MentorFilter = ({
                   </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
+              </>
+              )}
             </div>
           </div>
         </Colxx>

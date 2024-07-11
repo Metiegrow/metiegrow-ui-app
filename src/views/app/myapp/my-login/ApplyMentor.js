@@ -59,6 +59,9 @@ const ApplyMentor = () => {
   const [imageErrorMessage, setImageErrorMessage] = useState(null);
   const [skillErrorMessage,setSkillErrorMessage] = useState(null);
   const [languages, setLanguages] = useState([]);
+  const [aboutLoading,setAboutLoading] = useState(false)
+  const [profileLoading,setProfileLoading] = useState(false)
+  const [experienceLoading, setExperienceLoading] = useState(false)
   const [aboutField, setAboutField] = useState({
     image: "",
   });
@@ -149,7 +152,7 @@ const languageOptions = language.map(option => ({
 
 
   const postDataAbout = async (data) => {
-
+    setAboutLoading(true)
     const formData = new FormData();
     formData.append("image", file1);
 
@@ -170,11 +173,13 @@ const languageOptions = language.map(option => ({
         },
       });
       // setNextStep(true)
+      setAboutLoading(false)
       //   console.log(`resres ${response.status}`);
       handleNextStep();
     } catch (error) {
       setImageError(false);
       // console.error(error);
+      setAboutLoading(false)
       error.response.data.statuses.forEach((status) => {
          NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
          if(status.code === 40327){
@@ -195,6 +200,7 @@ const languageOptions = language.map(option => ({
   };
 
   const postDataProfile = async (data) => {
+    setProfileLoading(true)
     try {
       await axios.post(mentorProfileUrl, data, {
         headers: {
@@ -202,10 +208,12 @@ const languageOptions = language.map(option => ({
         },
       });
       // setNextStep(true)
+      setProfileLoading(false)
       //   console.log(`resres ${response.status}`);
       handleNextStep();
     } catch (error) {
       setSkillError(false);
+      setProfileLoading(false)
       error.response.data.statuses.forEach((status) => {
          NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
          if(status.code === 40110){
@@ -217,6 +225,7 @@ const languageOptions = language.map(option => ({
   };
 
   const postDataExperience = async (data) => {
+    setExperienceLoading(true);
     const postDataExp = { ...data, price: amount };
     try {
       await axios.post(experienceUrl, postDataExp, {
@@ -226,12 +235,14 @@ const languageOptions = language.map(option => ({
       });
       // setNextStep(true)
       // console.log(response);
+      setExperienceLoading(false)
       handleNextStep();
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
       }, 3000);
     } catch (error) {
+      setExperienceLoading(false)
       error.response.data.statuses.forEach((status) => {
         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
     });
@@ -508,8 +519,17 @@ const languageOptions = language.map(option => ({
                       </FormGroup>
                   <Row>
                     <Col className="text-center">
-                      <Button color="primary" type="submit">
-                        Next
+                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                      aboutLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      Next
+                    </span>
                       </Button>
                     </Col>
                   </Row>
@@ -712,8 +732,17 @@ const languageOptions = language.map(option => ({
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit">
-                        Next
+                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                      profileLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      Next
+                    </span>
                       </Button>
                     </Col>
                   </Row>
@@ -888,8 +917,17 @@ const languageOptions = language.map(option => ({
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit">
-                        Next
+                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                     experienceLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      Submit
+                    </span>
                       </Button>
                     </Col>
                   </Row>

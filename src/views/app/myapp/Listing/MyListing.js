@@ -1,32 +1,33 @@
 import React from "react";
-import { Card, Badge } from "reactstrap";
+import { Card, Badge, Button } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { Colxx } from "components/common/CustomBootstrap";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 const MyListing = () => {
   const data = [
     {
       title: "Title 1",
       category: "Job Listing",
-      postedOn: "postedOn 1",
-      badgeColor: "primary",
-      badgeText: "Processed",
+      postedOn: 1720189649645,
+      badgeColor: "success",
+      badgeText: "Published",
       link: "#",
       interestedCount: "6",
     },
     {
       title: "Title 2",
       category: "Stay Listing",
-      postedOn: "postedOn 2",
+      postedOn: 1720276049645,
       badgeColor: "success",
-      badgeText: "Completed",
+      badgeText: "Published",
       link: "#",
       interestedCount: "1",
     },
     {
       title: "Title 3",
       category: "Other Listing",
-      postedOn: "postedOn 1",
+      postedOn: 1720362449645,
       badgeColor: "primary",
       badgeText: "Processed",
       link: "#",
@@ -35,9 +36,9 @@ const MyListing = () => {
     {
       title: "Title 4",
       category: "Stay Listing",
-      postedOn: "postedOn 2",
+      postedOn: 1720448849645,
       badgeColor: "success",
-      badgeText: "Completed",
+      badgeText: "Published",
       link: "#",
       interestedCount: "4",
     },
@@ -56,13 +57,13 @@ const MyListing = () => {
                 </p>
               </NavLink>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
-                {item.category}
+               <i className="simple-icon-layers" /> {" "} {item.category}
               </p>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
-                {item.postedOn}
+               <i className="simple-icon-clock" />{" "}<TimestampConverter timeStamp={item.postedOn} format="datetime"  />
               </p>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
-                {item.interestedCount}
+                <i className="iconsminds-like" />{" "}{item.interestedCount}
               </p>
               <div className="w-15 w-sm-100">
                 <Badge color={item.badgeColor} pill>
@@ -79,6 +80,8 @@ const MyListing = () => {
                 onChange={() => {}}
                 label=""
               /> */}
+              <Button outline color="primary" className="icon-button"><i className="simple-icon-pencil" /></Button>
+              <Button outline color="primary" className="icon-button ml-2"><i className="simple-icon-trash" /></Button>
             </div>
           </div>
         </Card>

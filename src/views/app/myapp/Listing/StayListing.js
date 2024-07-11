@@ -56,7 +56,7 @@ const StayListing = () => {
     }
   };
   const handleClick = (id) => {
-    history.push(`/app/listing/staylisting/view/${id}`);
+    history.push(`/app/listing/stay/view/${id}`);
   };
 
   const handleInterestedButtonClick = async (id) => {

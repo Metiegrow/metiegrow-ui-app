@@ -56,8 +56,8 @@ function* loginWithEmailPassword({ payload }) {
       setCurrentUser(item);
       yield put(loginUserSuccess(item));
       history.push(adminRoot);
-    } else if(userObj.response && userObj.response.data && userObj.response.data.error && userObj.response.data.error.message) {
-      yield put(loginUserError(userObj.response.data.error.message));
+    } else if(userObj.response && userObj.response.data && userObj.response.data.statuses && userObj.response.data.statuses[0].message) {
+      yield put(loginUserError(userObj.response.data.statuses[0].message));
     } else if(userObj.response && userObj.response.data && userObj.response.data.error) {
       yield put(loginUserError(userObj.response.data.error));
     }

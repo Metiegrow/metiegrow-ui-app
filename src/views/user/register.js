@@ -137,15 +137,18 @@ const Register = () => {
       } else {
         console.error("Signup Failed:", signUpResponse);
         setLoading(false);
-        // console.log("su",signUpResponse)
-        NotificationManager.warning(
-          "Something went wrong",
-          "Oops!",
-          3000,
-          null,
-          null,
-          ""
-        );
+        // console.log("su",signUpResponse.data.statuses[0].message)
+        signUpResponse.data.statuses.forEach((status) => {
+          NotificationManager.warning(status.message, status.status, 5000, null, null, '');
+      });
+        // NotificationManager.warning(
+        //   "Something went wrong",
+        //   "Oops!",
+        //   3000,
+        //   null,
+        //   null,
+        //   ""
+        // );
       }
     } catch (error) {
       console.error("Error registering user:", error);
