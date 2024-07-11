@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import {
   Button,
+  Card,
   // CustomInput,
   Dropdown,
   DropdownItem,
@@ -13,6 +14,8 @@ import {
   // Label,
   Row,
 } from "reactstrap";
+import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import country from "../my-login/Country";
 
@@ -33,6 +36,8 @@ const MentorFilter = ({
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
   const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
   const [priceRange,setPriceRange] = useState([800, 1200]);
+
+  const searchUrl = `${baseUrl}/api/mentor/search/skills`
 
   const handleSkillSelect = (skill) => {
     onSkillsChange(skill);
@@ -86,18 +91,18 @@ const MentorFilter = ({
   ]
 
   
-  const skills = [
-    "HTML",
-    "CSS",
-    "JavaScript",
-    "Python",
-    "Java",
-    "React",
-    "Node.js",
-    "SQL",
-    "TypeScript",
-    "GraphQL"
-  ]
+  // const skills = [
+  //   "HTML",
+  //   "CSS",
+  //   "JavaScript",
+  //   "Python",
+  //   "Java",
+  //   "React",
+  //   "Node.js",
+  //   "SQL",
+  //   "TypeScript",
+  //   "GraphQL"
+  // ]
   const [searchText, setSearchText] = useState('');
   const [searchCompanies, setSearchCompanies] = useState('');
   const [searchTools, setSearchTools] = useState('');
@@ -105,8 +110,14 @@ const MentorFilter = ({
   const [filteredCountry, setFilteredCountry] = useState(country);
   const [filteredTools, setFilteredTools] = useState(tools);
   const [filteredCompanies, setFilteredCompanies] = useState(companies);
-  const [filteredSkills, setFilteredSkills] = useState(skills);
-  const [viewFilters, setViewFilters] = useState(false)
+  // const [filteredSkills, setFilteredSkills] = useState(skills);
+  const [viewFilters, setViewFilters] = useState(false);
+  const [skillsData,setSkillsData] = useState([]);
+  const [paginationMeta, setPaginationMeta] = useState([]);
+  const [size, setSize] = useState(10);
+  console.log("skillsData",skillsData)
+console.log("pagination", paginationMeta);
+
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -140,14 +151,42 @@ const MentorFilter = ({
     setFilteredTools(tools.filter((t) => t.toLowerCase().includes(newText)));
   };
   const handleSearchSkills = (event) => {
-    const newText = event.target.value.toLowerCase();
-    setSearchSkills(newText);
-    setFilteredSkills(skills.filter((s) => s.toLowerCase().includes(newText)));
+    // const newText = event.target.value.toLowerCase();
+    setSearchSkills(event.target.value);
+    // setFilteredSkills(skills.filter((s) => s.toLowerCase().includes(newText)));
   };
+
+  useEffect(() => {
+    const FetchSkills = async () => {
+      // const params = {
+      //   company: selectedIndustry,
+      //   location: selectedLocation,
+      //   skills: selectedSkills,
+      // };
+      const params = {};
+
+    if (searchSkills) {
+      params.skill = searchSkills;
+    }
+    
+    params.size = size;
+    params.page = 0;
+      try {
+        const response = await axios.get(searchUrl,{params});
+        setSkillsData(response.data.data);
+        setPaginationMeta(response.data.paginationMeta);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    FetchSkills();
+  }, [searchSkills, size]);
 
   const handleViewFilters = () => {
     setViewFilters(!viewFilters)
   };
+
+  const handleLoadMore = () => setSize(size + 5)
 
 
   return (
@@ -215,11 +254,15 @@ const MentorFilter = ({
                  {selectedSkills[0] &&  <DropdownItem onClick={() => handleSkillSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedSkills}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                  {filteredSkills.map((s) => (
-                      <DropdownItem key={s} onClick={() => handleSkillSelect(s)}>
+                  {skillsData.map((s,index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                      <DropdownItem key={index} onClick={() => handleSkillSelect(s)}>
                         {s}
                       </DropdownItem>
                     ))}
+                     {!paginationMeta.last &&  <Card style={{cursor: "pointer"}} onClick={handleLoadMore}  className="bg-light d-flex justify-content-between align-items-center">
+                    load more
+                  </Card>}
                  </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
@@ -279,8 +322,9 @@ const MentorFilter = ({
                   {selectedIndustry &&  <DropdownItem onClick={() => handleIndustrySelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedIndustry}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                  {filteredCompanies.map((c) => (
-                      <DropdownItem key={c} onClick={() => handleIndustrySelect(c)}>
+                  {filteredCompanies.map((c,index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                      <DropdownItem key={index} onClick={() => handleIndustrySelect(c)}>
                         {c}
                       </DropdownItem>
                     ))}
@@ -362,8 +406,9 @@ const MentorFilter = ({
                   {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                    {filteredCountry.map((c) => (
-                      <DropdownItem key={c.iso_code} onClick={() => handleLocationSelect(c.iso_code)}>
+                    {filteredCountry.map((c,index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <DropdownItem key={index} onClick={() => handleLocationSelect(c.iso_code)}>
                         {c.name}
                       </DropdownItem>
                     ))}

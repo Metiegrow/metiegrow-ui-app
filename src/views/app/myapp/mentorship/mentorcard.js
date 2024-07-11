@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
-import {useLocation,useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
 import { adminRoot, baseUrl } from 'constants/defaultValues';
 import React, { useState ,useEffect} from 'react';
 import {  Button, Card, CardBody, CardText, Row } from 'reactstrap'
+import Pagination from "containers/pages/Pagination";
 // import RatingExamples from './RatingExamples';
 import ThumbnailLetters from 'components/cards/ThumbnailLetters';
 import Rating from 'components/common/Rating';
@@ -22,6 +23,11 @@ const MentorCard = () => {
   const [selectedIndustry, setSelectedIndustry] = useState("");
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationMeta, setPaginationMeta] = useState([]);
+console.log(paginationMeta.totalPage)
+console.log(paginationMeta.first)
+console.log(paginationMeta.last)
 
   const handleSkillsChange = (skills) => setSelectedSkills(skills);
   const handleToolsChange = (tools) => setSelectedTools(tools);
@@ -39,7 +45,7 @@ const MentorCard = () => {
 
 	
   // const url1=`${baseUrl}/mentorDetails`
-  const url1=`${baseUrl}/api/mentor`
+  // const url1=`${baseUrl}/api/mentor`
   const url2 = `${baseUrl}/api/mentor/cards`
   // const imageUrl = `${baseUrl}/api/public/images`;
   // To change to backend api url uncomment the below line
@@ -47,9 +53,9 @@ const MentorCard = () => {
   const history = useHistory();
 
   // const {category}=useParams();
-  const location = useLocation();
-const firstNameParam = new URLSearchParams(location.search).get('firstName');
-const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
+  // const location = useLocation();
+// const firstNameParam = new URLSearchParams(location.search).get('firstName');
+// const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
  // Using useLocation hook
   // const age = new URLSearchParams(location.search);
 
@@ -105,24 +111,24 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
   //   };
   //   mentorCardDetails();
   // },[location.search])   
-  useEffect(() => {
-    setIsMentorCardFetched(false);
-    const mentorCardDetails = async () => {
-      try {
-        let url = url1;
-        if (firstNameParam || jobTitleParam) {
-          url += `?firstName=${firstNameParam || ''}&jobTitle=${jobTitleParam || ''}`;
-        }
-        const response = await axios.get(url);
-        setMentorDetails(response.data);
-        setIsMentorCardFetched(true);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setIsMentorCardFetched(true);
-      }
-    };
-    mentorCardDetails();
-  }, [location.search]);
+  // useEffect(() => {
+  //   setIsMentorCardFetched(false);
+  //   const mentorCardDetails = async () => {
+  //     try {
+  //       let url = url1;
+  //       if (firstNameParam || jobTitleParam) {
+  //         url += `?firstName=${firstNameParam || ''}&jobTitle=${jobTitleParam || ''}`;
+  //       }
+  //       const response = await axios.get(url);
+  //       setMentorDetails(response.data);
+  //       setIsMentorCardFetched(true);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setIsMentorCardFetched(true);
+  //     }
+  //   };
+  //   mentorCardDetails();
+  // }, [location.search]);
   useEffect(() => {
     setIsMentorCardFetched(false);
     const mentorCardDetails = async () => {
@@ -148,9 +154,12 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
     if (selectedPrice) {
       params.price = selectedPrice;
     }
+    params.size = 2;
+    params.page = currentPage - 1;
       try {
         const response = await axios.get(url2,{params});
-        setMentorDetails(response.data);
+        setMentorDetails(response.data.data);
+        setPaginationMeta(response.data.paginationMeta);
         setIsMentorCardFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -158,7 +167,7 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       }
     };
     mentorCardDetails();
-  }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice]);
+  }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice,currentPage]);
 
   useEffect(() => {
     const filterMentors = () => {
@@ -432,6 +441,14 @@ const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
       
 </>
       )}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPage={paginationMeta.totalPage}
+        onChangePage={(i) => setCurrentPage(i)}
+        lastIsActive = {paginationMeta.last}
+        firstIsActive = {paginationMeta.first}
+      />
    
       {/* <Colxx xxs="12">
       <Row>
