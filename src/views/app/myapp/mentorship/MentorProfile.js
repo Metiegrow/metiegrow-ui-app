@@ -160,7 +160,7 @@ const MentorProfile = () => {
 
             </div>
           </div>
-          <div className='col-5 mt-4'>
+          <div className='col-sm-5 mt-4 '>
           <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1>
           {/* <h1 className='font-weight-semibold text-xlarge'>{mentorprofiledetails1.firstName} {mentorprofiledetails1.lastName}</h1> */}
           <h3 className='text-large  text-muted  '>{mentorprofiledetails1.jobTitle}</h3>
@@ -173,7 +173,7 @@ const MentorProfile = () => {
            {/* <h6 className=''><i className='simple-icon-clock text-primary'/><span className='ml-2'>Last Seen</span></h6> */}
           </div>
          
-          <div className='col-7 mt-4'>
+          <div className='col-sm-7 mt-4'>
             <h2 className='mx-2'>Skills</h2>
            
             {/* <div className='d-flex'>
@@ -258,12 +258,12 @@ const MentorProfile = () => {
            
         <Row>
             {mentorprofiledetails1 && mentorprofiledetails1.featuredArticle && 
-          <Colxx xxs="12" xs="6" lg="4">
+          <Colxx xxs="12" xs="12" lg="4" md="6">
           <NavLink href={mentorprofiledetails1.featuredArticle}>
          
         
          
-          <Card className="mb-4 w-80">
+          <Card className="mb-4 ">
            
            <div className="position-relative">
              <CardImg
@@ -292,10 +292,10 @@ const MentorProfile = () => {
           </Colxx>
             }
           { mentorprofiledetails1 && mentorprofiledetails1.introVideo && 
-          <Colxx xxs="12" xs="6" lg="4">
+          <Colxx xxs="12" xs="12" lg="4" md="6">
           <NavLink href={mentorprofiledetails1.introVideo}>
        
-            <Card className="mb-4 w-80">
+            <Card className="mb-4 ">
           
               <div className="position-relative">
                 <CardImg

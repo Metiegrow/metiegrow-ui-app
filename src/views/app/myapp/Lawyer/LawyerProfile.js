@@ -145,14 +145,7 @@ const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.na
               </NavLink>
               )}
             </div>
-            <div>
-              <NavLink>
-              <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
-             
-                <i className='simple-icon-social-linkedin text-primary font-weight-semibold text-one  '/>
-              </Button>
-              </NavLink>
-            </div>
+            
           </div>
       </div>
      <Row>

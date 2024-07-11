@@ -132,8 +132,8 @@ const LawyerJobList = () => {
         <Card key={j.id} className='my-2'  style={{cursor:"pointer"}}   
         onClick={() => history.push(`/app/jobsdetails/${j.id}`, { clientName: j.clientName })}>
         <CardBody>
-        <div className='d-flex justify-content-between'>
-        <div className='d-flex align-items-center'>
+        <div className='d-flex justify-content-between flex-wrap '>
+        <div className='d-flex align-items-center flex-wrap'>
         <div className=''>
        <ThumbnailLetters
         rounded
@@ -150,7 +150,7 @@ const LawyerJobList = () => {
         
       
          
-          <div className='d-flex flex-column'>
+          <div className='d-flex flex-column mt-sm-2 '>
           <h4 >Status:<span className='font-weight-semibold'> {j.status}</span> </h4>
 
           <h4>Created At:<span className='text-muted'> {formattedDate}</span> </h4>
@@ -191,8 +191,8 @@ const LawyerJobList = () => {
           <Card key={j.id} className='my-2'  style={{cursor:"pointer"}}   
         onClick={() => history.push(`/app/jobsdetails/${j.id}`, { clientName: j.clientName,clientId:j.clientUserId })}>
         <CardBody>
-        <div className='d-flex justify-content-between'>
-        <div className='d-flex align-items-center'>
+        <div className='d-flex justify-content-between flex-wrap'>
+        <div className='d-flex align-items-center flex-wrap'>
         <div className=''>
        <ThumbnailLetters
         rounded
@@ -207,7 +207,7 @@ const LawyerJobList = () => {
        </div>
         </div>
          
-          <div className='d-flex flex-column'>
+          <div className='d-flex flex-column mt-sm-2'>
           <h4 >Status:<span className='font-weight-semibold'> {j.status}</span> </h4>
           <h4>Created At:<span className='text-muted'> {formattedDate}</span> </h4>
           <h4>Modified At:<span className='text-muted'> {formattedModifiedAt}</span></h4>

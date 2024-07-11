@@ -71,26 +71,28 @@ const [editStates, setEditStates] = useState({});
 
  
      const [textQuillStandart, setTextQuillStandart] = useState('');
+     const AnswersByMentors = async () => {
+      try {
+        const response = await axios.get(url1);
+        setAnswers(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+     const AnswersByMentors1 = async () => {
+      try {
+        const response = await axios.get(url);
+        setAnswers1(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
  
     useEffect(()=>{
-      const AnswersByMentors = async () => {
-        try {
-          const response = await axios.get(url1);
-          setAnswers(response.data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
+   
       AnswersByMentors();
 
-      const AnswersByMentors1 = async () => {
-        try {
-          const response = await axios.get(url);
-          setAnswers1(response.data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
+     
       AnswersByMentors1();
     },[])
    
@@ -136,14 +138,25 @@ const [editStates, setEditStates] = useState({});
     };
    
     
-    const handleEdit1 = (id) => {
-      const answerToUpdate = answers1.answer.find(answer => answer.id === id);
-      setEditedAnswer1(answerToUpdate.answerText); // Update the edited answer text
+  //   const handleEdit1 = (id) => {
+  //     const answerToUpdate = answers1.answer.find(answer => answer.id === id);
+  //     setEditedAnswer1(answerToUpdate.answerText); // Update the edited answer text
+  //     setEditStates(prevState => ({
+  //       ...prevState,
+  //       [id]: !prevState[id]
+  //     }));
+  //   };
+  // ;
+  const handleEdit1 = (id) => {
+    const answerToUpdate = answers1.answer.find(answer => answer.id === id);
+    if (answerToUpdate) {
+      setEditedAnswer1(answerToUpdate.answered); // Use answered to initialize editedAnswer1
       setEditStates(prevState => ({
         ...prevState,
-        [id]: !prevState[id]
+        [id]: true // Set edit mode to true
       }));
-    };
+    }
+  };
     
     const handleSave1 = async (id) => {
       try {
@@ -162,6 +175,9 @@ const [editStates, setEditStates] = useState({});
     
         const response = await axios.put(`${baseUrl}/api/mentor/answer`, updatedAnswer);
         console.log("Updated answer:", response.data);
+        if(response.status===201){
+          await AnswersByMentors1();
+        }
       } catch (error) {
         console.error('Error updating answered:', error);
       }
@@ -183,20 +199,7 @@ const [editStates, setEditStates] = useState({});
         [id]: false
       }));
     };
-    // const handleDeleteAnswer = async (id) => {
-    //   try {
-    //     // Send a request to delete the answer with the given ID
-    //     await axios.delete(`${baseUrl}/mentorAnswers/${questionId}/${id}`);
-    //     console.log('my is',id);
-    //     // Update the state to remove the deleted answer
-    //     setAnswers1(prevState => ({
-    //       ...prevState,
-    //       answer: prevState.answer.filter(answer => answer.id !== id)
-    //     }));
-    //   } catch (error) {
-    //     console.error('Error deleting answer:', error);
-    //   }
-    // };
+    
     const handleDeleteAnswer = async (answerId) => {
       try {
         // Construct the URL for deleting the answer
@@ -256,6 +259,9 @@ const [editStates, setEditStates] = useState({});
 
         // Update the state with the updated answers
         setAnswers1(updatedResponse.data.answer);
+        await AnswersByMentors();
+      await AnswersByMentors1();
+
         // Clear the textQuillStandart state to reset the Quill editor
         setTextQuillStandart('');
         console.log("Answer posted successfully!");

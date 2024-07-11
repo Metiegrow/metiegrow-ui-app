@@ -189,7 +189,7 @@ SessionUpcomingHistroy();
               NEW
             </Badge>
 
-            <CardBody className='d-flex justify-content-between'>
+            <CardBody className='d-flex justify-content-between flex-wrap'>
               {/* <div className='d-flex justify-content-between flex-column'>
                 
               <NavLink href={`/app/mentorprofile/${up.mentorId}`} className='d-flex align-items-center'>
@@ -370,7 +370,7 @@ SessionUpcomingHistroy();
             </div>
           </CardBody> */}
           
-          <CardBody className='d-flex justify-content-between'>
+          <CardBody className='d-flex justify-content-between flex-wrap'>
 
               <Row  className=''> 
   <Col className='d-flex'> 

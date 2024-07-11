@@ -136,7 +136,7 @@ SessionUpcomingHistroy();
               NEW
             </Badge>
 
-            <CardBody className='d-flex justify-content-between'>
+            <CardBody className='d-flex justify-content-between flex-wrap'>
               {/* <div className='d-flex justify-content-between flex-column'>
               
                 <h4 className='text-large text-primary'>{up.name}</h4>
@@ -207,7 +207,7 @@ SessionUpcomingHistroy();
 
       return (
         <Card className='my-2' key={sh.menteeId}>
-          <CardBody className='d-flex justify-content-between'>
+          <CardBody className='d-flex justify-content-between flex-wrap'>
             {/* <div className='d-flex justify-content-between flex-column'> */}
               {/* <NavLink href={`/app/mentorprofile/${sh.mentorId}`}>
                 <h4 className='text-large text-primary'>{sh.name}</h4>

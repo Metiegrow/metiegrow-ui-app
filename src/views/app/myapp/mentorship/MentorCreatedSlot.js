@@ -460,6 +460,41 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
     setSelectedDate(date); // Set the selected date
     setModalSmall(true); // Show the modal
   };
+  const deleteMentorSlot = async (id, fromTime, toTime) => {
+    try {
+      await axios.delete(`${baseUrl}/api/calendar/delete/${id}`);
+      // Fetch the updated slots after deletion
+      await fetchMentorSlotsCreate(fromTime, toTime);
+    } catch (error) {
+      console.error('Error deleting slot:', error);
+    }
+  };
+  
+  const handleDeleteSlotClick = (id) => {
+    if (window.confirm('Are you sure you want to delete this slot?')) {
+      // Use selected date and time from state
+      const selectedDateTime = new Date(selectedDate);
+  
+      // Set the hours and minutes for the selected date
+      const selectedHourFrom = selectedHourDropdown % 12 + (selectedfromampm === 'PM' ? 12 : 0); // Adjust for PM
+      selectedDateTime.setHours(selectedHourFrom, minutedrop, 0, 0);
+      const fromTime = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
+    
+      // Calculate 'to' time
+      const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
+      const selectedHourTo = selectedHourDropdown1 % 12 + (selectedfromampm1 === 'PM' ? 12 : 0); // Adjust for PM
+      toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0); // Set the 'to' hour
+      const toTime = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
+
+      deleteMentorSlot(id, fromTime, toTime);
+    }
+  };
+
+  
+  const handleCloseIconClick = (e, id) => {
+    e.stopPropagation();
+    handleDeleteSlotClick(id);
+  };
 
   const selectData = generateDropdownItemsSelect();
   const minutesSelectData=generateMinuteDropdownItems();
@@ -798,7 +833,19 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
             onMouseLeave={(e) => { e.currentTarget.classList.remove('bg-primary'); }}
           >
             <span className='d-flex gap-5 justify-content-center align-items-center'>
-              {fromTime} to {toTime} <i className='simple-icon-close ml-4'/>
+              {fromTime} to {toTime}  
+              <i
+              className='simple-icon-close ml-4 text-one'
+              role="button"
+              tabIndex={0}
+              onClick={(e) => handleCloseIconClick(e, avail.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleCloseIconClick(e, avail.id);
+
+                }
+              }}
+            />
             </span> 
           </div>
         );
