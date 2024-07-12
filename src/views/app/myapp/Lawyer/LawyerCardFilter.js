@@ -30,7 +30,7 @@ const LawyerCardFilter = ({
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
-  const [priceRange,setPriceRange] = useState([800, 1200]);
+  const [priceRange,setPriceRange] = useState([500, 15000]);
 
 
   const topics = [
@@ -59,7 +59,7 @@ const LawyerCardFilter = ({
   };
 
   const handleSliderChange = ( value) => {
-    onPriceChange([value]);
+    onPriceChange(value);
     setPriceRange(value);
     // console.log("priceChange",value)
    
@@ -223,12 +223,13 @@ const LawyerCardFilter = ({
                       <Colxx xxs="12" sm="12">
                         <RangeTooltip
                           min={500}
-                          max={1500}
+                          max={15000}
                           className="mb-5"
-                          defaultValue={[800, 1200]}
+                          defaultValue={[500, 15000]}
                           allowCross={false}
                           pushable={100}
                           value={priceRange}
+                          step={500}
                           onChange={handleSliderChange}
                         />
                       </Colxx>

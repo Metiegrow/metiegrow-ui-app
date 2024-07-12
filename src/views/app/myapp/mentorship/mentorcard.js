@@ -21,7 +21,7 @@ const MentorCard = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedTools, setSelectedTools] = useState("");
   const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [selectedPrice, setSelectedPrice] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
@@ -153,7 +153,9 @@ const MentorCard = () => {
       params.tools = selectedTools;
     }
     if (selectedPrice) {
-      params.price = selectedPrice;
+      // params.price = selectedPrice;
+      params.minPrice = selectedPrice.at(0);
+      params.maxPrice = selectedPrice.at(1);
     }
     params.size = 3;
     params.page = currentPage - 1;

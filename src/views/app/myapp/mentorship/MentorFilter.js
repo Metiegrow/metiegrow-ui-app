@@ -35,7 +35,7 @@ const MentorFilter = ({
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
   const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
-  const [priceRange,setPriceRange] = useState([800, 1200]);
+  const [priceRange,setPriceRange] = useState([500, 15000]);
 
   const searchUrl = `${baseUrl}/api/mentor/search/skills`
 
@@ -255,6 +255,9 @@ console.log("pagination", paginationMeta);
                  {selectedSkills[0] &&  <DropdownItem onClick={() => handleSkillSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedSkills}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
+                  {skillsData.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    {searchSkills} was not found
+                  </Card>}
                   {skillsData.map((s,index) => (
                     // eslint-disable-next-line react/no-array-index-key
                       <DropdownItem key={index} onClick={() => handleSkillSelect(s)}>
@@ -292,6 +295,9 @@ console.log("pagination", paginationMeta);
                     <span>{selectedTools}</span>
                     <i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
+                  {filteredTools.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    {searchTools} was not found
+                  </Card>}
                   {filteredTools.map((t) => (
                       <DropdownItem key={t} onClick={() => handleToolSelect(t)}>
                         {t}
@@ -325,6 +331,9 @@ console.log("pagination", paginationMeta);
                   {selectedIndustry &&  <DropdownItem onClick={() => handleIndustrySelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedIndustry}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
+                  {filteredCompanies.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    {searchCompanies} was not found
+                  </Card>}
                   {filteredCompanies.map((c,index) => (
                     // eslint-disable-next-line react/no-array-index-key
                       <DropdownItem key={index} onClick={() => handleIndustrySelect(c)}>
@@ -351,11 +360,12 @@ console.log("pagination", paginationMeta);
                       <Colxx xxs="12" sm="12">
                         <RangeTooltip
                           min={500}
-                          max={1500}
+                          max={15000}
                           className="mb-5"
-                          defaultValue={[800, 1200]}
+                          defaultValue={[500, 15000]}
                           allowCross={false}
                           pushable={100}
+                          step={500}
                           value={priceRange}
                           onChange={handleSliderChange}
                         />
@@ -407,9 +417,12 @@ console.log("pagination", paginationMeta);
                   </div>
                   <PerfectScrollbar style={{ maxHeight: '200px' }}
                   options={{ suppressScrollX: true, wheelPropagation: false }}>
-                  {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
+                  {selectedLocation &&  <DropdownItem onClick={() => handleLocationSelect("")}  className=" d-flex justify-content-between align-items-center">
                     <span>{country.find(c => c.iso_code === selectedLocation)?.name}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
+                  {filteredCountry.length === 0 &&  <Card  className="bg-light d-flex justify-content-between align-items-center">
+                    {searchText} was not found
+                  </Card>}
                     {filteredCountry.map((c,index) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <DropdownItem key={index} onClick={() => handleLocationSelect(c.iso_code)}>

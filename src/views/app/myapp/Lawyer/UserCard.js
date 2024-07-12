@@ -79,7 +79,9 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
       params.location = selectedLocation;
     }
     if (selectedPrice) {
-      params.price = selectedPrice;
+      // params.price = selectedPrice;
+      params.minPrice = selectedPrice.at(0);
+      params.maxPrice = selectedPrice.at(1);
     }
     if (selectedLanguage) {
       params.languages = selectedLanguage;
@@ -103,7 +105,7 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
       }
     };
     LawyerCardDetails();
-  }, [selectedLocation,selectedLanguage,selectedTopics,currentPage]);
+  }, [selectedLocation,selectedLanguage,selectedTopics,currentPage,selectedPrice]);
 
  
   
