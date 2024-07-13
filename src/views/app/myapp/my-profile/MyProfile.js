@@ -665,8 +665,8 @@ const token = getTokenRes();
               )}
             </Col>
             <Col lg="6" md="12" className="mt-4">
-                  {(languages.length > 0 || isEditingButton) && <h2 className="mx-2">Languages known</h2>}
-            {isEditingButton ? (
+                  {(languages.length > 0 && isEditingButton) && <h2 className="mx-2">Languages known</h2>}
+            {languages.length > 0 && isEditingButton ? (
                     <>
                       {languages.map((lang, index) => (
                         <Button
@@ -928,7 +928,7 @@ const token = getTokenRes();
                       onChange={(e) => setWebsite(e.target.value)}
                     />
                     <p className="text-muted">
-                           e.g. www.arun.com
+                           e.g. http://www.arun.com
                         </p>
                     <br />
                   </div>

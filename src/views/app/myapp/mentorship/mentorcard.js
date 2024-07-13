@@ -305,6 +305,7 @@ const handleSearchClear = () =>{
             className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
             placeholder='Search by name'
             // placeholder='Search by skill or job title'
+            disabled={searchClicked}
             value={inputkey}
             onChange={(e) =>setInputKey(e.target.value)}
             // onChange={handleInputChange}
