@@ -38,19 +38,20 @@ import {
   // validateLinkedinUrl,
   validateReasonForMentor,
   validateAchievement,
-  validateFile,
+  // validateFile,
 } from "./validation";
 
 import country from "./Country";
 import CategoryData from "./CategoryData";
 import language from "./Languages";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const ApplyMentor = () => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const steps = ["About you", "profile", "Experience"];
   const [currentStep, setCurrentStep] = useState(0);
   const [file1, setFile1] = useState(null);
-  const [amount, setAmount] = useState(250);
+  const [amount, setAmount] = useState(500);
   const [loading, setLoading] = useState(false);
   const [skillsTag, setSkillsTag] = useState([]);
   const [toolsTag, setToolsTag] = useState([]);
@@ -167,7 +168,7 @@ const languageOptions = language.map(option => ({
     formData.append("mentorProfile",new Blob([JSON.stringify(mentorProfile)], { type: "application/json" }));
 
     try {
-      await axios.post(mentorAboutUrl, formData, {
+     const response = await axios.post(mentorAboutUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -175,11 +176,13 @@ const languageOptions = language.map(option => ({
       // setNextStep(true)
       setAboutLoading(false)
       //   console.log(`resres ${response.status}`);
+      ToasterComponent('success', response.data.statuses);
       handleNextStep();
     } catch (error) {
       setImageError(false);
       // console.error(error);
       setAboutLoading(false)
+      if(error.response){
       error.response.data.statuses.forEach((status) => {
          NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
          if(status.code === 40327){
@@ -187,6 +190,9 @@ const languageOptions = language.map(option => ({
             setImageError(true);
          }
      });
+    }else{
+      NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
+    }
       // console.log("er",error.response.data.statuses)
       // NotificationManager.warning(
       //   "Something went wrong",
@@ -202,7 +208,7 @@ const languageOptions = language.map(option => ({
   const postDataProfile = async (data) => {
     setProfileLoading(true)
     try {
-      await axios.post(mentorProfileUrl, data, {
+     const response = await axios.post(mentorProfileUrl, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -210,10 +216,12 @@ const languageOptions = language.map(option => ({
       // setNextStep(true)
       setProfileLoading(false)
       //   console.log(`resres ${response.status}`);
+      ToasterComponent('success', response.data.statuses);
       handleNextStep();
     } catch (error) {
       setSkillError(false);
       setProfileLoading(false)
+      if(error.response){
       error.response.data.statuses.forEach((status) => {
          NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
          if(status.code === 40110){
@@ -221,6 +229,9 @@ const languageOptions = language.map(option => ({
            setSkillError(true);
         }
      });
+    }else{
+      NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
+    }
     }
   };
 
@@ -228,7 +239,7 @@ const languageOptions = language.map(option => ({
     setExperienceLoading(true);
     const postDataExp = { ...data, price: amount };
     try {
-      await axios.post(experienceUrl, postDataExp, {
+      const response = await axios.post(experienceUrl, postDataExp, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -236,6 +247,7 @@ const languageOptions = language.map(option => ({
       // setNextStep(true)
       // console.log(response);
       setExperienceLoading(false)
+      ToasterComponent('success', response.data.statuses);
       handleNextStep();
       setLoading(true);
       setTimeout(() => {
@@ -243,9 +255,13 @@ const languageOptions = language.map(option => ({
       }, 3000);
     } catch (error) {
       setExperienceLoading(false)
+      if(error.response){
       error.response.data.statuses.forEach((status) => {
         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
     });
+  }else{
+    NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
+  }
     }
   };
 
@@ -367,7 +383,7 @@ const languageOptions = language.map(option => ({
                               type="file"
                               className="form-control d-none"
                               onChange={handleFileChange}
-                              validate={validateFile}
+                              // validate={validateFile}
                             />
                             {/* </Form> */}
                             {file1 && (
@@ -837,7 +853,7 @@ const languageOptions = language.map(option => ({
                   <FormGroup>
                     <Row>
                       <Col md={6}>
-                        <Label for="introVideo">Intro Video</Label>
+                        <Label for="introVideo">Intro Video (Optional)</Label>
                         <Field
                           type="url"
                           name="introVideo"
@@ -856,7 +872,7 @@ const languageOptions = language.map(option => ({
                     )} */}
                       </Col>
                       <Col md={6}>
-                        <Label for="featuredArticle">Featured Article</Label>
+                        <Label for="featuredArticle">Featured Article (Optional)</Label>
                         <Field
                           type="url"
                           name="featuredArticle"

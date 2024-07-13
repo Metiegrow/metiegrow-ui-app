@@ -162,8 +162,9 @@ const ApplyAsLawyer = () => {
         },
       });
       setAboutLoading(false);
+      ToasterComponent('success', response.data.statuses);
       handleNextStep();
-      console.log(`resres ${response.status}`);
+      // console.log(`resres ${response.status}`);
     } catch (error) {
       setAboutLoading(false);
       if (error.response) {
@@ -182,8 +183,9 @@ const ApplyAsLawyer = () => {
         },
       });
       setProfileLoading(false);
+      ToasterComponent('success', response.data.statuses);
       handleNextStep();
-      console.log(`resres ${response.status}`);
+      // console.log(`resres ${response.status}`);
     } catch (error) {
       setProfileLoading(false);
       if (error.response) {
@@ -219,12 +221,13 @@ const ApplyAsLawyer = () => {
         },
       });
       setServicesLoading(false);
+      ToasterComponent('success', response.data.statuses);
       handleNextStep();
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
       }, 3000);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       setServicesLoading(false)
       if (error.response) {

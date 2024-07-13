@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import {
   Button,
+  Card,
   // CustomInput,
   Dropdown,
   DropdownItem,
@@ -12,6 +13,8 @@ import {
   // Label,
   Row,
 } from "reactstrap";
+import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
 import { RangeTooltip } from "components/common/SliderTooltips";
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import country from "../my-login/Country";
@@ -32,19 +35,27 @@ const LawyerCardFilter = ({
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
   const [priceRange,setPriceRange] = useState([500, 15000]);
 
+  const topicSearchUrl = `${baseUrl}/api/lawyer/search/lawyertopic`;
 
-  const topics = [
-    "Visas",
-    "Immigration",
-    "Accreditation",
-    "Rights",
-    "Employment",
-    "Work-permits",
-    "Housing",
-    "Intellectual-property",
-    "Dependents",
-    "Healthcare"
-  ]
+  const [topicsSize, setTopicsSize] = useState(10);
+
+  const [topicsPaginationMeta,setTopicsPaginationMeta] = useState([]);
+
+  const [topicsData,setTopicsData] = useState([])
+
+  const [topicsFetched, setTopicsFetched] = useState(false);
+  // const topics = [
+  //   "Visas",
+  //   "Immigration",
+  //   "Accreditation",
+  //   "Rights",
+  //   "Employment",
+  //   "Work-permits",
+  //   "Housing",
+  //   "Intellectual-property",
+  //   "Dependents",
+  //   "Healthcare"
+  // ]
 
   const handleTopicsSelect = (topic) => {
     onTopicsChange(topic);
@@ -69,7 +80,7 @@ const LawyerCardFilter = ({
   const [filteredCountry, setFilteredCountry] = useState(country);
   const [filteredLanguage, setFilteredLanguage] = useState(language);
   const [searchLanguage, setSearchLanguage] = useState('');
-  const [filteredTopics, setFilteredTopics] = useState(topics);
+  // const [filteredTopics, setFilteredTopics] = useState(topics);
   const [searchTopics, setSearchTopics] = useState('');
   const [viewFilters, setViewFilters] = useState(false)
 
@@ -100,14 +111,41 @@ const LawyerCardFilter = ({
     setFilteredLanguage(language.filter((s) => s.name.toLowerCase().includes(newText)));
   };
   const handleSearchTopics = (event) => {
-    const newText = event.target.value.toLowerCase();
-    setSearchTopics(newText);
-    setFilteredTopics(topics.filter((t) => t.toLowerCase().includes(newText)));
+    // const newText = event.target.value.toLowerCase();
+    setSearchTopics(event.target.value);
+    // setFilteredTopics(topics.filter((t) => t.toLowerCase().includes(newText)));
   };
+
+
+  useEffect(() => {
+    const FetchTopics = async () => {
+      const params = {};
+
+    if (searchTopics) {
+      params.skill = searchTopics;
+    }
+    
+    params.size = topicsSize;
+    params.page = 0;
+      try {
+        const response = await axios.get(topicSearchUrl,{params});
+        setTopicsData(response.data.data);
+        setTopicsPaginationMeta(response.data.paginationMeta);
+        setTopicsFetched(true);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setTopicsFetched(false);
+      }
+    };
+    FetchTopics();
+  }, [searchTopics, topicsSize]);
 
   const handleViewFilters = () => {
     setViewFilters(!viewFilters)
   };
+
+  const handleTopicsLoadMore = () => setTopicsSize(topicsSize + 5)
+
 
   return (
     <div>
@@ -150,7 +188,7 @@ const LawyerCardFilter = ({
                 className="mb-3 col-lg-auto col-sm-12"
               >
                 <DropdownToggle size="sm" caret color="primary" outline className="col-lg-auto col-sm-12 ">
-                  Topics
+                {selectedTopics[0] ? selectedTopics : <span>Topics</span>}
                 </DropdownToggle>
                 <DropdownMenu>
                     <div className="search-sm mr-1 ml-1 mb-1 align-top">
@@ -167,11 +205,21 @@ const LawyerCardFilter = ({
                   {selectedTopics[0] &&  <DropdownItem onClick={() => handleTopicsSelect("")} className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedTopics}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                  {filteredTopics.map((t) => (
-                      <DropdownItem key={t} onClick={() => handleTopicsSelect(t)}>
+                  {topicsFetched && topicsData.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    {searchTopics} was not found
+                  </Card>}
+                  {!topicsFetched &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    Failed to load data!
+                  </Card>}
+                  {topicsData.map((t,index) => (
+                     // eslint-disable-next-line react/no-array-index-key
+                      <DropdownItem key={index} onClick={() => handleTopicsSelect(t)}>
                         {t}
                       </DropdownItem>
                     ))}
+                    {!topicsPaginationMeta.last && topicsFetched &&  <Card style={{cursor: "pointer"}} onClick={handleTopicsLoadMore}  className="bg-light d-flex justify-content-between align-items-center">
+                    load more
+                  </Card>}
                  </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
@@ -182,7 +230,7 @@ const LawyerCardFilter = ({
                 className="mb-3 col-lg-auto col-sm-12"
               >
                 <DropdownToggle size="sm" caret color="primary" outline className="col-lg-auto col-sm-12 ">
-                 Languages
+                 {selectedLanguage ? (language.find(l => l.iso_code === selectedLanguage)?.name) : ( <span>Languages</span> )}
                 </DropdownToggle>
                 <DropdownMenu>
                 <div className="search-sm mr-1 ml-1 mb-1 align-top">

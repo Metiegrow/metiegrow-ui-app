@@ -38,6 +38,8 @@ const MentorFilter = ({
   const [priceRange,setPriceRange] = useState([500, 15000]);
 
   const searchUrl = `${baseUrl}/api/mentor/search/skills`
+  const companySearchUrl = `${baseUrl}/api/mentor/search/company`
+  const toolsSearchUrl = `${baseUrl}/api/mentor/search/tools`
 
   const handleSkillSelect = (skill) => {
     onSkillsChange(skill);
@@ -62,61 +64,49 @@ const MentorFilter = ({
    
   };
 
-  const companies = [
-    "Apple",
-    "Microsoft",
-    "Google",
-    "Amazon",
-    "Facebook",
-    "Tesla",
-    "IBM ",
-    "Intel",
-    "Netflix",
-    "Adobe"
-  ]
 
-  const tools = [
-    "VSCode",
-    "Git",
-    "GitHub",
-    "Docker",
-    "Postman",
-    "Jenkins",
-    "Webpack",
-    "ESLint",
-    "Sublime Text",
-    "JIRA",
-    "Slack",
-    "Figma"
-  ]
+  // const tools = [
+  //   "VSCode",
+  //   "Git",
+  //   "GitHub",
+  //   "Docker",
+  //   "Postman",
+  //   "Jenkins",
+  //   "Webpack",
+  //   "ESLint",
+  //   "Sublime Text",
+  //   "JIRA",
+  //   "Slack",
+  //   "Figma"
+  // ]
 
   
-  // const skills = [
-  //   "HTML",
-  //   "CSS",
-  //   "JavaScript",
-  //   "Python",
-  //   "Java",
-  //   "React",
-  //   "Node.js",
-  //   "SQL",
-  //   "TypeScript",
-  //   "GraphQL"
-  // ]
   const [searchText, setSearchText] = useState('');
   const [searchCompanies, setSearchCompanies] = useState('');
   const [searchTools, setSearchTools] = useState('');
   const [searchSkills, setSearchSkills] = useState('');
   const [filteredCountry, setFilteredCountry] = useState(country);
-  const [filteredTools, setFilteredTools] = useState(tools);
-  const [filteredCompanies, setFilteredCompanies] = useState(companies);
+  // const [filteredTools, setFilteredTools] = useState(tools);
+  // const [filteredCompanies, setFilteredCompanies] = useState(companies);
   // const [filteredSkills, setFilteredSkills] = useState(skills);
   const [viewFilters, setViewFilters] = useState(false);
+
   const [skillsData,setSkillsData] = useState([]);
+  const [companyData,setCompanyData] = useState([]);
+  const [toolsData,setToolsData] = useState([]);
+
   const [paginationMeta, setPaginationMeta] = useState([]);
+  const [companyPaginationMeta, setCompanyPaginationMeta] = useState([]);
+  const [toolsPaginationMeta, setToolsPaginationMeta] = useState([]);
+
   const [size, setSize] = useState(10);
-  console.log("skillsData",skillsData)
-console.log("pagination", paginationMeta);
+  const [companySize, setCompanySize] = useState(10);
+  const [toolsSize, setToolsSize] = useState(10);
+
+  const [skillsFetched, setSkillsFetched] = useState(false);
+  const [toolsFetched, setToolsFetched] = useState(false);
+  const [companiesFetched, setCompaniesFetched] = useState(false);
+  
 
 
   const [isMobile, setIsMobile] = useState(false);
@@ -141,14 +131,14 @@ console.log("pagination", paginationMeta);
   };
 
   const handleSearchCompanies = (event) => {
-    const newText = event.target.value.toLowerCase();
-    setSearchCompanies(newText);
-    setFilteredCompanies(companies.filter((c) => c.toLowerCase().includes(newText)));
+    // const newText = event.target.value.toLowerCase();
+    setSearchCompanies(event.target.value);
+    // setFilteredCompanies(companies.filter((c) => c.toLowerCase().includes(newText)));
   };
   const handleSearchTools = (event) => {
-    const newText = event.target.value.toLowerCase();
-    setSearchTools(newText);
-    setFilteredTools(tools.filter((t) => t.toLowerCase().includes(newText)));
+    // const newText = event.target.value.toLowerCase();
+    setSearchTools(event.target.value);
+    // setFilteredTools(tools.filter((t) => t.toLowerCase().includes(newText)));
   };
   const handleSearchSkills = (event) => {
     // const newText = event.target.value.toLowerCase();
@@ -175,18 +165,75 @@ console.log("pagination", paginationMeta);
         const response = await axios.get(searchUrl,{params});
         setSkillsData(response.data.data);
         setPaginationMeta(response.data.paginationMeta);
+        setSkillsFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setSkillsFetched(false);
       }
     };
     FetchSkills();
   }, [searchSkills, size]);
+
+
+  useEffect(() => {
+    const FetchCompanies = async () => {
+      // const params = {
+      //   company: selectedIndustry,
+      //   location: selectedLocation,
+      //   skills: selectedSkills,
+      // };
+      const params = {};
+
+    if (searchCompanies) {
+      params.company = searchCompanies;
+    }
+    
+    params.size = companySize;
+    params.page = 0;
+      try {
+        const response = await axios.get(companySearchUrl,{params});
+        setCompanyData(response.data.data);
+        setCompanyPaginationMeta(response.data.paginationMeta);
+        setCompaniesFetched(true);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setCompaniesFetched(false);
+      }
+    };
+    FetchCompanies();
+  }, [searchCompanies, companySize]);
+
+
+  useEffect(() => {
+    const FetchTools = async () => {
+      const params = {};
+
+    if (searchTools) {
+      params.tool = searchTools;
+    }
+    
+    params.size = toolsSize;
+    params.page = 0;
+      try {
+        const response = await axios.get(toolsSearchUrl,{params});
+        setToolsData(response.data.data);
+        setToolsPaginationMeta(response.data.paginationMeta);
+        setToolsFetched(true);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setToolsFetched(false);
+      }
+    };
+    FetchTools();
+  }, [searchTools, toolsSize]);
 
   const handleViewFilters = () => {
     setViewFilters(!viewFilters)
   };
 
   const handleLoadMore = () => setSize(size + 5)
+  const handleCompanyLoadMore = () => setCompanySize(companySize + 5)
+  const handleToolsLoadMore = () => setToolsSize(toolsSize + 5)
 
 
   return (
@@ -255,8 +302,11 @@ console.log("pagination", paginationMeta);
                  {selectedSkills[0] &&  <DropdownItem onClick={() => handleSkillSelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedSkills}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                  {skillsData.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
+                  {skillsFetched && skillsData.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
                     {searchSkills} was not found
+                  </Card>}
+                  {!skillsFetched &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    Failed to load data!
                   </Card>}
                   {skillsData.map((s,index) => (
                     // eslint-disable-next-line react/no-array-index-key
@@ -264,7 +314,7 @@ console.log("pagination", paginationMeta);
                         {s}
                       </DropdownItem>
                     ))}
-                     {!paginationMeta.last &&  <Card style={{cursor: "pointer"}} onClick={handleLoadMore}  className="bg-light d-flex justify-content-between align-items-center">
+                     {!paginationMeta.last && skillsFetched &&  <Card style={{cursor: "pointer"}} onClick={handleLoadMore}  className="bg-light d-flex justify-content-between align-items-center">
                     load more
                   </Card>}
                  </PerfectScrollbar>
@@ -295,14 +345,21 @@ console.log("pagination", paginationMeta);
                     <span>{selectedTools}</span>
                     <i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                  {filteredTools.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
+                  {toolsFetched && toolsData.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
                     {searchTools} was not found
                   </Card>}
-                  {filteredTools.map((t) => (
-                      <DropdownItem key={t} onClick={() => handleToolSelect(t)}>
+                  {!toolsFetched &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    Failed to load data!
+                  </Card>}
+                  {toolsData.map((t,index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                      <DropdownItem key={index} onClick={() => handleToolSelect(t)}>
                         {t}
                       </DropdownItem>
                     ))}
+                    {!toolsPaginationMeta.last && toolsFetched &&  <Card style={{cursor: "pointer"}} onClick={handleToolsLoadMore}  className="bg-light d-flex justify-content-between align-items-center">
+                    load more
+                  </Card>}
                  </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
@@ -331,15 +388,21 @@ console.log("pagination", paginationMeta);
                   {selectedIndustry &&  <DropdownItem onClick={() => handleIndustrySelect("")}  className="bg-light d-flex justify-content-between align-items-center">
                     <span>{selectedIndustry}</span><i className="iconsminds-close ml-auto" />
                   </DropdownItem>}
-                  {filteredCompanies.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
+                  {companiesFetched && companyData.length === 0 &&  <Card  className=" d-flex justify-content-between align-items-center">
                     {searchCompanies} was not found
                   </Card>}
-                  {filteredCompanies.map((c,index) => (
+                  {!companiesFetched &&  <Card  className=" d-flex justify-content-between align-items-center">
+                    Failed to load data!
+                  </Card>}
+                  {companyData.map((c,index) => (
                     // eslint-disable-next-line react/no-array-index-key
                       <DropdownItem key={index} onClick={() => handleIndustrySelect(c)}>
                         {c}
                       </DropdownItem>
                     ))}
+                    {!companyPaginationMeta.last && companiesFetched &&  <Card style={{cursor: "pointer"}} onClick={handleCompanyLoadMore}  className="bg-light d-flex justify-content-between align-items-center">
+                    load more
+                  </Card>}
                  </PerfectScrollbar>
                 </DropdownMenu>
               </Dropdown>
