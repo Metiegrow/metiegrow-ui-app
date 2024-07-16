@@ -1,9 +1,642 @@
-import React from 'react'
+import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardImg,
+  CardText,
+  CardTitle,
+  Col,
+  NavLink,
+  Row,
+} from "reactstrap";
+import { Colxx } from "components/common/CustomBootstrap";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "@glidejs/glide/dist/css/glide.core.min.css";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import Rating from "components/common/Rating";
+import { alumni, lawyers, mentors, newSession, recentChats, recentSessions } from "./Data";
+import TimestampConverter from "../Calculation/TimestampConverter";
 
 const DashBoard = () => {
-  return (
-    <div>DashBoard</div>
-  )
-}
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentMentorIndex, setCurrentMentorIndex] = useState(0);
+  const [currentLawyerIndex, setCurrentLawyerIndex] = useState(0);
+  const [currentAlumniIndex, setCurrentAlumniIndex] = useState(0);
+  const renderDots = () => {
+    // const total = React.Children.count(props.children);
+    const total = newSession.length;
+    const dots = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        <button
+          type="button"
+          className={`glide__bullet slider-dot ${i === currentIndex ? 'bg-primary' : 'bg-light'}`}
+          key={i}
+          data-glide-dir={`=${i}`}
+          onClick={() => setCurrentIndex(i)}
+        />
+      );
+    }
+    return dots;
+  };
+  const renderMentorsDots = () => {
+    // const total = React.Children.count(props.children);
+    const total = mentors.length;
+    const dots = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        <button
+          type="button"
+          className={`glide__bullet slider-dot ${i === currentMentorIndex ? 'bg-primary' : 'bg-light'}`}
+          key={i}
+          data-glide-dir={`=${i}`}
+          onClick={() => setCurrentMentorIndex(i)}
+        />
+      );
+    }
+    return dots;
+  };
+  const renderLawyerDots = () => {
+    // const total = React.Children.count(props.children);
+    const total = lawyers.length;
+    const dots = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        <button
+          type="button"
+          className={`glide__bullet slider-dot ${i === currentLawyerIndex ? 'bg-primary' : 'bg-light'}`}
+          key={i}
+          data-glide-dir={`=${i}`}
+          onClick={() => setCurrentLawyerIndex(i)}
+        />
+      );
+    }
+    return dots;
+  };
+  const renderAlumniDots = () => {
+    // const total = React.Children.count(props.children);
+    const total = alumni.length;
+    const dots = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        <button
+          type="button"
+          className={`glide__bullet slider-dot ${i === currentAlumniIndex ? 'bg-primary' : 'bg-light'}`}
+          key={i}
+          data-glide-dir={`=${i}`}
+          onClick={() => setCurrentAlumniIndex(i)}
+        />
+      );
+    }
+    return dots;
+  };
+  // const renderDots = () => {
+  //   const total = newSession.length;
+  //   const dots = [];
+  //   // eslint-disable-next-line no-plusplus
+  //   for (let i = 0; i < total; i++) {
+  //     dots.push(
+  //       <button
+  //         type="button"
+  //         className={` btn-xs primary glide__bullet slider-dot p-0 mx-1 ${i === currentIndex ? 'bg-primary' : 'bg-light'}`}
+  //         key={i}
+  //         onClick={() => setCurrentIndex(i)}
+  //         style={{ width: '10px', height: '10px' }}
+  //       />
+  //     );
+  //   }
+  //   return dots;
+  // };
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex > 0 ? prevIndex - 1 : newSession.length - 1
+    );
+  };
 
-export default DashBoard
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex < newSession.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+
+  const handleMentorPrevious = () => {
+    setCurrentMentorIndex((prevIndex) => 
+      prevIndex > 0 ? prevIndex - 1 : mentors.length - 1
+    );
+  };
+
+  const handleMentorNext = () => {
+    setCurrentMentorIndex((prevIndex) => 
+      prevIndex < mentors.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+
+  const handleLawyerPrevious = () => {
+    setCurrentLawyerIndex((prevIndex) => 
+      prevIndex > 0 ? prevIndex - 1 : lawyers.length - 1
+    );
+  };
+
+  const handleLawyerNext = () => {
+    setCurrentLawyerIndex((prevIndex) => 
+      prevIndex < lawyers.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+
+  const handleAlumniPrevious = () => {
+    setCurrentAlumniIndex((prevIndex) => 
+      prevIndex > 0 ? prevIndex - 1 : alumni.length - 1
+    );
+  };
+
+  const handleAlumniNext = () => {
+    setCurrentAlumniIndex((prevIndex) => 
+      prevIndex < alumni.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+
+  const currentSession = newSession[currentIndex];
+  const currentMentor = mentors[currentMentorIndex];
+  const currentLawyer = lawyers[currentLawyerIndex];
+  const currentAlumni = alumni[currentAlumniIndex];
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prevIndex) => 
+  //       prevIndex < newSession.length - 1 ? prevIndex + 1 : 0
+  //     );
+  //   }, 3000);
+  //   return () => clearInterval(interval);
+  // }, []);
+  
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentMentorIndex((prevIndex) => 
+  //       prevIndex < mentors.length - 1 ? prevIndex + 1 : 0
+  //     );
+  //   }, 3000);
+  //   return () => clearInterval(interval);
+  // }, []);
+  
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentLawyerIndex((prevIndex) => 
+  //       prevIndex < lawyers.length - 1 ? prevIndex + 1 : 0
+  //     );
+  //   }, 3000);
+  //   return () => clearInterval(interval);
+  // }, []);
+  
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentAlumniIndex((prevIndex) => 
+  //       prevIndex < alumni.length - 1 ? prevIndex + 1 : 0
+  //     );
+  //   }, 3000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  return (
+    <>
+      <Row className="mx-auto" style={{ maxWidth: "1000px" }}>
+        <Col xs={12} lg={3} className="mb-3 mb-lg-0">
+          <Card
+            className="h-100"
+            style={{
+              background: "linear-gradient(to right, #7B42C5, #AA5D93)",
+              color: "white",
+            }}
+          >
+            <div className="p-3 d-flex flex-column h-100">
+              <h3 className="mb-2 fw-bold">Profile Status</h3>
+              <div className="mt-auto">
+                <h1 className="mb-0 fw-bold display-6">75 </h1>
+                <span> % completed</span>
+              </div>
+            </div>
+          </Card>
+        </Col>
+        <Col xs={12} lg={3} className="mb-3 mb-lg-0">
+          <Card
+            className="h-100"
+            style={{
+              background: "linear-gradient(to right, #7B42C5, #AA5D93)",
+              color: "white",
+            }}
+          >
+            <div className="p-3 d-flex flex-column h-100">
+              <h3 className="mb-2 fw-bold">Wallet Balance</h3>
+              <div className="mt-auto">
+                <h1 className="mb-0 fw-bold display-6">₹2000 </h1>
+              </div>
+            </div>
+          </Card>
+        </Col>
+        <Col xs={12} lg={6} className="mb-3 mb-lg-0">
+          <Card className="h-100">
+            <div className="p-3 d-flex flex-column h-100">
+              <Row className="">
+                <Col>
+                  {" "}
+                  <h3 className="mb-3 fw-bold">New Session</h3>
+                </Col>
+                <Col className="d-flex justify-content-end">
+                  <button
+                  onClick={handlePrevious}
+                    type="button"
+                    className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
+                    data-glide-dir="<"
+                  >
+                    <i className="simple-icon-arrow-left" />
+                  </button>
+                  <button
+                  onClick={handleNext}
+                    type="button"
+                    className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
+                    data-glide-dir=">"
+                  >
+                    <i className="simple-icon-arrow-right" />
+                  </button>
+                </Col>
+              </Row>
+              <TransitionGroup>
+                <CSSTransition
+                  classNames="card"
+                  timeout={500}
+                >
+              <div className="d-flex flex-row mt-auto glide-item card-transition">
+                <img
+                  className="rounded-circle me-3"
+                  alt="Profile"
+                  src={currentSession.imageUrl}
+                  style={{ width: "40px", height: "40px", objectFit: "cover" }}
+                />
+                <div className="d-flex flex-grow-1 min-width-zero">
+                  <div className="pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                    <div className="min-width-zero ml-2">
+                      <h4 className="mb-1">{currentSession.name}</h4>
+                      <h5 className="text-muted text-small mb-0">
+                        {currentSession.jobTitle}
+                      </h5>
+                    </div>
+                  </div>
+                </div>
+                <Col xs="auto">
+                  <Button color="primary" size="xs" outline>
+                    <span>15 Jul-1:30pm</span>
+                  </Button>
+                </Col>
+              </div>
+              </CSSTransition>
+              </TransitionGroup>
+              <div className="d-flex justify-content-center">
+                <div
+                  className="glide__bullets slider-dot-container"
+                  data-glide-el="controls[nav]"
+                >
+                  {renderDots()}
+                </div>
+              </div>
+            </div>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mx-auto my-4 " style={{ maxWidth: "1000px" }}>
+        <Colxx md="6" sm="6" lg="4" xxs="12">
+          <Card className="mb-2">
+            <CardBody>
+              <Row className="mb-3 align-items-center">
+                <Col>
+                  <h3 className="mb-0 fw-bold">
+                    <strong>Mentors</strong>
+                  </h3>
+                </Col>
+                <Col xs="auto">
+                  <Button size="xs" color="primary">
+                    <span>View all</span>
+                  </Button>
+                </Col>
+              </Row>
+              <div className="text-center">
+                <Row>
+                  <Col className="d-flex align-items-center">
+                <button
+                  onClick={handleMentorPrevious}
+                    type="button"
+                    className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
+                    data-glide-dir="<"
+                  >
+                    <i className="simple-icon-arrow-left" />
+                  </button>
+                  </Col>
+                  <Col className="d-flex justify-content-center align-items-center">
+                <CardImg
+                  top
+                  src={currentMentor.imageUrl}
+                  alt="Card image cap"
+                  className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
+                />
+                </Col>
+                <Col className="d-flex align-items-center justify-content-end">
+                <button
+                  onClick={handleMentorNext}
+                    type="button"
+                    className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
+                    data-glide-dir=">"
+                  >
+                    <i className="simple-icon-arrow-right" />
+                  </button>
+                  </Col>
+                </Row>
+                <NavLink to="#">
+                  <h3 className="mb-0">
+                    <strong>{currentMentor.name}</strong>
+                  </h3>
+                </NavLink>
+                <CardText className="text-muted text-small mb-2">
+                  {currentMentor.jobTitle} | {currentMentor.company}
+                </CardText>
+                <span>{currentMentor.experience} years of experience</span>
+                <div className="separator mb-2 mt-2" />
+                <h3 className="mb-0 fw-bold">
+                  <strong>₹{currentMentor.price}/mo</strong>
+                </h3>
+              </div>
+              <div className="d-flex justify-content-center">
+                <div
+                  className="glide__bullets slider-dot-container"
+                  data-glide-el="controls[nav]"
+                >
+                  {renderMentorsDots()}
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Colxx>
+        <Colxx md="6" sm="6" lg="4" xxs="12">
+          <Card className="mb-2">
+            <CardBody>
+              <Row className="mb-3 align-items-center">
+                <Col>
+                  <h3 className="mb-0 fw-bold">
+                    <strong>Lawyers</strong>
+                  </h3>
+                </Col>
+                <Col xs="auto">
+                  <Button size="xs" color="primary">
+                    <span>View all</span>
+                  </Button>
+                </Col>
+              </Row>
+              <div className="text-center">
+              <Row>
+                  <Col className="d-flex align-items-center">
+                <button
+                  onClick={handleLawyerPrevious}
+                    type="button"
+                    className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
+                    data-glide-dir="<"
+                  >
+                    <i className="simple-icon-arrow-left" />
+                  </button>
+                  </Col>
+                  <Col className="d-flex justify-content-center align-items-center">
+                <CardImg
+                  top
+                  src={currentLawyer.imageUrl}
+                  alt="Card image cap"
+                  className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
+                />
+                </Col>
+                <Col className="d-flex align-items-center justify-content-end">
+                <button
+                  onClick={handleLawyerNext}
+                    type="button"
+                    className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
+                    data-glide-dir=">"
+                  >
+                    <i className="simple-icon-arrow-right" />
+                  </button>
+                  </Col>
+                </Row>
+                <NavLink to="#">
+                  <h3 className="mb-0">
+                    <strong>{currentLawyer.name}</strong>
+                  </h3>
+                </NavLink>
+                <CardText className="text-muted text-small mb-2">
+                  Executive Director | TCS
+                </CardText>
+                <span>{currentLawyer.experience} years of experience</span>
+                <div className="separator mb-2 mt-2" />
+                <h3 className="mb-0 fw-bold">
+                  <strong>₹{currentLawyer.price}/mo</strong>
+                </h3>
+              </div>
+              <div className="d-flex justify-content-center">
+                <div
+                  className="glide__bullets slider-dot-container"
+                  data-glide-el="controls[nav]"
+                >
+                  {renderLawyerDots()}
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Colxx>
+        <Colxx md="6" sm="6" lg="4" xxs="12">
+          <Card className="mb-2">
+            <CardBody>
+              <Row className="mb-3 align-items-center">
+                <Col>
+                  <h3 className="mb-0 fw-bold">
+                    <strong>Alumni</strong>
+                  </h3>
+                </Col>
+                <Col xs="auto">
+                  <Button size="xs" color="primary">
+                    <span>View all</span>
+                  </Button>
+                </Col>
+              </Row>
+              <div className="text-center">
+              <Row>
+                  <Col className="d-flex align-items-center">
+                <button
+                  onClick={handleAlumniPrevious}
+                    type="button"
+                    className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
+                    data-glide-dir="<"
+                  >
+                    <i className="simple-icon-arrow-left" />
+                  </button>
+                  </Col>
+                  <Col className="d-flex justify-content-center align-items-center">
+                <CardImg
+                  top
+                  src={currentAlumni.imageUrl}
+                  alt="Card image cap"
+                  className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
+                />
+                </Col>
+                <Col className="d-flex align-items-center justify-content-end">
+                <button
+                  onClick={handleAlumniNext}
+                    type="button"
+                    className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
+                    data-glide-dir=">"
+                  >
+                    <i className="simple-icon-arrow-right" />
+                  </button>
+                  </Col>
+                </Row>
+                <NavLink to="#">
+                  <h3 className="mb-0">
+                    <strong>{currentAlumni.name}</strong>
+                  </h3>
+                </NavLink>
+                <CardText className="text-muted text-small mb-2">
+                  {currentAlumni.jobTitle} | {currentAlumni.company}
+                </CardText>
+                <span>{currentAlumni.experience} years of experience</span>
+                <div className="separator mb-2 mt-2" />
+                <h3 className="mb-0 fw-bold">
+                  <strong>₹{currentAlumni.price}/mo</strong>
+                </h3>
+              </div>
+              <div className="d-flex justify-content-center">
+                <div
+                  className="glide__bullets slider-dot-container"
+                  data-glide-el="controls[nav]"
+                >
+                  {renderAlumniDots()}
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Colxx>
+      </Row>
+      <Row className="mx-auto  " style={{ maxWidth: "1000px" }}>
+        <Colxx lg="7" md="6" className="mb-2">
+          {/* <Col lg={7}> */}
+          <Card>
+            <CardBody>
+              <CardTitle>
+                <strong>Recent Sessions</strong>
+              </CardTitle>
+              <div className="dashboard-list-with-user">
+                <PerfectScrollbar
+                  options={{ suppressScrollX: true, wheelPropagation: false }}
+                >
+                  {recentSessions.map((sessions, index) => {
+                    return (
+                      <div
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        className="d-flex flex-row mb-2 pb-2 border-bottom"
+                      >
+                        <NavLink to="">
+                          <img
+                            src={sessions.imageUrl}
+                            alt={sessions.name}
+                            className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                          />
+                        </NavLink>
+                        <Row className=" w-100">
+                          <Col>
+                            {/* <div className="pl-2 pr-2"> */}
+                            <NavLink to="#">
+                              <p className="font-weight-medium mb-0 ">
+                                {sessions.name}
+                              </p>
+                              <p className="text-muted mb-0 text-small">
+                                {sessions.jobTitle}
+                              </p>
+                            </NavLink>
+                            {/* </div> */}
+                          </Col>
+                          <Col className="mt-3 mt-3 d-flex flex-column align-items-center">
+                            {/* <div className="mt-3 pr-2 ml-4"> */}
+                            <p className="text-muted mb-0 text-small">
+                              <TimestampConverter timeStamp={sessions.sessionStartTime} format="date" />
+                            </p>
+                            <p className="text-muted mb-0 text-small">
+                            <TimestampConverter timeStamp={sessions.sessionStartTime} format="time" /> - <TimestampConverter timeStamp={sessions.sessionEndTime} format="time" />
+                            </p>
+                            {/* </div> */}
+                          </Col>
+                          <Col className="mt-3">
+                            {/* <div className="d-flex justify-end ml-4 mr-2 pr-2 mt-3"> */}
+                            <Rating total={5} rating={sessions.stars} interactive={false} />
+                            {/* </div> */}
+                          </Col>
+                        </Row>
+                      </div>
+                    );
+                  })}
+                </PerfectScrollbar>
+              </div>
+            </CardBody>
+          </Card>
+          {/* </Col> */}
+        </Colxx>
+        <Colxx lg="5" md="6" className="mb-2">
+          {/* <Col lg={5}> */}
+          <Card>
+            <CardBody>
+              <CardTitle>
+                <strong>Recent Chats</strong>
+              </CardTitle>
+              <div className="dashboard-list-with-user">
+                <PerfectScrollbar
+                  options={{ suppressScrollX: true, wheelPropagation: false }}
+                >
+                  {recentChats.map((chats, index) => {
+                    return (
+                      <div
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        className="d-flex flex-row mb-2 pb-2 border-bottom"
+                      >
+                        <NavLink to="#">
+                          <img
+                            src={chats.imageUrl}
+                            alt={chats.name}
+                            className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                          />
+                        </NavLink>
+
+                        <div className="pl-3 pr-2">
+                          <NavLink to="#">
+                            <p className="font-weight-medium mb-0 ">
+                              {chats.name}
+                            </p>
+                            <p className="text-muted mb-0 text-small">
+                              {chats.jobTitle}
+                            </p>
+                          </NavLink>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </PerfectScrollbar>
+              </div>
+            </CardBody>
+          </Card>
+          {/* </Col> */}
+        </Colxx>
+      </Row>
+    </>
+  );
+};
+
+export default DashBoard;
