@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -15,14 +15,144 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Rating from "components/common/Rating";
-import { alumni, lawyers, mentors, newSession, recentChats, recentSessions } from "./Data";
+import { baseUrl } from "constants/defaultValues";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { alumniData, lawyersData, mentorsData, newSessionData, recentChatsData, recentSessionsData } from "./Data";
 import TimestampConverter from "../Calculation/TimestampConverter";
+import language from "../my-login/Languages";
 
 const DashBoard = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentMentorIndex, setCurrentMentorIndex] = useState(0);
   const [currentLawyerIndex, setCurrentLawyerIndex] = useState(0);
   const [currentAlumniIndex, setCurrentAlumniIndex] = useState(0);
+
+  const [walletBalance, setWalletBalance] = useState(2000);
+  const [profileStatus, setProfileStatus] = useState(75);
+  const [recentSessions, setRecentSessions] = useState(recentSessionsData);
+  const [mentors, setMentors] = useState(mentorsData);
+  const [lawyers, setLawyers] = useState(lawyersData);
+  const [alumni, setAlumni] = useState(alumniData);
+  const [newSession, setNewSession] = useState(newSessionData);
+  const [recentChats, setRecentChats] = useState(recentChatsData);
+
+
+  const walletUrl = `${baseUrl}/api/dashboard/walletbalance`;
+  const profileStatusUrl = `${baseUrl}/api/dashboard/profilestatus`;
+  const mentorsUrl = `${baseUrl}/api/dashboard/mentors`;
+  const sessionsUrl = `${baseUrl}/api/dashboard/sessions`;
+  const lawyersUrl = `${baseUrl}/api/dashboard/lawyer`;
+  const alumniUrl = `${baseUrl}/api/dashboard/alumni`;
+  const newSessionUrl = `${baseUrl}/api/dashboard/newsession`;
+  const recentChatsDataUrl = `${baseUrl}/api/dashboard/recentchats`;
+
+  useEffect(() => {
+    const fetchProfileStatus = async () => {
+      try {
+        const response = await axios.get(profileStatusUrl);
+        setProfileStatus(response.data);
+      } catch (error) {
+        console.error('Error Fetching profile status:', error);
+      }
+    };
+
+    fetchProfileStatus();
+  }, []); 
+
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      try {
+        const response = await axios.get(walletUrl);
+        setWalletBalance(response.data);
+      } catch (error) {
+        console.error('Error Fetching Balance:', error);
+      }
+    };
+
+    fetchWalletBalance();
+  }, []); 
+
+  useEffect(() => {
+    const fetchRecentSessions = async () => {
+      try {
+        const response = await axios.get(sessionsUrl);
+        setRecentSessions(response.data);
+      } catch (error) {
+        console.error('Error Fetching RecentSessions:', error);
+      }
+    };
+
+    fetchRecentSessions();
+  }, []); 
+
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const response = await axios.get(mentorsUrl);
+        setMentors(response.data);
+      } catch (error) {
+        console.error('Error Fetching Mentors:', error);
+      }
+    };
+
+    fetchMentors();
+  }, []); 
+
+  useEffect(() => {
+    const fetchLawyers = async () => {
+      try {
+        const response = await axios.get(lawyersUrl);
+        setLawyers(response.data);
+      } catch (error) {
+        console.error('Error Fetching Lawyers:', error);
+      }
+    };
+
+    fetchLawyers();
+  }, []); 
+
+  useEffect(() => {
+    const fetchAlumni = async () => {
+      try {
+        const response = await axios.get(alumniUrl);
+        setAlumni(response.data);
+      } catch (error) {
+        console.error('Error Fetching Alumni:', error);
+      }
+    };
+
+    fetchAlumni();
+  }, []); 
+
+  useEffect(() => {
+    const fetchNewsession = async () => {
+      try {
+        const response = await axios.get(newSessionUrl);
+        setNewSession(response.data);
+      } catch (error) {
+        console.error('Error Fetching Newsession:', error);
+      }
+    };
+
+    fetchNewsession();
+  }, []); 
+
+  useEffect(() => {
+    const fetchRecentChats = async () => {
+      try {
+        const response = await axios.get(recentChatsDataUrl);
+        setRecentChats(response.data);
+      } catch (error) {
+        console.error('Error Fetching RecentChats:', error);
+      }
+    };
+
+    fetchRecentChats();
+  }, []); 
+  
+  
+
   const renderDots = () => {
     // const total = React.Children.count(props.children);
     const total = newSession.length;
@@ -204,6 +334,12 @@ const DashBoard = () => {
   //   }, 3000);
   //   return () => clearInterval(interval);
   // }, []);
+  const history = useHistory();
+
+  const handleViewMentors = () => history.push("/app/mentor/list");
+  const handleViewLawyers = () => history.push("/app/lawyer/list");
+  const handleWalletClick = () => history.push("/app/mywallet");
+  const handleProfileClick = () => history.push("/app/user/myprofile")
 
   return (
     <>
@@ -217,9 +353,37 @@ const DashBoard = () => {
             }}
           >
             <div className="p-3 d-flex flex-column h-100">
-              <h3 className="mb-2 fw-bold">Profile Status</h3>
+            <Row className="d-flex align-items-center justify-content-between">
+              <Col>
+                <h3 className="mb-2 fw-bold">Profile Status</h3>
+              </Col>
+              <Col className="col-auto" xs="auto">
+              <button 
+              type="button"
+              className="icon-button" 
+              color="light" 
+              onClick={handleProfileClick}
+              style={{
+                  padding: '0.05rem 0.15rem', 
+                  fontSize: '0.4rem', 
+                  borderRadius: '50%', 
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '1.5rem',
+                  height: '1.5rem',
+                  minWidth: '1.5rem', 
+                  minHeight: '1.5rem',
+                  border: 'none', 
+                  outline: 'none'
+              }}
+            >
+              <i className="simple-icon-pencil text-primary" style={{ fontSize: '0.6rem' }} />
+              </button>
+              </Col>
+            </Row>
               <div className="mt-auto">
-                <h1 className="mb-0 fw-bold display-6">75 </h1>
+                <h1 className="mb-0 fw-bold display-6">{profileStatus} </h1>
                 <span> % completed</span>
               </div>
             </div>
@@ -234,9 +398,38 @@ const DashBoard = () => {
             }}
           >
             <div className="p-3 d-flex flex-column h-100">
+              <Row className="d-flex align-items-center justify-content-between">
+                <Col>
               <h3 className="mb-2 fw-bold">Wallet Balance</h3>
+              </Col>
+              <Col className="col-auto" xs="auto">
+              <button 
+              type="button"
+              className="icon-button" 
+              color="light" 
+              onClick={handleWalletClick}
+              style={{
+                  padding: '0.05rem 0.15rem', 
+                  fontSize: '0.4rem', 
+                  borderRadius: '50%', 
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '1.5rem',
+                  height: '1.5rem',
+                  minWidth: '1.5rem', 
+                  minHeight: '1.5rem',
+                  border: 'none', 
+                  outline: 'none'
+              }}
+            >
+              {/* <i className="iconsminds-add text-primary" style={{ fontSize: '0.8rem' }} /> */}
+              <span className="text-primary" style={{ fontSize: '0.9rem' }}><strong>+</strong></span>
+          </button>
+              </Col>
+            </Row>
               <div className="mt-auto">
-                <h1 className="mb-0 fw-bold display-6">₹2000 </h1>
+                <h1 className="mb-0 fw-bold display-6">₹{walletBalance} </h1>
               </div>
             </div>
           </Card>
@@ -253,8 +446,9 @@ const DashBoard = () => {
                   <button
                   onClick={handlePrevious}
                     type="button"
-                    className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
-                    data-glide-dir="<"
+                    className=" left-arrow btn btn-link btn-xs"
+                    style={{ textDecoration: 'none',padding: "5px"  }}
+                    // data-glide-dir="<"
                   >
                     <i className="simple-icon-arrow-left" />
                   </button>
@@ -263,6 +457,7 @@ const DashBoard = () => {
                     type="button"
                     className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
                     data-glide-dir=">"
+                    style={{ textDecoration: 'none', padding: "5px" }}
                   >
                     <i className="simple-icon-arrow-right" />
                   </button>
@@ -321,7 +516,7 @@ const DashBoard = () => {
                   </h3>
                 </Col>
                 <Col xs="auto">
-                  <Button size="xs" color="primary">
+                  <Button size="xs" color="primary" onClick={handleViewMentors}>
                     <span>View all</span>
                   </Button>
                 </Col>
@@ -334,6 +529,7 @@ const DashBoard = () => {
                     type="button"
                     className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
                     data-glide-dir="<"
+                    style={{ textDecoration: 'none' }}
                   >
                     <i className="simple-icon-arrow-left" />
                   </button>
@@ -352,6 +548,7 @@ const DashBoard = () => {
                     type="button"
                     className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
                     data-glide-dir=">"
+                    style={{ textDecoration: 'none' }}
                   >
                     <i className="simple-icon-arrow-right" />
                   </button>
@@ -392,7 +589,7 @@ const DashBoard = () => {
                   </h3>
                 </Col>
                 <Col xs="auto">
-                  <Button size="xs" color="primary">
+                  <Button size="xs" color="primary" onClick={handleViewLawyers}>
                     <span>View all</span>
                   </Button>
                 </Col>
@@ -405,6 +602,7 @@ const DashBoard = () => {
                     type="button"
                     className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
                     data-glide-dir="<"
+                    style={{ textDecoration: 'none' }}
                   >
                     <i className="simple-icon-arrow-left" />
                   </button>
@@ -423,6 +621,7 @@ const DashBoard = () => {
                     type="button"
                     className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
                     data-glide-dir=">"
+                    style={{ textDecoration: 'none' }}
                   >
                     <i className="simple-icon-arrow-right" />
                   </button>
@@ -433,10 +632,20 @@ const DashBoard = () => {
                     <strong>{currentLawyer.name}</strong>
                   </h3>
                 </NavLink>
-                <CardText className="text-muted text-small mb-2">
-                  Executive Director | TCS
+                <CardText className="text-muted text-small mb-2 text-truncate">
+                {currentLawyer.serviceName.map((s, index) => (
+                  <>
+                    <span key={s}>{s}</span>
+                    {index < currentLawyer.serviceName.length - 1 && ' | '}
+                  </>
+                ))}
                 </CardText>
-                <span>{currentLawyer.experience} years of experience</span>
+                <span className="text-truncate">{currentLawyer.language.map((lang, index) => (
+                  <>
+                    <span key={lang}>{language.find((l) => l.iso_code === lang)?.name}</span>
+                    {index < currentLawyer.language.length - 1 && ' | '}
+                  </>
+                ))}</span>
                 <div className="separator mb-2 mt-2" />
                 <h3 className="mb-0 fw-bold">
                   <strong>₹{currentLawyer.price}/mo</strong>
@@ -476,6 +685,7 @@ const DashBoard = () => {
                     type="button"
                     className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
                     data-glide-dir="<"
+                    style={{ textDecoration: 'none' }}
                   >
                     <i className="simple-icon-arrow-left" />
                   </button>
@@ -494,6 +704,7 @@ const DashBoard = () => {
                     type="button"
                     className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
                     data-glide-dir=">"
+                    style={{ textDecoration: 'none' }}
                   >
                     <i className="simple-icon-arrow-right" />
                   </button>

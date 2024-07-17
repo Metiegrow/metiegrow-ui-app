@@ -1,4 +1,4 @@
-export const newSession = [
+export const newSessionData = [
     {
         "id": 1,
       "name": "Raj",
@@ -30,7 +30,7 @@ export const newSession = [
   ];
   
 
-  export const mentors =[
+  export const mentorsData =[
     {
         "name": "Robert",
         "imageUrl" : "/assets/img/profiles/l-1.jpg",
@@ -74,42 +74,47 @@ export const newSession = [
 ]
 
 
-export const lawyers= [
+export const lawyersData= [
     {
         "name": "Sunil",
         "imageUrl" : "/assets/img/profiles/l-3.jpg",
-        "experience" : 15,
-        "price" : 7000
+        "serviceName": ["service 1","service 2","service 3"],
+        "price" : 7000,
+        "language": ["TA","AR"],
     },
      {
         "name": "Ram",
         "imageUrl" : "/assets/img/profiles/l-2.jpg",
         "price" : 4000,
-        "experience" : 12,
+        "serviceName": ["service 1","service 2","service 3"],
+        "language": ["TA","MR"],
 
     },
      {
         "name": "Shree",
         "imageUrl" : "/assets/img/profiles/l-3.jpg",
         "price" : 5000,
-        "experience" : 5,
+        "serviceName": ["service 1","service 2","service 3","service 4","service 5","service 6"],
+        "language": ["TA","TE"],
     },
      {
         "name": "Amal",
         "imageUrl" : "/assets/img/profiles/l-5.jpg",
         "price" : 2000,
-        "experience" : 4,
+        "serviceName": ["service 1","service 3"],
+        "language": ["TA","HI","EN","ML"],
     },
      {
         "name": "Pondy",
         "imageUrl" : "/assets/img/profiles/l-1.jpg",
         "price" : 6000,
-        "experience" : 6,
+        "serviceName": ["service 1","service 2","service 3"],
+        "language": ["TA","KA"],
 
     },
 ]
 
-export const alumni = [
+export const alumniData = [
     {
         "id" : 1,
         "name": "Sunil",
@@ -158,7 +163,7 @@ export const alumni = [
 ]
 
 
-export const recentSessions = [
+export const recentSessionsData = [
 	
     {
 	    "id" : 1,
@@ -209,7 +214,7 @@ export const recentSessions = [
 
 
 
-export const recentChats = [
+export const recentChatsData = [
 
     {
 	    "id" : 1,
