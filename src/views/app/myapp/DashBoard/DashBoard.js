@@ -3,7 +3,7 @@ import {
   Button,
   Card,
   CardBody,
-  CardImg,
+  // CardImg,
   CardText,
   CardTitle,
   Col,
@@ -15,10 +15,11 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Rating from "components/common/Rating";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { baseUrl } from "constants/defaultValues";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { alumniData, lawyersData, mentorsData, newSessionData, recentChatsData, recentSessionsData } from "./Data";
+import { alumniData, newSessionData, recentChatsData, recentSessionsData } from "./Data";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import language from "../my-login/Languages";
 
@@ -28,24 +29,41 @@ const DashBoard = () => {
   const [currentLawyerIndex, setCurrentLawyerIndex] = useState(0);
   const [currentAlumniIndex, setCurrentAlumniIndex] = useState(0);
 
-  const [walletBalance, setWalletBalance] = useState(2000);
+  const [walletBalance, setWalletBalance] = useState(0);
   const [profileStatus, setProfileStatus] = useState(75);
   const [recentSessions, setRecentSessions] = useState(recentSessionsData);
-  const [mentors, setMentors] = useState(mentorsData);
-  const [lawyers, setLawyers] = useState(lawyersData);
+  const [mentors, setMentors] = useState([{
+    imageUrl: "",
+    company: "",
+    price: 0,
+    firstName: "",
+    lastName: "",
+    jobTitle: "",
+    experience: 0
+  }]);
+  const [lawyers, setLawyers] = useState([{
+    imageUrl: "",
+    firstName: "",
+    price: 0,
+    lastName: "",
+    services: [],
+    languages: []
+  }]);
   const [alumni, setAlumni] = useState(alumniData);
   const [newSession, setNewSession] = useState(newSessionData);
   const [recentChats, setRecentChats] = useState(recentChatsData);
 
 
-  const walletUrl = `${baseUrl}/api/dashboard/walletbalance`;
+  const walletUrl = `${baseUrl}/api/wallet/balance`;
   const profileStatusUrl = `${baseUrl}/api/dashboard/profilestatus`;
-  const mentorsUrl = `${baseUrl}/api/dashboard/mentors`;
+  const mentorsUrl = `${baseUrl}/api/mentor/cards?page=0&size=10`;
   const sessionsUrl = `${baseUrl}/api/dashboard/sessions`;
-  const lawyersUrl = `${baseUrl}/api/dashboard/lawyer`;
+  const lawyersUrl = `${baseUrl}/api/lawyer/lawyercards?page=0&size=10`;
   const alumniUrl = `${baseUrl}/api/dashboard/alumni`;
   const newSessionUrl = `${baseUrl}/api/dashboard/newsession`;
   const recentChatsDataUrl = `${baseUrl}/api/dashboard/recentchats`;
+
+  // console.log("mentors",mentors)
 
   useEffect(() => {
     const fetchProfileStatus = async () => {
@@ -64,7 +82,7 @@ const DashBoard = () => {
     const fetchWalletBalance = async () => {
       try {
         const response = await axios.get(walletUrl);
-        setWalletBalance(response.data);
+        setWalletBalance(response.data.balance);
       } catch (error) {
         console.error('Error Fetching Balance:', error);
       }
@@ -90,7 +108,7 @@ const DashBoard = () => {
     const fetchMentors = async () => {
       try {
         const response = await axios.get(mentorsUrl);
-        setMentors(response.data);
+        setMentors(response.data.data);
       } catch (error) {
         console.error('Error Fetching Mentors:', error);
       }
@@ -103,7 +121,7 @@ const DashBoard = () => {
     const fetchLawyers = async () => {
       try {
         const response = await axios.get(lawyersUrl);
-        setLawyers(response.data);
+        setLawyers(response.data.data);
       } catch (error) {
         console.error('Error Fetching Lawyers:', error);
       }
@@ -296,7 +314,10 @@ const DashBoard = () => {
 
   const currentSession = newSession[currentIndex];
   const currentMentor = mentors[currentMentorIndex];
+  // const currentMentor = mentors && currentMentorIndex >= 0 && currentMentorIndex < mentors.length ? mentors[currentMentorIndex] : null;
   const currentLawyer = lawyers[currentLawyerIndex];
+  // const currentLawyer = lawyers && currentLawyerIndex >= 0 && currentLawyerIndex < lawyers.length ? lawyers[currentLawyerIndex] : null;
+  
   const currentAlumni = alumni[currentAlumniIndex];
 
   // useEffect(() => {
@@ -508,6 +529,7 @@ const DashBoard = () => {
       <Row className="mx-auto my-4 " style={{ maxWidth: "1000px" }}>
         <Colxx md="6" sm="6" lg="4" xxs="12">
           <Card className="mb-2">
+            {currentMentor && (
             <CardBody>
               <Row className="mb-3 align-items-center">
                 <Col>
@@ -535,12 +557,26 @@ const DashBoard = () => {
                   </button>
                   </Col>
                   <Col className="d-flex justify-content-center align-items-center">
-                <CardImg
+                {/* <CardImg
                   top
-                  src={currentMentor.imageUrl}
+                  src={`${baseUrl}/${currentMentor.imageUrl}`}
                   alt="Card image cap"
                   className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
-                />
+                /> */}
+                {!currentMentor.imageUrl ? (
+                <ThumbnailLetters
+                    // small
+                    rounded
+                    text={currentMentor.firstName}
+                    className="mx-2 mb-3"
+                    color="secondary"
+                  /> ) : (
+                <img
+                    src={`${baseUrl}/${currentMentor.imageUrl}`}
+                    className=" rounded-circle mb-2"
+                    style={{ width: "90px", height: "90px", objectFit: "cover", overflow: "hidden"  }}
+                    alt="img"
+                  /> )}
                 </Col>
                 <Col className="d-flex align-items-center justify-content-end">
                 <button
@@ -556,16 +592,21 @@ const DashBoard = () => {
                 </Row>
                 <NavLink to="#">
                   <h3 className="mb-0">
-                    <strong>{currentMentor.name}</strong>
+                    <strong>{currentMentor.firstName} {" "} {currentMentor.lastName}</strong>
                   </h3>
                 </NavLink>
                 <CardText className="text-muted text-small mb-2">
                   {currentMentor.jobTitle} | {currentMentor.company}
                 </CardText>
-                <span>{currentMentor.experience} years of experience</span>
+                <span>
+                    {currentMentor.experience === undefined || currentMentor.experience === 0
+                      ? "No experience"
+                      : `${currentMentor.experience} years of experience`}
+                  </span>
+
                 <div className="separator mb-2 mt-2" />
                 <h3 className="mb-0 fw-bold">
-                  <strong>₹{currentMentor.price}/mo</strong>
+                  <strong>₹{currentMentor.price}/hr</strong>
                 </h3>
               </div>
               <div className="d-flex justify-content-center">
@@ -577,6 +618,7 @@ const DashBoard = () => {
                 </div>
               </div>
             </CardBody>
+            )}
           </Card>
         </Colxx>
         <Colxx md="6" sm="6" lg="4" xxs="12">
@@ -608,12 +650,26 @@ const DashBoard = () => {
                   </button>
                   </Col>
                   <Col className="d-flex justify-content-center align-items-center">
-                <CardImg
+                {/* <CardImg
                   top
                   src={currentLawyer.imageUrl}
                   alt="Card image cap"
                   className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
-                />
+                /> */}
+                {!currentLawyer.imageUrl ? (
+                <ThumbnailLetters
+                    // small
+                    rounded
+                    text={currentLawyer.firstName}
+                    className="mx-2 mb-3"
+                    color="secondary"
+                  /> ) : (
+                <img
+                    src={`${baseUrl}/${currentLawyer.imageUrl}`}
+                    className=" rounded-circle mb-2"
+                    style={{ width: "90px", height: "90px", objectFit: "cover", overflow: "hidden"  }}
+                    alt="img"
+                  />)}
                 </Col>
                 <Col className="d-flex align-items-center justify-content-end">
                 <button
@@ -629,21 +685,27 @@ const DashBoard = () => {
                 </Row>
                 <NavLink to="#">
                   <h3 className="mb-0">
-                    <strong>{currentLawyer.name}</strong>
+                    <strong>{currentLawyer.firstName}{" "}{currentLawyer.lastName}</strong>
                   </h3>
                 </NavLink>
+                {!currentLawyer === null ? (
                 <CardText className="text-muted text-small mb-2 text-truncate">
-                {currentLawyer.serviceName.map((s, index) => (
+                { currentLawyer.services.map((s, index) => (
                   <>
                     <span key={s}>{s}</span>
-                    {index < currentLawyer.serviceName.length - 1 && ' | '}
+                    {index < currentLawyer.services.length - 1 && ' | '}
                   </>
                 ))}
+                </CardText>) : (
+                <CardText className="text-muted text-small mb-2 text-truncate">
+                  No services
                 </CardText>
-                <span className="text-truncate">{currentLawyer.language.map((lang, index) => (
+
+                )}
+                <span className="text-truncate">{currentLawyer.languages.map((lang, index) => (
                   <>
                     <span key={lang}>{language.find((l) => l.iso_code === lang)?.name}</span>
-                    {index < currentLawyer.language.length - 1 && ' | '}
+                    {index < currentLawyer.languages.length - 1 && ' | '}
                   </>
                 ))}</span>
                 <div className="separator mb-2 mt-2" />
@@ -691,12 +753,26 @@ const DashBoard = () => {
                   </button>
                   </Col>
                   <Col className="d-flex justify-content-center align-items-center">
-                <CardImg
+                {/* <CardImg
                   top
                   src={currentAlumni.imageUrl}
                   alt="Card image cap"
                   className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
-                />
+                /> */}
+                {!currentAlumni.imageUrl ? (
+                <ThumbnailLetters
+                    // small
+                    rounded
+                    text={currentAlumni.name}
+                    className="mx-2 mb-3"
+                    color="secondary"
+                  /> ) : (
+                <img
+                    src={currentAlumni.imageUrl}
+                    className=" rounded-circle mb-2"
+                    style={{ width: "90px", height: "90px", objectFit: "cover", overflow: "hidden"  }}
+                    alt="img"
+                  /> )}
                 </Col>
                 <Col className="d-flex align-items-center justify-content-end">
                 <button

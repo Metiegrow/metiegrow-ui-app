@@ -59,7 +59,7 @@ const JobListing = ({isPosted}) => {
         setIsLoaded(true);
       } catch (error) {
         console.error("Error fetching data:", error);
-        console.log("ck",error.response.data.statuses[0].code)
+        // console.log("ck",error.response.data.statuses[0].code)
         setIsLoaded(true);
         if (error.response && error.response.data && error.response.data.statuses && error.response.data.statuses[0].code === 40348) {
           setNoData(true);

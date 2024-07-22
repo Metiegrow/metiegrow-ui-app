@@ -1,0 +1,1093 @@
+/* eslint-disable no-param-reassign */
+
+import React, { createRef, useEffect, useState } from "react";
+import {
+  Card,
+  CardBody,
+  FormGroup,
+  Label,
+  NavLink,
+  Button,
+  Row,
+  Col,
+  Alert,
+  Input,
+  InputGroup,
+  FormText,
+  Jumbotron,
+  Spinner,
+} from "reactstrap";
+import { injectIntl } from "react-intl";
+import { Colxx } from "components/common/CustomBootstrap";
+import TagsInput from "react-tagsinput";
+import Select from 'react-select';
+import { Formik, Form, Field } from "formik";
+import axios from "axios";
+import { NotificationManager } from "components/common/react-notifications";
+// import { SliderTooltip } from "components/common/SliderTooltips";
+// import { FormikTagsInput } from "containers/form-validations/FormikFields";
+// import TagsInput from "react-tagsinput";
+import 'react-tagsinput/react-tagsinput.css';
+import { baseUrl } from "constants/defaultValues";
+import {
+  // validateCategory,
+  // validateLocation,
+  // validateCompany,
+  // validateJobTitle,
+  // validateSkills,
+  // validateBio,
+  // validateLinkedinUrl,
+  // validateReasonForMentor,
+  validateAchievement,
+  // validateFile,
+} from "../my-login/validation";
+
+// import country from "./Country";
+import language from "../my-login/Languages";
+import ToasterComponent from "../notifications/ToasterComponent";
+
+const ApplyAsMentor = () => {
+  const forms = [createRef(null), createRef(null), createRef(null)];
+  const steps = ["Profile", "Experience", "Others"];
+  const [currentStep, setCurrentStep] = useState(0);
+  const [file1, setFile1] = useState(null);
+  // const [amount, setAmount] = useState(500);
+  const [loading, setLoading] = useState(false);
+  const [skillsTag, setSkillsTag] = useState([]);
+
+  // const [skillsTag, setSkillsTag] = useState([]);
+  // const [toolsTag, setToolsTag] = useState([]);
+  const [imageError, setImageError] = useState(false);
+  // const [skillError,setSkillError] = useState(false);
+  const [imageErrorMessage, setImageErrorMessage] = useState(null);
+  // const [skillErrorMessage,setSkillErrorMessage] = useState(null);
+  const [languages, setLanguages] = useState([]);
+  const [aboutLoading,setAboutLoading] = useState(false)
+  const [profileLoading,setProfileLoading] = useState(false)
+  const [experienceLoading, setExperienceLoading] = useState(false)
+  const [aboutField, setAboutField] = useState({
+    image: "",
+  });
+  const [selectedFile, setSelectedFile] = useState(null);
+  useEffect(() => {
+    const status = localStorage.getItem("status");
+    console.log("status", status);
+    if (status) {
+      if (status === "0") {
+        setCurrentStep(0);
+      } else if (status === "1") {
+        setCurrentStep(1);
+      } else if (status === "3") {
+        setCurrentStep(2);
+      } else {
+        setCurrentStep(0);
+      }
+    }
+  }, []);
+
+  const [fields] = useState({
+    image: "",
+
+    jobTitle: "",
+    company: "",
+    location: "",
+    category: "",
+    skills: [],
+    bio: "",
+    linkedinUrl: "",
+    twitterHandle: "",
+    website: "",
+    introVideo: "",
+    featuredArticle: "",
+    reasonForMentor: "",
+    achievement: "",
+  });
+
+const languageOptions = language.map(option => ({
+  value: option.iso_code,
+  label: option.name
+}));
+
+  const handleNextStep = () => {
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFile1(file);
+
+    if (file) {
+      const reader = new FileReader();
+      setImageError(false);
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+        // .split(",")[1];
+        setSelectedFile(base64Image);
+        // setFieldValue("image", base64Image);
+        setAboutField({ ...aboutField, image: base64Image });
+        // console.log(base64Image)
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+  //   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
+  //   const mentorAboutUrl="http://localhost:3001/acheckabout";
+  const mentorAboutUrl = `${baseUrl}/api/mentor/details/about`;
+  const mentorProfileUrl = `${baseUrl}/api/mentor/details/profile`;
+  const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
+  function getTokenRes() {
+    return localStorage.getItem("tokenRes");
+  }
+  const token = getTokenRes();
+
+
+  const postDataUserProfile = async (data) => {
+    handleNextStep();
+
+    setAboutLoading(true)
+    const formData = new FormData();
+    formData.append("image", file1);
+
+    const userProfile = {
+    languages,
+    linkedinUrl: data.linkedinUrl,
+    twitterHandle: data.twitterHandle,
+    personalWebsite: data.personalWebsite
+    };
+    formData.append("mentorProfile",new Blob([JSON.stringify(userProfile)], { type: "application/json" }));
+
+    try {
+     const response = await axios.post(mentorAboutUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // setNextStep(true)
+      setAboutLoading(false)
+      //   console.log(`resres ${response.status}`);
+      ToasterComponent('success', response.data.statuses);
+      handleNextStep();
+    } catch (error) {
+      setImageError(false);
+      // console.error(error);
+      setAboutLoading(false)
+      if(error.response){
+      error.response.data.statuses.forEach((status) => {
+         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
+         if(status.code === 40327){
+           setImageErrorMessage(status.message)
+            setImageError(true);
+         }
+     });
+    }else{
+      NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
+    }
+      
+    }
+  };
+
+  const postExperience = async (data) => {
+    handleNextStep();
+
+    setProfileLoading(true)
+    try {
+     const response = await axios.post(mentorProfileUrl, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // setNextStep(true)
+      setProfileLoading(false)
+      //   console.log(`resres ${response.status}`);
+      ToasterComponent('success', response.data.statuses);
+      handleNextStep();
+    } catch (error) {
+      // setSkillError(false);
+      setProfileLoading(false)
+      if(error.response){
+      error.response.data.statuses.forEach((status) => {
+         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
+         
+     });
+    }else{
+      NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
+    }
+    }
+  };
+
+  const postDataExperience = async (data) => {
+    handleNextStep();
+    setExperienceLoading(true);
+    const postDataExp = { ...data };
+    try {
+      const response = await axios.post(experienceUrl, postDataExp, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // setNextStep(true)
+      // console.log(response);
+      setExperienceLoading(false)
+      ToasterComponent('success', response.data.statuses);
+      handleNextStep();
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    } catch (error) {
+      setExperienceLoading(false)
+      if(error.response){
+      error.response.data.statuses.forEach((status) => {
+        NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
+    });
+  }else{
+    NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
+  }
+    }
+  };
+
+  // const handleSliderChange = (value) => {
+  //   setAmount(value);
+  // };
+
+  // useEffect(() => {
+  //   axios.get(mentorAboutUrl).then((response) => {
+  //     console.log("reslog", response.data);
+  //     // setLoading(false);
+  //   });
+  // }, [currentStep]);
+
+  // const handleTagsChange = (newSkills) => {
+  //   setSkillError(false);
+  //   setSkillsTag(newSkills);
+  // };
+  // const handleToolsTagsChange = (newTools) => {
+  //   setSkillError(false);
+  //   setToolsTag(newTools);
+  // };
+  const [education, setEducation] = useState([
+    { collegeName: "", degree: "", department: "", year: 0 },
+  ]); 
+  
+  const [workExperience, setWorkExperience] = useState([
+    { company: "", jobTitle: "", employmentType: "", jobLocation: "" },
+  ]);
+
+  const removeEducation = (index) => {
+    const newEducation = [...education];
+    newEducation.splice(index, 1);
+    setEducation(newEducation);
+  };
+  const removeWorkExperience = (index) => {
+    const newWorkExperience = [...workExperience];
+    newWorkExperience.splice(index, 1);
+    setWorkExperience(newWorkExperience);
+  };
+
+  
+
+  const addEducation = () => {
+    setEducation([
+      ...education,
+      { collegeName: "", degree: "", department: "", year: 0 },
+    ]);
+  };
+  const addWorkExperience = () => {
+    setWorkExperience([
+      ...workExperience,
+      { company: "", jobTitle: "", employmentType: "", jobLocation: "" },
+    ]);
+  };
+
+  const handleInputChange = (index, field, value) => {
+    setEducation((previousEducation) =>
+      previousEducation.map((edu, i) =>
+        i === index ? { ...edu, [field]: value } : edu
+      )
+    );
+  };  
+  const handleWorkInputChange = (index, field, value) => {
+    setWorkExperience((previousWorkExperience) =>
+      previousWorkExperience.map((work, i) =>
+        i === index ? { ...work, [field]: value } : work
+      )
+    );
+  };
+
+  const handleTagsChange = (newSkills) => {
+    // setSkillError(false);
+    setSkillsTag(newSkills);
+  };
+
+  return (
+    <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
+      <CardBody className="wizard wizard-default">
+        <h1 className="mt-4 font-weight-bold">Apply as a mentor</h1>
+        <ul className="nav nav-tabs justify-content-center">
+          {steps.map((stepItem, index) => (
+            // <li key={`topNavStep_${index}`} className={`nav-item ${index === currentStep ? 'step-doing' : ''}`}>
+            <li
+            // eslint-disable-next-line
+              key={`topNavStep_${index}`}
+              className={`nav-item ${
+            // eslint-disable-next-line
+                index === currentStep
+                  ? "step-doing"
+                  : index < currentStep
+                  ? "step-done"
+                  : ""
+              }`}
+            >
+              <NavLink to="#" location={{}} className="nav-link">
+                <span>{stepItem}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+        <div className="wizard-basic-step">
+          {currentStep === 0 && (
+            <Formik
+            initialValues={{
+              personalWebsite: "",
+              languages: "",
+              linkedinUrl: "",
+              twitterHandle: "",
+            }}
+            onSubmit={postDataUserProfile}
+          >
+            {({ errors, touched }) => (
+              <Form className="av-tooltip tooltip-label-right">
+                <Alert color="primary">
+                  <strong>Tips</strong><br />
+                  <ul>
+                 <li>Adding your photo and social media profiles helps mentors
+                  feel confident that you’re a real person (e.g. not a bot).</li> 
+                 <li>Your profile is only visible to mentors that you send
+                  applications to. It is not indexed on search engines like
+                  Google.</li> 
+                  </ul>
+                 
+                </Alert>
+                <FormGroup>
+                  <Label for="image">Image*</Label>
+                  <Row>
+                    <Col md={2} className="">
+                      <img
+                        src={selectedFile || "/assets/img/profiles/l-1.jpg"}
+                        className="mx-2 rounded-circle img-thumbnail border"
+                        style={{ width: "70px", height: "70px", objectFit: "cover"  }}
+                        alt=""
+                      />
+                    </Col>
+                    <Col md={5} className="mt-3 ">
+                      <InputGroup className="mb-3">
+                        {errors.image && touched.image && (
+                          <div className="invalid-feedback d-block">
+                            {errors.image}
+                          </div>
+                        )}
+                        <div className="mt-2">
+                          <Button
+                            className="default"
+                            color="primary"
+                            onClick={() =>
+                              document.getElementById("file-upload").click()
+                            }
+                          >
+                            Upload profile pic{" "}
+                            <i className="iconsminds-upload " />
+                          </Button>
+                          <Input
+                            id="file-upload"
+                            type="file"
+                            className="form-control d-none"
+                            onChange={handleFileChange}
+                            // validate={validateFile}
+                            required
+                          />
+                          {file1 && (
+                            <p className="mt-2">
+                              Selected file: {file1.name}
+                            </p>
+                          )}
+                          {imageError &&  (
+                            <div className="invalid-feedback d-block">
+                              {imageErrorMessage}
+                            </div>
+                          )}
+                        </div>
+                      </InputGroup>
+                    </Col>
+                  </Row>
+                </FormGroup>
+                <FormGroup className="error-l-75">
+                  <Row>
+                    <Col md={6}>
+                        <Label for="languages">Languages known*</Label>
+                        <Select
+                          placeholder="Select Languages"
+                          name="languages"
+                          isMulti
+                          options={languageOptions}
+                          // validate={validateLanguages}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          onChange={selectedOptions => {
+                          const languagesArray = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                          setLanguages( languagesArray);
+                            }}
+                         /> 
+                        </Col>
+                        <Col md={6}>
+                      <Label for="linkedinUrl">Portfolio/personal website (optional)</Label>
+                      <Field
+                        className="form-control"
+                        name="personalWebsite"
+                        type="url"
+                        // validate={validateLinkedinUrl}
+                        autoComplete="off"
+                      />
+                      {errors.personalWebsite && touched.personalWebsite && (
+                        <div className="invalid-feedback d-block">
+                          {errors.personalWebsite}
+                        </div>
+                      )}
+                    </Col>
+                    </Row>
+                      </FormGroup>
+                <FormGroup className="error-l-125">
+                  <Row>
+                    <Col md={6}>
+                      <Label for="linkedinUrl">LinkedIn URL*</Label>
+                      <Field
+                        className="form-control"
+                        name="linkedinUrl"
+                        type="url"
+                        // validate={validateLinkedinUrl}
+                        autoComplete="off"
+                      />
+                      {errors.linkedinUrl && touched.linkedinUrl && (
+                        <div className="invalid-feedback d-block">
+                          {errors.linkedinUrl}
+                        </div>
+                      )}
+                    </Col>
+                    <Col md={6}>
+                      <Label for="twitterHandle">
+                        Twitter Handle (optional)
+                      </Label>
+                      <Field
+                        type="text"
+                        name="twitterHandle"
+                        id="twitterHandle"
+                        className="form-control"
+                        autoComplete="off"
+                      />
+                      <FormText color="muted">
+                        Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
+                      </FormText>
+                    </Col>
+                  </Row>
+                </FormGroup>
+
+                <div className="d-flex justify-content-end">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    className={`col-12 col-md-2 btn-shadow btn-multiple-state ${
+                      aboutLoading ? "show-spinner" : ""
+                    }`}
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">Next</span>
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+          )}
+          {currentStep === 1 && (
+            <Formik
+            innerRef={forms[2]}
+            initialValues={{
+                education: [
+                  {
+                      college: "",
+                      department: "",
+                      degree: "",
+                      year: 0,
+                  },
+                ],
+                workExperience: [
+                  {
+                    company: "",
+                    jobTitle: "",
+                    employmentType: "",
+                    jobLocation: ""
+                  }
+                ]
+              
+              
+            }}
+            onSubmit={() => {
+              const experienceData = {education, workExperience}
+            postExperience(experienceData);
+              console.log("my education", education);
+              // console.log("values", values);
+            }}
+            validateOnMount
+          >
+            {({ errors, touched }) => (
+              <Form className="av-tooltip tooltip-label-right my-4">
+                <Alert color="primary">
+                  <strong>Almost there!</strong> <br /> You&apos;re just one
+                  last step away from being a lawyer and connecting with
+                  mentees all over the world! In this step, show off your
+                  accomplishments and how you can help others.
+                  <br />
+                  <br /> Many of these fields are optional, but will help us
+                  get better insights into your work - and therefore
+                  exponentially increase your chances. They also give you a
+                  jumpstart once you&apos;re a lawyer.
+                </Alert>
+
+                {education.map((service, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <div key={index}>
+                    <div className="text-right">
+                      {/* <Button outline className="icon-button" onClick={() => removeService(index)}>
+                      <i className="simple-icon-close" />
+                    </Button> */}
+                  {education.length > 1 && (
+                      <span>
+                        <Button
+                          id="closeButton"
+                          color="primary"
+                          outline
+                          className="icon-button"
+                          onClick={() => removeEducation(index)}
+                        >
+                          {/* <i className="iconsminds-close" /> */}
+                          <span className="text-primary"><strong>x</strong></span>
+                        </Button>
+                      </span>
+                      )}
+                    </div>
+                    <Row>
+                      <Col md={6}>
+                        <FormGroup className="error-l-75">
+                          <Label>College Name*</Label>
+                          <Input
+                            className="form-control"
+                            name={`education[${index}].collegeName`}
+                            value={service.collegeName}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "collegeName",
+                                e.target.value
+                              )
+                            }
+                              // validate={validateServiceName}
+                          />
+                          {errors.education?.[index]?.collegeName &&
+                            touched.education?.[index]?.collegeName && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].collegeName}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for={`education[${index}].degree`}>
+                            Degree*
+                          </Label>
+                          <Input
+                            name={`education[${index}].degree`}
+                            id={`education[${index}].degree`}
+                            className="form-control"
+                            value={service.degree}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "degree",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageTopic}
+                          />
+                          {errors.education?.[index]?.degree &&
+                            touched.education?.[index]?.degree && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].degree}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for={`education[${index}].department`}>
+                            Department*
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`education[${index}].department`}
+                            id={`education[${index}].department`}
+                            className="form-control"
+                            value={service.department}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "department",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageDescription}
+                          />
+                          {errors.education?.[index]?.department &&
+                            touched.education?.[index]?.department && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].department}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                    
+                      <Col md={6}>
+                      <FormGroup>
+                          <Label for={`education[${index}].department`}>
+                            Year of passing*
+                          </Label>
+                          <Input
+                            type="number"
+                            name={`education[${index}].year`}
+                            id={`education[${index}].year`}
+                            className="form-control"
+                            value={service.year}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "year",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageDescription}
+                          />
+                          {errors.education?.[index]?.department &&
+                            touched.education?.[index]?.department && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].department}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    
+                    <hr />
+                  </div>
+                ))}
+
+                <Card onClick={addEducation} className="p-3 text-center my-5" style={{ cursor: "pointer" }}>
+                      <h3 className="font-weight-bold text-primary">+ Add more education</h3> 
+                </Card>
+                {workExperience.map((work, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <div key={index}>
+                    <div className="text-right">
+                      {/* <Button outline className="icon-button" onClick={() => removework(index)}>
+                      <i className="simple-icon-close" />
+                    </Button> */}
+                  {workExperience.length > 1 && (
+                      <span>
+                        <Button
+                          id="closeButton"
+                          color="primary"
+                          outline
+                          className="icon-button"
+                          onClick={() => removeWorkExperience(index)}
+                        >
+                          {/* <i className="iconsminds-close" /> */}
+                          <span className="text-primary"><strong>x</strong></span>
+                        </Button>
+                      </span>
+                      )}
+                    </div>
+                    <Row>
+                      <Col md={6}>
+                        <FormGroup className="error-l-75">
+                          <Label>Company Name*</Label>
+                          <Input
+                            className="form-control"
+                            name={`education[${index}].company`}
+                            value={work.company}
+                            onChange={(e) =>
+                              handleWorkInputChange(
+                                index,
+                                "company",
+                                e.target.value
+                              )
+                            }
+                              // validate={validateworkName}
+                          />
+                          {errors.education?.[index]?.company &&
+                            touched.education?.[index]?.company && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].company}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for={`education[${index}].jobTitle`}>
+                            Job title*
+                          </Label>
+                          <Input
+                            name={`education[${index}].jobTitle`}
+                            id={`education[${index}].jobTitle`}
+                            className="form-control"
+                            value={work.jobTitle}
+                            onChange={(e) =>
+                              handleWorkInputChange(
+                                index,
+                                "jobTitle",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageTopic}
+                          />
+                          {errors.education?.[index]?.jobTitle &&
+                            touched.education?.[index]?.jobTitle && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].jobTitle}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for={`education[${index}].employmentType`}>
+                            Employment type*
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`education[${index}].employmentType`}
+                            id={`education[${index}].employmentType`}
+                            className="form-control"
+                            value={work.employmentType}
+                            onChange={(e) =>
+                              handleWorkInputChange(
+                                index,
+                                "employmentType",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageDescription}
+                          />
+                          {errors.education?.[index]?.employmentType &&
+                            touched.education?.[index]?.employmentType && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].employmentType}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                    
+                      <Col md={6}>
+                      <FormGroup>
+                          <Label for={`education[${index}].jobLocation`}>
+                            Job location*
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`education[${index}].jobLocation`}
+                            id={`education[${index}].jobLocation`}
+                            className="form-control"
+                            value={work.jobLocation}
+                            onChange={(e) =>
+                              handleWorkInputChange(
+                                index,
+                                "jobLocation",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageDescription}
+                          />
+                          {errors.education?.[index]?.jobLocation &&
+                            touched.education?.[index]?.jobLocation && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].jobLocation}
+                              </div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    
+                    <hr />
+                  </div>
+                ))}
+
+                <Card onClick={addWorkExperience} className="p-3 text-center my-5" style={{ cursor: "pointer" }}>
+                      <h3 className="font-weight-bold text-primary">+ Add more work experience</h3> 
+                </Card>
+                <Row>
+                  {" "}
+                  <Col>
+                    {" "}
+                    <Button color="primary" onClick={handlePrevStep}>
+                      Previous
+                    </Button>
+                  </Col>
+                  <Col className="text-right">
+                    <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                    profileLoading ? "show-spinner" : ""
+                  }`}>
+                    <span className="spinner d-inline-block">
+                    <span className="bounce1" />
+                    <span className="bounce2" />
+                    <span className="bounce3" />
+                  </span>
+                  <span className="label">
+                    Submit
+                  </span>
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            )}
+          </Formik>
+          )}
+          {currentStep === 2 && (
+            <Formik
+              innerRef={forms[2]}
+              initialValues={{
+                introVideo: fields.introVideo,
+                featuredArticle: fields.featuredArticle,
+                reasonForMentor: fields.reasonForMentor,
+                achievement: fields.achievement,
+              }}
+              onSubmit={(values) => {
+                postDataExperience(values);
+              }}
+              validateOnMount
+            >
+              {({ errors, touched }) => (
+                <Form className="av-tooltip tooltip-label-right">
+                  <Alert color="primary">
+                    <strong>Almost there!</strong> <br /> You&apos;re just one
+                    last step away from being a mentor and connecting with
+                    mentees all over the world! in this step, shows off your
+                    accomplishments and how you can help others.
+                    <br />
+                    <br /> Many of these fields are optional, but will help us
+                    get better insights into your work - and therefore
+                    exponentially increase your chances. They also give you a
+                    jumpstart once you&apos;re a mentor.
+                  </Alert>
+                  <FormGroup>
+                    <Row>
+                      <Col md={12}>
+                      <FormGroup>
+                    <Label for="skills">Skills*</Label>
+                    {/* <Field
+                      type="text"
+                      name="skills"
+                      id="skills"
+                      className="form-control"
+                      placeholder="Enter your skills (comma-separated)"
+                      validate={validateSkills}
+                      onChange={(e) => {
+                        const skillArray = e.target.value
+                          .split(",")
+                          .map((skill) => skill.trim());
+                        setFieldValue("skills", skillArray);
+                      }}
+                      autoComplete="off"
+                    /> */}
+                    
+                    <TagsInput
+                        value={skillsTag}
+                        onChange={handleTagsChange}
+                        inputProps={{ placeholder: "Add skills " }}
+                        // validate={validateSkills}
+                      />
+                    {/* {skillError && (
+                      <div className="invalid-feedback d-block">
+                        {skillErrorMessage}
+                      </div>
+                    )} */}
+                    <FormText>Add skill and press Enter </FormText>
+                    <FormText color="muted">
+                      Describe your expertise to connect with mentors who have
+                      similar interests.
+                      <br />
+                    {/* Comma-separated list of your skills  */}
+                    (keep it below 10).
+                      Mentors will use this to find you.
+                    </FormText>
+                  </FormGroup>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                  <FormGroup>
+                    <Row>
+                      <Col md={6}>
+                        <Label for="introVideo">Bio*</Label>
+                        <Field
+                          type="textarea"
+                          name="introVideo"
+                          id="introVideo"
+                          className="form-control"
+                          autoComplete="off"
+                        />
+                        {/* <FormText color="muted">
+                          Add a youTube video or record a Loom for your future
+                          mentees
+                        </FormText> */}
+                        {/* {errors.introvideo && touched.introvideo && (
+                    <div className="invalid-feedback d-block">
+                      {errors.introvideo}
+                    </div>
+                    )} */}
+                      </Col>
+                      <Col md={6}>
+                        <Label for="featuredArticle">Seeking for*</Label>
+                        <Field
+                          type="text"
+                          name="featuredArticle"
+                          id="featuredArticle"
+                          className="form-control"
+                          autoComplete="off"
+                        />
+                        {/* <FormText color="muted">
+                          Link an interview / podcast / piece of writing you are
+                          proud of or were featured in.
+                        </FormText> */}
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="skills">Certifications*</Label>
+                    
+                    <TagsInput
+                        value={skillsTag}
+                        onChange={handleTagsChange}
+                        inputProps={{ placeholder: "Add skills " }}
+                        // validate={validateSkills}
+                      />
+                    {/* {skillError && (
+                      <div className="invalid-feedback d-block">
+                        {skillErrorMessage}
+                      </div>
+                    )} */}
+                    <FormText>Add Certification and press Enter </FormText>
+                    {/* <FormText color="muted">
+                      Describe your expertise to connect with mentees who have
+                      similar interests.
+                      <br />
+                    Comma-separated list of your skills 
+                    (keep it below 10).
+                      Mentees will use this to find you.
+                    </FormText> */}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      Goal*
+                    </Label>
+                    <Field
+                      as="textarea"
+                      name="achievement"
+                      id="achievement"
+                      className="form-control"
+                      validate={validateAchievement}
+                      autoComplete="off"
+                    />
+                    {errors.achievement && touched.achievement && (
+                      <div className="invalid-feedback d-block">
+                        {errors.achievement}
+                      </div>
+                    )}
+                  </FormGroup>
+                  <Row>
+                    {" "}
+                    <Col>
+                      {" "}
+                      <Button color="primary" onClick={handlePrevStep}>
+                        Previous
+                      </Button>
+                    </Col>
+                    <Col className="text-right">
+                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
+                     experienceLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      Submit
+                    </span>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
+              )}
+            </Formik>
+          )}
+          {loading ? (
+            <div className="wizard-basic-step text-center pt-3">
+              <Spinner color="primary" className="mb-1" />
+              <p>Submitting</p>
+            </div>
+          ) : (
+            <>
+              {currentStep === 3 && (
+                <Row>
+                  <Colxx xxs="12" className="mb-4">
+                    <Card>
+                      <CardBody className="text-center">
+                        <i
+                          alt=""
+                          className="glyph-icon iconsminds-yes text-success"
+                          style={{ fontSize: "75px" }}
+                        />
+                        <Jumbotron className="text-center">
+                          <h1 className="display-4">Submitted Successfully!</h1>
+                          <p className="lead">We will reach you shortly</p>
+                          <hr className="my-4" />
+                          <p className="lead mb-0">
+                            <Button color="primary" size="lg">
+                              Check status
+                            </Button>
+                          </p>
+                        </Jumbotron>
+                      </CardBody>
+                    </Card>
+                  </Colxx>
+                </Row>
+              )}
+            </>
+          )}
+        </div>
+      </CardBody>
+    </Card>
+  );
+};
+
+export default injectIntl(ApplyAsMentor);
