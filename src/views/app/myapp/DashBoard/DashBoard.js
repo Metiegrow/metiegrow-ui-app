@@ -24,7 +24,7 @@ import TimestampConverter from "../Calculation/TimestampConverter";
 import language from "../my-login/Languages";
 
 const DashBoard = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
   const [currentMentorIndex, setCurrentMentorIndex] = useState(0);
   const [currentLawyerIndex, setCurrentLawyerIndex] = useState(0);
   const [currentAlumniIndex, setCurrentAlumniIndex] = useState(0);
@@ -180,10 +180,10 @@ const DashBoard = () => {
       dots.push(
         <button
           type="button"
-          className={`glide__bullet slider-dot ${i === currentIndex ? 'bg-primary' : 'bg-light'}`}
+          className={`glide__bullet slider-dot ${i === currentSessionIndex ? 'bg-primary' : 'bg-light'}`}
           key={i}
           data-glide-dir={`=${i}`}
-          onClick={() => setCurrentIndex(i)}
+          onClick={() => setCurrentSessionIndex(i)}
         />
       );
     }
@@ -251,9 +251,9 @@ const DashBoard = () => {
   //     dots.push(
   //       <button
   //         type="button"
-  //         className={` btn-xs primary glide__bullet slider-dot p-0 mx-1 ${i === currentIndex ? 'bg-primary' : 'bg-light'}`}
+  //         className={` btn-xs primary glide__bullet slider-dot p-0 mx-1 ${i === currentSessionIndex ? 'bg-primary' : 'bg-light'}`}
   //         key={i}
-  //         onClick={() => setCurrentIndex(i)}
+  //         onClick={() => setCurrentSessionIndex(i)}
   //         style={{ width: '10px', height: '10px' }}
   //       />
   //     );
@@ -261,13 +261,13 @@ const DashBoard = () => {
   //   return dots;
   // };
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentSessionIndex((prevIndex) => 
       prevIndex > 0 ? prevIndex - 1 : newSession.length - 1
     );
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentSessionIndex((prevIndex) => 
       prevIndex < newSession.length - 1 ? prevIndex + 1 : 0
     );
   };
@@ -312,7 +312,7 @@ const DashBoard = () => {
   };
 
 
-  const currentSession = newSession[currentIndex];
+  const currentSession = newSession[currentSessionIndex];
   const currentMentor = mentors[currentMentorIndex];
   // const currentMentor = mentors && currentMentorIndex >= 0 && currentMentorIndex < mentors.length ? mentors[currentMentorIndex] : null;
   const currentLawyer = lawyers[currentLawyerIndex];
@@ -320,12 +320,22 @@ const DashBoard = () => {
   
   const currentAlumni = alumni[currentAlumniIndex];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSessionIndex(prevIndex => (prevIndex + 1) % newSession.length);
+      setCurrentMentorIndex(prevIndex => (prevIndex + 1) % mentors.length);
+      setCurrentLawyerIndex(prevIndex => (prevIndex + 1) % lawyers.length);
+      setCurrentAlumniIndex(prevIndex => (prevIndex + 1) % alumni.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [newSession.length, mentors.length, lawyers.length, alumni.length]);
+
   // useEffect(() => {
   //   const interval = setInterval(() => {
-  //     setCurrentIndex((prevIndex) => 
+  //     setCurrentSessionIndex((prevIndex) => 
   //       prevIndex < newSession.length - 1 ? prevIndex + 1 : 0
   //     );
-  //   }, 3000);
+  //   }, 4000);
   //   return () => clearInterval(interval);
   // }, []);
   
@@ -334,33 +344,33 @@ const DashBoard = () => {
   //     setCurrentMentorIndex((prevIndex) => 
   //       prevIndex < mentors.length - 1 ? prevIndex + 1 : 0
   //     );
-  //   }, 3000);
+  //   }, 4000);
   //   return () => clearInterval(interval);
-  // }, []);
+  // }, [mentors]);
   
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     setCurrentLawyerIndex((prevIndex) => 
   //       prevIndex < lawyers.length - 1 ? prevIndex + 1 : 0
   //     );
-  //   }, 3000);
+  //   }, 4000);
   //   return () => clearInterval(interval);
-  // }, []);
+  // }, [lawyers]);
   
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     setCurrentAlumniIndex((prevIndex) => 
   //       prevIndex < alumni.length - 1 ? prevIndex + 1 : 0
   //     );
-  //   }, 3000);
+  //   }, 4000);
   //   return () => clearInterval(interval);
-  // }, []);
+  // }, [alumni]);
   const history = useHistory();
 
   const handleViewMentors = () => history.push("/app/mentor/list");
   const handleViewLawyers = () => history.push("/app/lawyer/list");
   const handleWalletClick = () => history.push("/app/mywallet");
-  const handleProfileClick = () => history.push("/app/user/myprofile")
+  const handleProfileClick = () => history.push("/app/user/myprofile");
 
   return (
     <>

@@ -44,10 +44,10 @@ const ChatApp = ({
   getContactsAction,
   getConversationsAction,
   changeConversationAction,
-  addMessageToConversationAction,
+  // addMessageToConversationAction,
 }) => {
   const [activeTab, setActiveTab] = useState('messages');
-  const [messageInput, setMessageInput] = useState('');
+  // const [messageInput, setMessageInput] = useState('');
   const scrollBarRef = useRef(null);
   useEffect(() => {
     document.body.classList.add('no-footer');
@@ -131,8 +131,9 @@ const ChatApp = ({
       const [userId, setUserId] = useState("");
       const [token, setToken] = useState("");
       const [peerId, setPeerId] = useState(pid);
-      const tokenRes = localStorage.getItem("tokenRes")
-      const [appKey, setAppKey] = useState("")
+      const userName = localStorage.getItem("userName");
+      const tokenRes = localStorage.getItem("tokenRes");
+      const [appKey, setAppKey] = useState("");
       // console.log("peer", peerId)
       useEffect(() => {
         const fetchData = async () => {
@@ -167,7 +168,14 @@ const ChatApp = ({
   const [loading, setLoading] = useState(true)
   const [loadingConversation, setLoadingConversation] = useState(true)
   const [chatLoading, setChatLoading] =useState(true)
+  const [fullName, setFullName] = useState([])
   // const [historyMessages, setHistoryMessages] = useState([]); 
+  const users = serverConversations.map(conversation => conversation.conversationId);
+  
+
+  console.log("users",users)
+  console.log("fullName",fullName)
+
 
 
 
@@ -194,6 +202,7 @@ const ChatApp = ({
           // console.log("conversation", res.data.conversations);
 
           setServerConversations(res.data.conversations)
+          console.log("conversation",res.data)
           setLoadingConversation(false)
         // addLog("");
           
@@ -201,6 +210,22 @@ const ChatApp = ({
         .catch((error) => {
           console.log('Error fetching server conversations:', error);
         });
+        conn.updateUserInfo('nickname', userName).then((res) => {
+          console.log("nicknameupdate",res)
+      })
+      //   conn.fetchUserInfoById(peerId, 'nickname').then((res) => {
+      //     console.log("nicknameres", res)
+      // })
+      if(users.length > 0){
+      conn.fetchUserInfoById(users).then((res) => {
+        console.log("bulk",res)
+        setFullName(res.data);
+    })
+  }
+      
+    //   conn.fetchUserInfoById("robi").then((res) => {
+    //     console.log("nicknameres2",res)
+    // })
         conn.getHistoryMessages({
           targetId: peerId , // The user ID of the peer user for one-to-one chat or group ID for group chat.
           chatType: 'singleChat', // The chat type: `singleChat` for one-to-one chat or `groupChat` for group chat.
@@ -277,7 +302,7 @@ const ChatApp = ({
   }, 3000);
 
   return () => clearTimeout(timeoutId);
-  }, [peerId,userId,token,appKey]);
+  }, [peerId,userId,token,appKey,users]);
 
 //   connection.getServerConversations({pageSize:50, cursor: ''}).then((res)=>{
 //     console.log("res",res)
@@ -501,7 +526,8 @@ const ChatApp = ({
               <p>There is no contacts</p>
             )}
 
-            {serverConversations.map((conversation) => (
+            {/* {serverConversations.map((conversation) => ( */}
+            {fullName.length > 0 && fullName.map((conversation) => (
           //     <>
           // <li key={conversation.conversationId}>
           //   {conversation.conversationId}
@@ -518,10 +544,10 @@ const ChatApp = ({
                       // >
                       <NavLink
                           className="d-flex"
-                          key={conversation.conversationId}
+                          key={conversation.nickname}
                           to="#"
                           location={{}}
-                          onClick={() => handleConversationClick(conversation.conversationId)}
+                          onClick={() => handleConversationClick(conversation.nickname)}
                           style={{ cursor: 'pointer' }}
                         >
                           {/* <img
@@ -532,13 +558,13 @@ const ChatApp = ({
                           <ThumbnailLetters
                           extraSmall 
                   rounded
-                  text={conversation.conversationId}
+                  text={conversation.nickname}
                   className="m-1"
                 />
                           <div className="d-flex flex-grow-1 min-width-zero">
                             <div className="m-2 pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
                               <div className="min-width-zero">
-                                <p className="mb-0 truncate">{conversation.conversationId}</p>
+                                <p className="mb-0 truncate">{conversation.nickname}</p>
                               </div>
                                <div className="separator mb-2" />
                             </div>
