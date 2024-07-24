@@ -179,7 +179,7 @@ const StayListing = () => {
                     >
                       <i className="iconsminds-sharethis text-primary" />
                     </Button>
-                    <Button onClick={handleInterestedButtonClick(data.id)} outline color="primary" size="xs">
+                    <Button onClick={() => handleInterestedButtonClick(data.id)} outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>
                   </Col>
