@@ -37,9 +37,9 @@ const JobListing = ({isPosted}) => {
   useEffect(() => {
     const fetchData = async () => {
       const params = {
-        page: currentPage,
+        page: currentPage-1,
         size: 20,
-        sort: [""]
+        // sort: [""]
       };
       try {
         // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
@@ -190,7 +190,7 @@ const handleInterestedButtonClick = async (id) => {
                     >
                       <i className="iconsminds-sharethis text-primary" />
                     </Button>
-                    <Button onClick={handleInterestedButtonClick(data.id)} outline color="primary" size="xs">
+                    <Button onClick={() =>handleInterestedButtonClick(data.id)} outline color="primary" size="xs">
                       I&apos;m interested
                     </Button>
                   </Col>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colxx } from "components/common/CustomBootstrap";
 import {
   Row,
@@ -85,7 +85,7 @@ const quillFormats = [
 // ];
 
 const StayPosting = ({ closeModal }) => {
-  const [availableFrom, setAvailableFrom] = useState(new Date());
+  const [availableFrom, setAvailableFrom] = useState(new Date().getTime());
   const [title, setTitle] = useState("");
   const [apartmentType, setApartmentType] = useState(null);
   const [BHKType, setBHKType] = useState(null);
@@ -94,12 +94,18 @@ const StayPosting = ({ closeModal }) => {
   const [roomMate, setRoomMate] = useState(null);
   const [expectedRent, setExpectedRent] = useState(null);
   const [expectedDeposit, setExpectedDeposit] = useState(null);
-  const [monthlyMaintenance, setMonthlyMaintenance] = useState(true);
+  const [monthlyMaintenance, setMonthlyMaintenance] = useState(false);
   const [maintenanceAmount, setMaintenanceAmount] = useState(null);
   const [parking, setParking] = useState(null);
   const [contact, setContact] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!monthlyMaintenance) {
+      setMaintenanceAmount(null);
+    }
+  }, [monthlyMaintenance]);
 
   const url = `${baseUrl}/api/posts/stay-post/`;
 
@@ -122,7 +128,7 @@ const StayPosting = ({ closeModal }) => {
         expectedDeposit,
         availableFrom,
         monthlyMaintenance,
-        maintenanceAmount,
+        maintenanceAmount : monthlyMaintenance ? maintenanceAmount : null,
         parking,
         contact,
         description,
@@ -142,11 +148,14 @@ const StayPosting = ({ closeModal }) => {
   };
 
   const handleDateChange = (date) => {
-    // setAvailableFrom(date);
-    const timestampInSeconds = date ? Math.floor(date.getTime() / 1000) : null;
+    setAvailableFrom(date);
+    // const timestampInSeconds = date ? Math.floor(date.getTime() / 1000) : null;
+    const timestampInMilliseconds = date ? date.getTime() : null;
+
     // console.log(timestampInSeconds);
-    setAvailableFrom(timestampInSeconds);
+    setAvailableFrom(timestampInMilliseconds);
   };
+  
 
   return (
     <div>
@@ -364,19 +373,19 @@ const StayPosting = ({ closeModal }) => {
                       name="monthlyMaintenance"
                       // onChange={(e) => setMonthlyMaintenance(e.target.value)}
                       onChange={(e) =>
-                        setMonthlyMaintenance(e.target.value === "true")
+                        setMonthlyMaintenance(e.target.value === "extra")
                       }
                       //   validate={}
                       className="form-control"
-                      value={monthlyMaintenance ? "true" : "false"}
+                      value={monthlyMaintenance ? "extra" : "include"}
                     >
                       <option key="" value="" disabled>
                         Select
                       </option>
-                      <option key="include" value="true">
+                      <option key="include" value="include">
                         Include
                       </option>
-                      <option key="Extra" value="false">
+                      <option key="Extra" value="extra">
                         Extra
                       </option>
                     </Field>
@@ -390,8 +399,9 @@ const StayPosting = ({ closeModal }) => {
                       <Input
                         type="number"
                         placeholder="Enter Amount"
-                        disabled={monthlyMaintenance}
+                        disabled={!monthlyMaintenance}
                         //   value={}
+                        value={maintenanceAmount || ''}
                         onChange={(e) => setMaintenanceAmount(e.target.value)}
                         //   className="col-12 col-md-3"
                       />
