@@ -393,16 +393,24 @@ const MentorCard = () => {
               <CardBody className=" " >
                   <div className="min-width-zero">
                     
-                    <CardText className=" font-weight-semibold text-xlarge mb-4">
+                    {/* <CardText className=" font-weight-semibold text-xlarge text-sm-small mb-4">
                      {mentors.firstName} {mentors.lastName}
+                    </CardText> */}
+                    <div className='mb-4 d-flex flex-wrap' style={{gap:"10px"}}>
+                    <CardText className=" font-weight-semibold text-xlarge ">
+                     {mentors.firstName} 
                     </CardText>
+                    <CardText className=" font-weight-semibold text-xlarge ">
+                     {mentors.lastName}
+                    </CardText>
+                    </div>
                     <CardText className=" text-large  text-muted mb-3">
                     {mentors.jobTitle}
                     </CardText>
                     <CardText className=" text-one mb-2 text-primary">
                      {mentors.company}
                     </CardText>
-                    <CardText className=" text-one mb-2 d-flex align-items-center">
+                    <CardText className=" text-one mb-2 d-flex align-items-center flex-wrap">
                     <span className='font-weight-semibold '><Rating total={5} rating={mentors.star} interactive={false} /></span>
                     <span className='font-weight-semibold'>{mentors.star}</span> 
                     <span> ({mentors.ratings} reviews)</span> 
@@ -412,7 +420,7 @@ const MentorCard = () => {
                      {/* {mentors.bio} */}
                      {truncateBio(mentors.bio, 20)}
                     </CardText>
-                   <CardText className='d-flex'>
+                   <CardText className='d-flex flex-wrap'>
                   
                    {/* {mentordetails.skills&&mentordetails.skills.map((skill) => (
               <span key={skill} className="">{skill}</span>
@@ -420,7 +428,7 @@ const MentorCard = () => {
             {mentors.skills && mentors.skills.slice(0, 3).map((skill,index) => (
           <div key={skill} className={index !== 0 ? 'm-2' : `my-2 mr-2`} id='btn.rounded'>
           
-              <Button color="light" className="mb-2 font-weight-semibold" size='xs'>
+              <Button color="light" className="mb-2 font-weight-semibold " size='xs'>
                 {skill}
               </Button>
 
@@ -437,7 +445,8 @@ const MentorCard = () => {
                         View Profile
               </Button>
               </NavLink> */}
-              <Button color="primary " onClick={()=>history.push(`/app/mentorprofile/${mentors.id}`)} className="default w-80 py-2  rounded" >
+              <Button color="primary " onClick={()=>history.push(`/app/mentorprofile/${mentors.id}`)} 
+              className="default w-80 py-2 rounded" >
                         View Profile
               </Button>
               

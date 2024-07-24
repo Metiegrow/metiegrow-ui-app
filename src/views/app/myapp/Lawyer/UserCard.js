@@ -208,16 +208,24 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
               <CardBody className=" " >
                   <div className="min-width-zero">
                     
-                    <CardText className=" font-weight-semibold text-xlarge mb-4">
+                    {/* <CardText className=" font-weight-semibold text-xlarge mb-4">
                      {users.firstName} {users.lastName}
+                    </CardText> */}
+                    <div className='d-flex flex-wrap mb-4' style={{gap:"10px"}}>
+                    <CardText className=" font-weight-semibold text-xlarge ">
+                     {users.firstName} 
                     </CardText>
+                    <CardText className=" font-weight-semibold text-xlarge">
+                      {users.lastName}
+                    </CardText>
+                    </div>
                     <CardText className=" text-large  text-muted mb-3">
                     {users.jobTitle}
                     </CardText>
                     {/* <CardText className=" text-one mb-2 text-primary">
                      {users.company}
                     </CardText> */}
-                    <CardText className=" text-one mb-2 d-flex align-items-center">
+                    <CardText className=" text-one mb-2 d-flex flex-wrap align-items-center">
                     <span className='font-weight-semibold '><Rating total={5} rating={users.star} interactive={false} /></span>
                     <span className='font-weight-semibold'>{users.star}</span> 
                     <span> ({users.ratings} reviews)</span> 
@@ -226,7 +234,7 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
                     <CardText className=" text-one mb-2">
                      {users.bio}
                     </CardText>
-                   <CardText className='d-flex'>
+                   <CardText className='d-flex flex-wrap'>
                   
               
             {users.topic && users.topic.slice(0,3).map((skill,index) => (
