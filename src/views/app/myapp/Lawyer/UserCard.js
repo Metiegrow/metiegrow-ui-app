@@ -26,6 +26,9 @@ const UserCard = () => {
   const [isLast, setIsLast] = useState(true);
   const [totalPage, setTotalPage] = useState(1);
 
+  const [searchClick, setSearchClick] = useState("")
+  const [searchClicked, setSearchClicked] = useState(false)
+
   const url = `${baseUrl}/api/lawyer/lawyercards`
 
   const handleTopicsChange = (topics) => setSelectedTopics(topics);
@@ -44,6 +47,15 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
 
   const [userdetails,setUserDetails]=useState('')
   const [inputkey,setInputKey]=useState('');
+  const handleSearchByName = () => {
+    setSearchClick(inputkey);
+    setSearchClicked(true);
+  } 
+const handleSearchClear = () =>{
+  setInputKey("");
+  setSearchClick("");
+  setSearchClicked(false);
+}
   // const url=`${baseUrl}/user/cards`
   const history=useHistory();
 
@@ -79,15 +91,19 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
       params.location = selectedLocation;
     }
     if (selectedPrice) {
-      params.price = selectedPrice;
+      // params.price = selectedPrice;
+      params.minPrice = selectedPrice.at(0);
+      params.maxPrice = selectedPrice.at(1);
     }
     if (selectedLanguage) {
       params.languages = selectedLanguage;
     }
     if (selectedTopics) {
       params.topic = selectedTopics;
+    }if(searchClick){
+      params.firstName = searchClick;
     }
-    params.size = 2;
+    params.size = 10;
     params.page = currentPage - 1;
       try {
         const response = await axios.get(url,{params});
@@ -103,7 +119,7 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
       }
     };
     LawyerCardDetails();
-  }, [selectedLocation,selectedLanguage,selectedTopics,currentPage]);
+  }, [selectedLocation,selectedLanguage,selectedTopics,currentPage,selectedPrice,searchClick]);
 
  
   
@@ -119,14 +135,17 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
        <input
             type="text"
             className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
-            placeholder='Search by skill or job title'
+            placeholder='Search by name'
+            disabled={searchClicked}
             value={inputkey}
             onChange={(e) =>setInputKey(e.target.value)}
           />
           
+          {!searchClicked ? (
       
-          <Button className='ml-3 ' color='primary' >Search</Button>
-        
+          <Button disabled={!inputkey} className='ml-3 ' color='primary' onClick={() => handleSearchByName()} >Search</Button> ) : (
+          <Button className='ml-3 ' onClick={() => handleSearchClear()} color='primary' >Clear</Button>
+        )}
         
           
            
@@ -295,6 +314,7 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
    
 </>
       )}
+      {isLawyerCardFetched && (
       <Pagination
         currentPage={currentPage}
         totalPage={totalPage}
@@ -302,6 +322,7 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
         lastIsActive = {isFirst}
         firstIsActive = {isLast}
       />
+    )}
    
     </div>
   );

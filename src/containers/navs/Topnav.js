@@ -164,6 +164,8 @@ if (roleRes.includes("MENTOR")) {
 
   const handleLogout = () => {
     logoutUserAction(history);
+    localStorage.removeItem('roleRes');
+  localStorage.removeItem('tokenRes');
   };
 
   const renderMySlots = () => {

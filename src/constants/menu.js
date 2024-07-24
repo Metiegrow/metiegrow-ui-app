@@ -1,5 +1,10 @@
 import { adminRoot } from "./defaultValues";
 
+function getTokenRes() {
+  return localStorage.getItem("roleRes");
+}
+const role = getTokenRes();
+
 const data = [
   {
     id: "profile",
@@ -142,4 +147,13 @@ const data = [
     to: `${adminRoot}/classroom`,
   },
 ];
+
+if (role === "MENTEE") {
+  data.splice(1, 0, {
+    id: "Dashboard",
+    icon: "iconsminds-shop-4",
+    label: "Dashboard",
+    to: `${adminRoot}/dashboard`,
+  });
+}
 export default data;

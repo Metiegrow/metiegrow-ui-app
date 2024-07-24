@@ -18,6 +18,11 @@ const ViewMyApplications = React.lazy(() =>
     /* webpackChunkName: "views-app" */ './myapp/my-applications/my-applications'
   )
 );
+const ViewDashBoard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ './myapp/DashBoard/DashBoard'
+  )
+);
 const ViewMyDetails = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ './myapp/my-details/my-details')
 );
@@ -374,6 +379,11 @@ const roleRes = getRoleRes();
               path={`${match.url}/myapplications`}
               exact
               render={(props) => <ViewMyApplications {...props} />}
+            />
+            <Route
+              path={`${match.url}/dashboard`}
+              exact
+              render={(props) => <ViewDashBoard {...props} />}
             />
             <Route
               path={`${match.url}/mydetails`}

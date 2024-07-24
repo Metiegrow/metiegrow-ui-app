@@ -15,8 +15,10 @@ import {
   ModalHeader,
   ModalBody,
   Badge,
+  Spinner,
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const LawyerJobNotes = ({ jobId }) => {
   const [notes, setNotes] = useState([]);
@@ -29,20 +31,30 @@ const LawyerJobNotes = ({ jobId }) => {
   const [editedTitle, setEditedTitle] = useState("");
   const [editedText, setEditedText] = useState("");
   const [update, setUpdate] = useState(false)
+  const [notsFetched, setNotesFetched] = useState(false);
+  const [addNoteLoading, setAddNoteLoading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+  // const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState({});
 
   const [addModal, setAddModal] = useState(false);
 
   const notesUrl = `${baseUrl}/api/lawyer/job/${jobId}/notes`;
   useEffect(() => {
-    axios
-      .get(notesUrl)
-      .then((response) => {
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get(notesUrl);
         setNotes(response.data);
-      })
-      .catch((error) => {
+        setNotesFetched(true);
+      } catch (error) {
         console.error("Error fetching notes:", error);
-      });
+        setNotesFetched(false);
+      }
+    };
+  
+    fetchNotes();
   }, [update]);
+  
 
   const toggleAddModal = () => {
     setAddModal(!addModal);
@@ -56,41 +68,57 @@ const LawyerJobNotes = ({ jobId }) => {
     setEditModal(!editModal);
   };
 
-  const handleAddNote = () => {
+  const handleAddNote = async () => {
+    setAddNoteLoading(true);
     if (newTitle.trim() !== "" && newNote.trim() !== "") {
       const newNoteData = {
         title: newTitle,
         details: newNote,
       };
-      axios
-        .post(notesUrl, newNoteData)
-        .then((response) => {
-          const updatedNotes = [...notes, response.data];
-          setNotes(updatedNotes);
-          setUpdate(!update)
-          toggleAddModal();
-        })
-        .catch((error) => {
+  
+      try {
+        const response = await axios.post(notesUrl, newNoteData);
+        // const updatedNotes = [...notes, response.data];
+        // setNotes(updatedNotes);
+        setUpdate(!update);
+        toggleAddModal();
+        setAddNoteLoading(false);
+      ToasterComponent('success', response.data.statuses);
+      } catch (error) {
+        if(error.response){
+          ToasterComponent('error', error.response.data.statuses);
+        } else{
           console.error("Error adding note:", error);
-        });
+        }
+        setAddNoteLoading(false);
+      }
+  
       setNewTitle("");
       setNewNote("");
     }
   };
+  
 
-  const handleDeleteNote = (id) => {
-    axios
-      .delete(`${baseUrl}/api/lawyer/job/notes/${id}`)
-      .then((response) => {
-        const updatedNotes = notes.filter((note) => note.id !== id);
-        setNotes(updatedNotes);
-        console.log(response);
-        setUpdate(!update)
-      })
-      .catch((error) => {
+  const handleDeleteNote = async (id) => {
+    setDeleteLoading(prev => ({ ...prev, [id]: true }));
+    try {
+      const response = await axios.delete(`${baseUrl}/api/lawyer/job/notes/${id}`);
+      const updatedNotes = notes.filter((note) => note.id !== id);
+      setNotes(updatedNotes);
+      console.log(response);
+      setUpdate(!update);
+      ToasterComponent('success', response.data.statuses);
+    } catch (error) {
+      if(error.response){
+        ToasterComponent('error', error.response.data.statuses);
+      } else{
         console.error("Error deleting note:", error);
-      });
+      }
+    } finally {
+      setDeleteLoading(prev => ({ ...prev, [id]: false }));
+    }
   };
+  
 
   const handleEditNote = (id) => {
     const noteToEdit = notes.find((note) => note.id === id);
@@ -100,31 +128,41 @@ const LawyerJobNotes = ({ jobId }) => {
     toggleEditModal();
   };
 
-  const saveEditedNote = () => {
+  const saveEditedNote = async () => {
+    setSaveLoading(true);
     const updatedNote = {
       title: editedTitle,
       details: editedText,
     };
-    axios
-      .put(`${baseUrl}/api/lawyer/job/notes/${editNoteId}`, updatedNote)
-      .then((response) => {
-        console.log(response);
-        const updatedNotes = notes.map((note) => {
-          if (note.id === editNoteId) {
-            return { ...note, title: editedTitle, text: editedText };
-          }
-          return note;
-        });
-        setNotes(updatedNotes);
-        setUpdate(!update)
-        toggleEditModal();
-      })
-      .catch((error) => {
-        console.error("Error updating note:", error);
+  
+    try {
+      const response = await axios.put(`${baseUrl}/api/lawyer/job/notes/${editNoteId}`, updatedNote);
+      // console.log(response);
+  
+      const updatedNotes = notes.map((note) => {
+        if (note.id === editNoteId) {
+          return { ...note, title: editedTitle, text: editedText };
+        }
+        return note;
       });
+      ToasterComponent('success', response.data.statuses);
+      setSaveLoading(false);
+      setNotes(updatedNotes);
+      setUpdate(!update);
+      toggleEditModal();
+    } catch (error) {
+      setSaveLoading(false);
+      if(error.response){
+        ToasterComponent('error', error.response.data.statuses);
+      } else{
+        console.error("Error updating note:", error);
+      }
+      
+    }
   };
+  
 
-  const sortedNotes = [...notes].sort((a, b) => b.createdOn - a.createdOn);
+  // const sortedNotes = [...notes].sort((a, b) => b.createdOn - a.createdOn);
 
   const userName = localStorage.getItem('userName');
 
@@ -204,20 +242,35 @@ const LawyerJobNotes = ({ jobId }) => {
                         autoComplete="off"
                       />
                     </FormGroup>
-                    <Button color="primary" block>
-                      Add Note
+                    <Button type="submit" color="primary" block className={`btn-shadow btn-multiple-state ${
+                      addNoteLoading ? "show-spinner" : ""
+                    }`}>
+                      <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                    Add Note
+                    </span>
                     </Button>
                   </Form>
                 </ModalBody>
               </Modal>
-
+              {!notsFetched ? (
+                <div className="d-flex justify-content-center mt-4">
+                <Spinner color="primary" className="mb-1" />
+              </div>
+                  ) : (
               <Row>
-              {sortedNotes.length === 0 ? (
+              {notes.length === 0 ? (
                   <Col className="mt-4 d-flex justify-content-center align-items-center">
                   <h4 className="text-center">There are no notes.</h4>
                 </Col>
                 ) : (
-                sortedNotes.map((note) => (
+                  notes.map((note) => (
+                  <>
+                  
                   <Col key={note.id} xs={12} sm={12} lg={12}>
                     <Card className="mt-3">
                       <div className="p-3 d-flex flex-column">
@@ -264,14 +317,18 @@ const LawyerJobNotes = ({ jobId }) => {
                           </Col>
                           {userName === note.name && (
                           <Col className="" lg={2}>
-                            <Button
-                              outline
-                              onClick={() => handleDeleteNote(note.id)}
-                              color="danger"
-                              className="icon-button"
-                            >
-                              <i className="simple-icon-trash" />
-                            </Button>
+                              <Button
+                                outline
+                                onClick={() => handleDeleteNote(note.id)}
+                                color="danger"
+                                className="icon-button"
+                              >
+                                {!deleteLoading[note.id] ? (
+                                  <i className="simple-icon-trash" />
+                                ) : (
+                                  <Spinner size="sm" />
+                                )}
+                              </Button>
                             {/* <Button color="primary" size="sm" onClick={() => handleEditNote(note.id)}>Edit</Button>{' '} */}
                             {/* <Button color="danger" size="sm" onClick={() => handleDeleteNote(note.id)}>Delete</Button> */}
                           </Col>
@@ -280,9 +337,12 @@ const LawyerJobNotes = ({ jobId }) => {
                       </div>
                     </Card>
                   </Col>
+                  </>
                 ))
               )}
               </Row>
+                  )}
+
             </ModalBody>
           </Modal>
           <Modal
@@ -323,8 +383,17 @@ const LawyerJobNotes = ({ jobId }) => {
                     autoComplete="off"
                   />
                 </FormGroup>
-                <Button color="primary" block>
-                  Save Changes
+                <Button type="submit" color="primary" block className={`btn-shadow btn-multiple-state ${
+                      saveLoading ? "show-spinner" : ""
+                    }`}>
+                  <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                    Save Changes
+                    </span>
                 </Button>
               </Form>
             </ModalBody>

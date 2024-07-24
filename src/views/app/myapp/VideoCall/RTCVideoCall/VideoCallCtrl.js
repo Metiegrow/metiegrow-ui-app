@@ -338,7 +338,7 @@ const VideoCallCtrl = (props) => {
           Time Remaining :{" "}
           <span className="text-danger">{minutesRemaining1}</span>
         </h4> */}
-        {minutesRemaining1 > 0 && minutesRemaining1 <= 10 ? (
+        {minutesRemaining1 && minutesRemaining1 > 0 && minutesRemaining1 <= 10 ? (
           // <div>Time Remaining : {minutesRemaining1} minutes</div>
           <h4>
             Time Remaining :{" "}
@@ -347,7 +347,7 @@ const VideoCallCtrl = (props) => {
         ) : (
           <></>
         )}
-        {roleRes.includes("MENTEE") && minutesRemaining1 === 0 ? (
+        {minutesRemaining1 && roleRes.includes("MENTEE") && minutesRemaining1 === 0 ? (
           <div>
             <h4>
             Extend by 15 minutes? <Button color="primary">Pay from wallet</Button>
@@ -356,7 +356,7 @@ const VideoCallCtrl = (props) => {
         ) : null}
       </div>
       <div className="row" style={{ height: "90%" }}>
-        {start && tracks && <Video tracks={tracks} users={users} createdByName={createdByName} bookedByName={bookedByName} />}
+        {start && tracks ? (<Video tracks={tracks} users={users} createdByName={createdByName} bookedByName={bookedByName} />) : <div className="loading" />}
       </div>
       <div className="row ml-2" style={{ height: "10%" }}>
         {ready && tracks && (

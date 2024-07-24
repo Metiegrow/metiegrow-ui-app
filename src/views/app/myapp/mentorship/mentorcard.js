@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Colxx } from 'components/common/CustomBootstrap';
 import {useHistory} from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
-import { adminRoot, baseUrl } from 'constants/defaultValues';
+import { baseUrl } from 'constants/defaultValues';
 import React, { useState ,useEffect} from 'react';
 import {  Button, Card, CardBody, CardText, Row } from 'reactstrap'
 import Pagination from "containers/pages/Pagination";
@@ -21,10 +21,14 @@ const MentorCard = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedTools, setSelectedTools] = useState("");
   const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [selectedPrice, setSelectedPrice] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
+
+  const [searchClick, setSearchClick] = useState("")
+  const [searchClicked, setSearchClicked] = useState(false)
+
   // const [pageSize, setPageSize] = useState(2)
 // console.log(paginationMeta.totalPage)
 // console.log(paginationMeta.first)
@@ -44,6 +48,7 @@ const MentorCard = () => {
 
   const [isMentorCardFetched, setIsMentorCardFetched] = useState(false)
 
+  
 	
   // const url1=`${baseUrl}/mentorDetails`
   // const url1=`${baseUrl}/api/mentor`
@@ -59,7 +64,7 @@ const MentorCard = () => {
 // const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
  // Using useLocation hook
   // const age = new URLSearchParams(location.search);
-
+  
   // let filteredUrl = `${url}?`;
   // if (firstNameParam) filteredUrl += `firstName=${firstNameParam}&`;
   // if (jobTitleParam) filteredUrl += `jobTitle=${jobTitleParam}&`;
@@ -74,7 +79,18 @@ const MentorCard = () => {
   // const[mentorfilter,setMentorFilter]=useState([]);
   // const [image]=useState('');
   const [inputkey,setInputKey]=useState('')
-  const [filteredMentors, setFilteredMentors] = useState([]);
+  const handleSearchByName = () => {
+    setSearchClick(inputkey);
+    setSearchClicked(true);
+  } 
+const handleSearchClear = () =>{
+  setInputKey("");
+  setSearchClick("");
+  setSearchClicked(false);
+}
+
+    
+  // const [filteredMentors, setFilteredMentors] = useState([]);
   const truncateBio = (bio, lineCount) => {
    
     const words = bio.split(' ');
@@ -153,9 +169,13 @@ const MentorCard = () => {
       params.tools = selectedTools;
     }
     if (selectedPrice) {
-      params.price = selectedPrice;
+      // params.price = selectedPrice;
+      params.minPrice = selectedPrice.at(0);
+      params.maxPrice = selectedPrice.at(1);
+    }if(searchClick){
+      params.firstName = searchClick;
     }
-    params.size = 3;
+    params.size = 10;
     params.page = currentPage - 1;
       try {
         const response = await axios.get(url2,{params});
@@ -168,7 +188,7 @@ const MentorCard = () => {
       }
     };
     mentorCardDetails();
-  }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice,currentPage]);
+  }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice,currentPage,searchClick]);
 
 //   useEffect(() => {
 //     if (!paginationMeta.last) {
@@ -194,25 +214,25 @@ const MentorCard = () => {
 //     return undefined;
 //   }, [paginationMeta]);
 
-  useEffect(() => {
-    const filterMentors = () => {
-      const filtered = mentordetails.filter((mentor) => {
-        const lowercasedFilter = inputkey.toLowerCase();
-        return (
-          mentor.jobTitle.toLowerCase().includes(lowercasedFilter) ||
-          mentor.skills.some(skill => skill.toLowerCase().includes(lowercasedFilter))
-        );
-      });
-      setFilteredMentors(filtered);
-    };
-    filterMentors();
-  }, [inputkey, mentordetails]);
+  // useEffect(() => {
+  //   const filterMentors = () => {
+  //     const filtered = mentordetails.filter((mentor) => {
+  //       const lowercasedFilter = inputkey.toLowerCase();
+  //       return (
+  //         mentor.jobTitle.toLowerCase().includes(lowercasedFilter) ||
+  //         mentor.skills.some(skill => skill.toLowerCase().includes(lowercasedFilter))
+  //       );
+  //     });
+  //     setFilteredMentors(filtered);
+  //   };
+  //   filterMentors();
+  // }, [inputkey, mentordetails]);
 
   // const history = useHistory();
-  const handleMySlotsClick = () =>{
-    history.push(`${adminRoot}/calendar/mentor/appointment`)
-  }
-  const role = localStorage.getItem("roleRes");
+  // const handleMySlotsClick = () =>{
+  //   history.push(`${adminRoot}/calendar/mentor/appointment`)
+  // }
+  // const role = localStorage.getItem("roleRes");
  
   
   // useEffect(() => {
@@ -283,23 +303,26 @@ const MentorCard = () => {
        <input
             type="text"
             className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
-            placeholder='Search by skill or job title'
+            placeholder='Search by name'
+            // placeholder='Search by skill or job title'
+            disabled={searchClicked}
             value={inputkey}
             onChange={(e) =>setInputKey(e.target.value)}
             // onChange={handleInputChange}
           />
           {/* <i className="simple-icon-magnifier" /> */}
-      
-          <Button className='ml-3 ' color='primary' >Search</Button>
-        
+      {!searchClicked ? (
+          <Button disabled={!inputkey} className='ml-3 ' onClick={() => handleSearchByName()} color='primary' >Search</Button>) : (
+          <Button className='ml-3 ' onClick={() => handleSearchClear()} color='primary' >Clear</Button>
+        )}
         
           
            
-       {role === "MENTOR" && (
+       {/* {role === "MENTOR" && (
        
        <Button color='primary' className='ml-3' onClick={handleMySlotsClick}>My slots</Button>
        
-       )}
+       )} */}
        </div>
       
       
@@ -331,7 +354,7 @@ const MentorCard = () => {
        <>
       <div>
       
-        {filteredMentors.length===0?(
+        {mentordetails.length===0?(
           <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto '>
       <Card>
           <CardBody>
@@ -340,7 +363,7 @@ const MentorCard = () => {
          </Card>
       </Colxx>
         ):(
-          Array.isArray(filteredMentors) && filteredMentors.map((mentors)=>{
+          Array.isArray(mentordetails) && mentordetails.map((mentors)=>{
     return (
       <Colxx xxs="12" key={mentors.id}>
       <Row>
@@ -475,7 +498,7 @@ const MentorCard = () => {
       
 </>
       )}
-
+{isMentorCardFetched && (
       <Pagination
         currentPage={currentPage}
         totalPage={paginationMeta.totalPage}
@@ -483,6 +506,7 @@ const MentorCard = () => {
         lastIsActive = {paginationMeta.last}
         firstIsActive = {paginationMeta.first}
       />
+    )}
    
       {/* <Colxx xxs="12">
       <Row>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  NavLink,
+  // NavLink,
   Row,
   Input,
   Label,
@@ -237,7 +237,7 @@ const LawyerMyProfile = () => {
                   </h1>
                 </div>
               </div>
-              <div className="mr-4">
+              {/* <div className="mr-4">
               <NavLink className="d-none d-md-inline-block">
                   <Button
                     color="light"
@@ -248,7 +248,7 @@ const LawyerMyProfile = () => {
                     <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
                   </Button>
                 </NavLink>
-              </div>
+              </div> */}
             </div>
           </Card>
 

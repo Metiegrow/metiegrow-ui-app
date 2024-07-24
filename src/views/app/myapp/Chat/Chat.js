@@ -233,7 +233,7 @@ const ChatApp = ({
       .catch((error) => {
         // console.log("pp2id",peerId)
         console.log('Error fetching historical messages:', error);
-        addLog('Error fetching historical messages');
+        // addLog('Error fetching historical messages');
         
       });
       },
