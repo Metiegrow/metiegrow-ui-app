@@ -12,14 +12,17 @@ import {
   Modal,
   ModalBody,
   ModalHeader,
-  ModalFooter
+  ModalFooter,
+  FormGroup
 } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
-
+import Select from "react-select";
+import { ReactSortable } from "react-sortablejs";
 import { Colxx } from "components/common/CustomBootstrap";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
+import language from "../my-login/Languages";
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -39,8 +42,47 @@ const MyProfile = () => {
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
-  const [modaleditProfile, setModalEditProfile] = useState(false);
+  const [modalEditProfile, setModalEditProfile] = useState(false);
+  const [modalEditExperience, setModalEditExperience] = useState(false);
+  const [modalEditSkills, setModalEditSkills] = useState(false);
+  const [modalEditLanguage, setModalEditLanguage] = useState(false);
+  const [modalEditEducation, setModalEditEducation] = useState(false);
+  const [imageEditModal, setImageEditModal] = useState(false);
   const [modalAbout,setModalAbout]=useState(false);
+
+
+  const [experienceEditOpen, setExperienceEditOpen] = useState(false);
+  const [educationEditOpen, setEducationEditOpen] = useState(false);
+
+
+  const [skills, setSkills] = useState(["html","css","java","React"]);
+  const [languages, setLanguages] = useState([]);
+
+
+  const handleAddLanguages = (newLanguages) => {
+    setLanguages([...languages, newLanguages]);
+  };
+
+  const handleRemoveLanguages = (index) => {
+    setLanguages(languages.filter((_, i) => i !== index));
+  };
+
+  const languageOptions = language.map((option) => ({
+    value: option.iso_code,
+    label: option.name,
+  }));
+
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+
+  const handleChange = (selectedOptions) => {
+    const languagesArray = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
+    // console.log("arraychk", languagesArray);
+    handleAddLanguages(languagesArray[0]);
+    setSelectedLanguages([]);
+  };
+  
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
@@ -156,6 +198,17 @@ const MyProfile = () => {
 
   const countryName = country.find((c) => c.iso_code === location)?.name;
   const menteeName = localStorage.getItem("userName");
+
+  const handleEditEducation = () => {
+    setEducationEditOpen(true);
+  } 
+  const handleEditExperience = () => {
+    setExperienceEditOpen(true);
+  }
+
+  const handleImageClick = () => setImageEditModal(true);
+
+
   return (
     <div className="mentor-profile">
       {/* <div className=""> */}
@@ -184,7 +237,7 @@ const MyProfile = () => {
                     src={`${baseUrl}/${image}`}
                     // src="/assets/img/profiles/2.jpg"
                     className="mx-2 rounded-circle img-thumbnail border"
-                    style={{ width: "110px", height: "110px", objectFit: "cover" }}
+                    style={{ width: "110px", height: "110px", objectFit: "cover", cursor: "pointer" }}
                     alt="img"
                   />
                 )}
@@ -424,7 +477,11 @@ const MyProfile = () => {
                   <Row>
                     <Col>
                       <Card>
-                        <CardBody className="rounded-top bg-primary"
+                        <CardBody  style={{
+                            background: "linear-gradient(to right, #7B42C5, #AA5D93)",
+                            color: "white",
+                            borderRadius: "9px 9px 0 0",
+                          }}
                         >
                         <div className="text-end w-100  
                          m-0 d-flex justify-content-end "
@@ -432,8 +489,8 @@ const MyProfile = () => {
                         >
                         <Button
                           color="light"
-                          
-                          className=""
+                          className="icon-button"
+
                           size="sm"
                         >
                           <i className="simple-icon-pencil text-primary font-weight-bold" />
@@ -442,13 +499,71 @@ const MyProfile = () => {
                         </div>
                     
                         <div className="position-relative" 
-                        style={{position:"relative",top:"60px"}}>
-                        <img
+                        style={{position:"relative",top:"70px"}}>
+                        {/* <img
                         src="/assets/img/profiles/2.jpg"
                         className=" rounded-circle img-thumbnail border border-3"
                         style={{ width: "130px", height: "130px", objectFit: "cover" }}
                         alt="img"
-                  />
+                        onClick={() => handleImageClick()}
+                  /> */}
+                  <button 
+                  type="button"
+                    className="btn p-0" 
+                    style={{ border: 'none', background: 'none' }} 
+                    onClick={() => handleImageClick()}
+                    aria-label="Profile image"
+                  >
+                    <img
+                      src="/assets/img/profiles/2.jpg"
+                      className="rounded-circle img-thumbnail border border-3"
+                      style={{ width: "130px", height: "130px", objectFit: "cover" }}
+                      alt="Profile"
+                    />
+                  </button>
+
+                  <Modal
+                        isOpen={imageEditModal}
+                        toggle={() => setImageEditModal(!imageEditModal)}
+                        className=""
+                        size="lg"
+                        style={{ borderRadius: '10px', overflow: 'hidden' }}
+                      >
+                  <ModalHeader style={{ borderBottom: 'none' }}>
+                    <h2 className="font-weight-bold">Profile photo</h2>
+                  </ModalHeader>
+                  <ModalBody className="d-flex justify-content-center align-items-center">
+                    <img
+                        src="/assets/img/profiles/2.jpg"
+                        className="rounded-circle img-thumbnail border border-3"
+                        style={{ width: "130px", height: "130px", objectFit: "cover" }}
+                        alt="img"
+                    />
+                </ModalBody>
+
+                  <ModalFooter 
+                  // style={{ borderTop: 'none' }} 
+                  className="d-flex align-items-center justify-content-center">
+                    <Button
+                    outline
+                      color="primary"
+                      onClick={() => setModalAbout(false)}
+                      className="icon-button"
+                      style={{ border: 'none' }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>{' '}
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => setModalAbout(false)}
+                      className="icon-button"
+                      style={{ border: 'none' }}
+                    >
+                      <i className="simple-icon-trash" />
+                    </Button>
+                  </ModalFooter>
+                </Modal>
                         </div>
                   
                         
@@ -459,7 +574,8 @@ const MyProfile = () => {
                         <Button
                           color="primary"
                           outline
-                          className=""
+                          className="icon-button"
+                          style={{ border: 'none' }}
                           size="sm"
                           onClick={() => setModalEditProfile(true)}
                         >
@@ -480,12 +596,13 @@ const MyProfile = () => {
                        </div>
                         </CardBody>
                         <Modal
-                        isOpen={modaleditProfile}
-                        toggle={() => setModalEditProfile(!modaleditProfile)}
+                        isOpen={modalEditProfile}
+                        toggle={() => setModalEditProfile(!modalEditProfile)}
                         className=""
                         size="lg"
+                        style={{ borderRadius: '10px', overflow: 'hidden' }}
                       >
-                  <ModalHeader>
+                  <ModalHeader style={{ borderBottom: 'none' }}>
                     <h2 className="font-weight-bold">Edit Profile</h2>
                   </ModalHeader>
                   <ModalBody>
@@ -583,7 +700,7 @@ const MyProfile = () => {
                          
                        
                   </ModalBody>
-                  <ModalFooter className="d-flex align-items-center justify-content-center">
+                  <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
                     <Button
                       color="primary"
                       onClick={() => setModalEditProfile(false)}
@@ -607,20 +724,22 @@ const MyProfile = () => {
                     <Col>
                       <Card>
                         <CardBody>
-                        <div className="text-end w-100  d-flex justify-content-end">
-                        <Button
-                          color="primary"
-                          outline
-                          className=""
-                          size="sm"
-                          onClick={() => setModalAbout(true)}
-                        >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                        
-                        </div>
+                        <Row className="align-items-center">
+                          <Col className="d-flex justify-content-between">
+                            <h2 className="font-weight-bold">About</h2>
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button"
+                              size="sm"
+                              onClick={() => setModalAbout(true)}
+                              style={{ border: 'none' }}
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+                          </Col>
+                        </Row>
                         <div>
-                        <h2 className="font-weight-bold">About</h2>
                         <p className="text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, at?</p>
                         </div>
                           
@@ -630,8 +749,9 @@ const MyProfile = () => {
                         toggle={() => setModalAbout(!modalAbout)}
                         className=""
                         size="lg"
+                        style={{ borderRadius: '10px', overflow: 'hidden' }}
                       >
-                  <ModalHeader>
+                  <ModalHeader style={{ borderBottom: 'none' }}>
                     <h2 className="font-weight-bold">About</h2>
                   </ModalHeader>
                   <ModalBody>
@@ -703,7 +823,7 @@ const MyProfile = () => {
                          
                        
                   </ModalBody>
-                  <ModalFooter className="d-flex align-items-center justify-content-center">
+                  <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
                     <Button
                       color="primary"
                       onClick={() => setModalAbout(false)}
@@ -727,24 +847,274 @@ const MyProfile = () => {
                     <Col>
                       <Card>
                         <CardBody>
-                        <div className="text-end w-100  d-flex justify-content-end">
-                        <Button
-                          color="primary"
-                          outline
-                          className=""
-                          size="sm"
-                        >
+                        <Row className="align-items-center">
+                          <Col className="d-flex justify-content-between">
+                            <h2 className="font-weight-bold">Experience</h2>
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button"        
+                              style={{ border: 'none' }}
+                              size="sm"
+                              onClick={() => setModalEditExperience(true)}
+                              
+                              >
                           <i className="simple-icon-pencil" />
                         </Button>
-                       
-                        </div>
-                        <div>
-                        <h2 className="font-weight-bold">Experience</h2>
+                          </Col>
+                        </Row>
+                              <div>
                         <h6>Web Developer(internship)</h6>
                         <h6 className="text-muted">Metaverse | 15th Jun - present - 1 month</h6>
                         </div>
                           
                         </CardBody>
+                        <Modal
+                        isOpen={modalEditExperience}
+                        toggle={() => setModalEditExperience(!modalEditExperience)}
+                        className=""
+                        size="lg"
+                        style={{ borderRadius: '10px', overflow: 'hidden' }}
+                      >
+                  {/* <ModalHeader style={{ borderBottom: 'none' }}>
+                    <h2 className="font-weight-bold">Experience</h2>
+                  </ModalHeader> */}
+                  <ModalBody>
+                  <Row className="align-items-center mb-3 ">
+                    <Col>
+                      <h2 className="font-weight-bold">Edit Experience</h2>
+                    </Col>
+                    <Col xs="auto" className="ml-auto">
+                      <Button
+                        color="primary"
+                        outline
+                        className="icon-button"
+                        style={{ border: 'none' }}
+                        size="sm"
+                        onClick={() => handleEditExperience()}
+                      >
+                        <span className="text-primary" style={{ fontSize: '24px' }}>+</span>
+                      </Button>
+                    </Col>
+                  </Row>
+                  {/* <p>No education added</p> */}
+                  {experienceEditOpen ? (
+                    <>
+                     <FormGroup className="error-l-125">
+                  
+                      <Label for="twitterHandle">
+                        Job Title
+                      </Label>
+                      <Input
+                        type="text"
+                        name="jobTitle"
+                        id="jobTitle"
+                        // className="form-control"
+                      />
+                </FormGroup>
+                <FormGroup className="error-l-125">
+                  
+                      <Label for="twitterHandle">
+                        Employment type
+                      </Label>
+                      <Input
+                        type="text"
+                        name="employmentType"
+                        id="employmentType"
+                        // className="form-control"
+                      />
+                </FormGroup>
+                 <FormGroup className="error-l-125">
+                  
+                      <Label for="twitterHandle">
+                        Company name
+                      </Label>
+                      <Input
+                        type="text"
+                        name="companyName"
+                        id="companyName"
+                        // className="form-control"
+                      />
+                </FormGroup>
+                <FormGroup>
+                            <Label
+                                for="location"
+                                className="font-weight-medium"
+                              >
+                                Location
+                              </Label>
+                              <Input
+                                type="select"
+                                name="location"
+                                value={location}
+                                // validate={validateLocation}
+                                onChange={(e) => setLocation(e.target.value)}
+                                className="form-control"
+                              >
+                                <option disabled value="">
+                                  Select Location
+                                </option>
+                                {country.map((option) => (
+                                  <option
+                                    key={option.iso_code}
+                                    value={option.iso_code}
+                                  >
+                                    {option.name}
+                                  </option>
+                                ))}
+                              </Input>
+                           </FormGroup>
+
+                    <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
+                    <Button
+                      color="primary"
+                      onClick={() => setExperienceEditOpen(false)}
+                    >
+                      Save
+                    </Button>{' '}
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => setExperienceEditOpen(false)}
+                      className=""
+                    >
+                      Cancel
+                    </Button>
+                  </ModalFooter></>
+                  ) : (
+                    <Row>
+                    <Col>
+                      <h2>Dev Ops</h2>
+                      <h4>Web Development</h4>
+                    </Col>
+                    <Col className="d-flex justify-content-end align-items-center">
+                      <Button
+                        color="primary"
+                        outline
+                        className="icon-button"
+                        style={{ border: 'none' }}
+                        size="sm"
+                        onClick={() => handleEditExperience()}
+                      >
+                        <i className="simple-icon-pencil" />
+                      </Button>
+                    </Col>
+                  </Row>
+
+                  )}
+                       
+                  </ModalBody>
+                  
+                </Modal>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row className="my-4">
+                    <Col>
+                      <Card>
+                      <CardBody>
+                        <Row className="align-items-center">
+                          <Col className="d-flex justify-content-between">
+                            <h2 className="font-weight-bold">Skills</h2>
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button"
+                              style={{ border: 'none' }}
+                              size="sm"
+                              onClick={() => setModalEditSkills(true)}
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="d-flex flex-wrap" style={{ gap: '10px', marginTop: '10px' }}>
+                              <Button
+                                color="primary"
+                                outline
+                                size="sm"
+                              >
+                                HTML
+                              </Button>
+                              <Button
+                                color="primary"
+                                outline
+                                size="sm"
+                              >
+                                CSS
+                              </Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </CardBody>
+
+                        <Modal
+                        isOpen={modalEditSkills}
+                        toggle={() => setModalEditSkills(!modalEditSkills)}
+                        className=""
+                        size="lg"
+                        style={{ borderRadius: '10px', overflow: 'hidden' }}
+                      >
+                        <ModalHeader style={{ borderBottom: 'none' }}>
+                          <h2 className="font-weight-bold">Skills</h2>
+                        </ModalHeader>
+                        <ModalBody>
+                          <Row className="w-100 mb-3">
+                            <Col md={10}>
+                              <Input placeholder="Add skills" />
+                            </Col>
+                            <Col md={2}>
+                              <Button color="primary" className="w-100">Add skill</Button>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <ReactSortable
+                              list={skills}
+                              setList={setSkills}
+                              options={{ handle: '.handle' }}
+                              className="d-flex flex-wrap ml-2"
+                            >
+                              {skills.map((skill, index) => (
+                                <Button
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  key={index}
+                                  outline={index >= 3} 
+                                  color='primary'
+                                  // color={index < 3 ? 'primary' : 'light'}
+                                  className="ml-2 font-weight-semibold mx-2 d-flex align-items-center"
+                                  size="sm"
+                                  // onClick={() => handleRemoveSkill(index)}
+                                >
+                                  {skill}
+                                  <i className="iconsminds-close ml-2" />
+                                </Button>
+                              ))}
+                            </ReactSortable>
+                            {/* <p className="ml-3 text-muted mt-3">Drag skills to set top 3 (the top 3 skills will be displayed on mentor cards)</p> */}
+                          </Row>
+                        </ModalBody>
+
+                        <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
+                    <Button
+                      color="primary"
+                      onClick={() => setModalEditSkills(false)}
+                    >
+                      Save
+                    </Button>{' '}
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => setModalEditSkills(false)}
+                      className=""
+                    >
+                      Cancel
+                    </Button>
+                  </ModalFooter>
+                        
+                      </Modal>
+                        
                       </Card>
                     </Col>
                   </Row>
@@ -752,62 +1122,22 @@ const MyProfile = () => {
                     <Col>
                       <Card>
                         <CardBody>
-                        <div className="text-end w-100  d-flex justify-content-end">
-                        <Button
-                          color="primary"
-                          outline
-                          className=""
-                          size="sm"
-                        >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                       
-                        </div>
+                        <Row className="align-items-center">
+                          <Col className="d-flex justify-content-between">
+                            <h2 className="font-weight-bold">Education</h2>
+                            <Button
+                            color="primary"
+                            outline
+                            className="icon-button"
+                            style={{ border: 'none' }}
+                            size="sm"
+                            onClick={() => setModalEditEducation(true)}
+                          >
+                            <i className="simple-icon-pencil" />
+                          </Button>
+                          </Col>
+                        </Row>
                         <div>
-                        <h2 className="font-weight-bold">Skills</h2>
-                        <div className="d-flex flex-wrap" style={{gap:"10px"}}>
-                        <Button
-                          color="primary"
-                          outline
-                          className=""
-                          size="sm"
-                        >
-                          HTML
-                        </Button>
-                        <Button
-                          color="primary"
-                          outline
-                          className=""
-                          size="sm"
-                        >
-                          CSS
-                        </Button>
-                        </div>
-                       
-                       
-                        </div>
-                          
-                        </CardBody>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row className="my-4">
-                    <Col>
-                      <Card>
-                        <CardBody>
-                        <div className="text-end w-100  d-flex justify-content-end">
-                        <Button
-                          color="primary"
-                          outline
-                          className=""
-                          size="sm"
-                        >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                       
-                        </div>
-                        <div>
-                        <h2 className="font-weight-bold">Education</h2>
                         <div className="my-3">
                           <h6>Dev Ops</h6>
                           <h6 className="text-muted">Web Development | 2022-2023</h6>
@@ -825,6 +1155,116 @@ const MyProfile = () => {
                         </div>
                           
                         </CardBody>
+                        <Modal
+                        isOpen={modalEditEducation}
+                        toggle={() => setModalEditEducation(!modalEditEducation)}
+                        className=""
+                        size="lg"
+                        style={{ borderRadius: '10px', overflow: 'hidden' }}
+                      >
+                  {/* <ModalHeader className="" style={{ borderBottom: 'none' }}> */}
+                    
+                  {/* </ModalHeader> */}
+
+                  <ModalBody>
+                  <Row className="align-items-center mb-3 ">
+                    <Col>
+                      <h2 className="font-weight-bold">Education</h2>
+                    </Col>
+                    <Col xs="auto" className="ml-auto">
+                      <Button
+                        color="primary"
+                        outline
+                        className="icon-button"
+                        style={{ border: 'none' }}
+                        size="sm"
+                        onClick={() => handleEditEducation()}
+                      >
+                        <span className="text-primary" style={{ fontSize: '24px' }}>+</span>
+                      </Button>
+                    </Col>
+                  </Row>
+                  {/* <p>No education added</p> */}
+                  {educationEditOpen ? (
+                    <>
+                     <FormGroup className="error-l-125">
+                  
+                      <Label for="twitterHandle">
+                        School
+                      </Label>
+                      <Input
+                        type="text"
+                        name="school"
+                        id="school"
+                        // className="form-control"
+                      />
+                </FormGroup>
+                <FormGroup className="error-l-125">
+                  
+                      <Label for="twitterHandle">
+                        Degree
+                      </Label>
+                      <Input
+                        type="text"
+                        name="degree"
+                        id="degree"
+                        // className="form-control"
+                      />
+                </FormGroup>
+                 <FormGroup className="error-l-125">
+                  
+                      <Label for="twitterHandle">
+                        Field study
+                      </Label>
+                      <Input
+                        type="text"
+                        name="fieldStudy"
+                        id="fieldStudy"
+                        // className="form-control"
+                      />
+                </FormGroup>
+
+                    <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
+                    <Button
+                      color="primary"
+                      onClick={() => setEducationEditOpen(false)}
+                    >
+                      Save
+                    </Button>{' '}
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => setEducationEditOpen(false)}
+                      className=""
+                    >
+                      Cancel
+                    </Button>
+                  </ModalFooter></>
+                  ) : (
+                    <Row>
+                    <Col>
+                      <h2>Dev Ops</h2>
+                      <h4>Web Development</h4>
+                    </Col>
+                    <Col className="d-flex justify-content-end align-items-center">
+                      <Button
+                        color="primary"
+                        outline
+                        className="icon-button"
+                        style={{ border: 'none' }}
+                        size="sm"
+                        onClick={() => handleEditEducation()}
+                      >
+                        <i className="simple-icon-pencil" />
+                      </Button>
+                    </Col>
+                  </Row>
+
+                  )}
+                       
+                  </ModalBody>
+                  
+                </Modal>
                       </Card>
                     </Col>
                   </Row>
@@ -832,19 +1272,23 @@ const MyProfile = () => {
                     <Col>
                       <Card>
                         <CardBody>
-                        <div className="text-end w-100  d-flex justify-content-end">
-                        <Button
-                          color="primary"
-                          outline
-                          className=""
-                          size="sm"
-                        >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                       
-                        </div>
+                        <Row className="align-items-center">
+                          <Col className="d-flex justify-content-between">
+                            <h2 className="font-weight-bold">Languages</h2>
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button"
+                              style={{ border: 'none' }}
+                              size="sm"
+                              onClick={() => setModalEditLanguage(true)}
+
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+                          </Col>
+                        </Row>
                         <div className="">
-                        <h2 className="font-weight-bold">Languages</h2>
                         <div className="" >
                           <ul className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start" 
                           style={{gap:"30px"}}>
@@ -864,6 +1308,70 @@ const MyProfile = () => {
                         </div>
                           
                         </CardBody>
+                        <Modal
+                        isOpen={modalEditLanguage}
+                        toggle={() => setModalEditLanguage(!modalEditLanguage)}
+                        className=""
+                        size="lg"
+                        style={{ borderRadius: '10px', overflow: 'hidden' }}
+                      >
+                        <ModalHeader style={{ borderBottom: 'none' }}>
+                          <h2 className="font-weight-bold">Languages</h2>
+                        </ModalHeader>
+                        <ModalBody>
+                        <>
+                     
+
+                      <FormGroup className="error-l-75">
+                        <Select
+                          placeholder="Select Languages"
+                          name="languages"
+                          isMulti
+                          options={languageOptions}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          value={selectedLanguages}
+                          onChange={(selectedOptions) => {
+                            setSelectedLanguages(selectedOptions);
+                            handleChange(selectedOptions);
+                          }}
+                        />
+                      </FormGroup>
+                      {languages.map((lang, index) => (
+                        <Button
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={index}
+                          outline
+                          color="primary"
+                          className="mt-2 font-weight-semibold mx-2"
+                          size="sm"
+                          onClick={() => handleRemoveLanguages(index)}
+                        >
+                          {language.find((l) => l.iso_code === lang)?.name}{" "}
+                          <i className="iconsminds-close" />
+                        </Button>
+                      ))}
+                    </>
+                            
+                        </ModalBody>
+                        <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
+                    <Button
+                      color="primary"
+                      onClick={() => setModalEditLanguage(false)}
+                    >
+                      Save
+                    </Button>{' '}
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => setModalEditLanguage(false)}
+                      className=""
+                    >
+                      Cancel
+                    </Button>
+                  </ModalFooter>
+                        
+                      </Modal>
                       </Card>
                     </Col>
                   </Row>

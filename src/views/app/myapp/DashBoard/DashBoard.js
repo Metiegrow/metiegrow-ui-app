@@ -320,51 +320,51 @@ const DashBoard = () => {
   
   const currentAlumni = alumni[currentAlumniIndex];
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentSessionIndex(prevIndex => (prevIndex + 1) % newSession.length);
+  //     setCurrentMentorIndex(prevIndex => (prevIndex + 1) % mentors.length);
+  //     setCurrentLawyerIndex(prevIndex => (prevIndex + 1) % lawyers.length);
+  //     setCurrentAlumniIndex(prevIndex => (prevIndex + 1) % alumni.length);
+  //   }, 3000);
+  //   return () => clearInterval(interval);
+  // }, [newSession.length, mentors.length, lawyers.length, alumni.length]);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSessionIndex(prevIndex => (prevIndex + 1) % newSession.length);
-      setCurrentMentorIndex(prevIndex => (prevIndex + 1) % mentors.length);
-      setCurrentLawyerIndex(prevIndex => (prevIndex + 1) % lawyers.length);
-      setCurrentAlumniIndex(prevIndex => (prevIndex + 1) % alumni.length);
+      setCurrentSessionIndex((prevIndex) => 
+        prevIndex < newSession.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 3300);
+    return () => clearInterval(interval);
+  }, []);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMentorIndex((prevIndex) => 
+        prevIndex < mentors.length - 1 ? prevIndex + 1 : 0
+      );
     }, 3000);
     return () => clearInterval(interval);
-  }, [newSession.length, mentors.length, lawyers.length, alumni.length]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentSessionIndex((prevIndex) => 
-  //       prevIndex < newSession.length - 1 ? prevIndex + 1 : 0
-  //     );
-  //   }, 4000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  }, [mentors]);
   
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentMentorIndex((prevIndex) => 
-  //       prevIndex < mentors.length - 1 ? prevIndex + 1 : 0
-  //     );
-  //   }, 4000);
-  //   return () => clearInterval(interval);
-  // }, [mentors]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentLawyerIndex((prevIndex) => 
+        prevIndex < lawyers.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 3600);
+    return () => clearInterval(interval);
+  }, [lawyers]);
   
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentLawyerIndex((prevIndex) => 
-  //       prevIndex < lawyers.length - 1 ? prevIndex + 1 : 0
-  //     );
-  //   }, 4000);
-  //   return () => clearInterval(interval);
-  // }, [lawyers]);
-  
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentAlumniIndex((prevIndex) => 
-  //       prevIndex < alumni.length - 1 ? prevIndex + 1 : 0
-  //     );
-  //   }, 4000);
-  //   return () => clearInterval(interval);
-  // }, [alumni]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentAlumniIndex((prevIndex) => 
+        prevIndex < alumni.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 3800);
+    return () => clearInterval(interval);
+  }, [alumni]);
   const history = useHistory();
 
   const handleViewMentors = () => history.push("/app/mentor/list");

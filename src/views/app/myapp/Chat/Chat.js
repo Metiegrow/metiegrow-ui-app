@@ -177,107 +177,103 @@ const ChatApp = ({
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-    const conn = new AC.connection({
-      appKey: appKey,
-    });
-    
-
-// ok
-
-
-    conn.addEventHandler('connection&message', {
-      onConnected: () => {
-        // addLog('Connect success!');
-        // fetchHistoryMessages(); 
-        conn.getServerConversations({ pageSize: 50, cursor: '' })
-        .then((res) => {
-          // console.log("conversation", res.data.conversations);
-
-          setServerConversations(res.data.conversations)
-          setLoadingConversation(false)
-        // addLog("");
-          
-        })
-        .catch((error) => {
-          console.log('Error fetching server conversations:', error);
-        });
-        conn.getHistoryMessages({
-          targetId: peerId , // The user ID of the peer user for one-to-one chat or group ID for group chat.
-          chatType: 'singleChat', // The chat type: `singleChat` for one-to-one chat or `groupChat` for group chat.
-          pageSize: 20, // The number of messages to retrieve per page. The value range is [1,50] and the default value is 20.
-          searchDirection: 'down', // The message search direction: `up` means to retrieve messages in the descending order of the message timestamp and `down` means to retrieve messages in the ascending order of the message timestamp.
-          searchOptions: {
-            // from: "mahalingam", // The user ID of the message sender. This parameter is used only for group chat.
-            msgTypes: ['txt'], // An array of message types for query. If no value is passed in, all types of message will be queried.
-            startTime: new Date('2024,05,17').getTime(), // The start timestamp for query. The unit is millisecond.
-            // endTime: new Date('2024,05,18').getTime(), // The end timestamp for query. The unit is millisecond.
-            endTime: Date.now(),
-          },
-        }).then((res) => {
-          // console.log("ppid",peerId)
-        // console.log("Historical messages", res);
-        // addLog("Historical messages fetched successfully");
-  //       const newLogs = res.messages.map((message) => message.msg);
-  // setLogs((prevLogs) => [...prevLogs, ...newLogs]);
-  const newLogs = res.messages.map((message) => (
-    <>
-      <strong><h4>{message.from === userId ? "You" : message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
-      <span className='text-muted text-right'><TimestampConverter timeStamp={message.time} format="datetime" /></span>
-    </>
-  ));
-
-  setLogs((prevLogs) => [...prevLogs, ...newLogs]);
-  setChatLoading(false)
-
-      })
-      .catch((error) => {
-        // console.log("pp2id",peerId)
-        console.log('Error fetching historical messages:', error);
-        // addLog('Error fetching historical messages');
-        
+      const conn = new AC.connection({
+        appKey: appKey,
       });
-      },
-      onDisconnected: () => {
-        addLog('Logout!');
-        // addLog('Logout success!');
-      },
-      onTextMessage: (message) => {
-        console.log("msg",message)
-        const time = message.time
-        
-        // addLog( `${message.from} : ${message.msg} - <TimestampConverter timeStamp={time} format="datetime" />`);
-        if (message.from === peerId) {
-        addLog(
-          <>
-            <strong><h4>{message.from}</h4></strong>  <span className='text-muted'>{message.msg}</span>  
-            <span className='text-muted text-right'><TimestampConverter timeStamp={time} format="datetime" /></span>
-          </>
-        );
-      }
-      },
-      onTokenWillExpire: () => {
-        addLog('Token is about to expire');
-      },
-      onTokenExpired: () => {
-        addLog('The token has expired');
-      },
-      onError: (error) => {
-        console.log('on error', error);
-      },
-     
+  
+      conn.addEventHandler('connection&message', {
+        onConnected: () => {
+          // addLog('Connect success!');
+          // fetchHistoryMessages(); 
+          conn.getServerConversations({ pageSize: 50, cursor: '' })
+            .then((res) => {
+              // console.log("conversation", res.data.conversations);
+              setServerConversations(res.data.conversations);
+              setLoadingConversation(false);
+              // addLog("");
+            })
+            .catch((error) => {
+              console.log('Error fetching server conversations:', error);
+            });
+          //   if (peerId !== undefined) {
+  
+          // conn.addContact(peerId, "hi")
+          //   .then((res) => {
+          //     console.log("addcontact", res);
+          //     console.log("addcontactName", peerId);
+          //   });
+          // }
+  
+          if (peerId !== undefined) {
+            conn.getHistoryMessages({
+              targetId: peerId, // The user ID of the peer user for one-to-one chat or group ID for group chat.
+              chatType: 'singleChat', // The chat type: `singleChat` for one-to-one chat or `groupChat` for group chat.
+              pageSize: 20, // The number of messages to retrieve per page. The value range is [1,50] and the default value is 20.
+              searchDirection: 'down', // The message search direction: `up` means to retrieve messages in the descending order of the message timestamp and `down` means to retrieve messages in the ascending order of the message timestamp.
+              searchOptions: {
+                msgTypes: ['txt'], // An array of message types for query. If no value is passed in, all types of message will be queried.
+                startTime: new Date('2024, 05, 17').getTime(), // The start timestamp for query. The unit is millisecond.
+                endTime: Date.now(), // The end timestamp for query. The unit is millisecond.
+              },
+            }).then((res) => {
+              const newLogs = res.messages.map((message) => (
+                <>
+                  <strong><h4>{message.from === userId ? "You" : message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
+                  <span className='text-muted text-right'><TimestampConverter timeStamp={message.time} format="datetime" /></span>
+                </>
+              ));
+  
+              setLogs((prevLogs) => [...prevLogs, ...newLogs]);
+              setChatLoading(false);
+            })
+            .catch((error) => {
+              console.log('Error fetching historical messages:', error);
+            });
+          }
+        },
       
-    });
-
-    setConnection(conn);
-    conn.open({
-      user: userId,
-      agoraToken: token,
-    });
-    setLoading(false)
-  }, 3000);
-
-  return () => clearTimeout(timeoutId);
-  }, [peerId,userId,token,appKey]);
+        onDisconnected: () => {
+          // addLog('Logout!');
+          // addLog('Logout success!');
+          console.error("chat logout")
+        },
+        onTextMessage: (message) => {
+          // console.log("msg", message);
+          const time = message.time;
+          
+          if (message.from === peerId) {
+            addLog(
+              <>
+                <strong><h4>{message.from}</h4></strong>  <span className='text-muted'>{message.msg}</span>  
+                <span className='text-muted text-right'><TimestampConverter timeStamp={time} format="datetime" /></span>
+              </>
+            );
+          }
+        },
+        onTokenWillExpire: () => {
+          // addLog('Token is about to expire');
+          console.error('Token is about to expire')
+        },
+        onTokenExpired: () => {
+          console.error('The token has expired')
+          // addLog('The token has expired');
+        },
+        onError: (error) => {
+          console.log('on error', error);
+        },
+      });
+  
+      setConnection(conn);
+      conn.open({
+        user: userId,
+        agoraToken: token,
+      });
+      setLoading(false);
+    }, 3000);
+  
+    return () => clearTimeout(timeoutId);
+  }, [peerId, userId, token, appKey]);
+  
 
 //   connection.getServerConversations({pageSize:50, cursor: ''}).then((res)=>{
 //     console.log("res",res)
@@ -389,7 +385,7 @@ const ChatApp = ({
             <ChatHeading
               name={peerId}
               thumb={peerId}
-              lastSeenDate={selectedUser.lastSeenDate}
+              // lastSeenDate={selectedUser.lastSeenDate}
             />
           )}
 
