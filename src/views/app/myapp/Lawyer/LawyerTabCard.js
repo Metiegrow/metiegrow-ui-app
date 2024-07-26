@@ -342,7 +342,7 @@ const role = localStorage.getItem("roleRes")
                           <h5>{pack.serviceName}</h5>
                           <p className='text-muted'>{pack.description}</p>
                           <div className='d-flex '>
-                            {role.includes("MENTEE") && (
+                            {role.includes("USER") && (
                               <>
                           <Button className=' text-one'  outline color='primary' onClick={handleChatClick} >Contact</Button>
                             

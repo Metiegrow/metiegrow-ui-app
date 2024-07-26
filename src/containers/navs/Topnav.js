@@ -117,7 +117,7 @@ const TopNav = ({
 let session;  
 if (roleRes.includes("MENTOR")) {
   session = `${adminRoot}/sessionmentor`;
-}else if (roleRes.includes("MENTEE")) {
+}else if (roleRes.includes("USER")) {
   session = `${adminRoot}/sessionlists`; 
 }
 
@@ -126,7 +126,7 @@ if (roleRes.includes("MENTOR")) {
   myProfile = `${adminRoot}/mentor/myprofile`;
 }else if (roleRes.includes("LAWYER")) {
   myProfile = `${adminRoot}/lawyer/myprofile`; 
-}else if (roleRes.includes("MENTEE")) {
+}else if (roleRes.includes("USER")) {
   myProfile = `${adminRoot}/user/myprofile`; 
 }
 
@@ -181,7 +181,7 @@ if (roleRes.includes("MENTOR")) {
     return null; 
   };
   const renderMyWallet = () => {
-    if (roleRes.includes("MENTEE")) {
+    if (roleRes.includes("USER")) {
       return (
         <>
         <NavLink to={`${adminRoot}/mywallet`}>
@@ -213,7 +213,7 @@ if (roleRes.includes("MENTOR")) {
     return null; 
   };
   const renderMentorSession = () => {
-    if (roleRes.includes("MENTEE") || roleRes.includes("MENTOR")) {
+    if (roleRes.includes("USER") || roleRes.includes("MENTOR")) {
       return (
         <NavLink to={session}>
               <DropdownItem onClick={() => handleMySessionsClick()}>

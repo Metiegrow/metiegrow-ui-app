@@ -96,7 +96,7 @@ const Register = () => {
   //       setNewUser((props) => {
   //         return {
   //           ...props,
-  //           role: e === 1 ? 'MENTOR' : 'MENTEE', // checks if the event value passed is 1 and assigns the respective role
+  //           role: e === 1 ? 'MENTOR' : 'USER', // checks if the event value passed is 1 and assigns the respective role
   //         };
   //       });
   //       break;
@@ -444,10 +444,10 @@ const Register = () => {
                     <Label check>
                       <Input
                         type="checkbox"
-                        onChange={() => handleRoleChange("MENTEE")}
-                        checked={userRoles.includes("MENTEE")}
+                        onChange={() => handleRoleChange("USER")}
+                        checked={userRoles.includes("USER")}
                       />
-                      Mentee
+                      User
                     </Label>
                   </FormGroup>
                   <FormGroup check>

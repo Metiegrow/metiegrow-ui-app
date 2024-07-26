@@ -209,7 +209,7 @@ if (response.data.steps && response.data.steps.length > 0) {
    
   const showClientNoJob=()=>{
     
-    if(roleRes.includes("MENTEE")){
+    if(roleRes.includes("USER")){
       return(
         <div>
            <Card className='text-center'>
@@ -261,7 +261,7 @@ if (response.data.steps && response.data.steps.length > 0) {
   }
   
   const clientJobApproveInfo=()=>{
-    if(roleRes.includes("MENTEE")&&jobdetails.jobStatus==="LAWYER_COMPLETED"){
+    if(roleRes.includes("USER")&&jobdetails.jobStatus==="LAWYER_COMPLETED"){
       return(
           <Row>
           <Col  className='text-center my-2'  style={{ position: 'relative', top: '50%', bottom:'-50%'  }}>
@@ -503,7 +503,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         );
       }
     
-      if (roleRes.includes("MENTEE")) {
+      if (roleRes.includes("USER")) {
         return (
           <Card className='d-none'>
             {/* <CardBody className='my-2' style={{cursor: "pointer"}} onClick={handleAddCard}> */}
@@ -610,7 +610,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         );
       }
     
-      if (roleRes.includes("MENTEE")) {
+      if (roleRes.includes("USER")) {
         return (
           <>
           
@@ -831,7 +831,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         <Col className=''>
         <div className='d-flex justify-content-end align-items-center '>
         <div className=''>
-        {roleRes.includes("MENTEE") ? (
+        {roleRes.includes("USER") ? (
           <Button 
             className='mr-2'  
             outline 

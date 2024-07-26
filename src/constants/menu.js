@@ -148,7 +148,7 @@ const data = [
   },
 ];
 
-if (role === "MENTEE") {
+if (role === "USER") {
   data.splice(1, 0, {
     id: "Dashboard",
     icon: "iconsminds-shop-4",

@@ -304,7 +304,7 @@ const [editStates, setEditStates] = useState({});
         <div className='d-flex justify-content-between'>
         <h3 className='font-weight-semibold'>{answers.questionHeading}</h3>
          {/* <Button outline color="primary"><i className='simple-icon-pencil'/></Button> */}
-         {roleRes.includes("MENTEE")&&(
+         {roleRes.includes("USER")&&(
           <div className='d-flex '>
       
          {editing ? (

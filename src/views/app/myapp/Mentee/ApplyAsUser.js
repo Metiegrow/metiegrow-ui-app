@@ -54,6 +54,7 @@ const ApplyAsMentor = () => {
   // const [amount, setAmount] = useState(500);
   const [loading, setLoading] = useState(false);
   const [skillsTag, setSkillsTag] = useState([]);
+  const [certificationsTag, setCertificationsTag] = useState([]);
 
   // const [skillsTag, setSkillsTag] = useState([]);
   // const [toolsTag, setToolsTag] = useState([]);
@@ -85,23 +86,23 @@ const ApplyAsMentor = () => {
     }
   }, []);
 
-  const [fields] = useState({
-    image: "",
+  // const [fields] = useState({
+  //   image: "",
 
-    jobTitle: "",
-    company: "",
-    location: "",
-    category: "",
-    skills: [],
-    bio: "",
-    linkedinUrl: "",
-    twitterHandle: "",
-    website: "",
-    introVideo: "",
-    featuredArticle: "",
-    reasonForMentor: "",
-    achievement: "",
-  });
+  //   jobTitle: "",
+  //   company: "",
+  //   location: "",
+  //   category: "",
+  //   skills: [],
+  //   bio: "",
+  //   linkedinUrl: "",
+  //   twitterHandle: "",
+  //   website: "",
+  //   introVideo: "",
+  //   featuredArticle: "",
+  //   reasonForMentor: "",
+  //   achievement: "",
+  // });
 
 const languageOptions = language.map(option => ({
   value: option.iso_code,
@@ -137,32 +138,30 @@ const languageOptions = language.map(option => ({
   };
   //   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
   //   const mentorAboutUrl="http://localhost:3001/acheckabout";
-  const mentorAboutUrl = `${baseUrl}/api/mentor/details/about`;
-  const mentorProfileUrl = `${baseUrl}/api/mentor/details/profile`;
-  const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
-  function getTokenRes() {
-    return localStorage.getItem("tokenRes");
-  }
-  const token = getTokenRes();
+  const userProfileUrl = `${baseUrl}/api/userProfile/profile`;
+  const mentorExperienceUrl = `${baseUrl}/api/userProfile/experiance`;
+  const userAboutUrl = `${baseUrl}/api/userProfile/about`;
+ 
+  const token = localStorage.getItem("tokenRes");
 
 
   const postDataUserProfile = async (data) => {
-    handleNextStep();
+    // handleNextStep();
 
     setAboutLoading(true)
     const formData = new FormData();
     formData.append("image", file1);
 
     const userProfile = {
-    languages,
-    linkedinUrl: data.linkedinUrl,
+      languages,
+    linkedInurl: data.linkedinUrl,
     twitterHandle: data.twitterHandle,
-    personalWebsite: data.personalWebsite
+    personalwebsite: data.personalWebsite
     };
-    formData.append("mentorProfile",new Blob([JSON.stringify(userProfile)], { type: "application/json" }));
+    formData.append("userProfile",new Blob([JSON.stringify(userProfile)], { type: "application/json" }));
 
     try {
-     const response = await axios.post(mentorAboutUrl, formData, {
+     const response = await axios.post(userProfileUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -192,11 +191,11 @@ const languageOptions = language.map(option => ({
   };
 
   const postExperience = async (data) => {
-    handleNextStep();
+    // handleNextStep();
 
     setProfileLoading(true)
     try {
-     const response = await axios.post(mentorProfileUrl, data, {
+     const response = await axios.post(mentorExperienceUrl, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -209,7 +208,7 @@ const languageOptions = language.map(option => ({
     } catch (error) {
       // setSkillError(false);
       setProfileLoading(false)
-      if(error.response){
+      if(error.response && error.response.data && error.response.data.statuses){
       error.response.data.statuses.forEach((status) => {
          NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
          
@@ -220,12 +219,12 @@ const languageOptions = language.map(option => ({
     }
   };
 
-  const postDataExperience = async (data) => {
-    handleNextStep();
+  const postAboutData = async (data) => {
+    // handleNextStep();
     setExperienceLoading(true);
     const postDataExp = { ...data };
     try {
-      const response = await axios.post(experienceUrl, postDataExp, {
+      const response = await axios.post(userAboutUrl, postDataExp, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -241,7 +240,7 @@ const languageOptions = language.map(option => ({
       }, 3000);
     } catch (error) {
       setExperienceLoading(false)
-      if(error.response){
+      if(error.response && error.response.data && error.response.data.statuses){
       error.response.data.statuses.forEach((status) => {
         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
     });
@@ -271,11 +270,11 @@ const languageOptions = language.map(option => ({
   //   setToolsTag(newTools);
   // };
   const [education, setEducation] = useState([
-    { collegeName: "", degree: "", department: "", year: 0 },
+    { college: "", degree: "", department: "", year: 0 },
   ]); 
   
-  const [workExperience, setWorkExperience] = useState([
-    { company: "", jobTitle: "", employmentType: "", jobLocation: "" },
+  const [work, setWork] = useState([
+    { company: "", jobTitle: "", employmentType: "", jobLocation: "",startDate: 0, endDate: 0 },
   ]);
 
   const removeEducation = (index) => {
@@ -284,9 +283,9 @@ const languageOptions = language.map(option => ({
     setEducation(newEducation);
   };
   const removeWorkExperience = (index) => {
-    const newWorkExperience = [...workExperience];
+    const newWorkExperience = [...work];
     newWorkExperience.splice(index, 1);
-    setWorkExperience(newWorkExperience);
+    setWork(newWorkExperience);
   };
 
   
@@ -294,12 +293,12 @@ const languageOptions = language.map(option => ({
   const addEducation = () => {
     setEducation([
       ...education,
-      { collegeName: "", degree: "", department: "", year: 0 },
+      { college: "", degree: "", department: "", year: 0 },
     ]);
   };
   const addWorkExperience = () => {
-    setWorkExperience([
-      ...workExperience,
+    setWork([
+      ...work,
       { company: "", jobTitle: "", employmentType: "", jobLocation: "" },
     ]);
   };
@@ -312,9 +311,9 @@ const languageOptions = language.map(option => ({
     );
   };  
   const handleWorkInputChange = (index, field, value) => {
-    setWorkExperience((previousWorkExperience) =>
-      previousWorkExperience.map((work, i) =>
-        i === index ? { ...work, [field]: value } : work
+    setWork((previousWorkExperience) =>
+      previousWorkExperience.map((works, i) =>
+        i === index ? { ...works, [field]: value } : works
       )
     );
   };
@@ -322,12 +321,16 @@ const languageOptions = language.map(option => ({
   const handleTagsChange = (newSkills) => {
     // setSkillError(false);
     setSkillsTag(newSkills);
+  }; 
+   const handleCertificationsChange = (newCertifications) => {
+    // setSkillError(false);
+    setCertificationsTag(newCertifications);
   };
 
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
-        <h1 className="mt-4 font-weight-bold">Apply as a mentor</h1>
+        <h1 className="mt-4 font-weight-bold">Apply as a User</h1>
         <ul className="nav nav-tabs justify-content-center">
           {steps.map((stepItem, index) => (
             // <li key={`topNavStep_${index}`} className={`nav-item ${index === currentStep ? 'step-doing' : ''}`}>
@@ -528,20 +531,23 @@ const languageOptions = language.map(option => ({
                       year: 0,
                   },
                 ],
-                workExperience: [
+                work: [
                   {
                     company: "",
                     jobTitle: "",
                     employmentType: "",
-                    jobLocation: ""
+                    jobLocation: "",
+                    startDate: 0,
+                    endDate: 0,
                   }
                 ]
               
               
             }}
             onSubmit={() => {
-              const experienceData = {education, workExperience}
-            postExperience(experienceData);
+              const experience = {education, work}
+              const datas = {experience}
+            postExperience(datas);
               console.log("my education", education);
               // console.log("values", values);
             }}
@@ -589,21 +595,21 @@ const languageOptions = language.map(option => ({
                           <Label>College Name*</Label>
                           <Input
                             className="form-control"
-                            name={`education[${index}].collegeName`}
-                            value={service.collegeName}
+                            name={`education[${index}].college`}
+                            value={service.college}
                             onChange={(e) =>
                               handleInputChange(
                                 index,
-                                "collegeName",
+                                "college",
                                 e.target.value
                               )
                             }
                               // validate={validateServiceName}
                           />
-                          {errors.education?.[index]?.collegeName &&
-                            touched.education?.[index]?.collegeName && (
+                          {errors.education?.[index]?.college &&
+                            touched.education?.[index]?.college && (
                               <div className="invalid-feedback d-block">
-                                {errors.education[index].collegeName}
+                                {errors.education[index].college}
                               </div>
                             )}
                         </FormGroup>
@@ -703,14 +709,14 @@ const languageOptions = language.map(option => ({
                 <Card onClick={addEducation} className="p-3 text-center my-5" style={{ cursor: "pointer" }}>
                       <h3 className="font-weight-bold text-primary">+ Add more education</h3> 
                 </Card>
-                {workExperience.map((work, index) => (
+                {work.map((works, index) => (
                   // eslint-disable-next-line react/no-array-index-key
                   <div key={index}>
                     <div className="text-right">
                       {/* <Button outline className="icon-button" onClick={() => removework(index)}>
                       <i className="simple-icon-close" />
                     </Button> */}
-                  {workExperience.length > 1 && (
+                  {work.length > 1 && (
                       <span>
                         <Button
                           id="closeButton"
@@ -732,7 +738,7 @@ const languageOptions = language.map(option => ({
                           <Input
                             className="form-control"
                             name={`education[${index}].company`}
-                            value={work.company}
+                            value={works.company}
                             onChange={(e) =>
                               handleWorkInputChange(
                                 index,
@@ -759,7 +765,7 @@ const languageOptions = language.map(option => ({
                             name={`education[${index}].jobTitle`}
                             id={`education[${index}].jobTitle`}
                             className="form-control"
-                            value={work.jobTitle}
+                            value={works.jobTitle}
                             onChange={(e) =>
                               handleWorkInputChange(
                                 index,
@@ -789,7 +795,7 @@ const languageOptions = language.map(option => ({
                             name={`education[${index}].employmentType`}
                             id={`education[${index}].employmentType`}
                             className="form-control"
-                            value={work.employmentType}
+                            value={works.employmentType}
                             onChange={(e) =>
                               handleWorkInputChange(
                                 index,
@@ -818,7 +824,7 @@ const languageOptions = language.map(option => ({
                             name={`education[${index}].jobLocation`}
                             id={`education[${index}].jobLocation`}
                             className="form-control"
-                            value={work.jobLocation}
+                            value={works.jobLocation}
                             onChange={(e) =>
                               handleWorkInputChange(
                                 index,
@@ -832,6 +838,79 @@ const languageOptions = language.map(option => ({
                             touched.education?.[index]?.jobLocation && (
                               <div className="invalid-feedback d-block">
                                 {errors.education[index].jobLocation}
+                              </div>
+                            )}
+                        </FormGroup>
+                        </Col>
+                        </ Row>
+                        <Row>
+                          <Col>
+                        <FormGroup>
+                          <Label for={`education[${index}].startDate`}>
+                            Start date
+                          </Label>
+                          {/* <Input
+                            type="number"
+                            name={`education[${index}].startDate`}
+                            id={`education[${index}].startDate`}
+                            className="form-control"
+                            value={works.startDate}
+                            onChange={(e) =>
+                              handleWorkInputChange(
+                                index,
+                                "startDate",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageDescription}
+                          /> */}
+                          <Input
+                              type="number"
+                              name={`education[${index}].startDate`}
+                              id={`education[${index}].startDate`}
+                              className="form-control"
+                              value={works.startDate}
+                              onChange={(e) =>
+                                handleWorkInputChange(
+                                  index,
+                                  "startDate",
+                                  parseInt(e.target.value, 10) // Convert the string to an integer
+                                )
+                              }
+                            />
+
+                          {errors.education?.[index]?.startDate &&
+                            touched.education?.[index]?.startDate && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].startDate}
+                              </div>
+                            )}
+                        </FormGroup>
+                        </Col>
+                        <Col>
+                        <FormGroup>
+                          <Label for={`education[${index}].endDate`}>
+                            End date
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`education[${index}].endDate`}
+                            id={`education[${index}].endDate`}
+                            className="form-control"
+                            value={works.endDate}
+                            onChange={(e) =>
+                              handleWorkInputChange(
+                                index,
+                                "endDate",
+                                e.target.value
+                              )
+                            }
+                              // validate={validatePackageDescription}
+                          />
+                          {errors.education?.[index]?.endDate &&
+                            touched.education?.[index]?.endDate && (
+                              <div className="invalid-feedback d-block">
+                                {errors.education[index].endDate}
                               </div>
                             )}
                         </FormGroup>
@@ -876,13 +955,15 @@ const languageOptions = language.map(option => ({
             <Formik
               innerRef={forms[2]}
               initialValues={{
-                introVideo: fields.introVideo,
-                featuredArticle: fields.featuredArticle,
-                reasonForMentor: fields.reasonForMentor,
-                achievement: fields.achievement,
+                // skills: [],
+                bio: "",
+                seekingFor: "",
+                // certifications: [],
+                goal: "",
               }}
               onSubmit={(values) => {
-                postDataExperience(values);
+                const data = {...values, skills :skillsTag, certifications: certificationsTag}
+                postAboutData(data);
               }}
               validateOnMount
             >
@@ -904,21 +985,6 @@ const languageOptions = language.map(option => ({
                       <Col md={12}>
                       <FormGroup>
                     <Label for="skills">Skills*</Label>
-                    {/* <Field
-                      type="text"
-                      name="skills"
-                      id="skills"
-                      className="form-control"
-                      placeholder="Enter your skills (comma-separated)"
-                      validate={validateSkills}
-                      onChange={(e) => {
-                        const skillArray = e.target.value
-                          .split(",")
-                          .map((skill) => skill.trim());
-                        setFieldValue("skills", skillArray);
-                      }}
-                      autoComplete="off"
-                    /> */}
                     
                     <TagsInput
                         value={skillsTag}
@@ -926,11 +992,6 @@ const languageOptions = language.map(option => ({
                         inputProps={{ placeholder: "Add skills " }}
                         // validate={validateSkills}
                       />
-                    {/* {skillError && (
-                      <div className="invalid-feedback d-block">
-                        {skillErrorMessage}
-                      </div>
-                    )} */}
                     <FormText>Add skill and press Enter </FormText>
                     <FormText color="muted">
                       Describe your expertise to connect with mentors who have
@@ -950,34 +1011,19 @@ const languageOptions = language.map(option => ({
                         <Label for="introVideo">Bio*</Label>
                         <Field
                           type="textarea"
-                          name="introVideo"
-                          id="introVideo"
+                          name="bio"
+                          id="bio"
                           className="form-control"
-                          autoComplete="off"
                         />
-                        {/* <FormText color="muted">
-                          Add a youTube video or record a Loom for your future
-                          mentees
-                        </FormText> */}
-                        {/* {errors.introvideo && touched.introvideo && (
-                    <div className="invalid-feedback d-block">
-                      {errors.introvideo}
-                    </div>
-                    )} */}
                       </Col>
                       <Col md={6}>
                         <Label for="featuredArticle">Seeking for*</Label>
                         <Field
                           type="text"
-                          name="featuredArticle"
-                          id="featuredArticle"
+                          name="seekingFor"
+                          id="seekingFor"
                           className="form-control"
-                          autoComplete="off"
                         />
-                        {/* <FormText color="muted">
-                          Link an interview / podcast / piece of writing you are
-                          proud of or were featured in.
-                        </FormText> */}
                       </Col>
                     </Row>
                   </FormGroup>
@@ -985,25 +1031,12 @@ const languageOptions = language.map(option => ({
                     <Label for="skills">Certifications*</Label>
                     
                     <TagsInput
-                        value={skillsTag}
-                        onChange={handleTagsChange}
-                        inputProps={{ placeholder: "Add skills " }}
+                        value={certificationsTag}
+                        onChange={handleCertificationsChange}
+                        inputProps={{ placeholder: "Add Certification " }}
                         // validate={validateSkills}
                       />
-                    {/* {skillError && (
-                      <div className="invalid-feedback d-block">
-                        {skillErrorMessage}
-                      </div>
-                    )} */}
                     <FormText>Add Certification and press Enter </FormText>
-                    {/* <FormText color="muted">
-                      Describe your expertise to connect with mentees who have
-                      similar interests.
-                      <br />
-                    Comma-separated list of your skills 
-                    (keep it below 10).
-                      Mentees will use this to find you.
-                    </FormText> */}
                   </FormGroup>
                   <FormGroup>
                     <Label>
@@ -1011,15 +1044,15 @@ const languageOptions = language.map(option => ({
                     </Label>
                     <Field
                       as="textarea"
-                      name="achievement"
-                      id="achievement"
+                      name="goal"
+                      id="goal"
                       className="form-control"
                       validate={validateAchievement}
                       autoComplete="off"
                     />
-                    {errors.achievement && touched.achievement && (
+                    {errors.goal && touched.goal && (
                       <div className="invalid-feedback d-block">
-                        {errors.achievement}
+                        {errors.goal}
                       </div>
                     )}
                   </FormGroup>

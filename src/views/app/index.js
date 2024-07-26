@@ -279,7 +279,7 @@ import(
 ))
 const ViewUserApply=React.lazy(()=>
 import(
-  /* webpackChunkName: "views-app" */ './myapp/Mentee/UserApply'
+  /* webpackChunkName: "views-app" */ './myapp/Mentee/ApplyAsUser'
 ))
 const ViewSettings=React.lazy(()=>
 import(
@@ -305,7 +305,7 @@ const statusRes = getStatusRes();
 const roleRes = getRoleRes();
 // console.log("role res from index", roleRes)
 // const redirectTo =
-// roleRes === "MENTEE" && `${match.url}/mentor` ||
+// roleRes === "USER" && `${match.url}/mentor` ||
 // roleRes === "LAWYER" && `${match.url}/profile` ||
 // roleRes.some(role => role === "MENTOR" || role === "LAWYER") && `${match.url}/mentor` ||
 //   statusRes === '0' && `${match.url}/mentor/apply` ||
@@ -330,13 +330,17 @@ const roleRes = getRoleRes();
             } else {
               redirectTo =  `${match.url}/profile`;
             }
-          } else if (roleRes.includes("MENTEE")) {
+          } else if (roleRes.includes("USER")) {
             // redirectTo = `${match.url}/mentor/list`;
             if (statusRes === '0') {
               redirectTo = `${match.url}/user/apply`;
-            } else  {
-              redirectTo = `${match.url}/mentor/list`;
-            } 
+            } else if (statusRes === '1') {
+              redirectTo = `${match.url}/user/apply`;
+            }else if (statusRes === '3') {
+              redirectTo = `${match.url}/user/apply`;
+            }else  {
+              redirectTo = `${match.url}/dashboard`;
+            }
           } else if (roleRes.includes("LAWYER")) {
             if (statusRes === '0') {
               redirectTo = `${match.url}/lawyer/apply`;

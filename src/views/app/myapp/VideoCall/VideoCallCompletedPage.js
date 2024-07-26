@@ -42,7 +42,7 @@ const VideoCallCompletedPage = () => {
 
   let getUrl;
 
-if (roleRes === "MENTEE") {
+if (roleRes === "USER") {
   getUrl = `${baseUrl}/api/call-info-mentee/${sid}`;
 } else  {
   getUrl = `${baseUrl}/api/call-info-mentor/${sid}`;

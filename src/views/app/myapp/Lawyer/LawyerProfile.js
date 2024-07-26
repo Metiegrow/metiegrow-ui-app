@@ -136,7 +136,7 @@ const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.na
        
             </div>
             <div>
-              {role.includes("MENTEE") && (
+              {role.includes("USER") && (
             <NavLink  >
               <Button onClick={handleChatClick} color="light" className=" font-weight-semibold mx-2 " size='large'>
                 <span className='font-weight-semibold text-primary text-one'>Contact</span>
@@ -236,7 +236,7 @@ const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.na
               <p className='text-large mb-2 text-default'>₹ {pack.amount}</p>
               <p className='text-muted text-small'>{pack.description}</p>
               <div className=''>
-                {role.includes("MENTEE") && (
+                {role.includes("USER") && (
                 <Button color='primary  text-one' onClick={() => handlePurchase(pack)}>Purchase</Button>
                 )}
               </div>

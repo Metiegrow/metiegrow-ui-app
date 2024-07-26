@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  NavLink,
+  // NavLink,
   Row,
   Input,
   Label,
   Col,
-  Form,
+  // Form,
   Card,
   CardBody,
   Modal,
@@ -25,7 +25,7 @@ import country from "../my-login/Country";
 import language from "../my-login/Languages";
 
 const MyProfile = () => {
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
@@ -36,9 +36,10 @@ const MyProfile = () => {
   const [twitterHandle, setTwitterHandle] = useState("");
   const [personalWebsiteUrl,setPersonalWebsiteUrl]=useState("");
   const [about,setAbout]=useState('');
+  const [experience,setExperience] = useState([])
 
   // const userId = localStorage.getItem("userId");
-  const endUrl = `${baseUrl}/api/mentee/myprofile`;
+  const endUrl = `${baseUrl}/api/userProfile/myprofile`;
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
@@ -55,7 +56,7 @@ const MyProfile = () => {
   const [educationEditOpen, setEducationEditOpen] = useState(false);
 
 
-  const [skills, setSkills] = useState(["html","css","java","React"]);
+  const [skills, setSkills] = useState([]);
   const [languages, setLanguages] = useState([]);
 
 
@@ -90,14 +91,16 @@ const MyProfile = () => {
         const response = await axios.get(endUrl);
         const userData = response.data;
         if (userData) {
-          setImage(userData.imageUrl);
+          setImage(userData.userPhotoUrl);
           // setFirstName(userData.firstName);
           // setLastName(userData.lastName);
           setJobTitle(userData.jobTitle);
           setLocation(userData.location);
-          // setEmail(userData.email);
-          setLinkedinUrl(userData.linkedIn);
+          setExperience(userData.experience);
+          setLinkedinUrl(userData.linkedInUrl);
+          setLanguages(userData.languages);
           setTwitterHandle(userData.twitterHandle);
+          setSkills(userData.skills);
           setLoading(false);
         }
       } catch (error) {
@@ -164,40 +167,40 @@ const MyProfile = () => {
     }
   };
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  // const handleEditClick = () => {
+  //   setIsEditing(true);
+  // };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    updateMEntorProfile();
-  };
+  // const handleSave = () => {
+  //   setIsEditing(false);
+  //   updateMEntorProfile();
+  // };
 
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
+  // const handleCancel = () => {
+  //   setIsEditing(false);
+  // };
 
-  const handleLinkedInClick = () => {
-    if (linkedinUrl) {
-      window.open(linkedinUrl, "_blank");
-    }
-  };
+  // const handleLinkedInClick = () => {
+  //   if (linkedinUrl) {
+  //     window.open(linkedinUrl, "_blank");
+  //   }
+  // };
 
-  const handleTwitterClick = () => {
-    if (twitterHandle) {
-      const twitterUrl = `https://x.com/${twitterHandle}`;
-      window.open(twitterUrl, "_blank");
-    }
-  };
+  // const handleTwitterClick = () => {
+  //   if (twitterHandle) {
+  //     const twitterUrl = `https://x.com/${twitterHandle}`;
+  //     window.open(twitterUrl, "_blank");
+  //   }
+  // };
 
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
+  // const handleFileChange = (event) => {
+  //   setFile(event.target.files[0]);
+  // };
 
-  const countryName = country.find((c) => c.iso_code === location)?.name;
-  const menteeName = localStorage.getItem("userName");
+  // const countryName = country.find((c) => c.iso_code === location)?.name;
+  const userName = localStorage.getItem("userName");
 
   const handleEditEducation = () => {
     setEducationEditOpen(true);
@@ -207,15 +210,19 @@ const MyProfile = () => {
   }
 
   const handleImageClick = () => setImageEditModal(true);
+  const handleEditProfileSave = () => {
+    setModalEditProfile(false);
+    updateMEntorProfile();
+  }
 
 
   return (
-    <div className="mentor-profile">
+    <div className="d-flex justify-content-center align-items-center">
       {/* <div className=""> */}
 
-      <Colxx sm="12" md="12" lg="12" xxs="12" className="">
+      <Colxx sm="12" md="10" lg="10" xxs="12" className="">
         <div className="">
-          <Card
+          {/* <Card
             style={{ height: "160px", width: "100%", overflow: "hidden" }}
             className="bg-primary"
           >
@@ -243,8 +250,8 @@ const MyProfile = () => {
                 )}
                 <div className="ml-4 mt-2">
                   <h1 className="font-weight-semibold text-large">
-                    {/* {firstName} {lastName} */}
-                    {menteeName}
+                    {firstName} {lastName}
+                    {userName}
                   </h1>
                 </div>
               </div>
@@ -275,7 +282,7 @@ const MyProfile = () => {
                 )}
               </div>
             </div>
-          </Card>
+          </Card> */}
           {loading ? (
             <div className="loading" />
           ) : (
@@ -289,7 +296,7 @@ const MyProfile = () => {
                 </div>
               ) : (
                 <>
-                  {isEditing && (
+                  {/* {isEditing && (
                     <div className="mt-2">
                       <Button
                         className="default"
@@ -311,8 +318,8 @@ const MyProfile = () => {
                       </Form>
                       {file && <p>Selected file: {file.name}</p>}
                     </div>
-                  )}
-                  <Row>
+                  )} */}
+                  {/* <Row>
                     <Col lg="6" md="12" className="mt-4">
                       <div>
                         {isEditing ? (
@@ -368,12 +375,7 @@ const MyProfile = () => {
                               >
                                 <h4>Location</h4>
                               </Label>
-                              {/* <Input
-                        type="text"
-                        id="location"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                      /> */}
+                              
                               <Input
                                 type="select"
                                 name="location"
@@ -429,9 +431,6 @@ const MyProfile = () => {
                           </div>
                         ) : (
                           <div className="ml-3">
-                            {/* <h1 className="font-weight-semibold text-large">
-                                  {firstName} {lastName}
-                                </h1> */}
                             <h3 className="font-weight-semibold">
                               <i className="simple-icon-briefcase text-primary" />
                               <span className="ml-2">{jobTitle}</span>
@@ -473,7 +472,7 @@ const MyProfile = () => {
                         </>
                       )}
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Row>
                     <Col>
                       <Card>
@@ -500,13 +499,6 @@ const MyProfile = () => {
                     
                         <div className="position-relative" 
                         style={{position:"relative",top:"70px"}}>
-                        {/* <img
-                        src="/assets/img/profiles/2.jpg"
-                        className=" rounded-circle img-thumbnail border border-3"
-                        style={{ width: "130px", height: "130px", objectFit: "cover" }}
-                        alt="img"
-                        onClick={() => handleImageClick()}
-                  /> */}
                   <button 
                   type="button"
                     className="btn p-0" 
@@ -514,12 +506,21 @@ const MyProfile = () => {
                     onClick={() => handleImageClick()}
                     aria-label="Profile image"
                   >
+                    {image === null ? (
+                  <ThumbnailLetters
+                    // small
+                    rounded
+                    text={firstName}
+                    className="mx-2"
+                    color="secondary"
+                  /> ) : (
                     <img
-                      src="/assets/img/profiles/2.jpg"
+                      // src="/assets/img/profiles/2.jpg"
+                      src={`${baseUrl}/${image}`}
                       className="rounded-circle img-thumbnail border border-3"
                       style={{ width: "130px", height: "130px", objectFit: "cover" }}
                       alt="Profile"
-                    />
+                    /> ) }
                   </button>
 
                   <Modal
@@ -534,7 +535,8 @@ const MyProfile = () => {
                   </ModalHeader>
                   <ModalBody className="d-flex justify-content-center align-items-center">
                     <img
-                        src="/assets/img/profiles/2.jpg"
+                        // src="/assets/img/profiles/2.jpg"
+                        src={`${baseUrl}/${image}`}
                         className="rounded-circle img-thumbnail border border-3"
                         style={{ width: "130px", height: "130px", objectFit: "cover" }}
                         alt="img"
@@ -586,11 +588,11 @@ const MyProfile = () => {
                         <div className="mt-4">
                      
                        
-                       <h2 className="font-weight-bold">Daniel Robert</h2>
-                       <h3 className="text-one">web developer (intern) | Metaverse</h3>
+                       <h2 className="font-weight-bold">{userName}</h2>
+                       <h3 className="text-one">{experience.work[0].jobTitle} | {experience.work[0].company}</h3>
                        <div>
                        <h6 className="text-muted">Location</h6>
-                       <h6>India</h6>
+                       <h6>{experience.work[0].jobLocation}</h6>
                        </div>
                      
                        </div>
@@ -703,7 +705,7 @@ const MyProfile = () => {
                   <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
                     <Button
                       color="primary"
-                      onClick={() => setModalEditProfile(false)}
+                      onClick={() => handleEditProfileSave()}
                     >
                       Save
                     </Button>{' '}
@@ -863,10 +865,17 @@ const MyProfile = () => {
                         </Button>
                           </Col>
                         </Row>
-                              <div>
+                        {experience.work.map((w, index) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                          <div key={index}>
+                          <h6>{w.jobTitle}</h6>
+                          <h6 className="text-muted">{w.company} | {w.startDate} - {w.endDate} - 1 month</h6>
+                          </div>
+                        ))}
+                              {/* <div>
                         <h6>Web Developer(internship)</h6>
                         <h6 className="text-muted">Metaverse | 15th Jun - present - 1 month</h6>
-                        </div>
+                        </div> */}
                           
                         </CardBody>
                         <Modal
@@ -981,26 +990,34 @@ const MyProfile = () => {
                       Cancel
                     </Button>
                   </ModalFooter></>
-                  ) : (
-                    <Row>
+                  ) : (<>
+                    {experience.work.map((w, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                    <Row key={index}>
                     <Col>
-                      <h2>Dev Ops</h2>
-                      <h4>Web Development</h4>
-                    </Col>
-                    <Col className="d-flex justify-content-end align-items-center">
-                      <Button
-                        color="primary"
-                        outline
-                        className="icon-button"
-                        style={{ border: 'none' }}
-                        size="sm"
-                        onClick={() => handleEditExperience()}
-                      >
-                        <i className="simple-icon-pencil" />
-                      </Button>
-                    </Col>
-                  </Row>
-
+                      {/* <h2>Dev Ops</h2>
+                      <h4>Web Development</h4> */}
+                             {/* eslint-disable-next-line react/no-array-index-key */}
+                          <div key={index}>
+                          <h6>{w.jobTitle}</h6>
+                          <h6 className="text-muted">{w.company} | {w.startDate}- {w.endDate} - 1 month</h6>
+                          </div>
+                          </Col>
+                          <Col className="d-flex justify-content-end align-items-center">
+                          <Button
+                          color="primary"
+                          outline
+                          className="icon-button"
+                          style={{ border: 'none' }}
+                          size="sm"
+                          onClick={() => handleEditExperience()}
+                          >
+                          <i className="simple-icon-pencil" />
+                          </Button>
+                          </Col>
+                          </Row>
+                        ))}
+</>
                   )}
                        
                   </ModalBody>
@@ -1031,13 +1048,18 @@ const MyProfile = () => {
                         <Row>
                           <Col>
                             <div className="d-flex flex-wrap" style={{ gap: '10px', marginTop: '10px' }}>
-                              <Button
+                             
+                            {skills.map((skill, index) => (
+                                <Button
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  key={index}
                                 color="primary"
                                 outline
                                 size="sm"
                               >
-                                HTML
+                                  {skill}
                               </Button>
+                              ))}
                               <Button
                                 color="primary"
                                 outline
@@ -1137,23 +1159,26 @@ const MyProfile = () => {
                           </Button>
                           </Col>
                         </Row>
-                        <div>
+                        {experience.education.map((e,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div key={index}>
                         <div className="my-3">
-                          <h6>Dev Ops</h6>
-                          <h6 className="text-muted">Web Development | 2022-2023</h6>
+                          <h6>{e.college}</h6>
+                          <h6 className="text-muted">{e.degree} | {e.department} | {e.year}</h6>
                         </div>
-                        <div className="my-3">
+                        {/* <div className="my-3">
                           <h6>MRS College</h6>
                           <h6 className="text-muted">B.sc Computer Application | 2022-2023</h6>
                         </div>
                         <div className="my-3">
                           <h6>HHS School</h6>
                           <h6 className="text-muted">Higher Secondary | 2016-2018</h6>
-                        </div>
+                        </div> */}
                        
                        
                         </div>
-                          
+                        
+                          ))}
                         </CardBody>
                         <Modal
                         isOpen={modalEditEducation}
@@ -1241,10 +1266,16 @@ const MyProfile = () => {
                     </Button>
                   </ModalFooter></>
                   ) : (
-                    <Row>
+                    <>
+                     {experience.education.map((e,index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                    <Row key={index}>
                     <Col>
-                      <h2>Dev Ops</h2>
-                      <h4>Web Development</h4>
+                    <div className="my-3">
+                          <h6>{e.college}</h6>
+                          <h6 className="text-muted">{e.degree} | {e.department} | {e.year}</h6>
+                        </div>
+                        
                     </Col>
                     <Col className="d-flex justify-content-end align-items-center">
                       <Button
@@ -1259,6 +1290,8 @@ const MyProfile = () => {
                       </Button>
                     </Col>
                   </Row>
+                      ))}
+                  </>
 
                   )}
                        
@@ -1290,18 +1323,35 @@ const MyProfile = () => {
                         </Row>
                         <div className="">
                         <div className="" >
-                          <ul className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start" 
-                          style={{gap:"30px"}}>
-                            <li className="">
-                              English
-                            </li>
-                            <li className="">
-                              Tamil
-                            </li>
-                            <li className="">
-                              Hindi
-                            </li>
-                          </ul>
+                            {/* <ul className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start" 
+                            style={{gap:"30px"}}>
+                            {languages.map((lang,index) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                              <li key={index} className="">
+                              {language.find((l) => l.iso_code === lang)?.name}{" "}
+                              </li>
+                          ))}
+                            </ul> */}
+                            <ul className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start" 
+                                style={{ gap: "30px", listStyle: "none", paddingLeft: 0 }}>
+                                {languages.map((lang, index) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <li key={index} style={{ position: "relative", paddingLeft: "20px" }}>
+                                        <span style={{
+                                            content: '""',
+                                            position: "absolute",
+                                            left: 0,
+                                            top: "50%",
+                                            transform: "translateY(-50%) rotate(45deg)",
+                                            width: "7px",
+                                            height: "7px",
+                                            backgroundColor: "currentColor"
+                                        }} />
+                                        {language.find((l) => l.iso_code === lang)?.name}{" "}
+                                    </li>
+                                ))}
+                            </ul>
+
                         </div>
                        
                        

@@ -149,7 +149,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
                           <h5>Basic package</h5>
                           <div className='mt-4 '>
                             <div className=''  >
-                              {role.includes("MENTEE") && (
+                              {role.includes("USER") && (
                                 <Row>
                             <Button onClick={handleConnectClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
                                 <span className='font-weight-semibold  text-one'>Connect</span>

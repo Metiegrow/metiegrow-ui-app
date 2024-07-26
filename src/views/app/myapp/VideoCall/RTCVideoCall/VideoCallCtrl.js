@@ -342,12 +342,12 @@ const VideoCallCtrl = (props) => {
           // <div>Time Remaining : {minutesRemaining1} minutes</div>
           <h4>
             Time Remaining :{" "}
-            <span className="text-danger">{minutesRemaining1} minutes</span>{" "}{roleRes.includes("MENTEE") ? (<span>Extend by 15 minutes? <Button color="primary">Pay from wallet</Button></span>) : null }
+            <span className="text-danger">{minutesRemaining1} minutes</span>{" "}{roleRes.includes("USER") ? (<span>Extend by 15 minutes? <Button color="primary">Pay from wallet</Button></span>) : null }
           </h4>
         ) : (
           <></>
         )}
-        {minutesRemaining1 && roleRes.includes("MENTEE") && minutesRemaining1 === 0 ? (
+        {minutesRemaining1 && roleRes.includes("USER") && minutesRemaining1 === 0 ? (
           <div>
             <h4>
             Extend by 15 minutes? <Button color="primary">Pay from wallet</Button>
