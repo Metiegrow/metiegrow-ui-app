@@ -1,93 +1,154 @@
-import React from "react";
-import { Card, Badge, Button } from "reactstrap";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Row,
+  //   Card,
+  //   CardBody,
+  Nav,
+  NavItem,
+  TabContent,
+  TabPane,
+  //   Badge,
+  // Modal,
+  // ModalHeader,
+  // ModalBody,
+  // Button,
+} from "reactstrap";
+import { NavLink, useLocation, useHistory } from "react-router-dom";
+import classnames from "classnames";
+import { injectIntl } from "react-intl";
+// import Rating from 'components/common/Rating';
+
+// import Breadcrumb from 'containers/navs/Breadcrumb';
 import { Colxx } from "components/common/CustomBootstrap";
-import TimestampConverter from "../Calculation/TimestampConverter";
+
+// import JobPosting from "./JobPosting";
+// import StayPosting from "./StayPosting";
+// import OtherPosting from "./OtherPosting";
+import MyJobListing from "./MyJobListing";
+import MyStayListing from "./MyStayListing";
+import MyOtherListing from "./MyOtherListing";
 
 const MyListing = () => {
-  const data = [
-    {
-      title: "Title 1",
-      category: "Job Listing",
-      postedOn: 1720189649645,
-      badgeColor: "success",
-      badgeText: "Published",
-      link: "#",
-      interestedCount: "6",
-    },
-    {
-      title: "Title 2",
-      category: "Stay Listing",
-      postedOn: 1720276049645,
-      badgeColor: "success",
-      badgeText: "Published",
-      link: "#",
-      interestedCount: "1",
-    },
-    {
-      title: "Title 3",
-      category: "Other Listing",
-      postedOn: 1720362449645,
-      badgeColor: "primary",
-      badgeText: "Processed",
-      link: "#",
-      interestedCount: "2",
-    },
-    {
-      title: "Title 4",
-      category: "Stay Listing",
-      postedOn: 1720448849645,
-      badgeColor: "success",
-      badgeText: "Published",
-      link: "#",
-      interestedCount: "4",
-    },
-  ];
+
+  
+  const location = useLocation();
+  const history = useHistory();
+  const [activeTab, setActiveTab] = useState("job");
+  // const [modal, setModal] = useState(false);
+  // const [modalTitle, setModalTitle] = useState("");
+  // const [listingType, setListingType] = useState("");
+  // const [isPosted,setIsPosted] = useState(false)
+
+  // const toggleModal = (title, type) => {
+  //   setModalTitle(title);
+  //   setListingType(type);
+  //   setModal(!modal);
+  // };
+  //   const { messages } = intl;
+
+  // const toggleModalState = () => {
+  //   setModal(false);
+  //   setIsPosted(!isPosted);
+  // };
+
+
+  useEffect(() => {
+    const path = location.pathname.split('/').pop();
+    setActiveTab(path === 'mylisting' ? 'job' : path);
+  }, [location]);
+
+  const changeTab = (tab) => {
+    setActiveTab(tab);
+    history.push(`/app/mylisting${tab === 'job' ? '' : `/${tab}`}`);
+  };
+  
 
   return (
-    <Colxx xxs="12" className="mb-3">
-      <h1>My Listing</h1>
-      {data.map((item) => (
-        <Card key={item} className="mb-4">
-          <div className="pl-2 d-flex flex-grow-1 min-width-zero">
-            <div className="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
-              <NavLink to={item.link} className="w-40 w-sm-100">
-                <p className="list-item-heading mb-1 truncate">
-                  {item.title}
-                </p>
+    <>
+      <Row>
+        <Colxx xxs="12" className="mx-auto" style={{ maxWidth: "900px" }}>
+          <h1>My listing</h1>
+          
+          {/* <Breadcrumb match={match} /> */}
+
+          <Nav tabs className="separator-tabs ml-0 mb-5">
+          {/* <Button
+                outline
+                color="primary"
+                onClick={() => toggleModal("Create a job List", "job")}
+              >
+                Edit
+              </Button> */}
+            <NavItem>
+              <NavLink
+                location={{}}
+                to="#"
+                className={classnames({
+                  active: activeTab === "job",
+                  "nav-link": true,
+                })}
+                onClick={() => changeTab("job")}
+              >
+                <i className="iconsminds-management text-primary" />
+                Job
               </NavLink>
-              <p className="mb-1 text-muted text-small w-15 w-sm-100">
-               <i className="simple-icon-layers" /> {" "} {item.category}
-              </p>
-              <p className="mb-1 text-muted text-small w-15 w-sm-100">
-               <i className="simple-icon-clock" />{" "}<TimestampConverter timeStamp={item.postedOn} format="datetime"  />
-              </p>
-              <p className="mb-1 text-muted text-small w-15 w-sm-100">
-                <i className="iconsminds-like" />{" "}{item.interestedCount}
-              </p>
-              <div className="w-15 w-sm-100">
-                <Badge color={item.badgeColor} pill>
-                  {item.badgeText}
-                </Badge>
-              </div>
-            </div>
-            <div className="custom-control custom-checkbox pl-1 align-self-center pr-4">
-              {/* <CustomInput
-                className="item-check mb-0"
-                type="checkbox"
-                id={`check_${product.id}`}
-                checked={isSelect}
-                onChange={() => {}}
-                label=""
-              /> */}
-              <Button outline color="primary" className="icon-button"><i className="simple-icon-pencil" /></Button>
-              <Button outline color="primary" className="icon-button ml-2"><i className="simple-icon-trash" /></Button>
-            </div>
-          </div>
-        </Card>
-      ))}
-    </Colxx>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                location={{}}
+                to="#"
+                className={classnames({
+                  active: activeTab === "stay",
+                  "nav-link": true,
+                })}
+                onClick={() => changeTab("stay")}
+              >
+                <i className="iconsminds-building text-primary" />
+                Stay
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                location={{}}
+                to="#"
+                className={classnames({
+                  active: activeTab === "others",
+                  "nav-link": true,
+                })}
+                onClick={() => changeTab("others")}
+              >
+                <i className="iconsminds-testimonal text-primary" />
+                Others
+              </NavLink>
+            </NavItem>
+          </Nav>
+
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="job">
+              <MyJobListing  />
+            </TabPane>
+            <TabPane tabId="stay">
+              <MyStayListing  />
+            </TabPane>
+            <TabPane tabId="others">
+              <MyOtherListing  />
+            </TabPane>
+          </TabContent>
+        </Colxx>
+      </Row>
+      {/* <Modal size="lg" isOpen={modal} toggle={() => setModal(!modal)}>
+        <ModalHeader className="pb-1" toggle={() => setModal(!modal)}>
+          <h1 className="font-weight-semibold">{modalTitle}</h1>
+        </ModalHeader>
+        <ModalBody>
+          {listingType === "job" && <JobPosting closeModal={toggleModalState}/>}
+          {listingType === "stay" && <StayPosting closeModal={toggleModalState}/>}
+          {listingType === "others" && <OtherPosting />}
+          {listingType === "others" && <OtherPosting closeModal={toggleModalState} />}
+
+        </ModalBody>
+      </Modal> */}
+    </>
   );
 };
-
-export default MyListing;
+export default injectIntl(MyListing);

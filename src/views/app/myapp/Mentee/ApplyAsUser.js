@@ -139,7 +139,7 @@ const languageOptions = language.map(option => ({
   //   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
   //   const mentorAboutUrl="http://localhost:3001/acheckabout";
   const userProfileUrl = `${baseUrl}/api/userProfile/profile`;
-  const mentorExperienceUrl = `${baseUrl}/api/userProfile/experiance`;
+  const mentorExperienceUrl = `${baseUrl}/api/userProfile/experience`;
   const userAboutUrl = `${baseUrl}/api/userProfile/about`;
  
   const token = localStorage.getItem("tokenRes");

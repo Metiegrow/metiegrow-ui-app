@@ -6,12 +6,12 @@ function getTokenRes() {
 const role = getTokenRes();
 
 const data = [
-  {
-    id: "profile",
-    icon: "iconsminds-home",
-    label: "menu.home",
-    to: `${adminRoot}/profile`,
-  },
+  // {
+  //   id: "profile",
+  //   icon: "iconsminds-home",
+  //   label: "menu.home",
+  //   to: `${adminRoot}/profile`,
+  // },
   {
     id: "Mentor",
     icon: "simple-icon-people",
@@ -132,7 +132,7 @@ const data = [
     id: "Listing",
     icon: "simple-icon-list",
     label: "Listing",
-    to: `${adminRoot}/listing`,
+    to: `${adminRoot}/listing/job`,
   },
   {
     id: "Chat",
@@ -149,7 +149,7 @@ const data = [
 ];
 
 if (role === "USER") {
-  data.splice(1, 0, {
+  data.splice(0, 0, {
     id: "Dashboard",
     icon: "iconsminds-shop-4",
     label: "Dashboard",

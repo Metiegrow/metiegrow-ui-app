@@ -20,8 +20,9 @@ import TimestampConverter from "../Calculation/TimestampConverter";
 const JobListing = ({isPosted}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage] = useState(2);
+  // const [totalPage] = useState(2);
   const [items, setItems] = useState([]);
+  const [pagination, setPagination] = useState([]);
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [clickedCardTitle, setClickedCardTitle] = useState("");
   // const [copied, setCopied] = useState(false);
@@ -46,16 +47,22 @@ const JobListing = ({isPosted}) => {
   // };
 
   useEffect(() => {
+    const params = {
+      page: currentPage-1,
+      size: 20,
+      // sort: [""]
+    };
     const fetchData = async () => {
       try {
         // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
-        const res = await axios.get(url);
+        const res = await axios.get(url, {params});
         // console.log("other data",res);
         const { data } = res;
-        const sortedData = data
-          .map((x) => ({ ...x }))
-          .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
-        setItems(sortedData);
+        // const sortedData = data
+        //   .map((x) => ({ ...x }))
+        //   .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+        setItems(data.otherposts);
+        setPagination(data.paginationMeta);
         setIsLoaded(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -116,7 +123,7 @@ const handleShareButtonClick = async (id) => {
   return !isLoaded ? (
     <div className="loading" />
   ) : (<>
-  {noData ? (
+  {!items.length > 0 ? (
     <Card className="d-flex justify-content-center align-items-center "><h2 className="mt-4 mb-4">There are no posts available</h2></Card>
   ) : (
     <div className="disable-text-selection">
@@ -215,8 +222,10 @@ const handleShareButtonClick = async (id) => {
       ))}
       <Pagination
         currentPage={currentPage}
-        totalPage={totalPage}
+        totalPage={pagination.totalPage}
         onChangePage={(i) => setCurrentPage(i)}
+        lastIsActive = {pagination.first}
+        firstIsActive = {pagination.last}
       />
       {clickedCardTitle && <DesktopNotifications title={clickedCardTitle} />}
     </div>

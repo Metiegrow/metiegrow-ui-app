@@ -328,7 +328,7 @@ const roleRes = getRoleRes();
             } else if (statusRes === '7') {
               redirectTo = `${match.url}/calendar/mentor/appointment`;
             } else {
-              redirectTo =  `${match.url}/profile`;
+              redirectTo =  `${match.url}/calendar/mentor/appointment`;
             }
           } else if (roleRes.includes("USER")) {
             // redirectTo = `${match.url}/mentor/list`;
@@ -349,10 +349,10 @@ const roleRes = getRoleRes();
             }else if (statusRes === '3') {
               redirectTo = `${match.url}/lawyer/apply`;
             }else  {
-              redirectTo = `${match.url}/profile`;
+              redirectTo = `${match.url}/jobslist`;
             }
           } else {
-            redirectTo = `${match.url}/profile`; 
+            redirectTo = `${match.url}/lawyer/list`; 
           }
 
 

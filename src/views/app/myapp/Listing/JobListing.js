@@ -89,10 +89,13 @@ const handleInterestedButtonClick = async (id) => {
 };
 
  
-  return !isLoaded ? (
-    <div className="loading" />
-  ) : (
-    <div className="disable-text-selection">
+return !isLoaded ? (
+  <div className="loading" />
+) : (<>
+{!items.length > 0 ? (
+  <Card className="d-flex justify-content-center align-items-center "><h2 className="mt-4 mb-4">There are no posts available</h2></Card>
+) : (
+  <div className="disable-text-selection">
       {items.map((data, index) => (
         <Row key={data.title} className="mb-2">
           <Colxx xxs="12">
@@ -208,6 +211,8 @@ const handleInterestedButtonClick = async (id) => {
         firstIsActive = {isLast}
       />
     </div>
+    )}
+    </>
   );
 };
 

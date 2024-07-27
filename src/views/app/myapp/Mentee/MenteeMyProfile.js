@@ -13,7 +13,7 @@ import {
   ModalBody,
   ModalHeader,
   ModalFooter,
-  FormGroup
+  FormGroup,
 } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
@@ -29,17 +29,18 @@ const MyProfile = () => {
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
-  const [company,setCompany]=useState("Metaverse");
+  const [company, setCompany] = useState("Metaverse");
   const [location, setLocation] = useState("");
   const [lastName, setLastName] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
-  const [personalWebsiteUrl,setPersonalWebsiteUrl]=useState("");
-  const [about,setAbout]=useState('');
-  const [experience,setExperience] = useState([])
+  const [personalWebsiteUrl, setPersonalWebsiteUrl] = useState("");
+  // const [about, setAbout] = useState("");
+  const [experience, setExperience] = useState([]);
 
   // const userId = localStorage.getItem("userId");
-  const endUrl = `${baseUrl}/api/userProfile/myprofile`;
+  const endUrl = "http://localhost:3001/userprofile";
+  // const endUrl = `${baseUrl}/api/userProfile/myprofile`;
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
@@ -49,16 +50,101 @@ const MyProfile = () => {
   const [modalEditLanguage, setModalEditLanguage] = useState(false);
   const [modalEditEducation, setModalEditEducation] = useState(false);
   const [imageEditModal, setImageEditModal] = useState(false);
-  const [modalAbout,setModalAbout]=useState(false);
-
+  const [modalAbout, setModalAbout] = useState(false);
 
   const [experienceEditOpen, setExperienceEditOpen] = useState(false);
   const [educationEditOpen, setEducationEditOpen] = useState(false);
 
-
   const [skills, setSkills] = useState([]);
   const [languages, setLanguages] = useState([]);
+  const [bio, setBio] = useState("")
 
+const [currentEducation, setCurrentEducation] = useState(null);
+
+const handleAddEducation = () => {
+  setCurrentEducation({
+    id: Date.now(), 
+    college: '',
+    degree: '',
+    department: '',
+    year: ''
+  });
+  setEducationEditOpen(true);
+};
+
+// const handleSaveEducation = () => {
+//   setExperience(prevExperience => {
+//     const updatedEducation = prevExperience.education 
+//       ? prevExperience.education.map(edu => 
+//           edu.id === currentEducation.id ? currentEducation : edu
+//         )
+//       : [];
+
+//     if (!updatedEducation.some(edu => edu.id === currentEducation.id)) {
+//       updatedEducation.push(currentEducation);
+//     }
+
+//     return {
+//       ...prevExperience,
+//       education: updatedEducation
+//     };
+//   });
+
+//   setEducationEditOpen(false);
+//   setCurrentEducation(null);
+// };
+
+const handleSaveEducation = async () => {
+  try {
+    setExperience(prevExperience => {
+      const updatedEducation = prevExperience.education 
+        ? prevExperience.education.map(edu => 
+            edu.id === currentEducation.id ? currentEducation : edu
+          )
+        : [];
+
+      if (!updatedEducation.some(edu => edu.id === currentEducation.id)) {
+        updatedEducation.push(currentEducation);
+      }
+
+      const updatedExperience = {
+        // ...prevExperience,
+        education: updatedEducation,
+        firstName,
+        lastName,
+        jobTitle,
+        location,
+        linkedinUrl,
+        twitterHandle,
+        experience,
+        skills,
+      };
+
+      axios.put('http://localhost:3001/userprofileupdate', {
+        // ...prevExperience,
+        experience: updatedExperience
+      })
+      .then(response => {
+        console.log('Profile updated successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error updating profile:', error);
+      });
+
+      return updatedExperience;
+    });
+
+    setEducationEditOpen(false);
+    setCurrentEducation(null);
+  } catch (error) {
+    console.error('Error in handleSaveEducation:', error);
+  }
+};
+
+const handleEditEducation = (education) => {
+  setCurrentEducation({...education});
+  setEducationEditOpen(true);
+};
 
   const handleAddLanguages = (newLanguages) => {
     setLanguages([...languages, newLanguages]);
@@ -83,7 +169,6 @@ const MyProfile = () => {
     handleAddLanguages(languagesArray[0]);
     setSelectedLanguages([]);
   };
-  
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
@@ -100,7 +185,9 @@ const MyProfile = () => {
           setLinkedinUrl(userData.linkedInUrl);
           setLanguages(userData.languages);
           setTwitterHandle(userData.twitterHandle);
+          setPersonalWebsiteUrl(userData.personalWebsite);
           setSkills(userData.skills);
+          setBio(userData.bio);
           setLoading(false);
         }
       } catch (error) {
@@ -116,45 +203,20 @@ const MyProfile = () => {
     mentorProfileDetails();
   }, []);
 
-  // useEffect(() => {
-  //   const mentorProfileDetails = async () => {
-  //     try {
-  //       const response = await axios.get(inputUrl);
-  //       const inputData = response.data;
-  //       console.log("inputData:", inputData);
-  //       if (inputData) {
-  //         setExperience(inputData.experience)
-  //         setLoading(false)
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //       setLoading(true)
-  //       setTimeout(() => {
-  //       setLoading(false)
-  //         }, 4000);
-  //       setProfileData(true)
-  //     }
-  //   };
-
-  //   mentorProfileDetails();
-  // }, []);
-
-  function getTokenRes() {
-    return localStorage.getItem("tokenRes");
-  }
-  const token = getTokenRes();
+  const token = localStorage.getItem("tokenRes");
   // console.log(token);
 
   const updateMEntorProfile = async () => {
     try {
       const updatedData = {
-        image,
         firstName,
         lastName,
         jobTitle,
         location,
         linkedinUrl,
         twitterHandle,
+        experience,
+        skills,
       };
 
       await axios.put(endUrl, updatedData, {
@@ -202,19 +264,18 @@ const MyProfile = () => {
   // const countryName = country.find((c) => c.iso_code === location)?.name;
   const userName = localStorage.getItem("userName");
 
-  const handleEditEducation = () => {
-    setEducationEditOpen(true);
-  } 
+  // const handleEditEducation = () => {
+  //   setEducationEditOpen(true);
+  // };
   const handleEditExperience = () => {
     setExperienceEditOpen(true);
-  }
+  };
 
   const handleImageClick = () => setImageEditModal(true);
   const handleEditProfileSave = () => {
     setModalEditProfile(false);
     updateMEntorProfile();
-  }
-
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center">
@@ -476,170 +537,180 @@ const MyProfile = () => {
                   <Row>
                     <Col>
                       <Card>
-                        <CardBody  style={{
-                            background: "linear-gradient(to right, #7B42C5, #AA5D93)",
+                        <CardBody
+                          style={{
+                            background:
+                              "linear-gradient(to right, #7B42C5, #AA5D93)",
                             color: "white",
                             borderRadius: "9px 9px 0 0",
                           }}
                         >
-                        <div className="text-end w-100  
+                          <div
+                            className="text-end w-100  
                          m-0 d-flex justify-content-end "
-       
-                        >
-                        <Button
-                          color="light"
-                          className="icon-button"
+                          >
+                            <Button
+                              color="light"
+                              className="icon-button"
+                              size="sm"
+                            >
+                              <i className="simple-icon-pencil text-primary font-weight-bold" />
+                            </Button>
+                          </div>
 
-                          size="sm"
-                        >
-                          <i className="simple-icon-pencil text-primary font-weight-bold" />
-                        </Button>
-                          
-                        </div>
-                    
-                        <div className="position-relative" 
-                        style={{position:"relative",top:"70px"}}>
-                  <button 
-                  type="button"
-                    className="btn p-0" 
-                    style={{ border: 'none', background: 'none' }} 
-                    onClick={() => handleImageClick()}
-                    aria-label="Profile image"
-                  >
-                    {image === null ? (
-                  <ThumbnailLetters
-                    // small
-                    rounded
-                    text={firstName}
-                    className="mx-2"
-                    color="secondary"
-                  /> ) : (
-                    <img
-                      // src="/assets/img/profiles/2.jpg"
-                      src={`${baseUrl}/${image}`}
-                      className="rounded-circle img-thumbnail border border-3"
-                      style={{ width: "130px", height: "130px", objectFit: "cover" }}
-                      alt="Profile"
-                    /> ) }
-                  </button>
+                          <div
+                            className="position-relative"
+                            style={{ position: "relative", top: "70px" }}
+                          >
+                            <button
+                              type="button"
+                              className="btn p-0"
+                              style={{ border: "none", background: "none" }}
+                              onClick={() => handleImageClick()}
+                              aria-label="Profile image"
+                            >
+                              {image === null ? (
+                                <ThumbnailLetters
+                                  // small
+                                  rounded
+                                  text={firstName}
+                                  className="mx-2"
+                                  color="secondary"
+                                />
+                              ) : (
+                                <img
+                                  // src="/assets/img/profiles/2.jpg"
+                                  src={`${baseUrl}/${image}`}
+                                  className="rounded-circle img-thumbnail border border-3"
+                                  style={{
+                                    width: "130px",
+                                    height: "130px",
+                                    objectFit: "cover",
+                                  }}
+                                  alt="Profile"
+                                />
+                              )}
+                            </button>
 
-                  <Modal
-                        isOpen={imageEditModal}
-                        toggle={() => setImageEditModal(!imageEditModal)}
-                        className=""
-                        size="lg"
-                        style={{ borderRadius: '10px', overflow: 'hidden' }}
-                      >
-                  <ModalHeader style={{ borderBottom: 'none' }}>
-                    <h2 className="font-weight-bold">Profile photo</h2>
-                  </ModalHeader>
-                  <ModalBody className="d-flex justify-content-center align-items-center">
-                    <img
-                        // src="/assets/img/profiles/2.jpg"
-                        src={`${baseUrl}/${image}`}
-                        className="rounded-circle img-thumbnail border border-3"
-                        style={{ width: "130px", height: "130px", objectFit: "cover" }}
-                        alt="img"
-                    />
-                </ModalBody>
+                            <Modal
+                              isOpen={imageEditModal}
+                              toggle={() => setImageEditModal(!imageEditModal)}
+                              className=""
+                              size="lg"
+                              style={{
+                                borderRadius: "10px",
+                                overflow: "hidden",
+                              }}
+                            >
+                              <ModalHeader style={{ borderBottom: "none" }}>
+                                <h2 className="font-weight-bold">
+                                  Profile photo
+                                </h2>
+                              </ModalHeader>
+                              <ModalBody className="d-flex justify-content-center align-items-center">
+                                <img
+                                  // src="/assets/img/profiles/2.jpg"
+                                  src={`${baseUrl}/${image}`}
+                                  className="rounded-circle img-thumbnail border border-3"
+                                  style={{
+                                    width: "130px",
+                                    height: "130px",
+                                    objectFit: "cover",
+                                  }}
+                                  alt="img"
+                                />
+                              </ModalBody>
 
-                  <ModalFooter 
-                  // style={{ borderTop: 'none' }} 
-                  className="d-flex align-items-center justify-content-center">
-                    <Button
-                    outline
-                      color="primary"
-                      onClick={() => setModalAbout(false)}
-                      className="icon-button"
-                      style={{ border: 'none' }}
-                    >
-                      <i className="simple-icon-pencil" />
-                    </Button>{' '}
-                    <Button
-                      color="primary"
-                      outline
-                      onClick={() => setModalAbout(false)}
-                      className="icon-button"
-                      style={{ border: 'none' }}
-                    >
-                      <i className="simple-icon-trash" />
-                    </Button>
-                  </ModalFooter>
-                </Modal>
-                        </div>
-                  
-                        
-                          
+                              <ModalFooter
+                                // style={{ borderTop: 'none' }}
+                                className="d-flex align-items-center justify-content-center"
+                              >
+                                <Button
+                                  outline
+                                  color="primary"
+                                  onClick={() => setModalAbout(false)}
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>{" "}
+                                <Button
+                                  color="primary"
+                                  outline
+                                  onClick={() => setModalAbout(false)}
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                >
+                                  <i className="simple-icon-trash" />
+                                </Button>
+                              </ModalFooter>
+                            </Modal>
+                          </div>
                         </CardBody>
                         <CardBody>
-                        <div className="text-end w-100  d-flex justify-content-end">
-                        <Button
-                          color="primary"
-                          outline
-                          className="icon-button"
-                          style={{ border: 'none' }}
-                          size="sm"
-                          onClick={() => setModalEditProfile(true)}
-                        >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                       
-                        </div>
-                        <div className="mt-4">
-                     
-                       
-                       <h2 className="font-weight-bold">{userName}</h2>
-                       <h3 className="text-one">{experience.work[0].jobTitle} | {experience.work[0].company}</h3>
-                       <div>
-                       <h6 className="text-muted">Location</h6>
-                       <h6>{experience.work[0].jobLocation}</h6>
-                       </div>
-                     
-                       </div>
+                          <div className="text-end w-100  d-flex justify-content-end">
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button"
+                              style={{ border: "none" }}
+                              size="sm"
+                              onClick={() => setModalEditProfile(true)}
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+                          </div>
+                          <div className="mt-4">
+                            <h2 className="font-weight-bold">{userName}</h2>
+                            <h3 className="text-one">
+                              {experience.work[0].jobTitle} |{" "}
+                              {experience.work[0].company}
+                            </h3>
+                            <div>
+                              <h6 className="text-muted">Location</h6>
+                              <h6>{experience.work[0].jobLocation}</h6>
+                            </div>
+                          </div>
                         </CardBody>
                         <Modal
-                        isOpen={modalEditProfile}
-                        toggle={() => setModalEditProfile(!modalEditProfile)}
-                        className=""
-                        size="lg"
-                        style={{ borderRadius: '10px', overflow: 'hidden' }}
-                      >
-                  <ModalHeader style={{ borderBottom: 'none' }}>
-                    <h2 className="font-weight-bold">Edit Profile</h2>
-                  </ModalHeader>
-                  <ModalBody>
-                  <Row className="">
-                                <Col md="6">
-                                  <Label for="firstName" className="text-muted">
-                                    <h4>First Name</h4>
-                                  </Label>
-                                  <Input
-                                    type="text"
-                                    id="firstName"
-                                    value={firstName}
-                                    onChange={(e) =>
-                                      setFirstName(e.target.value)
-                                    }
-                                    className="font-weight-bold text-one"
-                                  />
-                                </Col>
-                                <Col md="6">
-                                  <Label for="lastName" className="text-muted">
-                                    <h4>Last Name</h4>
-                                  </Label>
-                                  <Input
-                                    type="text"
-                                    id="lastName"
-                                    value={lastName}
-                                    onChange={(e) =>
-                                      setLastName(e.target.value)
-                                    }
-                                     className="font-weight-bold text-one"
-                                  />
-                                </Col>
-                              </Row>
-                              <br />
-                            
+                          isOpen={modalEditProfile}
+                          toggle={() => setModalEditProfile(!modalEditProfile)}
+                          className=""
+                          size="lg"
+                          style={{ borderRadius: "10px", overflow: "hidden" }}
+                        >
+                          <ModalHeader style={{ borderBottom: "none" }}>
+                            <h2 className="font-weight-bold">Edit Profile</h2>
+                          </ModalHeader>
+                          <ModalBody>
+                            <Row className="">
+                              <Col md="6">
+                                <Label for="firstName" className="text-muted">
+                                  <h4>First Name</h4>
+                                </Label>
+                                <Input
+                                  type="text"
+                                  id="firstName"
+                                  value={firstName}
+                                  onChange={(e) => setFirstName(e.target.value)}
+                                  className="font-weight-bold text-one"
+                                />
+                              </Col>
+                              <Col md="6">
+                                <Label for="lastName" className="text-muted">
+                                  <h4>Last Name</h4>
+                                </Label>
+                                <Input
+                                  type="text"
+                                  id="lastName"
+                                  value={lastName}
+                                  onChange={(e) => setLastName(e.target.value)}
+                                  className="font-weight-bold text-one"
+                                />
+                              </Col>
+                            </Row>
+                            <br />
+
                             <>
                               <Label for="jobtitle" className="text-muted">
                                 <h4>Job Title</h4>
@@ -662,20 +733,16 @@ const MyProfile = () => {
                                 id="company"
                                 value={company}
                                 onChange={(e) => setCompany(e.target.value)}
-                                 className="font-weight-bold text-one"
+                                className="font-weight-bold text-one"
                               />
                               <br />
                             </>
 
-
                             <>
-                              <Label
-                                for="location"
-                                className="text-muted"
-                              >
+                              <Label for="location" className="text-muted">
                                 <h4>Location</h4>
                               </Label>
-                          
+
                               <Input
                                 type="select"
                                 name="location"
@@ -698,68 +765,70 @@ const MyProfile = () => {
                               </Input>
                               <br />
                             </>
-                            
-                         
-                       
-                  </ModalBody>
-                  <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
-                    <Button
-                      color="primary"
-                      onClick={() => handleEditProfileSave()}
-                    >
-                      Save
-                    </Button>{' '}
-                    <Button
-                      color="primary"
-                      outline
-                      onClick={() => setModalEditProfile(false)}
-                      className=""
-                    >
-                      Cancel
-                    </Button>
-                  </ModalFooter>
-                </Modal>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row className="my-4"> 
-                    <Col>
-                      <Card>
-                        <CardBody>
-                        <Row className="align-items-center">
-                          <Col className="d-flex justify-content-between">
-                            <h2 className="font-weight-bold">About</h2>
+                          </ModalBody>
+                          <ModalFooter
+                            style={{ borderTop: "none" }}
+                            className="d-flex align-items-center justify-content-center"
+                          >
+                            <Button
+                              color="primary"
+                              onClick={() => handleEditProfileSave()}
+                            >
+                              Save
+                            </Button>{" "}
                             <Button
                               color="primary"
                               outline
-                              className="icon-button"
-                              size="sm"
-                              onClick={() => setModalAbout(true)}
-                              style={{ border: 'none' }}
+                              onClick={() => setModalEditProfile(false)}
+                              className=""
                             >
-                              <i className="simple-icon-pencil" />
+                              Cancel
                             </Button>
-                          </Col>
-                        </Row>
-                        <div>
-                        <p className="text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, at?</p>
-                        </div>
-                          
+                          </ModalFooter>
+                        </Modal>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row className="my-4">
+                    <Col>
+                      <Card>
+                        <CardBody>
+                          <Row className="align-items-center">
+                            <Col className="d-flex justify-content-between">
+                              <h2 className="font-weight-bold">About</h2>
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                size="sm"
+                                onClick={() => setModalAbout(true)}
+                                style={{ border: "none" }}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                            </Col>
+                          </Row>
+                          <div>
+                            <p className="text-muted">
+                              {bio}
+                              {/* Lorem ipsum dolor sit amet consectetur adipisicing */}
+                              {/* elit. Sequi, at? */}
+                            </p>
+                          </div>
                         </CardBody>
                         <Modal
-                        isOpen={modalAbout}
-                        toggle={() => setModalAbout(!modalAbout)}
-                        className=""
-                        size="lg"
-                        style={{ borderRadius: '10px', overflow: 'hidden' }}
-                      >
-                  <ModalHeader style={{ borderBottom: 'none' }}>
-                    <h2 className="font-weight-bold">About</h2>
-                  </ModalHeader>
-                  <ModalBody>
-                 
-                              <br />
-                            
+                          isOpen={modalAbout}
+                          toggle={() => setModalAbout(!modalAbout)}
+                          className=""
+                          size="lg"
+                          style={{ borderRadius: "10px", overflow: "hidden" }}
+                        >
+                          <ModalHeader style={{ borderBottom: "none" }}>
+                            <h2 className="font-weight-bold">About</h2>
+                          </ModalHeader>
+                          <ModalBody>
+                            <br />
+
                             <>
                               <Label for="about" className="text-muted">
                                 <h4>About Me</h4>
@@ -767,15 +836,13 @@ const MyProfile = () => {
                               <Input
                                 type="textarea"
                                 id="about"
-                                value={about}
-                                onChange={(e) => setAbout(e.target.value)}
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
                                 className="font-weight-bold text-one"
                               />
                               <br />
                             </>
-                           
 
-                            
                             <>
                               <Label for="linkedinUrl" className="text-muted">
                                 <h4>LinkedIn</h4>
@@ -785,7 +852,7 @@ const MyProfile = () => {
                                 id="linkedinUrl"
                                 value={linkedinUrl}
                                 onChange={(e) => setLinkedinUrl(e.target.value)}
-                                 className="font-weight-bold text-one"
+                                className="font-weight-bold text-one"
                               />
                               <br />
                             </>
@@ -800,7 +867,7 @@ const MyProfile = () => {
                                 onChange={(e) =>
                                   setTwitterHandle(e.target.value)
                                 }
-                                 className="font-weight-bold text-one"
+                                className="font-weight-bold text-one"
                               />
                               <p className="text-muted mt-1">
                                 Omit the &ldquo;@&rdquo; -e.g.
@@ -816,32 +883,34 @@ const MyProfile = () => {
                                 type="text"
                                 id="website"
                                 value={personalWebsiteUrl}
-                                onChange={(e) => setPersonalWebsiteUrl(e.target.value)}
-                                 className="font-weight-bold text-one"
+                                onChange={(e) =>
+                                  setPersonalWebsiteUrl(e.target.value)
+                                }
+                                className="font-weight-bold text-one"
                               />
                               <br />
                             </>
-                            
-                         
-                       
-                  </ModalBody>
-                  <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
-                    <Button
-                      color="primary"
-                      onClick={() => setModalAbout(false)}
-                    >
-                      Save
-                    </Button>{' '}
-                    <Button
-                      color="primary"
-                      outline
-                      onClick={() => setModalAbout(false)}
-                      className=""
-                    >
-                      Cancel
-                    </Button>
-                  </ModalFooter>
-                </Modal>
+                          </ModalBody>
+                          <ModalFooter
+                            style={{ borderTop: "none" }}
+                            className="d-flex align-items-center justify-content-center"
+                          >
+                            <Button
+                              color="primary"
+                              onClick={() => setModalAbout(false)}
+                            >
+                              Save
+                            </Button>{" "}
+                            <Button
+                              color="primary"
+                              outline
+                              onClick={() => setModalAbout(false)}
+                              className=""
+                            >
+                              Cancel
+                            </Button>
+                          </ModalFooter>
+                        </Modal>
                       </Card>
                     </Col>
                   </Row>
@@ -849,294 +918,193 @@ const MyProfile = () => {
                     <Col>
                       <Card>
                         <CardBody>
-                        <Row className="align-items-center">
-                          <Col className="d-flex justify-content-between">
-                            <h2 className="font-weight-bold">Experience</h2>
-                            <Button
-                              color="primary"
-                              outline
-                              className="icon-button"        
-                              style={{ border: 'none' }}
-                              size="sm"
-                              onClick={() => setModalEditExperience(true)}
-                              
-                              >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                          </Col>
-                        </Row>
-                        {experience.work.map((w, index) => (
-                            // eslint-disable-next-line react/no-array-index-key
-                          <div key={index}>
-                          <h6>{w.jobTitle}</h6>
-                          <h6 className="text-muted">{w.company} | {w.startDate} - {w.endDate} - 1 month</h6>
-                          </div>
-                        ))}
-                              {/* <div>
-                        <h6>Web Developer(internship)</h6>
-                        <h6 className="text-muted">Metaverse | 15th Jun - present - 1 month</h6>
-                        </div> */}
-                          
-                        </CardBody>
-                        <Modal
-                        isOpen={modalEditExperience}
-                        toggle={() => setModalEditExperience(!modalEditExperience)}
-                        className=""
-                        size="lg"
-                        style={{ borderRadius: '10px', overflow: 'hidden' }}
-                      >
-                  {/* <ModalHeader style={{ borderBottom: 'none' }}>
-                    <h2 className="font-weight-bold">Experience</h2>
-                  </ModalHeader> */}
-                  <ModalBody>
-                  <Row className="align-items-center mb-3 ">
-                    <Col>
-                      <h2 className="font-weight-bold">Edit Experience</h2>
-                    </Col>
-                    <Col xs="auto" className="ml-auto">
-                      <Button
-                        color="primary"
-                        outline
-                        className="icon-button"
-                        style={{ border: 'none' }}
-                        size="sm"
-                        onClick={() => handleEditExperience()}
-                      >
-                        <span className="text-primary" style={{ fontSize: '24px' }}>+</span>
-                      </Button>
-                    </Col>
-                  </Row>
-                  {/* <p>No education added</p> */}
-                  {experienceEditOpen ? (
-                    <>
-                     <FormGroup className="error-l-125">
-                  
-                      <Label for="twitterHandle">
-                        Job Title
-                      </Label>
-                      <Input
-                        type="text"
-                        name="jobTitle"
-                        id="jobTitle"
-                        // className="form-control"
-                      />
-                </FormGroup>
-                <FormGroup className="error-l-125">
-                  
-                      <Label for="twitterHandle">
-                        Employment type
-                      </Label>
-                      <Input
-                        type="text"
-                        name="employmentType"
-                        id="employmentType"
-                        // className="form-control"
-                      />
-                </FormGroup>
-                 <FormGroup className="error-l-125">
-                  
-                      <Label for="twitterHandle">
-                        Company name
-                      </Label>
-                      <Input
-                        type="text"
-                        name="companyName"
-                        id="companyName"
-                        // className="form-control"
-                      />
-                </FormGroup>
-                <FormGroup>
-                            <Label
-                                for="location"
-                                className="font-weight-medium"
-                              >
-                                Location
-                              </Label>
-                              <Input
-                                type="select"
-                                name="location"
-                                value={location}
-                                // validate={validateLocation}
-                                onChange={(e) => setLocation(e.target.value)}
-                                className="form-control"
-                              >
-                                <option disabled value="">
-                                  Select Location
-                                </option>
-                                {country.map((option) => (
-                                  <option
-                                    key={option.iso_code}
-                                    value={option.iso_code}
-                                  >
-                                    {option.name}
-                                  </option>
-                                ))}
-                              </Input>
-                           </FormGroup>
-
-                    <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
-                    <Button
-                      color="primary"
-                      onClick={() => setExperienceEditOpen(false)}
-                    >
-                      Save
-                    </Button>{' '}
-                    <Button
-                      color="primary"
-                      outline
-                      onClick={() => setExperienceEditOpen(false)}
-                      className=""
-                    >
-                      Cancel
-                    </Button>
-                  </ModalFooter></>
-                  ) : (<>
-                    {experience.work.map((w, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                    <Row key={index}>
-                    <Col>
-                      {/* <h2>Dev Ops</h2>
-                      <h4>Web Development</h4> */}
-                             {/* eslint-disable-next-line react/no-array-index-key */}
-                          <div key={index}>
-                          <h6>{w.jobTitle}</h6>
-                          <h6 className="text-muted">{w.company} | {w.startDate}- {w.endDate} - 1 month</h6>
-                          </div>
-                          </Col>
-                          <Col className="d-flex justify-content-end align-items-center">
-                          <Button
-                          color="primary"
-                          outline
-                          className="icon-button"
-                          style={{ border: 'none' }}
-                          size="sm"
-                          onClick={() => handleEditExperience()}
-                          >
-                          <i className="simple-icon-pencil" />
-                          </Button>
-                          </Col>
-                          </Row>
-                        ))}
-</>
-                  )}
-                       
-                  </ModalBody>
-                  
-                </Modal>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row className="my-4">
-                    <Col>
-                      <Card>
-                      <CardBody>
-                        <Row className="align-items-center">
-                          <Col className="d-flex justify-content-between">
-                            <h2 className="font-weight-bold">Skills</h2>
-                            <Button
-                              color="primary"
-                              outline
-                              className="icon-button"
-                              style={{ border: 'none' }}
-                              size="sm"
-                              onClick={() => setModalEditSkills(true)}
-                            >
-                              <i className="simple-icon-pencil" />
-                            </Button>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <div className="d-flex flex-wrap" style={{ gap: '10px', marginTop: '10px' }}>
-                             
-                            {skills.map((skill, index) => (
-                                <Button
-                                  // eslint-disable-next-line react/no-array-index-key
-                                  key={index}
-                                color="primary"
-                                outline
-                                size="sm"
-                              >
-                                  {skill}
-                              </Button>
-                              ))}
+                          <Row className="align-items-center">
+                            <Col className="d-flex justify-content-between">
+                              <h2 className="font-weight-bold">Experience</h2>
                               <Button
                                 color="primary"
                                 outline
+                                className="icon-button"
+                                style={{ border: "none" }}
                                 size="sm"
+                                onClick={() => setModalEditExperience(true)}
                               >
-                                CSS
+                                <i className="simple-icon-pencil" />
                               </Button>
+                            </Col>
+                          </Row>
+                          {experience.work.map((w, index) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <div key={index}>
+                              <h6>{w.jobTitle}</h6>
+                              <h6 className="text-muted">
+                                {w.company} | {w.startDate} - {w.endDate} - 1
+                                month
+                              </h6>
                             </div>
-                          </Col>
-                        </Row>
-                      </CardBody>
-
+                          ))}
+                          {/* <div>
+                        <h6>Web Developer(internship)</h6>
+                        <h6 className="text-muted">Metaverse | 15th Jun - present - 1 month</h6>
+                        </div> */}
+                        </CardBody>
                         <Modal
-                        isOpen={modalEditSkills}
-                        toggle={() => setModalEditSkills(!modalEditSkills)}
-                        className=""
-                        size="lg"
-                        style={{ borderRadius: '10px', overflow: 'hidden' }}
-                      >
-                        <ModalHeader style={{ borderBottom: 'none' }}>
-                          <h2 className="font-weight-bold">Skills</h2>
-                        </ModalHeader>
-                        <ModalBody>
-                          <Row className="w-100 mb-3">
-                            <Col md={10}>
-                              <Input placeholder="Add skills" />
-                            </Col>
-                            <Col md={2}>
-                              <Button color="primary" className="w-100">Add skill</Button>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <ReactSortable
-                              list={skills}
-                              setList={setSkills}
-                              options={{ handle: '.handle' }}
-                              className="d-flex flex-wrap ml-2"
-                            >
-                              {skills.map((skill, index) => (
+                          isOpen={modalEditExperience}
+                          toggle={() =>
+                            setModalEditExperience(!modalEditExperience)
+                          }
+                          className=""
+                          size="lg"
+                          style={{ borderRadius: "10px", overflow: "hidden" }}
+                        >
+                          {/* <ModalHeader style={{ borderBottom: 'none' }}>
+                    <h2 className="font-weight-bold">Experience</h2>
+                  </ModalHeader> */}
+                          <ModalBody>
+                            <Row className="align-items-center mb-3 ">
+                              <Col>
+                                <h2 className="font-weight-bold">
+                                  Edit Experience
+                                </h2>
+                              </Col>
+                              <Col xs="auto" className="ml-auto">
                                 <Button
-                                  // eslint-disable-next-line react/no-array-index-key
-                                  key={index}
-                                  outline={index >= 3} 
-                                  color='primary'
-                                  // color={index < 3 ? 'primary' : 'light'}
-                                  className="ml-2 font-weight-semibold mx-2 d-flex align-items-center"
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  style={{ border: "none" }}
                                   size="sm"
-                                  // onClick={() => handleRemoveSkill(index)}
+                                  onClick={() => handleEditExperience()}
                                 >
-                                  {skill}
-                                  <i className="iconsminds-close ml-2" />
+                                  <span
+                                    className="text-primary"
+                                    style={{ fontSize: "24px" }}
+                                  >
+                                    +
+                                  </span>
                                 </Button>
-                              ))}
-                            </ReactSortable>
-                            {/* <p className="ml-3 text-muted mt-3">Drag skills to set top 3 (the top 3 skills will be displayed on mentor cards)</p> */}
-                          </Row>
-                        </ModalBody>
+                              </Col>
+                            </Row>
+                            {/* <p>No education added</p> */}
+                            {experienceEditOpen ? (
+                              <>
+                                <FormGroup className="error-l-125">
+                                  <Label for="twitterHandle">Job Title</Label>
+                                  <Input
+                                    type="text"
+                                    name="jobTitle"
+                                    id="jobTitle"
+                                    // className="form-control"
+                                  />
+                                </FormGroup>
+                                <FormGroup className="error-l-125">
+                                  <Label for="twitterHandle">
+                                    Employment type
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    name="employmentType"
+                                    id="employmentType"
+                                    // className="form-control"
+                                  />
+                                </FormGroup>
+                                <FormGroup className="error-l-125">
+                                  <Label for="twitterHandle">
+                                    Company name
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    name="companyName"
+                                    id="companyName"
+                                    // className="form-control"
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label
+                                    for="location"
+                                    className="font-weight-medium"
+                                  >
+                                    Location
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name="location"
+                                    value={location}
+                                    // validate={validateLocation}
+                                    onChange={(e) =>
+                                      setLocation(e.target.value)
+                                    }
+                                    className="form-control"
+                                  >
+                                    <option disabled value="">
+                                      Select Location
+                                    </option>
+                                    {country.map((option) => (
+                                      <option
+                                        key={option.iso_code}
+                                        value={option.iso_code}
+                                      >
+                                        {option.name}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
 
-                        <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
-                    <Button
-                      color="primary"
-                      onClick={() => setModalEditSkills(false)}
-                    >
-                      Save
-                    </Button>{' '}
-                    <Button
-                      color="primary"
-                      outline
-                      onClick={() => setModalEditSkills(false)}
-                      className=""
-                    >
-                      Cancel
-                    </Button>
-                  </ModalFooter>
-                        
-                      </Modal>
-                        
+                                <ModalFooter
+                                  style={{ borderTop: "none" }}
+                                  className="d-flex align-items-center justify-content-center"
+                                >
+                                  <Button
+                                    color="primary"
+                                    onClick={() => setExperienceEditOpen(false)}
+                                  >
+                                    Save
+                                  </Button>{" "}
+                                  <Button
+                                    color="primary"
+                                    outline
+                                    onClick={() => setExperienceEditOpen(false)}
+                                    className=""
+                                  >
+                                    Cancel
+                                  </Button>
+                                </ModalFooter>
+                              </>
+                            ) : (
+                              <>
+                                {experience.work.map((w, index) => (
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  <Row key={index}>
+                                    <Col>
+                                      {/* <h2>Dev Ops</h2>
+                      <h4>Web Development</h4> */}
+                                      {/* eslint-disable-next-line react/no-array-index-key */}
+                                      <div key={index}>
+                                        <h6>{w.jobTitle}</h6>
+                                        <h6 className="text-muted">
+                                          {w.company} | {w.startDate}-{" "}
+                                          {w.endDate} - 1 month
+                                        </h6>
+                                      </div>
+                                    </Col>
+                                    <Col className="d-flex justify-content-end align-items-center">
+                                      <Button
+                                        color="primary"
+                                        outline
+                                        className="icon-button"
+                                        style={{ border: "none" }}
+                                        size="sm"
+                                        onClick={() => handleEditExperience()}
+                                      >
+                                        <i className="simple-icon-pencil" />
+                                      </Button>
+                                    </Col>
+                                  </Row>
+                                ))}
+                              </>
+                            )}
+                          </ModalBody>
+                        </Modal>
                       </Card>
                     </Col>
                   </Row>
@@ -1144,29 +1112,146 @@ const MyProfile = () => {
                     <Col>
                       <Card>
                         <CardBody>
-                        <Row className="align-items-center">
-                          <Col className="d-flex justify-content-between">
-                            <h2 className="font-weight-bold">Education</h2>
-                            <Button
-                            color="primary"
-                            outline
-                            className="icon-button"
-                            style={{ border: 'none' }}
-                            size="sm"
-                            onClick={() => setModalEditEducation(true)}
+                          <Row className="align-items-center">
+                            <Col className="d-flex justify-content-between">
+                              <h2 className="font-weight-bold">Skills</h2>
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                style={{ border: "none" }}
+                                size="sm"
+                                onClick={() => setModalEditSkills(true)}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <div
+                                className="d-flex flex-wrap"
+                                style={{ gap: "10px", marginTop: "10px" }}
+                              >
+                                {skills.map((skill, index) => (
+                                  <Button
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={index}
+                                    color="primary"
+                                    outline
+                                    size="sm"
+                                  >
+                                    {skill}
+                                  </Button>
+                                ))}
+                                <Button color="primary" outline size="sm">
+                                  CSS
+                                </Button>
+                              </div>
+                            </Col>
+                          </Row>
+                        </CardBody>
+
+                        <Modal
+                          isOpen={modalEditSkills}
+                          toggle={() => setModalEditSkills(!modalEditSkills)}
+                          className=""
+                          size="lg"
+                          style={{ borderRadius: "10px", overflow: "hidden" }}
+                        >
+                          <ModalHeader style={{ borderBottom: "none" }}>
+                            <h2 className="font-weight-bold">Skills</h2>
+                          </ModalHeader>
+                          <ModalBody>
+                            <Row className="w-100 mb-3">
+                              <Col md={10}>
+                                <Input placeholder="Add skills" />
+                              </Col>
+                              <Col md={2}>
+                                <Button color="primary" className="w-100">
+                                  Add skill
+                                </Button>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <ReactSortable
+                                list={skills}
+                                setList={setSkills}
+                                options={{ handle: ".handle" }}
+                                className="d-flex flex-wrap ml-2"
+                              >
+                                {skills.map((skill, index) => (
+                                  <Button
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={index}
+                                    outline={index >= 3}
+                                    color="primary"
+                                    // color={index < 3 ? 'primary' : 'light'}
+                                    className="ml-2 font-weight-semibold mx-2 d-flex align-items-center"
+                                    size="sm"
+                                    // onClick={() => handleRemoveSkill(index)}
+                                  >
+                                    {skill}
+                                    <i className="iconsminds-close ml-2" />
+                                  </Button>
+                                ))}
+                              </ReactSortable>
+                              {/* <p className="ml-3 text-muted mt-3">Drag skills to set top 3 (the top 3 skills will be displayed on mentor cards)</p> */}
+                            </Row>
+                          </ModalBody>
+
+                          <ModalFooter
+                            style={{ borderTop: "none" }}
+                            className="d-flex align-items-center justify-content-center"
                           >
-                            <i className="simple-icon-pencil" />
-                          </Button>
-                          </Col>
-                        </Row>
-                        {experience.education.map((e,index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <div key={index}>
-                        <div className="my-3">
-                          <h6>{e.college}</h6>
-                          <h6 className="text-muted">{e.degree} | {e.department} | {e.year}</h6>
-                        </div>
-                        {/* <div className="my-3">
+                            <Button
+                              color="primary"
+                              onClick={() => setModalEditSkills(false)}
+                            >
+                              Save
+                            </Button>{" "}
+                            <Button
+                              color="primary"
+                              outline
+                              onClick={() => setModalEditSkills(false)}
+                              className=""
+                            >
+                              Cancel
+                            </Button>
+                          </ModalFooter>
+                        </Modal>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row className="my-4">
+                    <Col>
+                      <Card>
+                        <CardBody>
+                          <Row className="align-items-center">
+                            <Col className="d-flex justify-content-between">
+                              <h2 className="font-weight-bold">Education</h2>
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                style={{ border: "none" }}
+                                size="sm"
+                                onClick={() => setModalEditEducation(true)}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                            </Col>
+                          </Row>
+                          {experience.education && experience.education.map((e, index) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <div key={index}>
+                              <div className="my-3">
+                                <h6>{e.college}</h6>
+                                <h6 className="text-muted">
+                                  {e.degree} | {e.department} | {e.year}
+                                </h6>
+                              </div>
+                              {/* <div className="my-3">
                           <h6>MRS College</h6>
                           <h6 className="text-muted">B.sc Computer Application | 2022-2023</h6>
                         </div>
@@ -1174,130 +1259,143 @@ const MyProfile = () => {
                           <h6>HHS School</h6>
                           <h6 className="text-muted">Higher Secondary | 2016-2018</h6>
                         </div> */}
-                       
-                       
-                        </div>
-                        
+                            </div>
                           ))}
                         </CardBody>
                         <Modal
-                        isOpen={modalEditEducation}
-                        toggle={() => setModalEditEducation(!modalEditEducation)}
-                        className=""
-                        size="lg"
-                        style={{ borderRadius: '10px', overflow: 'hidden' }}
-                      >
-                  {/* <ModalHeader className="" style={{ borderBottom: 'none' }}> */}
-                    
-                  {/* </ModalHeader> */}
+                          isOpen={modalEditEducation}
+                          toggle={() =>
+                            setModalEditEducation(!modalEditEducation)
+                          }
+                          className=""
+                          size="lg"
+                          style={{ borderRadius: "10px", overflow: "hidden" }}
+                        >
+                          {/* <ModalHeader className="" style={{ borderBottom: 'none' }}> */}
 
-                  <ModalBody>
-                  <Row className="align-items-center mb-3 ">
-                    <Col>
-                      <h2 className="font-weight-bold">Education</h2>
-                    </Col>
-                    <Col xs="auto" className="ml-auto">
-                      <Button
-                        color="primary"
-                        outline
-                        className="icon-button"
-                        style={{ border: 'none' }}
-                        size="sm"
-                        onClick={() => handleEditEducation()}
-                      >
-                        <span className="text-primary" style={{ fontSize: '24px' }}>+</span>
-                      </Button>
-                    </Col>
-                  </Row>
-                  {/* <p>No education added</p> */}
-                  {educationEditOpen ? (
-                    <>
-                     <FormGroup className="error-l-125">
-                  
-                      <Label for="twitterHandle">
-                        School
-                      </Label>
-                      <Input
-                        type="text"
-                        name="school"
-                        id="school"
-                        // className="form-control"
-                      />
-                </FormGroup>
-                <FormGroup className="error-l-125">
-                  
-                      <Label for="twitterHandle">
-                        Degree
-                      </Label>
-                      <Input
-                        type="text"
-                        name="degree"
-                        id="degree"
-                        // className="form-control"
-                      />
-                </FormGroup>
-                 <FormGroup className="error-l-125">
-                  
-                      <Label for="twitterHandle">
-                        Field study
-                      </Label>
-                      <Input
-                        type="text"
-                        name="fieldStudy"
-                        id="fieldStudy"
-                        // className="form-control"
-                      />
-                </FormGroup>
+                          {/* </ModalHeader> */}
 
-                    <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
-                    <Button
-                      color="primary"
-                      onClick={() => setEducationEditOpen(false)}
-                    >
-                      Save
-                    </Button>{' '}
-                    <Button
-                      color="primary"
-                      outline
-                      onClick={() => setEducationEditOpen(false)}
-                      className=""
-                    >
-                      Cancel
-                    </Button>
-                  </ModalFooter></>
-                  ) : (
-                    <>
-                     {experience.education.map((e,index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                    <Row key={index}>
-                    <Col>
-                    <div className="my-3">
-                          <h6>{e.college}</h6>
-                          <h6 className="text-muted">{e.degree} | {e.department} | {e.year}</h6>
-                        </div>
-                        
-                    </Col>
-                    <Col className="d-flex justify-content-end align-items-center">
-                      <Button
-                        color="primary"
-                        outline
-                        className="icon-button"
-                        style={{ border: 'none' }}
-                        size="sm"
-                        onClick={() => handleEditEducation()}
-                      >
-                        <i className="simple-icon-pencil" />
-                      </Button>
-                    </Col>
-                  </Row>
-                      ))}
-                  </>
+                          <ModalBody>
+                            <Row className="align-items-center mb-3 ">
+                              <Col>
+                                <h2 className="font-weight-bold">Education</h2>
+                              </Col>
+                              <Col xs="auto" className="ml-auto">
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                  size="sm"
+                                  onClick={handleAddEducation}
+                                >
+                                  <span
+                                    className="text-primary"
+                                    style={{ fontSize: "24px" }}
+                                  >
+                                    +
+                                  </span>
+                                </Button>
+                              </Col>
+                            </Row>
+                            {/* <p>No education added</p> */}
+                            {educationEditOpen ? (
+                              <>
+                                <FormGroup className="error-l-125">
+                                  <Label for="twitterHandle">School</Label>
+                                  <Input
+                                    type="text"
+                                    name="school"
+                                    id="school"
+                                    value={currentEducation ? currentEducation.college : ''}
+                                    onChange={(e) => setCurrentEducation({...currentEducation, college: e.target.value})}
+                                    // className="form-control"
+                                  />
+                                </FormGroup>
+                                <FormGroup className="error-l-125">
+                                  <Label for="twitterHandle">Degree</Label>
+                                  <Input
+                                    type="text"
+                                    name="degree"
+                                    id="degree"
+                                    // className="form-control"
+                                    value={currentEducation ? currentEducation.degree : ''}
+                                    onChange={(e) => setCurrentEducation({...currentEducation, degree: e.target.value})}
+                                  />
+                                </FormGroup>
+                                <FormGroup className="error-l-125">
+                                  <Label for="twitterHandle">Field study</Label>
+                                  <Input
+                                    type="text"
+                                    name="fieldStudy"
+                                    id="fieldStudy"
+                                    // className="form-control"
+                                    value={currentEducation ? currentEducation.department : ''}
+                                    onChange={(e) => setCurrentEducation({...currentEducation, department: e.target.value})}
+                                  />
+                                </FormGroup>
+                                <FormGroup className="error-l-125">
+                                  <Label for="year">Year</Label> 
+                                  <Input
+                                    type="text"
+                                    name="year"
+                                    id="year"
+                                    value={currentEducation ? currentEducation.year : ''}
+                                    onChange={(e) => setCurrentEducation({...currentEducation, year: e.target.value})}
+                                  />
+                                </FormGroup>
 
-                  )}
-                       
-                  </ModalBody>
-                  
-                </Modal>
+                                <ModalFooter
+                                  style={{ borderTop: "none" }}
+                                  className="d-flex align-items-center justify-content-center"
+                                >
+                                  <Button
+                                    color="primary"
+                                    onClick={handleSaveEducation}
+                                  >
+                                    Save
+                                  </Button>{" "}
+                                  <Button
+                                    color="primary"
+                                    outline
+                                    onClick={() => setEducationEditOpen(false)}
+                                    className=""
+                                  >
+                                    Cancel
+                                  </Button>
+                                </ModalFooter>
+                              </>
+                            ) : (
+                              <>
+                                {experience.education.map((e, index) => (
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  <Row key={index}>
+                                    <Col>
+                                      <div className="my-3">
+                                        <h6>{e.college}</h6>
+                                        <h6 className="text-muted">
+                                          {e.degree} | {e.department} | {e.year}
+                                        </h6>
+                                      </div>
+                                    </Col>
+                                    <Col className="d-flex justify-content-end align-items-center">
+                                      <Button
+                                        color="primary"
+                                        outline
+                                        className="icon-button"
+                                        style={{ border: "none" }}
+                                        size="sm"
+                                        onClick={() => handleEditEducation(e)}
+                                      >
+                                        <i className="simple-icon-pencil" />
+                                      </Button>
+                                    </Col>
+                                  </Row>
+                                ))}
+                              </>
+                            )}
+                          </ModalBody>
+                        </Modal>
                       </Card>
                     </Col>
                   </Row>
@@ -1305,25 +1403,24 @@ const MyProfile = () => {
                     <Col>
                       <Card>
                         <CardBody>
-                        <Row className="align-items-center">
-                          <Col className="d-flex justify-content-between">
-                            <h2 className="font-weight-bold">Languages</h2>
-                            <Button
-                              color="primary"
-                              outline
-                              className="icon-button"
-                              style={{ border: 'none' }}
-                              size="sm"
-                              onClick={() => setModalEditLanguage(true)}
-
-                            >
-                              <i className="simple-icon-pencil" />
-                            </Button>
-                          </Col>
-                        </Row>
-                        <div className="">
-                        <div className="" >
-                            {/* <ul className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start" 
+                          <Row className="align-items-center">
+                            <Col className="d-flex justify-content-between">
+                              <h2 className="font-weight-bold">Languages</h2>
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                style={{ border: "none" }}
+                                size="sm"
+                                onClick={() => setModalEditLanguage(true)}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                            </Col>
+                          </Row>
+                          <div className="">
+                            <div className="">
+                              {/* <ul className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start" 
                             style={{gap:"30px"}}>
                             {languages.map((lang,index) => (
                                 // eslint-disable-next-line react/no-array-index-key
@@ -1332,96 +1429,114 @@ const MyProfile = () => {
                               </li>
                           ))}
                             </ul> */}
-                            <ul className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start" 
-                                style={{ gap: "30px", listStyle: "none", paddingLeft: 0 }}>
+                              <ul
+                                className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mx-3 text-start"
+                                style={{
+                                  gap: "30px",
+                                  listStyle: "none",
+                                  paddingLeft: 0,
+                                }}
+                              >
                                 {languages.map((lang, index) => (
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    <li key={index} style={{ position: "relative", paddingLeft: "20px" }}>
-                                        <span style={{
-                                            content: '""',
-                                            position: "absolute",
-                                            left: 0,
-                                            top: "50%",
-                                            transform: "translateY(-50%) rotate(45deg)",
-                                            width: "7px",
-                                            height: "7px",
-                                            backgroundColor: "currentColor"
-                                        }} />
-                                        {language.find((l) => l.iso_code === lang)?.name}{" "}
-                                    </li>
+                                  <li
+                                  // eslint-disable-next-line react/no-array-index-key
+                                    key={index}
+                                    style={{
+                                      position: "relative",
+                                      paddingLeft: "20px",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        content: '""',
+                                        position: "absolute",
+                                        left: 0,
+                                        top: "50%",
+                                        transform:
+                                          "translateY(-50%) rotate(45deg)",
+                                        width: "7px",
+                                        height: "7px",
+                                        backgroundColor: "currentColor",
+                                      }}
+                                    />
+                                    {
+                                      language.find((l) => l.iso_code === lang)
+                                        ?.name
+                                    }{" "}
+                                  </li>
                                 ))}
-                            </ul>
-
-                        </div>
-                       
-                       
-                        </div>
-                          
+                              </ul>
+                            </div>
+                          </div>
                         </CardBody>
                         <Modal
-                        isOpen={modalEditLanguage}
-                        toggle={() => setModalEditLanguage(!modalEditLanguage)}
-                        className=""
-                        size="lg"
-                        style={{ borderRadius: '10px', overflow: 'hidden' }}
-                      >
-                        <ModalHeader style={{ borderBottom: 'none' }}>
-                          <h2 className="font-weight-bold">Languages</h2>
-                        </ModalHeader>
-                        <ModalBody>
-                        <>
-                     
-
-                      <FormGroup className="error-l-75">
-                        <Select
-                          placeholder="Select Languages"
-                          name="languages"
-                          isMulti
-                          options={languageOptions}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          value={selectedLanguages}
-                          onChange={(selectedOptions) => {
-                            setSelectedLanguages(selectedOptions);
-                            handleChange(selectedOptions);
-                          }}
-                        />
-                      </FormGroup>
-                      {languages.map((lang, index) => (
-                        <Button
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={index}
-                          outline
-                          color="primary"
-                          className="mt-2 font-weight-semibold mx-2"
-                          size="sm"
-                          onClick={() => handleRemoveLanguages(index)}
+                          isOpen={modalEditLanguage}
+                          toggle={() =>
+                            setModalEditLanguage(!modalEditLanguage)
+                          }
+                          className=""
+                          size="lg"
+                          style={{ borderRadius: "10px", overflow: "hidden" }}
                         >
-                          {language.find((l) => l.iso_code === lang)?.name}{" "}
-                          <i className="iconsminds-close" />
-                        </Button>
-                      ))}
-                    </>
-                            
-                        </ModalBody>
-                        <ModalFooter style={{ borderTop: 'none' }} className="d-flex align-items-center justify-content-center">
-                    <Button
-                      color="primary"
-                      onClick={() => setModalEditLanguage(false)}
-                    >
-                      Save
-                    </Button>{' '}
-                    <Button
-                      color="primary"
-                      outline
-                      onClick={() => setModalEditLanguage(false)}
-                      className=""
-                    >
-                      Cancel
-                    </Button>
-                  </ModalFooter>
-                        
-                      </Modal>
+                          <ModalHeader style={{ borderBottom: "none" }}>
+                            <h2 className="font-weight-bold">Languages</h2>
+                          </ModalHeader>
+                          <ModalBody>
+                            <>
+                              <FormGroup className="error-l-75">
+                                <Select
+                                  placeholder="Select Languages"
+                                  name="languages"
+                                  isMulti
+                                  options={languageOptions}
+                                  className="react-select"
+                                  classNamePrefix="react-select"
+                                  value={selectedLanguages}
+                                  onChange={(selectedOptions) => {
+                                    setSelectedLanguages(selectedOptions);
+                                    handleChange(selectedOptions);
+                                  }}
+                                />
+                              </FormGroup>
+                              {languages.map((lang, index) => (
+                                <Button
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  key={index}
+                                  outline
+                                  color="primary"
+                                  className="mt-2 font-weight-semibold mx-2"
+                                  size="sm"
+                                  onClick={() => handleRemoveLanguages(index)}
+                                >
+                                  {
+                                    language.find((l) => l.iso_code === lang)
+                                      ?.name
+                                  }{" "}
+                                  <i className="iconsminds-close" />
+                                </Button>
+                              ))}
+                            </>
+                          </ModalBody>
+                          <ModalFooter
+                            style={{ borderTop: "none" }}
+                            className="d-flex align-items-center justify-content-center"
+                          >
+                            <Button
+                              color="primary"
+                              onClick={() => setModalEditLanguage(false)}
+                            >
+                              Save
+                            </Button>{" "}
+                            <Button
+                              color="primary"
+                              outline
+                              onClick={() => setModalEditLanguage(false)}
+                              className=""
+                            >
+                              Cancel
+                            </Button>
+                          </ModalFooter>
+                        </Modal>
                       </Card>
                     </Col>
                   </Row>

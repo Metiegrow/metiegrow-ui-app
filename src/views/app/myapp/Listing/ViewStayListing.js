@@ -17,7 +17,7 @@ const ViewOtherListing = () => {
   const [data, setData] = useState();
   const [copied, setCopied] = useState(false);
   const { id } = useParams();
-  const url = `${baseUrl}/staylistingcard/${id}`;
+  const url = `${baseUrl}/api/posts/stay-post/${id}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +103,7 @@ const ViewOtherListing = () => {
                     </span>{" "}
                     |{" "}
                     <span data-toggle="tooltip" title="BHK Type">
-                      {data.BHKType}
+                      {data.bhkType}
                     </span>
                   </Col>
                   {/* <Col>
@@ -135,7 +135,13 @@ const ViewOtherListing = () => {
                     </span>
                   </Col>
                 </Row>
-                <div className="mt-2">{data.description}</div>
+                {/* <div className="mt-2">{data.description}</div> */}
+                <div dangerouslySetInnerHTML={{ __html: data.description }} />
+                <div className="mt-2"><strong>Contact details :</strong> {data.contact}</div>
+                <div className="mt-2"><strong>Expected deposit amount :</strong> {data.expectedDeposit}</div>
+                <div className="mt-2"><strong>Maintenance amount :</strong> {data.maintenanceAmount}</div>
+                <div className="mt-2"><strong>Available from: </strong><TimestampConverter timeStamp={data.availableFrom} format="date" /></div>
+
                 <Row className="">
                   <Col className="">
                   {data.interestedCount && (

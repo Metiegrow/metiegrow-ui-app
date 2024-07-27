@@ -21,8 +21,11 @@ const StayListing = () => {
   
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [items, setItems] = useState([]);
+  const [pagination, setPagination] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage] = useState(2);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // const [totalPage] = useState(2);
   const history = useHistory();
   
   const url = `${baseUrl}/api/posts/stay-post/`;
@@ -31,17 +34,27 @@ const StayListing = () => {
   useEffect(() => {
     const fetchDataFromServer = async () => {
       try {
+        const params = {
+          page: currentPage-1,
+          size: 20,
+          // sort: [""]
+        };
         // const res = await axios.get(`${url}?_page=${currentPage}&_limit=4`);
-        const res = await axios.get(url);
+        const res = await axios.get(url, {params});
         const { data } = res;
-        const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
-        setItems(sortedData);
+        // const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+        setPagination(data.paginationMeta);
+        setItems(data.stayrooms);
+        setIsLoaded(true);
+
         // const stayListingCardData = res.data;
         // console.log("staylisting", stayListingCardData);
         // setItems(stayListingCardData);
 
         // console.log("Fetched data:", walletData);
       } catch (error) {
+        setIsLoaded(true);
+
         console.error("Error while fetching data from the server", error);
       }
     };
@@ -58,7 +71,7 @@ const StayListing = () => {
   const handleClick = (id) => {
     history.push(`/app/listing/stay/view/${id}`);
   };
-
+  
   const handleInterestedButtonClick = async (id) => {
     const data = {
       jobListingId: id,
@@ -72,8 +85,21 @@ const StayListing = () => {
     }
   };
 
-  return (
-    <>
+  function removeTags(str) {
+    if (str === null || str === '') {
+        return false;
+    }
+    const newStr = str.toString();
+    return newStr.replace(/(<([^>]+)>)/ig, '');
+}
+
+return !isLoaded ? (
+  <div className="loading" />
+) : (<>
+{!items.length > 0 ? (
+  <Card className="d-flex justify-content-center align-items-center "><h2 className="mt-4 mb-4">There are no posts available</h2></Card>
+) : (
+  <div className="disable-text-selection">
       {items.map((data, index) => (
         <Row key={data.title} className="mb-2">
           <Colxx xxs="12">
@@ -94,10 +120,10 @@ const StayListing = () => {
                 </Row>
                 {/* <CardSubtitle>{data.description}</CardSubtitle> */}
                 {expandedIndex === index ? (
-                  <CardSubtitle>{data.description}</CardSubtitle>
+                  <CardSubtitle>{removeTags(data.description)}</CardSubtitle>
                 ) : (
                   <CardSubtitle>
-                    {`${data.description.slice(0, 100)}...`}
+                    {`${removeTags(data.description).slice(0, 100)}...`}
                     {data.description.length > 100 && (
                       <Button
                         color="link"
@@ -191,9 +217,13 @@ const StayListing = () => {
       ))}
       <Pagination
         currentPage={currentPage}
-        totalPage={totalPage}
+        totalPage={pagination.totalPage}
         onChangePage={(i) => setCurrentPage(i)}
+        lastIsActive = {pagination.first}
+        firstIsActive = {pagination.last}
       />
+   </div>
+    )}
     </>
   );
 };

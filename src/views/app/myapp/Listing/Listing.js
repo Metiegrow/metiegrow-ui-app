@@ -38,7 +38,7 @@ const DetailsAltPages = () => {
   
   const location = useLocation();
   const history = useHistory();
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("job");
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [listingType, setListingType] = useState("");
@@ -136,7 +136,7 @@ const DetailsAltPages = () => {
           {/* <Breadcrumb match={match} /> */}
 
           <Nav tabs className="separator-tabs ml-0 mb-5">
-            <NavItem>
+            {/* <NavItem>
               <NavLink
                 location={{}}
                 to="#"
@@ -149,7 +149,7 @@ const DetailsAltPages = () => {
                 <i className="iconsminds-align-justify-all text-primary" />
                 All
               </NavLink>
-            </NavItem>
+            </NavItem> */}
             <NavItem>
               <NavLink
                 location={{}}
