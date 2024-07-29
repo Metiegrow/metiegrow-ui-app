@@ -25,22 +25,18 @@ import country from "../my-login/Country";
 import language from "../my-login/Languages";
 
 const MyProfile = () => {
-  // const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [company, setCompany] = useState("Metaverse");
   const [location, setLocation] = useState("");
   const [lastName, setLastName] = useState("");
-  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [linkedInUrl, setLinkedInUrl] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
-  const [personalWebsiteUrl, setPersonalWebsiteUrl] = useState("");
-  // const [about, setAbout] = useState("");
-  const [experience, setExperience] = useState([]);
-
-  // const userId = localStorage.getItem("userId");
-  const endUrl = "http://localhost:3001/userprofile";
-  // const endUrl = `${baseUrl}/api/userProfile/myprofile`;
+  const [personalWebsite, setPersonalWebsite] = useState("");
+  const [education, setEducation] = useState([]);
+  const [work, setWork] = useState([])
+  const endUrl = `${baseUrl}/api/userProfile/myprofile`;
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
@@ -60,90 +56,109 @@ const MyProfile = () => {
   const [bio, setBio] = useState("")
 
 const [currentEducation, setCurrentEducation] = useState(null);
+const [currentWork, setCurrentWork] = useState(null);
+
+const token = localStorage.getItem("tokenRes");
 
 const handleAddEducation = () => {
   setCurrentEducation({
-    id: Date.now(), 
     college: '',
     degree: '',
     department: '',
-    year: ''
+    year: 0
   });
   setEducationEditOpen(true);
 };
 
-// const handleSaveEducation = () => {
-//   setExperience(prevExperience => {
-//     const updatedEducation = prevExperience.education 
-//       ? prevExperience.education.map(edu => 
-//           edu.id === currentEducation.id ? currentEducation : edu
-//         )
-//       : [];
-
-//     if (!updatedEducation.some(edu => edu.id === currentEducation.id)) {
-//       updatedEducation.push(currentEducation);
-//     }
-
-//     return {
-//       ...prevExperience,
-//       education: updatedEducation
-//     };
-//   });
-
-//   setEducationEditOpen(false);
-//   setCurrentEducation(null);
-// };
-
-const handleSaveEducation = async () => {
+const updateMentorProfile = async () => {
   try {
-    setExperience(prevExperience => {
-      const updatedEducation = prevExperience.education 
-        ? prevExperience.education.map(edu => 
-            edu.id === currentEducation.id ? currentEducation : edu
-          )
-        : [];
+    const updatedData = {
+      firstName,
+      lastName,
+      linkedInUrl,
+      twitterHandle,
+      languages,
+      personalWebsite,
+      education: education.map(({ id, ...rest }) => rest), 
+      work: work.map(({ id, ...rest }) => rest), 
+      skills,
+      bio,
+    };
 
-      if (!updatedEducation.some(edu => edu.id === currentEducation.id)) {
-        updatedEducation.push(currentEducation);
-      }
-
-      const updatedExperience = {
-        // ...prevExperience,
-        education: updatedEducation,
-        firstName,
-        lastName,
-        jobTitle,
-        location,
-        linkedinUrl,
-        twitterHandle,
-        experience,
-        skills,
-      };
-
-      axios.put('http://localhost:3001/userprofileupdate', {
-        // ...prevExperience,
-        experience: updatedExperience
-      })
-      .then(response => {
-        console.log('Profile updated successfully:', response.data);
-      })
-      .catch(error => {
-        console.error('Error updating profile:', error);
-      });
-
-      return updatedExperience;
+    await axios.put(endUrl, updatedData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    setEducationEditOpen(false);
-    setCurrentEducation(null);
+
   } catch (error) {
-    console.error('Error in handleSaveEducation:', error);
+    console.error("Error updating profile", error);
   }
 };
 
-const handleEditEducation = (education) => {
-  setCurrentEducation({...education});
+const handleSaveEducation = () => {
+  setEducation(prevEducation => {
+    const updatedEducation = [...prevEducation];
+    
+    if (currentEducation.id) {
+      const index = updatedEducation.findIndex(edu => edu.id === currentEducation.id);
+      if (index !== -1) {
+        updatedEducation[index] = currentEducation;
+      }
+    } else {
+      updatedEducation.push(currentEducation);
+    }
+    
+    return updatedEducation;
+  });
+
+  setEducationEditOpen(false);
+  setCurrentEducation(null);
+  updateMentorProfile(); 
+};
+
+const handleEditEducation = (educationItem) => {
+  setCurrentEducation({...educationItem});
   setEducationEditOpen(true);
+};
+
+const handleAddWork = () => {
+  setCurrentWork({
+    company: '',
+    jobTitle: '',
+    employmentType: '',
+    jobLocation: '',
+    startDate: 0,
+    endDate: 0
+  });
+  setExperienceEditOpen(true);
+};
+
+const handleSaveWork = () => {
+  setWork(prevWork => {
+    const updatedWork = [...prevWork];
+    
+    if (currentWork.id) {
+      const index = updatedWork.findIndex(w => w.id === currentWork.id);
+      if (index !== -1) {
+        updatedWork[index] = currentWork;
+      }
+    } else {
+      updatedWork.push(currentWork);
+    }
+    
+    return updatedWork;
+  });
+
+  setExperienceEditOpen(false);
+  setCurrentWork(null);
+  updateMentorProfile(); 
+};
+
+const handleEditWork = (workItem) => {
+  setCurrentWork({...workItem});
+  setExperienceEditOpen(true);
 };
 
   const handleAddLanguages = (newLanguages) => {
@@ -165,7 +180,6 @@ const handleEditEducation = (education) => {
     const languagesArray = selectedOptions
       ? selectedOptions.map((option) => option.value)
       : [];
-    // console.log("arraychk", languagesArray);
     handleAddLanguages(languagesArray[0]);
     setSelectedLanguages([]);
   };
@@ -177,15 +191,16 @@ const handleEditEducation = (education) => {
         const userData = response.data;
         if (userData) {
           setImage(userData.userPhotoUrl);
-          // setFirstName(userData.firstName);
-          // setLastName(userData.lastName);
+          setFirstName(userData.firstName);
+          setLastName(userData.lastName);
           setJobTitle(userData.jobTitle);
           setLocation(userData.location);
-          setExperience(userData.experience);
-          setLinkedinUrl(userData.linkedInUrl);
+          setEducation(userData.education);
+          setLinkedInUrl(userData.linkedInUrl);
           setLanguages(userData.languages);
+          setWork(userData.work)
           setTwitterHandle(userData.twitterHandle);
-          setPersonalWebsiteUrl(userData.personalWebsite);
+          setPersonalWebsite(userData.personalWebsite);
           setSkills(userData.skills);
           setBio(userData.bio);
           setLoading(false);
@@ -203,62 +218,30 @@ const handleEditEducation = (education) => {
     mentorProfileDetails();
   }, []);
 
-  const token = localStorage.getItem("tokenRes");
-  // console.log(token);
+  // const updateMentorProfile = async () => {
+  //   try {
+  //     const updatedData = {
+  //       firstName,
+  //       lastName,
+  //       jobTitle,
+  //       location,
+  //       linkedInUrl,
+  //       personalWebsite,
+  //       twitterHandle,
+  //       education,
+  //       work,
+  //       skills,
+  //       bio,
+  //     };
 
-  const updateMEntorProfile = async () => {
-    try {
-      const updatedData = {
-        firstName,
-        lastName,
-        jobTitle,
-        location,
-        linkedinUrl,
-        twitterHandle,
-        experience,
-        skills,
-      };
-
-      await axios.put(endUrl, updatedData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (error) {
-      console.error("Error updating profile", error);
-    }
-  };
-
-  // const handleEditClick = () => {
-  //   setIsEditing(true);
-  // };
-
-  // const handleSave = () => {
-  //   setIsEditing(false);
-  //   updateMEntorProfile();
-  // };
-
-  // const handleCancel = () => {
-  //   setIsEditing(false);
-  // };
-
-  // const handleLinkedInClick = () => {
-  //   if (linkedinUrl) {
-  //     window.open(linkedinUrl, "_blank");
+  //     await axios.put(endUrl, updatedData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.error("Error updating profile", error);
   //   }
-  // };
-
-  // const handleTwitterClick = () => {
-  //   if (twitterHandle) {
-  //     const twitterUrl = `https://x.com/${twitterHandle}`;
-  //     window.open(twitterUrl, "_blank");
-  //   }
-  // };
-
-  // const [file, setFile] = useState(null);
-
-  // const handleFileChange = (event) => {
-  //   setFile(event.target.files[0]);
   // };
 
   // const countryName = country.find((c) => c.iso_code === location)?.name;
@@ -267,83 +250,20 @@ const handleEditEducation = (education) => {
   // const handleEditEducation = () => {
   //   setEducationEditOpen(true);
   // };
-  const handleEditExperience = () => {
-    setExperienceEditOpen(true);
-  };
+  // const handleEditExperience = () => {
+  //   setExperienceEditOpen(true);
+  // };
 
   const handleImageClick = () => setImageEditModal(true);
   const handleEditProfileSave = () => {
     setModalEditProfile(false);
-    updateMEntorProfile();
+    updateMentorProfile();
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center">
-      {/* <div className=""> */}
-
       <Colxx sm="12" md="10" lg="10" xxs="12" className="">
         <div className="">
-          {/* <Card
-            style={{ height: "160px", width: "100%", overflow: "hidden" }}
-            className="bg-primary"
-          >
-            <div
-              className="d-flex align-items-center justify-content-between"
-              style={{ height: "100%" }}
-            >
-              <div className="d-flex align-items-center mt-4 ml-4 mb-4">
-                {image === null ? (
-                  <ThumbnailLetters
-                    // small
-                    rounded
-                    text={firstName}
-                    className="mx-2"
-                    color="secondary"
-                  />
-                ) : (
-                  <img
-                    src={`${baseUrl}/${image}`}
-                    // src="/assets/img/profiles/2.jpg"
-                    className="mx-2 rounded-circle img-thumbnail border"
-                    style={{ width: "110px", height: "110px", objectFit: "cover", cursor: "pointer" }}
-                    alt="img"
-                  />
-                )}
-                <div className="ml-4 mt-2">
-                  <h1 className="font-weight-semibold text-large">
-                    {firstName} {lastName}
-                    {userName}
-                  </h1>
-                </div>
-              </div>
-              <div className="mr-4">
-                {linkedinUrl && (
-                  <NavLink className="d-none d-md-inline-block">
-                    <Button
-                      color="light"
-                      className="font-weight-semibold icon-button"
-                      size="large"
-                      onClick={handleLinkedInClick}
-                    >
-                      <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
-                    </Button>
-                  </NavLink>
-                )}
-                {twitterHandle && (
-                  <NavLink className="d-none d-md-inline-block">
-                    <Button
-                      color="light"
-                      className="font-weight-semibold icon-button"
-                      size="large"
-                      onClick={handleTwitterClick}
-                    >
-                      <i className="simple-icon-social-twitter text-primary font-weight-semibold text-one" />
-                    </Button>
-                  </NavLink>
-                )}
-              </div>
-            </div>
-          </Card> */}
           {loading ? (
             <div className="loading" />
           ) : (
@@ -357,183 +277,6 @@ const handleEditEducation = (education) => {
                 </div>
               ) : (
                 <>
-                  {/* {isEditing && (
-                    <div className="mt-2">
-                      <Button
-                        className="default"
-                        color="light"
-                        onClick={() =>
-                          document.getElementById("file-upload").click()
-                        }
-                      >
-                        Change profile pic{" "}
-                        <i className="iconsminds-upload text-primary" />
-                      </Button>
-                      <Form>
-                        <input
-                          id="file-upload"
-                          type="file"
-                          className="form-control d-none"
-                          onChange={handleFileChange}
-                        />
-                      </Form>
-                      {file && <p>Selected file: {file.name}</p>}
-                    </div>
-                  )} */}
-                  {/* <Row>
-                    <Col lg="6" md="12" className="mt-4">
-                      <div>
-                        {isEditing ? (
-                          <div>
-                            <>
-                              <Row>
-                                <Col md="6">
-                                  <Label for="firstName">
-                                    <h4>First Name</h4>
-                                  </Label>
-                                  <Input
-                                    type="text"
-                                    id="firstName"
-                                    value={firstName}
-                                    onChange={(e) =>
-                                      setFirstName(e.target.value)
-                                    }
-                                  />
-                                </Col>
-                                <Col md="6">
-                                  <Label for="lastName">
-                                    <h4>Last Name</h4>
-                                  </Label>
-                                  <Input
-                                    type="text"
-                                    id="lastName"
-                                    value={lastName}
-                                    onChange={(e) =>
-                                      setLastName(e.target.value)
-                                    }
-                                  />
-                                </Col>
-                              </Row>
-                              <br />
-                            </>
-                            <>
-                              <Label for="jobtitle">
-                                <h4>Job Title</h4>
-                              </Label>
-                              <Input
-                                type="text"
-                                id="jobtitle"
-                                value={jobTitle}
-                                onChange={(e) => setJobTitle(e.target.value)}
-                              />
-                              <br />
-                            </>
-
-                            <>
-                              <Label
-                                for="location"
-                                className="font-weight-medium"
-                              >
-                                <h4>Location</h4>
-                              </Label>
-                              
-                              <Input
-                                type="select"
-                                name="location"
-                                value={location}
-                                // validate={validateLocation}
-                                onChange={(e) => setLocation(e.target.value)}
-                                className="form-control"
-                              >
-                                <option disabled value="">
-                                  Select Location
-                                </option>
-                                {country.map((option) => (
-                                  <option
-                                    key={option.iso_code}
-                                    value={option.iso_code}
-                                  >
-                                    {option.name}
-                                  </option>
-                                ))}
-                              </Input>
-                              <br />
-                            </>
-                            <>
-                              <Label for="email" className="font-weight-medium">
-                                <h4>LinkedIn</h4>
-                              </Label>
-                              <Input
-                                type="text"
-                                id="linkedinUrl"
-                                value={linkedinUrl}
-                                onChange={(e) => setLinkedinUrl(e.target.value)}
-                              />
-                              <br />
-                            </>
-                            <>
-                              <Label for="email" className="font-weight-medium">
-                                <h4>Twitter</h4>
-                              </Label>
-                              <Input
-                                type="text"
-                                id="twitterHandle"
-                                value={twitterHandle}
-                                onChange={(e) =>
-                                  setTwitterHandle(e.target.value)
-                                }
-                              />
-                              <p className="text-muted">
-                                Omit the &ldquo;@&rdquo; -e.g.
-                                &ldquo;dqmonn&rdquo;
-                              </p>
-                              <br />
-                            </>
-                          </div>
-                        ) : (
-                          <div className="ml-3">
-                            <h3 className="font-weight-semibold">
-                              <i className="simple-icon-briefcase text-primary" />
-                              <span className="ml-2">{jobTitle}</span>
-                            </h3>
-                            <h5 className="font-weight-medium">
-                              <i className="simple-icon-location-pin text-primary" />
-                              <span className="ml-2 font-weight-medium">{countryName}</span>
-                            </h5>
-                          </div>
-                        )}
-                      </div>
-                      {!isEditing && (
-                        <Button
-                          color="primary"
-                          outline
-                          onClick={handleEditClick}
-                          className="ml-2"
-                        >
-                          <i className="simple-icon-pencil" /> Edit
-                        </Button>
-                      )}
-                      {isEditing && (
-                        <>
-                          <Button
-                            color="primary"
-                            onClick={handleSave}
-                            className="mr-2"
-                          >
-                            Save
-                          </Button>
-                          <Button
-                            color="primary"
-                            outline
-                            onClick={handleCancel}
-                            className="ml-2"
-                          >
-                            Cancel
-                          </Button>
-                        </>
-                      )}
-                    </Col>
-                  </Row> */}
                   <Row>
                     <Col>
                       <Card>
@@ -663,12 +406,12 @@ const handleEditEducation = (education) => {
                           <div className="mt-4">
                             <h2 className="font-weight-bold">{userName}</h2>
                             <h3 className="text-one">
-                              {experience.work[0].jobTitle} |{" "}
-                              {experience.work[0].company}
+                              {work.length > 0 && work[0].jobTitle} |{" "}
+                              {work.length > 0 && work[0].company}
                             </h3>
                             <div>
                               <h6 className="text-muted">Location</h6>
-                              <h6>{experience.work[0].jobLocation}</h6>
+                              <h6>{work.length > 0 && work[0].jobLocation}</h6>
                             </div>
                           </div>
                         </CardBody>
@@ -844,14 +587,14 @@ const handleEditEducation = (education) => {
                             </>
 
                             <>
-                              <Label for="linkedinUrl" className="text-muted">
+                              <Label for="linkedInUrl" className="text-muted">
                                 <h4>LinkedIn</h4>
                               </Label>
                               <Input
                                 type="text"
-                                id="linkedinUrl"
-                                value={linkedinUrl}
-                                onChange={(e) => setLinkedinUrl(e.target.value)}
+                                id="linkedInUrl"
+                                value={linkedInUrl}
+                                onChange={(e) => setLinkedInUrl(e.target.value)}
                                 className="font-weight-bold text-one"
                               />
                               <br />
@@ -882,9 +625,9 @@ const handleEditEducation = (education) => {
                               <Input
                                 type="text"
                                 id="website"
-                                value={personalWebsiteUrl}
+                                value={personalWebsite}
                                 onChange={(e) =>
-                                  setPersonalWebsiteUrl(e.target.value)
+                                  setPersonalWebsite(e.target.value)
                                 }
                                 className="font-weight-bold text-one"
                               />
@@ -933,7 +676,7 @@ const handleEditEducation = (education) => {
                               </Button>
                             </Col>
                           </Row>
-                          {experience.work.map((w, index) => (
+                          {work.map((w, index) => (
                             // eslint-disable-next-line react/no-array-index-key
                             <div key={index}>
                               <h6>{w.jobTitle}</h6>
@@ -974,7 +717,7 @@ const handleEditEducation = (education) => {
                                   className="icon-button"
                                   style={{ border: "none" }}
                                   size="sm"
-                                  onClick={() => handleEditExperience()}
+                                  onClick={handleAddWork}
                                 >
                                   <span
                                     className="text-primary"
@@ -1056,7 +799,7 @@ const handleEditEducation = (education) => {
                                 >
                                   <Button
                                     color="primary"
-                                    onClick={() => setExperienceEditOpen(false)}
+                                    onClick={handleSaveWork}
                                   >
                                     Save
                                   </Button>{" "}
@@ -1072,7 +815,7 @@ const handleEditEducation = (education) => {
                               </>
                             ) : (
                               <>
-                                {experience.work.map((w, index) => (
+                                {work.map((w, index) => (
                                   // eslint-disable-next-line react/no-array-index-key
                                   <Row key={index}>
                                     <Col>
@@ -1094,7 +837,7 @@ const handleEditEducation = (education) => {
                                         className="icon-button"
                                         style={{ border: "none" }}
                                         size="sm"
-                                        onClick={() => handleEditExperience()}
+                                        onClick={handleEditWork}
                                       >
                                         <i className="simple-icon-pencil" />
                                       </Button>
@@ -1242,7 +985,7 @@ const handleEditEducation = (education) => {
                               </Button>
                             </Col>
                           </Row>
-                          {experience.education && experience.education.map((e, index) => (
+                          {education.map((e, index) => (
                             // eslint-disable-next-line react/no-array-index-key
                             <div key={index}>
                               <div className="my-3">
@@ -1367,7 +1110,7 @@ const handleEditEducation = (education) => {
                               </>
                             ) : (
                               <>
-                                {experience.education.map((e, index) => (
+                                {education.map((e, index) => (
                                   // eslint-disable-next-line react/no-array-index-key
                                   <Row key={index}>
                                     <Col>
@@ -1385,7 +1128,7 @@ const handleEditEducation = (education) => {
                                         className="icon-button"
                                         style={{ border: "none" }}
                                         size="sm"
-                                        onClick={() => handleEditEducation(e)}
+                                        onClick={handleEditEducation}
                                       >
                                         <i className="simple-icon-pencil" />
                                       </Button>

@@ -546,9 +546,9 @@ const languageOptions = language.map(option => ({
             }}
             onSubmit={() => {
               const experience = {education, work}
-              const datas = {experience}
-            postExperience(datas);
-              console.log("my education", education);
+              // const datas = {experience}
+            postExperience(experience);
+              // console.log("my education", education);
               // console.log("values", values);
             }}
             validateOnMount
@@ -687,7 +687,7 @@ const languageOptions = language.map(option => ({
                               handleInputChange(
                                 index,
                                 "year",
-                                e.target.value
+                                parseInt(e.target.value, 10)
                               )
                             }
                               // validate={validatePackageDescription}
@@ -874,7 +874,7 @@ const languageOptions = language.map(option => ({
                                 handleWorkInputChange(
                                   index,
                                   "startDate",
-                                  parseInt(e.target.value, 10) // Convert the string to an integer
+                                  parseInt(e.target.value, 10) 
                                 )
                               }
                             />
@@ -893,7 +893,7 @@ const languageOptions = language.map(option => ({
                             End date
                           </Label>
                           <Input
-                            type="text"
+                            type="number"
                             name={`education[${index}].endDate`}
                             id={`education[${index}].endDate`}
                             className="form-control"
@@ -902,7 +902,7 @@ const languageOptions = language.map(option => ({
                               handleWorkInputChange(
                                 index,
                                 "endDate",
-                                e.target.value
+                                parseInt(e.target.value, 10)
                               )
                             }
                               // validate={validatePackageDescription}
