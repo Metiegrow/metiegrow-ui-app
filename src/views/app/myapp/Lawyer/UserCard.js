@@ -103,8 +103,8 @@ const handleSearchClear = () =>{
     }if(searchClick){
       params.firstName = searchClick;
     }
-    params.size = 10;
     params.page = currentPage - 1;
+    params.size = 10;
       try {
         const response = await axios.get(url,{params});
         setUserDetails(response.data.data);

@@ -133,7 +133,32 @@ const ChatApp = ({
       const [peerId, setPeerId] = useState(pid);
       const tokenRes = localStorage.getItem("tokenRes")
       const [appKey, setAppKey] = useState("")
-      // console.log("peer", peerId)
+      const [fullName, setFullName] = useState([])
+
+//       console.log("fullName", fullName)
+//       console.log("peer", peerId)
+// if(fullName.length > 0){
+//       console.log("name",fullName.find(user => user.username === peerId).name)
+// }
+      useEffect(() => {
+        // const params = {username: peerId};
+        console.log("start")
+
+        const UserNameUrl = `${baseUrl}/api/chat/user/details?username=${peerId}`
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(UserNameUrl);
+            console.log("namechk",response.data);
+            setFullName(response.data);
+          } catch (error) {
+            console.error("An error occurred:", error);
+          }
+        };
+    
+        fetchData(); 
+      }, [peerId]); 
+
+
       useEffect(() => {
         const fetchData = async () => {
           try {
@@ -167,9 +192,55 @@ const ChatApp = ({
   const [loading, setLoading] = useState(true)
   const [loadingConversation, setLoadingConversation] = useState(true)
   const [chatLoading, setChatLoading] =useState(true)
+  const [conversationIds, setConversationIds] = useState([]);
+  const [conversationFullName,setConversationFullName] = useState([]);
   // const [historyMessages, setHistoryMessages] = useState([]); 
 
+  console.log("conversation", serverConversations)
+  console.log("conversationIds", conversationIds)
+  console.log("conversationFullName", conversationFullName);
 
+
+  useEffect(() => {
+    const ids = serverConversations.map(conversation => conversation.conversationId);
+    setConversationIds(ids);
+  }, [serverConversations]);
+
+  useEffect(() => {
+    
+    const fetchData = async () => {
+      try {
+        const params = new URLSearchParams();
+        conversationIds.forEach(id => params.append('username', id));
+        const UserNameUrl = `${baseUrl}/api/chat/user/details?${params.toString()}`;
+  
+        const response = await axios.get(UserNameUrl);
+        // console.log("conversationFullName", response.data);
+        setConversationFullName(response.data);
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    };
+  
+    fetchData();
+  }, [conversationIds]);
+
+  // useEffect(() => {
+  //   // const params = {username: peerId};
+
+  //   const UserNameUrl = `${baseUrl}/api/chat/user/details?username=${conversationIds}`
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(UserNameUrl);
+  //       console.log("conversationFullName",response.data);
+  //       setConversationFullName(response.data);
+  //     } catch (error) {
+  //       console.error("An error occurred:", error);
+  //     }
+  //   };
+
+  //   fetchData(); 
+  // }, [conversationIds]); 
 
   // console.log("log",logs)
 
@@ -209,16 +280,20 @@ const ChatApp = ({
               targetId: peerId, // The user ID of the peer user for one-to-one chat or group ID for group chat.
               chatType: 'singleChat', // The chat type: `singleChat` for one-to-one chat or `groupChat` for group chat.
               pageSize: 20, // The number of messages to retrieve per page. The value range is [1,50] and the default value is 20.
+              cursor: '',
               searchDirection: 'down', // The message search direction: `up` means to retrieve messages in the descending order of the message timestamp and `down` means to retrieve messages in the ascending order of the message timestamp.
               searchOptions: {
                 msgTypes: ['txt'], // An array of message types for query. If no value is passed in, all types of message will be queried.
-                startTime: new Date('2024, 05, 17').getTime(), // The start timestamp for query. The unit is millisecond.
+                startTime: new Date('2024, 07, 17').getTime(), // The start timestamp for query. The unit is millisecond.
                 endTime: Date.now(), // The end timestamp for query. The unit is millisecond.
               },
             }).then((res) => {
+              // console.log("hist",res)
+
               const newLogs = res.messages.map((message) => (
                 <>
-                  <strong><h4>{message.from === userId ? "You" : message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
+                  {/* <strong><h4>{message.from === userId ? "You" : message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "} */}
+                  <strong><h4>{message.from === userId ? "You" : fullName.length > 0 ? fullName.find(user => user.username === message.from).name : message.from}</h4></strong> <span className='text-muted'>{message.msg}</span> {" "}
                   <span className='text-muted text-right'><TimestampConverter timeStamp={message.time} format="datetime" /></span>
                 </>
               ));
@@ -232,11 +307,11 @@ const ChatApp = ({
           }
         },
       
-        onDisconnected: () => {
-          // addLog('Logout!');
-          // addLog('Logout success!');
-          console.error("chat logout")
-        },
+        // onDisconnected: () => {
+        //   // addLog('Logout!');
+        //   // addLog('Logout success!');
+        //   console.error("chat logout")
+        // },
         onTextMessage: (message) => {
           // console.log("msg", message);
           const time = message.time;
@@ -244,7 +319,8 @@ const ChatApp = ({
           if (message.from === peerId) {
             addLog(
               <>
-                <strong><h4>{message.from}</h4></strong>  <span className='text-muted'>{message.msg}</span>  
+                {/* <strong><h4>{message.from}</h4></strong>  <span className='text-muted'>{message.msg}</span>   */}
+                <strong><h4>{fullName.length > 0 ? fullName.find(user => user.username === message.from).name : message.from}</h4></strong>  <span className='text-muted'>{message.msg}</span>  
                 <span className='text-muted text-right'><TimestampConverter timeStamp={time} format="datetime" /></span>
               </>
             );
@@ -272,7 +348,9 @@ const ChatApp = ({
     }, 3000);
   
     return () => clearTimeout(timeoutId);
-  }, [peerId, userId, token, appKey]);
+  }, [peerId, userId, token, appKey,fullName]);
+
+
   
 
 //   connection.getServerConversations({pageSize:50, cursor: ''}).then((res)=>{
@@ -351,6 +429,7 @@ const ChatApp = ({
     setChatLoading(true)
     setPeerId(selectedUserId);
     setLogs([]);
+    setFullName([]);
     
   };
 
@@ -383,7 +462,7 @@ const ChatApp = ({
         <Colxx xxs="12" className="chat-app">
           {peerId && loadingConversations && selectedUser && (
             <ChatHeading
-              name={peerId}
+              name={fullName.length > 0 ? fullName.find(user => user.username === peerId).name : peerId}
               thumb={peerId}
               // lastSeenDate={selectedUser.lastSeenDate}
             />
@@ -534,7 +613,8 @@ const ChatApp = ({
                           <div className="d-flex flex-grow-1 min-width-zero">
                             <div className="m-2 pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
                               <div className="min-width-zero">
-                                <p className="mb-0 truncate">{conversation.conversationId}</p>
+                                {/* <p className="mb-0 truncate">{conversation.conversationId}</p> */}
+                                <p className="mb-0 truncate">{conversationFullName.length > 0 ? conversationFullName.find(user => user.username === conversation.conversationId).name : conversation.conversationId}</p>
                               </div>
                                <div className="separator mb-2" />
                             </div>

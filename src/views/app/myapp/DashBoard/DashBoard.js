@@ -19,7 +19,7 @@ import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { baseUrl } from "constants/defaultValues";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { alumniData, newSessionData, recentChatsData, recentSessionsData } from "./Data";
+import { alumniData, recentChatsData } from "./Data";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import language from "../my-login/Languages";
 
@@ -30,8 +30,8 @@ const DashBoard = () => {
   const [currentAlumniIndex, setCurrentAlumniIndex] = useState(0);
 
   const [walletBalance, setWalletBalance] = useState(0);
-  const [profileStatus, setProfileStatus] = useState(75);
-  const [recentSessions, setRecentSessions] = useState(recentSessionsData);
+  const [profileStatus, setProfileStatus] = useState(0);
+  const [recentSessions, setRecentSessions] = useState([]);
   const [mentors, setMentors] = useState([{
     imageUrl: "",
     company: "",
@@ -50,17 +50,28 @@ const DashBoard = () => {
     languages: []
   }]);
   const [alumni, setAlumni] = useState(alumniData);
-  const [newSession, setNewSession] = useState(newSessionData);
+  const [newSession, setNewSession] = useState(	[
+      {
+        id: 0,
+        chatStatus: "",
+        fromTimeStamp: 0,
+        toTimeStamp: 0,
+        mentorUserId: 0,
+        mode: "",
+        name: "",
+        imageUrl: ""
+      }
+    ]);
   const [recentChats, setRecentChats] = useState(recentChatsData);
 
 
   const walletUrl = `${baseUrl}/api/wallet/balance`;
-  const profileStatusUrl = `${baseUrl}/api/dashboard/profilestatus`;
+  const profileStatusUrl = `${baseUrl}/api/userProfile/dashboard/status/profile-completion`;
   const mentorsUrl = `${baseUrl}/api/mentor/cards?page=0&size=10`;
-  const sessionsUrl = `${baseUrl}/api/dashboard/sessions`;
+  const sessionsUrl = `${baseUrl}/api/calendar/dashboard/appointment/session-history`;
   const lawyersUrl = `${baseUrl}/api/lawyer/lawyercards?page=0&size=10`;
   const alumniUrl = `${baseUrl}/api/dashboard/alumni`;
-  const newSessionUrl = `${baseUrl}/api/dashboard/newsession`;
+  const newSessionUrl = `${baseUrl}/api/calendar/dashboard/appointment/upcoming-bookedslots`;
   const recentChatsDataUrl = `${baseUrl}/api/dashboard/recentchats`;
 
   // console.log("mentors",mentors)
@@ -414,7 +425,7 @@ const DashBoard = () => {
               </Col>
             </Row>
               <div className="mt-auto">
-                <h1 className="mb-0 fw-bold display-6">{profileStatus} </h1>
+                <h1 className="mb-0 fw-bold display-6">{profileStatus.percentage} </h1>
                 <span> % completed</span>
               </div>
             </div>
@@ -473,6 +484,7 @@ const DashBoard = () => {
                   {" "}
                   <h3 className="mb-3 fw-bold">New Session</h3>
                 </Col>
+                {currentSession && (
                 <Col className="d-flex justify-content-end">
                   <button
                   onClick={handlePrevious}
@@ -493,7 +505,9 @@ const DashBoard = () => {
                     <i className="simple-icon-arrow-right" />
                   </button>
                 </Col>
+                )}
               </Row>
+              {currentSession ? (
               <TransitionGroup>
                 <CSSTransition
                   classNames="card"
@@ -511,19 +525,24 @@ const DashBoard = () => {
                     <div className="min-width-zero ml-2">
                       <h4 className="mb-1">{currentSession.name}</h4>
                       <h5 className="text-muted text-small mb-0">
-                        {currentSession.jobTitle}
+                        {currentSession.chatStatus}
                       </h5>
                     </div>
                   </div>
                 </div>
                 <Col xs="auto">
                   <Button color="primary" size="xs" outline>
-                    <span>15 Jul-1:30pm</span>
+                    <span><TimestampConverter timeStamp={currentSession.fromTimeStamp} format="datetime" /></span>
                   </Button>
                 </Col>
               </div>
               </CSSTransition>
               </TransitionGroup>
+              ) : ( 
+                <div className="d-flex justify-content-center">
+                  There is no new sessions
+                  </div>
+              )}
               <div className="d-flex justify-content-center">
                 <div
                   className="glide__bullets slider-dot-container"
@@ -834,7 +853,9 @@ const DashBoard = () => {
                 <PerfectScrollbar
                   options={{ suppressScrollX: true, wheelPropagation: false }}
                 >
-                  {recentSessions.map((sessions, index) => {
+                  {recentSessions.length > 0 ? (
+                  <>
+                  {recentSessions && recentSessions.map((sessions, index) => {
                     return (
                       <div
                         // eslint-disable-next-line react/no-array-index-key
@@ -856,7 +877,7 @@ const DashBoard = () => {
                                 {sessions.name}
                               </p>
                               <p className="text-muted mb-0 text-small">
-                                {sessions.jobTitle}
+                                {sessions.chatStatus}
                               </p>
                             </NavLink>
                             {/* </div> */}
@@ -864,22 +885,28 @@ const DashBoard = () => {
                           <Col className="mt-3 mt-3 d-flex flex-column align-items-center">
                             {/* <div className="mt-3 pr-2 ml-4"> */}
                             <p className="text-muted mb-0 text-small">
-                              <TimestampConverter timeStamp={sessions.sessionStartTime} format="date" />
+                              <TimestampConverter timeStamp={sessions.fromTimeStamp} format="date" />
                             </p>
                             <p className="text-muted mb-0 text-small">
-                            <TimestampConverter timeStamp={sessions.sessionStartTime} format="time" /> - <TimestampConverter timeStamp={sessions.sessionEndTime} format="time" />
+                            <TimestampConverter timeStamp={sessions.fromTimeStamp} format="time" /> - <TimestampConverter timeStamp={sessions.toTimeStamp} format="time" />
                             </p>
                             {/* </div> */}
                           </Col>
                           <Col className="mt-3">
                             {/* <div className="d-flex justify-end ml-4 mr-2 pr-2 mt-3"> */}
-                            <Rating total={5} rating={sessions.stars} interactive={false} />
+                            <Rating total={5} rating={sessions.star} interactive={false} />
                             {/* </div> */}
                           </Col>
                         </Row>
                       </div>
                     );
                   })}
+                  </>
+                  ) : (
+                    <div className="d-flex justify-content-center">
+                    There is no recent sessions
+                  </div>
+                  )}
                 </PerfectScrollbar>
               </div>
             </CardBody>
