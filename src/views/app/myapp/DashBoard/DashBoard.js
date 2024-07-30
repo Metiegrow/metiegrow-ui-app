@@ -16,10 +16,10 @@ import "@glidejs/glide/dist/css/glide.core.min.css";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Rating from "components/common/Rating";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
-import { baseUrl } from "constants/defaultValues";
+import { adminRoot, baseUrl } from "constants/defaultValues";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { alumniData, recentChatsData } from "./Data";
+import { alumniData } from "./Data";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import language from "../my-login/Languages";
 
@@ -62,7 +62,7 @@ const DashBoard = () => {
         imageUrl: ""
       }
     ]);
-  const [recentChats, setRecentChats] = useState(recentChatsData);
+  const [recentChats, setRecentChats] = useState([]);
 
 
   const walletUrl = `${baseUrl}/api/wallet/balance`;
@@ -72,7 +72,7 @@ const DashBoard = () => {
   const lawyersUrl = `${baseUrl}/api/lawyer/lawyercards?page=0&size=10`;
   const alumniUrl = `${baseUrl}/api/dashboard/alumni`;
   const newSessionUrl = `${baseUrl}/api/calendar/dashboard/appointment/upcoming-bookedslots`;
-  const recentChatsDataUrl = `${baseUrl}/api/dashboard/recentchats`;
+  const recentChatsDataUrl = `${baseUrl}/api/chat/recent-contact`;
 
   // console.log("mentors",mentors)
 
@@ -382,6 +382,7 @@ const DashBoard = () => {
   const handleViewLawyers = () => history.push("/app/lawyer/list");
   const handleWalletClick = () => history.push("/app/mywallet");
   const handleProfileClick = () => history.push("/app/user/myprofile");
+  const handleNewSessionClick = () => history.push("/app/sessionlists")
 
   return (
     <>
@@ -484,7 +485,7 @@ const DashBoard = () => {
                   {" "}
                   <h3 className="mb-3 fw-bold">New Session</h3>
                 </Col>
-                {currentSession && (
+                {currentSession && currentSession.length > 1 && (
                 <Col className="d-flex justify-content-end">
                   <button
                   onClick={handlePrevious}
@@ -517,7 +518,7 @@ const DashBoard = () => {
                 <img
                   className="rounded-circle me-3"
                   alt="Profile"
-                  src={currentSession.imageUrl}
+                  src={`${baseUrl}/${currentSession.imageUrl}`}
                   style={{ width: "40px", height: "40px", objectFit: "cover" }}
                 />
                 <div className="d-flex flex-grow-1 min-width-zero">
@@ -531,7 +532,7 @@ const DashBoard = () => {
                   </div>
                 </div>
                 <Col xs="auto">
-                  <Button color="primary" size="xs" outline>
+                  <Button onClick={() => handleNewSessionClick()} color="primary" size="xs" outline>
                     <span><TimestampConverter timeStamp={currentSession.fromTimeStamp} format="datetime" /></span>
                   </Button>
                 </Col>
@@ -924,34 +925,45 @@ const DashBoard = () => {
                 <PerfectScrollbar
                   options={{ suppressScrollX: true, wheelPropagation: false }}
                 >
-                  {recentChats.map((chats, index) => {
+                  {recentChats.length > 0 ? (
+                  <>
+                  {recentChats && recentChats.map((chats, index) => {
                     return (
                       <div
                         // eslint-disable-next-line react/no-array-index-key
                         key={index}
                         className="d-flex flex-row mb-2 pb-2 border-bottom"
                       >
-                        <NavLink to="#">
+                        <NavLink href={`${adminRoot}/chat/${chats.username}`} >
                           <img
-                            src={chats.imageUrl}
+                            src={`${baseUrl}/${chats.imageUrl}`}
                             alt={chats.name}
-                            className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                            // className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                             className=" rounded-circle img-thumbnail border"
+                            style={{ width: "50px", height: "50px", objectFit: "cover", overflow: "hidden"  }}
+                            
                           />
                         </NavLink>
 
-                        <div className="pl-3 pr-2">
-                          <NavLink to="#">
+                        <div className="pl-3 pr-2 mt-2">
+                          <NavLink href={`${adminRoot}/chat/${chats.username}`}>
                             <p className="font-weight-medium mb-0 ">
                               {chats.name}
                             </p>
                             <p className="text-muted mb-0 text-small">
-                              {chats.jobTitle}
+                              {chats.chatStatus}
                             </p>
                           </NavLink>
                         </div>
                       </div>
                     );
                   })}
+                  </>
+                  ) : (
+                    <div className="d-flex justify-content-center">
+                    There is no recent chats
+                  </div>
+                  )}
                 </PerfectScrollbar>
               </div>
             </CardBody>

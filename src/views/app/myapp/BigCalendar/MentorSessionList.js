@@ -165,7 +165,7 @@ SessionUpcomingHistroy();
        </div> */}
        
        <div className=''>
-  {upcomingsession.upcomingSessions && upcomingsession.upcomingSessions.length > 0 ? (
+  {upcomingsession && upcomingsession.upcomingSessions && upcomingsession.upcomingSessions.length > 0 ? (
     upcomingsession.upcomingSessions.map((up) => {
       const date = new Date(up.fromTimeStamp);
       const fromtime = new Date(up.fromTimeStamp);
@@ -314,7 +314,7 @@ SessionUpcomingHistroy();
            
           </div> */}
           <div>
-  {session.history && session.history.length > 0 ? (
+  {session && session.history && session.history.length > 0 ? (
     session.history.map((sh) => {
       const date = new Date(sh.fromTimeStamp);
       const fromtime = new Date(sh.fromTimeStamp);

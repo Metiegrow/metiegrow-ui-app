@@ -45,6 +45,7 @@ import {
 // import country from "./Country";
 import language from "../my-login/Languages";
 import ToasterComponent from "../notifications/ToasterComponent";
+import { EmploymentTypeData } from "../Listing/ListingData";
 
 const ApplyAsMentor = () => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -103,6 +104,15 @@ const ApplyAsMentor = () => {
   //   reasonForMentor: "",
   //   achievement: "",
   // });
+
+
+const currentYear = new Date().getFullYear();
+const years = [];
+
+for (let year = currentYear; year >= 2005; year -= 1) {
+  years.push(year);
+}
+
 
 const languageOptions = language.map(option => ({
   value: option.iso_code,
@@ -270,11 +280,11 @@ const languageOptions = language.map(option => ({
   //   setToolsTag(newTools);
   // };
   const [education, setEducation] = useState([
-    { college: "", degree: "", department: "", year: 0 },
+    { college: "", degree: "", department: "", year: "" },
   ]); 
   
   const [work, setWork] = useState([
-    { company: "", jobTitle: "", employmentType: "", jobLocation: "",startDate: 0, endDate: 0 },
+    { company: "", jobTitle: "", employmentType: "", jobLocation: "",startDate: "", endDate: "" },
   ]);
 
   const removeEducation = (index) => {
@@ -299,7 +309,7 @@ const languageOptions = language.map(option => ({
   const addWorkExperience = () => {
     setWork([
       ...work,
-      { company: "", jobTitle: "", employmentType: "", jobLocation: "" },
+      { company: "", jobTitle: "", employmentType: "", jobLocation: "",startDate: "", endDate: ""  },
     ]);
   };
 
@@ -528,7 +538,7 @@ const languageOptions = language.map(option => ({
                       college: "",
                       department: "",
                       degree: "",
-                      year: 0,
+                      year: "",
                   },
                 ],
                 work: [
@@ -537,8 +547,8 @@ const languageOptions = language.map(option => ({
                     jobTitle: "",
                     employmentType: "",
                     jobLocation: "",
-                    startDate: 0,
-                    endDate: 0,
+                    startDate: "",
+                    endDate: "",
                   }
                 ]
               
@@ -555,17 +565,17 @@ const languageOptions = language.map(option => ({
           >
             {({ errors, touched }) => (
               <Form className="av-tooltip tooltip-label-right my-4">
-                <Alert color="primary">
+                {/* <Alert color="primary">
                   <strong>Almost there!</strong> <br /> You&apos;re just one
-                  last step away from being a lawyer and connecting with
-                  mentees all over the world! In this step, show off your
+                  last step away from being a user and connecting with
+                  mentors,lawyers,alumni all over the world! In this step, show off your
                   accomplishments and how you can help others.
                   <br />
                   <br /> Many of these fields are optional, but will help us
                   get better insights into your work - and therefore
                   exponentially increase your chances. They also give you a
-                  jumpstart once you&apos;re a lawyer.
-                </Alert>
+                  jumpstart once you&apos;re a user.
+                </Alert> */}
 
                 {education.map((service, index) => (
                   // eslint-disable-next-line react/no-array-index-key
@@ -678,11 +688,11 @@ const languageOptions = language.map(option => ({
                             Year of passing*
                           </Label>
                           <Input
-                            type="number"
-                            name={`education[${index}].year`}
-                            id={`education[${index}].year`}
-                            className="form-control"
-                            value={service.year}
+                                type="select"
+                               name={`education[${index}].year`}
+                               id={`education[${index}].year`}
+                               className="form-control"
+                                value={service.year}
                             onChange={(e) =>
                               handleInputChange(
                                 index,
@@ -690,8 +700,20 @@ const languageOptions = language.map(option => ({
                                 parseInt(e.target.value, 10)
                               )
                             }
-                              // validate={validatePackageDescription}
-                          />
+                                
+                              >
+                                <option disabled value="">
+                                  Select year
+                                </option>
+                                {years.map((yr) => (
+                                  <option
+                                    key={yr}
+                                    value={yr}
+                                  >
+                                    {yr}
+                                  </option>
+                                ))}
+                              </Input>
                           {errors.education?.[index]?.department &&
                             touched.education?.[index]?.department && (
                               <div className="invalid-feedback d-block">
@@ -791,7 +813,7 @@ const languageOptions = language.map(option => ({
                             Employment type*
                           </Label>
                           <Input
-                            type="text"
+                            type="select"
                             name={`education[${index}].employmentType`}
                             id={`education[${index}].employmentType`}
                             className="form-control"
@@ -803,8 +825,18 @@ const languageOptions = language.map(option => ({
                                 e.target.value
                               )
                             }
-                              // validate={validatePackageDescription}
-                          />
+                              >
+                                <option key="" value="" disabled>
+                                  Select Employment type
+                                </option>
+                                {EmploymentTypeData.map((option, i) => (
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  <option key={i} value={option.label}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </Input>
+                          
                           {errors.education?.[index]?.employmentType &&
                             touched.education?.[index]?.employmentType && (
                               <div className="invalid-feedback d-block">
@@ -847,7 +879,7 @@ const languageOptions = language.map(option => ({
                           <Col>
                         <FormGroup>
                           <Label for={`education[${index}].startDate`}>
-                            Start date
+                            Start year
                           </Label>
                           {/* <Input
                             type="number"
@@ -864,20 +896,32 @@ const languageOptions = language.map(option => ({
                             }
                               // validate={validatePackageDescription}
                           /> */}
-                          <Input
-                              type="number"
-                              name={`education[${index}].startDate`}
-                              id={`education[${index}].startDate`}
-                              className="form-control"
-                              value={works.startDate}
-                              onChange={(e) =>
-                                handleWorkInputChange(
-                                  index,
-                                  "startDate",
-                                  parseInt(e.target.value, 10) 
-                                )
-                              }
-                            />
+                            <Input
+                            type="select"
+                                name={`education[${index}].startDate`}
+                                id={`education[${index}].startDate`}
+                                className="form-control"
+                                value={works.startDate}
+                                onChange={(e) =>
+                                  handleWorkInputChange(
+                                    index,
+                                    "startDate",
+                                    parseInt(e.target.value, 10) 
+                                  )
+                                }
+                              >
+                                <option disabled value="">
+                                  Select year
+                                </option>
+                                {years.map((yr) => (
+                                  <option
+                                    key={yr}
+                                    value={yr}
+                                  >
+                                    {yr}
+                                  </option>
+                                ))}
+                              </Input>
 
                           {errors.education?.[index]?.startDate &&
                             touched.education?.[index]?.startDate && (
@@ -890,10 +934,10 @@ const languageOptions = language.map(option => ({
                         <Col>
                         <FormGroup>
                           <Label for={`education[${index}].endDate`}>
-                            End date
+                            End year
                           </Label>
                           <Input
-                            type="number"
+                            type="select"
                             name={`education[${index}].endDate`}
                             id={`education[${index}].endDate`}
                             className="form-control"
@@ -906,7 +950,19 @@ const languageOptions = language.map(option => ({
                               )
                             }
                               // validate={validatePackageDescription}
-                          />
+                          >
+                            <option disabled value="">
+                                  Select year
+                                </option>
+                                {years.map((yr) => (
+                                  <option
+                                    key={yr}
+                                    value={yr}
+                                  >
+                                    {currentYear === yr ? "Present" : yr}
+                                  </option>
+                                ))}
+                          </Input>
                           {errors.education?.[index]?.endDate &&
                             touched.education?.[index]?.endDate && (
                               <div className="invalid-feedback d-block">
@@ -971,14 +1027,14 @@ const languageOptions = language.map(option => ({
                 <Form className="av-tooltip tooltip-label-right">
                   <Alert color="primary">
                     <strong>Almost there!</strong> <br /> You&apos;re just one
-                    last step away from being a mentor and connecting with
-                    mentees all over the world! in this step, shows off your
+                    last step away from being a user and connecting with
+                    mentors,lawyers,alumni all over the world! in this step, shows off your
                     accomplishments and how you can help others.
                     <br />
                     <br /> Many of these fields are optional, but will help us
                     get better insights into your work - and therefore
                     exponentially increase your chances. They also give you a
-                    jumpstart once you&apos;re a mentor.
+                    jumpstart once you&apos;re a user.
                   </Alert>
                   <FormGroup>
                     <Row>

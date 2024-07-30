@@ -535,7 +535,7 @@ const ApplyAsLawyer = () => {
               }}
               onSubmit={() => {
                 postServices(services);
-                console.log("my services", services);
+                // console.log("my services", services);
                 // console.log("values", values);
               }}
               validateOnMount

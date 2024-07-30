@@ -33,7 +33,7 @@ import ToasterComponent from '../notifications/ToasterComponent';
  // const url=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`
 
  // const url1=`${baseUrl}/ mentorAppointmentTime`
- const url1=`${baseUrl}/api/calendar/appointment/mentee`
+ const url1=`${baseUrl}/api/calendar/appointment/UserProfile`
  
 //  if you want to change backend url uncomment the below line
 

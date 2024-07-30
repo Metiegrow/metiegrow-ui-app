@@ -13,7 +13,7 @@ const Month = () => {
 
 
   // if you change the url to backend uncomment the below line
-  const url=`${baseUrl}/api/calendar/appointment/mentee`
+  const url=`${baseUrl}/api/calendar/appointment/user`
 
   const[mentoravailable,setMentorAvailable]=useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());

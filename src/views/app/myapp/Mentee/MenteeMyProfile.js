@@ -14,6 +14,8 @@ import {
   ModalHeader,
   ModalFooter,
   FormGroup,
+  InputGroup,
+  InputGroupAddon,
 } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
@@ -24,18 +26,34 @@ import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
 
+
+const currentYear = new Date().getFullYear();
+  const years = [];
+
+  for (let year = currentYear; year >= 2005; year -= 1) {
+    years.push(year);
+  }
+
+
 const MyProfile = () => {
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
-  const [company, setCompany] = useState("Metaverse");
+  const [company, setCompany] = useState("");
   const [location, setLocation] = useState("");
   const [lastName, setLastName] = useState("");
   const [linkedInUrl, setLinkedInUrl] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
   const [personalWebsite, setPersonalWebsite] = useState("");
   const [education, setEducation] = useState([]);
-  const [work, setWork] = useState([])
+  const [work, setWork] = useState([]);
+  const [goal, setGoal] = useState("");
+  const [certifications, setCertifications] = useState([]);
+  const [seekingFor, setSeekingFor] = useState("");
+  const [newInputSkill, setNewInputSkill] = useState("");
+  const [skillValidationMessage,setSkillValidationMessage] = useState("");
+
+// console.log("work",work)
   const endUrl = `${baseUrl}/api/userProfile/myprofile`;
 
   const [loading, setLoading] = useState(true);
@@ -47,30 +65,33 @@ const MyProfile = () => {
   const [modalEditEducation, setModalEditEducation] = useState(false);
   const [imageEditModal, setImageEditModal] = useState(false);
   const [modalAbout, setModalAbout] = useState(false);
+  const [profileUpdate, setProfileUpdate] = useState(false);
+  // const [educationEdit, setEducationEdit] = useState(false);
 
   const [experienceEditOpen, setExperienceEditOpen] = useState(false);
   const [educationEditOpen, setEducationEditOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedWorkIndex, setSelectedWorkIndex] = useState(null);
 
   const [skills, setSkills] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [bio, setBio] = useState("")
+// console.log("index",selectedIndex);
+// console.log("educationEdit",educationEdit);
+// console.log("selectedWorkIndex",selectedWorkIndex);
+// const [currentEducation, setCurrentEducation] = useState(null);
+// const [currentWork, setCurrentWork] = useState(null);
+const [newWork, setNewWork] = useState({});
 
-const [currentEducation, setCurrentEducation] = useState(null);
-const [currentWork, setCurrentWork] = useState(null);
+    const [newEducation, setNewEducation] = useState({});
 
 const token = localStorage.getItem("tokenRes");
+// const newUpdatedWork = [...work, newWork]
 
-const handleAddEducation = () => {
-  setCurrentEducation({
-    college: '',
-    degree: '',
-    department: '',
-    year: 0
-  });
-  setEducationEditOpen(true);
-};
+// check ok 
 
-const updateMentorProfile = async () => {
+
+const updateMentorProfile = async (updatedEducation = education, updatedWork = work) => {
   try {
     const updatedData = {
       firstName,
@@ -79,10 +100,13 @@ const updateMentorProfile = async () => {
       twitterHandle,
       languages,
       personalWebsite,
-      education: education.map(({ id, ...rest }) => rest), 
-      work: work.map(({ id, ...rest }) => rest), 
+      education: updatedEducation,
+      work: updatedWork,
       skills,
       bio,
+      certifications,
+      goal,
+      seekingFor
     };
 
     await axios.put(endUrl, updatedData, {
@@ -90,41 +114,44 @@ const updateMentorProfile = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    setProfileUpdate(!profileUpdate);
 
   } catch (error) {
     console.error("Error updating profile", error);
   }
 };
 
-const handleSaveEducation = () => {
-  setEducation(prevEducation => {
-    const updatedEducation = [...prevEducation];
+// const handleSaveEducation = () => {
+//   setEducation(prevEducation => {
+//     const updatedEducation = [...prevEducation];
     
-    if (currentEducation.id) {
-      const index = updatedEducation.findIndex(edu => edu.id === currentEducation.id);
-      if (index !== -1) {
-        updatedEducation[index] = currentEducation;
-      }
-    } else {
-      updatedEducation.push(currentEducation);
-    }
+//     if (currentEducation.id) {
+//       const index = updatedEducation.findIndex(edu => edu.id === currentEducation.id);
+//       if (index !== -1) {
+//         updatedEducation[index] = currentEducation;
+//       }
+//     } else {
+//       updatedEducation.push(currentEducation);
+//     }
     
-    return updatedEducation;
-  });
+//     return updatedEducation;
+//   });
 
-  setEducationEditOpen(false);
-  setCurrentEducation(null);
-  updateMentorProfile(); 
-};
+//   setEducationEditOpen(false);
+//   setCurrentEducation(null);
+//   updateMentorProfile(); 
+// };
 
-const handleEditEducation = (educationItem) => {
-  setCurrentEducation({...educationItem});
+const handleEditEducation = (index) => {
+  setNewEducation(education[index]);
+  setSelectedIndex(index);
+  // setCurrentEducation({...educationItem});
   setEducationEditOpen(true);
+  // setEducationEdit(true);
 };
 
 const handleAddWork = () => {
-  setCurrentWork({
+  setNewWork({
     company: '',
     jobTitle: '',
     employmentType: '',
@@ -132,32 +159,128 @@ const handleAddWork = () => {
     startDate: 0,
     endDate: 0
   });
+  setSelectedWorkIndex(null);
   setExperienceEditOpen(true);
 };
 
-const handleSaveWork = () => {
-  setWork(prevWork => {
-    const updatedWork = [...prevWork];
-    
-    if (currentWork.id) {
-      const index = updatedWork.findIndex(w => w.id === currentWork.id);
-      if (index !== -1) {
-        updatedWork[index] = currentWork;
-      }
-    } else {
-      updatedWork.push(currentWork);
-    }
-    
-    return updatedWork;
-  });
-
-  setExperienceEditOpen(false);
-  setCurrentWork(null);
-  updateMentorProfile(); 
+const handleAddEducation = () => {
+  // setCurrentEducation({
+  //   college: '',
+  //   degree: '',
+  //   department: '',
+  //   year: 0
+  // });
+  setEducationEditOpen(true);
 };
 
-const handleEditWork = (workItem) => {
-  setCurrentWork({...workItem});
+// const handleAddWork = () => {
+//   setCurrentWork({
+//     company: '',
+//     jobTitle: '',
+//     employmentType: '',
+//     jobLocation: '',
+//     startDate: 0,
+//     endDate: 0
+//   });
+//   setExperienceEditOpen(true);
+// };
+
+const handleSaveWork = () => {
+  setWork(prevWork => {
+    let updatedWork;
+    if (selectedWorkIndex !== null) {
+      updatedWork = prevWork.filter((_, index) => index !== selectedWorkIndex);
+    } else {
+      updatedWork = prevWork;
+    }
+    const newWorkArray = [...updatedWork, newWork];
+    
+    setTimeout(() => updateMentorProfile(education, newWorkArray), 0);
+    
+    return newWorkArray;
+  });
+  
+  setExperienceEditOpen(false);
+  setNewWork({
+    company: '',
+    jobTitle: '',
+    employmentType: '',
+    jobLocation: '',
+    startDate: 0,
+    endDate: 0
+  });
+  setSelectedWorkIndex(null);
+};
+
+// const handleSaveWork = () => {
+//   setWork(prevWork => {
+//     const updatedWork = prevWork.filter((_, index) => index !== selectedWorkIndex);
+//     const newWorkArray = [...updatedWork, newWork];
+    
+//     setTimeout(() => updateMentorProfile(), 0);
+    
+//     return newWorkArray;
+//   });
+  
+//   setExperienceEditOpen(false);
+//   setNewWork({
+//     company: '',
+//     jobTitle: '',
+//     employmentType: '',
+//     jobLocation: '',
+//     startDate: 0,
+//     endDate: 0
+//   });
+// };
+
+// const handleSaveEducation = () => {
+
+//   setEducation(prevEducation => [...prevEducation, newEducation]);
+//   // console.log("work added");
+//   updateMentorProfile(); 
+//   setEducationEditOpen(false);
+//   setNewEducation({
+//     college: '',
+//       degree: '',
+//       department: '',
+//       year: 0
+//   });
+// };
+
+// const handleRemoveEducation = (indexToRemove) => {
+//   console.log("deleteIndex",indexToRemove)
+//   setEducation(prevEducation => {
+//     const updatedEducation = prevEducation.filter((_, index) => index !== indexToRemove);
+//     setTimeout(() => updateMentorProfile(), 2000);
+//     return updatedEducation;
+//   });
+// };
+
+const handleSaveEducation = () => {
+  setEducation(prevEducation => {
+    const updatedEducation = prevEducation.filter((_, index) => index !== selectedIndex);
+    const newEducationArray = [...updatedEducation, newEducation];
+    
+    setTimeout(() => updateMentorProfile(newEducationArray), 0);
+    
+    return newEducationArray;
+  });
+  setSelectedIndex(null);
+  setEducationEditOpen(false);
+  setNewEducation({
+    college: '',
+    degree: '',
+    department: '',
+    year: 0
+  });
+};
+
+
+
+const handleEditWork = (index) => {
+  setNewWork(work[index]);
+  setSelectedWorkIndex(index)
+  // setCurrentWork({...workItem});
   setExperienceEditOpen(true);
 };
 
@@ -202,6 +325,9 @@ const handleEditWork = (workItem) => {
           setTwitterHandle(userData.twitterHandle);
           setPersonalWebsite(userData.personalWebsite);
           setSkills(userData.skills);
+          setSeekingFor(userData.seekingFor);
+          setGoal(userData.goal);
+          setCertifications(userData.certifications);
           setBio(userData.bio);
           setLoading(false);
         }
@@ -216,7 +342,7 @@ const handleEditWork = (workItem) => {
     };
 
     mentorProfileDetails();
-  }, []);
+  }, [profileUpdate]);
 
   // const updateMentorProfile = async () => {
   //   try {
@@ -245,7 +371,7 @@ const handleEditWork = (workItem) => {
   // };
 
   // const countryName = country.find((c) => c.iso_code === location)?.name;
-  const userName = localStorage.getItem("userName");
+  // const userName = localStorage.getItem("userName");
 
   // const handleEditEducation = () => {
   //   setEducationEditOpen(true);
@@ -259,6 +385,40 @@ const handleEditWork = (workItem) => {
     setModalEditProfile(false);
     updateMentorProfile();
   };
+
+  const handleAboutSave = () => {
+    setModalAbout(false);
+    updateMentorProfile();
+  };
+
+  const handleSkillsSave = () => {
+    setModalEditSkills(false);
+    updateMentorProfile();
+  };
+
+  const handleLanguageSave = () => {
+    setModalEditLanguage(false);
+    updateMentorProfile();
+  }
+
+  const handleAddSkill = (newSkill) => {
+    if (!newSkill.trim()) {
+      setSkillValidationMessage("Skill cannot be empty");
+  } else {
+    setSkillValidationMessage("")
+    setSkills([...skills, newSkill]);
+  }
+  };
+
+  const handleRemoveSkill = (index) => {
+    setSkills(skills.filter((_, i) => i !== index));
+  };
+
+  const handleEducationCancel = () => {
+   setEducationEditOpen(false);
+   setSelectedIndex(null);
+
+  }
 
   return (
     <div className="d-flex justify-content-center align-items-center">
@@ -404,7 +564,7 @@ const handleEditWork = (workItem) => {
                             </Button>
                           </div>
                           <div className="mt-4">
-                            <h2 className="font-weight-bold">{userName}</h2>
+                            <h2 className="font-weight-bold">{firstName} {" "} {lastName}</h2>
                             <h3 className="text-one">
                               {work.length > 0 && work[0].jobTitle} |{" "}
                               {work.length > 0 && work[0].company}
@@ -640,7 +800,7 @@ const handleEditWork = (workItem) => {
                           >
                             <Button
                               color="primary"
-                              onClick={() => setModalAbout(false)}
+                              onClick={() => handleAboutSave()}
                             >
                               Save
                             </Button>{" "}
@@ -681,8 +841,8 @@ const handleEditWork = (workItem) => {
                             <div key={index}>
                               <h6>{w.jobTitle}</h6>
                               <h6 className="text-muted">
-                                {w.company} | {w.startDate} - {w.endDate} - 1
-                                month
+                                {w.company} | {w.startDate} - {w.endDate === currentYear ? "Present" : w.endDate} 
+                                {/* - 1 month */}
                               </h6>
                             </div>
                           ))}
@@ -734,11 +894,18 @@ const handleEditWork = (workItem) => {
                                 <FormGroup className="error-l-125">
                                   <Label for="twitterHandle">Job Title</Label>
                                   <Input
-                                    type="text"
-                                    name="jobTitle"
-                                    id="jobTitle"
-                                    // className="form-control"
-                                  />
+                                      type="text"
+                                      name="jobTitle"
+                                      id="jobTitle"
+                                      value={newWork.jobTitle} 
+                                      onChange={(e) => {
+                                        const { name, value } = e.target;
+                                        setNewWork(prevState => ({
+                                          ...prevState, 
+                                          [name]: value 
+                                        }));
+                                      }}
+                                    />
                                 </FormGroup>
                                 <FormGroup className="error-l-125">
                                   <Label for="twitterHandle">
@@ -748,7 +915,15 @@ const handleEditWork = (workItem) => {
                                     type="text"
                                     name="employmentType"
                                     id="employmentType"
+                                    value={newWork.employmentType}
                                     // className="form-control"
+                                      onChange={(e) => {
+                                        const { name, value } = e.target;
+                                        setNewWork(prevState => ({
+                                          ...prevState, 
+                                          [name]: value 
+                                        }));
+                                      }}
                                   />
                                 </FormGroup>
                                 <FormGroup className="error-l-125">
@@ -757,9 +932,17 @@ const handleEditWork = (workItem) => {
                                   </Label>
                                   <Input
                                     type="text"
-                                    name="companyName"
-                                    id="companyName"
+                                    name="company"
+                                    id="company"
+                                    value={newWork.company}
                                     // className="form-control"
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewWork(prevState => ({
+                                        ...prevState, 
+                                        [name]: value 
+                                      }));
+                                    }}
                                   />
                                 </FormGroup>
                                 <FormGroup>
@@ -769,7 +952,7 @@ const handleEditWork = (workItem) => {
                                   >
                                     Location
                                   </Label>
-                                  <Input
+                                  {/* <Input
                                     type="select"
                                     name="location"
                                     value={location}
@@ -790,8 +973,90 @@ const handleEditWork = (workItem) => {
                                         {option.name}
                                       </option>
                                     ))}
-                                  </Input>
+                                  </Input> */}
+                                   <Input
+                                    type="text"
+                                    name="jobLocation"
+                                    id="jobLocation"
+                                    value={newWork.jobLocation}
+                                    // className="form-control"
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewWork(prevState => ({
+                                        ...prevState, 
+                                        [name]: value 
+                                      }));
+                                    }}
+                                  />
                                 </FormGroup>
+                                <Row>
+                                  <Col>
+                                <FormGroup>
+                                <Label for="startDate">
+                                Start year
+                              </Label>
+
+                              <Input
+                                type="select"
+                                name="startDate"
+                                value={newWork.startDate}
+                                onChange={(e) => {
+                                  const { name, value } = e.target;
+                                  setNewWork(prevState => ({
+                                    ...prevState, 
+                                    [name]: value 
+                                  }));
+                                }}
+                                className="form-control font-weight-bold text-one"
+                              >
+                                <option disabled value="">
+                                  Select year
+                                </option>
+                                {years.map((yr) => (
+                                  <option
+                                    key={yr}
+                                    value={yr}
+                                  >
+                                    {yr}
+                                  </option>
+                                ))}
+                              </Input>
+                                </FormGroup>
+                                </Col>
+                                <Col>
+                                <FormGroup>
+                                <Label for="endDate" >
+                                End year
+                              </Label>
+
+                              <Input
+                                type="select"
+                                name="endDate"
+                                value={newWork.endDate}
+                                onChange={(e) => {
+                                  const { name, value } = e.target;
+                                  setNewWork(prevState => ({
+                                    ...prevState, 
+                                    [name]: value 
+                                  }));
+                                }}
+                                className="form-control font-weight-bold text-one"
+                              >
+                                <option disabled value="">
+                                  Select year
+                                </option>
+                                {years.map((yr) => (
+                                  <option
+                                    key={yr}
+                                    value={yr}
+                                  >
+                                    {currentYear === yr ? "Present" : yr}
+                                  </option>
+                                ))}
+                              </Input>
+                                </FormGroup>
+                                </Col>
+                                </Row>
 
                                 <ModalFooter
                                   style={{ borderTop: "none" }}
@@ -799,7 +1064,7 @@ const handleEditWork = (workItem) => {
                                 >
                                   <Button
                                     color="primary"
-                                    onClick={handleSaveWork}
+                                    onClick={() => handleSaveWork()}
                                   >
                                     Save
                                   </Button>{" "}
@@ -826,7 +1091,8 @@ const handleEditWork = (workItem) => {
                                         <h6>{w.jobTitle}</h6>
                                         <h6 className="text-muted">
                                           {w.company} | {w.startDate}-{" "}
-                                          {w.endDate} - 1 month
+                                          {w.endDate === currentYear ? "Present" : w.endDate} 
+                                          {/* - 1 month */}
                                         </h6>
                                       </div>
                                     </Col>
@@ -837,7 +1103,7 @@ const handleEditWork = (workItem) => {
                                         className="icon-button"
                                         style={{ border: "none" }}
                                         size="sm"
-                                        onClick={handleEditWork}
+                                        onClick={() => handleEditWork(index)}
                                       >
                                         <i className="simple-icon-pencil" />
                                       </Button>
@@ -887,9 +1153,9 @@ const handleEditWork = (workItem) => {
                                     {skill}
                                   </Button>
                                 ))}
-                                <Button color="primary" outline size="sm">
+                                {/* <Button color="primary" outline size="sm">
                                   CSS
-                                </Button>
+                                </Button> */}
                               </div>
                             </Col>
                           </Row>
@@ -908,13 +1174,43 @@ const handleEditWork = (workItem) => {
                           <ModalBody>
                             <Row className="w-100 mb-3">
                               <Col md={10}>
-                                <Input placeholder="Add skills" />
+                              <InputGroup className="mb-3">
+                              <Input
+                                type="text"
+                                placeholder="New skill"
+                                value={newInputSkill}
+                                onChange={(e) => setNewInputSkill(e.target.value)}
+                                onKeyDown={(event) => {
+                                  if (event.key === "Enter") {
+                                    handleAddSkill(newInputSkill);
+                                    setNewInputSkill("");
+                                  }
+                                }}
+                              />
+                              <InputGroupAddon addonType="append">
+                                <Button
+                                  outline
+                                  color="primary"
+                                  onClick={() => {
+                                    handleAddSkill(newInputSkill);
+                                    setNewInputSkill("");
+                                  }}
+                                >
+                                  Add Skill
+                                </Button>
+                              </InputGroupAddon>
+                            </InputGroup>
                               </Col>
-                              <Col md={2}>
+                              {skillValidationMessage && (
+                      <div className="invalid-feedback d-block">
+                        {skillValidationMessage}
+                      </div>
+                    )}
+                              {/* <Col md={2}>
                                 <Button color="primary" className="w-100">
                                   Add skill
                                 </Button>
-                              </Col>
+                              </Col> */}
                             </Row>
                             <Row>
                               <ReactSortable
@@ -932,7 +1228,7 @@ const handleEditWork = (workItem) => {
                                     // color={index < 3 ? 'primary' : 'light'}
                                     className="ml-2 font-weight-semibold mx-2 d-flex align-items-center"
                                     size="sm"
-                                    // onClick={() => handleRemoveSkill(index)}
+                                    onClick={() => handleRemoveSkill(index)}
                                   >
                                     {skill}
                                     <i className="iconsminds-close ml-2" />
@@ -949,7 +1245,7 @@ const handleEditWork = (workItem) => {
                           >
                             <Button
                               color="primary"
-                              onClick={() => setModalEditSkills(false)}
+                              onClick={() => handleSkillsSave()}
                             >
                               Save
                             </Button>{" "}
@@ -1048,10 +1344,16 @@ const handleEditWork = (workItem) => {
                                   <Label for="twitterHandle">School</Label>
                                   <Input
                                     type="text"
-                                    name="school"
-                                    id="school"
-                                    value={currentEducation ? currentEducation.college : ''}
-                                    onChange={(e) => setCurrentEducation({...currentEducation, college: e.target.value})}
+                                    name="college"
+                                    id="college"
+                                    value={newEducation.college} 
+                                      onChange={(e) => {
+                                        const { name, value } = e.target;
+                                        setNewEducation(prevState => ({
+                                          ...prevState, 
+                                          [name]: value 
+                                        }));
+                                      }}
                                     // className="form-control"
                                   />
                                 </FormGroup>
@@ -1062,30 +1364,63 @@ const handleEditWork = (workItem) => {
                                     name="degree"
                                     id="degree"
                                     // className="form-control"
-                                    value={currentEducation ? currentEducation.degree : ''}
-                                    onChange={(e) => setCurrentEducation({...currentEducation, degree: e.target.value})}
+                                    value={newEducation.degree} 
+                                      onChange={(e) => {
+                                        const { name, value } = e.target;
+                                        setNewEducation(prevState => ({
+                                          ...prevState, 
+                                          [name]: value 
+                                        }));
+                                      }}
                                   />
                                 </FormGroup>
                                 <FormGroup className="error-l-125">
                                   <Label for="twitterHandle">Field study</Label>
                                   <Input
                                     type="text"
-                                    name="fieldStudy"
-                                    id="fieldStudy"
+                                    name="department"
+                                    id="department"
                                     // className="form-control"
-                                    value={currentEducation ? currentEducation.department : ''}
-                                    onChange={(e) => setCurrentEducation({...currentEducation, department: e.target.value})}
+                                    value={newEducation.department} 
+                                      onChange={(e) => {
+                                        const { name, value } = e.target;
+                                        setNewEducation(prevState => ({
+                                          ...prevState, 
+                                          [name]: value 
+                                        }));
+                                      }}
                                   />
                                 </FormGroup>
-                                <FormGroup className="error-l-125">
-                                  <Label for="year">Year</Label> 
-                                  <Input
-                                    type="text"
-                                    name="year"
-                                    id="year"
-                                    value={currentEducation ? currentEducation.year : ''}
-                                    onChange={(e) => setCurrentEducation({...currentEducation, year: e.target.value})}
-                                  />
+                                <FormGroup>
+                                <Label for="location" className="text-muted">
+                                <h4>End year</h4>
+                              </Label>
+
+                              <Input
+                                type="select"
+                                name="year"
+                                value={newEducation.year}
+                                onChange={(e) => {
+                                  const { name, value } = e.target;
+                                  setNewEducation(prevState => ({
+                                    ...prevState, 
+                                    [name]: value 
+                                  }));
+                                }}
+                                className="form-control font-weight-bold text-one"
+                              >
+                                {/* <option disabled value="">
+                                  Select Location
+                                </option> */}
+                                {years.map((yr) => (
+                                  <option
+                                    key={yr}
+                                    value={yr}
+                                  >
+                                    {yr}
+                                  </option>
+                                ))}
+                              </Input>
                                 </FormGroup>
 
                                 <ModalFooter
@@ -1101,7 +1436,7 @@ const handleEditWork = (workItem) => {
                                   <Button
                                     color="primary"
                                     outline
-                                    onClick={() => setEducationEditOpen(false)}
+                                    onClick={() => handleEducationCancel()}
                                     className=""
                                   >
                                     Cancel
@@ -1128,7 +1463,7 @@ const handleEditWork = (workItem) => {
                                         className="icon-button"
                                         style={{ border: "none" }}
                                         size="sm"
-                                        onClick={handleEditEducation}
+                                        onClick={() => handleEditEducation(index)}
                                       >
                                         <i className="simple-icon-pencil" />
                                       </Button>
@@ -1266,7 +1601,7 @@ const handleEditWork = (workItem) => {
                           >
                             <Button
                               color="primary"
-                              onClick={() => setModalEditLanguage(false)}
+                              onClick={() => handleLanguageSave()}
                             >
                               Save
                             </Button>{" "}

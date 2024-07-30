@@ -37,23 +37,27 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("+91");
   const [password, setPassword] = useState("");
-  const [userRoles, setUserRoles] = useState(["MENTOR"]);
+  // const [userRoles, setUserRoles] = useState(["MENTOR"]);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [roleError, setRoleError] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("MENTOR");
 
   const history = useHistory();
 
-  //
-
+  
   const handleRoleChange = (role) => {
-    if (userRoles.includes(role)) {
-      setUserRoles(userRoles.filter((item) => item !== role));
-    } else {
-      setUserRoles([...userRoles, role]);
-    }
+    setSelectedRole(role);
   };
+
+  // const handleRoleChange = (role) => {
+  //   if (userRoles.includes(role)) {
+  //     setUserRoles(userRoles.filter((item) => item !== role));
+  //   } else {
+  //     setUserRoles([...userRoles, role]);
+  //   }
+  // };
 
   const clickToLogin = () => {
     history.push("/login");
@@ -113,7 +117,7 @@ const Register = () => {
       //   newUser.password,
       //   newUser.name,
       //   newUser.role
-      if (userRoles.length === 0) {
+      if (selectedRole.length === 0) {
         setRoleError(true);
         return;
       }
@@ -126,7 +130,7 @@ const Register = () => {
         password,
         firstName,
         lastName,
-        userRoles,
+        [selectedRole],
         username
       );
       if (signUpResponse && signUpResponse.status === 200) {
@@ -433,9 +437,10 @@ const Register = () => {
                   <FormGroup check>
                     <Label check className="ml-2">
                       <Input
-                        type="checkbox"
+                        type="radio"
                         onChange={() => handleRoleChange("MENTOR")}
-                        checked={userRoles.includes("MENTOR")}
+                        checked={selectedRole === "MENTOR"}
+                        name="userRole"
                       />
                       Mentor
                     </Label>
@@ -443,9 +448,10 @@ const Register = () => {
                   <FormGroup check className="ml-2">
                     <Label check>
                       <Input
-                        type="checkbox"
+                        type="radio"
                         onChange={() => handleRoleChange("USER")}
-                        checked={userRoles.includes("USER")}
+                        checked={selectedRole === "USER"}
+                        name="userRole"
                       />
                       User
                     </Label>
@@ -453,9 +459,10 @@ const Register = () => {
                   <FormGroup check>
                     <Label check className="ml-2">
                       <Input
-                        type="checkbox"
+                        type="radio"
                         onChange={() => handleRoleChange("LAWYER")}
-                        checked={userRoles.includes("LAWYER")}
+                        checked={selectedRole === "LAWYER"}
+                        name="userRole"
                       />
                       Lawyer
                     </Label>
