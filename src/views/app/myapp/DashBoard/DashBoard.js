@@ -863,14 +863,16 @@ const DashBoard = () => {
                         key={index}
                         className="d-flex flex-row mb-2 pb-2 border-bottom"
                       >
-                        <NavLink to="">
+                          <Row className="w-100">
+                        <NavLink href="#">
                           <img
-                            src={sessions.imageUrl}
+                            src={`${baseUrl}/${sessions.imageUrl}`}
                             alt={sessions.name}
-                            className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                            className=" rounded-circle img-thumbnail border"
+                            style={{ width: "50px", height: "50px", objectFit: "cover", overflow: "hidden"  }}
+
                           />
                         </NavLink>
-                        <Row className=" w-100">
                           <Col>
                             {/* <div className="pl-2 pr-2"> */}
                             <NavLink to="#">
@@ -883,7 +885,7 @@ const DashBoard = () => {
                             </NavLink>
                             {/* </div> */}
                           </Col>
-                          <Col className="mt-3 mt-3 d-flex flex-column align-items-center">
+                          <Col className="mt-3  d-flex flex-column align-items-center">
                             {/* <div className="mt-3 pr-2 ml-4"> */}
                             <p className="text-muted mb-0 text-small">
                               <TimestampConverter timeStamp={sessions.fromTimeStamp} format="date" />
