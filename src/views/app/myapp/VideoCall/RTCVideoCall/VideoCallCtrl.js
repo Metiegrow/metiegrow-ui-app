@@ -44,7 +44,7 @@ const VideoCallCtrl = (props) => {
   // console.log("iid",id)
   // console.log("user chk", users);
   // console.log("check status", status);
-  const url = `${baseUrl}/api/mentee/connect-to-videocall`;
+  const url = `${baseUrl}/api/userprofile/connect-to-videocall`;
 
   //  const [rtcToken, setRtcToken] = useState()
   //  console.log("rrtc",rtcToken)

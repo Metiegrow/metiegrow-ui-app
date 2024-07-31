@@ -20,7 +20,7 @@ const UserProfile = () => {
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
-  const url = `${baseUrl}/api/mentee/profile/${uid}`;
+  const url = `${baseUrl}/api/userprofile/profile/${uid}`;
 
   useEffect(() => {
     const mentorProfileDetails = async () => {

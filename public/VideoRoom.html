@@ -23,7 +23,7 @@
         const userName = localStorage.getItem("userName");
         const type = role.includes("USER") ? 2 : 1;
 
-        fetch('https://api.metiegrow.in/api/mentee/generate-rtm-token', {
+        fetch('https://api.metiegrow.in/api/userprofile/generate-rtm-token', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

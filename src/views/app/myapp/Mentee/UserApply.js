@@ -33,7 +33,7 @@ const UserApply = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const url = `${baseUrl}/api/mentee/profile`;
+  const url = `${baseUrl}/api/userprofile/profile`;
   const token = localStorage.getItem("tokenRes");
 
   const onSubmit = async (values) => {
