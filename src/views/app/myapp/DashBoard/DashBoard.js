@@ -66,7 +66,7 @@ const DashBoard = () => {
 
 
   const walletUrl = `${baseUrl}/api/wallet/balance`;
-  const profileStatusUrl = `${baseUrl}/api/userProfile/dashboard/status/profile-completion`;
+  const profileStatusUrl = `${baseUrl}/api/userprofile/dashboard/status/profile-completion`;
   const mentorsUrl = `${baseUrl}/api/mentor/cards?page=0&size=10`;
   const sessionsUrl = `${baseUrl}/api/calendar/dashboard/appointment/session-history`;
   const lawyersUrl = `${baseUrl}/api/lawyer/lawyercards?page=0&size=10`;

@@ -25,6 +25,7 @@ import { Colxx } from "components/common/CustomBootstrap";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
+import { EmploymentTypeData } from "../Listing/ListingData";
 
 
 const currentYear = new Date().getFullYear();
@@ -54,7 +55,8 @@ const MyProfile = () => {
   const [skillValidationMessage,setSkillValidationMessage] = useState("");
 
 // console.log("work",work)
-  const endUrl = `${baseUrl}/api/userProfile/myprofile`;
+  const endUrl = `${baseUrl}/api/userprofile/myprofile`;
+  const imageEditUrl = `${baseUrl}/api/userprofile/profile-image`
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
@@ -84,11 +86,52 @@ const MyProfile = () => {
 const [newWork, setNewWork] = useState({});
 
     const [newEducation, setNewEducation] = useState({});
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileBase64, setSelectedFileBase64] = useState(null);
+
 
 const token = localStorage.getItem("tokenRes");
 // const newUpdatedWork = [...work, newWork]
 
 // check ok 
+
+const postImageData = async () => {
+  try {
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+
+    await axios.post(imageEditUrl, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setTimeout(() => {
+    setProfileUpdate(!profileUpdate);
+    }, 2000);
+    // console.log(`resres ${response.status}`);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  setSelectedFile(file);
+  
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      setSelectedFileBase64(base64Image);
+     
+
+      // setAboutField({ ...aboutField, image: base64Image });
+    };
+
+    reader.readAsDataURL(file);
+  }
+};
 
 
 const updateMentorProfile = async (updatedEducation = education, updatedWork = work) => {
@@ -420,6 +463,18 @@ const handleEditWork = (index) => {
 
   }
 
+  const handleImagePost = () => {
+    postImageData();
+    setSelectedFile(null);
+    setImageEditModal(false);
+  
+  }
+
+  const handleImageDelete = () => {
+    // setSelectedFile(image);
+    setImageEditModal(false);
+  }
+
   return (
     <div className="d-flex justify-content-center align-items-center">
       <Colxx sm="12" md="10" lg="10" xxs="12" className="">
@@ -483,7 +538,7 @@ const handleEditWork = (index) => {
                               ) : (
                                 <img
                                   // src="/assets/img/profiles/2.jpg"
-                                  src={`${baseUrl}/${image}`}
+                                  src={selectedFileBase64 || `${baseUrl}/${image}`}
                                   className="rounded-circle img-thumbnail border border-3"
                                   style={{
                                     width: "130px",
@@ -513,7 +568,7 @@ const handleEditWork = (index) => {
                               <ModalBody className="d-flex justify-content-center align-items-center">
                                 <img
                                   // src="/assets/img/profiles/2.jpg"
-                                  src={`${baseUrl}/${image}`}
+                                  src={selectedFileBase64 || `${baseUrl}/${image}`}
                                   className="rounded-circle img-thumbnail border border-3"
                                   style={{
                                     width: "130px",
@@ -528,19 +583,62 @@ const handleEditWork = (index) => {
                                 // style={{ borderTop: 'none' }}
                                 className="d-flex align-items-center justify-content-center"
                               >
+                                {selectedFile ? (
                                 <Button
                                   outline
                                   color="primary"
-                                  onClick={() => setModalAbout(false)}
+                                  onClick={() => handleImagePost()}
                                   className="icon-button"
                                   style={{ border: "none" }}
                                 >
+                                  <i className="iconsminds-upload " />
+                                </Button>
+                                ) : (
+                                <InputGroup className="" style={{ width: 'auto', display: 'flex', justifyContent: 'center' }}>
+                          {/* {errors.image && touched.image && (
+                            <div className="invalid-feedback d-block">
+                              {errors.image}
+                            </div>
+                          )} */}
+                          <div className="">
+                            <Button
+                            outline
+                              className="icon-button"
+                              color="primary"
+                              style={{ border: "none" }}
+                              onClick={() =>
+                                document.getElementById("file-upload").click()
+                              }
+                            >
                                   <i className="simple-icon-pencil" />
-                                </Button>{" "}
+                            </Button>
+                            {/* <Form> */}
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              className="d-none"
+                              onChange={handleFileChange}
+                              // validate={validateFile}
+                            />
+                            {/* </Form> */}
+                            {/* {file1 && (
+                              <p className="mt-2">
+                                Selected file: {file1.name}
+                              </p>
+                            )}
+                            {errors.image && touched.image && (
+                              <div className="invalid-feedback d-block">
+                                {errors.image}
+                              </div>
+                            )} */}
+                          </div>
+                        </InputGroup>
+                                )}
+
                                 <Button
                                   color="primary"
                                   outline
-                                  onClick={() => setModalAbout(false)}
+                                  onClick={() => handleImageDelete()}
                                   className="icon-button"
                                   style={{ border: "none" }}
                                 >
@@ -911,7 +1009,7 @@ const handleEditWork = (index) => {
                                   <Label for="twitterHandle">
                                     Employment type
                                   </Label>
-                                  <Input
+                                  {/* <Input
                                     type="text"
                                     name="employmentType"
                                     id="employmentType"
@@ -924,7 +1022,31 @@ const handleEditWork = (index) => {
                                           [name]: value 
                                         }));
                                       }}
-                                  />
+                                  /> */}
+                                  <Input
+                                    type="select"
+                                    name="employmentType"
+                                    id="employmentType"
+                                    value={newWork.employmentType}
+                                    // className="form-control"
+                                      onChange={(e) => {
+                                        const { name, value } = e.target;
+                                        setNewWork(prevState => ({
+                                          ...prevState, 
+                                          [name]: value 
+                                        }));
+                                      }}
+                                      >
+                                        <option key="" value="" disabled>
+                                          Select Employment type
+                                        </option>
+                                        {EmploymentTypeData.map((option, i) => (
+                                          // eslint-disable-next-line react/no-array-index-key
+                                          <option key={i} value={option.label}>
+                                            {option.label}
+                                          </option>
+                                        ))}
+                                      </Input>
                                 </FormGroup>
                                 <FormGroup className="error-l-125">
                                   <Label for="twitterHandle">
@@ -1173,7 +1295,7 @@ const handleEditWork = (index) => {
                           </ModalHeader>
                           <ModalBody>
                             <Row className="w-100 mb-3">
-                              <Col md={10}>
+                              <Col>
                               <InputGroup className="mb-3">
                               <Input
                                 type="text"

@@ -148,9 +148,9 @@ const languageOptions = language.map(option => ({
   };
   //   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
   //   const mentorAboutUrl="http://localhost:3001/acheckabout";
-  const userProfileUrl = `${baseUrl}/api/userProfile/profile`;
-  const mentorExperienceUrl = `${baseUrl}/api/userProfile/experience`;
-  const userAboutUrl = `${baseUrl}/api/userProfile/about`;
+  const userProfileUrl = `${baseUrl}/api/userprofile/profile`;
+  const mentorExperienceUrl = `${baseUrl}/api/userprofile/experience`;
+  const userAboutUrl = `${baseUrl}/api/userprofile/about`;
  
   const token = localStorage.getItem("tokenRes");
 
@@ -164,9 +164,9 @@ const languageOptions = language.map(option => ({
 
     const userProfile = {
       languages,
-    linkedInurl: data.linkedinUrl,
+    linkedInUrl: data.linkedinUrl,
     twitterHandle: data.twitterHandle,
-    personalwebsite: data.personalWebsite
+    personalWebsite: data.personalWebsite
     };
     formData.append("userProfile",new Blob([JSON.stringify(userProfile)], { type: "application/json" }));
 
