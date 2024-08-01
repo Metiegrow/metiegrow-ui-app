@@ -406,7 +406,7 @@ const handleSearchClear = () =>{
 
                     <div className='my-5  '>
                         <CardText className='text-primary '>
-                            <span className='text-xlarge font-weight-semibold'>₹{mentors.price}</span>/Hour
+                            <span className='text-xlarge font-weight-semibold'>₹{Math.floor(mentors.price).toLocaleString()}</span>/Hour
                         </CardText>
                     
                     </div> 

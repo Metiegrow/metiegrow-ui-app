@@ -61,7 +61,7 @@ const JobListing = ({isPosted}) => {
     setTimeout(() => {
       fetchData();
     },1000)
-  }, [currentPage, isPosted]);
+  }, [currentPage, isPosted, interestedClickUrl]);
 
   const handleClick = (id) => {
     history.push(`/app/listing/job/view/${id}`);

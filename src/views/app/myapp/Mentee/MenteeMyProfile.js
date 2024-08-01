@@ -22,10 +22,12 @@ import { baseUrl } from "constants/defaultValues";
 import Select from "react-select";
 import { ReactSortable } from "react-sortablejs";
 import { Colxx } from "components/common/CustomBootstrap";
+import { useParams } from "react-router-dom";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
 import { EmploymentTypeData } from "../Listing/ListingData";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 
 const currentYear = new Date().getFullYear();
@@ -54,9 +56,23 @@ const MyProfile = () => {
   const [newInputSkill, setNewInputSkill] = useState("");
   const [skillValidationMessage,setSkillValidationMessage] = useState("");
 
+  const { uid } = useParams();
+
+
 // console.log("work",work)
-  const endUrl = `${baseUrl}/api/userprofile/myprofile`;
+// console.log("uid",uid)
+  // const endUrl = `${baseUrl}/api/userprofile/myprofile`;
   const imageEditUrl = `${baseUrl}/api/userprofile/profile-image`
+  
+
+  let endUrl;
+
+  if (!uid) {
+    endUrl = `${baseUrl}/api/userprofile/myprofile`;
+  } else  {
+    endUrl = `${baseUrl}/api/userprofile/profile/${uid}`;
+  } 
+  
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
@@ -152,15 +168,21 @@ const updateMentorProfile = async (updatedEducation = education, updatedWork = w
       seekingFor
     };
 
-    await axios.put(endUrl, updatedData, {
+    const response = await axios.put(endUrl, updatedData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    ToasterComponent('success', response.data.statuses);
+
     setProfileUpdate(!profileUpdate);
 
   } catch (error) {
-    console.error("Error updating profile", error);
+    if(error.response && error.response.data && error.response.data.statuses){
+      ToasterComponent('error', error.response.data.statuses);
+      }else{
+      console.error("Error updating profile", error);
+      }
   }
 };
 
@@ -385,7 +407,7 @@ const handleEditWork = (index) => {
     };
 
     mentorProfileDetails();
-  }, [profileUpdate]);
+  }, [profileUpdate,uid]);
 
   // const updateMentorProfile = async () => {
   //   try {
@@ -507,13 +529,14 @@ const handleEditWork = (index) => {
                             className="text-end w-100  
                          m-0 d-flex justify-content-end "
                           >
+                            {!uid &&
                             <Button
                               color="light"
                               className="icon-button"
                               size="sm"
                             >
                               <i className="simple-icon-pencil text-primary font-weight-bold" />
-                            </Button>
+                            </Button>}
                           </div>
 
                           <div
@@ -578,6 +601,7 @@ const handleEditWork = (index) => {
                                   alt="img"
                                 />
                               </ModalBody>
+                              {!uid &&
 
                               <ModalFooter
                                 // style={{ borderTop: 'none' }}
@@ -645,11 +669,13 @@ const handleEditWork = (index) => {
                                   <i className="simple-icon-trash" />
                                 </Button>
                               </ModalFooter>
+}
                             </Modal>
                           </div>
                         </CardBody>
                         <CardBody>
                           <div className="text-end w-100  d-flex justify-content-end">
+                            {!uid && 
                             <Button
                               color="primary"
                               outline
@@ -660,6 +686,7 @@ const handleEditWork = (index) => {
                             >
                               <i className="simple-icon-pencil" />
                             </Button>
+}
                           </div>
                           <div className="mt-4">
                             <h2 className="font-weight-bold">{firstName} {" "} {lastName}</h2>
@@ -797,6 +824,7 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">About</h2>
+                              {!uid &&
                               <Button
                                 color="primary"
                                 outline
@@ -807,6 +835,7 @@ const handleEditWork = (index) => {
                               >
                                 <i className="simple-icon-pencil" />
                               </Button>
+}
                             </Col>
                           </Row>
                           <div>
@@ -922,6 +951,7 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Experience</h2>
+                              {!uid && 
                               <Button
                                 color="primary"
                                 outline
@@ -932,6 +962,7 @@ const handleEditWork = (index) => {
                               >
                                 <i className="simple-icon-pencil" />
                               </Button>
+}
                             </Col>
                           </Row>
                           {work.map((w, index) => (
@@ -1246,6 +1277,7 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Skills</h2>
+                              {!uid && 
                               <Button
                                 color="primary"
                                 outline
@@ -1256,6 +1288,7 @@ const handleEditWork = (index) => {
                               >
                                 <i className="simple-icon-pencil" />
                               </Button>
+}
                             </Col>
                           </Row>
                           <Row>
@@ -1391,6 +1424,7 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Education</h2>
+                              {!uid && 
                               <Button
                                 color="primary"
                                 outline
@@ -1401,6 +1435,7 @@ const handleEditWork = (index) => {
                               >
                                 <i className="simple-icon-pencil" />
                               </Button>
+}
                             </Col>
                           </Row>
                           {education.map((e, index) => (
@@ -1606,6 +1641,7 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Languages</h2>
+                              {!uid && 
                               <Button
                                 color="primary"
                                 outline
@@ -1616,6 +1652,7 @@ const handleEditWork = (index) => {
                               >
                                 <i className="simple-icon-pencil" />
                               </Button>
+}
                             </Col>
                           </Row>
                           <div className="">

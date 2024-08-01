@@ -168,7 +168,7 @@ const ReviewsComponent = ({revieweeId,category}) => {
                   key={rv.reviewerId}
                   className="d-flex flex-row   border-bottom "
                 >
-                  <NavLink href={`/app/user/${rv.reviewerId}`}>
+                  <NavLink href={`/app/user/profile/${rv.reviewerId}`}>
                   {!rv.imageUrl ? (
                   <ThumbnailLetters
                       rounded

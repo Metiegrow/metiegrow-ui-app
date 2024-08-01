@@ -233,7 +233,7 @@ const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.na
                 {pack.serviceName}
               </h2>
               {/* <p className=''>{pack.headline}</p> */}
-              <p className='text-large mb-2 text-default'>₹ {pack.amount}</p>
+              <p className='text-large mb-2 text-default'>₹{Math.floor(pack.amount).toLocaleString()}</p>
               <p className='text-muted text-small'>{pack.description}</p>
               <div className=''>
                 {role.includes("USER") && (

@@ -618,6 +618,9 @@ const roleRes = getRoleRes();
             <Route
             path={`${match.url}/user/myprofile`}
             render={(props) => <ViewUserMyProfile {...props} />}
+            /><Route
+            path={`${match.url}/user/profile/:uid`}
+            render={(props) => <ViewUserMyProfile {...props} />}
             />
              <Route
               path={`${match.url}/user/apply`}

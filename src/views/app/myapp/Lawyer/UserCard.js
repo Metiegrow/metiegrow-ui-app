@@ -215,7 +215,7 @@ const handleSearchClear = () =>{
 
                  <div className='my-5  '>
                      <CardText className='text-primary '>
-                         <span className='text-xlarge font-weight-semibold'>₹{users.price}</span>
+                         <span className='text-xlarge font-weight-semibold'>₹{Math.floor(users.price).toLocaleString()}</span>
                      </CardText>
                  
                  </div> 

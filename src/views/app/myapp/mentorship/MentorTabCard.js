@@ -145,7 +145,7 @@ const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
                     <Colxx sm="12">
                       <CardBody>
                         <CardTitle className="mb-4">
-                          {price && <h2>₹{price}</h2>}
+                          {price && <h2>₹{Math.floor(price).toLocaleString()}</h2>}
                           <h5>Basic package</h5>
                           <div className='mt-4 '>
                             <div className=''  >

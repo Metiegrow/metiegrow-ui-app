@@ -338,7 +338,7 @@ const role = localStorage.getItem("roleRes")
                     <Col sm="12">
                       <CardBody>
                         <CardTitle className="mb-4">
-                          <h2>₹ {pack.amount}</h2>
+                          <h2>₹{Math.floor(pack.amount).toLocaleString()}</h2>
                           <h5>{pack.serviceName}</h5>
                           <p className='text-muted'>{pack.description}</p>
                           <div className='d-flex '>

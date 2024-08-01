@@ -636,7 +636,7 @@ const DashBoard = () => {
 
                 <div className="separator mb-2 mt-2" />
                 <h3 className="mb-0 fw-bold">
-                  <strong>₹{currentMentor.price}/hr</strong>
+                  <strong>₹{Math.floor(currentMentor.price).toLocaleString()}/hr</strong>
                 </h3>
               </div>
               <div className="d-flex justify-content-center">
@@ -740,7 +740,7 @@ const DashBoard = () => {
                 ))}</span>
                 <div className="separator mb-2 mt-2" />
                 <h3 className="mb-0 fw-bold">
-                  <strong>₹{currentLawyer.price}/mo</strong>
+                  <strong>₹{Math.floor(currentLawyer.price).toLocaleString()}/mo</strong>
                 </h3>
               </div>
               <div className="d-flex justify-content-center">
@@ -827,7 +827,7 @@ const DashBoard = () => {
                 <span>{currentAlumni.experience} years of experience</span>
                 <div className="separator mb-2 mt-2" />
                 <h3 className="mb-0 fw-bold">
-                  <strong>₹{currentAlumni.price}/mo</strong>
+                  <strong>₹{Math.floor(currentAlumni.price).toLocaleString()}/mo</strong>
                 </h3>
               </div>
               <div className="d-flex justify-content-center">
