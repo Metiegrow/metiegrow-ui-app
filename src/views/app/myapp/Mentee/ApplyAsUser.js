@@ -73,7 +73,7 @@ const ApplyAsMentor = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   useEffect(() => {
     const status = localStorage.getItem("status");
-    console.log("status", status);
+    // console.log("status", status);
     if (status) {
       if (status === "0") {
         setCurrentStep(0);
@@ -181,6 +181,7 @@ const languageOptions = language.map(option => ({
       //   console.log(`resres ${response.status}`);
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "1");
     } catch (error) {
       setImageError(false);
       // console.error(error);
@@ -215,6 +216,8 @@ const languageOptions = language.map(option => ({
       //   console.log(`resres ${response.status}`);
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "3");
+
     } catch (error) {
       // setSkillError(false);
       setProfileLoading(false)
@@ -244,6 +247,7 @@ const languageOptions = language.map(option => ({
       setExperienceLoading(false)
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "7");
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -605,6 +609,7 @@ const languageOptions = language.map(option => ({
                           <Label>College Name*</Label>
                           <Input
                             className="form-control"
+                            required
                             name={`education[${index}].college`}
                             value={service.college}
                             onChange={(e) =>
@@ -634,6 +639,7 @@ const languageOptions = language.map(option => ({
                             id={`education[${index}].degree`}
                             className="form-control"
                             value={service.degree}
+                            required
                             onChange={(e) =>
                               handleInputChange(
                                 index,
@@ -664,6 +670,7 @@ const languageOptions = language.map(option => ({
                             id={`education[${index}].department`}
                             className="form-control"
                             value={service.department}
+                            required
                             onChange={(e) =>
                               handleInputChange(
                                 index,
@@ -693,6 +700,7 @@ const languageOptions = language.map(option => ({
                                id={`education[${index}].year`}
                                className="form-control"
                                 value={service.year}
+                                required
                             onChange={(e) =>
                               handleInputChange(
                                 index,
@@ -759,6 +767,7 @@ const languageOptions = language.map(option => ({
                           <Label>Company Name*</Label>
                           <Input
                             className="form-control"
+                            required
                             name={`education[${index}].company`}
                             value={works.company}
                             onChange={(e) =>
@@ -786,6 +795,7 @@ const languageOptions = language.map(option => ({
                           <Input
                             name={`education[${index}].jobTitle`}
                             id={`education[${index}].jobTitle`}
+                            required
                             className="form-control"
                             value={works.jobTitle}
                             onChange={(e) =>
@@ -818,6 +828,7 @@ const languageOptions = language.map(option => ({
                             id={`education[${index}].employmentType`}
                             className="form-control"
                             value={works.employmentType}
+                            required
                             onChange={(e) =>
                               handleWorkInputChange(
                                 index,
@@ -856,6 +867,7 @@ const languageOptions = language.map(option => ({
                             name={`education[${index}].jobLocation`}
                             id={`education[${index}].jobLocation`}
                             className="form-control"
+                            required
                             value={works.jobLocation}
                             onChange={(e) =>
                               handleWorkInputChange(
@@ -902,6 +914,7 @@ const languageOptions = language.map(option => ({
                                 id={`education[${index}].startDate`}
                                 className="form-control"
                                 value={works.startDate}
+                                required
                                 onChange={(e) =>
                                   handleWorkInputChange(
                                     index,
@@ -942,6 +955,7 @@ const languageOptions = language.map(option => ({
                             id={`education[${index}].endDate`}
                             className="form-control"
                             value={works.endDate}
+                            required
                             onChange={(e) =>
                               handleWorkInputChange(
                                 index,
@@ -1043,6 +1057,7 @@ const languageOptions = language.map(option => ({
                     <Label for="skills">Skills*</Label>
                     
                     <TagsInput
+                    required
                         value={skillsTag}
                         onChange={handleTagsChange}
                         inputProps={{ placeholder: "Add skills " }}
@@ -1066,6 +1081,7 @@ const languageOptions = language.map(option => ({
                       <Col md={6}>
                         <Label for="introVideo">Bio*</Label>
                         <Field
+                        required
                           type="textarea"
                           name="bio"
                           id="bio"
@@ -1075,6 +1091,7 @@ const languageOptions = language.map(option => ({
                       <Col md={6}>
                         <Label for="featuredArticle">Seeking for*</Label>
                         <Field
+                        required
                           type="text"
                           name="seekingFor"
                           id="seekingFor"

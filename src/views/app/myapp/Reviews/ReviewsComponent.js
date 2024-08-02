@@ -180,7 +180,9 @@ const ReviewsComponent = ({revieweeId,category}) => {
                      <img
                       src={`${baseUrl}/${rv.imageUrl}`}
                       alt={rv.name}
-                      className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                      // className="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall"
+                      className=" rounded-circle img-thumbnail border"
+                      style={{ width: "40px", height: "40px", objectFit: "cover"  }}
                     /> 
                     )}
                   </NavLink>

@@ -58,7 +58,8 @@ const MyProfile = () => {
   const [profileLoading, setProfileLoading] = useState(true);
   const [languages, setLanguages] = useState([]);
   const [skillValidationMessage,setSkillValidationMessage] = useState("");
-  const [isProfileUpdated, setIsProfileUpdated ] = useState(false)
+  const [isProfileUpdated, setIsProfileUpdated ] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
 
  // const Id = 1;
@@ -70,6 +71,7 @@ const MyProfile = () => {
   // const endUrl = `${baseUrl}/myprofile`;
   const endUrl = `${baseUrl}/api/mentor/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
+  const imageEditUrl = `${baseUrl}//api/mentor/mentor-profile-image`
 
 
   useEffect(() => {
@@ -141,7 +143,7 @@ const MyProfile = () => {
       try {
         const response = await axios.get(inputUrl);
         const inputData = response.data;
-        console.log("inputData:", inputData);
+        // console.log("inputData:", inputData);
         if (inputData) {
           // setReviews(inputData.reviews)
           // setPrice(inputData.price)
@@ -218,6 +220,26 @@ const token = getTokenRes();
       }
     }
   };
+  
+
+  const postImageData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+  
+      const response = await axios.post(imageEditUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      ToasterComponent('success', response.data.statuses);
+      setTimeout(() => {
+      }, 2000);
+      // console.log(`resres ${response.status}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleAddSkill = (newSkill) => {
     if (!newSkill.trim()) {
@@ -268,6 +290,7 @@ const token = getTokenRes();
   const handleSave = () => {
     setIsEditing(false);
     updateMEntorProfile();
+    postImageData();
   };
 
   const handleCancel = () => {
@@ -330,13 +353,31 @@ const token = getTokenRes();
     handleAddLanguages(languagesArray[0]);
     setSelectedLanguages([]);
   };
+
+
   
 
 
-  const [file, setFile] = useState(null);
+  const [file1, setFile1] = useState(null);
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setFile1(file);
+    
+    // if (file) {
+    //   const reader = new FileReader();
+  
+    //   reader.onloadend = () => {
+    //     const base64Image = reader.result;
+    //     setSelectedFileBase64(base64Image);
+       
+  
+    //     // setAboutField({ ...aboutField, image: base64Image });
+    //   };
+  
+    //   reader.readAsDataURL(file);
+    // }
   };
 
   const countryName = country.find(c => c.iso_code === location)?.name;
@@ -468,7 +509,7 @@ const token = getTokenRes();
                     onChange={handleFileChange}
                   />
                 </Form>
-                {file && <p>Selected file: {file.name}</p>}
+                {file1 && <p>Selected file: {file1.name}</p>}
               </div>
               }
           <Row>

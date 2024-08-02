@@ -20,6 +20,7 @@ const LawyerProfile = () => {
     // const[reviews,setReviews]=useState('');
     const [packages,setPackages]=useState('');
     const [showAll, setShowAll] = useState(false);
+    const [loading, setLoading] = useState(true);
     // const [isFixed, setIsFixed] = useState(false);
     const toggleShowAll = () => {
       setShowAll(!showAll);
@@ -56,7 +57,7 @@ const LawyerProfile = () => {
             try {
                 const response = await axios.get(url);
                 setLawyerProfile(response.data);
-                
+                setLoading(false);
               } catch (error) {
                 console.error('Error fetching data:', error);
               }
@@ -101,8 +102,10 @@ const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.na
   return (
     <div>
     
-
-
+    {loading ? (
+            <div className="loading" />
+          ) : (
+            <>
       <div>
       <div className='w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center'>
           <div className=' '>
@@ -270,6 +273,8 @@ const countryName = country.find(c => c.iso_code === lawyerprofile.location)?.na
      </Row>
      <ReviewsComponent  category="law"
              revieweeId ={pid}/>
+             </>
+    )}
     </div>
   );
 }

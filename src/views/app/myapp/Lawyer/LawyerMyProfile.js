@@ -21,6 +21,7 @@ import { Colxx } from "components/common/CustomBootstrap";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const LawyerMyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -40,9 +41,15 @@ const LawyerMyProfile = () => {
   const [about, setAbout] = useState("");
   const [profileLoading, setProfileLoading] = useState(true);
   const [topicValidationMessage, setTopicValidationMessage] = useState("");
-  const [isPosted, setIsPosted] = useState(false)
+  const [isPosted, setIsPosted] = useState(false);
+  const [file1, setFile1] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const token = localStorage.getItem("tokenRes");
+
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
+  const imageEditUrl = `${baseUrl}/api/lawyer/lawyer-profile-images`;
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
@@ -72,10 +79,46 @@ const LawyerMyProfile = () => {
     mentorProfileDetails();
   }, [isPosted]);
 
-  function getTokenRes() {
-    return localStorage.getItem("tokenRes");
-  }
-  const token = getTokenRes();
+  const postImageData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+  
+      const response = await axios.post(imageEditUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      ToasterComponent('success', response.data.statuses);
+      setTimeout(() => {
+      }, 2000);
+      // console.log(`resres ${response.status}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setFile1(file);
+    // if (file) {
+    //   const reader = new FileReader();
+  
+    //   reader.onloadend = () => {
+    //     const base64Image = reader.result;
+    //     setSelectedFileBase64(base64Image);
+       
+  
+    //     // setAboutField({ ...aboutField, image: base64Image });
+    //   };
+  
+    //   reader.readAsDataURL(file);
+    // }
+  };
+
+ 
 
   const updateMEntorProfile = async () => {
     try {
@@ -149,6 +192,10 @@ const LawyerMyProfile = () => {
   const handleSave = () => {
     setIsEditing(false);
     updateMEntorProfile();
+    if(selectedFile){
+      postImageData();
+    }
+    
   };
 
   const handleCancel = () => {
@@ -177,11 +224,10 @@ const LawyerMyProfile = () => {
   //     }
   //   };
 
-  const [file, setFile] = useState(null);
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
+  // const handleFileChange = (event) => {
+  //   setFile(event.target.files[0]);
+  // };
   const countryName = country.find((c) => c.iso_code === location)?.name;
 
   const languageOptions = language.map((option) => ({
@@ -276,7 +322,7 @@ const LawyerMyProfile = () => {
                       onChange={handleFileChange}
                     />
                   </Form>
-                  {file && <p>Selected file: {file.name}</p>}
+                  {file1 && <p>Selected file: {file1.name}</p>}
                 </div>
               )}
               <Row lg={10} md={8}>
@@ -442,14 +488,14 @@ const LawyerMyProfile = () => {
                           list={topic}
                           setList={setTopic}
                           options={{ handle: ".handle" }}
-                          className="row"
+                          className="row ml-1"
                         >
                           {topic.map((newTopics, index) => (
                             <Button
                             // eslint-disable-next-line react/no-array-index-key
                               key={index}
                               color={index < 3 ? 'primary' : 'light'}
-                              className="mb-2 font-weight-semibold mx-2"
+                              className=" mb-2 font-weight-semibold mx-2"
                               size="xs"
                               onClick={() => handleRemoveTopics(index)}
                             >
@@ -457,7 +503,7 @@ const LawyerMyProfile = () => {
                             </Button>
                           ))}
                         </ReactSortable>
-                        <p className="text-muted">Drag topic to set top 3 (the top 3 topics will be displayed on lawyer cards)</p>
+                        <p className="text-muted ml-2">Drag topic to set top 3 (the top 3 topics will be displayed on lawyer cards)</p>
                         <InputGroup className="mb-3">
                           <Input
                             type="text"

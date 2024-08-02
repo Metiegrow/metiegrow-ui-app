@@ -338,6 +338,8 @@ const roleRes = getRoleRes();
               redirectTo = `${match.url}/user/apply`;
             }else if (statusRes === '3') {
               redirectTo = `${match.url}/user/apply`;
+            }else if (statusRes === '7') {
+              redirectTo = `${match.url}/dashboard`;
             }else  {
               redirectTo = `${match.url}/dashboard`;
             }
@@ -348,6 +350,8 @@ const roleRes = getRoleRes();
               redirectTo = `${match.url}/lawyer/apply`;
             }else if (statusRes === '3') {
               redirectTo = `${match.url}/lawyer/apply`;
+            }else if (statusRes === '7') {
+              redirectTo = `${match.url}/jobslist`;
             }else  {
               redirectTo = `${match.url}/jobslist`;
             }

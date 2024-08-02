@@ -24,6 +24,7 @@ export const localeOptions = [
   { id: 'es', name: 'Español', direction: 'ltr' },
   { id: 'enrtl', name: 'English - RTL', direction: 'rtl' },
 ];
+export const appKey = "611104323#1329874"
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyBBksq-Asxq2M4Ot-75X19IyrEYJqNBPcg',

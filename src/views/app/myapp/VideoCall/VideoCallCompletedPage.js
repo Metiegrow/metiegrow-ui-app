@@ -17,7 +17,7 @@ import Rating from "components/common/Rating";
 
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
-import { baseUrl } from "constants/defaultValues";
+import { adminRoot, baseUrl } from "constants/defaultValues";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import ToasterComponent from "../notifications/ToasterComponent";
 
@@ -165,9 +165,11 @@ if (roleRes === "USER") {
   //     });
   // };
 
-  const handleHomeClick = () => {
-    history.push("/app/profile");
+  const handleDashboardClick = () => {
+    history.push(`${adminRoot}/dashboard`);
   };
+
+  const handleMentorClick = () => history.push(`${adminRoot}/calendar/mentor/appointment`)
   
 
   // const FromDate = new Date(parseInt(fromTime, 10));
@@ -234,9 +236,9 @@ if (roleRes === "USER") {
                          color="primary"
                          size="lg"
                          className="mt-4"
-                         onClick={handleHomeClick}
+                         onClick={handleMentorClick}
                        >
-                         Home
+                         My slots
                        </Button>
                      </Col>
                      ) : (
@@ -319,9 +321,9 @@ if (roleRes === "USER") {
                               color="primary"
                               size="lg"
                               className="mt-4"
-                              onClick={handleHomeClick}
+                              onClick={handleDashboardClick}
                             >
-                              Home
+                              Dashboard
                             </Button>
                           </>
                         )}

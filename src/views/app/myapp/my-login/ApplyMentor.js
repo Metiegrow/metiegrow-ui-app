@@ -21,13 +21,14 @@ import { injectIntl } from "react-intl";
 import { Colxx } from "components/common/CustomBootstrap";
 import Select from 'react-select';
 import { Formik, Form, Field } from "formik";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { NotificationManager } from "components/common/react-notifications";
 import { SliderTooltip } from "components/common/SliderTooltips";
 // import { FormikTagsInput } from "containers/form-validations/FormikFields";
 import TagsInput from "react-tagsinput";
 import 'react-tagsinput/react-tagsinput.css';
-import { baseUrl } from "constants/defaultValues";
+import { adminRoot, baseUrl } from "constants/defaultValues";
 import {
   validateCategory,
   validateLocation,
@@ -178,6 +179,8 @@ const languageOptions = language.map(option => ({
       //   console.log(`resres ${response.status}`);
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "1");
+
     } catch (error) {
       setImageError(false);
       // console.error(error);
@@ -218,6 +221,7 @@ const languageOptions = language.map(option => ({
       //   console.log(`resres ${response.status}`);
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "3");
     } catch (error) {
       setSkillError(false);
       setProfileLoading(false)
@@ -249,6 +253,7 @@ const languageOptions = language.map(option => ({
       setExperienceLoading(false)
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "7");
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -284,6 +289,8 @@ const languageOptions = language.map(option => ({
     setSkillError(false);
     setToolsTag(newTools);
   };
+  const history = useHistory();  
+  const handleMySlotsClick = () => history.push(`${adminRoot}/calendar/mentor/appointment`)
 
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
@@ -973,8 +980,8 @@ const languageOptions = language.map(option => ({
                           <p className="lead">We will reach you shortly</p>
                           <hr className="my-4" />
                           <p className="lead mb-0">
-                            <Button color="primary" size="lg">
-                              Check status
+                            <Button color="primary" size="lg" onClick={() => handleMySlotsClick()}>
+                              My slots
                             </Button>
                           </p>
                         </Jumbotron>

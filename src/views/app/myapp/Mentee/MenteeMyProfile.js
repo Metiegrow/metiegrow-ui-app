@@ -116,11 +116,12 @@ const postImageData = async () => {
     const formData = new FormData();
     formData.append("image", selectedFile);
 
-    await axios.post(imageEditUrl, formData, {
+    const response = await axios.post(imageEditUrl, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    ToasterComponent('success', response.data.statuses);
     setTimeout(() => {
     setProfileUpdate(!profileUpdate);
     }, 2000);
@@ -721,7 +722,7 @@ const handleEditWork = (index) => {
                                   id="firstName"
                                   value={firstName}
                                   onChange={(e) => setFirstName(e.target.value)}
-                                  className="font-weight-bold text-one"
+                                  className=" text-one"
                                 />
                               </Col>
                               <Col md="6">
@@ -733,7 +734,7 @@ const handleEditWork = (index) => {
                                   id="lastName"
                                   value={lastName}
                                   onChange={(e) => setLastName(e.target.value)}
-                                  className="font-weight-bold text-one"
+                                  className=" text-one"
                                 />
                               </Col>
                             </Row>
@@ -748,7 +749,7 @@ const handleEditWork = (index) => {
                                 id="jobtitle"
                                 value={jobTitle}
                                 onChange={(e) => setJobTitle(e.target.value)}
-                                className="font-weight-bold text-one"
+                                className=" text-one"
                               />
                               <br />
                             </>
@@ -761,7 +762,7 @@ const handleEditWork = (index) => {
                                 id="company"
                                 value={company}
                                 onChange={(e) => setCompany(e.target.value)}
-                                className="font-weight-bold text-one"
+                                className=" text-one"
                               />
                               <br />
                             </>
@@ -777,7 +778,7 @@ const handleEditWork = (index) => {
                                 value={location}
                                 // validate={validateLocation}
                                 onChange={(e) => setLocation(e.target.value)}
-                                className="form-control font-weight-bold text-one"
+                                className="form-control text-one"
                               >
                                 <option disabled value="">
                                   Select Location
@@ -868,7 +869,7 @@ const handleEditWork = (index) => {
                                 id="about"
                                 value={bio}
                                 onChange={(e) => setBio(e.target.value)}
-                                className="font-weight-bold text-one"
+                                className=" text-one"
                               />
                               <br />
                             </>
@@ -882,7 +883,7 @@ const handleEditWork = (index) => {
                                 id="linkedInUrl"
                                 value={linkedInUrl}
                                 onChange={(e) => setLinkedInUrl(e.target.value)}
-                                className="font-weight-bold text-one"
+                                className=" text-one"
                               />
                               <br />
                             </>
@@ -897,7 +898,7 @@ const handleEditWork = (index) => {
                                 onChange={(e) =>
                                   setTwitterHandle(e.target.value)
                                 }
-                                className="font-weight-bold text-one"
+                                className=" text-one"
                               />
                               <p className="text-muted mt-1">
                                 Omit the &ldquo;@&rdquo; -e.g.
@@ -916,7 +917,7 @@ const handleEditWork = (index) => {
                                 onChange={(e) =>
                                   setPersonalWebsite(e.target.value)
                                 }
-                                className="font-weight-bold text-one"
+                                className=" text-one"
                               />
                               <br />
                             </>
@@ -1160,7 +1161,7 @@ const handleEditWork = (index) => {
                                     [name]: value 
                                   }));
                                 }}
-                                className="form-control font-weight-bold text-one"
+                                className="form-control text-one"
                               >
                                 <option disabled value="">
                                   Select year
@@ -1193,7 +1194,7 @@ const handleEditWork = (index) => {
                                     [name]: value 
                                   }));
                                 }}
-                                className="form-control font-weight-bold text-one"
+                                className="form-control  text-one"
                               >
                                 <option disabled value="">
                                   Select year
@@ -1564,7 +1565,7 @@ const handleEditWork = (index) => {
                                     [name]: value 
                                   }));
                                 }}
-                                className="form-control font-weight-bold text-one"
+                                className="form-control  text-one"
                               >
                                 {/* <option disabled value="">
                                   Select Location

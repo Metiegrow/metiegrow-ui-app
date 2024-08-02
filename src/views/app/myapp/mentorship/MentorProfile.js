@@ -24,6 +24,7 @@ const MentorProfile = () => {
 //  const url1=`${baseUrl}/mentor/myprofile`;
   // const[mentorprofiledetails,setMentorProfileDetails]=useState([]);
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
+  const [loading, setLoading] = useState(true);
   const[reviews,setReviews]=useState('');
 
   const history = useHistory();
@@ -75,11 +76,13 @@ const MentorProfile = () => {
     mentorReviews();
 
     const mentorProfile = async () => {
-      
+      setLoading(true);
       try {
         const response = await axios.get(url1);
         setMentorProfileDetails1(response.data);
+        setLoading(false);
       } catch (error) {
+
         console.error('Error fetching data:', error);
       }
     };
@@ -115,9 +118,13 @@ const MentorProfile = () => {
   }
   return (
     <div  className='mentor-profile'>
+      {loading ? (
+            <div className="loading" />
+          ) : (
       <div className=''>
      
         <Colxx sm="12" md="12" lg="12" xxs="12" className=''>
+        
           <div className=''>
            {/* <Colxx className='bg-secondary '>
            <Row >
@@ -402,6 +409,7 @@ const MentorProfile = () => {
         revieweeId ={mid}
         />
       </div>
+          )}
     </div>
   );
 }

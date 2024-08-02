@@ -24,7 +24,7 @@ import {
 import SaySomething from 'components/applications/SaySomething';
 import TimestampConverter from '../Calculation/TimestampConverter';
 import axios from 'axios';
-import { baseUrl } from 'constants/defaultValues';
+import { appKey, baseUrl } from 'constants/defaultValues';
 import ApplicationMenu from 'components/common/ApplicationMenu';
 import ChatHeading from './ChatHeading';
 import ThumbnailLetters from './ThumbnailLetters';
@@ -132,7 +132,7 @@ const ChatApp = ({
       const [token, setToken] = useState("");
       const [peerId, setPeerId] = useState(pid);
       const tokenRes = localStorage.getItem("tokenRes")
-      const [appKey, setAppKey] = useState("")
+      // const [appKey, setAppKey] = useState("")
       const [fullName, setFullName] = useState([])
 
 //       console.log("fullName", fullName)
@@ -142,13 +142,13 @@ const ChatApp = ({
 // }
       useEffect(() => {
         // const params = {username: peerId};
-        console.log("start")
+        // console.log("start")
 
         const UserNameUrl = `${baseUrl}/api/chat/user/details?username=${peerId}`
         const fetchData = async () => {
           try {
             const response = await axios.get(UserNameUrl);
-            console.log("namechk",response.data);
+            // console.log("namechk",response.data);
             setFullName(response.data);
           } catch (error) {
             console.error("An error occurred:", error);
@@ -171,7 +171,7 @@ const ChatApp = ({
             });
             setToken(response.data.token);
             setUserId(response.data.chatUserName)
-            setAppKey(response.data.appKey)
+            // setAppKey(response.data.appKey)
             // setPeerId(response.data.targetChatUserName)
             // console.log("run",response)
           } catch (err) {
@@ -196,9 +196,9 @@ const ChatApp = ({
   const [conversationFullName,setConversationFullName] = useState([]);
   // const [historyMessages, setHistoryMessages] = useState([]); 
 
-  console.log("conversation", serverConversations)
-  console.log("conversationIds", conversationIds)
-  console.log("conversationFullName", conversationFullName);
+  // console.log("conversation", serverConversations)
+  // console.log("conversationIds", conversationIds)
+  // console.log("conversationFullName", conversationFullName);
 
 
   useEffect(() => {
@@ -461,11 +461,13 @@ const ChatApp = ({
       <Row className="app-row">
         <Colxx xxs="12" className="chat-app">
           {peerId && loadingConversations && selectedUser && (
+                        <NavLink href="#">
             <ChatHeading
               name={fullName.length > 0 ? fullName.find(user => user.username === peerId).name : peerId}
-              thumb={peerId}
+              thumb={`${baseUrl}/${fullName.length > 0 ? fullName.find(user => user.username === peerId).imageUrl : peerId}`}
               // lastSeenDate={selectedUser.lastSeenDate}
             />
+            </NavLink>
           )}
 
         {!peerId && (
@@ -599,17 +601,21 @@ const ChatApp = ({
                           onClick={() => handleConversationClick(conversation.conversationId)}
                           style={{ cursor: 'pointer' }}
                         >
-                          {/* <img
-                            alt={item.name}
-                            src={item.thumb}
-                            className="img-thumbnail border-0 rounded-circle mr-3 list-thumbnail align-self-center xsmall"
-                          /> */}
+                          {(conversationFullName.length > 0 && conversationFullName.find(user => user.username)) ? (
+                          <img
+                            alt={conversation.conversationId}
+                            src={`${baseUrl}/${conversationFullName.length > 0 ? conversationFullName.find(user => user.username === conversation.conversationId).imageUrl : conversation.conversationId}`}
+                            // className="img-thumbnail border-0 rounded-circle mr-3 list-thumbnail align-self-center xsmall"
+                            className=" rounded-circle img-thumbnail border mr-2"
+                            style={{ width: "40px", height: "40px", objectFit: "cover", overflow: "hidden"  }}
+                          /> ) : (
                           <ThumbnailLetters
                           extraSmall 
                   rounded
                   text={conversation.conversationId}
                   className="m-1"
                 />
+              )}
                           <div className="d-flex flex-grow-1 min-width-zero">
                             <div className="m-2 pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
                               <div className="min-width-zero">

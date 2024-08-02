@@ -9,6 +9,7 @@ import {
   DropdownItem,
   DropdownToggle,
   DropdownMenu,
+  Row,
 } from "reactstrap";
 
 import { NavLink } from "react-router-dom";
@@ -27,7 +28,7 @@ import {
   adminRoot,
   baseUrl,
 } from "constants/defaultValues";
-
+import ThumbnailLetters from "views/app/myapp/Chat/ThumbnailLetters";
 import { MobileMenuIcon, MenuIcon } from "components/svg";
 // import MyProfile from 'views/app/myapp/my-profile/MyProfile';
 import TopnavDarkSwitch from "./Topnav.DarkSwitch";
@@ -341,13 +342,24 @@ if (roleRes.includes("MENTOR")) {
         <div className="user d-inline-block">
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
-              <span className="name mr-1">{userName}</span>
               <span>
                   {
                     imageUrl === "null" ? (
-                      <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
+                      // <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
+                      <Row className="ml-2 mr-2 ml-md-0 mr-md-0">
+                        <span className="name mt-2 ml-2 mr-2">{userName}</span>
+                        <ThumbnailLetters
+                            extraSmall 
+                            rounded
+                            text={userName}
+                            className=""
+                        />
+                      </Row>
                     ) : (
-                      <img alt="Profile" src={`${baseUrl}/${imageUrl}`} style={{width: "40px", height: "40px",objectFit:"cover"}}/>
+                      <>
+                          <span className="name mr-1">{userName}</span>
+                          <img alt="Profile" src={`${baseUrl}/${imageUrl}`} style={{width: "40px", height: "40px",objectFit:"cover"}}/>
+                      </>
                     )
                   }
               </span>

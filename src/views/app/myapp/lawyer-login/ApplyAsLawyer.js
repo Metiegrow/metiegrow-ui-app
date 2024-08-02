@@ -23,11 +23,12 @@ import { injectIntl } from "react-intl";
 import { Colxx } from "components/common/CustomBootstrap";
 import Select from "react-select";
 import { Formik, Form, Field } from "formik";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { SliderTooltip } from "components/common/SliderTooltips";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
-import { baseUrl } from "constants/defaultValues";
+import { adminRoot, baseUrl } from "constants/defaultValues";
 import {
     validateLanguages,
     validateLocation,
@@ -164,6 +165,7 @@ const ApplyAsLawyer = () => {
       setAboutLoading(false);
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "1");
       // console.log(`resres ${response.status}`);
     } catch (error) {
       setAboutLoading(false);
@@ -185,6 +187,7 @@ const ApplyAsLawyer = () => {
       setProfileLoading(false);
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "3");
       // console.log(`resres ${response.status}`);
     } catch (error) {
       setProfileLoading(false);
@@ -223,6 +226,7 @@ const ApplyAsLawyer = () => {
       setServicesLoading(false);
       ToasterComponent('success', response.data.statuses);
       handleNextStep();
+      localStorage.setItem('status', "7");
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -236,6 +240,9 @@ const ApplyAsLawyer = () => {
       console.error(error);
     }
   };
+  const history = useHistory();
+
+  const handleJobsListClick = () => history.push(`${adminRoot}/jobslist`);
 //   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
@@ -752,8 +759,8 @@ const ApplyAsLawyer = () => {
                           <p className="lead">We will reach you shortly</p>
                           <hr className="my-4" />
                           <p className="lead mb-0">
-                            <Button color="primary" size="lg">
-                              Check status
+                            <Button color="primary" size="lg" onClick={() => handleJobsListClick()}>
+                            My jobs list
                             </Button>
                           </p>
                         </Jumbotron>

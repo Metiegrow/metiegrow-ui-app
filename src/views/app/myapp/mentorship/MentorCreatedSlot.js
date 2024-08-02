@@ -59,6 +59,7 @@ const MentorCreatedSlot = () => {
   const [modalSmall, setModalSmall] = useState(false);
   const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
   const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
+  const [loading,setLoading] = useState(false);
 
  
 
@@ -95,6 +96,7 @@ const MentorCreatedSlot = () => {
   };
   
   const handleOkButtonClick = async () => {
+    setLoading(true);
     // Ensure selectedDate is not null
     if (!selectedDate) {
       console.error('Selected date is null');
@@ -133,7 +135,7 @@ const MentorCreatedSlot = () => {
       console.error('Error saving data:', error);
     }
   
-   
+   setLoading(false);
     setModalSmall(false);
 
     // window.location.reload();
@@ -1317,7 +1319,21 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
        </Row>
        <Row>
           <Col>
-          <Button onClick={handleOkButtonClick} color='primary'>OK</Button>
+          <div className="row justify-content-center">
+          <Button onClick={handleOkButtonClick} className={`btn-shadow btn-multiple-state ${
+                        loading ? 'show-spinner' : ''
+                      }`} color='primary'>
+
+          <span className="spinner d-inline-block">
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">
+                      OK
+                      </span>
+          </Button>
+          </div>
           </Col>
         </Row>
       
