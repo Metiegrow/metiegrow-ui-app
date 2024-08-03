@@ -69,6 +69,8 @@ const ApplyAsLawyer = () => {
         setCurrentStep(1);
       } else if (status === "3") {
         setCurrentStep(2);
+      } else if (status === "7") {
+        setCurrentStep(3);
       } else {
         setCurrentStep(0);
       }

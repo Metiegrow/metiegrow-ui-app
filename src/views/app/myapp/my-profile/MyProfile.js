@@ -71,7 +71,7 @@ const MyProfile = () => {
   // const endUrl = `${baseUrl}/myprofile`;
   const endUrl = `${baseUrl}/api/mentor/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
-  const imageEditUrl = `${baseUrl}//api/mentor/mentor-profile-image`
+  const imageEditUrl = `${baseUrl}/api/mentor/mentor-profile-image`
 
 
   useEffect(() => {

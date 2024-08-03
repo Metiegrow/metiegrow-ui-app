@@ -26,8 +26,8 @@ const UserCard = () => {
   const [isLast, setIsLast] = useState(true);
   const [totalPage, setTotalPage] = useState(1);
 
-  const [searchClick, setSearchClick] = useState("")
-  const [searchClicked, setSearchClicked] = useState(false)
+  // const [searchClick, setSearchClick] = useState("")
+  // const [searchClicked, setSearchClicked] = useState(false)
 
   const url = `${baseUrl}/api/lawyer/lawyercards`
 
@@ -47,15 +47,15 @@ const [isLawyerCardFetched, setIsLawyerCardFetched] = useState(false)
 
   const [userdetails,setUserDetails]=useState('')
   const [inputkey,setInputKey]=useState('');
-  const handleSearchByName = () => {
-    setSearchClick(inputkey);
-    setSearchClicked(true);
-  } 
-const handleSearchClear = () =>{
-  setInputKey("");
-  setSearchClick("");
-  setSearchClicked(false);
-}
+  // const handleSearchByName = () => {
+  //   setSearchClick(inputkey);
+  //   // setSearchClicked(true);
+  // } 
+// const handleSearchClear = () =>{
+//   setInputKey("");
+//   setSearchClick("");
+//   setSearchClicked(false);
+// }
   // const url=`${baseUrl}/user/cards`
   const history=useHistory();
 
@@ -100,8 +100,8 @@ const handleSearchClear = () =>{
     }
     if (selectedTopics) {
       params.topic = selectedTopics;
-    }if(searchClick){
-      params.firstName = searchClick;
+    }if(inputkey){
+      params.firstName = inputkey;
     }
     params.page = currentPage - 1;
     params.size = 10;
@@ -119,7 +119,7 @@ const handleSearchClear = () =>{
       }
     };
     LawyerCardDetails();
-  }, [selectedLocation,selectedLanguage,selectedTopics,currentPage,selectedPrice,searchClick]);
+  }, [selectedLocation,selectedLanguage,selectedTopics,currentPage,selectedPrice,inputkey]);
 
  
   
@@ -132,20 +132,41 @@ const handleSearchClear = () =>{
        <div className="">
         <div className="form-group">
        <div className='input-group'>
-       <input
+       {/* <input
             type="text"
             className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
             placeholder='Search by name'
-            disabled={searchClicked}
+            // disabled={searchClicked}
             value={inputkey}
             onChange={(e) =>setInputKey(e.target.value)}
-          />
+          /> */}
+          <div style={{ position: 'relative' }} className="col-12 col-lg-7 col-md-7">
+              <i
+                className="simple-icon-magnifier mr-3"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '15px',
+                  transform: 'translateY(-50%)',
+                  zIndex: 2,
+                  color: '#aaa',
+                }}
+              />
+              <input
+                type="text"
+                className="form-control rounded py-2"
+                placeholder="Search by name"
+                value={inputkey}
+                onChange={(e) => setInputKey(e.target.value)}
+                style={{ paddingRight: '2.5rem' }} 
+              />
+            </div>
           
-          {!searchClicked ? (
+          {/* {!searchClicked ? (
       
           <Button disabled={!inputkey} className='ml-3 ' color='primary' onClick={() => handleSearchByName()} >Search</Button> ) : (
           <Button className='ml-3 ' onClick={() => handleSearchClear()} color='primary' >Clear</Button>
-        )}
+        )} */}
         
           
            

@@ -21,6 +21,7 @@ import { injectIntl } from "react-intl";
 import { Colxx } from "components/common/CustomBootstrap";
 import TagsInput from "react-tagsinput";
 import Select from 'react-select';
+import { useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
 import { NotificationManager } from "components/common/react-notifications";
@@ -28,7 +29,7 @@ import { NotificationManager } from "components/common/react-notifications";
 // import { FormikTagsInput } from "containers/form-validations/FormikFields";
 // import TagsInput from "react-tagsinput";
 import 'react-tagsinput/react-tagsinput.css';
-import { baseUrl } from "constants/defaultValues";
+import { adminRoot, baseUrl } from "constants/defaultValues";
 import {
   // validateCategory,
   // validateLocation,
@@ -56,6 +57,8 @@ const ApplyAsMentor = () => {
   const [loading, setLoading] = useState(false);
   const [skillsTag, setSkillsTag] = useState([]);
   const [certificationsTag, setCertificationsTag] = useState([]);
+  const history = useHistory();
+
 
   // const [skillsTag, setSkillsTag] = useState([]);
   // const [toolsTag, setToolsTag] = useState([]);
@@ -81,6 +84,8 @@ const ApplyAsMentor = () => {
         setCurrentStep(1);
       } else if (status === "3") {
         setCurrentStep(2);
+      } else if (status === "7") {
+        setCurrentStep(3);
       } else {
         setCurrentStep(0);
       }
@@ -339,6 +344,10 @@ const languageOptions = language.map(option => ({
    const handleCertificationsChange = (newCertifications) => {
     // setSkillError(false);
     setCertificationsTag(newCertifications);
+  };
+
+  const handleDashboardClick = () => {
+    history.push(`${adminRoot}/dashboard`);
   };
 
   return (
@@ -1178,8 +1187,8 @@ const languageOptions = language.map(option => ({
                           <p className="lead">We will reach you shortly</p>
                           <hr className="my-4" />
                           <p className="lead mb-0">
-                            <Button color="primary" size="lg">
-                              Check status
+                            <Button color="primary" size="lg"  onClick={handleDashboardClick} >
+                              Dashboard
                             </Button>
                           </p>
                         </Jumbotron>

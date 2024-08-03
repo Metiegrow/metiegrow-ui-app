@@ -26,8 +26,8 @@ const MentorCard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
 
-  const [searchClick, setSearchClick] = useState("")
-  const [searchClicked, setSearchClicked] = useState(false)
+  // const [searchClick, setSearchClick] = useState("")
+  // const [searchClicked, setSearchClicked] = useState(false)
 
   // const [pageSize, setPageSize] = useState(2)
 // console.log(paginationMeta.totalPage)
@@ -79,15 +79,15 @@ const MentorCard = () => {
   // const[mentorfilter,setMentorFilter]=useState([]);
   // const [image]=useState('');
   const [inputkey,setInputKey]=useState('')
-  const handleSearchByName = () => {
-    setSearchClick(inputkey);
-    setSearchClicked(true);
-  } 
-const handleSearchClear = () =>{
-  setInputKey("");
-  setSearchClick("");
-  setSearchClicked(false);
-}
+//   const handleSearchByName = () => {
+//     setSearchClick(inputkey);
+//     setSearchClicked(true);
+//   } 
+// const handleSearchClear = () =>{
+//   setInputKey("");
+//   setSearchClick("");
+//   setSearchClicked(false);
+// }
 
     
   // const [filteredMentors, setFilteredMentors] = useState([]);
@@ -172,8 +172,8 @@ const handleSearchClear = () =>{
       // params.price = selectedPrice;
       params.minPrice = selectedPrice.at(0);
       params.maxPrice = selectedPrice.at(1);
-    }if(searchClick){
-      params.firstName = searchClick;
+    }if(inputkey){
+      params.firstName = inputkey;
     }
     params.size = 10;
     params.page = currentPage - 1;
@@ -188,7 +188,7 @@ const handleSearchClear = () =>{
       }
     };
     mentorCardDetails();
-  }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice,currentPage,searchClick]);
+  }, [selectedLocation,selectedIndustry,selectedSkills,selectedTools,selectedPrice,currentPage,inputkey]);
 
 //   useEffect(() => {
 //     if (!paginationMeta.last) {
@@ -300,22 +300,45 @@ const handleSearchClear = () =>{
         <div className="form-group">
           
        <div className='input-group'>
-       <input
+       {/* <input
             type="text"
             className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
             placeholder='Search by name'
             // placeholder='Search by skill or job title'
-            disabled={searchClicked}
+            // disabled={searchClicked}
             value={inputkey}
             onChange={(e) =>setInputKey(e.target.value)}
             // onChange={handleInputChange}
-          />
+          /> */}
+          <div style={{ position: 'relative' }} className="col-12 col-lg-8 col-md-8">
+              <i
+                className="simple-icon-magnifier mr-3"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '15px',
+                  transform: 'translateY(-50%)',
+                  zIndex: 2,
+                  color: '#aaa',
+                }}
+              />
+              <input
+                type="text"
+                className="form-control rounded py-2"
+                placeholder="Search by name"
+                value={inputkey}
+                onChange={(e) => setInputKey(e.target.value)}
+                style={{ paddingRight: '2.5rem' }} 
+              />
+            </div>
+
+
           {/* <i className="simple-icon-magnifier" /> */}
-      {!searchClicked ? (
+      {/* {!searchClicked ? (
           <Button disabled={!inputkey} className='ml-3 ' onClick={() => handleSearchByName()} color='primary' >Search</Button>) : (
           <Button className='ml-3 ' onClick={() => handleSearchClear()} color='primary' >Clear</Button>
         )}
-        
+         */}
           
            
        {/* {role === "MENTOR" && (
