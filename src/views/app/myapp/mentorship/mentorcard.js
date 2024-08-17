@@ -433,7 +433,7 @@ const MentorCard = () => {
                           </div>
 
                           {/* <div className="d-flex flex-fill"> */}
-                          <CardBody className=" d-flex flex-column flex-fill p-0">
+                          <CardBody className="d-flex flex-column flex-fill p-0">
                             {/* <CardText className=" font-weight-semibold text-xlarge text-sm-small mb-4">
                      {mentors.firstName} {mentors.lastName}
                     </CardText> */}
@@ -453,7 +453,7 @@ const MentorCard = () => {
                                 className="text-one d-flex align-items-center flex-wrap"
                                 style={{ gap: "4px" }}
                               >
-                                <span className="font-weight-semibold ">
+                                <span className="font-weight-semibold">
                                   <Rating
                                     total={5}
                                     rating={mentors.star}
@@ -512,7 +512,7 @@ const MentorCard = () => {
                                 /Hour
                               </div>
                               <Button
-                                color="primary "
+                                color="primary"
                                 onClick={() =>
                                   history.push(
                                     `/app/mentorprofile/${mentors.id}`
