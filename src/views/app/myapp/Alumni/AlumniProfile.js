@@ -20,10 +20,10 @@ const AlumniProfile = () => {
 
   // const history = useHistory();
 
-  const [showAll, setShowAll] = useState(false);
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
+  // const [showAll, setShowAll] = useState(false);
+  // const toggleShowAll = () => {
+  //   setShowAll(!showAll);
+  // };
 
   //   const handleConnectClick = () => {
 
@@ -56,20 +56,20 @@ const AlumniProfile = () => {
     mentorProfile();
   }, []);
 
-  useEffect(() => {
-    if (showAll) {
-      document.getElementById("skillsSection").scrollIntoView();
-    }
-  }, [showAll]);
+  // useEffect(() => {
+  //   if (showAll) {
+  //     document.getElementById("skillsSection").scrollIntoView();
+  //   }
+  // }, [showAll]);
 
-  const remainingSkillsCount = alumniprofiledetails.skills
-    ? alumniprofiledetails.skills.length - 3
-    : 0;
-  const handleLinkedInClick = () => {
-    const linkedInUrl = alumniprofiledetails.linkedinUrl;
+  // const remainingSkillsCount = alumniprofiledetails.skills
+  //   ? alumniprofiledetails.skills.length - 3
+  //   : 0;
+  // const handleLinkedInClick = () => {
+  //   const linkedInUrl = alumniprofiledetails.linkedinUrl;
 
-    window.open(linkedInUrl, "_blank");
-  };
+  //   window.open(linkedInUrl, "_blank");
+  // };
 
   return (
     <div className="mentor-profile">

@@ -22,7 +22,7 @@ const CommonCard = ({ type, showPrice, noneText }) => {
     }
     return truncatedBio;
   };
-
+  console.log(showPrice);
   const url = `${baseUrl}/api/${type}`;
   useEffect(() => {
     const UserList = async () => {
