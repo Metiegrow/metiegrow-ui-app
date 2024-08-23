@@ -46,7 +46,6 @@ const Register = () => {
 
   const history = useHistory();
 
-  
   const handleRoleChange = (role) => {
     setSelectedRole(role);
   };
@@ -143,8 +142,15 @@ const Register = () => {
         setLoading(false);
         // console.log("su",signUpResponse.data.statuses[0].message)
         signUpResponse.data.statuses.forEach((status) => {
-          NotificationManager.warning(status.message, status.status, 5000, null, null, '');
-      });
+          NotificationManager.warning(
+            status.message,
+            status.status,
+            5000,
+            null,
+            null,
+            ""
+          );
+        });
         // NotificationManager.warning(
         //   "Something went wrong",
         //   "Oops!",
@@ -240,7 +246,9 @@ const Register = () => {
                       <strong>{email}</strong>. Please click the link to confirm
                       your address.
                     </h4>
-                    <p className="text-muted mt-2">Can&apos;t find the email? Please check the spam folder.</p>
+                    <p className="text-muted mt-2">
+                      Can&apos;t find the email? Please check the spam folder.
+                    </p>
                   </div>
                 </div>
                 <Col className="text-center mt-4">
@@ -456,7 +464,7 @@ const Register = () => {
                       User
                     </Label>
                   </FormGroup>
-                  <FormGroup check>
+                  <FormGroup check className="">
                     <Label check className="ml-2">
                       <Input
                         type="radio"
@@ -465,6 +473,17 @@ const Register = () => {
                         name="userRole"
                       />
                       Lawyer
+                    </Label>
+                  </FormGroup>
+                  <FormGroup check>
+                    <Label check className="ml-2">
+                      <Input
+                        type="radio"
+                        onChange={() => handleRoleChange("ALUMNI")}
+                        checked={selectedRole === "ALUMNI"}
+                        name="userRole"
+                      />
+                      Alumni
                     </Label>
                   </FormGroup>
                 </Row>

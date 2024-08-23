@@ -10,6 +10,7 @@ import Pagination from "containers/pages/Pagination";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import Rating from "components/common/Rating";
 import MentorFilter from "./MentorFilter";
+import "./mentorcard.css";
 // import MentorDropDown from './MentorDropDown';
 
 const MentorCard = () => {
@@ -385,13 +386,10 @@ const MentorCard = () => {
                         className="mx-auto"
                       >
                         <Card
-                          className="flex-row listing-card-container my-3 p-3"
+                          className="flex-row flex-wrap flex-sm-nowrap listing-card-container my-3 p-3"
                           style={{ gap: "16px" }}
                         >
-                          <div
-                            className="d-flex flex-column"
-                            style={{ gap: "16px" }}
-                          >
+                          <div className="d-block mentor-card-img-container">
                             {/* <img
                       className="card-img-left"
                       src={mentors.image}
@@ -417,17 +415,11 @@ const MentorCard = () => {
                               </div>
                             ) : (
                               <img
-                                // className="card-img-left"
+                                className="mentor-card-width"
                                 // src={`${baseUrl}/api/public/images/${mentors.id}/profile-pic`}
                                 src={`${baseUrl}/${mentors.imageUrl}`}
                                 // src={`${baseUrl/${mentors.imageUrl}`}
                                 alt="Card"
-                                style={{
-                                  width: "200px",
-                                  height: "240px",
-                                  borderRadius: "0.75rem",
-                                  objectFit: "cover",
-                                }}
                               />
                             )}
                           </div>
@@ -437,7 +429,10 @@ const MentorCard = () => {
                             {/* <CardText className=" font-weight-semibold text-xlarge text-sm-small mb-4">
                      {mentors.firstName} {mentors.lastName}
                     </CardText> */}
-                            <div className="d-flex flex-wrap justify-content-between mb-1">
+                            <div
+                              className="d-flex flex-wrap justify-content-between mb-1"
+                              style={{ columnGap: "24px" }}
+                            >
                               <div
                                 className="d-flex flex-wrap"
                                 style={{ gap: "10px" }}
@@ -498,7 +493,10 @@ const MentorCard = () => {
                                 ))}
                             </CardText>
 
-                            <div className="d-flex justify-content-between align-items-center mt-auto">
+                            <div
+                              className="d-flex justify-content-between align-items-center mt-auto flex-wrap"
+                              style={{ columnGap: "24px" }}
+                            >
                               {/* <NavLink href={`/app/mentorprofile/${mentors.id}`}>
                        <Button color="primary " className="default w-80 py-2  rounded" >
                         View Profile

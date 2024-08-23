@@ -34,7 +34,6 @@ import { MobileMenuIcon, MenuIcon } from "components/svg";
 import TopnavDarkSwitch from "./Topnav.DarkSwitch";
 import TopnavNotifications from "./Topnav.Notifications";
 
-
 // const NotificationData = {
 //   payload: [
 //     {
@@ -99,39 +98,38 @@ const TopNav = ({
   };
 
   function getRoleRes() {
-    return localStorage.getItem('roleRes');
+    return localStorage.getItem("roleRes");
   }
   function getExpTime() {
-    return localStorage.getItem('expirationTime');
+    return localStorage.getItem("expirationTime");
   }
 
   const roleRes = getRoleRes();
   const expTime = getExpTime();
 
   const timeUntilExpiration = expTime - Date.now();
-    setTimeout(() => {
+  setTimeout(() => {
     localStorage.clear();
     logoutUserAction(history);
-      
-    }, timeUntilExpiration);
-          
-let session;  
-if (roleRes.includes("MENTOR")) {
-  session = `${adminRoot}/sessionmentor`;
-}else if (roleRes.includes("USER")) {
-  session = `${adminRoot}/sessionlists`; 
-}
+  }, timeUntilExpiration);
 
-let myProfile;
-if (roleRes.includes("MENTOR")) {
-  myProfile = `${adminRoot}/mentor/myprofile`;
-}else if (roleRes.includes("LAWYER")) {
-  myProfile = `${adminRoot}/lawyer/myprofile`; 
-}else if (roleRes.includes("USER")) {
-  myProfile = `${adminRoot}/user/myprofile`; 
-}
+  let session;
+  if (roleRes.includes("MENTOR")) {
+    session = `${adminRoot}/sessionmentor`;
+  } else if (roleRes.includes("USER")) {
+    session = `${adminRoot}/sessionlists`;
+  }
 
-
+  let myProfile;
+  if (roleRes.includes("MENTOR")) {
+    myProfile = `${adminRoot}/mentor/myprofile`;
+  } else if (roleRes.includes("LAWYER")) {
+    myProfile = `${adminRoot}/lawyer/myprofile`;
+  } else if (roleRes.includes("USER")) {
+    myProfile = `${adminRoot}/user/myprofile`;
+  } else if (roleRes.includes("ALUMNI")) {
+    myProfile = `${adminRoot}/alumni/myprofile`;
+  }
 
   const handleMyProfileClick = () => {
     history.push(myProfile);
@@ -160,13 +158,11 @@ if (roleRes.includes("MENTOR")) {
   const handleSettingsClick = () => {
     history.push(`${adminRoot}/settings`);
   };
-  
-  
 
   const handleLogout = () => {
     logoutUserAction(history);
-    localStorage.removeItem('roleRes');
-  localStorage.removeItem('tokenRes');
+    localStorage.removeItem("roleRes");
+    localStorage.removeItem("tokenRes");
   };
 
   const renderMySlots = () => {
@@ -179,52 +175,50 @@ if (roleRes.includes("MENTOR")) {
         </NavLink>
       );
     }
-    return null; 
+    return null;
   };
   const renderMyWallet = () => {
     if (roleRes.includes("USER")) {
       return (
         <>
-        <NavLink to={`${adminRoot}/mywallet`}>
+          <NavLink to={`${adminRoot}/mywallet`}>
             <DropdownItem onClick={() => handleMyWalletClick()}>
-              <i className="simple-icon-wallet" />  My Wallet
+              <i className="simple-icon-wallet" /> My Wallet
             </DropdownItem>
-        </NavLink>
-        <NavLink to={`${adminRoot}/lawyerjobslist`}>
+          </NavLink>
+          <NavLink to={`${adminRoot}/lawyerjobslist`}>
             <DropdownItem onClick={() => handleMyClientJobsClick()}>
-              <i className="iconsminds-scale" />  My Lawyer Jobs
-           </DropdownItem>
-        </NavLink>
-      </>
+              <i className="iconsminds-scale" /> My Lawyer Jobs
+            </DropdownItem>
+          </NavLink>
+        </>
       );
     }
-    return null; 
+    return null;
   };
   const renderClientJob = () => {
     if (roleRes.includes("LAWYER")) {
       return (
         <NavLink to={`${adminRoot}/jobslist`}>
-        <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
-        <i className="iconsminds-scale" />  My Client Jobs
-        </DropdownItem>
-      </NavLink>
-        
+          <DropdownItem onClick={() => handleMyLawyerJobsClick()}>
+            <i className="iconsminds-scale" /> My Client Jobs
+          </DropdownItem>
+        </NavLink>
       );
     }
-    return null; 
+    return null;
   };
   const renderMentorSession = () => {
     if (roleRes.includes("USER") || roleRes.includes("MENTOR")) {
       return (
         <NavLink to={session}>
-              <DropdownItem onClick={() => handleMySessionsClick()}>
-              <i className="simple-icon-list" /> My Mentor Sessions
-              </DropdownItem>
-          </NavLink>
-        
+          <DropdownItem onClick={() => handleMySessionsClick()}>
+            <i className="simple-icon-list" /> My Mentor Sessions
+          </DropdownItem>
+        </NavLink>
       );
     }
-    return null; 
+    return null;
   };
 
   const menuButtonClick = (e, _clickCount, _conClassnames) => {
@@ -247,10 +241,9 @@ if (roleRes.includes("MENTOR")) {
     clickOnMobileMenuAction(_containerClassnames);
   };
 
-  
-  const userName = localStorage.getItem('userName');
-  
-  const imageUrl = localStorage.getItem('imageUrl');
+  const userName = localStorage.getItem("userName");
+
+  const imageUrl = localStorage.getItem("imageUrl");
   // console.log("img",imageUrl)
 
   return (
@@ -300,7 +293,7 @@ if (roleRes.includes("MENTOR")) {
 
       <NavLink className="navbar-logo" to={adminRoot}>
         <span className="logo d-none d-xs-block" />
-        
+
         <span className="logo-mobile d-block d-xs-none" />
       </NavLink>
 
@@ -335,7 +328,7 @@ if (roleRes.includes("MENTOR")) {
             </DropdownMenu>
           </UncontrolledDropdown>
         </div> */}
-          <TopnavNotifications />
+        <TopnavNotifications />
 
         {isDarkSwitchActive && <TopnavDarkSwitch />}
 
@@ -343,31 +336,37 @@ if (roleRes.includes("MENTOR")) {
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
               <span>
-                  {
-                    imageUrl === "null" ? (
-                      // <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
-                      <Row className="ml-2 mr-2 ml-md-0 mr-md-0">
-                        <span className="name mt-2 ml-2 mr-2">{userName}</span>
-                        <ThumbnailLetters
-                            extraSmall 
-                            rounded
-                            text={userName}
-                            className=""
-                        />
-                      </Row>
-                    ) : (
-                      <>
-                          <span className="name mr-1">{userName}</span>
-                          <img alt="Profile" src={`${baseUrl}/${imageUrl}`} style={{width: "40px", height: "40px",objectFit:"cover"}}/>
-                      </>
-                    )
-                  }
+                {imageUrl === "null" ? (
+                  // <img alt="Profile" src='/assets/img/profiles/l-2.jpg' />
+                  <Row className="ml-2 mr-2 ml-md-0 mr-md-0">
+                    <span className="name mt-2 ml-2 mr-2">{userName}</span>
+                    <ThumbnailLetters
+                      extraSmall
+                      rounded
+                      text={userName}
+                      className=""
+                    />
+                  </Row>
+                ) : (
+                  <>
+                    <span className="name mr-1">{userName}</span>
+                    <img
+                      alt="Profile"
+                      src={`${baseUrl}/${imageUrl}`}
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </>
+                )}
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>
               <NavLink to={myProfile}>
                 <DropdownItem onClick={() => handleMyProfileClick()}>
-                <i className="simple-icon-user" />  My Profile
+                  <i className="simple-icon-user" /> My Profile
                 </DropdownItem>
               </NavLink>
               {renderMyWallet()}
@@ -376,7 +375,7 @@ if (roleRes.includes("MENTOR")) {
                 <i className="simple-icon-wallet" />  My Wallet
                 </DropdownItem>
               </NavLink> */}
-              
+
               {/* <NavLink to={`${adminRoot}/calendar/mentor/appointment`}>
                 <DropdownItem onClick={() => handleMySlots()}>
                 <i className="simple-icon-wallet" />  My Slots
@@ -384,9 +383,9 @@ if (roleRes.includes("MENTOR")) {
               </NavLink> */}
               {renderMySlots()}
               {/* <NavLink to={`${adminRoot}/mylisting`}> */}
-                <NavLink to={`${adminRoot}/myactivities`}>
+              <NavLink to={`${adminRoot}/myactivities`}>
                 <DropdownItem onClick={() => handleMyActivitiesClick()}>
-                <i className="simple-icon-question" />  My Activities
+                  <i className="simple-icon-question" /> My Activities
                 </DropdownItem>
               </NavLink>
               {renderMentorSession()}
@@ -407,15 +406,15 @@ if (roleRes.includes("MENTOR")) {
               </NavLink> */}
               {renderClientJob()}
               <DropdownItem onClick={() => handleMyListingClick()}>
-                <i className="simple-icon-list" />  My Listing
-                </DropdownItem>
+                <i className="simple-icon-list" /> My Listing
+              </DropdownItem>
               {/* </NavLink> */}
               <DropdownItem onClick={handleSettingsClick}>
-              <i className="simple-icon-settings" />  Settings
+                <i className="simple-icon-settings" /> Settings
               </DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={() => handleLogout()}>
-              <i className="simple-icon-logout" />   Sign out
+                <i className="simple-icon-logout" /> Sign out
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
