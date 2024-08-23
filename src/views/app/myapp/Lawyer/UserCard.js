@@ -212,14 +212,11 @@ const UserCard = () => {
                   <Row>
                     <Colxx sm="12" md="12" lg="8" xxs="12" className="mx-auto">
                       <Card
-                        className="flex-row listing-card-container my-3 p-3"
+                        className="flex-row flex-wrap flex-sm-nowrap listing-card-container my-3 p-3"
                         style={{ gap: "16px" }}
                       >
                         {/* <Col md={5} lg={5}> */}
-                        <div
-                          className="d-flex flex-column"
-                          style={{ gap: "16px" }}
-                        >
+                        <div className="d-block lawyer-card-img-container">
                           {users.imageUrl === null ? (
                             <div
                               className="card-img-left bg-primary 
@@ -239,15 +236,9 @@ const UserCard = () => {
                             </div>
                           ) : (
                             <img
-                              // className="card-img-left"
+                              className="lawyer-card-width"
                               src={`${baseUrl}/${users.imageUrl}`}
                               alt="Card"
-                              style={{
-                                width: "200px",
-                                height: "240px",
-                                borderRadius: "0.75rem",
-                                objectFit: "cover",
-                              }}
                             />
                           )}
                           {/* <img src="/assets/img/profiles/1.jpg" alt='card' className='card-img-left'/> */}
@@ -268,8 +259,10 @@ const UserCard = () => {
                           {/* <CardText className=" font-weight-semibold text-xlarge mb-4">
                      {users.firstName} {users.lastName}
                     </CardText> */}
-                          <div className="d-flex flex-wrap justify-content-between mb-1">
-                            {" "}
+                          <div
+                            className="d-flex flex-wrap justify-content-between mb-1"
+                            style={{ columnGap: "24px" }}
+                          >
                             <div
                               className="d-flex flex-wrap"
                               style={{ gap: "10px" }}
@@ -329,7 +322,10 @@ const UserCard = () => {
                               ))}
                           </CardText>
 
-                          <div className="d-flex justify-content-between align-items-center mt-auto">
+                          <div
+                            className="d-flex justify-content-between align-items-center mt-auto flex-wrap"
+                            style={{ columnGap: "24px" }}
+                          >
                             {/* <NavLink href={`/app/mentorprofile/${users.id}`}>
                        <Button color="primary " className="default w-80 py-2  rounded" >
                         View Profile

@@ -1,7 +1,32 @@
-.thumbnail-image{
-    width:300px !important;
-    height:300px !important;
-    border-top-left-radius: 0.75rem;
-    border-bottom-left-radius: 0.75rem;
-    
+.thumbnail-image {
+  width: 300px !important;
+  height: 300px !important;
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+/* usecard css */
+
+.lawyer-card-width {
+  width: 230px;
+  max-width: 300px;
+  height: 240px;
+  border-radius: 0.75rem;
+  object-fit: cover;
+}
+.lawyer-card-img-container {
+  margin: 0 auto;
+}
+@media (min-width: 400px) {
+  .lawyer-card-width {
+    width: inherit;
+  }
+}
+@media (min-width: 576px) {
+  .lawyer-card-width {
+    width: 200px;
+  }
+  .lawyer-card-img-container {
+    margin: 0;
+  }
 }
