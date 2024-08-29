@@ -39,8 +39,8 @@ const MentorCard = () => {
   // console.log("skills",selectedSkills)
   // console.log("selectedTools",selectedTools)
   // console.log("selectedIndustry",selectedIndustry)
-  console.log("selectedPrice", selectedPrice);
-  // console.log("selectedLocation",selectedLocation)
+  // console.log("selectedPrice", selectedPrice);
+  console.log("selectedLocation", selectedLocation);
 
   const [isMentorCardFetched, setIsMentorCardFetched] = useState(false);
 
@@ -85,6 +85,7 @@ const MentorCard = () => {
 
   // const [filteredMentors, setFilteredMentors] = useState([]);
   const truncateBio = (bio, lineCount) => {
+    if (!bio) return "";
     const words = bio.split(" ");
 
     const truncatedBio = words.slice(0, lineCount).join(" ");
@@ -95,7 +96,6 @@ const MentorCard = () => {
     return truncatedBio;
   };
 
-  // const setFirstName = (newFirstName) => {
   //   const searchParams = new URLSearchParams(location.search);
   //   searchParams.set('firstName', newFirstName);
   //   const newSearch = searchParams.toString();
@@ -136,11 +136,6 @@ const MentorCard = () => {
   useEffect(() => {
     setIsMentorCardFetched(false);
     const mentorCardDetails = async () => {
-      // const params = {
-      //   company: selectedIndustry,
-      //   location: selectedLocation,
-      //   skills: selectedSkills,
-      // };
       const params = {};
 
       if (selectedIndustry) {
@@ -156,7 +151,6 @@ const MentorCard = () => {
         params.tools = selectedTools;
       }
       if (selectedPrice) {
-        // params.price = selectedPrice;
         params.minPrice = selectedPrice.at(0);
         params.maxPrice = selectedPrice.at(1);
       }
@@ -165,7 +159,6 @@ const MentorCard = () => {
       }
       params.size = 10;
       params.page = currentPage - 1;
-      console.log(params);
       try {
         const response = await axios.get(url2, { params });
         setMentorDetails(response.data.data);
@@ -367,7 +360,7 @@ const MentorCard = () => {
                                     className="pr-2"
                                     id="btn.rounded"
                                   >
-                                    <Badge color="info">{skill}</Badge>
+                                    <Badge color="light">{skill}</Badge>
                                   </div>
                                 ))}
                             </CardText>

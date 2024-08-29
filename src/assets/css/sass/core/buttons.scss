@@ -116,6 +116,11 @@ button {
   background-color: $theme-color-1;
 }
 
+.dropdown-item.no-bg-price.active,
+.dropdown-item.no-bg-price:active {
+  background-color: transparent;
+}
+
 .dropdown-divider {
   border-color: $separator-color;
 }

@@ -1,44 +1,42 @@
 /* eslint-disable no-param-reassign */
 
-import React, { createRef, useEffect, useState } from "react";
-import {
-  Card,
-  CardBody,
-  FormGroup,
-  Label,
-  NavLink,
-  Button,
-  Row,
-  Col,
-  Alert,
-  Input,
-  InputGroup,
-  FormText,
-  Jumbotron,
-  Spinner,
-//   Tooltip,
-//   PopoverBody,
-} from "reactstrap";
-import { injectIntl } from "react-intl";
-import { Colxx } from "components/common/CustomBootstrap";
-import Select from "react-select";
-import { Formik, Form, Field } from "formik";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { Colxx } from "components/common/CustomBootstrap";
 import { SliderTooltip } from "components/common/SliderTooltips";
+import { adminRoot, baseUrl } from "constants/defaultValues";
+import { Field, Form, Formik } from "formik";
+import { createRef, useEffect, useState } from "react";
+import { injectIntl } from "react-intl";
+import { useHistory } from "react-router-dom";
+import Select from "react-select";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
-import { adminRoot, baseUrl } from "constants/defaultValues";
 import {
-    validateLanguages,
-    validateLocation,
-    validatePackageTopic,
-    validatePackageDescription,
-    validateAbout,
-    validateBio,
-    validateServiceName,
-    validateFile,
-  } from "./ValidationsPart";
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  Col,
+  FormGroup,
+  FormText,
+  Input,
+  InputGroup,
+  Jumbotron,
+  Label,
+  NavLink,
+  Row,
+  Spinner,
+} from "reactstrap";
+import {
+  validateAbout,
+  validateBio,
+  validateFile,
+  validateLanguages,
+  validateLocation,
+  validatePackageDescription,
+  validatePackageTopic,
+  validateServiceName,
+} from "./ValidationsPart";
 
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
@@ -165,9 +163,9 @@ const ApplyAsLawyer = () => {
         },
       });
       setAboutLoading(false);
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
       handleNextStep();
-      localStorage.setItem('status', "1");
+      localStorage.setItem("status", "1");
       // console.log(`resres ${response.status}`);
     } catch (error) {
       setAboutLoading(false);
@@ -187,9 +185,9 @@ const ApplyAsLawyer = () => {
         },
       });
       setProfileLoading(false);
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
       handleNextStep();
-      localStorage.setItem('status', "3");
+      localStorage.setItem("status", "3");
       // console.log(`resres ${response.status}`);
     } catch (error) {
       setProfileLoading(false);
@@ -226,16 +224,16 @@ const ApplyAsLawyer = () => {
         },
       });
       setServicesLoading(false);
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
       handleNextStep();
-      localStorage.setItem('status', "7");
+      localStorage.setItem("status", "7");
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
       }, 3000);
       // console.log(response.data);
     } catch (error) {
-      setServicesLoading(false)
+      setServicesLoading(false);
       if (error.response) {
         ToasterComponent("error", error.response.data.statuses);
       }
@@ -245,7 +243,7 @@ const ApplyAsLawyer = () => {
   const history = useHistory();
 
   const handleJobsListClick = () => history.push(`${adminRoot}/jobslist`);
-//   const [tooltipOpen, setTooltipOpen] = useState(false);
+  //   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
@@ -414,17 +412,19 @@ const ApplyAsLawyer = () => {
                   </FormGroup>
                   <Row>
                     <Col className="text-center">
-                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
-                      AboutLoading ? "show-spinner" : ""
-                    }`}>
-                      <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                      Next
-                    </span>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        className={`btn-shadow btn-multiple-state ${
+                          AboutLoading ? "show-spinner" : ""
+                        }`}
+                      >
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label">Next</span>
                       </Button>
                     </Col>
                   </Row>
@@ -511,17 +511,19 @@ const ApplyAsLawyer = () => {
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
-                      profileLoading ? "show-spinner" : ""
-                    }`}>
-                      <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                      Next
-                    </span>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        className={`btn-shadow btn-multiple-state ${
+                          profileLoading ? "show-spinner" : ""
+                        }`}
+                      >
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label">Next</span>
                       </Button>
                     </Col>
                   </Row>
@@ -570,18 +572,18 @@ const ApplyAsLawyer = () => {
                         {/* <Button outline className="icon-button" onClick={() => removeService(index)}>
                         <i className="simple-icon-close" />
                       </Button> */}
-                    {services.length > 1 && (
-                        <span>
-                          <Button
-                            id="closeButton"
-                            color="primary"
-                            outline
-                            className="icon-button"
-                            onClick={() => removeService(index)}
-                          >
-                            <i className="iconsminds-close" />
-                          </Button>
-                          {/* <Tooltip
+                        {services.length > 1 && (
+                          <span>
+                            <Button
+                              id="closeButton"
+                              color="primary"
+                              outline
+                              className="icon-button"
+                              onClick={() => removeService(index)}
+                            >
+                              <i className="iconsminds-close" />
+                            </Button>
+                            {/* <Tooltip
                             placement="left"
                             isOpen={tooltipOpen}
                             target="closeButton"
@@ -589,7 +591,7 @@ const ApplyAsLawyer = () => {
                           >
                             <PopoverBody> Remove service</PopoverBody>
                           </Tooltip> */}
-                        </span>
+                          </span>
                         )}
                       </div>
                       <Row>
@@ -607,7 +609,7 @@ const ApplyAsLawyer = () => {
                                   e.target.value
                                 )
                               }
-                                validate={validateServiceName}
+                              validate={validateServiceName}
                             />
                             {errors.services?.[index]?.serviceName &&
                               touched.services?.[index]?.serviceName && (
@@ -636,7 +638,7 @@ const ApplyAsLawyer = () => {
                                   e.target.value
                                 )
                               }
-                                validate={validatePackageTopic}
+                              validate={validatePackageTopic}
                             />
                             {errors.services?.[index]?.headline &&
                               touched.services?.[index]?.headline && (
@@ -666,7 +668,7 @@ const ApplyAsLawyer = () => {
                                   e.target.value
                                 )
                               }
-                                validate={validatePackageDescription}
+                              validate={validatePackageDescription}
                             />
                             {errors.services?.[index]?.description &&
                               touched.services?.[index]?.description && (
@@ -709,8 +711,14 @@ const ApplyAsLawyer = () => {
                   {/* <Button color="primary" className="my-5" onClick={addService}>
                     Add more services
                   </Button> */}
-                  <Card onClick={addService} className="p-3 text-center my-5" style={{ cursor: "pointer" }}>
-                        <h3 className="font-weight-bold text-primary">+ Add more services</h3> 
+                  <Card
+                    onClick={addService}
+                    className="p-3 text-center my-5"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <h3 className="font-weight-bold text-primary">
+                      + Add more services
+                    </h3>
                   </Card>
                   <Row>
                     {" "}
@@ -721,17 +729,19 @@ const ApplyAsLawyer = () => {
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
-                      servicesLoading ? "show-spinner" : ""
-                    }`}>
-                      <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                      Submit
-                    </span>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        className={`btn-shadow btn-multiple-state ${
+                          servicesLoading ? "show-spinner" : ""
+                        }`}
+                      >
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label">Submit</span>
                       </Button>
                     </Col>
                   </Row>
@@ -761,8 +771,12 @@ const ApplyAsLawyer = () => {
                           <p className="lead">We will reach you shortly</p>
                           <hr className="my-4" />
                           <p className="lead mb-0">
-                            <Button color="primary" size="lg" onClick={() => handleJobsListClick()}>
-                            My jobs list
+                            <Button
+                              color="primary"
+                              size="lg"
+                              onClick={() => handleJobsListClick()}
+                            >
+                              My jobs list
                             </Button>
                           </p>
                         </Jumbotron>

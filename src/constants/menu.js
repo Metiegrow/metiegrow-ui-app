@@ -90,7 +90,6 @@ const data = [
     icon: "iconsminds-student-hat",
     label: "Alumni",
     to: `${adminRoot}/alumni/alumnilists`,
-  
   },
   // {
   //   id: "myapplications",
@@ -140,12 +139,12 @@ const data = [
     label: "Chat",
     to: `${adminRoot}/chat`,
   },
-  {
-    id: "classroom",
-    icon: "simple-icon-bubbles",
-    label: "Class room",
-    to: `${adminRoot}/classroom`,
-  },
+  // {
+  //   id: "classroom",
+  //   icon: "simple-icon-bubbles",
+  //   label: "Class room",
+  //   to: `${adminRoot}/classroom`,
+  // },
 ];
 
 if (role === "USER") {
