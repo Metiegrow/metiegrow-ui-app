@@ -1,7 +1,7 @@
-import React, { Suspense } from "react";
-import { Route, withRouter, Switch, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
 import AppLayout from "layout/AppLayout";
+import React, { Suspense } from "react";
+import { connect } from "react-redux";
+import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 
 // import MyApplications from './myapp/my-applications/my-applications';
 // import MyDetails from './myapp/my-details/my-details';
@@ -105,7 +105,9 @@ const ViewLawyerlogin = React.lazy(() =>
   )
 );
 const ViewAlumnilogin = React.lazy(() =>
-  import(/* webpackChunkName: "views-app" */ "./myapp/Alumni-Login/ApplyAlumni")
+  import(
+    /* webpackChunkName: "views-app" */ "./myapp/AlumniRegister/ApplyAlumni"
+  )
 );
 const ViewMyProfile = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ "./myapp/my-profile/MyProfile")

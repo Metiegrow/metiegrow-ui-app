@@ -51,6 +51,7 @@
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": 1,
       "react/jsx-props-no-spreading": 0,
+      "react/react-in-jsx-scope": "off",
       "no-console": "off",
       "react/prop-types": 0,
       "prettier/prettier": [

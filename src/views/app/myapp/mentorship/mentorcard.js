@@ -3,9 +3,9 @@ import { Colxx } from "components/common/CustomBootstrap";
 import { useHistory } from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
 import { baseUrl } from "constants/defaultValues";
-import React, { useState, useEffect } from "react";
-import { Badge, Button, Card, CardBody, CardText, Row } from "reactstrap";
 import Pagination from "containers/pages/Pagination";
+import { useEffect, useState } from "react";
+import { Badge, Button, Card, CardBody, CardText, Row } from "reactstrap";
 // import RatingExamples from './RatingExamples';
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import Rating from "components/common/Rating";
@@ -39,7 +39,7 @@ const MentorCard = () => {
   // console.log("skills",selectedSkills)
   // console.log("selectedTools",selectedTools)
   // console.log("selectedIndustry",selectedIndustry)
-  // console.log("selectedPrice",selectedPrice)
+  console.log("selectedPrice", selectedPrice);
   // console.log("selectedLocation",selectedLocation)
 
   const [isMentorCardFetched, setIsMentorCardFetched] = useState(false);
@@ -165,6 +165,7 @@ const MentorCard = () => {
       }
       params.size = 10;
       params.page = currentPage - 1;
+      console.log(params);
       try {
         const response = await axios.get(url2, { params });
         setMentorDetails(response.data.data);
@@ -176,6 +177,7 @@ const MentorCard = () => {
       }
     };
     mentorCardDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedLocation,
     selectedIndustry,
@@ -186,122 +188,13 @@ const MentorCard = () => {
     inputkey,
   ]);
 
-  //   useEffect(() => {
-  //     if (!paginationMeta.last) {
-  //    const handleScroll = (e) => {
-  //   const { documentElement, defaultView } = e.target;
-  //   const { innerHeight } = defaultView || window;
-  //   const { scrollHeight, scrollTop } = documentElement;
-
-  //   const currentHeight = scrollTop + innerHeight;
-
-  //   if (currentHeight + 1 >= scrollHeight) {
-  //     setPageSize((prevPageSize) => prevPageSize + 5);
-  //   }
-  // };
-
-  //       window.addEventListener("scroll", handleScroll);
-
-  //       return () => {
-  //         window.removeEventListener("scroll", handleScroll);
-  //       };
-  //     }
-
-  //     return undefined;
-  //   }, [paginationMeta]);
-
-  // useEffect(() => {
-  //   const filterMentors = () => {
-  //     const filtered = mentordetails.filter((mentor) => {
-  //       const lowercasedFilter = inputkey.toLowerCase();
-  //       return (
-  //         mentor.jobTitle.toLowerCase().includes(lowercasedFilter) ||
-  //         mentor.skills.some(skill => skill.toLowerCase().includes(lowercasedFilter))
-  //       );
-  //     });
-  //     setFilteredMentors(filtered);
-  //   };
-  //   filterMentors();
-  // }, [inputkey, mentordetails]);
-
-  // const history = useHistory();
-  // const handleMySlotsClick = () =>{
-  //   history.push(`${adminRoot}/calendar/mentor/appointment`)
-  // }
-  // const role = localStorage.getItem("roleRes");
-
-  // useEffect(() => {
-  //   const mentorCardDetails = async () => {
-  //     try {
-  //       const queryParams = new URLSearchParams(location.search);
-  //       const firstNameParam = queryParams.get('firstName');
-  //       const jobTitleParam = queryParams.get('jobTitle');
-  //       // Add more parameters as needed
-
-  //       let filteredUrl = `${url}?`;
-  //       if (firstNameParam) filteredUrl += `firstName=${firstNameParam}&`;
-  //       if (jobTitleParam) filteredUrl += `jobTitle=${jobTitleParam}&`;
-  //       // Add more conditions for other parameters
-
-  //       const response = await axios.get(filteredUrl);
-  //       setMentorDetails(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   mentorCardDetails();
-  // }, [location.search]);
-
-  // const mentorFilterSearch = async () => {
-  //   try {
-  //     const response = await axios.get(url1);
-  //     setMentorFilter(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-  // const handleInputChange = (e) => {
-  //   setInputKey(e.target.value);
-  //   mentorFilterSearch(); // Call the search function when input changes
-  // };
   return (
     <div>
-      {/* <Button onClick={mentorCardDetails}>
-    Get
-  </Button> */}
-      {/* {mentordetails.map((mentors) => (
-        <div key={mentors.id}>
-          <p>Name: {mentors.firstName} {mentors.lastName}</p>
-          <p>Star: {mentors.star}</p>
-          
-        </div>
-      ))} */}
-      {/* <SearchBar/> */}
-      {/* <Nav pills>
-                <NavItem>
-                  <NavLink href="/app/mentorprofile" active>
-                    <IntlMessages id="nav.link" />
-                  </NavLink>
-                </NavItem>
-</Nav> */}
-
-      {/* searchbar starts */}
-
       <Colxx sm="12" md="12" lg="8" xxs="12" className="mx-auto ">
         <div>
           <div className="">
             <div className="form-group">
               <div className="input-group">
-                {/* <input
-            type="text"
-            className="form-control rounded col-12 col-lg-8 col-md-8 py-2"
-            placeholder='Search by name'
-            // placeholder='Search by skill or job title'
-            // disabled={searchClicked}
-            value={inputkey}
-            onChange={(e) =>setInputKey(e.target.value)}
-            // onChange={handleInputChange}
-          /> */}
                 <div
                   style={{ position: "relative" }}
                   className="col-12 col-lg-8 col-md-8"
@@ -326,22 +219,8 @@ const MentorCard = () => {
                     style={{ paddingRight: "2.5rem" }}
                   />
                 </div>
-
-                {/* <i className="simple-icon-magnifier" /> */}
-                {/* {!searchClicked ? (
-          <Button disabled={!inputkey} className='ml-3 ' onClick={() => handleSearchByName()} color='primary' >Search</Button>) : (
-          <Button className='ml-3 ' onClick={() => handleSearchClear()} color='primary' >Clear</Button>
-        )}
-         */}
-
-                {/* {role === "MENTOR" && (
-       
-       <Button color='primary' className='ml-3' onClick={handleMySlotsClick}>My slots</Button>
-       
-       )} */}
               </div>
 
-              {/* <MentorDropDown/> */}
               <MentorFilter
                 onSkillsChange={handleSkillsChange}
                 onToolsChange={handleToolsChange}

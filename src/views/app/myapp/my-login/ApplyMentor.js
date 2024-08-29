@@ -1,51 +1,50 @@
 /* eslint-disable no-param-reassign */
 
-import React, { createRef, useEffect, useState } from "react";
-import {
-  Card,
-  CardBody,
-  FormGroup,
-  Label,
-  NavLink,
-  Button,
-  Row,
-  Col,
-  Alert,
-  Input,
-  InputGroup,
-  FormText,
-  Jumbotron,
-  Spinner,
-} from "reactstrap";
-import { injectIntl } from "react-intl";
-import { Colxx } from "components/common/CustomBootstrap";
-import Select from 'react-select';
-import { Formik, Form, Field } from "formik";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { Colxx } from "components/common/CustomBootstrap";
 import { NotificationManager } from "components/common/react-notifications";
 import { SliderTooltip } from "components/common/SliderTooltips";
-// import { FormikTagsInput } from "containers/form-validations/FormikFields";
-import TagsInput from "react-tagsinput";
-import 'react-tagsinput/react-tagsinput.css';
-import { adminRoot, baseUrl } from "constants/defaultValues";
+import { Field, Form, Formik } from "formik";
+import { createRef, useEffect, useState } from "react";
+import { injectIntl } from "react-intl";
+import { useHistory } from "react-router-dom";
+import Select from "react-select";
 import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  Col,
+  FormGroup,
+  FormText,
+  Input,
+  InputGroup,
+  Jumbotron,
+  Label,
+  NavLink,
+  Row,
+  Spinner,
+} from "reactstrap";
+// import { FormikTagsInput } from "containers/form-validations/FormikFields";
+import { adminRoot, baseUrl } from "constants/defaultValues";
+import TagsInput from "react-tagsinput";
+import "react-tagsinput/react-tagsinput.css";
+import {
+  validateAchievement,
+  validateBio,
   validateCategory,
-  validateLocation,
   validateCompany,
   validateJobTitle,
-  validateSkills,
-  validateBio,
+  validateLocation,
   // validateLinkedinUrl,
   validateReasonForMentor,
-  validateAchievement,
-  // validateFile,
+  validateSkills,
 } from "./validation";
 
-import country from "./Country";
-import CategoryData from "./CategoryData";
-import language from "./Languages";
 import ToasterComponent from "../notifications/ToasterComponent";
+import CategoryData from "./CategoryData";
+import country from "./Country";
+import language from "./Languages";
 
 const ApplyMentor = () => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -57,13 +56,13 @@ const ApplyMentor = () => {
   const [skillsTag, setSkillsTag] = useState([]);
   const [toolsTag, setToolsTag] = useState([]);
   const [imageError, setImageError] = useState(false);
-  const [skillError,setSkillError] = useState(false);
+  const [skillError, setSkillError] = useState(false);
   const [imageErrorMessage, setImageErrorMessage] = useState(null);
-  const [skillErrorMessage,setSkillErrorMessage] = useState(null);
+  const [skillErrorMessage, setSkillErrorMessage] = useState(null);
   const [languages, setLanguages] = useState([]);
-  const [aboutLoading,setAboutLoading] = useState(false)
-  const [profileLoading,setProfileLoading] = useState(false)
-  const [experienceLoading, setExperienceLoading] = useState(false)
+  const [aboutLoading, setAboutLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [experienceLoading, setExperienceLoading] = useState(false);
   const [aboutField, setAboutField] = useState({
     image: "",
   });
@@ -111,11 +110,11 @@ const ApplyMentor = () => {
   //   "Business & Management",
   //   "Product & Marketing",
   // ];
-//   console.log("step", currentStep);
-const languageOptions = language.map(option => ({
-  value: option.iso_code,
-  label: option.name
-}));
+  //   console.log("step", currentStep);
+  const languageOptions = language.map((option) => ({
+    value: option.iso_code,
+    label: option.name,
+  }));
 
   const handleNextStep = () => {
     setCurrentStep(currentStep + 1);
@@ -154,50 +153,65 @@ const languageOptions = language.map(option => ({
   }
   const token = getTokenRes();
 
-
   const postDataAbout = async (data) => {
-    setAboutLoading(true)
+    setAboutLoading(true);
     const formData = new FormData();
     formData.append("image", file1);
 
     const mentorProfile = {
       jobTitle: data.jobTitle,
-    company: data.company,
-    location: data.location,
-    linkedinUrl: data.linkedinUrl,
-    twitterHandle: data.twitterHandle,
-    language: data.language
+      company: data.company,
+      location: data.location,
+      linkedinUrl: data.linkedinUrl,
+      twitterHandle: data.twitterHandle,
+      language: data.language,
     };
-    formData.append("mentorProfile",new Blob([JSON.stringify(mentorProfile)], { type: "application/json" }));
+    formData.append(
+      "mentorProfile",
+      new Blob([JSON.stringify(mentorProfile)], { type: "application/json" })
+    );
 
     try {
-     const response = await axios.post(mentorAboutUrl, formData, {
+      const response = await axios.post(mentorAboutUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       // setNextStep(true)
-      setAboutLoading(false)
+      setAboutLoading(false);
       //   console.log(`resres ${response.status}`);
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
       handleNextStep();
-      localStorage.setItem('status', "1");
-
+      localStorage.setItem("status", "1");
     } catch (error) {
       setImageError(false);
       // console.error(error);
-      setAboutLoading(false)
-      if(error.response){
-      error.response.data.statuses.forEach((status) => {
-         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
-         if(status.code === 40327){
-           setImageErrorMessage(status.message)
+      setAboutLoading(false);
+      if (error.response) {
+        error.response.data.statuses.forEach((status) => {
+          NotificationManager.error(
+            status.message,
+            "Oops!",
+            3000,
+            null,
+            null,
+            ""
+          );
+          if (status.code === 40327) {
+            setImageErrorMessage(status.message);
             setImageError(true);
-         }
-     });
-    }else{
-      NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
-    }
+          }
+        });
+      } else {
+        NotificationManager.error(
+          "something went wrong",
+          "Oops!",
+          3000,
+          null,
+          null,
+          ""
+        );
+      }
       // console.log("er",error.response.data.statuses)
       // NotificationManager.warning(
       //   "Something went wrong",
@@ -211,33 +225,47 @@ const languageOptions = language.map(option => ({
   };
 
   const postDataProfile = async (data) => {
-    setProfileLoading(true)
+    setProfileLoading(true);
     try {
-     const response = await axios.post(mentorProfileUrl, data, {
+      const response = await axios.post(mentorProfileUrl, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       // setNextStep(true)
-      setProfileLoading(false)
+      setProfileLoading(false);
       //   console.log(`resres ${response.status}`);
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
       handleNextStep();
-      localStorage.setItem('status', "3");
+      localStorage.setItem("status", "3");
     } catch (error) {
       setSkillError(false);
-      setProfileLoading(false)
-      if(error.response){
-      error.response.data.statuses.forEach((status) => {
-         NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
-         if(status.code === 40110){
-          setSkillErrorMessage(status.message)
-           setSkillError(true);
-        }
-     });
-    }else{
-      NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
-    }
+      setProfileLoading(false);
+      if (error.response) {
+        error.response.data.statuses.forEach((status) => {
+          NotificationManager.error(
+            status.message,
+            "Oops!",
+            3000,
+            null,
+            null,
+            ""
+          );
+          if (status.code === 40110) {
+            setSkillErrorMessage(status.message);
+            setSkillError(true);
+          }
+        });
+      } else {
+        NotificationManager.error(
+          "something went wrong",
+          "Oops!",
+          3000,
+          null,
+          null,
+          ""
+        );
+      }
     }
   };
 
@@ -252,23 +280,37 @@ const languageOptions = language.map(option => ({
       });
       // setNextStep(true)
       // console.log(response);
-      setExperienceLoading(false)
-      ToasterComponent('success', response.data.statuses);
+      setExperienceLoading(false);
+      ToasterComponent("success", response.data.statuses);
       handleNextStep();
-      localStorage.setItem('status', "7");
+      localStorage.setItem("status", "7");
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
       }, 3000);
     } catch (error) {
-      setExperienceLoading(false)
-      if(error.response){
-      error.response.data.statuses.forEach((status) => {
-        NotificationManager.error(status.message, 'Oops!', 3000, null, null, '');
-    });
-  }else{
-    NotificationManager.error("something went wrong", 'Oops!', 3000, null, null, '');
-  }
+      setExperienceLoading(false);
+      if (error.response) {
+        error.response.data.statuses.forEach((status) => {
+          NotificationManager.error(
+            status.message,
+            "Oops!",
+            3000,
+            null,
+            null,
+            ""
+          );
+        });
+      } else {
+        NotificationManager.error(
+          "something went wrong",
+          "Oops!",
+          3000,
+          null,
+          null,
+          ""
+        );
+      }
     }
   };
 
@@ -291,8 +333,9 @@ const languageOptions = language.map(option => ({
     setSkillError(false);
     setToolsTag(newTools);
   };
-  const history = useHistory();  
-  const handleMySlotsClick = () => history.push(`${adminRoot}/calendar/mentor/appointment`)
+  const history = useHistory();
+  const handleMySlotsClick = () =>
+    history.push(`${adminRoot}/calendar/mentor/appointment`);
 
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
@@ -302,10 +345,10 @@ const languageOptions = language.map(option => ({
           {steps.map((stepItem, index) => (
             // <li key={`topNavStep_${index}`} className={`nav-item ${index === currentStep ? 'step-doing' : ''}`}>
             <li
-            // eslint-disable-next-line
+              // eslint-disable-next-line
               key={`topNavStep_${index}`}
               className={`nav-item ${
-            // eslint-disable-next-line
+                // eslint-disable-next-line
                 index === currentStep
                   ? "step-doing"
                   : index < currentStep
@@ -355,11 +398,11 @@ const languageOptions = language.map(option => ({
                   </Alert>
                   <FormGroup>
                     <Label for="image">Image*</Label>
-                    { imageError && (
-                              <div className="invalid-feedback d-block">
-                              {imageErrorMessage}
-                              </div>
-                            )}
+                    {imageError && (
+                      <div className="invalid-feedback d-block">
+                        {imageErrorMessage}
+                      </div>
+                    )}
                     <Row>
                       <Col md={2} className="">
                         <img
@@ -368,13 +411,16 @@ const languageOptions = language.map(option => ({
                             // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
                           }
                           className="mx-2 rounded-circle img-thumbnail border"
-                          style={{ width: "70px", height: "70px", objectFit: "cover"  }}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                          }}
                           alt="img"
                         />
                       </Col>
                       <Col md={5} className="mt-3 ">
                         <InputGroup className="mb-3">
-                       
                           <div className="mt-2">
                             <Button
                               className="default"
@@ -400,7 +446,6 @@ const languageOptions = language.map(option => ({
                                 Selected file: {file1.name}
                               </p>
                             )}
-                            
                           </div>
                         </InputGroup>
                       </Col>
@@ -466,9 +511,8 @@ const languageOptions = language.map(option => ({
                       </div>
                     )}
                   </FormGroup>
-                 
-                 
-                      <FormGroup className="error-l-125">
+
+                  <FormGroup className="error-l-125">
                     <Row>
                       <Col md={6}>
                         <Label for="linkedinUrl">LinkedIn URL*</Label>
@@ -511,22 +555,23 @@ const languageOptions = language.map(option => ({
                     </Row>
                   </FormGroup>
                   <FormGroup className="error-l-75">
-                        <Label for="languages">Languages known*</Label>
-                        <Select
-                          placeholder="Select Languages"
-                          name="languages"
-                          isMulti
-                          options={languageOptions}
-                          // validate={validateLanguages}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          onChange={selectedOptions => {
-                          const languagesArray = selectedOptions ? selectedOptions.map(option => option.value) : [];
-                          setLanguages( languagesArray);
-                            }}
-                         > 
-                        
-                          {/* <option disabled value="">
+                    <Label for="languages">Languages known*</Label>
+                    <Select
+                      placeholder="Select Languages"
+                      name="languages"
+                      isMulti
+                      options={languageOptions}
+                      // validate={validateLanguages}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(selectedOptions) => {
+                        const languagesArray = selectedOptions
+                          ? selectedOptions.map((option) => option.value)
+                          : [];
+                        setLanguages(languagesArray);
+                      }}
+                    >
+                      {/* <option disabled value="">
                               Select Languages
                             </option>
                           {language.map((option) => (
@@ -534,27 +579,28 @@ const languageOptions = language.map(option => ({
                               {option.name}
                             </option>
                           ))} */}
-                          
-                          </Select>
-                        {/* {errors.languages && touched.languages && (
+                    </Select>
+                    {/* {errors.languages && touched.languages && (
                           <div className="invalid-feedback d-block">
                             {errors.languages}
                           </div>
                         )} */}
-                      </FormGroup>
+                  </FormGroup>
                   <Row>
                     <Col className="text-center">
-                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
-                      aboutLoading ? "show-spinner" : ""
-                    }`}>
-                      <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                      Next
-                    </span>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        className={`btn-shadow btn-multiple-state ${
+                          aboutLoading ? "show-spinner" : ""
+                        }`}
+                      >
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label">Next</span>
                       </Button>
                     </Col>
                   </Row>
@@ -574,7 +620,11 @@ const languageOptions = language.map(option => ({
                 website: fields.website,
               }}
               onSubmit={(values) => {
-                const profileData = {...values, skills:skillsTag, tools:toolsTag}
+                const profileData = {
+                  ...values,
+                  skills: skillsTag,
+                  tools: toolsTag,
+                };
                 postDataProfile(profileData);
               }}
               validateOnMount
@@ -596,8 +646,8 @@ const languageOptions = language.map(option => ({
                       className="form-control"
                     >
                       <option disabled value="">
-                      Select Category
-                        </option>
+                        Select Category
+                      </option>
                       {CategoryData.map((option) => (
                         <option key={option.short} value={option.short}>
                           {option.name}
@@ -628,13 +678,13 @@ const languageOptions = language.map(option => ({
                       }}
                       autoComplete="off"
                     /> */}
-                    
+
                     <TagsInput
-                        value={skillsTag}
-                        onChange={handleTagsChange}
-                        inputProps={{ placeholder: "Add skills " }}
-                        validate={validateSkills}
-                      />
+                      value={skillsTag}
+                      onChange={handleTagsChange}
+                      inputProps={{ placeholder: "Add skills " }}
+                      validate={validateSkills}
+                    />
                     {skillError && (
                       <div className="invalid-feedback d-block">
                         {skillErrorMessage}
@@ -645,21 +695,19 @@ const languageOptions = language.map(option => ({
                       Describe your expertise to connect with mentees who have
                       similar interests.
                       <br />
-                    {/* Comma-separated list of your skills  */}
-                    (keep it below 10).
-                      Mentees will use this to find you.
+                      {/* Comma-separated list of your skills  */}
+                      (keep it below 10). Mentees will use this to find you.
                     </FormText>
                   </FormGroup>
                   <FormGroup>
                     <Label for="tools">Tools*</Label>
-                   
-                    
+
                     <TagsInput
-                        value={toolsTag}
-                        onChange={handleToolsTagsChange}
-                        inputProps={{ placeholder: "Add Tools " }}
-                        // validate={validateSkills}
-                      />
+                      value={toolsTag}
+                      onChange={handleToolsTagsChange}
+                      inputProps={{ placeholder: "Add Tools " }}
+                      // validate={validateSkills}
+                    />
                     {skillError && (
                       <div className="invalid-feedback d-block">
                         {/* {skillErrorMessage} */}
@@ -667,7 +715,6 @@ const languageOptions = language.map(option => ({
                       </div>
                     )}
                     <FormText>Add Tools and press Enter </FormText>
-                    
                   </FormGroup>
 
                   <FormGroup>
@@ -757,17 +804,19 @@ const languageOptions = language.map(option => ({
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
-                      profileLoading ? "show-spinner" : ""
-                    }`}>
-                      <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                      Next
-                    </span>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        className={`btn-shadow btn-multiple-state ${
+                          profileLoading ? "show-spinner" : ""
+                        }`}
+                      >
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label">Next</span>
                       </Button>
                     </Col>
                   </Row>
@@ -881,7 +930,9 @@ const languageOptions = language.map(option => ({
                     )} */}
                       </Col>
                       <Col md={6}>
-                        <Label for="featuredArticle">Featured Article (Optional)</Label>
+                        <Label for="featuredArticle">
+                          Featured Article (Optional)
+                        </Label>
                         <Field
                           type="url"
                           name="featuredArticle"
@@ -942,17 +993,19 @@ const languageOptions = language.map(option => ({
                       </Button>
                     </Col>
                     <Col className="text-right">
-                      <Button color="primary" type="submit" className={`btn-shadow btn-multiple-state ${
-                     experienceLoading ? "show-spinner" : ""
-                    }`}>
-                      <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                      Submit
-                    </span>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        className={`btn-shadow btn-multiple-state ${
+                          experienceLoading ? "show-spinner" : ""
+                        }`}
+                      >
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label">Submit</span>
                       </Button>
                     </Col>
                   </Row>
@@ -982,7 +1035,11 @@ const languageOptions = language.map(option => ({
                           <p className="lead">We will reach you shortly</p>
                           <hr className="my-4" />
                           <p className="lead mb-0">
-                            <Button color="primary" size="lg" onClick={() => handleMySlotsClick()}>
+                            <Button
+                              color="primary"
+                              size="lg"
+                              onClick={() => handleMySlotsClick()}
+                            >
                               My slots
                             </Button>
                           </p>
