@@ -30,8 +30,6 @@ import {
 import {
   validateAbout,
   validateBio,
-  validateFile,
-  validateLanguages,
   validateLocation,
   validatePackageDescription,
   validatePackageTopic,
@@ -87,6 +85,38 @@ const ApplyAsLawyer = () => {
     languages: [],
     about: "",
   });
+
+  // file upload validation
+
+  const [imageError, setImageError] = useState(false);
+  const [imageErrorMessage, setImageErrorMessage] = useState(null);
+
+  const validateFile = (file) => {
+    // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!file) {
+      setImageError(true);
+      setImageErrorMessage("A profile picture is required");
+      return false;
+    }
+    // if (!allowedTypes.includes(file.type)) {
+    //   setImageError(true);
+    //   setImageErrorMessage(
+    //     "Please upload a valid image file (JPEG, PNG, or GIF)"
+    //   );
+    //   return false;
+    // }
+    if (file.size > maxSize) {
+      setImageError(true);
+      setImageErrorMessage("File size must be less than 5MB");
+      return false;
+    }
+
+    setImageError(false);
+    setImageErrorMessage("");
+    return true;
+  };
+  // file upload validation end
 
   const languageOptions = language.map((option) => ({
     value: option.iso_code,
@@ -283,8 +313,10 @@ const ApplyAsLawyer = () => {
               }}
               validateOnMount
               onSubmit={(values) => {
-                postDataAbout(values);
-                postImageData();
+                if (validateFile(file1)) {
+                  postDataAbout(values);
+                  postImageData();
+                }
 
                 // console.log(aboutField.image);
               }}
@@ -306,6 +338,11 @@ const ApplyAsLawyer = () => {
 
                   <FormGroup>
                     <Label for="image">Image*</Label>
+                    {imageError && (
+                      <div className="invalid-feedback d-block">
+                        {imageErrorMessage}
+                      </div>
+                    )}
                     <Row>
                       <Col md={2} className="">
                         <img
@@ -394,7 +431,7 @@ const ApplyAsLawyer = () => {
                       name="languages"
                       isMulti
                       options={languageOptions}
-                      validate={validateLanguages}
+                      // validate={validateLanguages}
                       className="react-select"
                       classNamePrefix="react-select"
                       onChange={(selectedOptions) => {
@@ -454,6 +491,8 @@ const ApplyAsLawyer = () => {
                       value={topicsTag}
                       onChange={handleTopicsTagsChange}
                       inputProps={{ placeholder: "Add topics " }}
+                      addOnBlur
+                      addKeys={[188]}
                     />
                     {errors.topics && touched.topics && (
                       <div className="invalid-feedback d-block">

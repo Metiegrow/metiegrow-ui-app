@@ -88,10 +88,25 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
     ]);
   };
 
+  // const handleInputChange = (index, field, value) => {
+  //   setEducation((previousEducation) =>
+  //     previousEducation.map((edu, i) =>
+  //       i === index ? { ...edu, [field]: value } : edu
+  //     )
+  //   );
+  // };
+
   const handleInputChange = (index, field, value) => {
     setEducation((previousEducation) =>
       previousEducation.map((edu, i) =>
-        i === index ? { ...edu, [field]: value } : edu
+        i === index
+          ? {
+              ...edu,
+              [field]: ["college", "fieldStudy"].includes(field)
+                ? value.split(",").map((item) => item.trim())
+                : value,
+            }
+          : edu
       )
     );
   };

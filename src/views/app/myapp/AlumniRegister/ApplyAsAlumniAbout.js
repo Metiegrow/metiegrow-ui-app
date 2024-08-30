@@ -131,6 +131,35 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     }
   };
 
+  // file upload validation
+
+  const validateFile = (file) => {
+    // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!file) {
+      setImageError(true);
+      setImageErrorMessage("A profile picture is required");
+      return false;
+    }
+    // if (!allowedTypes.includes(file.type)) {
+    //   setImageError(true);
+    //   setImageErrorMessage(
+    //     "Please upload a valid image file (JPEG, PNG, or GIF)"
+    //   );
+    //   return false;
+    // }
+    if (file.size > maxSize) {
+      setImageError(true);
+      setImageErrorMessage("File size must be less than 5MB");
+      return false;
+    }
+
+    setImageError(false);
+    setImageErrorMessage("");
+    return true;
+  };
+  // file upload validation end
+
   return (
     <>
       <Formik
@@ -142,7 +171,9 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
         }}
         validateOnMount
         onSubmit={(values) => {
-          postDataAbout({ ...values, language: languages });
+          if (validateFile(file1)) {
+            postDataAbout({ ...values, language: languages });
+          }
         }}
       >
         {({ errors, touched }) => (

@@ -50,7 +50,7 @@ const ApplyAlumni = () => {
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
-        <h1 className="mt-4 font-weight-bold">Apply as a mentor</h1>
+        <h1 className="mt-4 font-weight-bold">Apply as a Alumni</h1>
         <ul className="nav nav-tabs justify-content-center">
           {steps.map((stepItem, index) => (
             <li

@@ -35,8 +35,8 @@ import {
   validateCategory,
   validateCompany,
   validateJobTitle,
+  validateLinkedinUrl,
   validateLocation,
-  // validateLinkedinUrl,
   validateReasonForMentor,
   validateSkills,
 } from "./validation";
@@ -84,6 +84,34 @@ const ApplyMentor = () => {
       }
     }
   }, []);
+
+  // file upload validation
+  const validateFile = (file) => {
+    // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!file) {
+      setImageError(true);
+      setImageErrorMessage("A profile picture is required");
+      return false;
+    }
+    // if (!allowedTypes.includes(file.type)) {
+    //   setImageError(true);
+    //   setImageErrorMessage(
+    //     "Please upload a valid image file (JPEG, PNG, or GIF)"
+    //   );
+    //   return false;
+    // }
+    if (file.size > maxSize) {
+      setImageError(true);
+      setImageErrorMessage("File size must be less than 5MB");
+      return false;
+    }
+
+    setImageError(false);
+    setImageErrorMessage("");
+    return true;
+  };
+  // file upload validation end
 
   const [fields] = useState({
     image: "",
@@ -154,6 +182,7 @@ const ApplyMentor = () => {
   const token = getTokenRes();
 
   const postDataAbout = async (data) => {
+    console.log(data);
     setAboutLoading(true);
     const formData = new FormData();
     formData.append("image", file1);
@@ -170,6 +199,7 @@ const ApplyMentor = () => {
       "mentorProfile",
       new Blob([JSON.stringify(mentorProfile)], { type: "application/json" })
     );
+    console.log(formData);
 
     try {
       const response = await axios.post(mentorAboutUrl, formData, {
@@ -375,11 +405,15 @@ const ApplyMentor = () => {
                 twitterHandle: fields.twitterHandle,
               }}
               validateOnMount
-              onSubmit={(values) => {
-                // postDataAbout(values,aboutField.image);
-                postDataAbout({ ...values, language: languages });
-
-                // console.log(aboutField.image);
+              // onSubmit={(values) => {
+              //   postDataAbout({ ...values, language: languages })
+              // }}
+              onSubmit={(values, { setSubmitting }) => {
+                if (validateFile(file1)) {
+                  postDataAbout({ ...values, language: languages });
+                } else {
+                  setSubmitting(false);
+                }
               }}
             >
               {({ errors, touched }) => (
@@ -429,7 +463,7 @@ const ApplyMentor = () => {
                                 document.getElementById("file-upload").click()
                               }
                             >
-                              Upload profile pic{" "}
+                              Upload profile pic
                               <i className="iconsminds-upload " />
                             </Button>
                             {/* <Form> */}
@@ -438,8 +472,12 @@ const ApplyMentor = () => {
                               type="file"
                               className="form-control d-none"
                               onChange={handleFileChange}
-                              // validate={validateFile}
                             />
+                            {/* {errors.fileUpload && touched.fileUpload && (
+                              <div className="invalid-feedback d-block">
+                                {errors.fileUpload}
+                              </div>
+                            )} */}
                             {/* </Form> */}
                             {file1 && (
                               <p className="mt-2">
@@ -520,7 +558,7 @@ const ApplyMentor = () => {
                           className="form-control"
                           name="linkedinUrl"
                           type="url"
-                          // validate={validateLinkedinUrl}
+                          validate={validateLinkedinUrl}
                           autoComplete="off"
                         />
                         <FormText color="muted" className="">
