@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import { Row, Card, CardTitle, Label, FormGroup, Button } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Formik, Form, Field } from 'formik';
-import { NotificationManager } from 'components/common/react-notifications';
-import { loginUser } from 'redux/actions';
-import { Colxx } from 'components/common/CustomBootstrap';
-import IntlMessages from 'helpers/IntlMessages';
+import { Colxx } from "components/common/CustomBootstrap";
+import { NotificationManager } from "components/common/react-notifications";
+import { Field, Form, Formik } from "formik";
+import IntlMessages from "helpers/IntlMessages";
+import { useState } from "react";
+import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
+import { Button, Card, CardTitle, FormGroup, Label, Row } from "reactstrap";
+import { loginUser } from "redux/actions";
 // import axios from 'axios';
 // import { baseUrl } from 'constants/defaultValues';
 // import { authService } from 'services/authservice';
 
 // import { connect } from 'react-redux';
-
 
 // const validatePassword = (value) => {
 //   let error;
@@ -33,29 +32,29 @@ const validatePassword = (value) => {
   const lengthRegex = /^.{8,15}$/;
 
   if (!value) {
-    error = 'Please enter your password';
+    error = "Please enter your password";
   } else if (!lowercaseRegex.test(value)) {
-    error = 'Password must contain at least one lowercase letter';
+    error = "Password must contain at least one lowercase letter";
   } else if (!uppercaseRegex.test(value)) {
-    error = 'Password must contain at least one uppercase letter';
+    error = "Password must contain at least one uppercase letter";
   } else if (!digitRegex.test(value)) {
-    error = 'Password must contain at least one digit';
+    error = "Password must contain at least one digit";
   } else if (!specialCharRegex.test(value)) {
-    error = 'Password must contain at least one special character from the set @#$%^&+=!';
+    error =
+      "Password must contain at least one special character from the set @#$%^&+=!";
   } else if (!lengthRegex.test(value)) {
-    error = 'Password must be between 8 and 15 characters long';
+    error = "Password must be between 8 and 15 characters long";
   }
 
   return error;
 };
 
-
 const validateEmail = (value) => {
   let error;
   if (!value) {
-    error = 'Please enter your email address';
+    error = "Please enter your email address";
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-    error = 'Invalid email address';
+    error = "Invalid email address";
   }
   return error;
 };
@@ -90,8 +89,8 @@ const Login = ({ history, loading, loginUserAction }) => {
   //       break;
   //   }
   // }
-  const [email] = useState('');
-  const [password] = useState('');
+  const [email] = useState("");
+  const [password] = useState("");
 
   // useEffect(() => {
   //   if (error) {
@@ -107,12 +106,12 @@ const Login = ({ history, loading, loginUserAction }) => {
   //   });
   // };
 
-  // new 
+  // new
   // const onUserLogin = (values) => {
   //   if (!loading) {
   //     if (values.email !== '' && values.password !== '') {
   //       // if (values.email === email && values.password === password) {
-      
+
   //       const loginResponse = authService.login(email, password);
   //       // const loginResponse = authService.login(values.email, values.password);
 
@@ -133,17 +132,23 @@ const Login = ({ history, loading, loginUserAction }) => {
   //       //   });
   //       // console.log(values, history);
   //       loginUserAction(values, history);
-        
-        
-  //     } 
+
+  //     }
   //   }
   // };
   const onUserLogin = (values) => {
     if (!loading) {
-      if (values.email !== '' && values.password !== '') {
+      if (values.email !== "" && values.password !== "") {
         loginUserAction(values, history);
       } else {
-        NotificationManager.warning('Please enter email and password', 'Login Error', 3000, null, null, '');
+        NotificationManager.warning(
+          "Please enter email and password",
+          "Login Error",
+          3000,
+          null,
+          null,
+          ""
+        );
       }
     }
   };
@@ -159,7 +164,7 @@ const Login = ({ history, loading, loginUserAction }) => {
             <p className="white mb-0">
               Please use your credentials to login.
               <br />
-              If you are not a member, please{' '}
+              If you are not a member, please{" "}
               <NavLink to="/user/register" className="white">
                 register
               </NavLink>
@@ -175,7 +180,7 @@ const Login = ({ history, loading, loginUserAction }) => {
             </CardTitle>
 
             <Formik initialValues={initialValues} onSubmit={onUserLogin}>
-              {({ errors, touched, handleSubmit  }) => (
+              {({ errors, touched, handleSubmit }) => (
                 <Form className="av-tooltip tooltip-label-bottom">
                   <FormGroup className="form-group has-float-label">
                     <Label>
@@ -218,13 +223,14 @@ const Login = ({ history, loading, loginUserAction }) => {
                       register
                     </NavLink>
                     </div> */}
-                    <Button type='submit'
+                    <Button
+                      type="submit"
                       color="primary"
                       className={`btn-shadow btn-multiple-state ${
-                        loading ? 'show-spinner' : ''
+                        loading ? "show-spinner" : ""
                       }`}
                       size="lg"
-                      onClick={handleSubmit} 
+                      onClick={handleSubmit}
                     >
                       <span className="spinner d-inline-block">
                         <span className="bounce1" />
@@ -236,11 +242,12 @@ const Login = ({ history, loading, loginUserAction }) => {
                       </span>
                     </Button>
                   </div>
-                    <div>Not a registered user? {" "}
+                  <div>
+                    Not a registered user?{" "}
                     <NavLink to="/user/register" className="">
                       register
                     </NavLink>
-                    </div>
+                  </div>
                 </Form>
               )}
             </Formik>

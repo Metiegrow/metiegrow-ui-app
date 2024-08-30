@@ -31,15 +31,15 @@ import {
 import { adminRoot, baseUrl } from "constants/defaultValues";
 import "react-tagsinput/react-tagsinput.css";
 import {
+  // validateReasonForMentor,
+  validateAchievement,
   // validateCategory,
   // validateLocation,
   // validateCompany,
   // validateJobTitle,
   // validateSkills,
   // validateBio,
-  // validateLinkedinUrl,
-  // validateReasonForMentor,
-  validateAchievement,
+  validateLinkedinUrl,
 } from "../my-login/validation";
 
 // import country from "./Country";
@@ -407,6 +407,35 @@ const ApplyAsMentor = () => {
     history.push(`${adminRoot}/dashboard`);
   };
 
+  // file upload validation
+
+  const validateFile = (file) => {
+    // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!file) {
+      setImageError(true);
+      setImageErrorMessage("A profile picture is required");
+      return false;
+    }
+    // if (!allowedTypes.includes(file.type)) {
+    //   setImageError(true);
+    //   setImageErrorMessage(
+    //     "Please upload a valid image file (JPEG, PNG, or GIF)"
+    //   );
+    //   return false;
+    // }
+    if (file.size > maxSize) {
+      setImageError(true);
+      setImageErrorMessage("File size must be less than 5MB");
+      return false;
+    }
+
+    setImageError(false);
+    setImageErrorMessage("");
+    return true;
+  };
+  // file upload validation end
+
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
@@ -442,7 +471,13 @@ const ApplyAsMentor = () => {
                 linkedinUrl: "",
                 twitterHandle: "",
               }}
-              onSubmit={postDataUserProfile}
+              // onSubmit={postDataUserProfile}
+              onSubmit={(values) => {
+                console.log("test");
+                if (validateFile(file1)) {
+                  postDataUserProfile({ ...values });
+                }
+              }}
             >
               {({ errors, touched }) => (
                 <Form className="av-tooltip tooltip-label-right">
@@ -464,6 +499,11 @@ const ApplyAsMentor = () => {
                   </Alert>
                   <FormGroup>
                     <Label for="image">Image*</Label>
+                    {imageError && (
+                      <div className="invalid-feedback d-block">
+                        {imageErrorMessage}
+                      </div>
+                    )}
                     <Row>
                       <Col md={2} className="">
                         <img
@@ -479,11 +519,6 @@ const ApplyAsMentor = () => {
                       </Col>
                       <Col md={5} className="mt-3 ">
                         <InputGroup className="mb-3">
-                          {errors.image && touched.image && (
-                            <div className="invalid-feedback d-block">
-                              {errors.image}
-                            </div>
-                          )}
                           <div className="mt-2">
                             <Button
                               className="default"
@@ -501,17 +536,11 @@ const ApplyAsMentor = () => {
                               className="form-control d-none"
                               onChange={handleFileChange}
                               // validate={validateFile}
-                              required
                             />
                             {file1 && (
                               <p className="mt-2">
                                 Selected file: {file1.name}
                               </p>
-                            )}
-                            {imageError && (
-                              <div className="invalid-feedback d-block">
-                                {imageErrorMessage}
-                              </div>
                             )}
                           </div>
                         </InputGroup>
@@ -546,14 +575,13 @@ const ApplyAsMentor = () => {
                           className="form-control"
                           name="personalWebsite"
                           type="url"
-                          // validate={validateLinkedinUrl}
                           autoComplete="off"
                         />
-                        {errors.personalWebsite && touched.personalWebsite && (
+                        {/* {errors.personalWebsite && touched.personalWebsite && (
                           <div className="invalid-feedback d-block">
                             {errors.personalWebsite}
                           </div>
-                        )}
+                        )} */}
                       </Col>
                     </Row>
                   </FormGroup>
@@ -565,9 +593,12 @@ const ApplyAsMentor = () => {
                           className="form-control"
                           name="linkedinUrl"
                           type="url"
-                          // validate={validateLinkedinUrl}
+                          validate={validateLinkedinUrl}
                           autoComplete="off"
                         />
+                        <FormText color="muted" className="">
+                          e.g. https://www.linkedin.com/in/username/
+                        </FormText>
                         {errors.linkedinUrl && touched.linkedinUrl && (
                           <div className="invalid-feedback d-block">
                             {errors.linkedinUrl}

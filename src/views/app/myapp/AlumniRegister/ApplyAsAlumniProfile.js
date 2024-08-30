@@ -11,7 +11,7 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [profileLoading, setProfileLoading] = useState(false);
   const [education, setEducation] = useState([
-    { college: "", degree: "", fieldStudy: "", year: "" },
+    { college: [], degree: "", fieldStudy: [], year: "" },
   ]);
 
   const currentYear = new Date().getFullYear();
@@ -84,14 +84,29 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
   const addEducation = () => {
     setEducation([
       ...education,
-      { college: "", degree: "", fieldStudy: "", year: "0" },
+      { college: [], degree: "", fieldStudy: [], year: "0" },
     ]);
   };
+
+  // const handleInputChange = (index, field, value) => {
+  //   setEducation((previousEducation) =>
+  //     previousEducation.map((edu, i) =>
+  //       i === index ? { ...edu, [field]: value } : edu
+  //     )
+  //   );
+  // };
 
   const handleInputChange = (index, field, value) => {
     setEducation((previousEducation) =>
       previousEducation.map((edu, i) =>
-        i === index ? { ...edu, [field]: value } : edu
+        i === index
+          ? {
+              ...edu,
+              [field]: ["college", "fieldStudy"].includes(field)
+                ? value.split(",").map((item) => item.trim())
+                : value,
+            }
+          : edu
       )
     );
   };
@@ -175,25 +190,25 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
                 <Row>
                   <Col md={6}>
                     <FormGroup>
-                      <Label for={`education[${index}].department`}>
-                        Department*
+                      <Label for={`education[${index}].fieldStudy`}>
+                        Field Studied*
                       </Label>
                       <Input
                         type="text"
-                        name={`education[${index}].department`}
-                        id={`education[${index}].department`}
+                        name={`fieldStudy[${index}].fieldStudy`}
+                        id={`fieldStudy[${index}].fieldStudy`}
                         className="form-control"
-                        value={service.department}
+                        value={service.fieldStudy}
                         required
                         onChange={(e) =>
-                          handleInputChange(index, "department", e.target.value)
+                          handleInputChange(index, "fieldStudy", e.target.value)
                         }
                         // validate={validatePackageDescription}
                       />
-                      {errors.education?.[index]?.department &&
-                        touched.education?.[index]?.department && (
+                      {errors.education?.[index]?.fieldStudy &&
+                        touched.education?.[index]?.fieldStudy && (
                           <div className="invalid-feedback d-block">
-                            {errors.education[index].department}
+                            {errors.education[index].fieldStudy}
                           </div>
                         )}
                     </FormGroup>

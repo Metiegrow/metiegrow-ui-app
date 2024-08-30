@@ -1,48 +1,46 @@
-import React, { useEffect, useState } from "react";
+import classnames from "classnames";
+import { useEffect, useState } from "react";
+import { injectIntl } from "react-intl";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import {
-  Row,
+  Button,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  //   Badge,
+  Modal,
+  ModalBody,
+  ModalHeader,
   //   Card,
   //   CardBody,
   Nav,
   NavItem,
-  Button,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
+  Row,
   TabContent,
   TabPane,
-  //   Badge,
-  Modal,
-  ModalHeader,
-  ModalBody,
+  UncontrolledDropdown,
 } from "reactstrap";
-import { NavLink, useLocation, useHistory } from "react-router-dom";
-import classnames from "classnames";
-import { injectIntl } from "react-intl";
 // import Rating from 'components/common/Rating';
 
 // import Breadcrumb from 'containers/navs/Breadcrumb';
 import { Colxx } from "components/common/CustomBootstrap";
 
-import JobListing from "./JobListing";
-import StayListing from "./StayListing";
-import OtherListing from "./OtherListing";
 import All from "./All";
+import JobListing from "./JobListing";
 import JobPosting from "./JobPosting";
-import StayPosting from "./StayPosting";
+import OtherListing from "./OtherListing";
 import OtherPosting from "./OtherPosting";
+import StayListing from "./StayListing";
+import StayPosting from "./StayPosting";
 
 const DetailsAltPages = () => {
-
-  
   const location = useLocation();
   const history = useHistory();
   const [activeTab, setActiveTab] = useState("job");
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [listingType, setListingType] = useState("");
-  const [isPosted,setIsPosted] = useState(false)
+  const [isPosted, setIsPosted] = useState(false);
 
   const toggleModal = (title, type) => {
     setModalTitle(title);
@@ -56,17 +54,15 @@ const DetailsAltPages = () => {
     setIsPosted(!isPosted);
   };
 
-
   useEffect(() => {
-    const path = location.pathname.split('/').pop();
-    setActiveTab(path === 'listing' ? 'all' : path);
+    const path = location.pathname.split("/").pop();
+    setActiveTab(path === "listing" ? "all" : path);
   }, [location]);
 
   const changeTab = (tab) => {
     setActiveTab(tab);
-    history.push(`/app/listing${tab === 'all' ? '' : `/${tab}`}`);
+    history.push(`/app/listing${tab === "all" ? "" : `/${tab}`}`);
   };
-  
 
   return (
     <>
@@ -215,11 +211,16 @@ const DetailsAltPages = () => {
           <h1 className="font-weight-semibold">{modalTitle}</h1>
         </ModalHeader>
         <ModalBody>
-          {listingType === "job" && <JobPosting closeModal={toggleModalState}/>}
-          {listingType === "stay" && <StayPosting closeModal={toggleModalState}/>}
+          {listingType === "job" && (
+            <JobPosting closeModal={toggleModalState} />
+          )}
+          {listingType === "stay" && (
+            <StayPosting closeModal={toggleModalState} />
+          )}
           {/* {listingType === "others" && <OtherPosting />} */}
-          {listingType === "others" && <OtherPosting closeModal={toggleModalState} />}
-
+          {listingType === "others" && (
+            <OtherPosting closeModal={toggleModalState} />
+          )}
         </ModalBody>
       </Modal>
     </>

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Colxx } from "components/common/CustomBootstrap";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
-import { Badge, Button, Card, CardBody, CardText, Row } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import Pagination from "containers/pages/Pagination";
-import { baseUrl } from "constants/defaultValues";
+import { Colxx } from "components/common/CustomBootstrap";
 import Rating from "components/common/Rating";
+import { baseUrl } from "constants/defaultValues";
+import Pagination from "containers/pages/Pagination";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { Badge, Button, Card, CardBody, CardText, Row } from "reactstrap";
 // import MentorDropDown from '../mentorship/MentorDropDown';
 import "./ThumbnailImage.css";
 
@@ -317,7 +317,7 @@ const UserCard = () => {
                                   className="pr-2"
                                   id="btn.rounded"
                                 >
-                                  <Badge color="info">{skill}</Badge>
+                                  <Badge color="light">{skill}</Badge>
                                 </div>
                               ))}
                           </CardText>

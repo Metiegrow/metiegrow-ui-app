@@ -513,7 +513,7 @@ const MentorFilter = ({
                       Price
                     </DropdownToggle>
                     <DropdownMenu>
-                      <DropdownItem>
+                      <DropdownItem className="no-bg-price">
                         {/* <SliderExamples onChange={onPriceChange} /> */}
                         <Row>
                           <Colxx xxs="12" sm="12">
