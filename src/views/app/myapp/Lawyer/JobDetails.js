@@ -136,6 +136,7 @@ if (response.data.steps && response.data.steps.length > 0) {
           stepName: '',
           description: '',
           doneBy: '',
+          upload: true,
         });
     
       
@@ -188,6 +189,7 @@ if (response.data.steps && response.data.steps.length > 0) {
         stepName: step.stepName,
         description: step.description,
         doneBy: step.doneBy,
+        upload: true,
       });   
     };
   

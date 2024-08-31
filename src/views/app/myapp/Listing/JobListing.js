@@ -82,11 +82,10 @@ const JobListing = ({ isPosted }) => {
   };
 
   function removeTags(str) {
-    if (str === null || str === "") {
-      return false;
+    if (typeof str !== 'string') {
+      return ''; 
     }
-    const newStr = str.toString();
-    return newStr.replace(/(<([^>]+)>)/gi, "");
+    return str.replace(/(<([^>]+)>)/ig, '');
   }
 
   const handleInterestedButtonClick = async (id) => {

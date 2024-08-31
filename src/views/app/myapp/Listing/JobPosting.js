@@ -89,6 +89,8 @@ const JobPosting = ({ closeModal }) => {
   const [description, setDescription] = useState("");
   const [skillsTag, setSkillsTag] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
 
   const url = `${baseUrl}/api/posts/job-post/`;
 
@@ -128,6 +130,25 @@ const JobPosting = ({ closeModal }) => {
   const handleTagsChange = (newSkills) => {
     // setSkillError(false);
     setSkillsTag(newSkills);
+  };
+
+  const handleChangeInput = (value) => {
+    if (value.endsWith(',')) {
+      const newTag = value.slice(0, -1).trim();
+      if (newTag && !skillsTag.includes(newTag)) {
+        setSkillsTag([...skillsTag, newTag]);
+      }
+      setInputValue('');
+    } else {
+      setInputValue(value);
+    }
+  };
+
+  const handleAddTag = () => {
+    if (inputValue.trim() && !skillsTag.includes(inputValue.trim())) {
+      setSkillsTag([...skillsTag, inputValue.trim()]);
+      setInputValue('');
+    }
   };
 
   return (
@@ -363,18 +384,39 @@ const JobPosting = ({ closeModal }) => {
                       autoComplete="off"
                     /> */}
 
-                  <TagsInput
+                  {/* <TagsInput
                     value={skillsTag}
                     onChange={handleTagsChange}
                     inputProps={{ placeholder: "Add skills " }}
                     // validate={validateSkills}
-                  />
+                  /> */}
+                  <TagsInput
+                            value={skillsTag}
+                            onChange={handleTagsChange}
+                            renderInput={({ addTag, ...inputProps }) => {
+                              const { onChange, value, ...other } = inputProps;
+                              return (
+                                <input
+                                  {...other}
+                                  value={inputValue}
+                                  onChange={(e) => handleChangeInput(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      handleAddTag();
+                                      e.preventDefault();
+                                    }
+                                  }}
+                                  placeholder="Add skills"
+                                />
+                              );
+                            }}
+                          />
                   {/* {skillError && (
                       <div className="invalid-feedback d-block">
                         {skillErrorMessage}
                       </div>
                     )} */}
-                  <FormText>Add skill and press Enter </FormText>
+                  <FormText>Add skill and press Enter or comma </FormText>
                 </FormGroup>
                 <div className="mt-3 d-flex justify-content-end">
                   <Button
