@@ -3,7 +3,7 @@ import axios from "axios";
 import { Colxx } from "components/common/CustomBootstrap";
 import { RangeTooltip } from "components/common/SliderTooltips";
 import { baseUrl } from "constants/defaultValues";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import {
@@ -59,11 +59,12 @@ const MentorFilter = ({
   };
 
   const handleSliderChange = (value) => {
-    console.log(value);
-    onPriceChange(value);
     setPriceRange(value);
-    // console.log("priceChange",value)
   };
+  const handleAfterChange = useCallback((finalRange) => {
+    onPriceChange(finalRange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const tools = [
   //   "VSCode",
@@ -527,6 +528,7 @@ const MentorFilter = ({
                               step={500}
                               value={priceRange}
                               onChange={handleSliderChange}
+                              onAfterChange={handleAfterChange}
                             />
                           </Colxx>
                         </Row>
