@@ -1,13 +1,13 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  NavLink,
-} from "reactstrap";
+import { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import {
+  DropdownMenu,
+  DropdownToggle,
+  NavLink,
+  UncontrolledDropdown,
+} from "reactstrap";
 // import notifications from 'data/notifications';
 import { adminRoot, baseUrl } from "constants/defaultValues";
 import TimestampConverter from "views/app/myapp/Calculation/TimestampConverter";
@@ -36,7 +36,7 @@ const TopnavNotifications = () => {
   const url = `${baseUrl}/api/notifications/last30days`;
 
   const [notifications, setNotifications] = useState([]);
-  const [clicked, setClicked] =useState(false)
+  const [clicked, setClicked] = useState(false);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -44,24 +44,24 @@ const TopnavNotifications = () => {
         const response = await axios.get(url);
         setNotifications(response.data);
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error("Error fetching notifications:", error);
       }
     };
 
-    fetchNotifications(); 
+    fetchNotifications();
 
-    const intervalId = setInterval(fetchNotifications, 30000); 
+    const intervalId = setInterval(fetchNotifications, 30000);
 
     return () => clearInterval(intervalId);
-  }, [url,clicked]);
-  const handleClick = () =>{
-    setClicked(!clicked)
-  }
+  }, [url, clicked]);
+  const handleClick = () => {
+    setClicked(!clicked);
+  };
   return (
     <div className="position-relative d-inline-block">
       <UncontrolledDropdown className="dropdown-menu-right">
         <DropdownToggle
-          className="header-icon notificationButton"
+          className="header-icon notificationButton mr-3"
           color="empty"
           onClick={handleClick}
         >
@@ -74,31 +74,45 @@ const TopnavNotifications = () => {
           id="notificationDropdown"
         >
           {notifications.length === 0 ? (
-            <div className="p-3 text-center">You don&apos;t have any notifications</div>
+            <div className="p-3 text-center">
+              You don&apos;t have any notifications
+            </div>
           ) : (
-          <PerfectScrollbar
-            options={{ suppressScrollX: true, wheelPropagation: false }}
-          >
-            {notifications.map((notification) => {
-              // return <NotificationItem key={index} {...notification} />;
-              return <div className="d-flex flex-row mb-3 pb-3 border-bottom" key={notification.id}>
-              <NavLink to={`${adminRoot}/pages/product/details`}>
-                <img
-                  src=""
-                  alt=""
-                  className="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"
-                />
-              </NavLink>
-              <div className="pl-3 pr-2">
-                <NavLink to={notification.url}>
-                  <p className="font-weight-medium mb-1">{notification.message}</p>
-                  <p className="text-muted mb-0 text-small"><TimestampConverter timeStamp={notification.createdAt} format="datetime" /></p>
-                </NavLink>
-              </div>
-            </div>;
-            })}
-          </PerfectScrollbar>
-                )}
+            <PerfectScrollbar
+              options={{ suppressScrollX: true, wheelPropagation: false }}
+            >
+              {notifications.map((notification) => {
+                // return <NotificationItem key={index} {...notification} />;
+                return (
+                  <div
+                    className="d-flex flex-row mb-3 pb-3 border-bottom"
+                    key={notification.id}
+                  >
+                    <NavLink to={`${adminRoot}/pages/product/details`}>
+                      <img
+                        src=""
+                        alt=""
+                        className="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"
+                      />
+                    </NavLink>
+                    <div className="pl-3 pr-2">
+                      <NavLink to={notification.url}>
+                        <p className="font-weight-medium mb-1">
+                          {notification.message}
+                        </p>
+                        <p className="text-muted mb-0 text-small">
+                          <TimestampConverter
+                            timeStamp={notification.createdAt}
+                            format="datetime"
+                          />
+                        </p>
+                      </NavLink>
+                    </div>
+                  </div>
+                );
+              })}
+            </PerfectScrollbar>
+          )}
         </DropdownMenu>
       </UncontrolledDropdown>
     </div>

@@ -135,7 +135,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
 
   const validateFile = (file) => {
     // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 2 * 1024 * 1024; // 5MB
     if (!file) {
       setImageError(true);
       setImageErrorMessage("A profile picture is required");
@@ -150,7 +150,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     // }
     if (file.size > maxSize) {
       setImageError(true);
-      setImageErrorMessage("File size must be less than 5MB");
+      setImageErrorMessage("File size must be less than 2MB");
       return false;
     }
 

@@ -1,35 +1,35 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-use-before-define */
-import React, { useState } from "react";
+import { useState } from "react";
 import { injectIntl } from "react-intl";
 
 import {
-  UncontrolledDropdown,
   DropdownItem,
-  DropdownToggle,
   DropdownMenu,
+  DropdownToggle,
   Row,
+  UncontrolledDropdown,
 } from "reactstrap";
 
-import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 import {
-  setContainerClassnames,
+  changeLocale,
   clickOnMobileMenu,
   logoutUser,
-  changeLocale,
+  setContainerClassnames,
 } from "redux/actions";
 
+import { MenuIcon, MobileMenuIcon } from "components/svg";
 import {
-  searchPath,
-  isDarkSwitchActive,
   adminRoot,
   baseUrl,
+  isDarkSwitchActive,
+  searchPath,
 } from "constants/defaultValues";
 import ThumbnailLetters from "views/app/myapp/Chat/ThumbnailLetters";
-import { MobileMenuIcon, MenuIcon } from "components/svg";
 // import MyProfile from 'views/app/myapp/my-profile/MyProfile';
 import TopnavDarkSwitch from "./Topnav.DarkSwitch";
 import TopnavNotifications from "./Topnav.Notifications";
@@ -298,36 +298,6 @@ const TopNav = ({
       </NavLink>
 
       <div className="navbar-right">
-        {/* <div
-          style={{
-            paddingRight: "20px",
-          }}
-          className="d-inline-block "
-        >
-          <UncontrolledDropdown className="dropdown-menu-right">
-            <DropdownToggle className="p-0" color="empty">
-              <span>
-                <i alt="" className="simple-icon-bell" />
-              </span>
-            </DropdownToggle>
-            <DropdownMenu className="mt-3" right>
-              {NotificationData.payload.map((product) => {
-                return (
-                  <div key={product.id}>
-                    <DropdownItem
-                      onClick={(e) => {
-                        console.log(e);
-                      }}
-                    >
-                      {product.msg}
-                    </DropdownItem>
-                    <DropdownItem divider />
-                  </div>
-                );
-              })}
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        </div> */}
         <TopnavNotifications />
 
         {isDarkSwitchActive && <TopnavDarkSwitch />}

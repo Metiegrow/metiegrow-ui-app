@@ -40,7 +40,7 @@ const MentorCard = () => {
   // console.log("selectedTools",selectedTools)
   // console.log("selectedIndustry",selectedIndustry)
   // console.log("selectedPrice", selectedPrice);
-  console.log("selectedLocation", selectedLocation);
+  // console.log("selectedLocation", selectedLocation);
 
   const [isMentorCardFetched, setIsMentorCardFetched] = useState(false);
 
