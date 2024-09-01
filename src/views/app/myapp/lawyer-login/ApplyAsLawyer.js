@@ -50,6 +50,7 @@ const ApplyAsLawyer = () => {
   const [AboutLoading, setAboutLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [servicesLoading, setServicesLoading] = useState(false);
+  const [topicsInputValue,setTopicsInputValue] = useState("")
 
   const [aboutField, setAboutField] = useState({
     image: "",
@@ -230,6 +231,26 @@ const ApplyAsLawyer = () => {
 
   const handleTopicsTagsChange = (newTopics) => {
     setTopicsTag(newTopics);
+  };
+
+  const handleTopicsChangeInput = (value) => {
+    if (value.endsWith(',')) {
+      const newTag = value.slice(0, -1).trim();
+      if (newTag && !topicsTag.includes(newTag)) {
+        setTopicsTag([...topicsTag, newTag]);
+      }
+      setTopicsInputValue('');
+    } else {
+      setTopicsInputValue(value);
+    }
+  };
+
+
+  const handleAddTopicsTag = () => {
+    if (topicsInputValue.trim() && !topicsTag.includes(topicsInputValue.trim())) {
+      setTopicsTag([...topicsTag, topicsInputValue.trim()]);
+      setTopicsInputValue('');
+    }
   };
 
   const removeService = (index) => {
@@ -487,13 +508,34 @@ const ApplyAsLawyer = () => {
                   <FormGroup>
                     <Label for="topics">Topics*</Label>
 
-                    <TagsInput
+                    {/* <TagsInput
                       value={topicsTag}
                       onChange={handleTopicsTagsChange}
                       inputProps={{ placeholder: "Add topics " }}
                       addOnBlur
                       addKeys={[188]}
-                    />
+                    /> */}
+                    <TagsInput
+                            value={topicsTag}
+                            onChange={handleTopicsTagsChange}
+                            renderInput={({ addTag, ...inputProps }) => {
+                              const { onChange, value, ...other } = inputProps;
+                              return (
+                                <input
+                                  {...other}
+                                  value={topicsInputValue}
+                                  onChange={(e) => handleTopicsChangeInput(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      handleAddTopicsTag();
+                                      e.preventDefault();
+                                    }
+                                  }}
+                                  placeholder="Add Topics"
+                                />
+                              );
+                            }}
+                          />
                     {errors.topics && touched.topics && (
                       <div className="invalid-feedback d-block">
                         {errors.topics}

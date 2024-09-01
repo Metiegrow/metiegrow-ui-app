@@ -83,13 +83,19 @@ const JobListing = ({isPosted}) => {
     history.push(`/app/listing/others/view/${id}`);
   };
 
-const removeTags = (str) => {
-  if (str === null || str === '') {
-      return false;
+// const removeTags = (str) => {
+//   if (str === null || str === '') {
+//       return false;
+//   }
+//   const newStr = str.toString();
+//   return newStr.replace(/<\/?[^>]+(>|$)/g, ' ').trim().replace(/\s+/g, ' ');
+// };
+function removeTags(str) {
+  if (typeof str !== 'string') {
+    return ''; 
   }
-  const newStr = str.toString();
-  return newStr.replace(/<\/?[^>]+(>|$)/g, ' ').trim().replace(/\s+/g, ' ');
-};
+  return str.replace(/(<([^>]+)>)/ig, '');
+}
 
 
 const handleInterestedButtonClick = async (id, title) => {

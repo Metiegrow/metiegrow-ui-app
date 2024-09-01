@@ -86,12 +86,11 @@ const StayListing = () => {
   };
 
   function removeTags(str) {
-    if (str === null || str === '') {
-        return false;
+    if (typeof str !== 'string') {
+      return ''; 
     }
-    const newStr = str.toString();
-    return newStr.replace(/(<([^>]+)>)/ig, '');
-}
+    return str.replace(/(<([^>]+)>)/ig, '');
+  }
 
 return !isLoaded ? (
   <div className="loading" />

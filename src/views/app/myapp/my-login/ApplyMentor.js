@@ -838,7 +838,7 @@ const ApplyMentor = () => {
                         Required
                       </div>
                     )}
-                    <FormText>Add Tools and press Enter </FormText>
+                    <FormText>Add Tools and press Enter or Comma </FormText>
                   </FormGroup>
 
                   <FormGroup>

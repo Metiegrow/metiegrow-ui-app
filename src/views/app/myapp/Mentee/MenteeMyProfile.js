@@ -54,7 +54,9 @@ const MyProfile = () => {
   const [certifications, setCertifications] = useState([]);
   const [seekingFor, setSeekingFor] = useState("");
   const [newInputSkill, setNewInputSkill] = useState("");
+  const [newInputCertifications, setNewInputCertifications] = useState("");
   const [skillValidationMessage,setSkillValidationMessage] = useState("");
+  const [certificationsValidationMessage,setCertificationsValidationMessage] = useState("");
 
   const { uid } = useParams();
 
@@ -84,6 +86,8 @@ const MyProfile = () => {
   const [imageEditModal, setImageEditModal] = useState(false);
   const [modalAbout, setModalAbout] = useState(false);
   const [profileUpdate, setProfileUpdate] = useState(false);
+  const [modalEditCertifications,setModalEditCertifications] = useState(false);
+
   // const [educationEdit, setEducationEdit] = useState(false);
 
   const [experienceEditOpen, setExperienceEditOpen] = useState(false);
@@ -462,6 +466,11 @@ const handleEditWork = (index) => {
     updateMentorProfile();
   };
 
+  const handleCertificationsSave = () => {
+    setModalEditCertifications(false);
+    updateMentorProfile();
+  };
+
   const handleLanguageSave = () => {
     setModalEditLanguage(false);
     updateMentorProfile();
@@ -476,8 +485,21 @@ const handleEditWork = (index) => {
   }
   };
 
+  const handleAddCertifications = (newCertification) => {
+    if (!newCertification.trim()) {
+      setCertificationsValidationMessage("Certification cannot be empty");
+  } else {
+    setCertificationsValidationMessage("")
+    setCertifications([...certifications, newCertification]);
+  }
+  };
+
   const handleRemoveSkill = (index) => {
     setSkills(skills.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveCertifications = (index) => {
+    setCertifications(certifications.filter((_, i) => i !== index));
   };
 
   const handleEducationCancel = () => {
@@ -526,7 +548,7 @@ const handleEditWork = (index) => {
                             borderRadius: "9px 9px 0 0",
                           }}
                         >
-                          <div
+                          {/* <div
                             className="text-end w-100  
                          m-0 d-flex justify-content-end "
                           >
@@ -538,7 +560,7 @@ const handleEditWork = (index) => {
                             >
                               <i className="simple-icon-pencil text-primary font-weight-bold" />
                             </Button>}
-                          </div>
+                          </div> */}
 
                           <div
                             className="position-relative"
@@ -1409,6 +1431,158 @@ const handleEditWork = (index) => {
                               color="primary"
                               outline
                               onClick={() => setModalEditSkills(false)}
+                              className=""
+                            >
+                              Cancel
+                            </Button>
+                          </ModalFooter>
+                        </Modal>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row className="my-4">
+                    <Col>
+                      <Card>
+                        <CardBody>
+                          <Row className="align-items-center">
+                            <Col className="d-flex justify-content-between">
+                              <h2 className="font-weight-bold">Certifications	</h2>
+                              {!uid && 
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                style={{ border: "none" }}
+                                size="sm"
+                                onClick={() => setModalEditCertifications	(true)}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+}
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <div
+                                className="d-flex flex-wrap"
+                                style={{ gap: "10px", marginTop: "10px" }}
+                              >
+                                {certifications.length > 0 ? (
+                                <>
+                                {certifications.map((certification, index) => (
+                                  <Button
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={index}
+                                    color="primary"
+                                    outline
+                                    size="sm"
+                                  >
+                                    {certification}
+                                  </Button>
+                                ))}
+                                </>) : (
+                                  <span>There are no certifications. Please add new certifications.</span>
+                                )}
+                                {/* <Button color="primary" outline size="sm">
+                                  CSS
+                                </Button> */}
+                              </div>
+                            </Col>
+                          </Row>
+                        </CardBody>
+
+                        <Modal
+                          isOpen={modalEditCertifications	}
+                          toggle={() => setModalEditCertifications	(!modalEditCertifications	)}
+                          className=""
+                          size="lg"
+                          style={{ borderRadius: "10px", overflow: "hidden" }}
+                        >
+                          <ModalHeader style={{ borderBottom: "none" }}>
+                            <h2 className="font-weight-bold">Certifications</h2>
+                          </ModalHeader>
+                          <ModalBody>
+                            <Row className="w-100 mb-3">
+                              <Col>
+                              <InputGroup className="mb-3">
+                              <Input
+                                type="text"
+                                placeholder="New Certification"
+                                value={newInputCertifications}
+                                onChange={(e) => setNewInputCertifications	(e.target.value)}
+                                onKeyDown={(event) => {
+                                  if (event.key === "Enter") {
+                                    handleAddCertifications(newInputCertifications	);
+                                    setNewInputCertifications	("");
+                                  }
+                                }}
+                              />
+                              <InputGroupAddon addonType="append">
+                                <Button
+                                  outline
+                                  color="primary"
+                                  onClick={() => {
+                                    handleAddCertifications	(newInputCertifications	);
+                                    setNewInputCertifications	("");
+                                  }}
+                                >
+                                  Add Certification	
+                                </Button>
+                              </InputGroupAddon>
+                            </InputGroup>
+                              </Col>
+                              {certificationsValidationMessage && (
+                      <div className="invalid-feedback d-block">
+                        {certificationsValidationMessage}
+                      </div>
+                    )}
+                              {/* <Col md={2}>
+                                <Button color="primary" className="w-100">
+                                  Add skill
+                                </Button>
+                              </Col> */}
+                            </Row>
+                            <Row>
+                              <ReactSortable
+                                list={certifications}
+                                setList={setCertifications}
+                                options={{ handle: ".handle" }}
+                                className="d-flex flex-wrap ml-2"
+                              >
+                                {certifications.map((certification, index) => (
+                                  <Button
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={index}
+                                    outline={index >= 3}
+                                    color="primary"
+                                    // color={index < 3 ? 'primary' : 'light'}
+                                    className="ml-2 font-weight-semibold mx-2 d-flex align-items-center"
+                                    size="sm"
+                                    onClick={() => handleRemoveCertifications(index)}
+                                  >
+                                    {certification}
+                                    <i className="iconsminds-close ml-2" />
+                                  </Button>
+                                ))}
+                              </ReactSortable>
+                              {/* <p className="ml-3 text-muted mt-3">Drag skills to set top 3 (the top 3 skills will be displayed on mentor cards)</p> */}
+                            </Row>
+                          </ModalBody>
+
+                          <ModalFooter
+                            style={{ borderTop: "none" }}
+                            className="d-flex align-items-center justify-content-center"
+                          >
+                            <Button
+                              color="primary"
+                              onClick={() => handleCertificationsSave()}
+                            >
+                              Save
+                            </Button>{" "}
+                            <Button
+                              color="primary"
+                              outline
+                              onClick={() => setModalEditCertifications(false)}
                               className=""
                             >
                               Cancel
