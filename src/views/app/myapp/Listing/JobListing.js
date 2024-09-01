@@ -81,11 +81,19 @@ const JobListing = ({ isPosted }) => {
     history.push(`/app/listing/job/view/${id}`);
   };
 
+  // function removeTags(str) {
+  //   if (str === null || str === "") {
+  //     return false;
+  //   }
+  //   const newStr = str.toString();
+  //   return newStr.replace(/(<([^>]+)>)/gi, "");
+  // }
+
   function removeTags(str) {
-    if (typeof str !== 'string') {
-      return ''; 
+    if (typeof str === "string") {
+      return str.replace(/<[^>]*>/g, "");
     }
-    return str.replace(/(<([^>]+)>)/ig, '');
+    return "";
   }
 
   const handleInterestedButtonClick = async (id) => {
@@ -178,7 +186,11 @@ const JobListing = ({ isPosted }) => {
                           </CardSubtitle>
                         ) : (
                           <CardSubtitle>
-                            {`${removeTags(data.description).slice(0, 100)}`}
+                            {`${(
+                              (data.description &&
+                                removeTags(data.description)) ||
+                              ""
+                            ).slice(0, 100)}`}{" "}
                             {data.description.length > 100 && (
                               <Button
                                 color="link"
