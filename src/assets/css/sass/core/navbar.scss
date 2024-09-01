@@ -203,7 +203,7 @@
     }
 
     @include respond-below(md) {
-      width: $sub-menu-width/2;
+      width: calc($sub-menu-width / 2);
       input {
         width: 85%;
       }
@@ -295,9 +295,10 @@
         height: 15px;
         text-align: center;
         font-weight: 700;
-        top: -4px;
-        right: 0px;
+        top: 2px;
+        right: 18px;
         line-height: 14px;
+        background-color: white;
 
         @include respond-below(xs) {
           right: -1px;
@@ -327,11 +328,10 @@
     }
 
     @include respond-below(sm) {
+      margin-left: initial;
       img {
         width: 30px;
       }
-
-      margin-left: initial;
 
       &:after {
         font-size: 11px;
