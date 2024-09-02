@@ -7,9 +7,11 @@ import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 import { useHistory, useParams } from "react-router-dom";
 import { Button, Card, CardBody, NavLink, Row } from "reactstrap";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const quillModules = {
   toolbar: [
+    // [{ header: [1, 2, false] }],
     ["bold", "italic", "underline", "strike", "blockquote"],
     [
       { list: "ordered" },
@@ -17,8 +19,8 @@ const quillModules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
-    ["clean"],
+    // ["link", "image"],
+    // ["clean"],
   ],
 };
 const quillFormats = [
@@ -191,12 +193,15 @@ const MentorAnswers = () => {
       // const deleteUrl = `${baseUrl}/mentorAnswers/${questionId}/answer/${answerId}`;
       const deleteUrl = `${baseUrl}/api/mentor/${answerId}/answer`;
 
-      await axios.delete(deleteUrl);
+      const response = await axios.delete(deleteUrl);
 
-      setAnswers1((prevState) => ({
-        ...prevState,
-        answer: prevState.answer.filter((answer) => answer.id !== answerId),
-      }));
+      if (response.status === 200) {
+        ToasterComponent("success", "Answer successfully deleted");
+        setAnswers1((prevState) => ({
+          ...prevState,
+          answer: prevState.answer.filter((answer) => answer.id !== answerId),
+        }));
+      }
     } catch (error) {
       console.error("Error deleting answer:", error);
     }
@@ -207,6 +212,7 @@ const MentorAnswers = () => {
 
       const response = await axios.delete(deleteUrl);
       if (response.status === 200) {
+        ToasterComponent("success", "Question successfully deleted");
         // setAnswers1(prevState => ({
         //   ...prevState,
         //   question: prevState.question.filter(question => question.id !== questionsId)
@@ -242,6 +248,7 @@ const MentorAnswers = () => {
       );
 
       // Update the state with the updated answers
+      ToasterComponent("success", "Successfully posted");
       setAnswers1(updatedResponse.data.answer);
       await AnswersByMentors();
       await AnswersByMentors1();
@@ -386,7 +393,7 @@ const MentorAnswers = () => {
                         <h3>{an.mentorName}</h3>
                         <p className="text-one text-muted">{an.mentorRole}</p>
                       </div>
-                      <div>
+                      {/* <div>
                         <NavLink href="/app/mentorconsult">
                           <Button
                             outline
@@ -397,7 +404,7 @@ const MentorAnswers = () => {
                             Consult Now
                           </Button>
                         </NavLink>
-                      </div>
+                      </div> */}
                     </div>
 
                     {/* <p>{an.answered}</p> */}
@@ -460,7 +467,7 @@ const MentorAnswers = () => {
                     <hr />
                     <div className="d-flex justify-content-between">
                       <div className="d-flex align-items-center">
-                        <h6 className="">Was this answer helpful?</h6>
+                        {/* <h6 className="">Was this answer helpful?</h6>
                         <div className="ml-3">
                           <Button
                             outline
@@ -478,7 +485,7 @@ const MentorAnswers = () => {
                           >
                             No
                           </Button>
-                        </div>
+                        </div> */}
                       </div>
                       <div>
                         {/* <Button  outline color="primary" className='mr-2' ><i className='simple-icon-pencil'/></Button> */}
