@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Colxx } from "components/common/CustomBootstrap";
+import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
@@ -7,7 +8,6 @@ import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 import { useHistory, useParams } from "react-router-dom";
 import { Button, Card, CardBody, NavLink, Row } from "reactstrap";
-import ToasterComponent from "../notifications/ToasterComponent";
 
 const quillModules = {
   toolbar: [
@@ -63,6 +63,8 @@ const MentorAnswers = () => {
   const [editStates, setEditStates] = useState({});
   // const [editStates, setEditStates] = useState('');
   //  const [newAnswer,setNewAnswer]=useState('')
+
+  const [loading, setLoading] = useState(false);
 
   const isArrayOfLength = (value, length) => {
     return Array.isArray(value) && value.length > length;
@@ -196,7 +198,11 @@ const MentorAnswers = () => {
       const response = await axios.delete(deleteUrl);
 
       if (response.status === 200) {
-        ToasterComponent("success", "Answer successfully deleted");
+        NotificationManager.success(
+          `Answer successfully deleted`,
+          "Success",
+          3000
+        );
         setAnswers1((prevState) => ({
           ...prevState,
           answer: prevState.answer.filter((answer) => answer.id !== answerId),
@@ -212,7 +218,11 @@ const MentorAnswers = () => {
 
       const response = await axios.delete(deleteUrl);
       if (response.status === 200) {
-        ToasterComponent("success", "Question successfully deleted");
+        NotificationManager.success(
+          `Question successfully deleted`,
+          "Success",
+          3000
+        );
         // setAnswers1(prevState => ({
         //   ...prevState,
         //   question: prevState.question.filter(question => question.id !== questionsId)
@@ -225,40 +235,38 @@ const MentorAnswers = () => {
   };
 
   const handlePostAnswer = async () => {
+    setLoading(true);
     try {
-      console.log("Posting answer...");
-      // Make a POST request to the backend to post the new answer
-      // await axios.post(`${baseUrl}/mentorAnswers/${questionId}/answer`, { answered: textQuillStandart });
       const doc = new DOMParser().parseFromString(
         textQuillStandart,
         "text/html"
       );
       const strippedAnswerText = doc.body.textContent || "";
-      //  backend
+
       await axios.post(`${baseUrl}/api/mentor/${questionId}/answer`, {
         answerText: strippedAnswerText,
       });
-
-      // After posting the answer successfully, fetch the updated answers
-      // const updatedResponse = await axios.get(`${baseUrl}/mentorAnswers/${questionId}/answer, { answerText: strippedAnswerText })`);
-
-      // backend
+      NotificationManager.success(
+        `Answer posted successfully`,
+        "Success",
+        3000
+      );
+    } catch (error) {
+      NotificationManager.error(`Error posting answer`, "Error", 3000);
+      console.error("Error posting answer:", error);
+    }
+    try {
       const updatedResponse = await axios.get(
         `${baseUrl}/api/mentorAnswers/${questionId}`
       );
-
-      // Update the state with the updated answers
-      ToasterComponent("success", "Successfully posted");
       setAnswers1(updatedResponse.data.answer);
       await AnswersByMentors();
       await AnswersByMentors1();
-
-      // Clear the textQuillStandart state to reset the Quill editor
       setTextQuillStandart("");
-      console.log("Answer posted successfully!");
     } catch (error) {
-      console.error("Error posting answer:", error);
+      console.error("Error fecting answer:", error);
     }
+    setLoading(false);
   };
 
   return (
@@ -277,13 +285,12 @@ const MentorAnswers = () => {
 
           {/*  Questions card starts */}
 
-          <Card className=" mt-3">
+          <Card className="mt-3">
             <CardBody>
               <div className="d-flex justify-content-between">
                 <h3 className="font-weight-semibold">
                   {answers.questionHeading}
                 </h3>
-                {/* <Button outline color="primary"><i className='simple-icon-pencil'/></Button> */}
                 {roleRes.includes("USER") && (
                   <div className="d-flex ">
                     {editing ? (
@@ -372,13 +379,18 @@ const MentorAnswers = () => {
 
           {/*  Questions  card ends  */}
           {isArrayOfLength(answers1.answer, 0) && (
-            <div className=" mt-3 d-flex justify-content-between font-weight-medium">
-              <h6>Answers {answers1.answer && answers1.answer.length} </h6>
+            <div
+              className=" mt-3 d-flex justify-content-between font-weight-medium"
+              style={{ gap: "16px" }}
+            >
+              <h6 className="text-nowrap">
+                Answers {answers1.answer && answers1.answer.length}
+              </h6>
 
-              <h6>
+              {/* <h6>
                 Like the answers? Consult privately with the Mentor of your
                 choice
-              </h6>
+              </h6> */}
             </div>
           )}
           {/*  answer starts  */}
@@ -430,40 +442,8 @@ const MentorAnswers = () => {
                     ) : (
                       <p>{an.answered}</p>
                     )}
-                    {/* <div className="d-flex align-items-center">
-                      {editing1 ? (
-                        <>
-                          <Button
-                            outline
-                            color="primary"
-                            onClick={handleSave1}
-                            className="mr-2"
-                          >
-                            Save
-                          </Button>
-                          <Button
-                            outline
-                            color="primary"
-                            onClick={handleCancel1}
-                          >
-                            Cancel
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          outline
-                          color="primary"
-                          onClick={() => handleEdit1(an.id, an.answered)}
-                        >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                      )}
-                      </div>
-                 */}
-
-                    {/* <p>Answered 6 years ago</p> */}
                     <p>Answered {an.answeredYear} years ago</p>
-                    <p>0/1 people found this helpful</p>
+                    {/* <p>0/1 people found this helpful</p> */}
                     <hr />
                     <div className="d-flex justify-content-between">
                       <div className="d-flex align-items-center">
@@ -488,71 +468,6 @@ const MentorAnswers = () => {
                         </div> */}
                       </div>
                       <div>
-                        {/* <Button  outline color="primary" className='mr-2' ><i className='simple-icon-pencil'/></Button> */}
-                        {/* want */}
-                        {/* <div className="d-flex align-items-center ">
-                      {editing1 ? (
-                        <>
-                          <Button
-                            outline
-                            color="primary"
-                            onClick={handleSave1}
-                            className="mr-2"
-                          >
-                            Save
-                          </Button>
-                          <Button
-                            outline
-                            color="primary"
-                            onClick={handleCancel1}
-                            className='mr-2'
-                          >
-                            Cancel
-                          </Button>
-                        </>
-                      ) : (
-                        <Button className='mr-2'
-                          outline
-                          color="primary"
-                          onClick={() => handleEdit1(an.id,an.answered)}
-                        >
-                          <i className="simple-icon-pencil" />
-                        </Button>
-                      )}
-               
-                      <Button outline color="primary" ><i className='simple-icon-trash'/></Button>
-                      </div> */}
-                        {/* <div className="d-flex align-items-center">
-                {editStates[an.id] ? (
-                  <>
-                    <Button
-                      outline
-                      color="primary"
-                      onClick={() => handleSave1(an.id)}
-                      className="mr-2"
-                    >
-                      Save
-                    </Button>
-                    <Button className='mr-2'
-                      outline
-                      color="primary"
-                      onClick={() => handleCancel1(an.id)}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <Button className='mr-2'
-                    outline
-                    color="primary"
-                    onClick={() => handleEdit1(an.id)}
-                  >
-                    <i className="simple-icon-pencil" />
-                  </Button>
-                )}
-                
-                <Button outline color="primary" onClick={()=>handleDeleteAnswer(an.id)} ><i className='simple-icon-trash' /></Button>
-              </div> */}
                         <div className="d-flex align-items-center">
                           {roleRes.includes("MENTOR") && (
                             <>
@@ -598,50 +513,39 @@ const MentorAnswers = () => {
                       </div>
                     </div>
                   </CardBody>
-                  {/* <div className='d-flex w-100 justify-content-between'>
-      <div>
-          <h3 className=''>{answers1.mentorName}</h3>
-          <p className='text-one text-muted'>{answers.mentorRole}</p>
-        </div>
-       <div>
-    
-       <NavLink href='/app/mentorconsult'>
-       <Button outline color="primary" size='sm' className="">
-              Consult Now
-              </Button>
-       </NavLink>
-      
-       </div> */}
                 </Card>
               );
             })}
-
           {/*  answer ends  */}
-          <div className="mt-4">
-            <h5 className="font-weight-semibold">Your Answer</h5>
-            {/* <p className='text-muted'>Include all the information would need to answer your question</p> */}
-            <Row className="mb-4">
-              <Colxx xxs="12">
-                <ReactQuill
-                  theme="snow"
-                  value={textQuillStandart}
-                  onChange={(val) => setTextQuillStandart(val)}
-                  modules={quillModules}
-                  formats={quillFormats}
-                />
-                <div>
-                  <Button
-                    className="mt-2"
-                    szie="xs"
-                    color="primary"
-                    onClick={handlePostAnswer}
-                  >
-                    Post your answer
-                  </Button>
-                </div>
-              </Colxx>
-            </Row>
-          </div>
+          {roleRes.includes("USER") ? (
+            <></>
+          ) : (
+            <div className="mt-4">
+              <h5 className="font-weight-semibold">Your Answer</h5>
+              <Row className="mb-4">
+                <Colxx xxs="12">
+                  <ReactQuill
+                    theme="snow"
+                    value={textQuillStandart}
+                    onChange={(val) => setTextQuillStandart(val)}
+                    modules={quillModules}
+                    formats={quillFormats}
+                  />
+                  <div>
+                    <Button
+                      className="mt-2"
+                      szie="xs"
+                      color="primary"
+                      onClick={handlePostAnswer}
+                      disabled={loading}
+                    >
+                      {loading ? "Posting..." : "Post your answer"}
+                    </Button>
+                  </div>
+                </Colxx>
+              </Row>
+            </div>
+          )}
         </div>
       </Colxx>
     </div>

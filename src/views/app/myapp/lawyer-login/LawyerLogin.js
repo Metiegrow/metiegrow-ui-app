@@ -1,44 +1,44 @@
 /* eslint-disable no-param-reassign */
-import React, { createRef, useState } from "react";
-import {
-  Button,
-  Card,
-  CardBody,
-  FormGroup,
-  Label,
-  Spinner,
-  Row,
-  Col,
-  FormText,
-  Alert,
-  InputGroup,
-  Input,
-  PopoverBody,
-  Tooltip,
-} from "reactstrap";
 import axios from "axios";
-import { Wizard, Steps, Step, WithWizard } from "react-albus";
-import { injectIntl } from "react-intl";
-import { Formik, Form, Field } from "formik";
+import { SliderTooltip } from "components/common/SliderTooltips";
 import TopNavigation from "components/wizard/TopNavigation";
 import { baseUrl } from "constants/defaultValues";
-import { SliderTooltip } from "components/common/SliderTooltips";
+import { Field, Form, Formik } from "formik";
+import { createRef, useState } from "react";
+import { Step, Steps, WithWizard, Wizard } from "react-albus";
+import { injectIntl } from "react-intl";
 import Select from "react-select";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
-import LawyerJumbotron from "./LawyerJumbotron";
+import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  Col,
+  FormGroup,
+  FormText,
+  Input,
+  InputGroup,
+  Label,
+  PopoverBody,
+  Row,
+  Spinner,
+  Tooltip,
+} from "reactstrap";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
+import LawyerJumbotron from "./LawyerJumbotron";
 
 import {
-  validateLanguages,
-  validateLocation,
-  validatePackageTopic,
-  validatePackageDescription,
   validateAbout,
   validateBio,
-  validateServiceName,
   validateFile,
+  validateLanguages,
+  validateLocation,
+  validatePackageDescription,
+  validatePackageTopic,
+  validateServiceName,
 } from "./ValidationsPart";
 
 const languageOptions = language.map((option) => ({
@@ -123,21 +123,26 @@ const LawyerLogin = ({ intl }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   // const [amount,setAmount] = useState(1000);
 
-//   const [services, setServices] = useState([
-//     { serviceName: "", description: "", headline: "", amount: 1000 },
-//   ]);
-//  const handleSliderChange = (index, value) => {
-//   setServices((prevServices) => {
-//     const newServices = [...prevServices];
-//     newServices[index] = { ...newServices[index], amount: value };
-//     return newServices;
-//   });
-// };
-const [services, setServices] = useState([{ serviceName: "", headline: "", description: "", amount: 1000 }]);
+  //   const [services, setServices] = useState([
+  //     { serviceName: "", description: "", headline: "", amount: 1000 },
+  //   ]);
+  //  const handleSliderChange = (index, value) => {
+  //   setServices((prevServices) => {
+  //     const newServices = [...prevServices];
+  //     newServices[index] = { ...newServices[index], amount: value };
+  //     return newServices;
+  //   });
+  // };
+  const [services, setServices] = useState([
+    { serviceName: "", headline: "", description: "", amount: 1000 },
+  ]);
 
-const addService = () => {
-  setServices([...services, { serviceName: "", headline: "", description: "", amount: 1000 }]);
-};
+  const addService = () => {
+    setServices([
+      ...services,
+      { serviceName: "", headline: "", description: "", amount: 1000 },
+    ]);
+  };
 
   const lawyerAboutUrl = `${baseUrl}/api/lawyer/about`;
   const lawyerProfileUrl = `${baseUrl}/api/lawyer/profile`;
@@ -153,9 +158,8 @@ const addService = () => {
     try {
       const formData = new FormData();
       formData.append("image", file1);
-  
-      
-       await axios.post(lawyerImagePostUrl, formData, {
+
+      await axios.post(lawyerImagePostUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -164,7 +168,7 @@ const addService = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const postDataAbout = async (data) => {
     try {
@@ -198,10 +202,10 @@ const addService = () => {
   //       serviceName: service.serviceName,
   //       headline: service.headline,
   //       description: service.description,
-  //       amount: service.amount, 
+  //       amount: service.amount,
   //     })),
   //   };
-  
+
   //   try {
   //     const response = await axios.post(packageUrl, payload, {
   //       headers: {
@@ -291,22 +295,17 @@ const addService = () => {
   };
   const postDataExperience = async (services1) => {
     try {
-      const response = await axios.post(
-        packageUrl,
-         services1 ,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.post(packageUrl, services1, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
   const [tooltipOpen, setTooltipOpen] = useState(false);
-
 
   const { messages } = intl;
   return (
@@ -364,7 +363,11 @@ const addService = () => {
                                 // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
                               }
                               className="mx-2 rounded-circle img-thumbnail border"
-                              style={{ width: "70px", height: "70px", objectFit: "cover"  }}
+                              style={{
+                                width: "70px",
+                                height: "70px",
+                                objectFit: "cover",
+                              }}
                               alt="img"
                             />
                           </Col>
@@ -493,6 +496,8 @@ const addService = () => {
                           value={topicsTag}
                           onChange={handleTopicsTagsChange}
                           inputProps={{ placeholder: "Add topics " }}
+                          addOnBlur
+                          addKeys={[13, 188]}
                         />
                         {errors.topics && touched.topics && (
                           <div className="invalid-feedback d-block">
@@ -547,11 +552,20 @@ const addService = () => {
                 </Formik>
               </div>
             </Step>
-            <Step id="step3" name="Services" >
+            <Step id="step3" name="Services">
               <div className="wizard-basic-step">
                 <Formik
                   innerRef={forms[2]}
-                  initialValues={{ services: [{ serviceName: "", headline: "", description: "", amount: 1000 }] }}
+                  initialValues={{
+                    services: [
+                      {
+                        serviceName: "",
+                        headline: "",
+                        description: "",
+                        amount: 1000,
+                      },
+                    ],
+                  }}
                   onSubmit={() => {
                     postDataExperience(services);
                     console.log("my services", services);
@@ -561,23 +575,34 @@ const addService = () => {
                 >
                   {({ errors, touched }) => (
                     <Form className="av-tooltip tooltip-label-right my-4">
-                    <Alert color="primary">
-                      <strong>Almost there!</strong> <br /> You&apos;re just one last step away from being a lawyer and connecting with mentees all over the world! In this step, show off your accomplishments and how you can help others.
-                      <br />
-                      <br /> Many of these fields are optional, but will help us get better insights into your work - and therefore exponentially increase your chances. They also give you a jumpstart once you&apos;re a lawyer.
-                    </Alert>
-            
-                    {services.map((service, index) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div key={index}>
-                        <div  className="text-right">
-                        {/* <Button outline className="icon-button" onClick={() => removeService(index)}>
+                      <Alert color="primary">
+                        <strong>Almost there!</strong> <br /> You&apos;re just
+                        one last step away from being a lawyer and connecting
+                        with mentees all over the world! In this step, show off
+                        your accomplishments and how you can help others.
+                        <br />
+                        <br /> Many of these fields are optional, but will help
+                        us get better insights into your work - and therefore
+                        exponentially increase your chances. They also give you
+                        a jumpstart once you&apos;re a lawyer.
+                      </Alert>
+
+                      {services.map((service, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div key={index}>
+                          <div className="text-right">
+                            {/* <Button outline className="icon-button" onClick={() => removeService(index)}>
                               <i className="simple-icon-close" />
                             </Button> */}
 
                             <span>
-                              <Button id="close" outline className="icon-button" onClick={() => removeService(index)}>
-                              <i className="iconsminds-close" />
+                              <Button
+                                id="close"
+                                outline
+                                className="icon-button"
+                                onClick={() => removeService(index)}
+                              >
+                                <i className="iconsminds-close" />
                               </Button>
                               <Tooltip
                                 placement="left"
@@ -586,101 +611,131 @@ const addService = () => {
                                 toggle={() => setTooltipOpen(!tooltipOpen)}
                               >
                                 <PopoverBody> Remove service</PopoverBody>
-                              
                               </Tooltip>
                             </span>
-                            </div>
-                        <Row>
-                          <Col md={12}>
-                            <FormGroup className="error-l-75">
-                              <Label>Service Name*</Label>
-                              <Input
-                                className="form-control"
-                                name={`services[${index}].serviceName`}
-                                value={service.serviceName}
-                                onChange={(e) => handleInputChange(index, "serviceName", e.target.value)}
-                                validate={validateServiceName}
-                              />
-                              {errors.services?.[index]?.serviceName && touched.services?.[index]?.serviceName && (
-                                <div className="invalid-feedback d-block">
-                                  {errors.services[index].serviceName}
-                                </div>
-                              )}
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col md={12}>
-                            <FormGroup>
-                              <Label for={`services[${index}].headline`}>Headline*</Label>
-                              <Input
-                                name={`services[${index}].headline`}
-                                id={`services[${index}].headline`}
-                                className="form-control"
-                                value={service.headline}
-                                onChange={(e) => handleInputChange(index, "headline", e.target.value)}
-                                validate={validatePackageTopic}
-                              />
-                              {errors.services?.[index]?.headline && touched.services?.[index]?.headline && (
-                                <div className="invalid-feedback d-block">
-                                  {errors.services[index].headline}
-                                </div>
-                              )}
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col md={12}>
-                            <FormGroup>
-                              <Label for={`services[${index}].description`}>Description*</Label>
-                              <Input
-                                type="textarea"
-                                name={`services[${index}].description`}
-                                id={`services[${index}].description`}
-                                className="form-control"
-                                value={service.description}
-                                onChange={(e) => handleInputChange(index, "description", e.target.value)}
-                                validate={validatePackageDescription}
-                              />
-                              {errors.services?.[index]?.description && touched.services?.[index]?.description && (
-                                <div className="invalid-feedback d-block">
-                                  {errors.services[index].description}
-                                </div>
-                              )}
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col md={12}>
-                            <FormGroup className="error-l-75">
-                              <Label>Amount*</Label>
-                              <SliderTooltip
-                                min={0}
-                                max={500000}
-                                defaultValue={service.amount}
-                                className="mb-5"
-                                step={500}
-                                value={service.amount}
-                                onChange={(value) => handleInputChange(index, "amount", value)}
-                              />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Row>
-                          {/* <Col md={12}>
+                          </div>
+                          <Row>
+                            <Col md={12}>
+                              <FormGroup className="error-l-75">
+                                <Label>Service Name*</Label>
+                                <Input
+                                  className="form-control"
+                                  name={`services[${index}].serviceName`}
+                                  value={service.serviceName}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "serviceName",
+                                      e.target.value
+                                    )
+                                  }
+                                  validate={validateServiceName}
+                                />
+                                {errors.services?.[index]?.serviceName &&
+                                  touched.services?.[index]?.serviceName && (
+                                    <div className="invalid-feedback d-block">
+                                      {errors.services[index].serviceName}
+                                    </div>
+                                  )}
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md={12}>
+                              <FormGroup>
+                                <Label for={`services[${index}].headline`}>
+                                  Headline*
+                                </Label>
+                                <Input
+                                  name={`services[${index}].headline`}
+                                  id={`services[${index}].headline`}
+                                  className="form-control"
+                                  value={service.headline}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "headline",
+                                      e.target.value
+                                    )
+                                  }
+                                  validate={validatePackageTopic}
+                                />
+                                {errors.services?.[index]?.headline &&
+                                  touched.services?.[index]?.headline && (
+                                    <div className="invalid-feedback d-block">
+                                      {errors.services[index].headline}
+                                    </div>
+                                  )}
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md={12}>
+                              <FormGroup>
+                                <Label for={`services[${index}].description`}>
+                                  Description*
+                                </Label>
+                                <Input
+                                  type="textarea"
+                                  name={`services[${index}].description`}
+                                  id={`services[${index}].description`}
+                                  className="form-control"
+                                  value={service.description}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "description",
+                                      e.target.value
+                                    )
+                                  }
+                                  validate={validatePackageDescription}
+                                />
+                                {errors.services?.[index]?.description &&
+                                  touched.services?.[index]?.description && (
+                                    <div className="invalid-feedback d-block">
+                                      {errors.services[index].description}
+                                    </div>
+                                  )}
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md={12}>
+                              <FormGroup className="error-l-75">
+                                <Label>Amount*</Label>
+                                <SliderTooltip
+                                  min={0}
+                                  max={500000}
+                                  defaultValue={service.amount}
+                                  className="mb-5"
+                                  step={500}
+                                  value={service.amount}
+                                  onChange={(value) =>
+                                    handleInputChange(index, "amount", value)
+                                  }
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            {/* <Col md={12}>
                             <Button color="primary" className="my-3" onClick={() => removeService(index)}>
                               Remove Service
                             </Button>
                           </Col> */}
-                        </Row>
-                        <hr />
-                      </div>
-                    ))}
-            
-                    <Button color="primary" className="my-5" onClick={addService}>
-                      Add more services
-                    </Button>
-                  </Form>
+                          </Row>
+                          <hr />
+                        </div>
+                      ))}
+
+                      <Button
+                        color="primary"
+                        className="my-5"
+                        onClick={addService}
+                      >
+                        Add more services
+                      </Button>
+                    </Form>
                   )}
                 </Formik>
               </div>

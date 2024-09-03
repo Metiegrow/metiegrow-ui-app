@@ -17,8 +17,8 @@ const quillModules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
-    ["clean"],
+    // ["link", "image"],
+    // ["clean"],
   ],
 };
 const quillFormats = [

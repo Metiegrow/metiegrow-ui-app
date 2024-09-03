@@ -72,7 +72,6 @@ const ApplyAsMentor = () => {
     image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
-  const [inputValue, setInputValue] = useState('');
   const [certificateInputValue, setCertificateInputValue] = useState("");
 
   useEffect(() => {
@@ -402,50 +401,35 @@ const ApplyAsMentor = () => {
     setSkillsTag(newSkills);
   };
 
-  const handleChangeInput = (value) => {
-    if (value.endsWith(',')) {
-      const newTag = value.slice(0, -1).trim();
-      if (newTag && !skillsTag.includes(newTag)) {
-        setSkillsTag([...skillsTag, newTag]);
-      }
-      setInputValue('');
-    } else {
-      setInputValue(value);
-    }
-  };
-
-  const handleAddTag = () => {
-    if (inputValue.trim() && !skillsTag.includes(inputValue.trim())) {
-      setSkillsTag([...skillsTag, inputValue.trim()]);
-      setInputValue('');
-    }
-  };
-
   const handleCertificationsChange = (newCertifications) => {
     // setSkillError(false);
     setCertificationsTag(newCertifications);
   };
 
-
   const handleCertificateChangeInput = (value) => {
-    if (value.endsWith(',')) {
+    if (value.endsWith(",")) {
       const newTag = value.slice(0, -1).trim();
       if (newTag && !certificationsTag.includes(newTag)) {
         setCertificationsTag([...certificationsTag, newTag]);
       }
-      setCertificateInputValue('');
+      setCertificateInputValue("");
     } else {
       setCertificateInputValue(value);
     }
   };
 
   const handleAddCertificateTag = () => {
-    if (certificateInputValue.trim() && !certificationsTag.includes(certificateInputValue.trim())) {
-      setCertificationsTag([...certificationsTag, certificateInputValue.trim()]);
-      setCertificateInputValue('');
+    if (
+      certificateInputValue.trim() &&
+      !certificationsTag.includes(certificateInputValue.trim())
+    ) {
+      setCertificationsTag([
+        ...certificationsTag,
+        certificateInputValue.trim(),
+      ]);
+      setCertificateInputValue("");
     }
   };
-
 
   const handleDashboardClick = () => {
     history.push(`${adminRoot}/dashboard`);
@@ -1173,7 +1157,7 @@ const ApplyAsMentor = () => {
                           <span className="bounce2" />
                           <span className="bounce3" />
                         </span>
-                        <span className="label">Submit</span>
+                        <span className="label">Next</span>
                       </Button>
                     </Col>
                   </Row>
@@ -1220,35 +1204,18 @@ const ApplyAsMentor = () => {
                         <FormGroup>
                           <Label for="skills">Skills*</Label>
 
-                          {/* <TagsInput
+                          <TagsInput
                             required
                             value={skillsTag}
                             onChange={handleTagsChange}
                             inputProps={{ placeholder: "Add skills " }}
-                            // validate={validateSkills}
-                          /> */}
-                          <TagsInput
-                            value={skillsTag}
-                            onChange={handleTagsChange}
-                            renderInput={({ addTag, ...inputProps }) => {
-                              const { onChange, value, ...other } = inputProps;
-                              return (
-                                <input
-                                  {...other}
-                                  value={inputValue}
-                                  onChange={(e) => handleChangeInput(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      handleAddTag();
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                  placeholder="Add skills"
-                                />
-                              );
-                            }}
+                            addOnBlur
+                            addKeys={[13, 188]}
                           />
-                          <FormText>Add skill and press Enter or Comma </FormText>
+
+                          <FormText>
+                            Add skill and press Enter or Comma{" "}
+                          </FormText>
                           <FormText color="muted">
                             Describe your expertise to connect with mentors who
                             have similar interests.
@@ -1295,27 +1262,31 @@ const ApplyAsMentor = () => {
                       // validate={validateSkills}
                     /> */}
                     <TagsInput
-                            value={certificationsTag}
-                            onChange={handleCertificationsChange}
-                            renderInput={({ addTag, ...inputProps }) => {
-                              const { onChange, value, ...other } = inputProps;
-                              return (
-                                <input
-                                  {...other}
-                                  value={certificateInputValue}
-                                  onChange={(e) => handleCertificateChangeInput(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      handleAddCertificateTag();
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                  placeholder="Add Certification"
-                                />
-                              );
+                      value={certificationsTag}
+                      onChange={handleCertificationsChange}
+                      renderInput={({ addTag, ...inputProps }) => {
+                        const { onChange, value, ...other } = inputProps;
+                        return (
+                          <input
+                            {...other}
+                            value={certificateInputValue}
+                            onChange={(e) =>
+                              handleCertificateChangeInput(e.target.value)
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                handleAddCertificateTag();
+                                e.preventDefault();
+                              }
                             }}
+                            placeholder="Add Certification"
                           />
-                    <FormText>Add Certification and press Enter or Comma </FormText>
+                        );
+                      }}
+                    />
+                    <FormText>
+                      Add Certification and press Enter or Comma{" "}
+                    </FormText>
                   </FormGroup>
                   <FormGroup>
                     <Label>Goal*</Label>

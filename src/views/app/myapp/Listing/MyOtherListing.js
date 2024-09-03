@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Colxx } from "components/common/CustomBootstrap";
+import { baseUrl } from "constants/defaultValues";
+import Pagination from "containers/pages/Pagination";
+import { Field, Formik } from "formik";
+import { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
+import { NavLink } from "react-router-dom";
 import {
-  Card,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  Row,
+  Card,
   Col,
+  Form,
   FormGroup,
   Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
 } from "reactstrap";
-import { NavLink } from "react-router-dom";
-import { Colxx } from "components/common/CustomBootstrap";
-import axios from "axios";
-import { Field, Formik } from "formik";
-import ReactQuill from "react-quill";
-import Pagination from "containers/pages/Pagination";
-import { baseUrl } from "constants/defaultValues";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import ToasterComponent from "../notifications/ToasterComponent";
 
@@ -31,8 +31,8 @@ const quillModules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
-    ["clean"],
+    // ["link", "image"],
+    // ["clean"],
   ],
 };
 const quillFormats = [

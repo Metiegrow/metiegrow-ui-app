@@ -1,13 +1,13 @@
-import React, { useState } from "react";
 import { Colxx } from "components/common/CustomBootstrap";
-import { Row, Card, Button, FormGroup, Label, Col, Form } from "reactstrap";
+import { useState } from "react";
 import ReactQuill from "react-quill";
+import { Button, Card, Col, Form, FormGroup, Label, Row } from "reactstrap";
 
-import "react-quill/dist/quill.snow.css";
-import "react-quill/dist/quill.bubble.css";
-import { Field, Formik } from "formik";
-import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
+import { Field, Formik } from "formik";
+import "react-quill/dist/quill.bubble.css";
+import "react-quill/dist/quill.snow.css";
 
 const quillModules = {
   toolbar: [
@@ -18,8 +18,8 @@ const quillModules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
-    ["clean"],
+    // ["link", "image"],
+    // ["clean"],
   ],
 };
 const quillFormats = [
@@ -170,25 +170,25 @@ const OtherPosting = ({ closeModal }) => {
                 >
                   Post
                 </Button> */}
-                    <Button
-                      color="primary"
-                      // className="py-2"
-                      className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
-                        isLoading ? "show-spinner" : ""
-                      }`}
-                      // disabled={!isValid}
-                      onClick={() => {
-                        handleSubmit();
-                        // closeModal();
-                      }}
-                    >
-                      <span className="spinner d-inline-block">
-                        <span className="bounce1" />
-                        <span className="bounce2" />
-                        <span className="bounce3" />
-                      </span>
-                      <span className="label">Post</span>
-                    </Button>
+                  <Button
+                    color="primary"
+                    // className="py-2"
+                    className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
+                      isLoading ? "show-spinner" : ""
+                    }`}
+                    // disabled={!isValid}
+                    onClick={() => {
+                      handleSubmit();
+                      // closeModal();
+                    }}
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">Post</span>
+                  </Button>
                 </div>
               </Form>
             )}

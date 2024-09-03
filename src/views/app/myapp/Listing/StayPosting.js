@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
 import { Colxx } from "components/common/CustomBootstrap";
+import { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
 import {
-  Row,
-  Card,
   Button,
-  FormGroup,
-  Label,
+  Card,
   Col,
   Form,
+  FormGroup,
   Input,
   InputGroup,
   InputGroupAddon,
+  Label,
+  Row,
 } from "reactstrap";
-import ReactQuill from "react-quill";
 
-import "react-quill/dist/quill.snow.css";
-import "react-quill/dist/quill.bubble.css";
-import { Field, Formik } from "formik";
-import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
+import { Field, Formik } from "formik";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "react-quill/dist/quill.bubble.css";
+import "react-quill/dist/quill.snow.css";
 import {
   ApartmentTypeData,
   BHKData,
@@ -39,8 +39,8 @@ const quillModules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
-    ["clean"],
+    // ["link", "image"],
+    // ["clean"],
   ],
 };
 const quillFormats = [
@@ -128,7 +128,7 @@ const StayPosting = ({ closeModal }) => {
         expectedDeposit,
         availableFrom,
         monthlyMaintenance,
-        maintenanceAmount : monthlyMaintenance ? maintenanceAmount : null,
+        maintenanceAmount: monthlyMaintenance ? maintenanceAmount : null,
         parking,
         contact,
         description,
@@ -155,7 +155,6 @@ const StayPosting = ({ closeModal }) => {
     // console.log(timestampInSeconds);
     setAvailableFrom(timestampInMilliseconds);
   };
-  
 
   return (
     <div>
@@ -401,7 +400,7 @@ const StayPosting = ({ closeModal }) => {
                         placeholder="Enter Amount"
                         disabled={!monthlyMaintenance}
                         //   value={}
-                        value={maintenanceAmount || ''}
+                        value={maintenanceAmount || ""}
                         onChange={(e) => setMaintenanceAmount(e.target.value)}
                         //   className="col-12 col-md-3"
                       />
