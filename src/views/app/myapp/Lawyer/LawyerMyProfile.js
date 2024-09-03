@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  // NavLink,
-  Row,
-  Input,
-  Label,
-  InputGroup,
-  InputGroupAddon,
-  Col,
-  Form,
-  Card,
-  FormGroup,
-} from "reactstrap";
 import axios from "axios";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { Colxx } from "components/common/CustomBootstrap";
 import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
-import { ReactSortable } from "react-sortablejs";
+import { useEffect, useState } from "react";
 import Select from "react-select";
-import { Colxx } from "components/common/CustomBootstrap";
-import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { ReactSortable } from "react-sortablejs";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  Label,
+  // NavLink,
+  Row,
+} from "reactstrap";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
 import ToasterComponent from "../notifications/ToasterComponent";
@@ -46,7 +46,6 @@ const LawyerMyProfile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const token = localStorage.getItem("tokenRes");
-
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
   const imageEditUrl = `${baseUrl}/api/lawyer/lawyer-profile-images`;
@@ -83,21 +82,19 @@ const LawyerMyProfile = () => {
     try {
       const formData = new FormData();
       formData.append("image", selectedFile);
-  
+
       const response = await axios.post(imageEditUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      ToasterComponent('success', response.data.statuses);
-      setTimeout(() => {
-      }, 2000);
+      ToasterComponent("success", response.data.statuses);
+      setTimeout(() => {}, 2000);
       // console.log(`resres ${response.status}`);
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -105,20 +102,17 @@ const LawyerMyProfile = () => {
     setFile1(file);
     // if (file) {
     //   const reader = new FileReader();
-  
+
     //   reader.onloadend = () => {
     //     const base64Image = reader.result;
     //     setSelectedFileBase64(base64Image);
-       
-  
+
     //     // setAboutField({ ...aboutField, image: base64Image });
     //   };
-  
+
     //   reader.readAsDataURL(file);
     // }
   };
-
- 
 
   const updateMEntorProfile = async () => {
     try {
@@ -139,9 +133,16 @@ const LawyerMyProfile = () => {
         },
       });
       response.data.statuses.forEach((status) => {
-         NotificationManager.success(status.message, 'Great!', 3000, null, null, '');
-     });
-     setIsPosted(!isPosted)
+        NotificationManager.success(
+          status.message,
+          "Great!",
+          3000,
+          null,
+          null,
+          ""
+        );
+      });
+      setIsPosted(!isPosted);
       // console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile", error);
@@ -170,18 +171,18 @@ const LawyerMyProfile = () => {
   };
   const handleSaveButton = () => {
     if (topic.length === 0) {
-      setTopicValidationMessage('At least one topic is required.');
+      setTopicValidationMessage("At least one topic is required.");
     } else {
-    setIsEditingButton(false);
-    updateMEntorProfile();
+      setIsEditingButton(false);
+      updateMEntorProfile();
     }
   };
 
   const handleCancelButton = () => {
     if (topic.length === 0) {
-      setTopicValidationMessage('At least one topic is required.');
+      setTopicValidationMessage("At least one topic is required.");
     } else {
-    setIsEditingButton(false);
+      setIsEditingButton(false);
     }
   };
 
@@ -192,10 +193,9 @@ const LawyerMyProfile = () => {
   const handleSave = () => {
     setIsEditing(false);
     updateMEntorProfile();
-    if(selectedFile){
+    if (selectedFile) {
       postImageData();
     }
-    
   };
 
   const handleCancel = () => {
@@ -209,10 +209,10 @@ const LawyerMyProfile = () => {
   const handleAddTopics = (newTopics) => {
     if (!newTopics.trim()) {
       setTopicValidationMessage("Topic cannot be empty");
-  } else {
-    setTopicValidationMessage("")
-    setTopic([...topic, newTopics]);
-  }
+    } else {
+      setTopicValidationMessage("");
+      setTopic([...topic, newTopics]);
+    }
   };
   const handleRemoveTopics = (index) => {
     setTopic(topic.filter((_, i) => i !== index));
@@ -223,7 +223,6 @@ const LawyerMyProfile = () => {
   //       window.open(linkedinUrl, "_blank");
   //     }
   //   };
-
 
   // const handleFileChange = (event) => {
   //   setFile(event.target.files[0]);
@@ -273,7 +272,11 @@ const LawyerMyProfile = () => {
                   <img
                     src={`${baseUrl}/${imageUrl}`}
                     className="mx-2 rounded-circle img-thumbnail border"
-                    style={{ width: "110px", height: "110px", objectFit: "cover"  }}
+                    style={{
+                      width: "110px",
+                      height: "110px",
+                      objectFit: "cover",
+                    }}
                     alt="img"
                   />
                 )}
@@ -373,9 +376,9 @@ const LawyerMyProfile = () => {
                             <option disabled value="">
                               Select Location
                             </option>
-                            {country.map((option,index) => (
+                            {country.map((option, index) => (
                               <option
-                              // eslint-disable-next-line react/no-array-index-key
+                                // eslint-disable-next-line react/no-array-index-key
                                 key={index}
                                 value={option.iso_code}
                               >
@@ -432,7 +435,11 @@ const LawyerMyProfile = () => {
                 </Col>
 
                 <Col lg="5" md="12" className="mt-4 ml-4">
-                {(languages.length > 0 || isEditingButton) && <h2 className="mx-2 font-weight-semibold">Languages known</h2>}
+                  {(languages.length > 0 || isEditingButton) && (
+                    <h2 className="mx-2 font-weight-semibold">
+                      Languages known
+                    </h2>
+                  )}
                   {isEditingButton ? (
                     <>
                       {languages.map((lang, index) => (
@@ -492,9 +499,9 @@ const LawyerMyProfile = () => {
                         >
                           {topic.map((newTopics, index) => (
                             <Button
-                            // eslint-disable-next-line react/no-array-index-key
+                              // eslint-disable-next-line react/no-array-index-key
                               key={index}
-                              color={index < 3 ? 'primary' : 'light'}
+                              color={index < 3 ? "primary" : "light"}
                               className=" mb-2 font-weight-semibold mx-2"
                               size="xs"
                               onClick={() => handleRemoveTopics(index)}
@@ -503,7 +510,10 @@ const LawyerMyProfile = () => {
                             </Button>
                           ))}
                         </ReactSortable>
-                        <p className="text-muted ml-2">Drag topic to set top 3 (the top 3 topics will be displayed on lawyer cards)</p>
+                        <p className="text-muted ml-2">
+                          Drag topic to set top 3 (the top 3 topics will be
+                          displayed on lawyer cards)
+                        </p>
                         <InputGroup className="mb-3">
                           <Input
                             type="text"
@@ -531,17 +541,17 @@ const LawyerMyProfile = () => {
                           </InputGroupAddon>
                         </InputGroup>
                         {topicValidationMessage && (
-                      <div className="invalid-feedback d-block">
-                        {topicValidationMessage}
-                      </div>
-                    )}
+                          <div className="invalid-feedback d-block">
+                            {topicValidationMessage}
+                          </div>
+                        )}
                       </>
                     ) : (
-                      topic.map((newTopics,index) => (
+                      topic.map((newTopics, index) => (
                         <Button
-                        // eslint-disable-next-line react/no-array-index-key
+                          // eslint-disable-next-line react/no-array-index-key
                           key={index}
-                          color={index < 3 ? 'primary' : 'light'}
+                          color={index < 3 ? "primary" : "light"}
                           className="mb-2 font-weight-semibold mx-2"
                           size="xs"
                         >

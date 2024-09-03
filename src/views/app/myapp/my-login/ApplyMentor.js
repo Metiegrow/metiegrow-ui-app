@@ -38,7 +38,6 @@ import {
   validateLinkedinUrl,
   validateLocation,
   validateReasonForMentor,
-  // validateSkills,
 } from "./validation";
 
 import ToasterComponent from "../notifications/ToasterComponent";
@@ -67,9 +66,6 @@ const ApplyMentor = () => {
     image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
-  const [inputValue, setInputValue] = useState('');
-  const [toolsInputValue, setToolsInputValue] = useState('');
-
 
   useEffect(() => {
     const status = localStorage.getItem("status");
@@ -363,50 +359,11 @@ const ApplyMentor = () => {
     // setSkillError(false);
     setSkillsTag(newSkills);
   };
-  const handleChangeInput = (value) => {
-    if (value.endsWith(',')) {
-      const newTag = value.slice(0, -1).trim();
-      if (newTag && !skillsTag.includes(newTag)) {
-        setSkillsTag([...skillsTag, newTag]);
-      }
-      setInputValue('');
-    } else {
-      setInputValue(value);
-    }
-  };
-
-  const handleAddTag = () => {
-    if (inputValue.trim() && !skillsTag.includes(inputValue.trim())) {
-      setSkillsTag([...skillsTag, inputValue.trim()]);
-      setInputValue('');
-    }
-  };
   const handleToolsTagsChange = (newTools) => {
     setSkillError(false);
     setToolsTag(newTools);
   };
 
-
-  const handleToolsChangeInput = (value) => {
-    if (value.endsWith(',')) {
-      const newTag = value.slice(0, -1).trim();
-      if (newTag && !toolsTag.includes(newTag)) {
-        setToolsTag([...toolsTag, newTag]);
-      }
-      setToolsInputValue('');
-    } else {
-      setToolsInputValue(value);
-    }
-  };
-
-
-  const handleAddToolsTag = () => {
-    if (toolsInputValue.trim() && !toolsTag.includes(toolsInputValue.trim())) {
-      setToolsTag([...toolsTag, toolsInputValue.trim()]);
-      setToolsInputValue('');
-    }
-  };
-  
   const history = useHistory();
   const handleMySlotsClick = () =>
     history.push(`${adminRoot}/calendar/mentor/appointment`);
@@ -745,49 +702,13 @@ const ApplyMentor = () => {
 
                   <FormGroup>
                     <Label for="skills">Skills*</Label>
-                    {/* <Field
-                      type="text"
-                      name="skills"
-                      id="skills"
-                      className="form-control"
-                      placeholder="Enter your skills (comma-separated)"
-                      validate={validateSkills}
-                      onChange={(e) => {
-                        const skillArray = e.target.value
-                          .split(",")
-                          .map((skill) => skill.trim());
-                        setFieldValue("skills", skillArray);
-                      }}
-                      autoComplete="off"
-                    /> */}
-{/* 
                     <TagsInput
                       value={skillsTag}
                       onChange={handleTagsChange}
                       inputProps={{ placeholder: "Add skills " }}
-                      validate={validateSkills}
-                    /> */}
-                     <TagsInput
-                            value={skillsTag}
-                            onChange={handleTagsChange}
-                            renderInput={({ addTag, ...inputProps }) => {
-                              const { onChange, value, ...other } = inputProps;
-                              return (
-                                <input
-                                  {...other}
-                                  value={inputValue}
-                                  onChange={(e) => handleChangeInput(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      handleAddTag();
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                  placeholder="Add skills"
-                                />
-                              );
-                            }}
-                          />
+                      addOnBlur
+                      addKeys={[13, 188]}
+                    />
                     {skillError && (
                       <div className="invalid-feedback d-block">
                         {skillErrorMessage}
@@ -798,40 +719,19 @@ const ApplyMentor = () => {
                       Describe your expertise to connect with mentees who have
                       similar interests.
                       <br />
-                      Comma-separated list of your skills 
-                      (keep it below 10). Mentees will use this to find you.
+                      Comma-separated list of your skills (keep it below 10).
+                      Mentees will use this to find you.
                     </FormText>
                   </FormGroup>
                   <FormGroup>
                     <Label for="tools">Tools*</Label>
-
-                    {/* <TagsInput
+                    <TagsInput
                       value={toolsTag}
                       onChange={handleToolsTagsChange}
                       inputProps={{ placeholder: "Add Tools " }}
-                      // validate={validateSkills}
-                    /> */}
-                    <TagsInput
-                            value={toolsTag}
-                            onChange={handleToolsTagsChange}
-                            renderInput={({ addTag, ...inputProps }) => {
-                              const { onChange, value, ...other } = inputProps;
-                              return (
-                                <input
-                                  {...other}
-                                  value={toolsInputValue}
-                                  onChange={(e) => handleToolsChangeInput(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      handleAddToolsTag();
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                  placeholder="Add Tools"
-                                />
-                              );
-                            }}
-                          />
+                      addOnBlur
+                      addKeys={[13, 188]}
+                    />
                     {skillError && (
                       <div className="invalid-feedback d-block">
                         {/* {skillErrorMessage} */}

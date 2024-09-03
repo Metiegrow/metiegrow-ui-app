@@ -1,22 +1,22 @@
-import React, { useState } from "react";
 import { Colxx } from "components/common/CustomBootstrap";
+import { useState } from "react";
+import ReactQuill from "react-quill";
 import {
-  Row,
-  Card,
   Button,
-  FormGroup,
-  Label,
+  Card,
   Col,
   Form,
+  FormGroup,
   FormText,
+  Label,
+  Row,
 } from "reactstrap";
-import ReactQuill from "react-quill";
 
-import "react-quill/dist/quill.snow.css";
-import "react-quill/dist/quill.bubble.css";
-import { Field, Formik } from "formik";
-import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
+import { Field, Formik } from "formik";
+import "react-quill/dist/quill.bubble.css";
+import "react-quill/dist/quill.snow.css";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
 import { EmploymentTypeData, WorkPlaceTypeData } from "./ListingData";
@@ -30,8 +30,8 @@ const quillModules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
-    ["clean"],
+    // ["link", "image"],
+    // ["clean"],
   ],
 };
 const quillFormats = [
@@ -89,8 +89,6 @@ const JobPosting = ({ closeModal }) => {
   const [description, setDescription] = useState("");
   const [skillsTag, setSkillsTag] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-
 
   const url = `${baseUrl}/api/posts/job-post/`;
 
@@ -130,25 +128,6 @@ const JobPosting = ({ closeModal }) => {
   const handleTagsChange = (newSkills) => {
     // setSkillError(false);
     setSkillsTag(newSkills);
-  };
-
-  const handleChangeInput = (value) => {
-    if (value.endsWith(',')) {
-      const newTag = value.slice(0, -1).trim();
-      if (newTag && !skillsTag.includes(newTag)) {
-        setSkillsTag([...skillsTag, newTag]);
-      }
-      setInputValue('');
-    } else {
-      setInputValue(value);
-    }
-  };
-
-  const handleAddTag = () => {
-    if (inputValue.trim() && !skillsTag.includes(inputValue.trim())) {
-      setSkillsTag([...skillsTag, inputValue.trim()]);
-      setInputValue('');
-    }
   };
 
   return (
@@ -384,33 +363,34 @@ const JobPosting = ({ closeModal }) => {
                       autoComplete="off"
                     /> */}
 
-                  {/* <TagsInput
+                  <TagsInput
                     value={skillsTag}
                     onChange={handleTagsChange}
                     inputProps={{ placeholder: "Add skills " }}
-                    // validate={validateSkills}
+                    addOnBlur
+                    addKeys={[13, 188]}
+                  />
+                  {/* <TagsInput
+                    value={skillsTag}
+                    onChange={handleTagsChange}
+                    renderInput={({ addTag, ...inputProps }) => {
+                      const { onChange, value, ...other } = inputProps;
+                      return (
+                        <input
+                          {...other}
+                          value={inputValue}
+                          onChange={(e) => handleChangeInput(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleAddTag();
+                              e.preventDefault();
+                            }
+                          }}
+                          placeholder="Add skills"
+                        />
+                      );
+                    }}
                   /> */}
-                  <TagsInput
-                            value={skillsTag}
-                            onChange={handleTagsChange}
-                            renderInput={({ addTag, ...inputProps }) => {
-                              const { onChange, value, ...other } = inputProps;
-                              return (
-                                <input
-                                  {...other}
-                                  value={inputValue}
-                                  onChange={(e) => handleChangeInput(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      handleAddTag();
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                  placeholder="Add skills"
-                                />
-                              );
-                            }}
-                          />
                   {/* {skillError && (
                       <div className="invalid-feedback d-block">
                         {skillErrorMessage}

@@ -1,20 +1,20 @@
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
-  Container,
-  Row,
-  Col,
+  Badge,
   Button,
+  Card,
+  Col,
+  Container,
   Form,
   FormGroup,
-  Label,
   Input,
-  Card,
+  Label,
   Modal,
-  ModalHeader,
   ModalBody,
-  Badge,
+  ModalHeader,
+  Row,
   Spinner,
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
@@ -30,7 +30,7 @@ const LawyerJobNotes = ({ jobId }) => {
   const [editNoteId, setEditNoteId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
   const [editedText, setEditedText] = useState("");
-  const [update, setUpdate] = useState(false)
+  const [update, setUpdate] = useState(false);
   const [notsFetched, setNotesFetched] = useState(false);
   const [addNoteLoading, setAddNoteLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -51,10 +51,9 @@ const LawyerJobNotes = ({ jobId }) => {
         setNotesFetched(false);
       }
     };
-  
+
     fetchNotes();
   }, [update]);
-  
 
   const toggleAddModal = () => {
     setAddModal(!addModal);
@@ -75,7 +74,7 @@ const LawyerJobNotes = ({ jobId }) => {
         title: newTitle,
         details: newNote,
       };
-  
+
       try {
         const response = await axios.post(notesUrl, newNoteData);
         // const updatedNotes = [...notes, response.data];
@@ -83,42 +82,42 @@ const LawyerJobNotes = ({ jobId }) => {
         setUpdate(!update);
         toggleAddModal();
         setAddNoteLoading(false);
-      ToasterComponent('success', response.data.statuses);
+        ToasterComponent("success", response.data.statuses);
       } catch (error) {
-        if(error.response){
-          ToasterComponent('error', error.response.data.statuses);
-        } else{
+        if (error.response) {
+          ToasterComponent("error", error.response.data.statuses);
+        } else {
           console.error("Error adding note:", error);
         }
         setAddNoteLoading(false);
       }
-  
+
       setNewTitle("");
       setNewNote("");
     }
   };
-  
 
   const handleDeleteNote = async (id) => {
-    setDeleteLoading(prev => ({ ...prev, [id]: true }));
+    setDeleteLoading((prev) => ({ ...prev, [id]: true }));
     try {
-      const response = await axios.delete(`${baseUrl}/api/lawyer/job/notes/${id}`);
+      const response = await axios.delete(
+        `${baseUrl}/api/lawyer/job/notes/${id}`
+      );
       const updatedNotes = notes.filter((note) => note.id !== id);
       setNotes(updatedNotes);
       console.log(response);
       setUpdate(!update);
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
     } catch (error) {
-      if(error.response){
-        ToasterComponent('error', error.response.data.statuses);
-      } else{
+      if (error.response) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
         console.error("Error deleting note:", error);
       }
     } finally {
-      setDeleteLoading(prev => ({ ...prev, [id]: false }));
+      setDeleteLoading((prev) => ({ ...prev, [id]: false }));
     }
   };
-  
 
   const handleEditNote = (id) => {
     const noteToEdit = notes.find((note) => note.id === id);
@@ -134,37 +133,38 @@ const LawyerJobNotes = ({ jobId }) => {
       title: editedTitle,
       details: editedText,
     };
-  
+
     try {
-      const response = await axios.put(`${baseUrl}/api/lawyer/job/notes/${editNoteId}`, updatedNote);
+      const response = await axios.put(
+        `${baseUrl}/api/lawyer/job/notes/${editNoteId}`,
+        updatedNote
+      );
       // console.log(response);
-  
+
       const updatedNotes = notes.map((note) => {
         if (note.id === editNoteId) {
           return { ...note, title: editedTitle, text: editedText };
         }
         return note;
       });
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
       setSaveLoading(false);
       setNotes(updatedNotes);
       setUpdate(!update);
       toggleEditModal();
     } catch (error) {
       setSaveLoading(false);
-      if(error.response){
-        ToasterComponent('error', error.response.data.statuses);
-      } else{
+      if (error.response) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
         console.error("Error updating note:", error);
       }
-      
     }
   };
-  
 
   // const sortedNotes = [...notes].sort((a, b) => b.createdOn - a.createdOn);
 
-  const userName = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   return (
     <Container>
@@ -175,10 +175,16 @@ const LawyerJobNotes = ({ jobId }) => {
               {/* <h1 className="mb-4">Lawyer job notes</h1> */}
             </Col>
             <Col xs="auto">
-              <Button color="primary" onClick={toggleModal} size="sm" className="mt-4 header-icon notificationButton position-relative">
-                Notes {" "}
-                {/* <span className="count">{notes.length}</span> */}
-                <Badge  color="light" className=" ">{notes.length}</Badge>
+              <Button
+                color="primary"
+                onClick={toggleModal}
+                size="sm"
+                className="mt-4 header-icon notificationButton position-relative"
+              >
+                Notes {/* <span className="count">{notes.length}</span> */}
+                <Badge color="light" className=" ">
+                  {notes.length}
+                </Badge>
               </Button>
               {/* <Button color="primary" onClick={toggleModal} size="sm" className="header-icon notificationButton position-relative">
                 Notes
@@ -242,107 +248,111 @@ const LawyerJobNotes = ({ jobId }) => {
                         autoComplete="off"
                       />
                     </FormGroup>
-                    <Button type="submit" color="primary" block className={`btn-shadow btn-multiple-state ${
-                      addNoteLoading ? "show-spinner" : ""
-                    }`}>
+                    <Button
+                      type="submit"
+                      color="primary"
+                      block
+                      className={`btn-shadow btn-multiple-state ${
+                        addNoteLoading ? "show-spinner" : ""
+                      }`}
+                    >
                       <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                    Add Note
-                    </span>
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">Add Note</span>
                     </Button>
                   </Form>
                 </ModalBody>
               </Modal>
               {!notsFetched ? (
                 <div className="d-flex justify-content-center mt-4">
-                <Spinner color="primary" className="mb-1" />
-              </div>
+                  <Spinner color="primary" className="mb-1" />
+                </div>
+              ) : (
+                <Row>
+                  {notes.length === 0 ? (
+                    <Col className="mt-4 d-flex justify-content-center align-items-center">
+                      <h4 className="text-center">There are no notes.</h4>
+                    </Col>
                   ) : (
-              <Row>
-              {notes.length === 0 ? (
-                  <Col className="mt-4 d-flex justify-content-center align-items-center">
-                  <h4 className="text-center">There are no notes.</h4>
-                </Col>
-                ) : (
-                  notes.map((note) => (
-                  <>
-                  
-                  <Col key={note.id} xs={12} sm={12} lg={12}>
-                    <Card className="mt-3">
-                      <div className="p-3 d-flex flex-column">
-                        <Row className="">
-                          <Col xs="auto">
-                            <h5>{note.title}</h5>
-                          </Col>
-                            {userName === note.name && (
-                          <Col xs="auto" className="ml-auto" lg={2}>
-                            <Button
-                              outline
-                              onClick={() => handleEditNote(note.id)}
-                              color="primary"
-                              className="icon-button"
-                            >
-                              <i className="simple-icon-pencil" />
-                            </Button>
-                          </Col>
-                        )}
-                        </Row>
+                    notes.map((note) => (
+                      <>
+                        <Col key={note.id} xs={12} sm={12} lg={12}>
+                          <Card className="mt-3">
+                            <div className="p-3 d-flex flex-column">
+                              <Row className="">
+                                <Col xs="auto">
+                                  <h5>{note.title}</h5>
+                                </Col>
+                                {userName === note.name && (
+                                  <Col xs="auto" className="ml-auto" lg={2}>
+                                    <Button
+                                      outline
+                                      onClick={() => handleEditNote(note.id)}
+                                      color="primary"
+                                      className="icon-button"
+                                    >
+                                      <i className="simple-icon-pencil" />
+                                    </Button>
+                                  </Col>
+                                )}
+                              </Row>
 
-                        <p>{note.details}</p>
-                        <Row className="">
-                        <Col className="d-flex flex-column justify-content-end" lg={6}>
-                            <p className="text-muted mb-0">
-                              Created at -{" "}
-                              <TimestampConverter
-                                timeStamp={note.createdAt}
-                                format="datetime"
-                              />
-                            </p>
-                            {/* <p className="text-muted">
+                              <p>{note.details}</p>
+                              <Row className="">
+                                <Col
+                                  className="d-flex flex-column justify-content-end"
+                                  lg={6}
+                                >
+                                  <p className="text-muted mb-0">
+                                    Created at -{" "}
+                                    <TimestampConverter
+                                      timeStamp={note.createdAt}
+                                      format="datetime"
+                                    />
+                                  </p>
+                                  {/* <p className="text-muted">
                               Modified at -{" "}
                               <TimestampConverter
                                 timeStamp={note.modifiedAt}
                                 format="datetime"
                               />
                             </p> */}
-                          </Col>
-                          <Col className="d-flex flex-column justify-content-end">
-                            <p className="text-muted mb-0">
-                              Created by - {note.name}
-                            </p>
-                          </Col>
-                          {userName === note.name && (
-                          <Col className="" lg={2}>
-                              <Button
-                                outline
-                                onClick={() => handleDeleteNote(note.id)}
-                                color="danger"
-                                className="icon-button"
-                              >
-                                {!deleteLoading[note.id] ? (
-                                  <i className="simple-icon-trash" />
-                                ) : (
-                                  <Spinner size="sm" />
+                                </Col>
+                                <Col className="d-flex flex-column justify-content-end">
+                                  <p className="text-muted mb-0">
+                                    Created by - {note.name}
+                                  </p>
+                                </Col>
+                                {userName === note.name && (
+                                  <Col className="" lg={2}>
+                                    <Button
+                                      outline
+                                      onClick={() => handleDeleteNote(note.id)}
+                                      color="danger"
+                                      className="icon-button"
+                                    >
+                                      {!deleteLoading[note.id] ? (
+                                        <i className="simple-icon-trash" />
+                                      ) : (
+                                        <Spinner size="sm" />
+                                      )}
+                                    </Button>
+                                    {/* <Button color="primary" size="sm" onClick={() => handleEditNote(note.id)}>Edit</Button>{' '} */}
+                                    {/* <Button color="danger" size="sm" onClick={() => handleDeleteNote(note.id)}>Delete</Button> */}
+                                  </Col>
                                 )}
-                              </Button>
-                            {/* <Button color="primary" size="sm" onClick={() => handleEditNote(note.id)}>Edit</Button>{' '} */}
-                            {/* <Button color="danger" size="sm" onClick={() => handleDeleteNote(note.id)}>Delete</Button> */}
-                          </Col>
-                          )}
-                        </Row>
-                      </div>
-                    </Card>
-                  </Col>
-                  </>
-                ))
-              )}
-              </Row>
+                              </Row>
+                            </div>
+                          </Card>
+                        </Col>
+                      </>
+                    ))
                   )}
-
+                </Row>
+              )}
             </ModalBody>
           </Modal>
           <Modal
@@ -383,17 +393,20 @@ const LawyerJobNotes = ({ jobId }) => {
                     autoComplete="off"
                   />
                 </FormGroup>
-                <Button type="submit" color="primary" block className={`btn-shadow btn-multiple-state ${
-                      saveLoading ? "show-spinner" : ""
-                    }`}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  block
+                  className={`btn-shadow btn-multiple-state ${
+                    saveLoading ? "show-spinner" : ""
+                  }`}
+                >
                   <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    <span className="label">
-                    Save Changes
-                    </span>
+                    <span className="bounce1" />
+                    <span className="bounce2" />
+                    <span className="bounce3" />
+                  </span>
+                  <span className="label">Save Changes</span>
                 </Button>
               </Form>
             </ModalBody>
