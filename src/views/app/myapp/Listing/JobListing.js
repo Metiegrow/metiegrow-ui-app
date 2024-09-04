@@ -32,6 +32,7 @@ const JobListing = ({ isPosted }) => {
   const [isLast, setIsLast] = useState(true);
   const [modal, setModal] = useState(false);
   const [interestPerson, setInterestPerson] = useState([]);
+  const [copiedId, setCopiedId] = useState(null);
 
   const toggle = () => setModal(!modal);
   const url = `${baseUrl}/api/posts/job-post/`;
@@ -121,6 +122,20 @@ const JobListing = ({ isPosted }) => {
 
   const handleUserClick = (userId) => {
     history.push(`/app/mentorprofile/${userId}`);
+  };
+
+  const handleShareButtonClick = async (id) => {
+    try {
+      await navigator.clipboard.writeText(
+        `${window.location.href}/joblisting/view/${id}`
+      );
+      setCopiedId(id);
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 3000);
+    } catch (error) {
+      console.error("Error copying link:", error);
+    }
   };
 
   return (
@@ -263,14 +278,31 @@ const JobListing = ({ isPosted }) => {
                             >
                               <i className="simple-icon-size-fullscreen text-primary" />
                             </Button>
+                            {copiedId === data.id && (
+                              <span className="text-success mr-2">
+                                Link copied to clipboard!
+                              </span>
+                            )}
                             <Button
                               outline
                               color="primary"
                               className="mr-2"
                               size="xs"
-                              // onClick={}
+                              onClick={() => handleShareButtonClick(data.id)}
                             >
-                              <i className="iconsminds-sharethis text-primary" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-copy"
+                                viewBox="0 0 16 16"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                                />
+                              </svg>
                             </Button>
                             <Button
                               onClick={() =>

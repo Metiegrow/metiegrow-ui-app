@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
+import classnames from "classnames";
+import { useEffect, useState } from "react";
+import { injectIntl } from "react-intl";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import {
-  Row,
   //   Card,
   //   CardBody,
   Nav,
   NavItem,
+  Row,
   TabContent,
   TabPane,
-  //   Badge,
-  // Modal,
-  // ModalHeader,
-  // ModalBody,
-  // Button,
 } from "reactstrap";
-import { NavLink, useLocation, useHistory } from "react-router-dom";
-import classnames from "classnames";
-import { injectIntl } from "react-intl";
 // import Rating from 'components/common/Rating';
 
 // import Breadcrumb from 'containers/navs/Breadcrumb';
@@ -25,12 +20,10 @@ import { Colxx } from "components/common/CustomBootstrap";
 // import StayPosting from "./StayPosting";
 // import OtherPosting from "./OtherPosting";
 import MyJobListing from "./MyJobListing";
-import MyStayListing from "./MyStayListing";
 import MyOtherListing from "./MyOtherListing";
+import MyStayListing from "./MyStayListing";
 
 const MyListing = () => {
-
-  
   const location = useLocation();
   const history = useHistory();
   const [activeTab, setActiveTab] = useState("job");
@@ -51,28 +44,26 @@ const MyListing = () => {
   //   setIsPosted(!isPosted);
   // };
 
-
   useEffect(() => {
-    const path = location.pathname.split('/').pop();
-    setActiveTab(path === 'mylisting' ? 'job' : path);
+    const path = location.pathname.split("/").pop();
+    setActiveTab(path === "mylisting" ? "job" : path);
   }, [location]);
 
   const changeTab = (tab) => {
     setActiveTab(tab);
-    history.push(`/app/mylisting${tab === 'job' ? '' : `/${tab}`}`);
+    history.push(`/app/mylisting${tab === "job" ? "" : `/${tab}`}`);
   };
-  
 
   return (
     <>
       <Row>
         <Colxx xxs="12" className="mx-auto" style={{ maxWidth: "900px" }}>
           <h1>My listing</h1>
-          
+
           {/* <Breadcrumb match={match} /> */}
 
           <Nav tabs className="separator-tabs ml-0 mb-5">
-          {/* <Button
+            {/* <Button
                 outline
                 color="primary"
                 onClick={() => toggleModal("Create a job List", "job")}
@@ -125,13 +116,13 @@ const MyListing = () => {
 
           <TabContent activeTab={activeTab}>
             <TabPane tabId="job">
-              <MyJobListing  />
+              <MyJobListing />
             </TabPane>
             <TabPane tabId="stay">
-              <MyStayListing  />
+              <MyStayListing />
             </TabPane>
             <TabPane tabId="others">
-              <MyOtherListing  />
+              <MyOtherListing />
             </TabPane>
           </TabContent>
         </Colxx>

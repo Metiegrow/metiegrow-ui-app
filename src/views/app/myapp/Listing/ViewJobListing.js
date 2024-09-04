@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { baseUrl } from "constants/defaultValues";
-import { useParams, NavLink } from "react-router-dom";
 import axios from "axios";
+import { Colxx } from "components/common/CustomBootstrap";
+import { baseUrl } from "constants/defaultValues";
+import { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
 import {
+  Button,
   Card,
   CardBody,
   //   CardTitle,
   Col,
   Row,
-  Button,
 } from "reactstrap";
-import { Colxx } from "components/common/CustomBootstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 
 const ViewJobListing = () => {
@@ -66,7 +66,11 @@ const ViewJobListing = () => {
                       <NavLink to="#" location={{}}>
                         <p className="font-weight-medium mb-0 ">Name</p>
                         <p className="text-muted mb-0 text-small">
-                    Posted on <TimestampConverter timeStamp={data.postedOn} format="datetime" />
+                          Posted on{" "}
+                          <TimestampConverter
+                            timeStamp={data.postedOn}
+                            format="datetime"
+                          />
                         </p>
                       </NavLink>
                     </div>
@@ -84,7 +88,19 @@ const ViewJobListing = () => {
                       size="xs"
                       onClick={handleCopyLink}
                     >
-                      <i className="iconsminds-sharethis text-primary" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-copy"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                        />
+                      </svg>{" "}
                     </Button>
                   </Col>
                 </Row>
@@ -129,7 +145,10 @@ const ViewJobListing = () => {
                     ))}
                   </Col>
                 </Row>
-                <div className="mt-2" dangerouslySetInnerHTML={{ __html: data.description }} />
+                <div
+                  className="mt-2"
+                  dangerouslySetInnerHTML={{ __html: data.description }}
+                />
                 <Row className="">
                   <Col className="">
                     <div className="text-muted mt-2">
