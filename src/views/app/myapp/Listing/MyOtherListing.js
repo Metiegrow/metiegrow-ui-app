@@ -2,52 +2,21 @@ import axios from "axios";
 import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
-import { Field, Formik } from "formik";
 import { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
 import { NavLink } from "react-router-dom";
 import {
   Button,
   Card,
-  Col,
-  Form,
-  FormGroup,
-  Label,
+  
   Modal,
   ModalBody,
-  ModalFooter,
   ModalHeader,
-  Row,
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import ToasterComponent from "../notifications/ToasterComponent";
+import OtherPosting from "./OtherPosting";
 
-const quillModules = {
-  toolbar: [
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    // ["link", "image"],
-    // ["clean"],
-  ],
-};
-const quillFormats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-  "image",
-];
+
 
 const MyOtherListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,17 +24,12 @@ const MyOtherListing = () => {
   const [pagination, setPagination] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [deleteStayPost, setDeleteStayPost] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [selectedOther, setSelectedOther] = useState(null);
 
-  const [otherListEdit, setOtherListingEdit] = useState(false);
-
-  const [title, setTitle] = useState("");
-  const [job, setJob] = useState("");
-  const [description, setDescription] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   // console.log(data)
   const url = `${baseUrl}/api/posts/other-post/myotherposts`;
-  const updateUrl = `${baseUrl}/api/posts/other-post/`;
 
   useEffect(() => {
     const fetchMyOtherListingData = async () => {
@@ -83,18 +47,33 @@ const MyOtherListing = () => {
     };
 
     fetchMyOtherListingData();
-  }, [deleteStayPost]);
+  }, [deleteStayPost,modal]);
 
-  const submitForm = async () => {
-    setIsLoading(true);
+  const handleEditOthers = async (othersData) => {
     try {
-      const response = await axios.put(updateUrl, ...data);
-      console.log(response.data);
-      setIsLoading(false);
+      const token = localStorage.getItem("tokenRes");
+      const editUrl = `${baseUrl}/api/posts/other-post/`; 
+      const response = await axios.put(editUrl, othersData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      ToasterComponent('success', response.data.statuses);
+      setModal(false);
     } catch (error) {
-      console.error("There was an error!", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error editing job:", error);
+      }
     }
   };
+
+
 
   const deletePost = async (id) => {
     const otherDeleteUrl = `${baseUrl}/api/posts/other-post/${id}`;
@@ -103,19 +82,32 @@ const MyOtherListing = () => {
       setDeleteStayPost(!deleteStayPost);
       ToasterComponent("success", response.data.statuses);
     } catch (error) {
-      console.error("There was an error!", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("There was an error!", error);
+      }
     }
+    
   };
 
   const handleMyOtherListDelete = (id) => deletePost(id);
-  const handleMyOtherListEdit = () => setOtherListingEdit(true);
-  const handleSaveOtherListing = () => {
-    setOtherListingEdit(false);
-    submitForm();
+  const handleEditButtonClick = (other) => {
+    setSelectedOther(other);
+    setModal(true);
   };
-  const handleCancelOtherListing = () => {
-    setOtherListingEdit(false);
+
+  
+
+  const toggleModalState = () => {
+    setModal(false);
+    setSelectedOther(null);
   };
+
 
   return !isLoaded ? (
     <div className="loading" />
@@ -152,7 +144,7 @@ const MyOtherListing = () => {
                 </div>
                 <div className="custom-control custom-checkbox pl-1 align-self-center pr-4">
                   <Button
-                    onClick={() => handleMyOtherListEdit()}
+                    onClick={() => handleEditButtonClick(item)}
                     outline
                     color="primary"
                     className="icon-button"
@@ -169,129 +161,20 @@ const MyOtherListing = () => {
                   </Button>
                 </div>
               </div>
-              <Modal
-                isOpen={otherListEdit}
-                toggle={() => setOtherListingEdit(!otherListEdit)}
-                className=""
-                size="lg"
-                style={{
-                  borderRadius: "10px",
-                  overflow: "hidden",
-                }}
-              >
-                <ModalHeader style={{ borderBottom: "none" }}>
-                  <h2 className="font-weight-bold">Edit other listing</h2>
-                </ModalHeader>
-                <ModalBody className="d-flex justify-content-center align-items-center">
-                  <Formik
-                    initialValues={{
-                      title,
-                      job,
-                      description,
-                    }}
-                    // validate={validate}
-                  >
-                    {({ errors, touched }) => (
-                      <Form className="av-tooltip tooltip-label-right ">
-                        <Row>
-                          <Col md={6}>
-                            <FormGroup className="error-l-75">
-                              <Label>Title*</Label>
-                              <Field
-                                className="form-control"
-                                name="title"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                // validate={validate}
-                              />
-                              {errors.title && touched.title && (
-                                <div className="invalid-feedback d-block">
-                                  {errors.title}
-                                </div>
-                              )}
-                              {/* <ErrorMessage name="title" component="div" className="invalid-feedback d-block" /> */}
-                            </FormGroup>
-                          </Col>
-                          <Col md={6}>
-                            <FormGroup className="error-l-75">
-                              <Label>Job</Label>
-                              <Field
-                                className="form-control"
-                                name="job"
-                                value={job}
-                                onChange={(e) => setJob(e.target.value)}
-                                //   validate={}
-                              />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-
-                        <div className="mt-4">
-                          <h6 className="font-weight-semibold">
-                            Add a description*
-                          </h6>
-                          {/* <p className='text-muted'>Include all the information would need to answer your question</p> */}
-                          <Row className="mb-4">
-                            <Colxx xxs="12">
-                              <ReactQuill
-                                theme="snow"
-                                value={description}
-                                onChange={(val) => setDescription(val)}
-                                modules={quillModules}
-                                formats={quillFormats}
-                              />
-                            </Colxx>
-                          </Row>
-                        </div>
-
-                        {/* <div className="mt-3 d-flex justify-content-end"></div> */}
-                      </Form>
-                    )}
-                  </Formik>
-                </ModalBody>
-
-                <ModalFooter
-                  // style={{ borderTop: 'none' }}
-                  className="d-flex align-items-center justify-content-center"
-                >
-                  <Button
-                    color="primary"
-                    outline
-                    // className="py-2"
-                    className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
-                      isLoading ? "show-spinner" : ""
-                    }`}
-                    // disabled={!isValid}
-                    onClick={() => handleSaveOtherListing()}
-                  >
-                    <span className="spinner d-inline-block">
-                      <span className="bounce1" />
-                      <span className="bounce2" />
-                      <span className="bounce3" />
-                    </span>
-                    Save
-                  </Button>
-                  {/* <Button
-                    outline
-                    color="primary"
-                    onClick={() => handleSaveOtherListing()}
-                    className=""
-                    // style={{ border: "none" }}
-                  >
-                    Save
-                  </Button>{" "} */}
-                  <Button
-                    color="primary"
-                    outline
-                    onClick={() => handleCancelOtherListing()}
-                    className=""
-                    // style={{ border: "none" }}
-                  >
-                    {/* <i className="simple-icon-trash" /> */}
-                    <span className="label">Cancel</span>
-                  </Button>
-                </ModalFooter>
-              </Modal>
+              <Modal size="lg" isOpen={modal} toggle={() => setModal(!modal)}>
+        <ModalHeader className="pb-1" toggle={() => setModal(!modal)}>
+          <h1 className="font-weight-semibold">Edit</h1>
+        </ModalHeader>
+        <ModalBody>
+        {/* <JobPosting closeModal={toggleModalState}  /> */}
+        <OtherPosting
+          closeModal={toggleModalState}
+          initialData={selectedOther}
+          onEdit={handleEditOthers}
+        />
+          
+        </ModalBody>
+      </Modal>
             </Card>
           ))}
           <Pagination

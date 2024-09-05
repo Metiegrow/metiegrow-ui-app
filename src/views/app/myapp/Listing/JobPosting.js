@@ -20,6 +20,7 @@ import "react-quill/dist/quill.snow.css";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
 import { EmploymentTypeData, WorkPlaceTypeData } from "./ListingData";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const quillModules = {
   toolbar: [
@@ -79,15 +80,16 @@ const validateDescription = (value) => {
   return error;
 };
 
-const JobPosting = ({ closeModal }) => {
-  const [title, setTitle] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
-  const [company, setCompany] = useState("");
-  const [workPlaceType, setWorkPlaceType] = useState(null);
-  const [jobLocation, setJobLocation] = useState("");
-  const [employmentType, setEmploymentType] = useState(null);
-  const [description, setDescription] = useState("");
-  const [skillsTag, setSkillsTag] = useState([]);
+const JobPosting = ({ closeModal, initialData, onEdit }) => {
+  const [id] = useState(initialData?.id || 0)
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [jobTitle, setJobTitle] = useState(initialData?.jobTitle || "");
+  const [company, setCompany] = useState(initialData?.company || "");
+  const [workPlaceType, setWorkPlaceType] = useState(initialData?.workPlaceTypeValue || null);
+  const [jobLocation, setJobLocation] = useState(initialData?.jobLocation || "");
+  const [employmentType, setEmploymentType] = useState(initialData?.employmentTypeValue || null);
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [skillsTag, setSkillsTag] = useState(initialData?.skills || []);
   const [isLoading, setIsLoading] = useState(false);
 
   const url = `${baseUrl}/api/posts/job-post/`;
@@ -99,9 +101,9 @@ const JobPosting = ({ closeModal }) => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    // console.log("jobpostsubmit")
     try {
       const data = {
+        id,
         title,
         jobTitle,
         company,
@@ -111,19 +113,32 @@ const JobPosting = ({ closeModal }) => {
         description,
         skills: skillsTag,
       };
-      await axios.post(url, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      if (initialData) {
+        await onEdit(data);
+      } else {
+       const response = await axios.post(url, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      ToasterComponent('success', response.data.statuses);
+      }
       closeModal();
-      // console.log("job posted successfully");
       setIsLoading(false);
     } catch (error) {
-      console.error("Error posting job:", error);
       setIsLoading(false);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error posting/editing job:", error);
+      }
     }
   };
+
 
   const handleTagsChange = (newSkills) => {
     // setSkillError(false);
@@ -415,7 +430,7 @@ const JobPosting = ({ closeModal }) => {
                       <span className="bounce2" />
                       <span className="bounce3" />
                     </span>
-                    <span className="label">Post a job</span>
+                    <span className="label">{initialData ? "Submit" : "Post a job"}</span>
                   </Button>
                 </div>
               </Form>

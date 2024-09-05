@@ -1,5 +1,5 @@
 import { Colxx } from 'components/common/CustomBootstrap';
-import React ,{useState,useEffect} from 'react';
+import React ,{useState,useEffect,useRef, useCallback} from 'react';
 import {  Button,Row,Card,CardBody,CardImg,NavLink} from 'reactstrap';
 import { baseUrl } from 'constants/defaultValues';
 import axios from 'axios';
@@ -26,14 +26,35 @@ const MentorProfile = () => {
   const[mentorprofiledetails1,setMentorProfileDetails1]=useState([]);
   const [loading, setLoading] = useState(true);
   const[reviews,setReviews]=useState('');
+  const skillsSectionRef = useRef(null);
 
   const history = useHistory();
 
   const [showAll, setShowAll] = useState(false);
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
- 
+
+  const scrollToSkills = useCallback(() => {
+    const yOffset = -60; 
+
+    if (skillsSectionRef.current) {
+      const y = skillsSectionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      return;
+    }
+
+    const element = document.getElementById('skillsSection');
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    } else {
+      console.error("unable to scroll");
+    }
+  }, []);
+
+  const toggleShowAll = useCallback(() => {
+    setShowAll((prevShowAll) => !prevShowAll);
+   
+    setTimeout(scrollToSkills, 100);
+  }, [scrollToSkills]);
 
   // const handleConnectClick = () => {
   //   // Construct the URL with mentor's name as query parameter
@@ -89,10 +110,10 @@ const MentorProfile = () => {
     mentorProfile();
   },[])
 
+
   useEffect(() => {
-    if (showAll) {
-      // Scroll to the skills section when showAll becomes true
-      document.getElementById('skillsSection').scrollIntoView();
+    if (showAll && skillsSectionRef.current) {
+      skillsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [showAll]);
 
@@ -380,11 +401,12 @@ const MentorProfile = () => {
             </div>
           </Colxx>
         )} */}
-        <Colxx  lg={7} className="my-4" id="skillsSection">
+        <div id="skillsSection" />
+        <Colxx  lg={7} className="my-4" ref={skillsSectionRef} >
         <Row>
         <h1 className='font-weight-semibold text-large'>Skills </h1>
         </Row>
-        <Row>
+        <Row >
       
             <div className='d-flex flex-wrap '>
               {mentorprofiledetails1.skills && mentorprofiledetails1.skills.map((skill) => (

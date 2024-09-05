@@ -29,6 +29,7 @@ import {
   RoomTypeData,
   parkingOptions,
 } from "./ListingData";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const quillModules = {
   toolbar: [
@@ -84,21 +85,23 @@ const quillFormats = [
 //   { label: "Shared Room", value: 1 },
 // ];
 
-const StayPosting = ({ closeModal }) => {
-  const [availableFrom, setAvailableFrom] = useState(new Date().getTime());
-  const [title, setTitle] = useState("");
-  const [apartmentType, setApartmentType] = useState(null);
-  const [BHKType, setBHKType] = useState(null);
-  const [floor, setFloor] = useState(null);
-  const [roomType, setRoomType] = useState(null);
-  const [roomMate, setRoomMate] = useState(null);
-  const [expectedRent, setExpectedRent] = useState(null);
-  const [expectedDeposit, setExpectedDeposit] = useState(null);
-  const [monthlyMaintenance, setMonthlyMaintenance] = useState(false);
-  const [maintenanceAmount, setMaintenanceAmount] = useState(null);
-  const [parking, setParking] = useState(null);
-  const [contact, setContact] = useState("");
-  const [description, setDescription] = useState("");
+const StayPosting = ({ closeModal, initialData, onEdit }) => {
+  const [id] = useState(initialData?.id)
+  const [availableFrom, setAvailableFrom] = useState(initialData?.availableFrom || new Date().getTime());
+  const [title, setTitle] = useState(initialData?.title ||"");
+  const [apartmentType, setApartmentType] = useState(initialData?.apartmentTypeValue || null);
+  const [BHKType, setBHKType] = useState(initialData?.bhkTypeValue || null);
+  const [floor, setFloor] = useState(initialData?.floorValue || null);
+  const [roomType, setRoomType] = useState(initialData?.roomTypeValue || null);
+  const [roomMate, setRoomMate] = useState(initialData?.roomMateValue || null);
+  const [expectedRent, setExpectedRent] = useState(initialData?.expectedRent || null);
+  const [expectedDeposit, setExpectedDeposit] = useState(initialData?.expectedDeposit || null);
+  const [monthlyMaintenance, setMonthlyMaintenance] = useState(initialData?.monthlyMaintenance || false);
+  const [maintenanceAmount, setMaintenanceAmount] = useState(initialData?.maintenanceAmount || null);
+  const [parking, setParking] = useState(initialData?.parkingValue || null);
+  const [contact, setContact] = useState(initialData?.contact || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  // console.log("init",initialData)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -117,7 +120,8 @@ const StayPosting = ({ closeModal }) => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const Data = {
+      const data = {
+        id,
         title,
         apartmentType,
         bhkType: BHKType,
@@ -133,17 +137,30 @@ const StayPosting = ({ closeModal }) => {
         contact,
         description,
       };
-      await axios.post(url, Data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      if (initialData) {
+        await onEdit(data);
+      } else {
+        const response = await axios.post(url, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        ToasterComponent('success', response.data.statuses);
+      }
       closeModal();
       setIsLoading(false);
       // console.log("job posted successfully");
     } catch (error) {
-      console.error("Error posting job:", error);
       setIsLoading(false);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error posting job:", error);
+      }
     }
   };
 
@@ -172,6 +189,7 @@ const StayPosting = ({ closeModal }) => {
                       className="form-control"
                       name="title"
                       placeholder=""
+                      value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       //   validate={}
                     />
@@ -343,6 +361,7 @@ const StayPosting = ({ closeModal }) => {
                         //   value={}
                         onChange={(e) => setExpectedRent(e.target.value)}
                         //   className="col-12 col-md-3"
+                        value={expectedRent}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -358,6 +377,7 @@ const StayPosting = ({ closeModal }) => {
                         //   value={}
                         onChange={(e) => setExpectedDeposit(e.target.value)}
                         //   className="col-12 col-md-3"
+                        value={expectedDeposit}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -417,6 +437,7 @@ const StayPosting = ({ closeModal }) => {
                       name="company"
                       placeholder="Enter Email or phone Number"
                       onChange={(e) => setContact(e.target.value)}
+                      value={contact}
                       //   validate={}
                     />
                     {/* {errors.company && touched.company && (
@@ -476,7 +497,7 @@ const StayPosting = ({ closeModal }) => {
                   <Colxx xxs="12">
                     <ReactQuill
                       theme="snow"
-                      //   value={description}
+                        value={description}
                       onChange={(val) => setDescription(val)}
                       modules={quillModules}
                       formats={quillFormats}
@@ -500,7 +521,7 @@ const StayPosting = ({ closeModal }) => {
                     <span className="bounce2" />
                     <span className="bounce3" />
                   </span>
-                  <span className="label">List a Room</span>
+                  <span className="label">{initialData ? "Submit" : "List a Room"}</span>
                 </Button>
               </div>
             </Form>

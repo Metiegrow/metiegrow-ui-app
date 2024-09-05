@@ -8,6 +8,7 @@ import { baseUrl } from "constants/defaultValues";
 import { Field, Formik } from "formik";
 import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const quillModules = {
   toolbar: [
@@ -43,10 +44,11 @@ const quillFormats = [
 //   return errors;
 // };
 
-const OtherPosting = ({ closeModal }) => {
-  const [title, setTitle] = useState("");
-  const [job, setJob] = useState("");
-  const [description, setDescription] = useState("");
+const OtherPosting = ({ closeModal, initialData, onEdit }) => {
+  const [id] = useState(initialData?.id || 0)
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [job, setJob] = useState(initialData?.job || "");
+  const [description, setDescription] = useState(initialData?.description || "");
   const [isLoading, setIsLoading] = useState(false);
   // const [skills, setSkills] = useState([]);
 
@@ -60,22 +62,36 @@ const OtherPosting = ({ closeModal }) => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const Data = {
+      const data = {
+        id,
         title,
         job,
         description,
-        // skills,
       };
-      await axios.post(url, Data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      if (initialData) {
+        await onEdit(data);
+      } else {
+       const response = await axios.post(url, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      ToasterComponent('success', response.data.statuses);
+
+      }
       setIsLoading(false);
       closeModal();
       // console.log("job posted successfully");
     } catch (error) {
-      console.error("Error posting job:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error posting", error);
+      }
       setIsLoading(false);
     }
   };
@@ -187,7 +203,7 @@ const OtherPosting = ({ closeModal }) => {
                       <span className="bounce2" />
                       <span className="bounce3" />
                     </span>
-                    <span className="label">Post</span>
+                    <span className="label">{initialData ? "Submit" : "Post"}</span>
                   </Button>
                 </div>
               </Form>

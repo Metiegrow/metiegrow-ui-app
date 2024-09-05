@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button } from "reactstrap";
+import { Card, Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { Colxx } from "components/common/CustomBootstrap";
 import axios from "axios";
@@ -7,6 +7,7 @@ import Pagination from "containers/pages/Pagination";
 import { baseUrl } from "constants/defaultValues";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import ToasterComponent from "../notifications/ToasterComponent";
+import StayPosting from "./StayPosting";
 
 const MyStayListing = () => {
 
@@ -15,8 +16,15 @@ const MyStayListing = () => {
     const [pagination, setPagination] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [deleteStayPost, setDeleteStayPost] = useState(false);
+  const [modal, setModal] = useState(false);
+  const[selectedStay,setSelectedStay] = useState(null);
 
-    console.log(data)
+
+    // console.log(data)
+    const toggleModalState = () => {
+      setModal(false);
+      setSelectedStay(null);
+    };
 //   const data1 = [
 //     {
 //       title: "Title 1",
@@ -81,7 +89,7 @@ const MyStayListing = () => {
     };
 
     fetchMyStayListingData();
-  }, [deleteStayPost]); 
+  }, [deleteStayPost,modal]); 
 
   const deletePost = async (id) => {
     const stayDeleteUrl = `${baseUrl}/api/posts/stay-post/${id}` 
@@ -90,13 +98,52 @@ const MyStayListing = () => {
       setDeleteStayPost(!deleteStayPost);
       ToasterComponent('success', response.data.statuses);
     } catch (error) {
-      console.error('There was an error!', error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error('There was an error!', error);
+      }
     }
+  };
+
+  const handleEditStay = async (stayData) => {
+    try {
+      const token = localStorage.getItem("tokenRes");
+      const editUrl = `${baseUrl}/api/posts/stay-post/`; 
+     const response = await axios.put(editUrl, stayData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      ToasterComponent('success', response.data.statuses);
+
+      setModal(false);
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error editing job:", error);
+      }
+    }
+    
   };
 
   
 
   const handleMyStayListDelete = (id) => deletePost(id);
+  const handleEditButtonClick = (stay) => {
+    setSelectedStay(stay);
+    setModal(true);
+  };
+
 
   return !isLoaded ? (
     <div className="loading" />
@@ -139,10 +186,23 @@ const MyStayListing = () => {
                 onChange={() => {}}
                 label=""
               /> */}
-              <Button outline color="primary" className="icon-button"><i className="simple-icon-pencil" /></Button>
+              <Button outline color="primary" className="icon-button" onClick={ () => handleEditButtonClick(item)}><i className="simple-icon-pencil" /></Button>
               <Button onClick={() => handleMyStayListDelete(item.id)} outline color="primary" className="icon-button ml-2"><i className="simple-icon-trash" /></Button>
             </div>
           </div>
+          <Modal size="lg" isOpen={modal} toggle={() => setModal(!modal)}>
+        <ModalHeader className="pb-1" toggle={() => setModal(!modal)}>
+          <h1 className="font-weight-semibold">Edit</h1>
+        </ModalHeader>
+        <ModalBody>
+        <StayPosting
+          closeModal={toggleModalState}
+          initialData={selectedStay}
+          onEdit={handleEditStay}
+        />
+          
+        </ModalBody>
+      </Modal>
         </Card>
       ))}
       <Pagination
