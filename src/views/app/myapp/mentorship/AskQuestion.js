@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Colxx } from "components/common/CustomBootstrap";
+import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
 import { useState } from "react";
 import ReactQuill from "react-quill";
@@ -37,10 +38,12 @@ const quillFormats = [
 
 const AskQuestion = () => {
   const [inputkey, setInputKey] = useState("");
+  const [loading, setLoading] = useState(false);
   // const [inputkey1,setInputKey1]=useState('')
   const [textQuillStandart, setTextQuillStandart] = useState("");
   const history = useHistory();
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const doc = new DOMParser().parseFromString(
         textQuillStandart,
@@ -51,13 +54,19 @@ const AskQuestion = () => {
         questionHeading: inputkey,
         questionHeadingBrief: strippedAnswerText,
       });
-      if (response.status === 201) {
+      NotificationManager.success(
+        `Question reviwed successfully`,
+        "Success",
+        3000
+      );
+      if (response.status === 200) {
         history.push("/app/questions");
       }
-      console.log("Response:", response.data);
+      console.log("Response:", response);
     } catch (error) {
       console.error("Error:", error);
     }
+    setLoading(false);
   };
 
   return (
@@ -114,8 +123,9 @@ const AskQuestion = () => {
           color="primary "
           className="default  py-2 "
           onClick={handleSubmit}
+          disabled={loading}
         >
-          Review your question
+          {loading ? "Reviewing..." : "Review your question"}
         </Button>
       </div>
     </div>

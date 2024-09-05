@@ -4,6 +4,7 @@ import { baseUrl } from "constants/defaultValues";
 import { Field, Form, Formik } from "formik";
 import { createRef, useState } from "react";
 import Select from "react-select";
+import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
 import {
   Alert,
@@ -16,11 +17,9 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import { validateBio, validateLocation } from "./validation";
-
 import ToasterComponent from "../notifications/ToasterComponent";
-import country from "./Country";
 import language from "./Languages";
+import { validateBio } from "./validation";
 
 const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -33,6 +32,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
+  const [skillsTag, setSkillsTag] = useState([]);
 
   const [fields] = useState({
     image: "",
@@ -82,9 +82,11 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     const alumniProfile = {
       linkedinUrl: data.linkedinUrl,
       twitterHandle: data.twitterHandle,
-      language: data.language,
+      languages: data.language,
+      skills: data.skills,
       bio: data.bio,
     };
+
     formData.append(
       "alumniProfile",
       new Blob([JSON.stringify(alumniProfile)], { type: "application/json" })
@@ -160,6 +162,10 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   };
   // file upload validation end
 
+  const handleTagsChange = (newSkills) => {
+    setSkillsTag(newSkills);
+  };
+
   return (
     <>
       <Formik
@@ -172,7 +178,11 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
         validateOnMount
         onSubmit={(values) => {
           if (validateFile(file1)) {
-            postDataAbout({ ...values, language: languages });
+            postDataAbout({
+              ...values,
+              language: languages,
+              skills: skillsTag,
+            });
           }
         }}
       >
@@ -236,7 +246,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
               </Row>
             </FormGroup>
 
-            <FormGroup className="error-l-75">
+            {/* <FormGroup className="error-l-75">
               <Label>Location*</Label>
               <Field
                 as="select"
@@ -258,6 +268,24 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
                   {errors.location}
                 </div>
               )}
+            </FormGroup> */}
+            <FormGroup className="error-l-75">
+              <Label for="languages">Languages known*</Label>
+              <Select
+                placeholder="Select Languages"
+                name="languages"
+                isMulti
+                options={languageOptions}
+                // validate={validateLanguages}
+                className="react-select"
+                classNamePrefix="react-select"
+                onChange={(selectedOptions) => {
+                  const languagesArray = selectedOptions
+                    ? selectedOptions.map((option) => option.value)
+                    : [];
+                  setLanguages(languagesArray);
+                }}
+              />
             </FormGroup>
 
             <FormGroup className="error-l-125">
@@ -295,38 +323,35 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
                 </Col>
               </Row>
             </FormGroup>
-            <FormGroup className="error-l-75">
-              <Label for="languages">Languages known*</Label>
-              <Select
-                placeholder="Select Languages"
-                name="languages"
-                isMulti
-                options={languageOptions}
-                // validate={validateLanguages}
-                className="react-select"
-                classNamePrefix="react-select"
-                onChange={(selectedOptions) => {
-                  const languagesArray = selectedOptions
-                    ? selectedOptions.map((option) => option.value)
-                    : [];
-                  setLanguages(languagesArray);
-                }}
-              >
-                {/* <option disabled value="">
-                              Select Languages
-                            </option>
-                          {language.map((option) => (
-                            <option key={option.iso_code} value={option.iso_code}>
-                              {option.name}
-                            </option>
-                          ))} */}
-              </Select>
-              {/* {errors.languages && touched.languages && (
-                          <div className="invalid-feedback d-block">
-                            {errors.languages}
-                          </div>
-                        )} */}
+
+            <FormGroup>
+              <Row>
+                <Col md={12}>
+                  <FormGroup>
+                    <Label for="skills">Skills*</Label>
+
+                    <TagsInput
+                      required
+                      value={skillsTag}
+                      onChange={handleTagsChange}
+                      inputProps={{ placeholder: "Add skills " }}
+                      addOnBlur
+                      addKeys={[13, 188]}
+                    />
+
+                    <FormText>Add skill and press Enter or Comma </FormText>
+                    <FormText color="muted">
+                      Describe your expertise to connect with mentors who have
+                      similar interests.
+                      <br />
+                      {/* Comma-separated list of your skills  */}
+                      (keep it below 10). Mentors will use this to find you.
+                    </FormText>
+                  </FormGroup>
+                </Col>
+              </Row>
             </FormGroup>
+
             <FormGroup>
               <Label for="bio">Bio*</Label>
               <Field

@@ -10,9 +10,17 @@ import ToasterComponent from "../notifications/ToasterComponent";
 const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [profileLoading, setProfileLoading] = useState(false);
-  const [education, setEducation] = useState([
-    { college: [], degree: "", fieldStudy: [], year: "" },
-  ]);
+
+  const [education, setEducation] = useState({
+    college: [
+      {
+        college: "",
+        degree: "",
+        department: "",
+        year: "",
+      },
+    ],
+  });
 
   const currentYear = new Date().getFullYear();
   const years = [];
@@ -76,39 +84,34 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
   };
 
   const removeEducation = (index) => {
-    const newEducation = [...education];
-    newEducation.splice(index, 1);
-    setEducation(newEducation);
+    setEducation((prevState) => ({
+      ...prevState,
+      college: prevState.college.filter((_, i) => i !== index),
+    }));
   };
 
   const addEducation = () => {
-    setEducation([
-      ...education,
-      { college: [], degree: "", fieldStudy: [], year: "0" },
-    ]);
+    setEducation((prevState) => ({
+      ...prevState,
+      college: [
+        ...prevState.college,
+        {
+          college: "",
+          degree: "",
+          department: "",
+          year: "",
+        },
+      ],
+    }));
   };
 
-  // const handleInputChange = (index, field, value) => {
-  //   setEducation((previousEducation) =>
-  //     previousEducation.map((edu, i) =>
-  //       i === index ? { ...edu, [field]: value } : edu
-  //     )
-  //   );
-  // };
-
   const handleInputChange = (index, field, value) => {
-    setEducation((previousEducation) =>
-      previousEducation.map((edu, i) =>
-        i === index
-          ? {
-              ...edu,
-              [field]: ["college", "fieldStudy"].includes(field)
-                ? value.split(",").map((item) => item.trim())
-                : value,
-            }
-          : edu
-      )
-    );
+    setEducation((prevState) => ({
+      ...prevState,
+      college: prevState.college.map((edu, i) =>
+        i === index ? { ...edu, [field]: value } : edu
+      ),
+    }));
   };
 
   return (
@@ -123,11 +126,11 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
       >
         {({ errors, touched }) => (
           <Form className="av-tooltip tooltip-label-right my-4">
-            {education.map((service, index) => (
+            {education.college.map((service, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <div key={index}>
                 <div className="text-right">
-                  {education.length > 1 && (
+                  {education.college.length > 1 && (
                     <span>
                       <Button
                         id="closeButton"
@@ -191,7 +194,7 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
                   <Col md={6}>
                     <FormGroup>
                       <Label for={`education[${index}].fieldStudy`}>
-                        Field Studied*
+                        Department*
                       </Label>
                       <Input
                         type="text"
@@ -201,7 +204,7 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
                         value={service.fieldStudy}
                         required
                         onChange={(e) =>
-                          handleInputChange(index, "fieldStudy", e.target.value)
+                          handleInputChange(index, "department", e.target.value)
                         }
                         // validate={validatePackageDescription}
                       />
