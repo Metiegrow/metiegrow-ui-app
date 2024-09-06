@@ -7,25 +7,22 @@ import { Card, CardBody, NavLink, Row } from "reactstrap";
 
 const MyQandA = () => {
   const [myanswers, setMyAnswers] = useState("");
+  const [answerPagination, setAnswerPagination] = useState("");
   const [myquestions, setMyQuestions] = useState("");
-  // const[activities,setActivities]=useState('');
   const url = `${baseUrl}/api/mentor/myAnswers`;
   const url1 = `${baseUrl}/api/mentee/myQuestions`;
-  // const url2=`${baseUrl}/myActivities`;
-  const [currentPage, setCurrentPage] = useState(0);
-  // const [totalPage] = useState(4);
-  // const [currentPage1, setCurrentPage1] = useState(0);
-  // const [totalPage1] = useState(4);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage1, setCurrentPage1] = useState(1);
   const [pagination, setPagination] = useState("");
 
   useEffect(() => {
     const MyAnswers = async () => {
       try {
         const response = await axios.get(
-          `${url}?_page=${currentPage}&_limit=5`
+          `${url}?_page=${currentPage1}&_limit=5`
         );
-        // const response = await axios.get(url);
         setMyAnswers(response.data.data);
+        setAnswerPagination(response.data.paginationMeta);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -36,13 +33,9 @@ const MyQandA = () => {
         const response = await axios.get(
           `${url1}?_page=${currentPage}&_size=3`
         );
-        // const response = await axios.get(url1);
-        // const response = await axios.get(url1);
-        // setMyQuestions(response.data.data.myQuestions);
         setMyQuestions(response.data.data);
-
         setPagination(response.data.paginationMeta);
-        console.log(response.data.paginationMeta);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -65,7 +58,7 @@ const MyQandA = () => {
                   <h2 className="font-weight-semibold">Questions</h2>
                 </div>
 
-                {myquestions && myquestions?.totalQuestions === null ? (
+                {myquestions && myquestions?.totalQuestions === 0 ? (
                   <></>
                 ) : (
                   <h3 className="my-2">
@@ -77,7 +70,6 @@ const MyQandA = () => {
                   </h3>
                 )}
               </div>
-
               <div className="">
                 <div className="">
                   {myquestions &&
@@ -121,16 +113,14 @@ const MyQandA = () => {
             </div>
           </Colxx>
         </Row>
-        {/* <Pagination
-        currentPage={currentPage}
-        totalPage={totalPage}
-        onChangePage={(i) => setCurrentPage(i)}
-      /> */}
         <Pagination
-          currentPage={pagination.pageNumber}
+          currentPage={currentPage}
           totalPage={pagination.totalPage}
           onChangePage={(i) => setCurrentPage(i)}
+          lastIsActive={pagination.last}
+          firstIsActive={pagination.first}
         />
+        <div className="mt-5" />
         <hr />
         <Row>
           <Colxx xxs="12">
@@ -139,17 +129,7 @@ const MyQandA = () => {
                 <div className="d-flex justify-content-between">
                   <h2 className="font-weight-semibold">Answers</h2>
                 </div>
-                {/* {myanswers&&myanswers.map((num)=>{
-       return(
-        <div key={num.totalAnswers}>
-        <h3>view all <span className="font-weight-semibold">{num.totalAnswers}</span> answers</h3>
-    
-        </div>
-       )
-      })} */}
-                {/* <h3 className='my-2'>view all <span className="font-weight-bold">{myanswers.totalAnswers}</span> answers</h3> */}
-
-                {myanswers?.totalAnswers != null ? (
+                {myanswers?.totalAnswers !== 0 ? (
                   <h3 className="my-2">
                     View all
                     <span className="font-weight-bold px-1">
@@ -160,65 +140,7 @@ const MyQandA = () => {
                 ) : (
                   <></>
                 )}
-                {/* {activities.myAnswers&&activities.myAnswers.map((num)=>{
-       return(
-        <div key={num.totalAnswers}>
-        <h3>view all <span className="font-weight-semibold">{num.totalAnswers}</span> answers</h3>
-    
-        </div>
-       )
-      })} */}
               </div>
-              {/* <Card className='mt-3'>
-        <CardBody>
-         <div className=''>
-         <div className=''>
-         {myanswers&&myanswers.map((ans)=>{
-         
-            return (
-              
-              <div key={ans.totalAnswers}>
-                
-                <div className='' key={ans.totalAnswers}>
-           
-              <h3>{ans.answers.map((s)=>{
-                const ansdate=new Date(s.timestamp);
-                const ansdateformat = `${ansdate.getDate()}/${ansdate.getMonth()+1}/${ansdate.getFullYear()}`;
-                return (
-                  <div key={s.questionId}>
-                 
-                    <div className='d-flex   justify-content-between'>
-                    <NavLink href={`/app/questions/${s.questionId}`} className='d-flex justify-content-between'>
-                    <h3>{s.question}</h3>
-              
-                   
-                    </NavLink>
-                  
-                    <h3>{ansdateformat}</h3>
-                   
-                   
-                    </div>
-                   <hr/>
-                  
-                 
-                  </div>
-                )
-              })}</h3>
-             
-         </div>
-               
-              </div>
-            
-            )
-          })}
-          
-        
-         </div>
-         
-         </div>
-         
-        </CardBody>
-       </Card> */}
               {myanswers &&
               myanswers.questions &&
               myanswers.questions.length > 0 ? (
@@ -253,18 +175,14 @@ const MyQandA = () => {
             </div>
           </Colxx>
         </Row>
+        <Pagination
+          currentPage={currentPage1}
+          totalPage={answerPagination.totalPage}
+          onChangePage={(i) => setCurrentPage1(i)}
+          lastIsActive={answerPagination.last}
+          firstIsActive={answerPagination.first}
+        />
       </Colxx>
-
-      {/* <Pagination
-        currentPage={currentPage}
-        totalPage={totalPage}
-        onChangePage={(i) => setCurrentPage(i)}
-      /> */}
-      {/* <Pagination
-        currentPage={currentPage1}
-        totalPage={totalPage1}
-        onChangePage={(i) => setCurrentPage1(i)}
-      /> */}
     </div>
   );
 };
