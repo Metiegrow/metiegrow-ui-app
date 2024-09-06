@@ -16,17 +16,19 @@ const ApplyAsAlumniexperience = ({
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [profileLoading, setProfileLoading] = useState(false);
   const currentYear = new Date().getFullYear();
-  const [work, setWork] = useState([
-    {
-      company: "",
-      jobTitle: "",
-      employmentType: "",
-      jobLocation: "",
-      startDate: "",
-      endDate: "",
-      price: "",
-    },
-  ]);
+  const [work, setWork] = useState({
+    experience: [
+      {
+        company: "",
+        jobTitle: "",
+        employmentType: "",
+        jobLocation: "",
+        startYear: "",
+        endYear: "",
+        price: "",
+      },
+    ],
+  });
   const years = [];
   for (let year = currentYear; year >= 2005; year -= 1) {
     years.push(year);
@@ -91,31 +93,36 @@ const ApplyAsAlumniexperience = ({
   };
 
   const removeWorkExperience = (index) => {
-    const newWorkExperience = [...work];
-    newWorkExperience.splice(index, 1);
-    setWork(newWorkExperience);
+    setWork((prevState) => ({
+      ...prevState,
+      experience: prevState.experience.filter((_, i) => i !== index),
+    }));
   };
 
   const addWorkExperience = () => {
-    setWork([
-      ...work,
-      {
-        company: "",
-        jobTitle: "",
-        employmentType: "",
-        jobLocation: "",
-        startDate: "",
-        endDate: "",
-      },
-    ]);
+    setWork((prevState) => ({
+      ...prevState,
+      experience: [
+        ...prevState.experience,
+        {
+          company: "",
+          jobTitle: "",
+          employmentType: "",
+          jobLocation: "",
+          startYear: "",
+          endYear: "",
+        },
+      ],
+    }));
   };
 
   const handleWorkInputChange = (index, field, value) => {
-    setWork((previousWorkExperience) =>
-      previousWorkExperience.map((works, i) =>
-        i === index ? { ...works, [field]: value } : works
-      )
-    );
+    setWork((prevState) => ({
+      ...prevState,
+      experience: prevState.experience.map((exp, i) =>
+        i === index ? { ...exp, [field]: value } : exp
+      ),
+    }));
   };
 
   return (
@@ -130,11 +137,11 @@ const ApplyAsAlumniexperience = ({
       >
         {({ errors, touched }) => (
           <Form className="av-tooltip tooltip-label-right my-4">
-            {work.map((works, index) => (
+            {work.experience.map((works, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <div key={index}>
                 <div className="text-right">
-                  {work.length > 1 && (
+                  {work.experience.length > 1 && (
                     <span>
                       <Button
                         id="closeButton"
@@ -360,10 +367,11 @@ const ApplyAsAlumniexperience = ({
                           className="form-control"
                           name={`education[${index}].company`}
                           value={works.price}
+                          type="number"
                           onChange={(e) =>
                             handleWorkInputChange(
                               index,
-                              "Price",
+                              "price",
                               e.target.value
                             )
                           }

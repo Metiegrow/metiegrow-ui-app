@@ -8,6 +8,7 @@ import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 import { useHistory, useParams } from "react-router-dom";
 import { Button, Card, CardBody, NavLink, Row } from "reactstrap";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const quillModules = {
   toolbar: [
@@ -40,15 +41,6 @@ const quillFormats = [
 const MentorAnswers = () => {
   const { questionId } = useParams();
   const history = useHistory();
-  //  const {ansid}=useParams();
-
-  // const [inputkey, setInputKey] = useState("");
-  // const url=`${baseUrl}/mentorAnswers/${questionId}`;
-  // const url1=`${baseUrl}/multipleQuestions/${questionId}`;
-  // const deleteurl=`${baseUrl}/mentorAnswers/${questionId}/answer/${ansid}`
-  // console.log('Params:', { questionId, ansid });
-  // frontend url for post answer url
-  // const answerUrl=`${baseUrl}/mentorAnswers/${questionId}/answer`
 
   // Backend url
   const url1 = `${baseUrl}/api/mentee/multipleQuestions/${questionId}`;
@@ -57,12 +49,8 @@ const MentorAnswers = () => {
   const [answers1, setAnswers1] = useState([]);
   const [editing, setEditing] = useState(false);
   const [editedQuestion, setEditedQuestion] = useState("");
-  // const [editing1, setEditing1] = useState(false);
   const [editedAnswer1, setEditedAnswer1] = useState("");
-  //  const [editedAnswerId, setEditedAnswerId] = useState(null);
   const [editStates, setEditStates] = useState({});
-  // const [editStates, setEditStates] = useState('');
-  //  const [newAnswer,setNewAnswer]=useState('')
 
   const [loading, setLoading] = useState(false);
 
@@ -83,6 +71,7 @@ const MentorAnswers = () => {
     try {
       const response = await axios.get(url);
       setAnswers1(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -90,8 +79,8 @@ const MentorAnswers = () => {
 
   useEffect(() => {
     AnswersByMentors();
-
     AnswersByMentors1();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEdit = () => {
@@ -103,6 +92,7 @@ const MentorAnswers = () => {
     return localStorage.getItem("roleRes");
   }
   const roleRes = getRoleRes();
+  const userId = localStorage.getItem("userId");
 
   const handleSave = async () => {
     try {
@@ -168,7 +158,7 @@ const MentorAnswers = () => {
         `${baseUrl}/api/mentor/answer`,
         updatedAnswer
       );
-      console.log("Updated answer:", response.data);
+      ToasterComponent("success", response.data.statuses);
       if (response.status === 201) {
         await AnswersByMentors1();
       }
@@ -269,6 +259,10 @@ const MentorAnswers = () => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    setAnswers1(answers1);
+  }, [answers1, editStates]);
+
   return (
     <div className="">
       <Colxx sm="12" md="12" lg="8" xxs="12" className="mx-auto ">
@@ -291,7 +285,8 @@ const MentorAnswers = () => {
                 <h3 className="font-weight-semibold">
                   {answers.questionHeading}
                 </h3>
-                {roleRes.includes("USER") && (
+                {/* {roleRes.includes("USER") && ( */}
+                {+userId === answers.menteeUserId && (
                   <div className="d-flex ">
                     {editing ? (
                       <>
@@ -331,6 +326,7 @@ const MentorAnswers = () => {
                     </Button>
                   </div>
                 )}
+                {/* )} */}
               </div>
 
               {editing ? (
@@ -469,7 +465,8 @@ const MentorAnswers = () => {
                       </div>
                       <div>
                         <div className="d-flex align-items-center">
-                          {roleRes.includes("MENTOR") && (
+                          {/* {roleRes.includes("MENTOR") && ( */}
+                          {+userId === an.mentorId && (
                             <>
                               {editStates[an.id] ? (
                                 <>
@@ -509,6 +506,7 @@ const MentorAnswers = () => {
                               </Button>
                             </>
                           )}
+                          {/* )} */}
                         </div>
                       </div>
                     </div>
