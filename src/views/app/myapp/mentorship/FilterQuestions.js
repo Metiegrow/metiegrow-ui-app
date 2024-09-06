@@ -12,7 +12,8 @@ const FilterQuestions = () => {
   const url = `${baseUrl}/api/mentee/multipleQuestions`;
   const [multiquestions, setMultiQuestions] = useState([]);
   const [editing, setEditing] = useState(false);
-  // const [editedQuestion, setEditedQuestion] = useState("");
+  const [editedQuestion, setEditedQuestion] = useState("");
+  const [originalQuestions, setOriginalQuestions] = useState([]);
   const [loadingStates, setLoadingStates] = useState({});
   const [editStates, setEditStates] = useState({});
 
@@ -44,40 +45,99 @@ const FilterQuestions = () => {
   };
 
   const handleEdit = (id) => {
-    const answerToUpdate = multiquestions.find((answer) => answer.id === id);
-    if (answerToUpdate) {
-      // setEditedAnswer1(answerToUpdate.answered); // Use answered to initialize editedAnswer1
+    const questionToEdit = multiquestions.find(
+      (question) => question.id === id
+    );
+    if (questionToEdit) {
+      setEditedQuestion(questionToEdit);
       setEditStates((prevState) => ({
         ...prevState,
-        [id]: true, // Set edit mode to true
+        [id]: true,
       }));
     }
     setEditing(true);
   };
 
-  const handleSave = async () => {
-    // try {
-    //   // await axios.put(`${baseUrl}/multipleQuestions/${questionId}`,
-    //   await axios.put(`${baseUrl}/api/mentee/question`, {
-    //     id: questionId,
-    //     questionHeading: answers.questionHeading,
-    //     questionHeadingBrief: editedQuestion,
-    //     views: answers.views, // Keep the views unchanged
-    //     time: answers.time, // Keep the time unchanged
-    //   });
-    //   setAnswers((prevAnswers) => ({
-    //     ...prevAnswers,
-    //     questionHeadingBrief: editedQuestion,
-    //   }));
-    // } catch (error) {
-    //   console.error("Error updating question:", error);
-    // }
-    setEditing(false);
+  // const handleSave = async () => {
+  //   try {
+  //     // await axios.put(`${baseUrl}/multipleQuestions/${questionId}`,
+  //     await axios.put(`${baseUrl}/api/mentee/question`, {
+  //       id: questionId,
+  //       questionHeading: answers.questionHeading,
+  //       questionHeadingBrief: editedQuestion,
+  //       views: answers.views, // Keep the views unchanged
+  //       time: answers.time, // Keep the time unchanged
+  //     });
+  //     setAnswers((prevAnswers) => ({
+  //       ...prevAnswers,
+  //       questionHeadingBrief: editedQuestion,
+  //     }));
+  //   } catch (error) {
+  //     console.error("Error updating question:", error);
+  //   }
+  //   setEditing(false);
+  // };
+
+  const handleSave = async (id) => {
+    const questionToUpdate = multiquestions.find((q) => q.id === id);
+    if (!questionToUpdate) return;
+
+    setLoadingStates((prev) => ({ ...prev, [id]: true }));
+
+    try {
+      const response = await axios.put(`${baseUrl}/api/mentee/question`, {
+        id: questionToUpdate.id,
+        questionHeading: questionToUpdate.questionHeading,
+        questionHeadingBrief: questionToUpdate.questionHeadingBrief,
+        views: questionToUpdate.views,
+        time: questionToUpdate.time,
+      });
+
+      if (response.status === 200) {
+        // Update the original questions state
+        setOriginalQuestions((prevQuestions) =>
+          prevQuestions.map((q) => (q.id === id ? questionToUpdate : q))
+        );
+
+        // Update edit states
+        setEditStates((prevState) => ({
+          ...prevState,
+          [id]: false,
+        }));
+
+        setEditing(false);
+        setEditedQuestion(null);
+
+        NotificationManager.success(
+          "Question successfully updated",
+          "Success",
+          3000
+        );
+      }
+    } catch (error) {
+      console.error("Error updating question:", error);
+      NotificationManager.error("Failed to update question", "Error", 3000);
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, [id]: false }));
+    }
   };
 
   const handleCancel = () => {
-    // setEditedQuestion("");
+    if (editedQuestion) {
+      setMultiQuestions((prevQuestions) =>
+        prevQuestions.map((q) =>
+          q.id === editedQuestion.id
+            ? originalQuestions.find((oq) => oq.id === q.id)
+            : q
+        )
+      );
+      setEditStates((prevState) => ({
+        ...prevState,
+        [editedQuestion.id]: false,
+      }));
+    }
     setEditing(false);
+    setEditedQuestion(null);
   };
 
   useEffect(() => {
@@ -85,6 +145,7 @@ const FilterQuestions = () => {
       try {
         const response = await axios.get(url);
         setMultiQuestions(response.data);
+        setOriginalQuestions(response.data);
         setIsQuestionFetched(true);
         console.log(response.data);
       } catch (error) {
@@ -122,35 +183,51 @@ const FilterQuestions = () => {
                     const date = new Date(qs.time);
                     return (
                       <div key={qs.id}>
-                        <NavLink href={`/app/questions/${qs.id}`}>
-                          {editStates[qs.id] ? (
-                            <>
-                              <input
-                                type="text"
-                                className="form-control py-2 my-2"
-                                // value={editedAnswer1}
-                                // onChange={(e) => setEditedAnswer1(e.target.value)}
-                              />
-                              <input
-                                type="text"
-                                className="form-control py-2 my-2"
-                                // value={editedAnswer1}
-                                // onChange={(e) => setEditedAnswer1(e.target.value)}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <h2 className="font-weight-medium">
-                                {qs.questionHeading}
-                              </h2>
-                              <p>{qs.questionHeadingBrief}</p>
-                              <h6 className="text-muted">{qs.views} views</h6>
-                              <h6 className="text-muted">
-                                Asked on {date.toLocaleString()}
-                              </h6>
-                            </>
-                          )}
-                        </NavLink>
+                        {editStates[qs.id] ? (
+                          <>
+                            <input
+                              type="text"
+                              className="form-control py-2 my-2"
+                              value={qs.questionHeading}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                setMultiQuestions((prevQuestions) =>
+                                  prevQuestions.map((q) =>
+                                    q.id === qs.id
+                                      ? { ...q, questionHeading: newValue }
+                                      : q
+                                  )
+                                );
+                              }}
+                            />
+                            <input
+                              type="text"
+                              className="form-control py-2 my-2"
+                              value={qs.questionHeadingBrief}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                setMultiQuestions((prevQuestions) =>
+                                  prevQuestions.map((q) =>
+                                    q.id === qs.id
+                                      ? { ...q, questionHeadingBrief: newValue }
+                                      : q
+                                  )
+                                );
+                              }}
+                            />
+                          </>
+                        ) : (
+                          <NavLink href={`/app/questions/${qs.id}`}>
+                            <h2 className="font-weight-medium">
+                              {qs.questionHeading}
+                            </h2>
+                            <p>{qs.questionHeadingBrief}</p>
+                            <h6 className="text-muted">{qs.views} views</h6>
+                            <h6 className="text-muted">
+                              Asked on {date.toLocaleString()}
+                            </h6>
+                          </NavLink>
+                        )}
                         {+userId === qs.menteeUserId && (
                           <>
                             {editing ? (
@@ -158,10 +235,15 @@ const FilterQuestions = () => {
                                 <Button
                                   outline
                                   color="primary"
-                                  onClick={handleSave}
+                                  onClick={() => handleSave(qs.id)}
                                   className="mr-2"
+                                  disabled={loadingStates[qs.id]}
                                 >
-                                  Save
+                                  {loadingStates[qs.id] ? (
+                                    <Spinner size="sm" color="primary" />
+                                  ) : (
+                                    "Save"
+                                  )}
                                 </Button>
                                 <Button
                                   outline

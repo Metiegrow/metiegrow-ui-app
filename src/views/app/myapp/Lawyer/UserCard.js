@@ -124,6 +124,7 @@ const UserCard = () => {
   ]);
 
   const truncateBio = (bio, lineCount) => {
+    if (!bio) return "";
     const words = bio.split(" ");
 
     const truncatedBio = words.slice(0, lineCount).join(" ");

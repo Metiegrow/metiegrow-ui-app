@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import axios from "axios";
 import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
@@ -60,8 +61,8 @@ const JobListing = ({ isPosted }) => {
           .map((x) => ({ ...x }))
           .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
         setItems(sortedData);
-        console.log(sortedData[0].interestedUsers);
-        setInterestPerson(sortedData[0].interestedUsers);
+        console.log(sortedData);
+        setInterestPerson(sortedData);
         setTotalPage(data.pagination.totalPage);
         setIsFirst(data.pagination.first);
         setIsLast(data.pagination.last);
@@ -110,18 +111,21 @@ const JobListing = ({ isPosted }) => {
     }
   };
 
-  const handleInterestPersonPage = () => {
+  const handleInterestPersonPage = (item) => {
+    setInterestPerson(item);
+    console.log(item);
     setModal(!modal);
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter" || event.key === " ") {
-      handleInterestPersonPage();
-    }
-  };
+  // const handleKeyDown = (event) => {
+  //   if (event.key === "Enter" || event.key === " ") {
+  //     handleInterestPersonPage();
+  //   }
+  // };
 
   const handleUserClick = (userId) => {
-    history.push(`/app/mentorprofile/${userId}`);
+    const lowerCaseRole = userId.role.toLowerCase();
+    history.push(`/app/${lowerCaseRole}profile/${userId.userid}`);
   };
 
   const handleShareButtonClick = async (id) => {
@@ -153,7 +157,7 @@ const JobListing = ({ isPosted }) => {
                   tag="a"
                   style={{ cursor: "pointer" }}
                   // href={`/app/mentorprofile/${data.id}`}
-                  onClick={() => handleUserClick(data.id)}
+                  onClick={() => handleUserClick(data)}
                 >
                   {data.username}
                 </ListGroupItem>
@@ -175,7 +179,7 @@ const JobListing = ({ isPosted }) => {
           ) : (
             <div className="disable-text-selection">
               {items.map((data, index) => (
-                <Row key={data.title} className="mb-2">
+                <Row key={data.title + data.id} className="mb-2">
                   <Colxx xxs="12">
                     <Card className="mx-auto" style={{ maxWidth: "900px" }}>
                       <CardBody className="p-4">
@@ -260,9 +264,17 @@ const JobListing = ({ isPosted }) => {
                             <div
                               role="button"
                               tabIndex={0}
-                              onKeyDown={handleKeyDown}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  handleInterestPersonPage(
+                                    data.interestedUsers
+                                  );
+                                }
+                              }}
                               className="text-muted mt-2"
-                              onClick={handleInterestPersonPage}
+                              onClick={() => {
+                                handleInterestPersonPage(data.interestedUsers);
+                              }}
                               style={{ cursor: "pointer" }}
                             >
                               {data.interestedCount} people have shown interest

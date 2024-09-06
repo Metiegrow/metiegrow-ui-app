@@ -7,7 +7,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 import { useHistory, useParams } from "react-router-dom";
-import { Button, Card, CardBody, NavLink, Row } from "reactstrap";
+import { Button, Card, CardBody, NavLink, Row, Spinner } from "reactstrap";
 import ToasterComponent from "../notifications/ToasterComponent";
 
 const quillModules = {
@@ -51,6 +51,10 @@ const MentorAnswers = () => {
   const [editedQuestion, setEditedQuestion] = useState("");
   const [editedAnswer1, setEditedAnswer1] = useState("");
   const [editStates, setEditStates] = useState({});
+  const [loadingStates, setLoadingStates] = useState({});
+  const [questionLoadingStates, setQuestionLoadingStates] = useState(false);
+
+  const [updateTrigger, setUpdateTrigger] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -95,9 +99,10 @@ const MentorAnswers = () => {
   const userId = localStorage.getItem("userId");
 
   const handleSave = async () => {
+    setQuestionLoadingStates(true);
     try {
       // await axios.put(`${baseUrl}/multipleQuestions/${questionId}`,
-      await axios.put(`${baseUrl}/api/mentee/question`, {
+      const response = await axios.put(`${baseUrl}/api/mentee/question`, {
         id: questionId,
         questionHeading: answers.questionHeading,
         questionHeadingBrief: editedQuestion,
@@ -108,10 +113,12 @@ const MentorAnswers = () => {
         ...prevAnswers,
         questionHeadingBrief: editedQuestion,
       }));
+      ToasterComponent("success", response.data.statuses);
     } catch (error) {
       console.error("Error updating question:", error);
     }
     setEditing(false);
+    setQuestionLoadingStates(false);
   };
 
   const handleCancel = () => {
@@ -140,15 +147,8 @@ const MentorAnswers = () => {
   };
 
   const handleSave1 = async (id) => {
+    setLoadingStates((prev) => ({ ...prev, [id]: true }));
     try {
-      const updatedAnswers = answers1.answer.map((ans) =>
-        ans.id === id ? { ...ans, answerText: editedAnswer1 } : ans
-      );
-      setAnswers1((prevAnswers) => ({
-        ...prevAnswers,
-        answer: updatedAnswers,
-      }));
-
       const updatedAnswer = {
         id,
         answerText: editedAnswer1,
@@ -158,18 +158,41 @@ const MentorAnswers = () => {
         `${baseUrl}/api/mentor/answer`,
         updatedAnswer
       );
-      ToasterComponent("success", response.data.statuses);
+
       if (response.status === 201) {
+        // or 200, depending on your API
+        // Log the response to check if it contains the updated data
+        console.log("Server response:", response.data);
+
+        // Update the local state with the data from the server
+        const updatedAnswers = answers1.answer.map((ans) =>
+          ans.id === id
+            ? { ...ans, answerText: response.data.answerText || editedAnswer1 }
+            : ans
+        );
+        setAnswers1((prevAnswers) => ({
+          ...prevAnswers,
+          answer: updatedAnswers,
+        }));
+
+        // Force a re-render
+        setUpdateTrigger((prev) => !prev);
+
+        ToasterComponent("success", response.data.statuses);
+
+        // Refresh the answers from the server
         await AnswersByMentors1();
       }
     } catch (error) {
-      console.error("Error updating answered:", error);
+      console.error("Error updating answer:", error);
+      ToasterComponent("error", "Failed to update answer. Please try again.");
+    } finally {
+      setEditStates((prevState) => ({
+        ...prevState,
+        [id]: false,
+      }));
+      setLoadingStates((prev) => ({ ...prev, [id]: false }));
     }
-
-    setEditStates((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
   };
 
   const handleCancel1 = (id) => {
@@ -180,6 +203,7 @@ const MentorAnswers = () => {
   };
 
   const handleDeleteAnswer = async (answerId) => {
+    setLoadingStates((prev) => ({ ...prev, [answerId]: true }));
     try {
       // Construct the URL for deleting the answer
       // const deleteUrl = `${baseUrl}/mentorAnswers/${questionId}/answer/${answerId}`;
@@ -201,8 +225,10 @@ const MentorAnswers = () => {
     } catch (error) {
       console.error("Error deleting answer:", error);
     }
+    setLoadingStates((prev) => ({ ...prev, [answerId]: false }));
   };
   const handleDeleteQuestion = async () => {
+    setQuestionLoadingStates(true);
     try {
       const deleteUrl = `${baseUrl}/api/mentee/${questionId}/question`;
 
@@ -222,6 +248,7 @@ const MentorAnswers = () => {
     } catch (error) {
       console.error("Error deleting question:", error);
     }
+    setQuestionLoadingStates(false);
   };
 
   const handlePostAnswer = async () => {
@@ -267,16 +294,6 @@ const MentorAnswers = () => {
     <div className="">
       <Colxx sm="12" md="12" lg="8" xxs="12" className="mx-auto ">
         <div className="form-group">
-          {/* <div className="input-group">
-            <input
-              type="text"
-              className="form-control   "
-              placeholder="Search here"
-              value={inputkey}
-              onChange={(e) => setInputKey(e.target.value)}
-            />
-          </div> */}
-
           {/*  Questions card starts */}
 
           <Card className="mt-3">
@@ -296,7 +313,11 @@ const MentorAnswers = () => {
                           onClick={handleSave}
                           className="mr-2"
                         >
-                          Save
+                          {questionLoadingStates ? (
+                            <Spinner size="sm" color="primary" />
+                          ) : (
+                            "Save"
+                          )}
                         </Button>
                         <Button
                           outline
@@ -308,22 +329,28 @@ const MentorAnswers = () => {
                         </Button>
                       </>
                     ) : (
-                      <Button
-                        outline
-                        color="primary"
-                        className="mr-2"
-                        onClick={handleEdit}
-                      >
-                        <i className="simple-icon-pencil" />
-                      </Button>
+                      <>
+                        <Button
+                          outline
+                          color="primary"
+                          className="mr-2"
+                          onClick={handleEdit}
+                        >
+                          <i className="simple-icon-pencil" />
+                        </Button>{" "}
+                        <Button
+                          outline
+                          color="primary"
+                          onClick={handleDeleteQuestion}
+                        >
+                          {questionLoadingStates ? (
+                            <Spinner size="sm" color="primary" />
+                          ) : (
+                            <i className="simple-icon-trash" />
+                          )}
+                        </Button>
+                      </>
                     )}
-                    <Button
-                      outline
-                      color="primary"
-                      onClick={() => handleDeleteQuestion(questionId)}
-                    >
-                      <i className="simple-icon-trash" />
-                    </Button>
                   </div>
                 )}
                 {/* )} */}
@@ -357,10 +384,6 @@ const MentorAnswers = () => {
           </Card>
 
           <div className="w-100">
-            {/* <Button color="primary " className="default w-20 py-0   rounded" >
-      Ask a questions
-      </Button> */}
-
             <NavLink href="/app/askquestions">
               <Button
                 color="primary"
@@ -394,7 +417,7 @@ const MentorAnswers = () => {
           {answers1.answer &&
             answers1.answer.map((an) => {
               return (
-                <Card key={an.id} className="mt-3 ">
+                <Card key={updateTrigger} className="mt-3 ">
                   <CardBody>
                     <div className="d-flex w-100 justify-content-between">
                       <div className=" ">
@@ -475,8 +498,13 @@ const MentorAnswers = () => {
                                     color="primary"
                                     onClick={() => handleSave1(an.id)}
                                     className="mr-2"
+                                    disabled={loadingStates[an.id]}
                                   >
-                                    Save
+                                    {loadingStates[an.id] ? (
+                                      <Spinner size="sm" color="primary" />
+                                    ) : (
+                                      "Save"
+                                    )}
                                   </Button>
                                   <Button
                                     className="mr-2"
@@ -488,22 +516,28 @@ const MentorAnswers = () => {
                                   </Button>
                                 </>
                               ) : (
-                                <Button
-                                  className="mr-2"
-                                  outline
-                                  color="primary"
-                                  onClick={() => handleEdit1(an.id)}
-                                >
-                                  <i className="simple-icon-pencil" />
-                                </Button>
+                                <>
+                                  <Button
+                                    className="mr-2"
+                                    outline
+                                    color="primary"
+                                    onClick={() => handleEdit1(an.id)}
+                                  >
+                                    <i className="simple-icon-pencil" />
+                                  </Button>
+                                  <Button
+                                    outline
+                                    color="primary"
+                                    onClick={() => handleDeleteAnswer(an.id)}
+                                  >
+                                    {loadingStates[an.id] ? (
+                                      <Spinner size="sm" />
+                                    ) : (
+                                      <i className="simple-icon-trash" />
+                                    )}
+                                  </Button>
+                                </>
                               )}
-                              <Button
-                                outline
-                                color="primary"
-                                onClick={() => handleDeleteAnswer(an.id)}
-                              >
-                                <i className="simple-icon-trash" />
-                              </Button>
                             </>
                           )}
                           {/* )} */}
