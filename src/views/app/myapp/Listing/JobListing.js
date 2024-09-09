@@ -22,6 +22,7 @@ import {
 } from "reactstrap";
 
 import TimestampConverter from "../Calculation/TimestampConverter";
+// import ToasterComponent from "../notifications/ToasterComponent";
 
 const JobListing = ({ isPosted }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -38,9 +39,10 @@ const JobListing = ({ isPosted }) => {
   const toggle = () => setModal(!modal);
   const url = `${baseUrl}/api/posts/job-post/`;
   const interestedClickUrl = `${baseUrl}/api/posts/job-post/interested`;
-
   const history = useHistory();
-
+  const currentUserId = localStorage.getItem("userId");
+  const currentUserRole = localStorage.getItem("roleRes");
+  const currentUserName = localStorage.getItem("userName");
   const toggleExpand = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
   };
@@ -83,14 +85,6 @@ const JobListing = ({ isPosted }) => {
     history.push(`/app/listing/job/view/${id}`);
   };
 
-  // function removeTags(str) {
-  //   if (str === null || str === "") {
-  //     return false;
-  //   }
-  //   const newStr = str.toString();
-  //   return newStr.replace(/(<([^>]+)>)/gi, "");
-  // }
-
   function removeTags(str) {
     if (typeof str === "string") {
       return str.replace(/<[^>]*>/g, "");
@@ -98,14 +92,51 @@ const JobListing = ({ isPosted }) => {
     return "";
   }
 
-  const handleInterestedButtonClick = async (id) => {
-    const data = {
-      jobListingId: id,
-      interested: true,
-    };
+  const handleInterestedButtonClick = async (isCurrentlyInterested, itemId) => {
+    setItems((prev) =>
+      prev.map((job) => {
+        if (job.id === itemId) {
+          const isAlreadyInterested = job.interestedUsers.some(
+            (user) => user.id === currentUserId
+          );
 
+          if (isAlreadyInterested) {
+            // If already interested, decrement the count and remove the user
+            return {
+              ...job,
+              isInterested: false,
+              interestedCount: job.interestedCount - 1,
+              interestedUsers: job.interestedUsers.filter(
+                (user) => user.id !== currentUserId
+              ),
+            };
+          }
+          // If not already interested, increment the count and add the user
+          return {
+            ...job,
+            isInterested: true,
+            interestedCount: job.interestedCount + 1,
+            interestedUsers: [
+              ...job.interestedUsers,
+              {
+                id: currentUserId,
+                role: currentUserRole,
+                username: currentUserName,
+              },
+            ],
+          };
+        }
+        return job;
+      })
+    );
+    const data = {
+      jobListingId: itemId,
+      interested: !isCurrentlyInterested,
+    };
     try {
-      await axios.post(interestedClickUrl, data);
+      const res = await axios.post(interestedClickUrl, data);
+      console.log(res);
+      // ToasterComponent("success", res.data.statuses);
     } catch (error) {
       console.error("Error sending interest:", error);
     }
@@ -113,7 +144,6 @@ const JobListing = ({ isPosted }) => {
 
   const handleInterestPersonPage = (item) => {
     setInterestPerson(item);
-    console.log(item);
     setModal(!modal);
   };
 
@@ -125,7 +155,7 @@ const JobListing = ({ isPosted }) => {
 
   const handleUserClick = (userId) => {
     const lowerCaseRole = userId.role.toLowerCase();
-    history.push(`/app/${lowerCaseRole}profile/${userId.userid}`);
+    history.push(`/app/${lowerCaseRole}profile/${userId.id}`);
   };
 
   const handleShareButtonClick = async (id) => {
@@ -150,7 +180,7 @@ const JobListing = ({ isPosted }) => {
         </ModalHeader>
         <ModalBody className="p-3">
           <ListGroup flush>
-            {interestPerson.length > 0 ? (
+            {interestPerson?.length > 0 ? (
               interestPerson.map((data) => (
                 <ListGroupItem
                   key={data.id}
@@ -172,7 +202,7 @@ const JobListing = ({ isPosted }) => {
         <div className="loading" />
       ) : (
         <>
-          {!items.length > 0 ? (
+          {!items?.length > 0 ? (
             <Card className="d-flex justify-content-center align-items-center ">
               <h2 className="mt-4 mb-4">There are no posts available</h2>
             </Card>
@@ -191,7 +221,7 @@ const JobListing = ({ isPosted }) => {
                           </Col>
                           <Col className="text-right">
                             <p className="text-muted">
-                              Posted on{" "}
+                              Posted on
                               <TimestampConverter
                                 timeStamp={data.postedOn}
                                 format="datetime"
@@ -210,7 +240,7 @@ const JobListing = ({ isPosted }) => {
                                 removeTags(data.description)) ||
                               ""
                             ).slice(0, 100)}`}{" "}
-                            {data.description.length > 100 && (
+                            {data.description?.length > 100 && (
                               <Button
                                 color="link"
                                 onClick={() => toggleExpand(index)}
@@ -247,7 +277,7 @@ const JobListing = ({ isPosted }) => {
                         </Row>
                         <Row className="mt-3">
                           <Col>
-                            {data.skills.map((skill) => (
+                            {data.skills?.map((skill) => (
                               <Button
                                 key={skill}
                                 color="light"
@@ -318,11 +348,15 @@ const JobListing = ({ isPosted }) => {
                             </Button>
                             <Button
                               onClick={() =>
-                                handleInterestedButtonClick(data.id)
+                                handleInterestedButtonClick(
+                                  data.isInterested,
+                                  data.id
+                                )
                               }
                               outline
                               color="primary"
                               size="xs"
+                              active={data.isInterested}
                             >
                               I&apos;m interested
                             </Button>
