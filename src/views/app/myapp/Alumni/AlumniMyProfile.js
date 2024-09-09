@@ -19,6 +19,7 @@ import {
   NavLink,
   Row,
 } from "reactstrap";
+import { EmploymentTypeData } from "../Listing/ListingData";
 import CategoryData from "../my-login/CategoryData";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
@@ -28,10 +29,11 @@ const AlumniMyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [isEditingButton, setIsEditingButton] = useState(false);
+  const [isEditingExp, setIsEditingExp] = useState(false);
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
-  const [experience, setExperience] = useState("");
+  const [experience, setExperience] = useState([]);
   const [location, setLocation] = useState("");
   const [newInputSkill, setNewInputSkill] = useState("");
   const [skills, setSkills] = useState([]);
@@ -52,6 +54,7 @@ const AlumniMyProfile = () => {
   const [averageStar, setAverageStar] = useState(0);
   const [profileLoading, setProfileLoading] = useState(true);
   const [languages, setLanguages] = useState([]);
+  const [college, setCollege] = useState([]);
   const [skillValidationMessage, setSkillValidationMessage] = useState("");
   const [isProfileUpdated, setIsProfileUpdated] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -65,6 +68,7 @@ const AlumniMyProfile = () => {
       try {
         const response = await axios.get(endUrl);
         const userData = response.data;
+        console.log(userData);
         if (userData) {
           setImage(userData.imageUrl);
           setFirstName(userData.firstName);
@@ -87,6 +91,7 @@ const AlumniMyProfile = () => {
           setProfileLoading(false);
           setLanguages(userData.languages);
           setExperience(userData.experience);
+          setCollege(userData.colleges);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -95,6 +100,12 @@ const AlumniMyProfile = () => {
 
     mentorProfileDetails();
   }, [isProfileUpdated]);
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let year = currentYear; year >= 2005; year -= 1) {
+    years.push(year);
+  }
+
   useEffect(() => {
     const mentorReviews = async () => {
       const ratingUrl = `${baseUrl}/api/mentorship/rating/meta/${userId}`;
@@ -152,6 +163,7 @@ const AlumniMyProfile = () => {
         featuredArticle,
         reasonForMentor,
         achievement,
+        experience,
       };
 
       const response = await axios.put(endUrl, updatedData, {
@@ -202,6 +214,19 @@ const AlumniMyProfile = () => {
 
   const handleEditAboutClick = () => {
     setIsEditingAbout(true);
+  };
+
+  const handleEditExpClick = () => {
+    setIsEditingExp(true);
+  };
+
+  const handleSaveExp = () => {
+    setIsEditingExp(false);
+    updateMEntorProfile();
+  };
+
+  const handleCancelEditExp = () => {
+    setIsEditingExp(false);
   };
 
   const handleSaveAbout = () => {
@@ -305,6 +330,12 @@ const AlumniMyProfile = () => {
   };
 
   const countryName = country.find((c) => c.iso_code === location)?.name;
+
+  const handleInputChange = (index, field, value) => {
+    const updatedExperience = [...experience];
+    updatedExperience[index][field] = value;
+    setExperience(updatedExperience);
+  };
 
   return (
     <div className="aluni-profile">
@@ -470,7 +501,7 @@ const AlumniMyProfile = () => {
                           />
                           <br />
                         </>
-                        <>
+                        {/* <>
                           <Label for="experience" className=" text-dark">
                             <h4>Experience</h4>
                           </Label>
@@ -482,7 +513,7 @@ const AlumniMyProfile = () => {
                             onChange={(e) => setExperience(e.target.value)}
                           />
                           <br />
-                        </>
+                        </> */}
                         <>
                           <Label for="location" className="font-weight-medium">
                             <h4>Country</h4>
@@ -560,24 +591,23 @@ const AlumniMyProfile = () => {
                     ) : (
                       <>
                         <h3 className="font-weight-semibold">
-                          {jobTitle} @ {company}
+                          {college[0]?.degree} {college[0]?.department} @
+                          {college[0]?.college}
                         </h3>
-                        <p className="text-one font-weight-medium ">
+                        {/* <p className="text-one font-weight-medium ">
                           {experience}
-                        </p>
-                        <h5 className="font-weight-medium">
-                          <i className="simple-icon-location-pin text-primary" />
+                        </p> */}
+                        {countryName && (
+                          <h5 className="font-weight-medium">
+                            <i className="simple-icon-location-pin text-primary" />
 
-                          <span className="ml-2">{countryName}</span>
-                        </h5>
+                            <span className="ml-2">{countryName}</span>
+                          </h5>
+                        )}
                         <h6 className="">
                           <i className="simple-icon-star text-primary " />
                           <span className="ml-2">{`${averageStar} (${totalRatings} reviews)`}</span>
                         </h6>
-                        {/* <h6 className="">
-                      <i className="simple-icon-clock text-primary" />
-                      <span className="ml-2">Last seen</span>
-                    </h6> */}
                       </>
                     )}
                   </div>
@@ -615,20 +645,6 @@ const AlumniMyProfile = () => {
                   <h2 className="mx-2">Languages known</h2>
                   {languages.length > 0 && isEditingButton ? (
                     <>
-                      {/* {languages.map((lang, index) => (
-                        <Button
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={index}
-                          color="light"
-                          className="mb-2 font-weight-semibold mx-2"
-                          size="xs"
-                          onClick={() => handleRemoveLanguages(index)}
-                        >
-                          {language.find((l) => l.iso_code === lang)?.name}
-                          <i className="iconsminds-close" />
-                        </Button>
-                      ))} */}
-
                       <FormGroup className="error-l-75">
                         <Select
                           placeholder="Select Languages"
@@ -663,24 +679,6 @@ const AlumniMyProfile = () => {
                   <h2 className="mx-2 mt-2">Skills</h2>
                   {isEditingButton ? (
                     <>
-                      {/* <ReactSortable
-                        list={skills}
-                        setList={setSkills}
-                        options={{ handle: ".handle" }}
-                        className="row"
-                      >
-                        {skills.map((skill, index) => (
-                          <Button
-                            key={skill}
-                            color={index < 3 ? "primary" : "light"}
-                            className="mb-2 font-weight-semibold mx-2"
-                            size="xs"
-                            onClick={() => handleRemoveSkill(index)}
-                          >
-                            {skill} <i className="iconsminds-close" />
-                          </Button>
-                        ))}
-                      </ReactSortable> */}
                       <p className="text-muted">
                         Drag skills to set top 3 (the top 3 skills will be
                         displayed on mentor cards)
@@ -816,7 +814,7 @@ const AlumniMyProfile = () => {
                           value={website}
                           onChange={(e) => setWebsite(e.target.value)}
                         />
-                        <p className="text-muted">e.g. http://www.arun.com</p>
+                        <p className="text-muted">e.g. http://www.google.com</p>
                         <br />
                       </div>
                     ) : (
@@ -848,6 +846,248 @@ const AlumniMyProfile = () => {
                         color="primary"
                         outline
                         onClick={handleCancelEditAbout}
+                        className="ml-2"
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  )}
+                </Col>
+              </Row>
+              <hr />
+              <Row>
+                <Col lg="12" md="12">
+                  <h2 className="font-weight-semibold mx-2">Experience</h2>
+                  <div>
+                    {isEditingExp ? (
+                      <div className="col-lg-12 col-12">
+                        <Label for="experience" className=" text-dark">
+                          <h4>Experience</h4>
+                        </Label>
+                        {experience.map((works, index) => (
+                          <>
+                            <Row>
+                              <Col md={6}>
+                                <FormGroup className="error-l-75">
+                                  <Label>Company Name*</Label>
+                                  <Input
+                                    className="form-control"
+                                    name="education company"
+                                    value={works.company}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "company",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              </Col>
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label for={`education[${index}].jobTitle`}>
+                                    Job title*
+                                  </Label>
+                                  <Input
+                                    name={`education[${index}].jobTitle`}
+                                    id={`education[${index}].jobTitle`}
+                                    className="form-control"
+                                    value={works.jobTitle}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "jobTitle",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label
+                                    for={`education[${index}].employmentType`}
+                                  >
+                                    Employment type*
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`education[${index}].employmentType`}
+                                    id={`education[${index}].employmentType`}
+                                    className="form-control"
+                                    value={works.employmentType}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "employmentType",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option key="" value="" disabled>
+                                      Select Employment type
+                                    </option>
+                                    {EmploymentTypeData.map((option, i) => (
+                                      // eslint-disable-next-line react/no-array-index-key
+                                      <option key={i} value={option.label}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label
+                                    for={`education[${index}].jobLocation`}
+                                  >
+                                    Job location*
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    name={`education[${index}].jobLocation`}
+                                    id={`education[${index}].jobLocation`}
+                                    className="form-control"
+                                    value={works.jobLocation}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "jobLocation",
+                                        e.target.value
+                                      )
+                                    }
+                                    // validate={validatePackageDescription}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label for={`education[${index}].startDate`}>
+                                    Start year
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`education[${index}].startDate`}
+                                    id={`education[${index}].startDate`}
+                                    className="form-control"
+                                    value={works.startDate}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "startYear",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option disabled value="">
+                                      Select year
+                                    </option>
+                                    {years.map((yr) => (
+                                      <option key={yr} value={yr}>
+                                        {yr}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+                              <Col>
+                                <FormGroup>
+                                  <Label for={`education[${index}].endDate`}>
+                                    End year
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`education[${index}].endDate`}
+                                    id={`education[${index}].endDate`}
+                                    className="form-control"
+                                    value={works.endDate}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "endYear",
+                                        e.target.value
+                                      )
+                                    }
+                                    // validate={validatePackageDescription}
+                                  >
+                                    <option disabled value="">
+                                      Select year
+                                    </option>
+                                    {years.map((yr) => (
+                                      <option key={yr} value={yr}>
+                                        {currentYear === yr ? "Present" : yr}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+                              <Row>
+                                <Col>
+                                  <FormGroup className="error-l-75">
+                                    <Label>Price</Label>
+                                    <Input
+                                      className="form-control"
+                                      name={`education[${index}].company`}
+                                      value={works.price}
+                                      onChange={(e) =>
+                                        handleInputChange(
+                                          index,
+                                          "price",
+                                          e.target.value
+                                        )
+                                      }
+                                      type="number"
+                                    />
+                                  </FormGroup>
+                                </Col>
+                              </Row>
+                            </Row>
+                          </>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="col-lg-12 col-12">
+                        {experience?.map((value) => (
+                          <p
+                            className="text-one font-weight-medium "
+                            key={value.id}
+                          >
+                            {value.jobTitle} <br /> {value.company} |{" "}
+                            {value.startYear} - {value.endYear}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {!isEditingExp && (
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={handleEditExpClick}
+                      className="ml-2"
+                    >
+                      <i className="simple-icon-pencil" /> Edit
+                    </Button>
+                  )}
+                  {isEditingExp && (
+                    <>
+                      <Button
+                        color="primary"
+                        onClick={handleSaveExp}
+                        className="mr-2"
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        color="primary"
+                        outline
+                        onClick={handleCancelEditExp}
                         className="ml-2"
                       >
                         Cancel

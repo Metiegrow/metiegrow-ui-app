@@ -155,6 +155,7 @@ const JobListing = ({ isPosted }) => {
 
   const handleUserClick = (userId) => {
     const lowerCaseRole = userId.role.toLowerCase();
+    console.log(`/app/${lowerCaseRole}profile/${userId.id}`);
     history.push(`/app/${lowerCaseRole}profile/${userId.id}`);
   };
 
