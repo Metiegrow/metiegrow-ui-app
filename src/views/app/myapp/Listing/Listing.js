@@ -191,18 +191,26 @@ const DetailsAltPages = () => {
           </Nav>
 
           <TabContent activeTab={activeTab}>
-            <TabPane tabId="all">
-              <All />
-            </TabPane>
-            <TabPane tabId="job">
-              <JobListing isPosted={isPosted} />
-            </TabPane>
-            <TabPane tabId="stay">
-              <StayListing isPosted={isPosted} />
-            </TabPane>
-            <TabPane tabId="others">
-              <OtherListing isPosted={isPosted} />
-            </TabPane>
+            {activeTab === "all" && (
+              <TabPane tabId="all">
+                <All />
+              </TabPane>
+            )}
+            {activeTab === "job" && (
+              <TabPane tabId="job">
+                <JobListing isPosted={isPosted} />
+              </TabPane>
+            )}
+            {activeTab === "stay" && (
+              <TabPane tabId="stay">
+                <StayListing isPosted={isPosted} />
+              </TabPane>
+            )}
+            {activeTab === "others" && (
+              <TabPane tabId="others">
+                <OtherListing isPosted={isPosted} />
+              </TabPane>
+            )}
           </TabContent>
         </Colxx>
       </Row>

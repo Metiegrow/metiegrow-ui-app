@@ -1,17 +1,17 @@
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
 import { useEffect, useState } from "react";
-import { ReactSortable } from "react-sortablejs";
+// import { ReactSortable } from "react-sortablejs";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { Colxx } from "components/common/CustomBootstrap";
+import Select from "react-select";
 import {
+  Badge,
   Button,
   Card,
   Col,
   Form,
   FormGroup,
-  // Card,
-  // CardBody,
-  // CardSubtitle,
-  // CardImg,
   Input,
   InputGroup,
   InputGroupAddon,
@@ -19,10 +19,7 @@ import {
   NavLink,
   Row,
 } from "reactstrap";
-// import { NotificationManager } from 'components/common/react-notifications';
-import ThumbnailLetters from "components/cards/ThumbnailLetters";
-import { Colxx } from "components/common/CustomBootstrap";
-import Select from "react-select";
+import { EmploymentTypeData } from "../Listing/ListingData";
 import CategoryData from "../my-login/CategoryData";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
@@ -32,10 +29,11 @@ const AlumniMyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [isEditingButton, setIsEditingButton] = useState(false);
+  const [isEditingExp, setIsEditingExp] = useState(false);
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
-  const [experience, setExperience] = useState("");
+  const [experience, setExperience] = useState([]);
   const [location, setLocation] = useState("");
   const [newInputSkill, setNewInputSkill] = useState("");
   const [skills, setSkills] = useState([]);
@@ -56,17 +54,11 @@ const AlumniMyProfile = () => {
   const [averageStar, setAverageStar] = useState(0);
   const [profileLoading, setProfileLoading] = useState(true);
   const [languages, setLanguages] = useState([]);
+  const [college, setCollege] = useState([]);
   const [skillValidationMessage, setSkillValidationMessage] = useState("");
   const [isProfileUpdated, setIsProfileUpdated] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // const Id = 1;
-
-  // const url = `${baseUrl}/user`;
-  // const url = `${baseUrl}/api/mentor/11/details/profile`;
-  // const url1 = `${baseUrl}/mentor/profile${userId}`;
-  // const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
-  // const endUrl = `${baseUrl}/myprofile`;
   const endUrl = `${baseUrl}/api/alumni/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
   const imageEditUrl = `${baseUrl}/api/mentor/mentor-profile-image`;
@@ -76,24 +68,17 @@ const AlumniMyProfile = () => {
       try {
         const response = await axios.get(endUrl);
         const userData = response.data;
-        // console.log("userData:", userData);
+        console.log(userData);
         if (userData) {
           setImage(userData.imageUrl);
           setFirstName(userData.firstName);
-          // setJobRole(userData.jobRole);
           setJobTitle(userData.jobTitle);
           setCompany(userData.company);
           setLocation(userData.location);
-          // setAbout(userData.bio);
           setSkills(userData.skills);
           setUserId(userData.id);
-          // setLastseen(userData.lastSeen);
-          // setRatings(userData[0].ratings)
-          // console.log(response)
-          // console.log("Username:", userData[1].jobRole);
           setLastName(userData.lastName);
           setEmail(userData.email);
-          // setPassword(userData.password);
           setCategory(userData.category);
           setBio(userData.bio);
           setLinkedinUrl(userData.linkedinUrl);
@@ -104,11 +89,9 @@ const AlumniMyProfile = () => {
           setReasonForMentor(userData.reasonForMentor);
           setAchievement(userData.achievement);
           setProfileLoading(false);
-          // setReviews(userData.reviews)
-          // setPrice(userData.price)
-          // setExperience(userData.experience)
-          // setTopics(userData.topics);
-          // setStar(userData.star);
+          setLanguages(userData.languages);
+          setExperience(userData.experience);
+          setCollege(userData.colleges);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -117,6 +100,12 @@ const AlumniMyProfile = () => {
 
     mentorProfileDetails();
   }, [isProfileUpdated]);
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let year = currentYear; year >= 2005; year -= 1) {
+    years.push(year);
+  }
+
   useEffect(() => {
     const mentorReviews = async () => {
       const ratingUrl = `${baseUrl}/api/mentorship/rating/meta/${userId}`;
@@ -137,13 +126,8 @@ const AlumniMyProfile = () => {
       try {
         const response = await axios.get(inputUrl);
         const inputData = response.data;
-        // console.log("inputData:", inputData);
         if (inputData) {
-          // setReviews(inputData.reviews)
-          // setPrice(inputData.price)
           setExperience(inputData.experience);
-          // setTopics(inputData.topics);
-          // setStar(inputData.star);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -157,7 +141,6 @@ const AlumniMyProfile = () => {
     return localStorage.getItem("tokenRes");
   }
   const token = getTokenRes();
-  // console.log(token);
 
   const updateMEntorProfile = async () => {
     try {
@@ -180,15 +163,8 @@ const AlumniMyProfile = () => {
         featuredArticle,
         reasonForMentor,
         achievement,
-        // reviews,
-        // star,
-        // topics,
-        // price,
-        // experience,
+        experience,
       };
-
-      // console.log("Updated Data:", updatedData);
-      // const response =
 
       const response = await axios.put(endUrl, updatedData, {
         headers: {
@@ -196,14 +172,8 @@ const AlumniMyProfile = () => {
         },
       });
 
-      // console.log("Response", response.data.statuses[0].message);
-      //   response.data.statuses.forEach((status) => {
-      //    const responseMessage = status.message;
-      //     NotificationManager.success(responseMessage, 'Great!', 3000, null, null, '');
-      // });
       setIsProfileUpdated(!isProfileUpdated);
       ToasterComponent("success", response.data.statuses);
-      // console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile", error);
       if (error.response && error.response.data.statuses[0]) {
@@ -228,7 +198,6 @@ const AlumniMyProfile = () => {
       });
       ToasterComponent("success", response.data.statuses);
       setTimeout(() => {}, 2000);
-      // console.log(`resres ${response.status}`);
     } catch (error) {
       console.error(error);
     }
@@ -245,6 +214,19 @@ const AlumniMyProfile = () => {
 
   const handleEditAboutClick = () => {
     setIsEditingAbout(true);
+  };
+
+  const handleEditExpClick = () => {
+    setIsEditingExp(true);
+  };
+
+  const handleSaveExp = () => {
+    setIsEditingExp(false);
+    updateMEntorProfile();
+  };
+
+  const handleCancelEditExp = () => {
+    setIsEditingExp(false);
   };
 
   const handleSaveAbout = () => {
@@ -290,15 +272,8 @@ const AlumniMyProfile = () => {
     setIsEditing(false);
   };
 
-  const handleRemoveSkill = (index) => {
-    setSkills(skills.filter((_, i) => i !== index));
-  };
-
-  // const handleAddTopics = (newTopics) => {
-  //   setTopics([...topics, newTopics]);
-  // };
-  // const handleRemoveTopics = (index) => {
-  //   setTopics(topics.filter((_, i) => i !== index));
+  // const handleRemoveSkill = (index) => {
+  //   setSkills(skills.filter((_, i) => i !== index));
   // };
 
   const handleLinkedInClick = () => {
@@ -327,9 +302,9 @@ const AlumniMyProfile = () => {
     setLanguages([...languages, newLanguages]);
   };
 
-  const handleRemoveLanguages = (index) => {
-    setLanguages(languages.filter((_, i) => i !== index));
-  };
+  // const handleRemoveLanguages = (index) => {
+  //   setLanguages(languages.filter((_, i) => i !== index));
+  // };
 
   const languageOptions = language.map((option) => ({
     value: option.iso_code,
@@ -342,7 +317,6 @@ const AlumniMyProfile = () => {
     const languagesArray = selectedOptions
       ? selectedOptions.map((option) => option.value)
       : [];
-    // console.log("arraychk", languagesArray);
     handleAddLanguages(languagesArray[0]);
     setSelectedLanguages([]);
   };
@@ -353,63 +327,20 @@ const AlumniMyProfile = () => {
     const file = event.target.files[0];
     setSelectedFile(file);
     setFile1(file);
-
-    // if (file) {
-    //   const reader = new FileReader();
-
-    //   reader.onloadend = () => {
-    //     const base64Image = reader.result;
-    //     setSelectedFileBase64(base64Image);
-
-    //     // setAboutField({ ...aboutField, image: base64Image });
-    //   };
-
-    //   reader.readAsDataURL(file);
-    // }
   };
 
   const countryName = country.find((c) => c.iso_code === location)?.name;
 
-  return (
-    <div className="mentor-profile">
-      {/* <div className=""> */}
+  const handleInputChange = (index, field, value) => {
+    const updatedExperience = [...experience];
+    updatedExperience[index][field] = value;
+    setExperience(updatedExperience);
+  };
 
+  return (
+    <div className="aluni-profile">
       <Colxx sm="12" md="12" lg="12" xxs="12" className="">
         <div className="">
-          {/* <div className="h-100"> */}
-          {/* <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
-            <div className=" ">
-              <img
-                src={`${baseUrl}/${image}`}
-                // "/assets/img/profiles/2.jpg"
-                className=" col-2 mx-2 w-60 rounded-circle img-thumbnail border"
-                alt=""
-              />
-              <Button
-                color="light"
-                className=" font-weight-semibold mx-2"
-                size="large"
-              >
-                <span className="font-weight-semibold text-one">
-                  <i className="iconsminds-thunder text-primary" /> Quick
-                  Responder
-                </span>
-              </Button>
-            </div>
-            <div>
-              <NavLink>
-                <Button
-                  color="light"
-                  className="font-weight-semibold mx-2"
-                  size="large"
-                  onClick={handleLinkedInClick}
-                >
-                  <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
-                </Button>
-              </NavLink>
-            </div>
-          </div> */}
-
           <Card
             style={{ height: "160px", width: "100%", overflow: "hidden" }}
             className="bg-primary"
@@ -570,7 +501,7 @@ const AlumniMyProfile = () => {
                           />
                           <br />
                         </>
-                        <>
+                        {/* <>
                           <Label for="experience" className=" text-dark">
                             <h4>Experience</h4>
                           </Label>
@@ -582,7 +513,7 @@ const AlumniMyProfile = () => {
                             onChange={(e) => setExperience(e.target.value)}
                           />
                           <br />
-                        </>
+                        </> */}
                         <>
                           <Label for="location" className="font-weight-medium">
                             <h4>Country</h4>
@@ -659,28 +590,24 @@ const AlumniMyProfile = () => {
                       </div>
                     ) : (
                       <>
-                        {/* <h1 className="font-weight-semibold text-large">
-                      {firstName} {lastName}
-                    </h1> */}
                         <h3 className="font-weight-semibold">
-                          {jobTitle} @ {company}
+                          {college[0]?.degree} {college[0]?.department} @
+                          {college[0]?.college}
                         </h3>
-                        <p className="text-one font-weight-medium ">
+                        {/* <p className="text-one font-weight-medium ">
                           {experience}
-                        </p>
-                        <h5 className="font-weight-medium">
-                          <i className="simple-icon-location-pin text-primary" />
+                        </p> */}
+                        {countryName && (
+                          <h5 className="font-weight-medium">
+                            <i className="simple-icon-location-pin text-primary" />
 
-                          <span className="ml-2">{countryName}</span>
-                        </h5>
+                            <span className="ml-2">{countryName}</span>
+                          </h5>
+                        )}
                         <h6 className="">
                           <i className="simple-icon-star text-primary " />
                           <span className="ml-2">{`${averageStar} (${totalRatings} reviews)`}</span>
                         </h6>
-                        {/* <h6 className="">
-                      <i className="simple-icon-clock text-primary" />
-                      <span className="ml-2">Last seen</span>
-                    </h6> */}
                       </>
                     )}
                   </div>
@@ -715,25 +642,9 @@ const AlumniMyProfile = () => {
                   )}
                 </Col>
                 <Col lg="6" md="12" className="mt-4">
-                  {languages.length > 0 && isEditingButton && (
-                    <h2 className="mx-2">Languages known</h2>
-                  )}
+                  <h2 className="mx-2">Languages known</h2>
                   {languages.length > 0 && isEditingButton ? (
                     <>
-                      {languages.map((lang, index) => (
-                        <Button
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={index}
-                          color="light"
-                          className="mb-2 font-weight-semibold mx-2"
-                          size="xs"
-                          onClick={() => handleRemoveLanguages(index)}
-                        >
-                          {language.find((l) => l.iso_code === lang)?.name}{" "}
-                          <i className="iconsminds-close" />
-                        </Button>
-                      ))}
-
                       <FormGroup className="error-l-75">
                         <Select
                           placeholder="Select Languages"
@@ -752,40 +663,22 @@ const AlumniMyProfile = () => {
                     </>
                   ) : (
                     languages.map((lang, index) => (
-                      <Button
+                      <Badge
                         // eslint-disable-next-line react/no-array-index-key
                         key={index}
-                        color="light"
+                        color={index < 3 ? "primary" : "light"}
                         className="mb-2 font-weight-semibold mx-2"
                         size="xs"
+                        pill
                       >
                         {language.find((l) => l.iso_code === lang)?.name}
-                      </Button>
+                      </Badge>
                     ))
                   )}
 
-                  <h2 className="mx-2">Skills</h2>
+                  <h2 className="mx-2 mt-2">Skills</h2>
                   {isEditingButton ? (
                     <>
-                      <ReactSortable
-                        list={skills}
-                        setList={setSkills}
-                        options={{ handle: ".handle" }}
-                        className="row"
-                      >
-                        {skills.map((skill, index) => (
-                          <Button
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={index}
-                            color={index < 3 ? "primary" : "light"}
-                            className="mb-2 font-weight-semibold mx-2"
-                            size="xs"
-                            onClick={() => handleRemoveSkill(index)}
-                          >
-                            {skill} <i className="iconsminds-close" />
-                          </Button>
-                        ))}
-                      </ReactSortable>
                       <p className="text-muted">
                         Drag skills to set top 3 (the top 3 skills will be
                         displayed on mentor cards)
@@ -824,87 +717,19 @@ const AlumniMyProfile = () => {
                     </>
                   ) : (
                     skills.map((skill, index) => (
-                      <Button
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={index}
+                      <Badge
+                        key={skill}
                         color={index < 3 ? "primary" : "light"}
                         className="mb-2 font-weight-semibold mx-2"
                         size="xs"
-                        // onClick={() => handleRemoveSkill(index)}
+                        pill
                       >
                         {skill}
-                      </Button>
+                      </Badge>
                     ))
                   )}
-
                   <div className="mt-2">
-                    {/* <h2 className="mx-2">Topics</h2> */}
-
-                    {/* {isEditingButton ? (
-                  <>
-                    {topics.map((newTopics, index) => (
-                      <Button
-                        key={newTopics}
-                        color="light"
-                        className="mb-2 font-weight-semibold mx-2"
-                        size="xs"
-                        onClick={() => handleRemoveTopics(index)}
-                      >
-                        {newTopics} <i className="iconsminds-close" />
-                      </Button>
-                    ))}
-                    <InputGroup className="mb-3">
-                      <Input
-                        type="text"
-                        placeholder="New topic"
-                        value={newInputTopics}
-                        onChange={(e) => setNewInputTopics(e.target.value)}
-                        onKeyDown={(event) => {
-                          if (event.key === "Enter") {
-                            handleAddTopics(newInputTopics);
-                            setNewInputTopics("");
-                          }
-                        }}
-                      />
-                      <InputGroupAddon addonType="append">
-                        <Button
-                          outline
-                          color="primary"
-                          onClick={() => {
-                            handleAddTopics(newInputTopics);
-                            setNewInputTopics("");
-                          }}
-                        >
-                          Add topics
-                        </Button>
-                      </InputGroupAddon>
-                    </InputGroup>
-                  </>
-                ) : (
-                  topics.map((newTopics) => (
-                    <Button
-                      key={newTopics}
-                      color="light"
-                      className="mb-2 font-weight-semibold mx-2"
-                      size="xs"
-                      // onClick={() => handleRemoveSkill(index)}
-                    >
-                      {newTopics}
-                    </Button>
-                  ))
-                )} */}
-                    {/* <br /> */}
-                    {!isEditingButton && (
-                      <Button
-                        color="primary"
-                        outline
-                        onClick={handleEditButton}
-                        className="ml-2"
-                      >
-                        <i className="simple-icon-pencil" /> Edit
-                      </Button>
-                    )}
-                    {isEditingButton && (
+                    {isEditingButton ? (
                       <>
                         <Button
                           color="primary"
@@ -919,21 +744,26 @@ const AlumniMyProfile = () => {
                           onClick={handleCancelButton}
                           className="ml-2"
                         >
-                          {/* <i className="simple-icon-close" />  */}
                           Cancel
                         </Button>
                       </>
+                    ) : (
+                      <Button
+                        color="primary"
+                        outline
+                        onClick={handleEditButton}
+                        className="ml-2"
+                      >
+                        <i className="simple-icon-pencil" /> Edit
+                      </Button>
                     )}
                   </div>
                 </Col>
               </Row>
-              {/* </div> */}
               <hr />
-              {/* <Colxx sm="12" md="12" lg="12" xxs="12" className="mt-5"> */}
               <Row>
                 <Col lg="12" md="12">
                   <h2 className="font-weight-semibold mx-2">About</h2>
-
                   <div>
                     {isEditingAbout ? (
                       <div className="col-lg-6 col-12">
@@ -972,7 +802,6 @@ const AlumniMyProfile = () => {
                         <p className="text-muted">
                           Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
                         </p>
-                        {/* <br /> */}
                         <Label
                           for="personalWebsite"
                           className="font-weight-medium"
@@ -985,7 +814,7 @@ const AlumniMyProfile = () => {
                           value={website}
                           onChange={(e) => setWebsite(e.target.value)}
                         />
-                        <p className="text-muted">e.g. http://www.arun.com</p>
+                        <p className="text-muted">e.g. http://www.google.com</p>
                         <br />
                       </div>
                     ) : (
@@ -994,7 +823,6 @@ const AlumniMyProfile = () => {
                       </div>
                     )}
                   </div>
-
                   {!isEditingAbout && (
                     <Button
                       color="primary"
@@ -1005,7 +833,6 @@ const AlumniMyProfile = () => {
                       <i className="simple-icon-pencil" /> Edit
                     </Button>
                   )}
-
                   {isEditingAbout && (
                     <>
                       <Button
@@ -1021,7 +848,6 @@ const AlumniMyProfile = () => {
                         onClick={handleCancelEditAbout}
                         className="ml-2"
                       >
-                        {/* <i className="simple-icon-close" /> */}
                         Cancel
                       </Button>
                     </>
@@ -1029,13 +855,253 @@ const AlumniMyProfile = () => {
                 </Col>
               </Row>
               <hr />
-              {/* </Colxx> */}
+              <Row>
+                <Col lg="12" md="12">
+                  <h2 className="font-weight-semibold mx-2">Experience</h2>
+                  <div>
+                    {isEditingExp ? (
+                      <div className="col-lg-12 col-12">
+                        <Label for="experience" className=" text-dark">
+                          <h4>Experience</h4>
+                        </Label>
+                        {experience.map((works, index) => (
+                          <>
+                            <Row>
+                              <Col md={6}>
+                                <FormGroup className="error-l-75">
+                                  <Label>Company Name*</Label>
+                                  <Input
+                                    className="form-control"
+                                    name="education company"
+                                    value={works.company}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "company",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              </Col>
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label for={`education[${index}].jobTitle`}>
+                                    Job title*
+                                  </Label>
+                                  <Input
+                                    name={`education[${index}].jobTitle`}
+                                    id={`education[${index}].jobTitle`}
+                                    className="form-control"
+                                    value={works.jobTitle}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "jobTitle",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label
+                                    for={`education[${index}].employmentType`}
+                                  >
+                                    Employment type*
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`education[${index}].employmentType`}
+                                    id={`education[${index}].employmentType`}
+                                    className="form-control"
+                                    value={works.employmentType}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "employmentType",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option key="" value="" disabled>
+                                      Select Employment type
+                                    </option>
+                                    {EmploymentTypeData.map((option, i) => (
+                                      // eslint-disable-next-line react/no-array-index-key
+                                      <option key={i} value={option.label}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label
+                                    for={`education[${index}].jobLocation`}
+                                  >
+                                    Job location*
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    name={`education[${index}].jobLocation`}
+                                    id={`education[${index}].jobLocation`}
+                                    className="form-control"
+                                    value={works.jobLocation}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "jobLocation",
+                                        e.target.value
+                                      )
+                                    }
+                                    // validate={validatePackageDescription}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label for={`education[${index}].startDate`}>
+                                    Start year
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`education[${index}].startDate`}
+                                    id={`education[${index}].startDate`}
+                                    className="form-control"
+                                    value={works.startDate}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "startYear",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option disabled value="">
+                                      Select year
+                                    </option>
+                                    {years.map((yr) => (
+                                      <option key={yr} value={yr}>
+                                        {yr}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+                              <Col>
+                                <FormGroup>
+                                  <Label for={`education[${index}].endDate`}>
+                                    End year
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`education[${index}].endDate`}
+                                    id={`education[${index}].endDate`}
+                                    className="form-control"
+                                    value={works.endDate}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        index,
+                                        "endYear",
+                                        e.target.value
+                                      )
+                                    }
+                                    // validate={validatePackageDescription}
+                                  >
+                                    <option disabled value="">
+                                      Select year
+                                    </option>
+                                    {years.map((yr) => (
+                                      <option key={yr} value={yr}>
+                                        {currentYear === yr ? "Present" : yr}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+                              <Row>
+                                <Col>
+                                  <FormGroup className="error-l-75">
+                                    <Label>Price</Label>
+                                    <Input
+                                      className="form-control"
+                                      name={`education[${index}].company`}
+                                      value={works.price}
+                                      onChange={(e) =>
+                                        handleInputChange(
+                                          index,
+                                          "price",
+                                          e.target.value
+                                        )
+                                      }
+                                      type="number"
+                                    />
+                                  </FormGroup>
+                                </Col>
+                              </Row>
+                            </Row>
+                          </>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="col-lg-12 col-12">
+                        {experience?.map((value) => (
+                          <p
+                            className="text-one font-weight-medium "
+                            key={value.id}
+                          >
+                            {value.jobTitle} <br /> {value.company} |{" "}
+                            {value.startYear} - {value.endYear}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {!isEditingExp && (
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={handleEditExpClick}
+                      className="ml-2"
+                    >
+                      <i className="simple-icon-pencil" /> Edit
+                    </Button>
+                  )}
+                  {isEditingExp && (
+                    <>
+                      <Button
+                        color="primary"
+                        onClick={handleSaveExp}
+                        className="mr-2"
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        color="primary"
+                        outline
+                        onClick={handleCancelEditExp}
+                        className="ml-2"
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  )}
+                </Col>
+              </Row>
+              <hr />
             </>
           )}
         </div>
       </Colxx>
     </div>
-    // </div>
   );
 };
 

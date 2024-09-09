@@ -30,6 +30,7 @@ const MentorFilter = ({
   selectedLocation,
   selectedIndustry,
   selectedTools,
+  userRole,
 }) => {
   const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
   const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
@@ -357,76 +358,78 @@ const MentorFilter = ({
                     </DropdownMenu>
                   </Dropdown>
 
-                  <Dropdown
-                    isOpen={dropdownBasicOpen1}
-                    toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
-                    className="mb-3  col-lg-auto col-sm-12"
-                  >
-                    <DropdownToggle
-                      size="sm"
-                      className="col-lg-auto col-sm-12"
-                      caret
-                      color="primary"
-                      outline
+                  {userRole !== "alumni" && (
+                    <Dropdown
+                      isOpen={dropdownBasicOpen1}
+                      toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
+                      className="mb-3  col-lg-auto col-sm-12"
                     >
-                      {selectedTools[0] ? selectedTools : <span>Tools</span>}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      <div className="search-sm mr-1 ml-1 mb-1 align-top">
-                        <input
-                          type="text"
-                          className="form-control "
-                          placeholder="Search tools"
-                          value={searchTools}
-                          onChange={handleSearchTools}
-                        />
-                      </div>
-                      <PerfectScrollbar
-                        style={{ maxHeight: "200px" }}
-                        options={{
-                          suppressScrollX: true,
-                          wheelPropagation: false,
-                        }}
+                      <DropdownToggle
+                        size="sm"
+                        className="col-lg-auto col-sm-12"
+                        caret
+                        color="primary"
+                        outline
                       >
-                        {selectedTools[0] && (
-                          <DropdownItem
-                            onClick={() => handleToolSelect("")}
-                            className="bg-light d-flex justify-content-between align-items-center"
-                          >
-                            <span>{selectedTools}</span>
-                            <i className="iconsminds-close ml-auto" />
-                          </DropdownItem>
-                        )}
-                        {toolsFetched && toolsData.length === 0 && (
-                          <Card className=" d-flex justify-content-between align-items-center">
-                            {searchTools} was not found
-                          </Card>
-                        )}
-                        {!toolsFetched && (
-                          <Card className=" d-flex justify-content-between align-items-center">
-                            Failed to load data!
-                          </Card>
-                        )}
-                        {toolsData.map((t, index) => (
-                          <DropdownItem
-                            key={index}
-                            onClick={() => handleToolSelect(t)}
-                          >
-                            {t}
-                          </DropdownItem>
-                        ))}
-                        {!toolsPaginationMeta.last && toolsFetched && (
-                          <Card
-                            style={{ cursor: "pointer" }}
-                            onClick={handleToolsLoadMore}
-                            className="bg-light d-flex justify-content-between align-items-center"
-                          >
-                            load more
-                          </Card>
-                        )}
-                      </PerfectScrollbar>
-                    </DropdownMenu>
-                  </Dropdown>
+                        {selectedTools[0] ? selectedTools : <span>Tools</span>}
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                          <input
+                            type="text"
+                            className="form-control "
+                            placeholder="Search tools"
+                            value={searchTools}
+                            onChange={handleSearchTools}
+                          />
+                        </div>
+                        <PerfectScrollbar
+                          style={{ maxHeight: "200px" }}
+                          options={{
+                            suppressScrollX: true,
+                            wheelPropagation: false,
+                          }}
+                        >
+                          {selectedTools[0] && (
+                            <DropdownItem
+                              onClick={() => handleToolSelect("")}
+                              className="bg-light d-flex justify-content-between align-items-center"
+                            >
+                              <span>{selectedTools}</span>
+                              <i className="iconsminds-close ml-auto" />
+                            </DropdownItem>
+                          )}
+                          {toolsFetched && toolsData.length === 0 && (
+                            <Card className=" d-flex justify-content-between align-items-center">
+                              {searchTools} was not found
+                            </Card>
+                          )}
+                          {!toolsFetched && (
+                            <Card className=" d-flex justify-content-between align-items-center">
+                              Failed to load data!
+                            </Card>
+                          )}
+                          {toolsData.map((t, index) => (
+                            <DropdownItem
+                              key={index}
+                              onClick={() => handleToolSelect(t)}
+                            >
+                              {t}
+                            </DropdownItem>
+                          ))}
+                          {!toolsPaginationMeta.last && toolsFetched && (
+                            <Card
+                              style={{ cursor: "pointer" }}
+                              onClick={handleToolsLoadMore}
+                              className="bg-light d-flex justify-content-between align-items-center"
+                            >
+                              load more
+                            </Card>
+                          )}
+                        </PerfectScrollbar>
+                      </DropdownMenu>
+                    </Dropdown>
+                  )}
 
                   <Dropdown
                     isOpen={dropdownBasicOpen2}
@@ -536,32 +539,33 @@ const MentorFilter = ({
                     </DropdownMenu>
                   </Dropdown>
 
-                  <Dropdown
-                    isOpen={dropdownBasicOpen4}
-                    toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
-                    className="mb-3  col-lg-auto col-sm-12"
-                  >
-                    <DropdownToggle
-                      size="sm"
-                      className="col-lg-auto col-sm-12"
-                      caret
-                      color="primary"
-                      outline
+                  {userRole !== "alumni" && (
+                    <Dropdown
+                      isOpen={dropdownBasicOpen4}
+                      toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
+                      className="mb-3  col-lg-auto col-sm-12"
                     >
-                      {selectedLocation ? (
-                        country.find((c) => c.iso_code === selectedLocation)
-                          ?.name
-                      ) : (
-                        <span>Location</span>
-                      )}
-                    </DropdownToggle>
-                    {/* <DropdownMenu
+                      <DropdownToggle
+                        size="sm"
+                        className="col-lg-auto col-sm-12"
+                        caret
+                        color="primary"
+                        outline
+                      >
+                        {selectedLocation ? (
+                          country.find((c) => c.iso_code === selectedLocation)
+                            ?.name
+                        ) : (
+                          <span>Location</span>
+                        )}
+                      </DropdownToggle>
+                      {/* <DropdownMenu
                   style={{
                     maxHeight: '200px',
                     overflowY: 'auto'
                   }}
                 > */}
-                    {/* <DropdownMenu>
+                      {/* <DropdownMenu>
                   <PerfectScrollbar style={{ maxHeight: '200px' }}>
                     {country.map((c) => (
                       <DropdownItem key={c.iso_code} onClick={() => handleLocationSelect(c.iso_code)}>
@@ -570,61 +574,62 @@ const MentorFilter = ({
                     ))}
                   </PerfectScrollbar>
                 </DropdownMenu> */}
-                    <DropdownMenu>
-                      {/* <input
+                      <DropdownMenu>
+                        {/* <input
                     type="text"
                     className="form-control mb-2"
                     placeholder="Search Country"
                     value={searchText}
                     onChange={handleSearchChange}
                   /> */}
-                      <div className="search-sm mr-1 ml-1 mb-1 align-top">
-                        <input
-                          type="text"
-                          className="form-control "
-                          placeholder="Search Country"
-                          value={searchText}
-                          onChange={handleSearchChange}
-                        />
-                      </div>
-                      <PerfectScrollbar
-                        style={{ maxHeight: "200px" }}
-                        options={{
-                          suppressScrollX: true,
-                          wheelPropagation: false,
-                        }}
-                      >
-                        {selectedLocation && (
-                          <DropdownItem
-                            onClick={() => handleLocationSelect("")}
-                            className=" d-flex justify-content-between align-items-center"
-                          >
-                            <span>
-                              {
-                                country.find(
-                                  (c) => c.iso_code === selectedLocation
-                                )?.name
-                              }
-                            </span>
-                            <i className="iconsminds-close ml-auto" />
-                          </DropdownItem>
-                        )}
-                        {filteredCountry.length === 0 && (
-                          <Card className="bg-light d-flex justify-content-between align-items-center">
-                            {searchText} was not found
-                          </Card>
-                        )}
-                        {filteredCountry.map((c, index) => (
-                          <DropdownItem
-                            key={index}
-                            onClick={() => handleLocationSelect(c.iso_code)}
-                          >
-                            {c.name}
-                          </DropdownItem>
-                        ))}
-                      </PerfectScrollbar>
-                    </DropdownMenu>
-                  </Dropdown>
+                        <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                          <input
+                            type="text"
+                            className="form-control "
+                            placeholder="Search Country"
+                            value={searchText}
+                            onChange={handleSearchChange}
+                          />
+                        </div>
+                        <PerfectScrollbar
+                          style={{ maxHeight: "200px" }}
+                          options={{
+                            suppressScrollX: true,
+                            wheelPropagation: false,
+                          }}
+                        >
+                          {selectedLocation && (
+                            <DropdownItem
+                              onClick={() => handleLocationSelect("")}
+                              className=" d-flex justify-content-between align-items-center"
+                            >
+                              <span>
+                                {
+                                  country.find(
+                                    (c) => c.iso_code === selectedLocation
+                                  )?.name
+                                }
+                              </span>
+                              <i className="iconsminds-close ml-auto" />
+                            </DropdownItem>
+                          )}
+                          {filteredCountry.length === 0 && (
+                            <Card className="bg-light d-flex justify-content-between align-items-center">
+                              {searchText} was not found
+                            </Card>
+                          )}
+                          {filteredCountry.map((c, index) => (
+                            <DropdownItem
+                              key={index}
+                              onClick={() => handleLocationSelect(c.iso_code)}
+                            >
+                              {c.name}
+                            </DropdownItem>
+                          ))}
+                        </PerfectScrollbar>
+                      </DropdownMenu>
+                    </Dropdown>
+                  )}
                 </>
               )}
             </div>
