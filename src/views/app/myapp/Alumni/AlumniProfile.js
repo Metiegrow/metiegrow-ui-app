@@ -1,18 +1,18 @@
-import { Colxx } from "components/common/CustomBootstrap";
-import React, { useState, useEffect } from "react";
-import { Button, Row } from "reactstrap";
-import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { Colxx } from "components/common/CustomBootstrap";
+import { baseUrl } from "constants/defaultValues";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button, Row } from "reactstrap";
 import ReviewsComponent from "../Reviews/ReviewsComponent";
 
 const AlumniProfile = () => {
   const { mid } = useParams();
 
   //  To change url to backend please uncomment the below line
-  //  const url1=`${baseUrl}/api/alumni/${mid}`
-  const url1 = `${baseUrl}/alumniProfile/${mid}`;
+  const url1 = `${baseUrl}/api/alumni/${mid}`;
+  // const url1 = `${baseUrl}/alumniProfile/${mid}`;
   const ratingUrl = `${baseUrl}/api/alumni/rating/meta/${mid}`;
 
   const [alumniprofiledetails, setAlumniProfileDetails] = useState([]);
