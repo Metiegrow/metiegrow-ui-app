@@ -252,7 +252,7 @@ const AlumniLists = () => {
                                 color="primary"
                                 onClick={() =>
                                   history.push(
-                                    `/app/alumniprofile/${mentors.id}`
+                                    `/app/alumni/profile/${mentors.id}`
                                   )
                                 }
                                 className="rounded"
