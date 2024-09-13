@@ -57,14 +57,11 @@ const JobListing = ({ isPosted }) => {
       try {
         // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
         const res = await axios.get(url, { params });
-        // console.log(res);
         const { data } = res;
         const sortedData = data.jobLists
           .map((x) => ({ ...x }))
           .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
         setItems(sortedData);
-        console.log(sortedData);
-        setInterestPerson(sortedData);
         setTotalPage(data.pagination.totalPage);
         setIsFirst(data.pagination.first);
         setIsLast(data.pagination.last);
@@ -96,32 +93,31 @@ const JobListing = ({ isPosted }) => {
     setItems((prev) =>
       prev.map((job) => {
         if (job.id === itemId) {
-          const isAlreadyInterested = job.interestedUsers.some(
-            (user) => user.id === currentUserId
-          );
-
-          if (isAlreadyInterested) {
+          // const isAlreadyInterested = job.interestedUsers.some(
+          //   (user) => user.id === currentUserId
+          // );
+          if (isCurrentlyInterested) {
             // If already interested, decrement the count and remove the user
             return {
               ...job,
-              isInterested: false,
+              loggedInUserInterested: false,
               interestedCount: job.interestedCount - 1,
               interestedUsers: job.interestedUsers.filter(
-                (user) => user.id !== currentUserId
+                (user) => user.userId !== +currentUserId
               ),
             };
           }
           // If not already interested, increment the count and add the user
           return {
             ...job,
-            isInterested: true,
+            loggedInUserInterested: true,
             interestedCount: job.interestedCount + 1,
             interestedUsers: [
               ...job.interestedUsers,
               {
-                id: currentUserId,
+                userId: +currentUserId,
                 role: currentUserRole,
-                username: currentUserName,
+                userName: currentUserName,
               },
             ],
           };
@@ -134,8 +130,7 @@ const JobListing = ({ isPosted }) => {
       interested: !isCurrentlyInterested,
     };
     try {
-      const res = await axios.post(interestedClickUrl, data);
-      console.log(res);
+      await axios.post(interestedClickUrl, data);
       // ToasterComponent("success", res.data.statuses);
     } catch (error) {
       console.error("Error sending interest:", error);
@@ -155,8 +150,7 @@ const JobListing = ({ isPosted }) => {
 
   const handleUserClick = (userId) => {
     const lowerCaseRole = userId.role.toLowerCase();
-    console.log(`/app/${lowerCaseRole}profile/${userId.id}`);
-    history.push(`/app/${lowerCaseRole}profile/${userId.id}`);
+    history.push(`/app/${lowerCaseRole}profile/${userId.UserId}`);
   };
 
   const handleShareButtonClick = async (id) => {
@@ -184,13 +178,13 @@ const JobListing = ({ isPosted }) => {
             {interestPerson?.length > 0 ? (
               interestPerson.map((data) => (
                 <ListGroupItem
-                  key={data.id}
+                  key={data.userId}
                   tag="a"
                   style={{ cursor: "pointer" }}
                   // href={`/app/mentorprofile/${data.id}`}
                   onClick={() => handleUserClick(data)}
                 >
-                  {data.username}
+                  {data.userName}
                 </ListGroupItem>
               ))
             ) : (
@@ -350,14 +344,14 @@ const JobListing = ({ isPosted }) => {
                             <Button
                               onClick={() =>
                                 handleInterestedButtonClick(
-                                  data.isInterested,
+                                  data.loggedInUserInterested,
                                   data.id
                                 )
                               }
                               outline
                               color="primary"
                               size="xs"
-                              active={data.isInterested}
+                              active={data.loggedInUserInterested}
                             >
                               I&apos;m interested
                             </Button>
