@@ -1,42 +1,41 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
+import { useEffect, useState } from "react";
+import { ReactSortable } from "react-sortablejs";
 import {
   Button,
-  NavLink,
-  Row,
+  Card,
+  CardBody,
+  Col,
   // Card,
   // CardBody,
   // CardSubtitle,
   // CardImg,
   Input,
-  Label,
   InputGroup,
   InputGroupAddon,
-  Col,
-  Form,
-  Card,
-  FormGroup,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
 } from "reactstrap";
-import { ReactSortable } from 'react-sortablejs';
-import axios from "axios";
-import { baseUrl } from "constants/defaultValues";
 // import { NotificationManager } from 'components/common/react-notifications';
-import { Colxx } from "components/common/CustomBootstrap";
-import Select from "react-select";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { Colxx } from "components/common/CustomBootstrap";
 import country from "../my-login/Country";
-import language from "../my-login/Languages";
-import CategoryData from "../my-login/CategoryData";
 import ToasterComponent from "../notifications/ToasterComponent";
-
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [isEditingButton, setIsEditingButton] = useState(false);
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
-  const [jobTitle, setJobTitle] = useState("")
-  const [experience, setExperience] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  // const [experience, setExperience] = useState("");
+  const [setExperience] = useState("");
   const [location, setLocation] = useState("");
   const [newInputSkill, setNewInputSkill] = useState("");
   const [skills, setSkills] = useState([]);
@@ -53,26 +52,28 @@ const MyProfile = () => {
   const [featuredArticle, setFeaturedArticle] = useState("");
   const [reasonForMentor, setReasonForMentor] = useState("");
   const [achievement, setAchievement] = useState("");
-  const [totalRatings,setTotalRatings] = useState(0);
+  const [totalRatings, setTotalRatings] = useState(0);
   const [averageStar, setAverageStar] = useState(0);
-  const [profileLoading, setProfileLoading] = useState(true);
-  const [languages, setLanguages] = useState([]);
-  const [skillValidationMessage,setSkillValidationMessage] = useState("");
-  const [isProfileUpdated, setIsProfileUpdated ] = useState(false);
+  // const [profileLoading, setProfileLoading] = useState(true);
+  const [setProfileLoading] = useState(true);
+  // const [languages, setLanguages] = useState([]);
+  const [languages] = useState([]);
+  const [skillValidationMessage, setSkillValidationMessage] = useState("");
+  const [isProfileUpdated, setIsProfileUpdated] = useState(false);
+  const [imageEditModal, setImageEditModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileBase64, setSelectedFileBase64] = useState(null);
 
-
- // const Id = 1;
+  // const Id = 1;
 
   // const url = `${baseUrl}/user`;
   // const url = `${baseUrl}/api/mentor/11/details/profile`;
   // const url1 = `${baseUrl}/mentor/profile${userId}`;
- // const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
+  // const endUrl = `${baseUrl}/api/mentor/${Id}/details/profile`;
   // const endUrl = `${baseUrl}/myprofile`;
   const endUrl = `${baseUrl}/api/mentor/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
-  const imageEditUrl = `${baseUrl}/api/mentor/mentor-profile-image`
-
+  const imageEditUrl = `${baseUrl}/api/mentor/mentor-profile-image`;
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
@@ -81,7 +82,7 @@ const MyProfile = () => {
         const userData = response.data;
         // console.log("userData:", userData);
         if (userData) {
-          setImage(userData.imageUrl)
+          setImage(userData.imageUrl);
           setFirstName(userData.firstName);
           // setJobRole(userData.jobRole);
           setJobTitle(userData.jobTitle);
@@ -121,22 +122,19 @@ const MyProfile = () => {
     mentorProfileDetails();
   }, [isProfileUpdated]);
   useEffect(() => {
+    const mentorReviews = async () => {
+      const ratingUrl = `${baseUrl}/api/mentorship/rating/meta/${userId}`;
 
-  const mentorReviews = async () => {
-    const ratingUrl=`${baseUrl}/api/mentorship/rating/meta/${userId}`
-
-      
-    try {
-      const response = await axios.get(ratingUrl);
-      setTotalRatings(response.data.totalRatings);
-      setAverageStar(response.data.averageStar);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-  mentorReviews();
-}, [userId]);
-
+      try {
+        const response = await axios.get(ratingUrl);
+        setTotalRatings(response.data.totalRatings);
+        setAverageStar(response.data.averageStar);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    mentorReviews();
+  }, [userId]);
 
   useEffect(() => {
     const mentorProfileDetails = async () => {
@@ -147,7 +145,7 @@ const MyProfile = () => {
         if (inputData) {
           // setReviews(inputData.reviews)
           // setPrice(inputData.price)
-          setExperience(inputData.experience)
+          setExperience(inputData.experience);
           // setTopics(inputData.topics);
           // setStar(inputData.star);
         }
@@ -160,10 +158,10 @@ const MyProfile = () => {
   }, []);
 
   function getTokenRes() {
-    return localStorage.getItem('tokenRes');
-}
-const token = getTokenRes();
-// console.log(token);
+    return localStorage.getItem("tokenRes");
+  }
+  const token = getTokenRes();
+  // console.log(token);
 
   const updateMEntorProfile = async () => {
     try {
@@ -196,96 +194,107 @@ const token = getTokenRes();
       // console.log("Updated Data:", updatedData);
       // const response =
 
-
       const response = await axios.put(endUrl, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       // console.log("Response", response.data.statuses[0].message);
-    //   response.data.statuses.forEach((status) => {
-    //    const responseMessage = status.message;
-    //     NotificationManager.success(responseMessage, 'Great!', 3000, null, null, '');
-    // });
-    setIsProfileUpdated(!isProfileUpdated);
-    ToasterComponent('success', response.data.statuses);
+      //   response.data.statuses.forEach((status) => {
+      //    const responseMessage = status.message;
+      //     NotificationManager.success(responseMessage, 'Great!', 3000, null, null, '');
+      // });
+      setIsProfileUpdated(!isProfileUpdated);
+      ToasterComponent("success", response.data.statuses);
       // console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile", error);
       if (error.response && error.response.data.statuses[0]) {
-        ToasterComponent('warning', error.response.data.statuses);
+        ToasterComponent("warning", error.response.data.statuses);
       } else {
-        ToasterComponent('error', [{ message: "An unexpected error occurred" }]);
+        ToasterComponent("error", [
+          { message: "An unexpected error occurred" },
+        ]);
       }
     }
   };
-  
 
   const postImageData = async () => {
     try {
       const formData = new FormData();
       formData.append("image", selectedFile);
-  
+
       const response = await axios.post(imageEditUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      ToasterComponent('success', response.data.statuses);
-      setTimeout(() => {
-      }, 2000);
+      ToasterComponent("success", response.data.statuses);
+      setTimeout(() => {}, 2000);
       // console.log(`resres ${response.status}`);
     } catch (error) {
       console.error(error);
     }
   };
+  const handleImageClick = () => setImageEditModal(true);
+
+  const handleImagePost = () => {
+    postImageData();
+    setSelectedFile(null);
+    setImageEditModal(false);
+  };
+
+  const handleImageDelete = () => {
+    // setSelectedFile(image);
+    setImageEditModal(false);
+  };
 
   const handleAddSkill = (newSkill) => {
     if (!newSkill.trim()) {
       setSkillValidationMessage("Skill cannot be empty");
-  } else {
-    setSkillValidationMessage("")
-    setSkills([...skills, newSkill]);
-  }
+    } else {
+      setSkillValidationMessage("");
+      setSkills([...skills, newSkill]);
+    }
   };
 
-  const handleEditAboutClick = () => {
-    setIsEditingAbout(true);
-  };
+  // const handleEditAboutClick = () => {
+  //   setIsEditingAbout(true);
+  // };
 
   const handleSaveAbout = () => {
     setIsEditingAbout(false);
     updateMEntorProfile();
   };
 
-  const handleCancelEditAbout = () => {
-    setIsEditingAbout(false);
-  };
+  // const handleCancelEditAbout = () => {
+  //   setIsEditingAbout(false);
+  // };
 
-  const handleEditButton = () => {
-    setIsEditingButton(true);
-  };
+  // const handleEditButton = () => {
+  //   setIsEditingButton(true);
+  // };
   const handleSaveButton = () => {
     if (skills.length === 0) {
-      setSkillValidationMessage('At least one skill is required.');
+      setSkillValidationMessage("At least one skill is required.");
     } else {
-    setIsEditingButton(false);
-    updateMEntorProfile();
+      setIsEditingButton(false);
+      updateMEntorProfile();
     }
   };
 
-  const handleCancelButton = () => {
-    if (skills.length === 0) {
-      setSkillValidationMessage('At least one skill is required.');
-    } else {
-    setIsEditingButton(false);
-    }
-  };
+  // const handleCancelButton = () => {
+  //   if (skills.length === 0) {
+  //     setSkillValidationMessage("At least one skill is required.");
+  //   } else {
+  //     setIsEditingButton(false);
+  //   }
+  // };
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  // const handleEditClick = () => {
+  //   setIsEditing(true);
+  // };
 
   const handleSave = () => {
     setIsEditing(false);
@@ -293,9 +302,9 @@ const token = getTokenRes();
     postImageData();
   };
 
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
+  // const handleCancel = () => {
+  //   setIsEditing(false);
+  // };
 
   const handleRemoveSkill = (index) => {
     setSkills(skills.filter((_, i) => i !== index));
@@ -308,256 +317,264 @@ const token = getTokenRes();
   //   setTopics(topics.filter((_, i) => i !== index));
   // };
 
-  const handleLinkedInClick = () => {
-    if (linkedinUrl) {
-      window.open(linkedinUrl, "_blank");
-    }
-  };
+  // const handleLinkedInClick = () => {
+  //   if (linkedinUrl) {
+  //     window.open(linkedinUrl, "_blank");
+  //   }
+  // };
 
-  const handleTwitterClick = () => {
-    if (twitterHandle) {
-      const twitterUrl = `https://x.com/${twitterHandle}`
-      window.open(twitterUrl, "_blank");
-    }
-  }
-  const handlePersonalWebsiteClick = () => {
-    if (website) {
-      let url = website;
-      if (!url.startsWith("https://")) {
-        url = `https://${url}`;
-      }
-      window.open(url, "_blank");
-    }
-  }
+  // const handleTwitterClick = () => {
+  //   if (twitterHandle) {
+  //     const twitterUrl = `https://x.com/${twitterHandle}`;
+  //     window.open(twitterUrl, "_blank");
+  //   }
+  // };
+  // const handlePersonalWebsiteClick = () => {
+  //   if (website) {
+  //     let url = website;
+  //     if (!url.startsWith("https://")) {
+  //       url = `https://${url}`;
+  //     }
+  //     window.open(url, "_blank");
+  //   }
+  // };
 
-  const handleAddLanguages = (newLanguages) => {
-    setLanguages([...languages, newLanguages]);
-  };
+  // const handleAddLanguages = (newLanguages) => {
+  //   setLanguages([...languages, newLanguages]);
+  // };
 
-  const handleRemoveLanguages = (index) => {
-    setLanguages(languages.filter((_, i) => i !== index));
-  };
+  // const handleRemoveLanguages = (index) => {
+  //   setLanguages(languages.filter((_, i) => i !== index));
+  // };
 
-  const languageOptions = language.map((option) => ({
-    value: option.iso_code,
-    label: option.name,
-  }));
+  // const languageOptions = language.map((option) => ({
+  //   value: option.iso_code,
+  //   label: option.name,
+  // }));
 
-  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  // const [selectedLanguages, setSelectedLanguages] = useState([]);
 
-  const handleChange = (selectedOptions) => {
-    const languagesArray = selectedOptions
-      ? selectedOptions.map((option) => option.value)
-      : [];
-    // console.log("arraychk", languagesArray);
-    handleAddLanguages(languagesArray[0]);
-    setSelectedLanguages([]);
-  };
+  // const handleChange = (selectedOptions) => {
+  //   const languagesArray = selectedOptions
+  //     ? selectedOptions.map((option) => option.value)
+  //     : [];
+  //   // console.log("arraychk", languagesArray);
+  //   handleAddLanguages(languagesArray[0]);
+  //   setSelectedLanguages([]);
+  // };
 
-
-  
-
-
-  const [file1, setFile1] = useState(null);
+  // const [file1] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    setFile1(file);
-    
-    // if (file) {
-    //   const reader = new FileReader();
-  
-    //   reader.onloadend = () => {
-    //     const base64Image = reader.result;
-    //     setSelectedFileBase64(base64Image);
-       
-  
-    //     // setAboutField({ ...aboutField, image: base64Image });
-    //   };
-  
-    //   reader.readAsDataURL(file);
-    // }
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+        setSelectedFileBase64(base64Image);
+
+        // setAboutField({ ...aboutField, image: base64Image });
+      };
+
+      reader.readAsDataURL(file);
+    }
   };
 
-  const countryName = country.find(c => c.iso_code === location)?.name;
+  const countryName = country.find((c) => c.iso_code === location)?.name;
 
   return (
     <div className="mentor-profile">
       {/* <div className=""> */}
 
       <Colxx sm="12" md="12" lg="12" xxs="12" className="">
-        <div className="">
-          {/* <div className="h-100"> */}
-          {/* <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
-            <div className=" ">
-              <img
-                src={`${baseUrl}/${image}`}
-                // "/assets/img/profiles/2.jpg"
-                className=" col-2 mx-2 w-60 rounded-circle img-thumbnail border"
-                alt=""
-              />
-              <Button
-                color="light"
-                className=" font-weight-semibold mx-2"
-                size="large"
+        {/* new design starts */}
+        {/* profile section starts */}
+        <Row>
+          <Col>
+            <Card>
+              <CardBody
+                style={{
+                  background: "linear-gradient(to right, #7B42C5, #AA5D93)",
+                  color: "white",
+                  borderRadius: "9px 9px 0 0",
+                }}
               >
-                <span className="font-weight-semibold text-one">
-                  <i className="iconsminds-thunder text-primary" /> Quick
-                  Responder
-                </span>
-              </Button>
-            </div>
-            <div>
-              <NavLink>
-                <Button
-                  color="light"
-                  className="font-weight-semibold mx-2"
-                  size="large"
-                  onClick={handleLinkedInClick}
+                <div
+                  className="position-relative"
+                  style={{ position: "relative", top: "70px" }}
                 >
-                  <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
-                </Button>
-              </NavLink>
-            </div>
-          </div> */}
+                  <button
+                    type="button"
+                    className="btn p-0"
+                    style={{ border: "none", background: "none" }}
+                    onClick={() => handleImageClick()}
+                    aria-label="Profile image"
+                  >
+                    {image === null ? (
+                      <ThumbnailLetters
+                        // small
+                        rounded
+                        text={firstName}
+                        className="mx-2"
+                        color="secondary"
+                      />
+                    ) : (
+                      <img
+                        src={`${baseUrl}/${image}`}
+                        className="mx-2 rounded-circle img-thumbnail border"
+                        style={{
+                          width: "110px",
+                          height: "110px",
+                          objectFit: "cover",
+                          overflow: "hidden",
+                        }}
+                        alt="img"
+                      />
+                    )}
+                  </button>
+                  <Modal
+                    isOpen={imageEditModal}
+                    toggle={() => setImageEditModal(!imageEditModal)}
+                    className=""
+                    size="lg"
+                    style={{
+                      borderRadius: "10px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <ModalHeader style={{ borderBottom: "none" }}>
+                      <h2 className="font-weight-bold">Profile photo</h2>
+                    </ModalHeader>
+                    <ModalBody className="d-flex justify-content-center align-items-center">
+                      <img
+                        src={selectedFileBase64 || `${baseUrl}/${image}`}
+                        className="rounded-circle img-thumbnail border border-3"
+                        style={{
+                          width: "130px",
+                          height: "130px",
+                          objectFit: "cover",
+                        }}
+                        alt="img"
+                      />
+                    </ModalBody>
 
-          <Card style={{ height: "160px", width: "100%", overflow: "hidden" }} className="bg-primary">
-            <div className="d-flex align-items-center justify-content-between" style={{ height: "100%" }}>
-              <div className="d-flex align-items-center mt-4 ml-4 mb-4">
-                {image === null ? (
-                  <ThumbnailLetters
-                    // small
-                    rounded
-                    text={firstName}
-                    className="mx-2"
-                    color="secondary"
-                  />
-                ) : (
-                  <img
-                    src={`${baseUrl}/${image}`}
-                    // src="/assets/img/profiles/2.jpg"
-                    className="mx-2 rounded-circle img-thumbnail border"
-                    style={{ width: "110px", height: "110px", objectFit: "cover", overflow: "hidden"  }}
-                    alt="img"
-                  />
-                )}
-                <div className="ml-4 mt-2">
-                  <h1 className="font-weight-semibold text-large">
-                    {firstName} {lastName}
-                  </h1>
+                    <ModalFooter className="d-flex align-items-center justify-content-center">
+                      {selectedFile ? (
+                        <Button
+                          outline
+                          color="primary"
+                          onClick={() => handleImagePost()}
+                          className="icon-button"
+                          style={{ border: "none" }}
+                        >
+                          <i className="iconsminds-upload " />
+                        </Button>
+                      ) : (
+                        <InputGroup
+                          className=""
+                          style={{
+                            width: "auto",
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <div className="">
+                            <Button
+                              outline
+                              className="icon-button"
+                              color="primary"
+                              style={{ border: "none" }}
+                              onClick={() =>
+                                document.getElementById("file-upload").click()
+                              }
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              className="d-none"
+                              onChange={handleFileChange}
+                            />
+                          </div>
+                        </InputGroup>
+                      )}
+
+                      <Button
+                        color="primary"
+                        outline
+                        onClick={() => handleImageDelete()}
+                        className="icon-button"
+                        style={{ border: "none" }}
+                      >
+                        <i className="simple-icon-trash" />
+                      </Button>
+                    </ModalFooter>
+                  </Modal>
                 </div>
-              </div>
-              <div className="mr-4">
-                {linkedinUrl && (
-                <NavLink className="d-none d-md-inline-block">
-                  <Button
-                    color="light"
-                    className="font-weight-semibold icon-button"
-                    size="large"
-                    onClick={handleLinkedInClick}
-                  >
-                    <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
-                  </Button>
-                </NavLink>
-                )}
-                {twitterHandle && (
-                <NavLink className="d-none d-md-inline-block">
-                  <Button
-                    color="light"
-                    className="font-weight-semibold icon-button"
-                    size="large"
-                    onClick={handleTwitterClick}
-                  >
-                    <i className="simple-icon-social-twitter text-primary font-weight-semibold text-one" />
-                  </Button>
-                </NavLink>
-                )}
-                {website && (
-                <NavLink className="d-none d-md-inline-block">
-                  <Button
-                    color="light"
-                    className="font-weight-semibold icon-button"
-                    size="large"
-                    onClick={handlePersonalWebsiteClick}
-                  >
-                    <i className="simple-icon-globe text-primary font-weight-semibold text-one" />
-                  </Button>
-                </NavLink>
-                )}
-              </div>
-            </div>
-          </Card>
-          {profileLoading ? (
-            <div className="loading" />
-          ) : (
-          <>
-          {isEditing &&
-              <div className="mt-2">
-                <Button
-                  className="default"
-                  color="light"
-                  onClick={() => document.getElementById("file-upload").click()}
+
+                {/* Modal for update profile starts */}
+                <Modal
+                  isOpen={isEditing}
+                  toggle={() => setIsEditing(!isEditing)}
+                  className=""
+                  size="lg"
+                  style={{
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                  }}
                 >
-                  Change profile pic <i className="iconsminds-upload text-primary" />
-                </Button>
-                <Form>
-                  <input
-                    id="file-upload"
-                    type="file"
-                    className="form-control d-none"
-                    onChange={handleFileChange}
-                  />
-                </Form>
-                {file1 && <p>Selected file: {file1.name}</p>}
-              </div>
-              }
-          <Row>
-            <Col lg="6" md="12" className="mt-4">
-              <div>
-                {isEditing ? (
-                  <div>
+                  <ModalHeader style={{ borderBottom: "none" }}>
+                    <h2 className="font-weight-bold">Edit Profile</h2>
+                  </ModalHeader>
+                  <ModalBody>
+                    <Row className="">
+                      <Col md="6">
+                        <Label for="firstName" className="text-muted">
+                          <h4>First Name</h4>
+                        </Label>
+                        <Input
+                          type="text"
+                          id="firstName"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          className=" text-one"
+                        />
+                      </Col>
+                      <Col md="6">
+                        <Label for="lastName" className="text-muted">
+                          <h4>Last Name</h4>
+                        </Label>
+                        <Input
+                          type="text"
+                          id="lastName"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          className=" text-one"
+                        />
+                      </Col>
+                    </Row>
+                    <br />
+
                     <>
-                      <Row>
-                        <Col md="6">
-                          <Label for="firstName">
-                            <h4>First Name</h4>
-                          </Label>
-                          <Input
-                            type="text"
-                            id="firstName"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                          />
-                        </Col>
-                        <Col md="6">
-                          <Label for="lastName">
-                            <h4>Last Name</h4>
-                          </Label>
-                          <Input
-                            type="text"
-                            id="lastName"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                          />
-                        </Col>
-                      </Row>
-                      <br />
-                    </>
-                    <>
-                      <Label for="jobtitle">
+                      <Label for="jobtitle" className="text-muted">
                         <h4>Job Title</h4>
                       </Label>
                       <Input
                         type="text"
                         id="jobtitle"
                         value={jobTitle}
-                        onChange={(e) =>setJobTitle(e.target.value)}
+                        onChange={(e) => setJobTitle(e.target.value)}
+                        className=" text-one"
                       />
                       <br />
                     </>
                     <>
-                      <Label for="company">
+                      <Label for="company" className="text-muted">
                         <h4>Company</h4>
                       </Label>
                       <Input
@@ -565,459 +582,389 @@ const token = getTokenRes();
                         id="company"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
+                        className=" text-one"
                       />
                       <br />
                     </>
+
                     <>
-                      <Label for="experience" className=" text-dark">
-                        <h4>Experience</h4>
+                      <Label for="location" className="text-muted">
+                        <h4>Location</h4>
                       </Label>
+
                       <Input
-                        type="textarea"
-                        id="experience"
-                        value={experience}
-                        rows="3"
-                        onChange={(e) => setExperience(e.target.value)}
-                      />
-                      <br />
-                    </>
-                    <>
-                      <Label for="location" className="font-weight-medium">
-                        <h4>Country</h4>
-                      </Label>
-                      {/* <Input
-                        type="text"
-                        id="location"
+                        type="select"
+                        name="location"
                         value={location}
+                        // validate={validateLocation}
                         onChange={(e) => setLocation(e.target.value)}
-                      /> */}
-                      <Input
-                      type="select"
-                      name="location"
-                      value={location}
-                      // validate={validateLocation}
-                      onChange={(e) => setLocation(e.target.value)}
-                      className="form-control"
-                    >
-                      <option disabled value="">
-                        Select Location
-                      </option>
-                      {country.map((option) => (
-                        <option key={option.iso_code} value={option.iso_code}>
-                          {option.name}
+                        className="form-control text-one"
+                      >
+                        <option disabled value="">
+                          Select Location
                         </option>
-                      ))}
-                    </Input>
+                        {country.map((option) => (
+                          <option key={option.iso_code} value={option.iso_code}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </Input>
                       <br />
                     </>
-                    <>
-                      <Label for="location" className="font-weight-medium">
-                        <h4>category</h4>
-                      </Label>
-                      {/* <Input
-                        type="text"
-                        id="location"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                      /> */}
-                      <Input
-                      type="select"
-                      name="category"
-                      value={category}
-                      // validate={validateLocation}
-                      onChange={(e) => setCategory(e.target.value)}
-                      className="form-control"
-                    >
-                      <option disabled value="">
-                        Select category
-                      </option>
-                      {CategoryData.map((option) => (
-                        <option key={option.short} value={option.short}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </Input>
-                      <br />
-                    </>
-                    {/* <>
-                      <Label for="email" className="font-weight-medium">
-                        <h4>Email</h4>
-                      </Label>
-                      <Input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                      <br />
-                    </> */}
-                  </div>
-                ) : (
-                  <>
-                    {/* <h1 className="font-weight-semibold text-large">
-                      {firstName} {lastName}
-                    </h1> */}
-                    <h3 className="font-weight-semibold">
-                       {jobTitle} @ {" "} {company}
-                    </h3>
-                    <p className="text-one font-weight-medium ">
-                       {experience}
-                    </p>
-                    <h5 className="font-weight-medium">
-                      <i className="simple-icon-location-pin text-primary" />
-
-                      <span className="ml-2">{countryName}</span>
-                    </h5>
-                    <h6 className="">
-                      <i className="simple-icon-star text-primary " />
-                      <span className="ml-2">{`${averageStar} (${totalRatings} reviews)`}</span>
-                    </h6>
-                    {/* <h6 className="">
-                      <i className="simple-icon-clock text-primary" />
-                      <span className="ml-2">Last seen</span>
-                    </h6> */}
-                  </>
-                )}
-              </div>
-              {!isEditing && (
-                <Button
-                  color="primary"
-                  outline
-                  onClick={handleEditClick}
-                  className="ml-2"
-                >
-                  <i className="simple-icon-pencil" /> Edit
-                </Button>
-              )}
-              {isEditing && (
-                <>
-                  <Button color="primary" onClick={handleSave} className="mr-2">
-                    Save
-                  </Button>
-                  <Button
-                    color="primary"
-                    outline
-                    onClick={handleCancel}
-                    className="ml-2"
+                  </ModalBody>
+                  <ModalFooter
+                    style={{ borderTop: "none" }}
+                    className="d-flex align-items-center justify-content-center"
                   >
-                    Cancel
-                  </Button>
-                </>
-              )}
-            </Col>
-            <Col lg="6" md="12" className="mt-4">
-                  {(languages.length > 0 && isEditingButton) && <h2 className="mx-2">Languages known</h2>}
-            {languages.length > 0 && isEditingButton ? (
-                    <>
-                      {languages.map((lang, index) => (
-                        <Button
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={index}
-                          color="light"
-                          className="mb-2 font-weight-semibold mx-2"
-                          size="xs"
-                          onClick={() => handleRemoveLanguages(index)}
-                        >
-                          {language.find((l) => l.iso_code === lang)?.name}{" "}
-                          <i className="iconsminds-close" />
-                        </Button>
-                      ))}
-
-                      <FormGroup className="error-l-75">
-                        <Select
-                          placeholder="Select Languages"
-                          name="languages"
-                          isMulti
-                          options={languageOptions}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          value={selectedLanguages}
-                          onChange={(selectedOptions) => {
-                            setSelectedLanguages(selectedOptions);
-                            handleChange(selectedOptions);
-                          }}
-                        />
-                      </FormGroup>
-                    </>
-                  ) : (
-                    languages.map((lang, index) => (
-                      <Button
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={index}
-                        color="light"
-                        className="mb-2 font-weight-semibold mx-2"
-                        size="xs"
-                      >
-                        {language.find((l) => l.iso_code === lang)?.name}
-                      </Button>
-                    ))
-                  )}
-
-              <h2 className="mx-2">Skills</h2>
-              {isEditingButton ? (
-                <>
-                <ReactSortable
-                    list={skills}
-                    setList={setSkills}
-                    options={{ handle: '.handle' }}
-                    className="row"
-                  >
-                  {skills.map((skill, index) => (
-                    <Button
-                     // eslint-disable-next-line react/no-array-index-key
-                      key={index}
-                      color={index < 3 ? 'primary' : 'light'}
-                      className="mb-2 font-weight-semibold mx-2"
-                      size="xs"
-                      onClick={() => handleRemoveSkill(index)}
-                    >
-                      {skill} <i className="iconsminds-close" />
-                    </Button>
-                  ))}
-                </ReactSortable>
-                <p className="text-muted">Drag skills to set top 3 (the top 3 skills will be displayed on mentor cards)</p>
-                  <InputGroup className="mb-3">
-                    <Input
-                      type="text"
-                      placeholder="New skill"
-                      value={newInputSkill}
-                      onChange={(e) => setNewInputSkill(e.target.value)}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          handleAddSkill(newInputSkill);
-                          setNewInputSkill("");
-                        }
-                      }}
-                    />
-                    <InputGroupAddon addonType="append">
-                      <Button
-                        outline
-                        color="primary"
-                        onClick={() => {
-                          handleAddSkill(newInputSkill);
-                          setNewInputSkill("");
-                        }}
-                      >
-                        Add Skill
-                      </Button>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {skillValidationMessage && (
-                      <div className="invalid-feedback d-block">
-                        {skillValidationMessage}
-                      </div>
-                    )}
-                </>
-              ) : (
-                skills.map((skill, index) => (
-                  <Button
-                   // eslint-disable-next-line react/no-array-index-key
-                    key={index}
-                    color={index < 3 ? 'primary' : 'light'}
-                    className="mb-2 font-weight-semibold mx-2"
-                    size="xs"
-                    // onClick={() => handleRemoveSkill(index)}
-                  >
-                    {skill}
-                  </Button>
-                ))
-              )}
-
-              <div className="mt-2">
-                {/* <h2 className="mx-2">Topics</h2> */}
-
-                {/* {isEditingButton ? (
-                  <>
-                    {topics.map((newTopics, index) => (
-                      <Button
-                        key={newTopics}
-                        color="light"
-                        className="mb-2 font-weight-semibold mx-2"
-                        size="xs"
-                        onClick={() => handleRemoveTopics(index)}
-                      >
-                        {newTopics} <i className="iconsminds-close" />
-                      </Button>
-                    ))}
-                    <InputGroup className="mb-3">
-                      <Input
-                        type="text"
-                        placeholder="New topic"
-                        value={newInputTopics}
-                        onChange={(e) => setNewInputTopics(e.target.value)}
-                        onKeyDown={(event) => {
-                          if (event.key === "Enter") {
-                            handleAddTopics(newInputTopics);
-                            setNewInputTopics("");
-                          }
-                        }}
-                      />
-                      <InputGroupAddon addonType="append">
-                        <Button
-                          outline
-                          color="primary"
-                          onClick={() => {
-                            handleAddTopics(newInputTopics);
-                            setNewInputTopics("");
-                          }}
-                        >
-                          Add topics
-                        </Button>
-                      </InputGroupAddon>
-                    </InputGroup>
-                  </>
-                ) : (
-                  topics.map((newTopics) => (
-                    <Button
-                      key={newTopics}
-                      color="light"
-                      className="mb-2 font-weight-semibold mx-2"
-                      size="xs"
-                      // onClick={() => handleRemoveSkill(index)}
-                    >
-                      {newTopics}
-                    </Button>
-                  ))
-                )} */}
-                {/* <br /> */}
-                {!isEditingButton && (
-                  <Button
-                    color="primary"
-                    outline
-                    onClick={handleEditButton}
-                    className="ml-2"
-                  >
-                    <i className="simple-icon-pencil" /> Edit
-                  </Button>
-                )}
-                {isEditingButton && (
-                  <>
-                    <Button
-                      color="primary"
-                      onClick={handleSaveButton}
-                      className="mr-2"
-                    >
+                    <Button color="primary" onClick={() => handleSave()}>
                       Save
-                    </Button>
+                    </Button>{" "}
                     <Button
                       color="primary"
                       outline
-                      onClick={handleCancelButton}
-                      className="ml-2"
+                      onClick={() => setIsEditing(false)}
+                      className=""
                     >
-                      {/* <i className="simple-icon-close" />  */}
                       Cancel
                     </Button>
-                  </>
-                )}
-              </div>
-            </Col>
-          </Row>
-          {/* </div> */}
-          <hr />
-          {/* <Colxx sm="12" md="12" lg="12" xxs="12" className="mt-5"> */}
-          <Row>
-            <Col lg="12" md="12">
-              <h2 className="font-weight-semibold mx-2">About</h2>
-
-              <div>
-                {isEditingAbout ? (
-                  <div className="col-lg-6 col-12">
-                    <Label for="about" className="font-weight-medium">
-                      <h4>About Me</h4>
-                    </Label>
-                    <Input
-                      type="textarea"
-                      id="about"
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      className="form-control"
-                      rows="5"
-                    />
-                    <br />
-                    <Label for="linkedin" className="font-weight-medium">
-                      <h4>LinkedIn URL</h4>
-                    </Label>
-                    <Input
-                      type="url"
-                      id="linkedinUrl"
-                      value={linkedinUrl}
-                      onChange={(e) => setLinkedinUrl(e.target.value)}
-                      className="form-control"
-                    />
-                    <br />
-                    <Label for="twitter" className="font-weight-medium">
-                      <h4>Twitter handle</h4>
-                    </Label>
-                    <Input
-                      type="url"
-                      id="twitter"
-                      value={twitterHandle}
-                      onChange={(e) => setTwitterHandle(e.target.value)}
-                    />
-                     <p className="text-muted">
-                          Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
-                        </p>
-                    {/* <br /> */}
-                    <Label for="personalWebsite" className="font-weight-medium">
-                      <h4>Personal Website URL</h4>
-                    </Label>
-                    <Input
-                      type="url"
-                      id="personalWebsite"
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                    />
-                    <p className="text-muted">
-                           e.g. http://www.arun.com
-                        </p>
-                    <br />
+                  </ModalFooter>
+                </Modal>
+                {/* Modal for update profile ends */}
+              </CardBody>
+              <CardBody>
+                <div className=" mt-2">
+                  <div className="text-end w-100  d-flex justify-content-end">
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      style={{ border: "none" }}
+                      size="sm"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
                   </div>
-                ) : (
-                  <div className="col-lg-12 col-12">
-                    <p className="text-one font-weight-medium">{bio}</p>
-                  </div>
+                  <div className="">
+                    {/* {linkedinUrl && (
+                  <NavLink className="d-none d-md-inline-block">
+                    <Button
+                      color="light"
+                      className="font-weight-semibold icon-button"
+                      size="large"
+                      onClick={handleLinkedInClick}
+                    >
+                      <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
+                    </Button>
+                  </NavLink>
                 )}
-              </div>
+                {twitterHandle && (
+                  <NavLink className="d-none d-md-inline-block">
+                    <Button
+                      color="light"
+                      className="font-weight-semibold icon-button"
+                      size="large"
+                      onClick={handleTwitterClick}
+                    >
+                      <i className="simple-icon-social-twitter text-primary font-weight-semibold text-one" />
+                    </Button>
+                  </NavLink>
+                )}
+                {website && (
+                  <NavLink className="d-none d-md-inline-block">
+                    <Button
+                      color="light"
+                      className="font-weight-semibold icon-button"
+                      size="large"
+                      onClick={handlePersonalWebsiteClick}
+                    >
+                      <i className="simple-icon-globe text-primary font-weight-semibold text-one" />
+                    </Button>
+                  </NavLink>
+                )} */}
 
-              {!isEditingAbout && (
-                <Button
-                  color="primary"
-                  outline
-                  onClick={handleEditAboutClick}
-                  className="ml-2"
+                    <div className="mt-4">
+                      <h2 className="font-weight-bold">
+                        {firstName} {lastName}
+                      </h2>
+                      <h3 className="text-one">
+                        {jobTitle} | {company}
+                      </h3>
+                      <h5 className="font-weight-medium">
+                        <i className="simple-icon-location-pin text-primary" />
+
+                        <span className="ml-2">{countryName}</span>
+                      </h5>
+                      <h6 className="">
+                        <i className="simple-icon-star text-primary " />
+                        <span className="ml-2">{`${averageStar} (${totalRatings} reviews)`}</span>
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* profile section ends */}
+
+        {/* about section starts */}
+        <Row className="my-4 ">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row className="align-items-center">
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">About</h2>
+
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      size="sm"
+                      onClick={() => setIsEditingAbout(true)}
+                      style={{ border: "none" }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
+                <div>
+                  <p className="text-muted">{bio}</p>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        {/* about modal  */}
+        <Modal
+          isOpen={isEditingAbout}
+          toggle={() => setIsEditingAbout(!isEditingAbout)}
+          className=""
+          size="lg"
+          style={{ borderRadius: "10px", overflow: "hidden" }}
+        >
+          <ModalHeader style={{ borderBottom: "none" }}>
+            <h2 className="font-weight-bold">About</h2>
+          </ModalHeader>
+          <ModalBody>
+            <br />
+
+            <>
+              <Label for="about" className="text-muted">
+                <h4>About Me</h4>
+              </Label>
+              <Input
+                type="textarea"
+                id="about"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                className=" text-one"
+              />
+              <br />
+            </>
+
+            <>
+              <Label for="linkedInUrl" className="text-muted">
+                <h4>LinkedIn URL</h4>
+              </Label>
+              <Input
+                type="text"
+                id="linkedInUrl"
+                value={linkedinUrl}
+                onChange={(e) => setLinkedinUrl(e.target.value)}
+                className=" text-one"
+              />
+              <br />
+            </>
+            <>
+              <Label for="email" className="text-muted">
+                <h4>Twitter URL</h4>
+              </Label>
+              <Input
+                type="text"
+                id="twitterHandle"
+                value={twitterHandle}
+                onChange={(e) => setTwitterHandle(e.target.value)}
+                className=" text-one"
+              />
+              <p className="text-muted mt-1">
+                Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
+              </p>
+              <br />
+            </>
+            <>
+              <Label for="website" className="text-muted">
+                <h4>Personal Website URL</h4>
+              </Label>
+              <Input
+                type="text"
+                id="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                className=" text-one"
+              />
+              <br />
+            </>
+          </ModalBody>
+          <ModalFooter
+            style={{ borderTop: "none" }}
+            className="d-flex align-items-center justify-content-center"
+          >
+            <Button color="primary" onClick={() => handleSaveAbout()}>
+              Save
+            </Button>{" "}
+            <Button
+              color="primary"
+              outline
+              onClick={() => setIsEditingAbout(false)}
+              className=""
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+
+        {/* about section ends */}
+
+        {/* skill section starts */}
+        <Row className="my-4">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row className="align-items-center">
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">Skills</h2>
+
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      style={{ border: "none" }}
+                      size="sm"
+                      onClick={() => setIsEditingButton(true)}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <div
+                      className="d-flex flex-wrap"
+                      style={{ gap: "10px", marginTop: "10px" }}
+                    >
+                      {skills.map((skill, index) => (
+                        <Button
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={index}
+                          color={index < 3 ? "primary" : "light"}
+                          size="sm"
+                        >
+                          {skill}
+                        </Button>
+                      ))}
+                    </div>
+                  </Col>
+                </Row>
+              </CardBody>
+
+              <Modal
+                isOpen={isEditingButton}
+                toggle={() => setIsEditingButton(!isEditingButton)}
+                className=""
+                size="lg"
+                style={{ borderRadius: "10px", overflow: "hidden" }}
+              >
+                <ModalHeader style={{ borderBottom: "none" }}>
+                  <h2 className="font-weight-bold">Skills</h2>
+                </ModalHeader>
+                <ModalBody>
+                  <Row className="w-100 mb-3">
+                    <>
+                      <InputGroup className="mb-3">
+                        <Input
+                          type="text"
+                          placeholder="New skill"
+                          value={newInputSkill}
+                          onChange={(e) => setNewInputSkill(e.target.value)}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter") {
+                              handleAddSkill(newInputSkill);
+                              setNewInputSkill("");
+                            }
+                          }}
+                        />
+                        <InputGroupAddon addonType="append">
+                          <Button
+                            outline
+                            color="primary"
+                            onClick={() => {
+                              handleAddSkill(newInputSkill);
+                              setNewInputSkill("");
+                            }}
+                          >
+                            Add Skill
+                          </Button>
+                        </InputGroupAddon>
+                      </InputGroup>
+                      {skillValidationMessage && (
+                        <div className="invalid-feedback d-block">
+                          {skillValidationMessage}
+                        </div>
+                      )}
+                    </>
+                  </Row>
+                  <Row>
+                    <ReactSortable
+                      list={skills}
+                      setList={setSkills}
+                      options={{ handle: ".handle" }}
+                      className="d-flex flex-wrap ml-2"
+                    >
+                      {skills.map((skill, index) => (
+                        <Button
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={index}
+                          outline={index >= 3}
+                          color="light"
+                          // color={index < 3 ? 'primary' : 'light'}
+                          className="ml-2 font-weight-semibold mx-2 d-flex align-items-center text-dark"
+                          size="sm"
+                          onClick={() => handleRemoveSkill(index)}
+                        >
+                          {skill}
+                          <i className="iconsminds-close ml-2 text-dark" />
+                        </Button>
+                      ))}
+                    </ReactSortable>
+                    {/* <p className="ml-3 text-muted mt-3">Drag skills to set top 3 (the top 3 skills will be displayed on mentor cards)</p> */}
+                  </Row>
+                </ModalBody>
+
+                <ModalFooter
+                  style={{ borderTop: "none" }}
+                  className="d-flex align-items-center justify-content-center"
                 >
-                  <i className="simple-icon-pencil" /> Edit 
-                </Button>
-              )}
-
-              {isEditingAbout && (
-                <>
-                  <Button
-                    color="primary"
-                    onClick={handleSaveAbout}
-                    className="mr-2"
-                  >
+                  <Button color="primary" onClick={() => handleSaveButton()}>
                     Save
-                  </Button>
+                  </Button>{" "}
                   <Button
                     color="primary"
                     outline
-                    onClick={handleCancelEditAbout}
-                    className="ml-2"
+                    onClick={() => setIsEditingButton(false)}
+                    className=""
                   >
-                    {/* <i className="simple-icon-close" /> */}
                     Cancel
                   </Button>
-                </>
-              )}
-            </Col>
-          </Row>
-          <hr />
-          {/* </Colxx> */}
-          </>
-        )}
-        </div>
+                </ModalFooter>
+              </Modal>
+            </Card>
+          </Col>
+        </Row>
+        {/* skill section ends */}
+        {/* new design ends */}
       </Colxx>
     </div>
     // </div>

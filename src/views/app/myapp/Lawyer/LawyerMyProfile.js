@@ -6,16 +6,21 @@ import { baseUrl } from "constants/defaultValues";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { ReactSortable } from "react-sortablejs";
+
 import {
   Button,
   Card,
+  CardBody,
   Col,
-  Form,
   FormGroup,
   Input,
   InputGroup,
   InputGroupAddon,
   Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   // NavLink,
   Row,
 } from "reactstrap";
@@ -26,7 +31,7 @@ import ToasterComponent from "../notifications/ToasterComponent";
 const LawyerMyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
-  const [isEditingButton, setIsEditingButton] = useState(false);
+  // const [isEditingButton, setIsEditingButton] = useState(false);
   // const [newInputLanguages, setNewInputLanguages] = useState("");
   const [newInputTopics, setNewInputTopics] = useState("");
   const [imageUrl, setImageUrl] = useState(null);
@@ -39,11 +44,16 @@ const LawyerMyProfile = () => {
   const [bio, setBio] = useState("");
   const [star, setStar] = useState("");
   const [about, setAbout] = useState("");
-  const [profileLoading, setProfileLoading] = useState(true);
+  // const [profileLoading, setProfileLoading] = useState(true);
+  const [setProfileLoading] = useState(true);
   const [topicValidationMessage, setTopicValidationMessage] = useState("");
   const [isPosted, setIsPosted] = useState(false);
-  const [file1, setFile1] = useState(null);
+  // const [file1] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imageEditModal, setImageEditModal] = useState(false);
+  const [selectedFileBase64, setSelectedFileBase64] = useState(null);
+  const [isEditingLanguages, setIsEditingLanguages] = useState(false);
+  const [isEditingTopics, setIsEditingTopics] = useState(false);
 
   const token = localStorage.getItem("tokenRes");
 
@@ -96,22 +106,35 @@ const LawyerMyProfile = () => {
     }
   };
 
+  const handleImageClick = () => setImageEditModal(true);
+
+  const handleImagePost = () => {
+    postImageData();
+    setSelectedFile(null);
+    setImageEditModal(false);
+  };
+
+  const handleImageDelete = () => {
+    // setSelectedFile(image);
+    setImageEditModal(false);
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    setFile1(file);
-    // if (file) {
-    //   const reader = new FileReader();
 
-    //   reader.onloadend = () => {
-    //     const base64Image = reader.result;
-    //     setSelectedFileBase64(base64Image);
+    if (file) {
+      const reader = new FileReader();
 
-    //     // setAboutField({ ...aboutField, image: base64Image });
-    //   };
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+        setSelectedFileBase64(base64Image);
 
-    //   reader.readAsDataURL(file);
-    // }
+        // setAboutField({ ...aboutField, image: base64Image });
+      };
+
+      reader.readAsDataURL(file);
+    }
   };
 
   const updateMEntorProfile = async () => {
@@ -153,42 +176,69 @@ const LawyerMyProfile = () => {
     setLanguages([...languages, newLanguages]);
   };
 
-  const handleEditAboutClick = () => {
-    setIsEditingAbout(true);
-  };
+  // const handleEditAboutClick = () => {
+  //   setIsEditingAbout(true);
+  // };
 
   const handleSaveAbout = () => {
     setIsEditingAbout(false);
     updateMEntorProfile();
   };
 
-  const handleCancelEditAbout = () => {
-    setIsEditingAbout(false);
-  };
+  // const handleCancelEditAbout = () => {
+  //   setIsEditingAbout(false);
+  // };
 
-  const handleEditButton = () => {
-    setIsEditingButton(true);
-  };
-  const handleSaveButton = () => {
-    if (topic.length === 0) {
-      setTopicValidationMessage("At least one topic is required.");
+  // const handleEditButton = () => {
+  //   setIsEditingButton(true);
+  const handleLanguagesSave = () => {
+    if (languages.length === 0) {
+      setTopicValidationMessage("At least one language is required.");
     } else {
-      setIsEditingButton(false);
+      setIsEditingLanguages(false);
       updateMEntorProfile();
     }
   };
+  const handleLanguagesCancel = () => {
+    setIsEditingLanguages(false);
+  };
 
-  const handleCancelButton = () => {
+  const handleSaveTopics = () => {
     if (topic.length === 0) {
       setTopicValidationMessage("At least one topic is required.");
     } else {
-      setIsEditingButton(false);
+      setIsEditingTopics(false);
+      updateMEntorProfile();
     }
   };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
+  const handleTopicCancel = () => {
+    if (topic.length === 0) {
+      setTopicValidationMessage("At least one topic is required.");
+    } else {
+      setIsEditingTopics(false);
+    }
   };
+  // };
+  // const handleSaveButton = () => {
+  //   if (topic.length === 0) {
+  //     setTopicValidationMessage("At least one topic is required.");
+  //   } else {
+  //     setIsEditingButton(false);
+  //     updateMEntorProfile();
+  //   }
+  // };
+
+  // const handleCancelButton = () => {
+  //   if (topic.length === 0) {
+  //     setTopicValidationMessage("At least one topic is required.");
+  //   } else {
+  //     setIsEditingButton(false);
+  //   }
+  // };
+
+  // const handleEditClick = () => {
+  //   setIsEditing(true);
+  // };
 
   const handleSave = () => {
     setIsEditing(false);
@@ -198,9 +248,9 @@ const LawyerMyProfile = () => {
     }
   };
 
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
+  // const handleCancel = () => {
+  //   setIsEditing(false);
+  // };
 
   const handleRemoveLanguages = (index) => {
     setLanguages(languages.filter((_, i) => i !== index));
@@ -247,91 +297,152 @@ const LawyerMyProfile = () => {
 
   return (
     <div className="mentor-profile">
-      {/* <div className=""> */}
-
       <Colxx sm="12" md="12" lg="12" xxs="12" className="">
-        <div className="">
-          <Card
-            style={{ height: "160px", width: "100%", overflow: "hidden" }}
-            className="bg-primary"
-          >
-            <div
-              className="d-flex align-items-center justify-content-between"
-              style={{ height: "100%" }}
-            >
-              <div className="d-flex align-items-center mt-4 ml-4 mb-4">
-                {imageUrl === null ? (
-                  <ThumbnailLetters
-                    // small
-                    rounded
-                    text={firstName}
-                    className="mx-2"
-                    color="secondary"
-                  />
-                ) : (
-                  <img
-                    src={`${baseUrl}/${imageUrl}`}
-                    className="mx-2 rounded-circle img-thumbnail border"
-                    style={{
-                      width: "110px",
-                      height: "110px",
-                      objectFit: "cover",
-                    }}
-                    alt="img"
-                  />
-                )}
-                <div className="ml-4 mt-2">
-                  <h1 className="font-weight-semibold text-large">
-                    {firstName} {lastName}
-                  </h1>
-                </div>
-              </div>
-              {/* <div className="mr-4">
-              <NavLink className="d-none d-md-inline-block">
-                  <Button
-                    color="light"
-                    className="font-weight-semibold icon-button"
-                    size="large"
-                    // onClick={handleLinkedInClick}
-                  >
-                    <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
-                  </Button>
-                </NavLink>
-              </div> */}
-            </div>
-          </Card>
+        {/* new design code starts */}
 
-          {profileLoading ? (
-            <div className="loading" />
-          ) : (
-            <>
-              {isEditing && (
-                <div className="mt-2">
-                  <Button
-                    className="default"
-                    color="light"
-                    onClick={() =>
-                      document.getElementById("file-upload").click()
-                    }
+        {/* profile section starts */}
+        <Row>
+          <Col>
+            <Card>
+              <CardBody
+                style={{
+                  background: "linear-gradient(to right, #7B42C5, #AA5D93)",
+                  color: "white",
+                  borderRadius: "9px 9px 0 0",
+                }}
+              >
+                <div
+                  className="position-relative"
+                  style={{ position: "relative", top: "70px" }}
+                >
+                  <button
+                    type="button"
+                    className="btn p-0"
+                    style={{ border: "none", background: "none" }}
+                    onClick={() => handleImageClick()}
+                    aria-label="Profile image"
                   >
-                    Change profile pic{" "}
-                    <i className="iconsminds-upload text-primary" />
-                  </Button>
-                  <Form>
-                    <input
-                      id="file-upload"
-                      type="file"
-                      className="form-control d-none"
-                      onChange={handleFileChange}
-                    />
-                  </Form>
-                  {file1 && <p>Selected file: {file1.name}</p>}
+                    {imageUrl === null ? (
+                      <ThumbnailLetters
+                        // small
+                        rounded
+                        text={firstName}
+                        className="mx-2"
+                        color="secondary"
+                      />
+                    ) : (
+                      <img
+                        src={`${baseUrl}/${imageUrl}`}
+                        className="mx-2 rounded-circle img-thumbnail border"
+                        style={{
+                          width: "110px",
+                          height: "110px",
+                          objectFit: "cover",
+                        }}
+                        alt="img"
+                      />
+                    )}
+                  </button>
+                  {/* image modal starts */}
+                  <Modal
+                    isOpen={imageEditModal}
+                    toggle={() => setImageEditModal(!imageEditModal)}
+                    className=""
+                    size="lg"
+                    style={{
+                      borderRadius: "10px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <ModalHeader style={{ borderBottom: "none" }}>
+                      <h2 className="font-weight-bold">Profile photo</h2>
+                    </ModalHeader>
+                    <ModalBody className="d-flex justify-content-center align-items-center">
+                      <img
+                        src={selectedFileBase64 || `${baseUrl}/${imageUrl}`}
+                        className="rounded-circle img-thumbnail border border-3"
+                        style={{
+                          width: "130px",
+                          height: "130px",
+                          objectFit: "cover",
+                        }}
+                        alt="img"
+                      />
+                    </ModalBody>
+
+                    <ModalFooter className="d-flex align-items-center justify-content-center">
+                      {selectedFile ? (
+                        <Button
+                          outline
+                          color="primary"
+                          onClick={() => handleImagePost()}
+                          className="icon-button"
+                          style={{ border: "none" }}
+                        >
+                          <i className="iconsminds-upload " />
+                        </Button>
+                      ) : (
+                        <InputGroup
+                          className=""
+                          style={{
+                            width: "auto",
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <div className="">
+                            <Button
+                              outline
+                              className="icon-button"
+                              color="primary"
+                              style={{ border: "none" }}
+                              onClick={() =>
+                                document.getElementById("file-upload").click()
+                              }
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              className="d-none"
+                              onChange={handleFileChange}
+                            />
+                          </div>
+                        </InputGroup>
+                      )}
+
+                      <Button
+                        color="primary"
+                        outline
+                        onClick={() => handleImageDelete()}
+                        className="icon-button"
+                        style={{ border: "none" }}
+                      >
+                        <i className="simple-icon-trash" />
+                      </Button>
+                    </ModalFooter>
+                  </Modal>
+                  {/* image modal ends */}
                 </div>
-              )}
-              <Row lg={10} md={8}>
-                <Col lg="5" md="12" className="mt-4 ml-4">
-                  <div>
-                    {isEditing ? (
+
+                {/* Modal for update profile starts */}
+                <Modal
+                  isOpen={isEditing}
+                  toggle={() => setIsEditing(!isEditing)}
+                  className=""
+                  size="lg"
+                  style={{
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <ModalHeader style={{ borderBottom: "none" }}>
+                    <h2 className="font-weight-bold">Edit Profile</h2>
+                  </ModalHeader>
+                  <ModalBody>
+                    <div className="">
                       <div>
                         <>
                           <Row>
@@ -358,104 +469,256 @@ const LawyerMyProfile = () => {
                               />
                             </Col>
                           </Row>
-                          <br />
-                        </>
+                          <>
+                            <Label
+                              for="location"
+                              className="font-weight-medium"
+                            >
+                              <h4>Location</h4>
+                            </Label>
 
-                        <>
-                          <Label for="location" className="font-weight-medium">
-                            <h4>Location</h4>
-                          </Label>
-
-                          <Input
-                            type="select"
-                            name="location"
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                            className="form-control"
-                          >
-                            <option disabled value="">
-                              Select Location
-                            </option>
-                            {country.map((option, index) => (
-                              <option
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={index}
-                                value={option.iso_code}
-                              >
-                                {option.name}
+                            <Input
+                              type="select"
+                              name="location"
+                              value={location}
+                              onChange={(e) => setLocation(e.target.value)}
+                              className="form-control"
+                            >
+                              <option disabled value="">
+                                Select Location
                               </option>
-                            ))}
-                          </Input>
+                              {country.map((option, index) => (
+                                <option
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  key={index}
+                                  value={option.iso_code}
+                                >
+                                  {option.name}
+                                </option>
+                              ))}
+                            </Input>
+                            <br />
+                          </>
                           <br />
                         </>
                       </div>
-                    ) : (
-                      <>
-                        <h5 className="font-weight-medium">
-                          <i className="simple-icon-location-pin text-primary" />
-
-                          <span className="ml-2">{countryName}</span>
-                        </h5>
-                        <h6 className="">
-                          <i className="simple-icon-star text-primary " />
-                          <span className="ml-2">{`${star} (${ratings} ratings)`}</span>
-                        </h6>
-                      </>
-                    )}
-                  </div>
-                  {!isEditing && (
+                    </div>
+                    <br />
+                  </ModalBody>
+                  <ModalFooter
+                    style={{ borderTop: "none" }}
+                    className="d-flex align-items-center justify-content-center"
+                  >
+                    <Button color="primary" onClick={() => handleSave()}>
+                      Save
+                    </Button>{" "}
                     <Button
                       color="primary"
                       outline
-                      onClick={handleEditClick}
-                      className="ml-2"
+                      onClick={() => setIsEditing(false)}
+                      className=""
                     >
-                      <i className="simple-icon-pencil" /> Edit
+                      Cancel
                     </Button>
-                  )}
-                  {isEditing && (
-                    <>
-                      <Button
-                        color="primary"
-                        onClick={handleSave}
-                        className="mr-2"
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        color="primary"
-                        outline
-                        onClick={handleCancel}
-                        className="ml-2"
-                      >
-                        Cancel
-                      </Button>
-                    </>
-                  )}
-                </Col>
-
-                <Col lg="5" md="12" className="mt-4 ml-4">
-                  {(languages.length > 0 || isEditingButton) && (
-                    <h2 className="mx-2 font-weight-semibold">
-                      Languages known
+                  </ModalFooter>
+                </Modal>
+                {/* Modal for update profile ends */}
+              </CardBody>
+              <CardBody>
+                <div>
+                  <div className="text-end w-100  d-flex justify-content-end">
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      style={{ border: "none" }}
+                      size="sm"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </div>
+                  <div className="mt-4">
+                    <h2 className="font-weight-bold">
+                      {firstName} {lastName}
                     </h2>
-                  )}
-                  {isEditingButton ? (
+
+                    <h5 className="font-weight-medium">
+                      <i className="simple-icon-location-pin text-primary" />
+
+                      <span className="ml-2">{countryName}</span>
+                    </h5>
+                    <h6 className="">
+                      <i className="simple-icon-star text-primary " />
+                      <span className="ml-2">{`${star} (${ratings} ratings)`}</span>
+                    </h6>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        {/* profile section ends */}
+
+        {/* about section starts */}
+        <Row className="my-4">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row className="align-items-center">
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">About</h2>
+
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      size="sm"
+                      onClick={() => setIsEditingAbout(true)}
+                      style={{ border: "none" }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
+                <div>
+                  <p className="text-muted">{about}</p>
+                </div>
+                {/* about modal starts */}
+                <Modal
+                  isOpen={isEditingAbout}
+                  toggle={() => setIsEditingAbout(!isEditingAbout)}
+                  className=""
+                  size="lg"
+                  style={{ borderRadius: "10px", overflow: "hidden" }}
+                >
+                  <ModalHeader style={{ borderBottom: "none" }}>
+                    <h2 className="font-weight-bold">About</h2>
+                  </ModalHeader>
+                  <ModalBody>
+                    <br />
+
                     <>
+                      <Label for="about" className="text-muted">
+                        <h4>About Me</h4>
+                      </Label>
+                      <Input
+                        type="textarea"
+                        id="about"
+                        value={about}
+                        onChange={(e) => setAbout(e.target.value)}
+                        className=" text-one"
+                      />
+                      <br />
+                    </>
+                    <>
+                      <Label for="about" className="text-muted">
+                        <h4>Bio</h4>
+                      </Label>
+                      <Input
+                        type="textarea"
+                        id="about"
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        className=" text-one"
+                      />
+                      <br />
+                    </>
+                  </ModalBody>
+                  <ModalFooter
+                    style={{ borderTop: "none" }}
+                    className="d-flex align-items-center justify-content-center"
+                  >
+                    <Button color="primary" onClick={() => handleSaveAbout()}>
+                      Save
+                    </Button>{" "}
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => setIsEditingAbout(false)}
+                      className=""
+                    >
+                      Cancel
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+                {/* about modal ends */}
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        {/* about section ends */}
+
+        {/* language section starts */}
+        <Row className="my-4">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row>
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">Languages known</h2>
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      size="sm"
+                      onClick={() => setIsEditingLanguages(true)}
+                      style={{ border: "none" }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <ul
+                      className="text-one text-muted font-weight-bold d-flex flex-wrap p-0 mr-3 text-start"
+                      style={{
+                        gap: "30px",
+                        listStyle: "none",
+                        paddingLeft: 0,
+                      }}
+                    >
                       {languages.map((lang, index) => (
-                        <Button
+                        <li
                           // eslint-disable-next-line react/no-array-index-key
                           key={index}
-                          color="light"
-                          className="mb-2 font-weight-semibold mx-2"
-                          size="xs"
-                          onClick={() => handleRemoveLanguages(index)}
+                          style={{
+                            position: "relative",
+                            paddingLeft: "20px",
+                          }}
                         >
+                          <span
+                            style={{
+                              content: '""',
+                              position: "absolute",
+                              left: 0,
+                              top: "50%",
+                              transform: "translateY(-50%) rotate(45deg)",
+                              width: "7px",
+                              height: "7px",
+                              backgroundColor: "currentColor",
+                            }}
+                          />
                           {language.find((l) => l.iso_code === lang)?.name}{" "}
-                          <i className="iconsminds-close" />
-                        </Button>
+                        </li>
                       ))}
-
+                    </ul>
+                  </Col>
+                </Row>
+                <Modal
+                  isOpen={isEditingLanguages}
+                  toggle={() => setIsEditingLanguages(!isEditingLanguages)}
+                  className=""
+                  size="lg"
+                  style={{ borderRadius: "10px", overflow: "hidden" }}
+                >
+                  <ModalHeader>
+                    <h2 className="font-weight-bold">Languages</h2>
+                  </ModalHeader>
+                  <ModalBody>
+                    <h5>Languages</h5>
+                    <>
                       <FormGroup className="error-l-75">
                         <Select
                           placeholder="Select Languages"
@@ -471,203 +734,177 @@ const LawyerMyProfile = () => {
                           }}
                         />
                       </FormGroup>
-                    </>
-                  ) : (
-                    languages.map((lang, index) => (
-                      <Button
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={index}
-                        color="light"
-                        className="mb-2 font-weight-semibold mx-2"
-                        size="xs"
-                      >
-                        {language.find((l) => l.iso_code === lang)?.name}
-                      </Button>
-                    ))
-                  )}
-
-                  <div className="mt-2">
-                    <h2 className="font-weight-semibold mx-2">Topics</h2>
-
-                    {isEditingButton ? (
-                      <>
-                        <ReactSortable
-                          list={topic}
-                          setList={setTopic}
-                          options={{ handle: ".handle" }}
-                          className="row ml-1"
-                        >
-                          {topic.map((newTopics, index) => (
-                            <Button
-                              // eslint-disable-next-line react/no-array-index-key
-                              key={index}
-                              color={index < 3 ? "primary" : "light"}
-                              className=" mb-2 font-weight-semibold mx-2"
-                              size="xs"
-                              onClick={() => handleRemoveTopics(index)}
-                            >
-                              {newTopics} <i className="iconsminds-close" />
-                            </Button>
-                          ))}
-                        </ReactSortable>
-                        <p className="text-muted ml-2">
-                          Drag topic to set top 3 (the top 3 topics will be
-                          displayed on lawyer cards)
-                        </p>
-                        <InputGroup className="mb-3">
-                          <Input
-                            type="text"
-                            placeholder="New topic"
-                            value={newInputTopics}
-                            onChange={(e) => setNewInputTopics(e.target.value)}
-                            onKeyDown={(event) => {
-                              if (event.key === "Enter") {
-                                handleAddTopics(newInputTopics);
-                                setNewInputTopics("");
-                              }
-                            }}
-                          />
-                          <InputGroupAddon addonType="append">
-                            <Button
-                              outline
-                              color="primary"
-                              onClick={() => {
-                                handleAddTopics(newInputTopics);
-                                setNewInputTopics("");
-                              }}
-                            >
-                              Add topics
-                            </Button>
-                          </InputGroupAddon>
-                        </InputGroup>
-                        {topicValidationMessage && (
-                          <div className="invalid-feedback d-block">
-                            {topicValidationMessage}
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      topic.map((newTopics, index) => (
+                      {languages.map((lang, index) => (
                         <Button
                           // eslint-disable-next-line react/no-array-index-key
                           key={index}
-                          color={index < 3 ? "primary" : "light"}
-                          className="mb-2 font-weight-semibold mx-2"
-                          size="xs"
-                        >
-                          {newTopics}
-                        </Button>
-                      ))
-                    )}
-                    <br />
-                    {!isEditingButton && (
-                      <Button
-                        color="primary"
-                        outline
-                        onClick={handleEditButton}
-                        className="ml-2"
-                      >
-                        <i className="simple-icon-pencil" /> Edit
-                      </Button>
-                    )}
-                    {isEditingButton && (
-                      <>
-                        <Button
-                          color="primary"
-                          onClick={handleSaveButton}
-                          className="mr-2"
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          color="primary"
                           outline
-                          onClick={handleCancelButton}
-                          className="ml-2"
+                          color="primary"
+                          className="mt-2 font-weight-semibold mr-2"
+                          size="sm"
+                          onClick={() => handleRemoveLanguages(index)}
                         >
-                          Cancel
+                          {language.find((l) => l.iso_code === lang)?.name}{" "}
+                          <i className="iconsminds-close" />
                         </Button>
-                      </>
-                    )}
-                  </div>
-                </Col>
-              </Row>
-              <hr />
-              <Row>
-                <Col lg="12" md="12" className="ml-4">
-                  <h2 className="font-weight-semibold mx-2">About</h2>
-
-                  <div>
-                    {isEditingAbout ? (
-                      <div className="col-lg-6 col-12">
-                        <Label for="about" className="font-weight-medium">
-                          <h4>About Me</h4>
-                        </Label>
-                        <Input
-                          type="textarea"
-                          id="about"
-                          value={about}
-                          onChange={(e) => setAbout(e.target.value)}
-                          className="form-control"
-                          rows="5"
-                        />
-                        <Label for="about" className="font-weight-medium mt-2">
-                          <h4>Bio</h4>
-                        </Label>
-                        <Input
-                          type="textarea"
-                          id="bio"
-                          value={bio}
-                          onChange={(e) => setBio(e.target.value)}
-                          className="form-control"
-                          rows="5"
-                        />
-
-                        <br />
-                      </div>
-                    ) : (
-                      <div className="col-lg-12 col-12">
-                        <p className="text-one font-weight-medium">{about}</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {!isEditingAbout && (
+                      ))}
+                    </>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="primary"
+                      onClick={handleLanguagesSave}
+                      className="mr-2"
+                    >
+                      Save
+                    </Button>
                     <Button
                       color="primary"
                       outline
-                      onClick={handleEditAboutClick}
+                      onClick={handleLanguagesCancel}
                       className="ml-2"
                     >
-                      <i className="simple-icon-pencil" /> Edit
+                      Cancel
                     </Button>
-                  )}
+                  </ModalFooter>
+                </Modal>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        {/* langauge section ends */}
+        {/* topic section starts */}
+        <Row className="my-4">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row>
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">Topics</h2>
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      size="sm"
+                      onClick={() => setIsEditingTopics(true)}
+                      style={{ border: "none" }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
 
-                  {isEditingAbout && (
-                    <>
+                <div
+                  className="d-flex flex-wrap"
+                  style={{ gap: "10px", marginTop: "10px" }}
+                >
+                  {topic.map((newTopics, index) => (
+                    <Button
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      color={index < 3 ? "primary" : "light"}
+                      className="mb-2 font-weight-semibold mr-2"
+                      size="sm"
+                    >
+                      {newTopics}
+                    </Button>
+                  ))}
+                </div>
+              </CardBody>
+            </Card>
+
+            <Modal
+              isOpen={isEditingTopics}
+              toggle={() => setIsEditingTopics(!isEditingTopics)}
+              className=""
+              size="lg"
+              style={{ borderRadius: "10px", overflow: "hidden" }}
+            >
+              <ModalHeader>
+                <h2 className="font-weight-bold">Topics</h2>
+              </ModalHeader>
+              <ModalBody>
+                <div className="mt-3">
+                  <h5>Topics</h5>
+                  <ReactSortable
+                    list={topic}
+                    setList={setTopic}
+                    options={{ handle: ".handle" }}
+                    className="row ml-1"
+                  >
+                    {topic.map((newTopics, index) => (
                       <Button
-                        color="primary"
-                        onClick={handleSaveAbout}
-                        className="mr-2"
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        color={index < 3 ? "primary" : "light"}
+                        // className=" mb-2 font-weight-semibold "
+                        className=" my-2 font-weight-semibold mr-2 d-flex align-items-center "
+                        size="sm"
+                        onClick={() => handleRemoveTopics(index)}
                       >
-                        Save
+                        {newTopics} <i className="iconsminds-close" />
                       </Button>
+                    ))}
+                  </ReactSortable>
+                  <p className="text-muted ml-2">
+                    Drag topic to set top 3 (the top 3 topics will be displayed
+                    on lawyer cards)
+                  </p>
+                  <InputGroup className="mb-3">
+                    <Input
+                      type="text"
+                      placeholder="New topic"
+                      value={newInputTopics}
+                      onChange={(e) => setNewInputTopics(e.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          handleAddTopics(newInputTopics);
+                          setNewInputTopics("");
+                        }
+                      }}
+                    />
+                    <InputGroupAddon addonType="append">
                       <Button
-                        color="primary"
                         outline
-                        onClick={handleCancelEditAbout}
-                        className="ml-2"
+                        color="primary"
+                        onClick={() => {
+                          handleAddTopics(newInputTopics);
+                          setNewInputTopics("");
+                        }}
                       >
-                        Cancel
+                        Add topics
                       </Button>
-                    </>
+                    </InputGroupAddon>
+                  </InputGroup>
+                  {topicValidationMessage && (
+                    <div className="invalid-feedback d-block">
+                      {topicValidationMessage}
+                    </div>
                   )}
-                </Col>
-              </Row>
-              <hr />
-            </>
-          )}
-        </div>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={handleSaveTopics}
+                  className="mr-2"
+                >
+                  Save
+                </Button>
+                <Button
+                  color="primary"
+                  outline
+                  onClick={handleTopicCancel}
+                  className="ml-2"
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </Col>
+        </Row>
+        {/* topic section ends */}
+        {/* new design cocde ends */}
       </Colxx>
     </div>
   );
