@@ -5,8 +5,10 @@ import IntlMessages from "helpers/IntlMessages";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { Button, Card, CardTitle, FormGroup, Label, Row } from "reactstrap";
 import { loginUser } from "redux/actions";
+
 // import axios from 'axios';
 // import { baseUrl } from 'constants/defaultValues';
 // import { authService } from 'services/authservice';
@@ -59,7 +61,8 @@ const validateEmail = (value) => {
   return error;
 };
 
-const Login = ({ history, loading, loginUserAction }) => {
+const Login = ({ loading, loginUserAction }) => {
+  const history = useHistory();
   // const [user, setUser] = useState({
   //   username: '',
   //   password: '',
@@ -141,7 +144,7 @@ const Login = ({ history, loading, loginUserAction }) => {
       if (values.email !== "" && values.password !== "") {
         loginUserAction(values, history);
       } else {
-        NotificationManager.warning(
+        NotificationManager.error(
           "Please enter email and password",
           "Login Error",
           3000,
@@ -160,7 +163,7 @@ const Login = ({ history, loading, loginUserAction }) => {
       <Colxx xxs="12" md="10" className="mx-auto my-auto">
         <Card className="auth-card">
           <div className="position-relative image-side ">
-            <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
+            <p className="text-white h2">METIEGROW</p>
             <p className="white mb-0">
               Please use your credentials to login.
               <br />
@@ -171,14 +174,47 @@ const Login = ({ history, loading, loginUserAction }) => {
               .
             </p>
           </div>
-          <div className="form-side">
-            <NavLink to="/" className="white">
+          <div className="form-side ">
+            <NavLink to="/" className="">
               <span className="logo-single" />
+
+              {/* <span
+                style={{
+                  display: "inline-block",
+                  width: "110px",
+                  height: "55px",
+                  backgroundImage: "url('/assets/logos/metiegrowlogo.jpg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center center",
+                  marginBottom: "60px",
+                }}
+                aria-label="Metiegrow Logo"
+              /> */}
+              {/* <div
+                style={{
+                  width: "110px",
+                  marginBottom: "60px",
+                  height: "110px",
+                }}
+              >
+                <img
+                  src="/assets/logos/metiegrowlogo.jpg"
+                  // src="/assets/img/profiles/1.jpg"
+                  className="w-100 h-100"
+                  alt="Metiegrow Logo"
+                  style={{
+                    textAlign: "start",
+                    backgroundColor: "red",
+                    marginLeft: "0px !important",
+                    display: "flex",
+                  }}
+                />
+              </div> */}
             </NavLink>
-            <CardTitle className="mb-4">
+
+            <CardTitle className="mb-4 d-flex flex-column">
               <IntlMessages id="user.login-title" />
             </CardTitle>
-
             <Formik initialValues={initialValues} onSubmit={onUserLogin}>
               {({ errors, touched, handleSubmit }) => (
                 <Form className="av-tooltip tooltip-label-bottom">
@@ -244,7 +280,11 @@ const Login = ({ history, loading, loginUserAction }) => {
                   </div>
                   <div>
                     Not a registered user?{" "}
-                    <NavLink to="/user/register" className="">
+                    <NavLink
+                      to="/user/register"
+                      className=""
+                      style={{ textDecoration: "underline" }}
+                    >
                       register
                     </NavLink>
                   </div>

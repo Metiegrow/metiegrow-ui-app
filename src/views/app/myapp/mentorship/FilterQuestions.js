@@ -2,6 +2,7 @@ import axios from "axios";
 import { Colxx } from "components/common/CustomBootstrap";
 import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
+import Pagination from "containers/pages/Pagination";
 import { useEffect, useState } from "react";
 import { Button, Card, CardBody, NavLink, Spinner } from "reactstrap";
 
@@ -9,13 +10,17 @@ const FilterQuestions = () => {
   const [isQuestionFetched, setIsQuestionFetched] = useState(false);
 
   // Backend url below
-  const url = `${baseUrl}/api/mentee/multipleQuestions`;
+  const url = `${baseUrl}/api/questions`;
+
   const [multiquestions, setMultiQuestions] = useState([]);
   const [editing, setEditing] = useState(false);
   const [editedQuestion, setEditedQuestion] = useState("");
   const [originalQuestions, setOriginalQuestions] = useState([]);
   const [loadingStates, setLoadingStates] = useState({});
   const [editStates, setEditStates] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationMeta, setPaginationMeta] = useState([]);
+  const [inputkey, setInputKey] = useState("");
 
   const userId = localStorage.getItem("userId");
 
@@ -142,10 +147,18 @@ const FilterQuestions = () => {
 
   useEffect(() => {
     const FilterMultiQuestions = async () => {
+      const params = {};
+      if (inputkey) {
+        params.q = inputkey;
+      }
+      params.size = 10;
+      params.page = currentPage - 1;
+
       try {
-        const response = await axios.get(url);
-        setMultiQuestions(response.data);
-        setOriginalQuestions(response.data);
+        const response = await axios.get(url, { params });
+        setMultiQuestions(response.data.data);
+        setOriginalQuestions(response.data.data);
+        setPaginationMeta(response.data.paginationMeta);
         setIsQuestionFetched(true);
         console.log(response.data);
       } catch (error) {
@@ -153,7 +166,7 @@ const FilterQuestions = () => {
       }
     };
     FilterMultiQuestions();
-  }, []);
+  }, [inputkey, currentPage]);
 
   return (
     <div>
@@ -168,6 +181,32 @@ const FilterQuestions = () => {
             Ask a Free Question
           </Button>
         </NavLink>
+        <div className="input-group">
+          <div
+            style={{ position: "relative" }}
+            className="col-12 col-lg-12 col-md-12"
+          >
+            <i
+              className="simple-icon-magnifier mr-3"
+              style={{
+                position: "absolute",
+                top: "50%",
+                right: "15px",
+                transform: "translateY(-50%)",
+                zIndex: 2,
+                color: "#aaa",
+              }}
+            />
+            <input
+              type="text"
+              className="form-control text-one py-3"
+              placeholder="Search questions"
+              value={inputkey}
+              onChange={(e) => setInputKey(e.target.value)}
+              style={{ paddingRight: "2.5rem" }}
+            />
+          </div>
+        </div>
         {!isQuestionFetched ? (
           <div className="loading" />
         ) : (
@@ -299,6 +338,16 @@ const FilterQuestions = () => {
               </Card>
             )}
           </>
+        )}
+
+        {isQuestionFetched && (
+          <Pagination
+            currentPage={currentPage}
+            totalPage={paginationMeta.totalPage}
+            onChangePage={(i) => setCurrentPage(i)}
+            lastIsActive={paginationMeta.last}
+            firstIsActive={paginationMeta.first}
+          />
         )}
       </Colxx>
     </div>

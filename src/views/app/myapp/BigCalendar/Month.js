@@ -1,33 +1,38 @@
-import { Colxx } from 'components/common/CustomBootstrap';
-import React,{useState,useEffect} from 'react';
-import { useLocation } from 'react-router-dom';
+import { Colxx } from "components/common/CustomBootstrap";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-import {  Button, Card, CardBody, Modal, ModalBody, Table ,Row,} from 'reactstrap';
-import axios from 'axios';
-import { baseUrl } from 'constants/defaultValues';
-import PopupWizard from './PopupWizard';
+import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
+import {
+  Button,
+  Card,
+  CardBody,
+  Modal,
+  ModalBody,
+  Row,
+  Table,
+} from "reactstrap";
+import PopupWizard from "./PopupWizard";
 
 const Month = () => {
-  
   // const url=`${baseUrl}/mentorAvailablity`
 
-
   // if you change the url to backend uncomment the below line
-  const url=`${baseUrl}/api/calendar/appointment/user`
+  const url = `${baseUrl}/api/calendar/appointment/user`;
 
-  const[mentoravailable,setMentorAvailable]=useState([]);
+  const [mentoravailable, setMentorAvailable] = useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const mentorName = searchParams.get('mentorName');
-  const mentorId = searchParams.get('mentorId');
+  const mentorName = searchParams.get("mentorName");
+  const mentorId = searchParams.get("mentorId");
 
-  const [selectedDate, setSelectedDate] = useState(null); 
+  const [selectedDate, setSelectedDate] = useState(null);
   // const [hasAvailableSlots,setHasAvailableSlots] = useState(true);
- 
+
   // const [selectedStartTime, setSelectedStartTime] = useState(null);
   // const [selectedEndTime, setSelectedEndTime] = useState(null);
-  
 
   // Function to get the start date of the current week
   // const getStartOfWeek = () => {
@@ -41,7 +46,7 @@ const Month = () => {
     const day = currentDate.getDay();
     const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
     const startOfWeek = new Date(currentDate.setDate(diff));
-    
+
     return startOfWeek;
   };
 
@@ -52,103 +57,94 @@ const Month = () => {
   //   return endOfWeek;
   // };
 
- 
+  const fetchMentorAvailability = async (fromTime, toTime) => {
+    try {
+      // const response = await axios.get(`${baseUrl}/mentorAvailablity?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`);
+      const response = await axios.get(
+        `${url}?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`
+      );
+      const availability = response.data;
+      setMentorAvailable(availability);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-  
+  // useEffect(() => {
+  //   const startOfWeek = getStartOfWeek();
+  //   const endOfWeek = getEndOfWeek(startOfWeek);
+  //   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeek.getTime()}&toTime=${endOfWeek.getTime()}`;
+  //   window.history.replaceState(null, '', newUrl);
+  //   if (mentorId) {
+  //     fetchMentorAvailability(startOfWeek.getTime(), endOfWeek.getTime());
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   const startOfWeekTimestamp = currentWeekStart.getTime(); // Start of the current week
+  //   const endOfWeekTimestamp = new Date(currentWeekStart); // End of the current week
+  //   endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6);
 
-const fetchMentorAvailability = async (fromTime, toTime) => {
-  try {
-    // const response = await axios.get(`${baseUrl}/mentorAvailablity?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`);
-    const response = await axios.get(`${url}?mentorId=${mentorId}&fromTime=${fromTime}&toTime=${toTime}`);
-    const availability = response.data;
-    setMentorAvailable(availability);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
+  //   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp}&toTime=${endOfWeekTimestamp.getTime()}`;
+  //   window.history.replaceState(null, '', newUrl);
 
+  //   if (mentorId) {
+  //     fetchMentorAvailability(startOfWeekTimestamp, endOfWeekTimestamp.getTime());
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   // Set the time of currentWeekStart to 12:00 PM (noon)
+  //   const startOfWeekTimestamp = new Date(currentWeekStart);
+  //   startOfWeekTimestamp.setHours(12, 0, 0, 0);
 
-// useEffect(() => {
-//   const startOfWeek = getStartOfWeek();
-//   const endOfWeek = getEndOfWeek(startOfWeek);
-//   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeek.getTime()}&toTime=${endOfWeek.getTime()}`;
-//   window.history.replaceState(null, '', newUrl);
-//   if (mentorId) {
-//     fetchMentorAvailability(startOfWeek.getTime(), endOfWeek.getTime());
-//   }
-// }, []);
-// useEffect(() => {
-//   const startOfWeekTimestamp = currentWeekStart.getTime(); // Start of the current week
-//   const endOfWeekTimestamp = new Date(currentWeekStart); // End of the current week
-//   endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6);
+  //   // Set the time of endOfWeekTimestamp to 11:59 PM
+  //   const endOfWeekTimestamp = new Date(currentWeekStart);
+  //   endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
+  //   endOfWeekTimestamp.setHours(11, 59, 59, 999);
 
-//   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp}&toTime=${endOfWeekTimestamp.getTime()}`;
-//   window.history.replaceState(null, '', newUrl);
+  //   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
+  //   window.history.replaceState(null, '', newUrl);
 
-//   if (mentorId) {
-//     fetchMentorAvailability(startOfWeekTimestamp, endOfWeekTimestamp.getTime());
-//   }
-// }, []);
-// useEffect(() => {
-//   // Set the time of currentWeekStart to 12:00 PM (noon)
-//   const startOfWeekTimestamp = new Date(currentWeekStart);
-//   startOfWeekTimestamp.setHours(12, 0, 0, 0);
+  //   if (mentorId) {
+  //     fetchMentorAvailability(startOfWeekTimestamp.getTime(), endOfWeekTimestamp.getTime());
+  //   }
+  // }, [currentWeekStart, mentorId]);
+  // new code
+  useEffect(() => {
+    // Set the time of currentWeekStart to 12:00 AM (midnight)
+    const startOfWeekTimestamp = new Date(currentWeekStart);
+    startOfWeekTimestamp.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
 
-//   // Set the time of endOfWeekTimestamp to 11:59 PM
-//   const endOfWeekTimestamp = new Date(currentWeekStart);
-//   endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
-//   endOfWeekTimestamp.setHours(11, 59, 59, 999);
+    // Set the time of endOfWeekTimestamp to 11:59 PM
+    const endOfWeekTimestamp = new Date(currentWeekStart);
+    endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
+    endOfWeekTimestamp.setHours(23, 59, 59, 999); // Set hours to 11, minutes to 59, seconds to 59, and milliseconds to 999
 
-//   const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
-//   window.history.replaceState(null, '', newUrl);
+    const newUrl = `${window.location.origin}${
+      window.location.pathname
+    }?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
+    window.history.replaceState(null, "", newUrl);
 
-//   if (mentorId) {
-//     fetchMentorAvailability(startOfWeekTimestamp.getTime(), endOfWeekTimestamp.getTime());
-//   }
-// }, [currentWeekStart, mentorId]);
-// new code
-useEffect(() => {
-  // Set the time of currentWeekStart to 12:00 AM (midnight)
-  const startOfWeekTimestamp = new Date(currentWeekStart);
-  startOfWeekTimestamp.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+    if (mentorId) {
+      fetchMentorAvailability(
+        startOfWeekTimestamp.getTime(),
+        endOfWeekTimestamp.getTime()
+      );
+    }
+  }, [currentWeekStart, mentorId]);
 
-  // Set the time of endOfWeekTimestamp to 11:59 PM
-  const endOfWeekTimestamp = new Date(currentWeekStart);
-  endOfWeekTimestamp.setDate(endOfWeekTimestamp.getDate() + 6); // Set to end of week
-  endOfWeekTimestamp.setHours(23, 59, 59, 999); // Set hours to 11, minutes to 59, seconds to 59, and milliseconds to 999
+  // useEffect(() => {
+  //   const startOfWeek = getStartOfWeek();
+  //   console.log('Start of the Current Week checking:', startOfWeek);
+  //   setCurrentWeekStart(startOfWeek);
+  // }, []);
+  useEffect(() => {
+    const startOfWeek = getStartOfWeek();
 
-  const newUrl = `${window.location.origin}${window.location.pathname}?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
-  window.history.replaceState(null, '', newUrl);
-  
+    setCurrentWeekStart(startOfWeek);
+  }, []);
 
-  if (mentorId) {
-    fetchMentorAvailability(startOfWeekTimestamp.getTime(), endOfWeekTimestamp.getTime());
-  }
-}, [currentWeekStart, mentorId]);
-
-
-
-
-
-
-
-// useEffect(() => {
-//   const startOfWeek = getStartOfWeek();
-//   console.log('Start of the Current Week checking:', startOfWeek);
-//   setCurrentWeekStart(startOfWeek);
-// }, []);
-useEffect(() => {
-  const startOfWeek = getStartOfWeek();
-
-  setCurrentWeekStart(startOfWeek);
-}, []);
-
-  
-
-  
-  
   const [modalSmall, setModalSmall] = useState(false);
-  
+
   // weeklist functions start
   const goToPreviousWeek = () => {
     const newStartDate = new Date(currentWeekStart);
@@ -161,25 +157,24 @@ useEffect(() => {
   //   newStartDate.setDate(newStartDate.getDate() + 7);
   //   setCurrentWeekStart(newStartDate);
 
-    
   // };
 
   // const goToNextWeek = () => {
   //   const newStartDate = new Date(currentWeekStart);
   //   newStartDate.setDate(newStartDate.getDate() + 7);
   //   setCurrentWeekStart(newStartDate);
-  
+
   //   // Calculate the start of the next week
   //   const nextWeekStart = new Date(newStartDate);
   //   nextWeekStart.setDate(nextWeekStart.getDate() - nextWeekStart.getDay() + 1);
-  
+
   //   // Calculate the end of the next week
   //   const nextWeekEnd = new Date(nextWeekStart);
   //   nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
-  
+
   //   const fromTime = nextWeekStart.getTime(); // Timestamp of the start of the next week
   //   const toTime = nextWeekEnd.getTime(); // Timestamp of the end of the next week
-  
+
   //   fetchMentorAvailability(fromTime, toTime);
   // };
   // Modify the goToNextWeek function to update the URL and fetch availability for the next week
@@ -187,36 +182,41 @@ useEffect(() => {
     const newStartDate = new Date(currentWeekStart);
     newStartDate.setDate(newStartDate.getDate() + 7);
     setCurrentWeekStart(newStartDate);
-  
+
     // Calculate the start of the next week
     const nextWeekStart = new Date(newStartDate);
     nextWeekStart.setDate(nextWeekStart.getDate() - nextWeekStart.getDay() + 1);
-  
+
     // Calculate the end of the next week
     const nextWeekEnd = new Date(nextWeekStart);
     nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
-  
+
     const fromTime = nextWeekStart.getTime(); // Timestamp of the start of the next week
     const toTime = nextWeekEnd.getTime(); // Timestamp of the end of the next week
-  
+
     fetchMentorAvailability(fromTime, toTime);
   };
-
-
-
-
-
-  
 
   // const formatDate = (date) => {
   //   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   // };
   const formatDate = (date) => {
     const monthNames = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
     const month = monthNames[date.getMonth()];
-    const day = String(date.getDate()).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
     return `${day}-${month}-${date.getFullYear()}`;
   };
   const getWeekDates = () => {
@@ -229,125 +229,115 @@ useEffect(() => {
     }
     return weekDates;
   };
-;
- 
   // const isPreviousWeekDisabled = () => {
   //   // Disable the button if you're already in the current week
   //   const today = new Date();
   //   const currentWeekStartDate = new Date(today);
   //  currentWeekStartDate.setDate(today.getDate() - today.getDay() + 1); // Adjust to the start of the week
-  
+
   //   console.log('Current Week Start Date:', currentWeekStartDate);
   //   console.log('Stored Current Week Start Date:', currentWeekStart);
-  
+
   //   // const disabled = (
   //   //   currentWeekStartDate.getFullYear() === currentWeekStart.getFullYear() &&
   //   //   currentWeekStartDate.getMonth() === currentWeekStart.getMonth() &&
   //   //   currentWeekStartDate.getDate() === currentWeekStart.getDate()
   //   // );
-    
+
   //   const disabled = currentWeekStartDate.getTime() === currentWeekStart.getTime();
   //   console.log('Is Previous Week Disabled:', disabled);
-   
 
-  
   //   return disabled;
   // };
   const isPreviousWeekDisabled = () => {
     // Disable the button if you're already in the current week
     const today = new Date();
     const currentWeekStartDate = new Date(today);
-const day = today.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    const day = today.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
 
-if (day === 0) {
-  // If today is Sunday, subtract 6 days to get the start of the current week
-  currentWeekStartDate.setDate(today.getDate() - 6);
-} else {
-  // Otherwise, subtract the number of days from the current day to get the start of the current week
-  currentWeekStartDate.setDate(today.getDate() - (day - 1));
-}
+    if (day === 0) {
+      // If today is Sunday, subtract 6 days to get the start of the current week
+      currentWeekStartDate.setDate(today.getDate() - 6);
+    } else {
+      // Otherwise, subtract the number of days from the current day to get the start of the current week
+      currentWeekStartDate.setDate(today.getDate() - (day - 1));
+    }
 
-// Set hours, minutes, seconds, and milliseconds to zero
-currentWeekStartDate.setHours(0, 0, 0, 0);
+    // Set hours, minutes, seconds, and milliseconds to zero
+    currentWeekStartDate.setHours(0, 0, 0, 0);
 
-
-    
     const storedWeekStart = new Date(currentWeekStart);
     storedWeekStart.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
-    
-    const disabled = currentWeekStartDate.getTime() === storedWeekStart.getTime();
-   
-  
+
+    const disabled =
+      currentWeekStartDate.getTime() === storedWeekStart.getTime();
+
     return disabled;
   };
-  
-  
- 
-  
+
   const handleTimeSlotClick = (date) => {
     setSelectedDate(date);
-   
+
     setModalSmall(true); // Optionally open the modal when a time slot is clicked
-    
-    
   };
- 
- 
-
-
-
-
- 
-
 
   return (
     <div>
-     
+      <Row>
+        <Colxx xxs="12" md="9" lg="7" className="mx-auto">
+          <h1 className="py-4 text-large"> {mentorName} availability</h1>
+          <div className="font-weight-semibold d-flex justify-content-center align-items-center">
+            {/* <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button> */}
+            <span
+              className="font-weight-semibold text-xlarge mr-2 cursor-pointer"
+              style={{
+                cursor: isPreviousWeekDisabled() ? "not-allowed" : "pointer",
+                opacity: isPreviousWeekDisabled() ? 0.5 : 1, // Lower opacity for disabled state
+              }}
+              onClick={!isPreviousWeekDisabled() ? goToPreviousWeek : undefined}
+              onKeyDown={(e) => {
+                if (
+                  !isPreviousWeekDisabled() &&
+                  (e.key === "Enter" || e.key === " ")
+                ) {
+                  goToPreviousWeek();
+                }
+              }}
+              role="button"
+              tabIndex={!isPreviousWeekDisabled() ? 0 : -1}
+              aria-disabled={isPreviousWeekDisabled()}
+            >
+              {/* <i className='simple-icon-arrow-left' /> */}
+              <i
+                className={`simple-icon-arrow-left ${
+                  isPreviousWeekDisabled() ? "disabled" : ""
+                }`}
+              />
+            </span>
 
-    <Row>
-    <Colxx xxs="12" md='9' lg='7' className='mx-auto'>
-  
-
-   <h1 className='py-4 text-large'> {mentorName} availability</h1>
-   <div className='font-weight-semibold d-flex justify-content-center align-items-center'>
-     {/* <Button className='font-weight-semibold text-one ' color="primary" onClick={goToPreviousWeek}   disabled={isPreviousWeekDisabled()}><i className='simple-icon-arrow-left'/></Button> */}
-     <span className='font-weight-semibold text-xlarge mr-2 cursor-pointer'
-      style={{ 
-       cursor: isPreviousWeekDisabled() ? "not-allowed" : "pointer",
-       opacity: isPreviousWeekDisabled() ? 0.5 : 1, // Lower opacity for disabled state
-     }}
-      onClick={!isPreviousWeekDisabled() ? goToPreviousWeek : undefined}
-      onKeyDown={(e) => {
-    if (!isPreviousWeekDisabled() && (e.key === 'Enter' || e.key === ' ')) {
-      goToPreviousWeek();
-    }
-  }} 
-  role="button"
-  tabIndex={!isPreviousWeekDisabled() ? 0 : -1}
-  aria-disabled={isPreviousWeekDisabled()}
->
-{/* <i className='simple-icon-arrow-left' /> */}
-<i className={`simple-icon-arrow-left ${isPreviousWeekDisabled() ? 'disabled' : ''}`} />
-</span>
-
-      <div>
-      <h4 className=' font-weight-semibold'> 
-       {formatDate(currentWeekStart)} - {formatDate(new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000))}
-      </h4>
-       
-      </div>
-      <span className='ml-2 font-weight-semibold text-xlarge' role="button" tabIndex={0} 
-       style={{cursor:"pointer"}}
-      onClick={goToNextWeek}
-      onKeyDown={(e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      goToNextWeek();
-    }
-  }}
->
-<i className='simple-icon-arrow-right' />
-</span>
-{/* {hasAvailableSlots && (
+            <div>
+              <h4 className=" font-weight-semibold">
+                {formatDate(currentWeekStart)} -{" "}
+                {formatDate(
+                  new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000)
+                )}
+              </h4>
+            </div>
+            <span
+              className="ml-2 font-weight-semibold text-xlarge"
+              role="button"
+              tabIndex={0}
+              style={{ cursor: "pointer" }}
+              onClick={goToNextWeek}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  goToNextWeek();
+                }
+              }}
+            >
+              <i className="simple-icon-arrow-right" />
+            </span>
+            {/* {hasAvailableSlots && (
   <span
     className='ml-2 font-weight-semibold text-xlarge'
     role="button"
@@ -372,30 +362,24 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
     <i className='simple-icon-arrow-right' />
   </span>
 )} */}
-     {/* <Button className='ml-5 font-weight-semibold text-one' color="primary" onClick={goToNextWeek} ><i className='simple-icon-arrow-right '/></Button> */}
-   </div>
-         <Card className="mb-4 mt-4">
-           <CardBody>
-            
-             <Table bordered>
-               <thead>
-       
-                 <tr >
-                   <th className='text-one'>Date</th>
-                   <th className='text-center text-one'>Availablilty time</th>
-                    
-                 </tr>
-               </thead>
-               <tbody >
-              
-
-                 {getWeekDates().map((date) => (
-  <tr key={date.getTime()} >
-    {/* <td>{getMonthName(date.getMonth())} {formatDate(date)}</td> */}
-    <td> {formatDate(date)}</td>
-    <td>
-      
-  {/* {mentoravailable.map((avail) => {
+            {/* <Button className='ml-5 font-weight-semibold text-one' color="primary" onClick={goToNextWeek} ><i className='simple-icon-arrow-right '/></Button> */}
+          </div>
+          <Card className="mb-4 mt-4">
+            <CardBody>
+              <Table bordered>
+                <thead>
+                  <tr>
+                    <th className="text-one">Date</th>
+                    <th className="text-center text-one">Availablilty time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {getWeekDates().map((date) => (
+                    <tr key={date.getTime()}>
+                      {/* <td>{getMonthName(date.getMonth())} {formatDate(date)}</td> */}
+                      <td> {formatDate(date)}</td>
+                      <td>
+                        {/* {mentoravailable.map((avail) => {
     const availDate = new Date(avail.fromTimeStamp);
     if (availDate.toDateString() === date.toDateString()) {
         // Mentor is available on this date, display the available time
@@ -432,114 +416,120 @@ currentWeekStartDate.setHours(0, 0, 0, 0);
        return null;
 })}  */}
 
+                        {mentoravailable
+                          .filter(
+                            (avail) =>
+                              new Date(avail.fromTimeStamp).toDateString() ===
+                              date.toDateString()
+                          )
+                          .map((avail) => {
+                            const FromDate = new Date(avail.fromTimeStamp);
+                            const ToDate = new Date(avail.toTimeStamp);
 
-{mentoravailable
-        .filter(avail => new Date(avail.fromTimeStamp).toDateString() === date.toDateString())
-        .map(avail => {
-          const FromDate = new Date(avail.fromTimeStamp);
-          const ToDate = new Date(avail.toTimeStamp);
-          
-          const fromHours = FromDate.getHours() % 12 || 12;
-          const fromMinutes = String(FromDate.getMinutes()).padStart(2, '0');
-          const fromPeriod = FromDate.getHours() < 12 ? 'AM' : 'PM';
-          
-          const toHours = ToDate.getHours() % 12 || 12;
-          const toMinutes = String(ToDate.getMinutes()).padStart(2, '0');
-          const toPeriod = ToDate.getHours() < 12 ? 'AM' : 'PM';
-          
-          const fromTime = `${fromHours}:${fromMinutes} ${fromPeriod}`;
-          const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
+                            const fromHours = FromDate.getHours() % 12 || 12;
+                            const fromMinutes = String(
+                              FromDate.getMinutes()
+                            ).padStart(2, "0");
+                            const fromPeriod =
+                              FromDate.getHours() < 12 ? "AM" : "PM";
 
-          const isPastTime = ToDate < new Date();
+                            const toHours = ToDate.getHours() % 12 || 12;
+                            const toMinutes = String(
+                              ToDate.getMinutes()
+                            ).padStart(2, "0");
+                            const toPeriod =
+                              ToDate.getHours() < 12 ? "AM" : "PM";
 
-          return (
-            <Button
-              key={avail.fromTimeStamp} // Ensure a unique key for each button
-              color='primary'
-              block
-              className={`text-center ${isPastTime ? 'cursor-not-allowed' : 'cursor-pointer'} my-2`}
-              disabled={isPastTime}
-              onClick={() => handleTimeSlotClick(date)}
-              // onClick={() => handleTimeSlotClick(date, avail.fromTimeStamp, avail.toTimeStamp)}
-            >
-              {fromTime} to {toTime}
-            </Button>
-          );
-        })
-      }
+                            const fromTime = `${fromHours}:${fromMinutes} ${fromPeriod}`;
+                            const toTime = `${toHours}:${toMinutes} ${toPeriod}`;
 
-{mentoravailable.every(avail => new Date(avail.fromTimeStamp).toDateString() !== date.toDateString()) && (
-        <div className="text-center text-one">-</div>
-      )}
-    </td>
-  </tr>
-))}
+                            const isPastTime = ToDate < new Date();
 
-{/* another */}
+                            return (
+                              <Button
+                                key={avail.fromTimeStamp} // Ensure a unique key for each button
+                                color="primary"
+                                block
+                                className={`text-center ${
+                                  isPastTime
+                                    ? "cursor-not-allowed"
+                                    : "cursor-pointer"
+                                } my-2`}
+                                disabled={isPastTime}
+                                onClick={() => handleTimeSlotClick(date)}
+                                // onClick={() => handleTimeSlotClick(date, avail.fromTimeStamp, avail.toTimeStamp)}
+                              >
+                                {fromTime} to {toTime}
+                              </Button>
+                            );
+                          })}
 
+                        {mentoravailable.every(
+                          (avail) =>
+                            new Date(avail.fromTimeStamp).toDateString() !==
+                            date.toDateString()
+                        ) && <div className="text-center text-one">-</div>}
+                      </td>
+                    </tr>
+                  ))}
 
- {/* return `${FromDate.toLocaleTimeString()} to ${ToDate.toLocaleTimeString()} `; */}
+                  {/* another */}
 
-               </tbody>
-             </Table>
-             <Button onClick={() => setModalSmall(true)} outline color="primary">Book Now</Button>
-             <div className="mb-4">
-           <div>
-         
-             <div className=''>
-             
-               <Modal
-                 isOpen={modalSmall}
-                 toggle={() => setModalSmall(!modalSmall)}
-                 className='mt-5'
-               >
-                 
-                 <ModalBody >
-                 <div className='text-right my-2'>
-                 {/* <Button className='ml-2 my-4 '  outline   color="primary"  onClick={() => setModalSmall(false)}
+                  {/* return `${FromDate.toLocaleTimeString()} to ${ToDate.toLocaleTimeString()} `; */}
+                </tbody>
+              </Table>
+              {/* <Button onClick={() => setModalSmall(true)} outline color="primary">Book Now</Button> */}
+              <div className="mb-4">
+                <div>
+                  <div className="">
+                    <Modal
+                      isOpen={modalSmall}
+                      toggle={() => setModalSmall(!modalSmall)}
+                      className="mt-5"
+                    >
+                      <ModalBody>
+                        <div className="text-right my-2">
+                          {/* <Button className='ml-2 my-4 '  outline   color="primary"  onClick={() => setModalSmall(false)}
         ><i className='simple-icon-close text-one'  />
                    </Button> */}
-                   <span style={{cursor:'pointer'}} 
-            className='mt-2'
-            role='button'
-            tabIndex={0}
-            onClick={() => setModalSmall(false)}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    setModalSmall(false);
-                }
-            }}
-        >
-            <i className='simple-icon-close text-large' />
-        </span>
-                 </div>
-                
-              
-   
-       <PopupWizard selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
-        mentorName={mentorName} mentorId={mentorId}   
- 
-     />
-       {/* <Button className='ml-2 mt-2 '  outline  color="secondary"  onClick={() => setModalSmall(false)}
+                          <span
+                            style={{ cursor: "pointer" }}
+                            className="mt-2"
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setModalSmall(false)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                setModalSmall(false);
+                              }
+                            }}
+                          >
+                            <i className="simple-icon-close text-large" />
+                          </span>
+                        </div>
+
+                        <PopupWizard
+                          selectedDate={selectedDate}
+                          setSelectedDate={setSelectedDate}
+                          mentorName={mentorName}
+                          mentorId={mentorId}
+                        />
+                        {/* <Button className='ml-2 mt-2 '  outline  color="secondary"  onClick={() => setModalSmall(false)}
                    >
                      Close
                    </Button> */}
-          
-       
-                 </ModalBody>
-               </Modal>
-             </div>
-           </div>
-         </div>
-            
-           </CardBody>
-         </Card>
-      {/* <PopupWizard/> */}
-       </Colxx>
-    </Row>
-  
+                      </ModalBody>
+                    </Modal>
+                  </div>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+          {/* <PopupWizard/> */}
+        </Colxx>
+      </Row>
     </div>
   );
-}
+};
 
 export default Month;

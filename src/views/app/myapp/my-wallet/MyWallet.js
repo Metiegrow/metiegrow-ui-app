@@ -1,19 +1,19 @@
 import axios from "axios";
+import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
+  Card,
   Container,
   Form,
   Input,
-  InputGroupAddon,
   InputGroup,
+  InputGroupAddon,
   //   ListGroup,
   //   ListGroupItem,
   Row,
-  Card,
 } from "reactstrap";
-import { NotificationManager } from "components/common/react-notifications";
 import TimestampConverter from "../Calculation/TimestampConverter";
 // check
 
@@ -145,7 +145,18 @@ const MyWallet = () => {
               type="number"
               placeholder="Enter Amount"
               value={rechargeAmount}
-              onChange={(e) => setRechargeAmount(e.target.value)}
+              // onChange={(e) => setRechargeAmount(e.target.value)}
+              onChange={({ target: { value } }) => {
+                // Convert to a valid positive number string or empty value
+                if (/^\d*$/.test(value)) {
+                  setRechargeAmount(value);
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "-" || e.key === "+" || e.key === "e") {
+                  e.preventDefault(); // Prevent these characters from being entered
+                }
+              }}
               className="col-12 col-md-3"
             />
           </InputGroup>

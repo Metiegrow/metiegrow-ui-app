@@ -1,42 +1,39 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { Colxx } from "components/common/CustomBootstrap";
+import { baseUrl } from "constants/defaultValues";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Select from "react-select";
+import { ReactSortable } from "react-sortablejs";
 import {
   Button,
-  // NavLink,
-  Row,
-  Input,
-  Label,
-  Col,
   // Form,
   Card,
   CardBody,
+  Col,
+  FormGroup,
+  Input,
+  InputGroup,
+  Label,
   Modal,
   ModalBody,
-  ModalHeader,
   ModalFooter,
-  FormGroup,
-  InputGroup,
-  InputGroupAddon,
+  ModalHeader,
+  // NavLink,
+  Row,
 } from "reactstrap";
-import axios from "axios";
-import { baseUrl } from "constants/defaultValues";
-import Select from "react-select";
-import { ReactSortable } from "react-sortablejs";
-import { Colxx } from "components/common/CustomBootstrap";
-import { useParams } from "react-router-dom";
-import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { EmploymentTypeData } from "../Listing/ListingData";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
-import { EmploymentTypeData } from "../Listing/ListingData";
 import ToasterComponent from "../notifications/ToasterComponent";
 
-
 const currentYear = new Date().getFullYear();
-  const years = [];
+const years = [];
 
-  for (let year = currentYear; year >= 2005; year -= 1) {
-    years.push(year);
-  }
-
+for (let year = currentYear; year >= 2005; year -= 1) {
+  years.push(year);
+}
 
 const MyProfile = () => {
   const [image, setImage] = useState(null);
@@ -55,26 +52,24 @@ const MyProfile = () => {
   const [seekingFor, setSeekingFor] = useState("");
   const [newInputSkill, setNewInputSkill] = useState("");
   const [newInputCertifications, setNewInputCertifications] = useState("");
-  const [skillValidationMessage,setSkillValidationMessage] = useState("");
-  const [certificationsValidationMessage,setCertificationsValidationMessage] = useState("");
+  const [skillValidationMessage, setSkillValidationMessage] = useState("");
+  const [certificationsValidationMessage, setCertificationsValidationMessage] =
+    useState("");
 
   const { uid } = useParams();
 
-
-// console.log("work",work)
-// console.log("uid",uid)
+  // console.log("work",work)
+  // console.log("uid",uid)
   // const endUrl = `${baseUrl}/api/userprofile/myprofile`;
-  const imageEditUrl = `${baseUrl}/api/userprofile/profile-image`
-  
+  const imageEditUrl = `${baseUrl}/api/userprofile/profile-image`;
 
   let endUrl;
 
   if (!uid) {
     endUrl = `${baseUrl}/api/userprofile/myprofile`;
-  } else  {
+  } else {
     endUrl = `${baseUrl}/api/userprofile/profile/${uid}`;
-  } 
-  
+  }
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(false);
@@ -86,7 +81,7 @@ const MyProfile = () => {
   const [imageEditModal, setImageEditModal] = useState(false);
   const [modalAbout, setModalAbout] = useState(false);
   const [profileUpdate, setProfileUpdate] = useState(false);
-  const [modalEditCertifications,setModalEditCertifications] = useState(false);
+  const [modalEditCertifications, setModalEditCertifications] = useState(false);
 
   // const [educationEdit, setEducationEdit] = useState(false);
 
@@ -97,262 +92,306 @@ const MyProfile = () => {
 
   const [skills, setSkills] = useState([]);
   const [languages, setLanguages] = useState([]);
-  const [bio, setBio] = useState("")
-// console.log("index",selectedIndex);
-// console.log("educationEdit",educationEdit);
-// console.log("selectedWorkIndex",selectedWorkIndex);
-// const [currentEducation, setCurrentEducation] = useState(null);
-// const [currentWork, setCurrentWork] = useState(null);
-const [newWork, setNewWork] = useState({});
+  const [bio, setBio] = useState("");
+  // console.log("index",selectedIndex);
+  // console.log("educationEdit",educationEdit);
+  // console.log("selectedWorkIndex",selectedWorkIndex);
+  // const [currentEducation, setCurrentEducation] = useState(null);
+  // const [currentWork, setCurrentWork] = useState(null);
+  const [newWork, setNewWork] = useState({});
 
-    const [newEducation, setNewEducation] = useState({});
+  const [newEducation, setNewEducation] = useState({});
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileBase64, setSelectedFileBase64] = useState(null);
 
-
-const token = localStorage.getItem("tokenRes");
-// const newUpdatedWork = [...work, newWork]
-
-// check ok 
-
-const postImageData = async () => {
-  try {
-    const formData = new FormData();
-    formData.append("image", selectedFile);
-
-    const response = await axios.post(imageEditUrl, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    ToasterComponent('success', response.data.statuses);
-    setTimeout(() => {
-    setProfileUpdate(!profileUpdate);
-    }, 2000);
-    // console.log(`resres ${response.status}`);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const handleFileChange = (event) => {
-  const file = event.target.files[0];
-  setSelectedFile(file);
-  
-  if (file) {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64Image = reader.result;
-      setSelectedFileBase64(base64Image);
-     
-
-      // setAboutField({ ...aboutField, image: base64Image });
-    };
-
-    reader.readAsDataURL(file);
-  }
-};
-
-
-const updateMentorProfile = async (updatedEducation = education, updatedWork = work) => {
-  try {
-    const updatedData = {
-      firstName,
-      lastName,
-      linkedInUrl,
-      twitterHandle,
-      languages,
-      personalWebsite,
-      education: updatedEducation,
-      work: updatedWork,
-      skills,
-      bio,
-      certifications,
-      goal,
-      seekingFor
-    };
-
-    const response = await axios.put(endUrl, updatedData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    ToasterComponent('success', response.data.statuses);
-
-    setProfileUpdate(!profileUpdate);
-
-  } catch (error) {
-    if(error.response && error.response.data && error.response.data.statuses){
-      ToasterComponent('error', error.response.data.statuses);
-      }else{
-      console.error("Error updating profile", error);
+  const token = localStorage.getItem("tokenRes");
+  // const newUpdatedWork = [...work, newWork]
+  const mentorProfileDetails = async () => {
+    try {
+      const response = await axios.get(endUrl);
+      const userData = response.data;
+      if (userData) {
+        setImage(userData.userPhotoUrl);
+        setFirstName(userData.firstName);
+        setLastName(userData.lastName);
+        setJobTitle(userData.jobTitle);
+        setLocation(userData.location);
+        setEducation(userData.education);
+        setLinkedInUrl(userData.linkedInUrl);
+        setLanguages(userData.languages);
+        setWork(userData.work);
+        setTwitterHandle(userData.twitterHandle);
+        setPersonalWebsite(userData.personalWebsite);
+        setSkills(userData.skills);
+        setSeekingFor(userData.seekingFor);
+        setGoal(userData.goal);
+        setCertifications(userData.certifications);
+        setBio(userData.bio);
+        setLoading(false);
       }
-  }
-};
-
-// const handleSaveEducation = () => {
-//   setEducation(prevEducation => {
-//     const updatedEducation = [...prevEducation];
-    
-//     if (currentEducation.id) {
-//       const index = updatedEducation.findIndex(edu => edu.id === currentEducation.id);
-//       if (index !== -1) {
-//         updatedEducation[index] = currentEducation;
-//       }
-//     } else {
-//       updatedEducation.push(currentEducation);
-//     }
-    
-//     return updatedEducation;
-//   });
-
-//   setEducationEditOpen(false);
-//   setCurrentEducation(null);
-//   updateMentorProfile(); 
-// };
-
-const handleEditEducation = (index) => {
-  setNewEducation(education[index]);
-  setSelectedIndex(index);
-  // setCurrentEducation({...educationItem});
-  setEducationEditOpen(true);
-  // setEducationEdit(true);
-};
-
-const handleAddWork = () => {
-  setNewWork({
-    company: '',
-    jobTitle: '',
-    employmentType: '',
-    jobLocation: '',
-    startDate: 0,
-    endDate: 0
-  });
-  setSelectedWorkIndex(null);
-  setExperienceEditOpen(true);
-};
-
-const handleAddEducation = () => {
-  // setCurrentEducation({
-  //   college: '',
-  //   degree: '',
-  //   department: '',
-  //   year: 0
-  // });
-  setEducationEditOpen(true);
-};
-
-// const handleAddWork = () => {
-//   setCurrentWork({
-//     company: '',
-//     jobTitle: '',
-//     employmentType: '',
-//     jobLocation: '',
-//     startDate: 0,
-//     endDate: 0
-//   });
-//   setExperienceEditOpen(true);
-// };
-
-const handleSaveWork = () => {
-  setWork(prevWork => {
-    let updatedWork;
-    if (selectedWorkIndex !== null) {
-      updatedWork = prevWork.filter((_, index) => index !== selectedWorkIndex);
-    } else {
-      updatedWork = prevWork;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 4000);
+      setProfileData(true);
     }
-    const newWorkArray = [...updatedWork, newWork];
-    
-    setTimeout(() => updateMentorProfile(education, newWorkArray), 0);
-    
-    return newWorkArray;
-  });
-  
-  setExperienceEditOpen(false);
-  setNewWork({
-    company: '',
-    jobTitle: '',
-    employmentType: '',
-    jobLocation: '',
-    startDate: 0,
-    endDate: 0
-  });
-  setSelectedWorkIndex(null);
-};
+  };
 
-// const handleSaveWork = () => {
-//   setWork(prevWork => {
-//     const updatedWork = prevWork.filter((_, index) => index !== selectedWorkIndex);
-//     const newWorkArray = [...updatedWork, newWork];
-    
-//     setTimeout(() => updateMentorProfile(), 0);
-    
-//     return newWorkArray;
-//   });
-  
-//   setExperienceEditOpen(false);
-//   setNewWork({
-//     company: '',
-//     jobTitle: '',
-//     employmentType: '',
-//     jobLocation: '',
-//     startDate: 0,
-//     endDate: 0
-//   });
-// };
+  useEffect(() => {
+    mentorProfileDetails();
+  }, [profileUpdate, uid]);
 
-// const handleSaveEducation = () => {
+  // check ok
 
-//   setEducation(prevEducation => [...prevEducation, newEducation]);
-//   // console.log("work added");
-//   updateMentorProfile(); 
-//   setEducationEditOpen(false);
-//   setNewEducation({
-//     college: '',
-//       degree: '',
-//       department: '',
-//       year: 0
-//   });
-// };
+  const postImageData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", selectedFile);
 
-// const handleRemoveEducation = (indexToRemove) => {
-//   console.log("deleteIndex",indexToRemove)
-//   setEducation(prevEducation => {
-//     const updatedEducation = prevEducation.filter((_, index) => index !== indexToRemove);
-//     setTimeout(() => updateMentorProfile(), 2000);
-//     return updatedEducation;
-//   });
-// };
+      const response = await axios.post(imageEditUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      ToasterComponent("success", response.data.statuses);
+      setTimeout(() => {
+        setProfileUpdate(!profileUpdate);
+      }, 2000);
+      // console.log(`resres ${response.status}`);
+      if (response.status === 200) {
+        await mentorProfileDetails();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-const handleSaveEducation = () => {
-  setEducation(prevEducation => {
-    const updatedEducation = prevEducation.filter((_, index) => index !== selectedIndex);
-    const newEducationArray = [...updatedEducation, newEducation];
-    
-    setTimeout(() => updateMentorProfile(newEducationArray), 0);
-    
-    return newEducationArray;
-  });
-  setSelectedIndex(null);
-  setEducationEditOpen(false);
-  setNewEducation({
-    college: '',
-    degree: '',
-    department: '',
-    year: 0
-  });
-};
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
 
+    if (file) {
+      const reader = new FileReader();
 
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+        setSelectedFileBase64(base64Image);
 
-const handleEditWork = (index) => {
-  setNewWork(work[index]);
-  setSelectedWorkIndex(index)
-  // setCurrentWork({...workItem});
-  setExperienceEditOpen(true);
-};
+        // setAboutField({ ...aboutField, image: base64Image });
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const updateMentorProfile = async (
+    updatedEducation = education,
+    updatedWork = work
+  ) => {
+    try {
+      const updatedData = {
+        firstName,
+        lastName,
+        linkedInUrl,
+        twitterHandle,
+        languages,
+        personalWebsite,
+        education: updatedEducation,
+        work: updatedWork,
+        skills,
+        bio,
+        certifications,
+        goal,
+        seekingFor,
+      };
+
+      const response = await axios.put(endUrl, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      ToasterComponent("success", response.data.statuses);
+
+      setProfileUpdate(!profileUpdate);
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error updating profile", error);
+      }
+    }
+  };
+
+  // const handleSaveEducation = () => {
+  //   setEducation(prevEducation => {
+  //     const updatedEducation = [...prevEducation];
+
+  //     if (currentEducation.id) {
+  //       const index = updatedEducation.findIndex(edu => edu.id === currentEducation.id);
+  //       if (index !== -1) {
+  //         updatedEducation[index] = currentEducation;
+  //       }
+  //     } else {
+  //       updatedEducation.push(currentEducation);
+  //     }
+
+  //     return updatedEducation;
+  //   });
+
+  //   setEducationEditOpen(false);
+  //   setCurrentEducation(null);
+  //   updateMentorProfile();
+  // };
+
+  const handleEditEducation = (index) => {
+    setNewEducation(education[index]);
+    setSelectedIndex(index);
+    // setCurrentEducation({...educationItem});
+    setEducationEditOpen(true);
+    // setEducationEdit(true);
+  };
+
+  const handleAddWork = () => {
+    setNewWork({
+      company: "",
+      jobTitle: "",
+      employmentType: "",
+      jobLocation: "",
+      startDate: 0,
+      endDate: 0,
+    });
+    setSelectedWorkIndex(null);
+    setExperienceEditOpen(true);
+  };
+
+  const handleAddEducation = () => {
+    // setCurrentEducation({
+    //   college: '',
+    //   degree: '',
+    //   department: '',
+    //   year: 0
+    // });
+    setEducationEditOpen(true);
+  };
+
+  // const handleAddWork = () => {
+  //   setCurrentWork({
+  //     company: '',
+  //     jobTitle: '',
+  //     employmentType: '',
+  //     jobLocation: '',
+  //     startDate: 0,
+  //     endDate: 0
+  //   });
+  //   setExperienceEditOpen(true);
+  // };
+
+  const handleSaveWork = () => {
+    setWork((prevWork) => {
+      let updatedWork;
+      if (selectedWorkIndex !== null) {
+        updatedWork = prevWork.filter(
+          (_, index) => index !== selectedWorkIndex
+        );
+      } else {
+        updatedWork = prevWork;
+      }
+      const newWorkArray = [...updatedWork, newWork];
+
+      setTimeout(() => updateMentorProfile(education, newWorkArray), 0);
+
+      return newWorkArray;
+    });
+
+    setExperienceEditOpen(false);
+    setNewWork({
+      company: "",
+      jobTitle: "",
+      employmentType: "",
+      jobLocation: "",
+      startDate: 0,
+      endDate: 0,
+    });
+    setSelectedWorkIndex(null);
+  };
+
+  // const handleSaveWork = () => {
+  //   setWork(prevWork => {
+  //     const updatedWork = prevWork.filter((_, index) => index !== selectedWorkIndex);
+  //     const newWorkArray = [...updatedWork, newWork];
+
+  //     setTimeout(() => updateMentorProfile(), 0);
+
+  //     return newWorkArray;
+  //   });
+
+  //   setExperienceEditOpen(false);
+  //   setNewWork({
+  //     company: '',
+  //     jobTitle: '',
+  //     employmentType: '',
+  //     jobLocation: '',
+  //     startDate: 0,
+  //     endDate: 0
+  //   });
+  // };
+
+  // const handleSaveEducation = () => {
+
+  //   setEducation(prevEducation => [...prevEducation, newEducation]);
+  //   // console.log("work added");
+  //   updateMentorProfile();
+  //   setEducationEditOpen(false);
+  //   setNewEducation({
+  //     college: '',
+  //       degree: '',
+  //       department: '',
+  //       year: 0
+  //   });
+  // };
+
+  // const handleRemoveEducation = (indexToRemove) => {
+  //   console.log("deleteIndex",indexToRemove)
+  //   setEducation(prevEducation => {
+  //     const updatedEducation = prevEducation.filter((_, index) => index !== indexToRemove);
+  //     setTimeout(() => updateMentorProfile(), 2000);
+  //     return updatedEducation;
+  //   });
+  // };
+
+  const handleSaveEducation = () => {
+    setEducation((prevEducation) => {
+      const updatedEducation = prevEducation.filter(
+        (_, index) => index !== selectedIndex
+      );
+      const newEducationArray = [...updatedEducation, newEducation];
+
+      setTimeout(() => updateMentorProfile(newEducationArray), 0);
+
+      return newEducationArray;
+    });
+    setSelectedIndex(null);
+    setEducationEditOpen(false);
+    setNewEducation({
+      college: "",
+      degree: "",
+      department: "",
+      year: 0,
+    });
+  };
+
+  const handleEditWork = (index) => {
+    setNewWork(work[index]);
+    setSelectedWorkIndex(index);
+    // setCurrentWork({...workItem});
+    setExperienceEditOpen(true);
+  };
 
   const handleAddLanguages = (newLanguages) => {
     setLanguages([...languages, newLanguages]);
@@ -376,43 +415,6 @@ const handleEditWork = (index) => {
     handleAddLanguages(languagesArray[0]);
     setSelectedLanguages([]);
   };
-
-  useEffect(() => {
-    const mentorProfileDetails = async () => {
-      try {
-        const response = await axios.get(endUrl);
-        const userData = response.data;
-        if (userData) {
-          setImage(userData.userPhotoUrl);
-          setFirstName(userData.firstName);
-          setLastName(userData.lastName);
-          setJobTitle(userData.jobTitle);
-          setLocation(userData.location);
-          setEducation(userData.education);
-          setLinkedInUrl(userData.linkedInUrl);
-          setLanguages(userData.languages);
-          setWork(userData.work)
-          setTwitterHandle(userData.twitterHandle);
-          setPersonalWebsite(userData.personalWebsite);
-          setSkills(userData.skills);
-          setSeekingFor(userData.seekingFor);
-          setGoal(userData.goal);
-          setCertifications(userData.certifications);
-          setBio(userData.bio);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-        }, 4000);
-        setProfileData(true);
-      }
-    };
-
-    mentorProfileDetails();
-  }, [profileUpdate,uid]);
 
   // const updateMentorProfile = async () => {
   //   try {
@@ -474,24 +476,24 @@ const handleEditWork = (index) => {
   const handleLanguageSave = () => {
     setModalEditLanguage(false);
     updateMentorProfile();
-  }
+  };
 
   const handleAddSkill = (newSkill) => {
     if (!newSkill.trim()) {
       setSkillValidationMessage("Skill cannot be empty");
-  } else {
-    setSkillValidationMessage("")
-    setSkills([...skills, newSkill]);
-  }
+    } else {
+      setSkillValidationMessage("");
+      setSkills([...skills, newSkill]);
+    }
   };
 
   const handleAddCertifications = (newCertification) => {
     if (!newCertification.trim()) {
       setCertificationsValidationMessage("Certification cannot be empty");
-  } else {
-    setCertificationsValidationMessage("")
-    setCertifications([...certifications, newCertification]);
-  }
+    } else {
+      setCertificationsValidationMessage("");
+      setCertifications([...certifications, newCertification]);
+    }
   };
 
   const handleRemoveSkill = (index) => {
@@ -503,22 +505,20 @@ const handleEditWork = (index) => {
   };
 
   const handleEducationCancel = () => {
-   setEducationEditOpen(false);
-   setSelectedIndex(null);
-
-  }
+    setEducationEditOpen(false);
+    setSelectedIndex(null);
+  };
 
   const handleImagePost = () => {
     postImageData();
     setSelectedFile(null);
     setImageEditModal(false);
-  
-  }
+  };
 
   const handleImageDelete = () => {
     // setSelectedFile(image);
     setImageEditModal(false);
-  }
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center">
@@ -561,6 +561,25 @@ const handleEditWork = (index) => {
                               <i className="simple-icon-pencil text-primary font-weight-bold" />
                             </Button>}
                           </div> */}
+                          <div
+                            className="position-relative"
+                            style={{
+                              position: "relative",
+                              top: "5px",
+                              textAlign: "end",
+                            }}
+                          >
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button  bg-light"
+                              style={{ border: "none" }}
+                              size="sm"
+                              onClick={() => handleImageClick()}
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+                          </div>
 
                           <div
                             className="position-relative"
@@ -570,7 +589,7 @@ const handleEditWork = (index) => {
                               type="button"
                               className="btn p-0"
                               style={{ border: "none", background: "none" }}
-                              onClick={() => handleImageClick()}
+                              // onClick={() => handleImageClick()}
                               aria-label="Profile image"
                             >
                               {image === null ? (
@@ -584,7 +603,9 @@ const handleEditWork = (index) => {
                               ) : (
                                 <img
                                   // src="/assets/img/profiles/2.jpg"
-                                  src={selectedFileBase64 || `${baseUrl}/${image}`}
+                                  src={
+                                    selectedFileBase64 || `${baseUrl}/${image}`
+                                  }
                                   className="rounded-circle img-thumbnail border border-3"
                                   style={{
                                     width: "130px",
@@ -614,7 +635,9 @@ const handleEditWork = (index) => {
                               <ModalBody className="d-flex justify-content-center align-items-center">
                                 <img
                                   // src="/assets/img/profiles/2.jpg"
-                                  src={selectedFileBase64 || `${baseUrl}/${image}`}
+                                  src={
+                                    selectedFileBase64 || `${baseUrl}/${image}`
+                                  }
                                   className="rounded-circle img-thumbnail border border-3"
                                   style={{
                                     width: "130px",
@@ -624,51 +647,59 @@ const handleEditWork = (index) => {
                                   alt="img"
                                 />
                               </ModalBody>
-                              {!uid &&
-
-                              <ModalFooter
-                                // style={{ borderTop: 'none' }}
-                                className="d-flex align-items-center justify-content-center"
-                              >
-                                {selectedFile ? (
-                                <Button
-                                  outline
-                                  color="primary"
-                                  onClick={() => handleImagePost()}
-                                  className="icon-button"
-                                  style={{ border: "none" }}
+                              {!uid && (
+                                <ModalFooter
+                                  // style={{ borderTop: 'none' }}
+                                  className="d-flex align-items-center justify-content-center"
                                 >
-                                  <i className="iconsminds-upload " />
-                                </Button>
-                                ) : (
-                                <InputGroup className="" style={{ width: 'auto', display: 'flex', justifyContent: 'center' }}>
-                          {/* {errors.image && touched.image && (
+                                  {selectedFile ? (
+                                    <Button
+                                      outline
+                                      color="primary"
+                                      onClick={() => handleImagePost()}
+                                      className="icon-button"
+                                      style={{ border: "none" }}
+                                    >
+                                      <i className="iconsminds-upload " />
+                                    </Button>
+                                  ) : (
+                                    <InputGroup
+                                      className=""
+                                      style={{
+                                        width: "auto",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                      }}
+                                    >
+                                      {/* {errors.image && touched.image && (
                             <div className="invalid-feedback d-block">
                               {errors.image}
                             </div>
                           )} */}
-                          <div className="">
-                            <Button
-                            outline
-                              className="icon-button"
-                              color="primary"
-                              style={{ border: "none" }}
-                              onClick={() =>
-                                document.getElementById("file-upload").click()
-                              }
-                            >
-                                  <i className="simple-icon-pencil" />
-                            </Button>
-                            {/* <Form> */}
-                            <Input
-                              id="file-upload"
-                              type="file"
-                              className="d-none"
-                              onChange={handleFileChange}
-                              // validate={validateFile}
-                            />
-                            {/* </Form> */}
-                            {/* {file1 && (
+                                      <div className="">
+                                        <Button
+                                          outline
+                                          className="icon-button"
+                                          color="primary"
+                                          style={{ border: "none" }}
+                                          onClick={() =>
+                                            document
+                                              .getElementById("file-upload")
+                                              .click()
+                                          }
+                                        >
+                                          <i className="simple-icon-pencil" />
+                                        </Button>
+                                        {/* <Form> */}
+                                        <Input
+                                          id="file-upload"
+                                          type="file"
+                                          className="d-none"
+                                          onChange={handleFileChange}
+                                          // validate={validateFile}
+                                        />
+                                        {/* </Form> */}
+                                        {/* {file1 && (
                               <p className="mt-2">
                                 Selected file: {file1.name}
                               </p>
@@ -678,41 +709,43 @@ const handleEditWork = (index) => {
                                 {errors.image}
                               </div>
                             )} */}
-                          </div>
-                        </InputGroup>
-                                )}
+                                      </div>
+                                    </InputGroup>
+                                  )}
 
-                                <Button
-                                  color="primary"
-                                  outline
-                                  onClick={() => handleImageDelete()}
-                                  className="icon-button"
-                                  style={{ border: "none" }}
-                                >
-                                  <i className="simple-icon-trash" />
-                                </Button>
-                              </ModalFooter>
-}
+                                  <Button
+                                    color="primary"
+                                    outline
+                                    onClick={() => handleImageDelete()}
+                                    className="icon-button"
+                                    style={{ border: "none" }}
+                                  >
+                                    <i className="simple-icon-trash" />
+                                  </Button>
+                                </ModalFooter>
+                              )}
                             </Modal>
                           </div>
                         </CardBody>
                         <CardBody>
                           <div className="text-end w-100  d-flex justify-content-end">
-                            {!uid && 
-                            <Button
-                              color="primary"
-                              outline
-                              className="icon-button"
-                              style={{ border: "none" }}
-                              size="sm"
-                              onClick={() => setModalEditProfile(true)}
-                            >
-                              <i className="simple-icon-pencil" />
-                            </Button>
-}
+                            {!uid && (
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                style={{ border: "none" }}
+                                size="sm"
+                                onClick={() => setModalEditProfile(true)}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                            )}
                           </div>
                           <div className="mt-4">
-                            <h2 className="font-weight-bold">{firstName} {" "} {lastName}</h2>
+                            <h2 className="font-weight-bold">
+                              {firstName} {lastName}
+                            </h2>
                             <h3 className="text-one">
                               {work.length > 0 && work[0].jobTitle} |{" "}
                               {work.length > 0 && work[0].company}
@@ -847,18 +880,18 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">About</h2>
-                              {!uid &&
-                              <Button
-                                color="primary"
-                                outline
-                                className="icon-button"
-                                size="sm"
-                                onClick={() => setModalAbout(true)}
-                                style={{ border: "none" }}
-                              >
-                                <i className="simple-icon-pencil" />
-                              </Button>
-}
+                              {!uid && (
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  size="sm"
+                                  onClick={() => setModalAbout(true)}
+                                  style={{ border: "none" }}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                              )}
                             </Col>
                           </Row>
                           <div>
@@ -898,7 +931,7 @@ const handleEditWork = (index) => {
 
                             <>
                               <Label for="linkedInUrl" className="text-muted">
-                                <h4>LinkedIn</h4>
+                                <h4>LinkedIn URL</h4>
                               </Label>
                               <Input
                                 type="text"
@@ -911,7 +944,7 @@ const handleEditWork = (index) => {
                             </>
                             <>
                               <Label for="email" className="text-muted">
-                                <h4>Twitter</h4>
+                                <h4>Twitter URL</h4>
                               </Label>
                               <Input
                                 type="text"
@@ -974,18 +1007,18 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Experience</h2>
-                              {!uid && 
-                              <Button
-                                color="primary"
-                                outline
-                                className="icon-button"
-                                style={{ border: "none" }}
-                                size="sm"
-                                onClick={() => setModalEditExperience(true)}
-                              >
-                                <i className="simple-icon-pencil" />
-                              </Button>
-}
+                              {!uid && (
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                  size="sm"
+                                  onClick={() => setModalEditExperience(true)}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                              )}
                             </Col>
                           </Row>
                           {work.map((w, index) => (
@@ -993,7 +1026,10 @@ const handleEditWork = (index) => {
                             <div key={index}>
                               <h6>{w.jobTitle}</h6>
                               <h6 className="text-muted">
-                                {w.company} | {w.startDate} - {w.endDate === currentYear ? "Present" : w.endDate} 
+                                {w.company} | {w.startDate} -{" "}
+                                {w.endDate === currentYear
+                                  ? "Present"
+                                  : w.endDate}
                                 {/* - 1 month */}
                               </h6>
                             </div>
@@ -1046,18 +1082,18 @@ const handleEditWork = (index) => {
                                 <FormGroup className="error-l-125">
                                   <Label for="twitterHandle">Job Title</Label>
                                   <Input
-                                      type="text"
-                                      name="jobTitle"
-                                      id="jobTitle"
-                                      value={newWork.jobTitle} 
-                                      onChange={(e) => {
-                                        const { name, value } = e.target;
-                                        setNewWork(prevState => ({
-                                          ...prevState, 
-                                          [name]: value 
-                                        }));
-                                      }}
-                                    />
+                                    type="text"
+                                    name="jobTitle"
+                                    id="jobTitle"
+                                    value={newWork.jobTitle}
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewWork((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
+                                      }));
+                                    }}
+                                  />
                                 </FormGroup>
                                 <FormGroup className="error-l-125">
                                   <Label for="twitterHandle">
@@ -1083,24 +1119,24 @@ const handleEditWork = (index) => {
                                     id="employmentType"
                                     value={newWork.employmentType}
                                     // className="form-control"
-                                      onChange={(e) => {
-                                        const { name, value } = e.target;
-                                        setNewWork(prevState => ({
-                                          ...prevState, 
-                                          [name]: value 
-                                        }));
-                                      }}
-                                      >
-                                        <option key="" value="" disabled>
-                                          Select Employment type
-                                        </option>
-                                        {EmploymentTypeData.map((option, i) => (
-                                          // eslint-disable-next-line react/no-array-index-key
-                                          <option key={i} value={option.label}>
-                                            {option.label}
-                                          </option>
-                                        ))}
-                                      </Input>
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewWork((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
+                                      }));
+                                    }}
+                                  >
+                                    <option key="" value="" disabled>
+                                      Select Employment type
+                                    </option>
+                                    {EmploymentTypeData.map((option, i) => (
+                                      // eslint-disable-next-line react/no-array-index-key
+                                      <option key={i} value={option.label}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </Input>
                                 </FormGroup>
                                 <FormGroup className="error-l-125">
                                   <Label for="twitterHandle">
@@ -1114,9 +1150,9 @@ const handleEditWork = (index) => {
                                     // className="form-control"
                                     onChange={(e) => {
                                       const { name, value } = e.target;
-                                      setNewWork(prevState => ({
-                                        ...prevState, 
-                                        [name]: value 
+                                      setNewWork((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
                                       }));
                                     }}
                                   />
@@ -1150,7 +1186,7 @@ const handleEditWork = (index) => {
                                       </option>
                                     ))}
                                   </Input> */}
-                                   <Input
+                                  <Input
                                     type="text"
                                     name="jobLocation"
                                     id="jobLocation"
@@ -1158,80 +1194,72 @@ const handleEditWork = (index) => {
                                     // className="form-control"
                                     onChange={(e) => {
                                       const { name, value } = e.target;
-                                      setNewWork(prevState => ({
-                                        ...prevState, 
-                                        [name]: value 
+                                      setNewWork((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
                                       }));
                                     }}
                                   />
                                 </FormGroup>
                                 <Row>
                                   <Col>
-                                <FormGroup>
-                                <Label for="startDate">
-                                Start year
-                              </Label>
+                                    <FormGroup>
+                                      <Label for="startDate">Start year</Label>
 
-                              <Input
-                                type="select"
-                                name="startDate"
-                                value={newWork.startDate}
-                                onChange={(e) => {
-                                  const { name, value } = e.target;
-                                  setNewWork(prevState => ({
-                                    ...prevState, 
-                                    [name]: value 
-                                  }));
-                                }}
-                                className="form-control text-one"
-                              >
-                                <option disabled value="">
-                                  Select year
-                                </option>
-                                {years.map((yr) => (
-                                  <option
-                                    key={yr}
-                                    value={yr}
-                                  >
-                                    {yr}
-                                  </option>
-                                ))}
-                              </Input>
-                                </FormGroup>
-                                </Col>
-                                <Col>
-                                <FormGroup>
-                                <Label for="endDate" >
-                                End year
-                              </Label>
+                                      <Input
+                                        type="select"
+                                        name="startDate"
+                                        value={newWork.startDate}
+                                        onChange={(e) => {
+                                          const { name, value } = e.target;
+                                          setNewWork((prevState) => ({
+                                            ...prevState,
+                                            [name]: value,
+                                          }));
+                                        }}
+                                        className="form-control text-one"
+                                      >
+                                        <option disabled value="">
+                                          Select year
+                                        </option>
+                                        {years.map((yr) => (
+                                          <option key={yr} value={yr}>
+                                            {yr}
+                                          </option>
+                                        ))}
+                                      </Input>
+                                    </FormGroup>
+                                  </Col>
+                                  <Col>
+                                    <FormGroup>
+                                      <Label for="endDate">End year</Label>
 
-                              <Input
-                                type="select"
-                                name="endDate"
-                                value={newWork.endDate}
-                                onChange={(e) => {
-                                  const { name, value } = e.target;
-                                  setNewWork(prevState => ({
-                                    ...prevState, 
-                                    [name]: value 
-                                  }));
-                                }}
-                                className="form-control  text-one"
-                              >
-                                <option disabled value="">
-                                  Select year
-                                </option>
-                                {years.map((yr) => (
-                                  <option
-                                    key={yr}
-                                    value={yr}
-                                  >
-                                    {currentYear === yr ? "Present" : yr}
-                                  </option>
-                                ))}
-                              </Input>
-                                </FormGroup>
-                                </Col>
+                                      <Input
+                                        type="select"
+                                        name="endDate"
+                                        value={newWork.endDate}
+                                        onChange={(e) => {
+                                          const { name, value } = e.target;
+                                          setNewWork((prevState) => ({
+                                            ...prevState,
+                                            [name]: value,
+                                          }));
+                                        }}
+                                        className="form-control  text-one"
+                                      >
+                                        <option disabled value="">
+                                          Select year
+                                        </option>
+                                        {years.map((yr) => (
+                                          <option key={yr} value={yr}>
+                                            {currentYear === yr
+                                              ? "Present"
+                                              : yr}
+                                          </option>
+                                        ))}
+                                      </Input>
+                                    </FormGroup>
+                                  </Col>
                                 </Row>
 
                                 <ModalFooter
@@ -1267,7 +1295,9 @@ const handleEditWork = (index) => {
                                         <h6>{w.jobTitle}</h6>
                                         <h6 className="text-muted">
                                           {w.company} | {w.startDate}-{" "}
-                                          {w.endDate === currentYear ? "Present" : w.endDate} 
+                                          {w.endDate === currentYear
+                                            ? "Present"
+                                            : w.endDate}
                                           {/* - 1 month */}
                                         </h6>
                                       </div>
@@ -1300,18 +1330,18 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Skills</h2>
-                              {!uid && 
-                              <Button
-                                color="primary"
-                                outline
-                                className="icon-button"
-                                style={{ border: "none" }}
-                                size="sm"
-                                onClick={() => setModalEditSkills(true)}
-                              >
-                                <i className="simple-icon-pencil" />
-                              </Button>
-}
+                              {!uid && (
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                  size="sm"
+                                  onClick={() => setModalEditSkills(true)}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                              )}
                             </Col>
                           </Row>
                           <Row>
@@ -1352,20 +1382,22 @@ const handleEditWork = (index) => {
                           <ModalBody>
                             <Row className="w-100 mb-3">
                               <Col>
-                              <InputGroup className="mb-3">
-                              <Input
-                                type="text"
-                                placeholder="New skill"
-                                value={newInputSkill}
-                                onChange={(e) => setNewInputSkill(e.target.value)}
-                                onKeyDown={(event) => {
-                                  if (event.key === "Enter") {
-                                    handleAddSkill(newInputSkill);
-                                    setNewInputSkill("");
-                                  }
-                                }}
-                              />
-                              <InputGroupAddon addonType="append">
+                                <InputGroup className="mb-3">
+                                  <Input
+                                    type="text"
+                                    placeholder="New skill"
+                                    value={newInputSkill}
+                                    onChange={(e) =>
+                                      setNewInputSkill(e.target.value)
+                                    }
+                                    onKeyDown={(event) => {
+                                      if (event.key === "Enter") {
+                                        handleAddSkill(newInputSkill);
+                                        setNewInputSkill("");
+                                      }
+                                    }}
+                                  />
+                                  {/* <InputGroupAddon addonType="append">
                                 <Button
                                   outline
                                   color="primary"
@@ -1376,14 +1408,24 @@ const handleEditWork = (index) => {
                                 >
                                   Add Skill
                                 </Button>
-                              </InputGroupAddon>
-                            </InputGroup>
+                              </InputGroupAddon> */}
+                                  <Button
+                                    className="ml-2"
+                                    color="primary"
+                                    onClick={() => {
+                                      handleAddSkill(newInputSkill);
+                                      setNewInputSkill("");
+                                    }}
+                                  >
+                                    Add skill
+                                  </Button>
+                                </InputGroup>
                               </Col>
                               {skillValidationMessage && (
-                      <div className="invalid-feedback d-block">
-                        {skillValidationMessage}
-                      </div>
-                    )}
+                                <div className="invalid-feedback d-block">
+                                  {skillValidationMessage}
+                                </div>
+                              )}
                               {/* <Col md={2}>
                                 <Button color="primary" className="w-100">
                                   Add skill
@@ -1402,14 +1444,14 @@ const handleEditWork = (index) => {
                                     // eslint-disable-next-line react/no-array-index-key
                                     key={index}
                                     outline={index >= 3}
-                                    color="primary"
+                                    color="light"
                                     // color={index < 3 ? 'primary' : 'light'}
-                                    className="ml-2 font-weight-semibold mx-2 d-flex align-items-center"
+                                    className="ml-2 font-weight-semibold mx-2 d-flex align-items-center text-dark"
                                     size="sm"
                                     onClick={() => handleRemoveSkill(index)}
                                   >
                                     {skill}
-                                    <i className="iconsminds-close ml-2" />
+                                    <i className="iconsminds-close ml-2 text-dark" />
                                   </Button>
                                 ))}
                               </ReactSortable>
@@ -1446,19 +1488,23 @@ const handleEditWork = (index) => {
                         <CardBody>
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
-                              <h2 className="font-weight-bold">Certifications	</h2>
-                              {!uid && 
-                              <Button
-                                color="primary"
-                                outline
-                                className="icon-button"
-                                style={{ border: "none" }}
-                                size="sm"
-                                onClick={() => setModalEditCertifications	(true)}
-                              >
-                                <i className="simple-icon-pencil" />
-                              </Button>
-}
+                              <h2 className="font-weight-bold">
+                                Certifications{" "}
+                              </h2>
+                              {!uid && (
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                  size="sm"
+                                  onClick={() =>
+                                    setModalEditCertifications(true)
+                                  }
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                              )}
                             </Col>
                           </Row>
                           <Row>
@@ -1468,20 +1514,26 @@ const handleEditWork = (index) => {
                                 style={{ gap: "10px", marginTop: "10px" }}
                               >
                                 {certifications.length > 0 ? (
-                                <>
-                                {certifications.map((certification, index) => (
-                                  <Button
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    key={index}
-                                    color="primary"
-                                    outline
-                                    size="sm"
-                                  >
-                                    {certification}
-                                  </Button>
-                                ))}
-                                </>) : (
-                                  <span>There are no certifications. Please add new certifications.</span>
+                                  <>
+                                    {certifications.map(
+                                      (certification, index) => (
+                                        <Button
+                                          // eslint-disable-next-line react/no-array-index-key
+                                          key={index}
+                                          color="primary"
+                                          outline
+                                          size="sm"
+                                        >
+                                          {certification}
+                                        </Button>
+                                      )
+                                    )}
+                                  </>
+                                ) : (
+                                  <span>
+                                    There are no certifications. Please add new
+                                    certifications.
+                                  </span>
                                 )}
                                 {/* <Button color="primary" outline size="sm">
                                   CSS
@@ -1492,8 +1544,10 @@ const handleEditWork = (index) => {
                         </CardBody>
 
                         <Modal
-                          isOpen={modalEditCertifications	}
-                          toggle={() => setModalEditCertifications	(!modalEditCertifications	)}
+                          isOpen={modalEditCertifications}
+                          toggle={() =>
+                            setModalEditCertifications(!modalEditCertifications)
+                          }
                           className=""
                           size="lg"
                           style={{ borderRadius: "10px", overflow: "hidden" }}
@@ -1504,38 +1558,56 @@ const handleEditWork = (index) => {
                           <ModalBody>
                             <Row className="w-100 mb-3">
                               <Col>
-                              <InputGroup className="mb-3">
-                              <Input
-                                type="text"
-                                placeholder="New Certification"
-                                value={newInputCertifications}
-                                onChange={(e) => setNewInputCertifications	(e.target.value)}
-                                onKeyDown={(event) => {
-                                  if (event.key === "Enter") {
-                                    handleAddCertifications(newInputCertifications	);
-                                    setNewInputCertifications	("");
-                                  }
-                                }}
-                              />
-                              <InputGroupAddon addonType="append">
-                                <Button
-                                  outline
-                                  color="primary"
-                                  onClick={() => {
-                                    handleAddCertifications	(newInputCertifications	);
-                                    setNewInputCertifications	("");
-                                  }}
-                                >
-                                  Add Certification	
-                                </Button>
-                              </InputGroupAddon>
-                            </InputGroup>
+                                <InputGroup className="mb-3">
+                                  <Input
+                                    type="text"
+                                    placeholder="New Certification"
+                                    value={newInputCertifications}
+                                    onChange={(e) =>
+                                      setNewInputCertifications(e.target.value)
+                                    }
+                                    onKeyDown={(event) => {
+                                      if (event.key === "Enter") {
+                                        handleAddCertifications(
+                                          newInputCertifications
+                                        );
+                                        setNewInputCertifications("");
+                                      }
+                                    }}
+                                  />
+                                  {/* <InputGroupAddon addonType="append">
+                                    <Button
+                                      outline
+                                      color="primary"
+                                      onClick={() => {
+                                        handleAddCertifications(
+                                          newInputCertifications
+                                        );
+                                        setNewInputCertifications("");
+                                      }}
+                                    >
+                                      Add Certification
+                                    </Button>
+                                  </InputGroupAddon> */}
+                                  <Button
+                                    className="ml-2"
+                                    color="primary"
+                                    onClick={() => {
+                                      handleAddCertifications(
+                                        newInputCertifications
+                                      );
+                                      setNewInputCertifications("");
+                                    }}
+                                  >
+                                    Add Certification
+                                  </Button>
+                                </InputGroup>
                               </Col>
                               {certificationsValidationMessage && (
-                      <div className="invalid-feedback d-block">
-                        {certificationsValidationMessage}
-                      </div>
-                    )}
+                                <div className="invalid-feedback d-block">
+                                  {certificationsValidationMessage}
+                                </div>
+                              )}
                               {/* <Col md={2}>
                                 <Button color="primary" className="w-100">
                                   Add skill
@@ -1554,14 +1626,16 @@ const handleEditWork = (index) => {
                                     // eslint-disable-next-line react/no-array-index-key
                                     key={index}
                                     outline={index >= 3}
-                                    color="primary"
+                                    color="light"
                                     // color={index < 3 ? 'primary' : 'light'}
-                                    className="ml-2 font-weight-semibold mx-2 d-flex align-items-center"
+                                    className="ml-2 font-weight-semibold mx-2 d-flex align-items-center text-dark"
                                     size="sm"
-                                    onClick={() => handleRemoveCertifications(index)}
+                                    onClick={() =>
+                                      handleRemoveCertifications(index)
+                                    }
                                   >
                                     {certification}
-                                    <i className="iconsminds-close ml-2" />
+                                    <i className="iconsminds-close ml-2 text-dark" />
                                   </Button>
                                 ))}
                               </ReactSortable>
@@ -1599,18 +1673,18 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Education</h2>
-                              {!uid && 
-                              <Button
-                                color="primary"
-                                outline
-                                className="icon-button"
-                                style={{ border: "none" }}
-                                size="sm"
-                                onClick={() => setModalEditEducation(true)}
-                              >
-                                <i className="simple-icon-pencil" />
-                              </Button>
-}
+                              {!uid && (
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                  size="sm"
+                                  onClick={() => setModalEditEducation(true)}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                              )}
                             </Col>
                           </Row>
                           {education.map((e, index) => (
@@ -1678,14 +1752,14 @@ const handleEditWork = (index) => {
                                     type="text"
                                     name="college"
                                     id="college"
-                                    value={newEducation.college} 
-                                      onChange={(e) => {
-                                        const { name, value } = e.target;
-                                        setNewEducation(prevState => ({
-                                          ...prevState, 
-                                          [name]: value 
-                                        }));
-                                      }}
+                                    value={newEducation.college}
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewEducation((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
+                                      }));
+                                    }}
                                     // className="form-control"
                                   />
                                 </FormGroup>
@@ -1696,14 +1770,14 @@ const handleEditWork = (index) => {
                                     name="degree"
                                     id="degree"
                                     // className="form-control"
-                                    value={newEducation.degree} 
-                                      onChange={(e) => {
-                                        const { name, value } = e.target;
-                                        setNewEducation(prevState => ({
-                                          ...prevState, 
-                                          [name]: value 
-                                        }));
-                                      }}
+                                    value={newEducation.degree}
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewEducation((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
+                                      }));
+                                    }}
                                   />
                                 </FormGroup>
                                 <FormGroup className="error-l-125">
@@ -1713,46 +1787,43 @@ const handleEditWork = (index) => {
                                     name="department"
                                     id="department"
                                     // className="form-control"
-                                    value={newEducation.department} 
-                                      onChange={(e) => {
-                                        const { name, value } = e.target;
-                                        setNewEducation(prevState => ({
-                                          ...prevState, 
-                                          [name]: value 
-                                        }));
-                                      }}
+                                    value={newEducation.department}
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewEducation((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
+                                      }));
+                                    }}
                                   />
                                 </FormGroup>
                                 <FormGroup>
-                                <Label for="location" className="text-muted">
-                                <h4>End year</h4>
-                              </Label>
+                                  <Label for="location" className="text-muted">
+                                    <h4>End year</h4>
+                                  </Label>
 
-                              <Input
-                                type="select"
-                                name="year"
-                                value={newEducation.year}
-                                onChange={(e) => {
-                                  const { name, value } = e.target;
-                                  setNewEducation(prevState => ({
-                                    ...prevState, 
-                                    [name]: value 
-                                  }));
-                                }}
-                                className="form-control  text-one"
-                              >
-                                {/* <option disabled value="">
+                                  <Input
+                                    type="select"
+                                    name="year"
+                                    value={newEducation.year}
+                                    onChange={(e) => {
+                                      const { name, value } = e.target;
+                                      setNewEducation((prevState) => ({
+                                        ...prevState,
+                                        [name]: value,
+                                      }));
+                                    }}
+                                    className="form-control  text-one"
+                                  >
+                                    {/* <option disabled value="">
                                   Select Location
                                 </option> */}
-                                {years.map((yr) => (
-                                  <option
-                                    key={yr}
-                                    value={yr}
-                                  >
-                                    {yr}
-                                  </option>
-                                ))}
-                              </Input>
+                                    {years.map((yr) => (
+                                      <option key={yr} value={yr}>
+                                        {yr}
+                                      </option>
+                                    ))}
+                                  </Input>
                                 </FormGroup>
 
                                 <ModalFooter
@@ -1795,7 +1866,9 @@ const handleEditWork = (index) => {
                                         className="icon-button"
                                         style={{ border: "none" }}
                                         size="sm"
-                                        onClick={() => handleEditEducation(index)}
+                                        onClick={() =>
+                                          handleEditEducation(index)
+                                        }
                                       >
                                         <i className="simple-icon-pencil" />
                                       </Button>
@@ -1816,18 +1889,18 @@ const handleEditWork = (index) => {
                           <Row className="align-items-center">
                             <Col className="d-flex justify-content-between">
                               <h2 className="font-weight-bold">Languages</h2>
-                              {!uid && 
-                              <Button
-                                color="primary"
-                                outline
-                                className="icon-button"
-                                style={{ border: "none" }}
-                                size="sm"
-                                onClick={() => setModalEditLanguage(true)}
-                              >
-                                <i className="simple-icon-pencil" />
-                              </Button>
-}
+                              {!uid && (
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  style={{ border: "none" }}
+                                  size="sm"
+                                  onClick={() => setModalEditLanguage(true)}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                              )}
                             </Col>
                           </Row>
                           <div className="">
@@ -1851,7 +1924,7 @@ const handleEditWork = (index) => {
                               >
                                 {languages.map((lang, index) => (
                                   <li
-                                  // eslint-disable-next-line react/no-array-index-key
+                                    // eslint-disable-next-line react/no-array-index-key
                                     key={index}
                                     style={{
                                       position: "relative",

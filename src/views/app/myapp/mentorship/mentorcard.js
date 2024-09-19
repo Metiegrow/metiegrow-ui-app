@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Colxx } from "components/common/CustomBootstrap";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 // import IntlMessages from 'helpers/IntlMessages';
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
@@ -50,7 +50,7 @@ const MentorCard = () => {
   // const imageUrl = `${baseUrl}/api/public/images`;
   // To change to backend api url uncomment the below line
   // const url1=`${baseUrl}/api/mentor`
-  const history = useHistory();
+  // const history = useHistory();
 
   // const {category}=useParams();
   // const location = useLocation();
@@ -374,14 +374,13 @@ const MentorCard = () => {
                         View Profile
               </Button>
               </NavLink> */}
-
                               <div className="text-primary">
                                 <span className="text-xlarge font-weight-semibold">
                                   ₹{Math.floor(mentors.price).toLocaleString()}
                                 </span>
                                 /Hour
                               </div>
-                              <Button
+                              {/* <Button
                                 color="primary"
                                 onClick={() =>
                                   history.push(
@@ -391,7 +390,16 @@ const MentorCard = () => {
                                 className="rounded"
                               >
                                 View Profile
-                              </Button>
+                              </Button> */}
+                              <a
+                                href={`/app/mentorprofile/${mentors.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Button color="primary" className="rounded">
+                                  View Profile
+                                </Button>
+                              </a>
                             </div>
                           </CardBody>
                           {/* </div> */}
