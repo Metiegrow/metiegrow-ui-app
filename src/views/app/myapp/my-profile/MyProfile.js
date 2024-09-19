@@ -31,6 +31,7 @@ const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [isEditingButton, setIsEditingButton] = useState(false);
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
@@ -45,6 +46,7 @@ const MyProfile = () => {
   const [company, setCompany] = useState("");
   const [category, setCategory] = useState("");
   const [bio, setBio] = useState("");
+  const [price, setPrice] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
   const [website, setWebsite] = useState("");
@@ -73,52 +75,52 @@ const MyProfile = () => {
   // const endUrl = `${baseUrl}/myprofile`;
   const endUrl = `${baseUrl}/api/mentor/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
-  const imageEditUrl = `${baseUrl}/api/mentor/mentor-profile-image`;
+  const imageEditUrl = `${baseUrl}/api/mentor/profile-image`;
+  const mentorProfileDetails = async () => {
+    try {
+      const response = await axios.get(endUrl);
+      const userData = response.data;
+      // console.log("userData:", userData);
+      if (userData) {
+        setImage(userData.imageUrl);
+        setFirstName(userData.firstName);
+        // setJobRole(userData.jobRole);
+        setJobTitle(userData.jobTitle);
+        setCompany(userData.company);
+        setLocation(userData.location);
+        // setAbout(userData.bio);
+        setSkills(userData.skills);
+        setUserId(userData.id);
+        // setLastseen(userData.lastSeen);
+        // setRatings(userData[0].ratings)
+        // console.log(response)
+        // console.log("Username:", userData[1].jobRole);
+        setLastName(userData.lastName);
+        setEmail(userData.email);
+        // setPassword(userData.password);
+        setCategory(userData.category);
+        setBio(userData.bio);
+        setPrice(userData.price);
+        setLinkedinUrl(userData.linkedinUrl);
+        setTwitterHandle(userData.twitterHandle);
+        setWebsite(userData.website);
+        setIntroVideo(userData.introVideo);
+        setFeaturedArticle(userData.featuredArticle);
+        setReasonForMentor(userData.reasonForMentor);
+        setAchievement(userData.achievement);
+        setProfileLoading(false);
+        // setReviews(userData.reviews)
+        // setPrice(userData.price)
+        // setExperience(userData.experience)
+        // setTopics(userData.topics);
+        // setStar(userData.star);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const mentorProfileDetails = async () => {
-      try {
-        const response = await axios.get(endUrl);
-        const userData = response.data;
-        // console.log("userData:", userData);
-        if (userData) {
-          setImage(userData.imageUrl);
-          setFirstName(userData.firstName);
-          // setJobRole(userData.jobRole);
-          setJobTitle(userData.jobTitle);
-          setCompany(userData.company);
-          setLocation(userData.location);
-          // setAbout(userData.bio);
-          setSkills(userData.skills);
-          setUserId(userData.id);
-          // setLastseen(userData.lastSeen);
-          // setRatings(userData[0].ratings)
-          // console.log(response)
-          // console.log("Username:", userData[1].jobRole);
-          setLastName(userData.lastName);
-          setEmail(userData.email);
-          // setPassword(userData.password);
-          setCategory(userData.category);
-          setBio(userData.bio);
-          setLinkedinUrl(userData.linkedinUrl);
-          setTwitterHandle(userData.twitterHandle);
-          setWebsite(userData.website);
-          setIntroVideo(userData.introVideo);
-          setFeaturedArticle(userData.featuredArticle);
-          setReasonForMentor(userData.reasonForMentor);
-          setAchievement(userData.achievement);
-          setProfileLoading(false);
-          // setReviews(userData.reviews)
-          // setPrice(userData.price)
-          // setExperience(userData.experience)
-          // setTopics(userData.topics);
-          // setStar(userData.star);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     mentorProfileDetails();
   }, [isProfileUpdated]);
   useEffect(() => {
@@ -137,7 +139,7 @@ const MyProfile = () => {
   }, [userId]);
 
   useEffect(() => {
-    const mentorProfileDetails = async () => {
+    const mentorProfileDetails1 = async () => {
       try {
         const response = await axios.get(inputUrl);
         const inputData = response.data;
@@ -154,7 +156,7 @@ const MyProfile = () => {
       }
     };
 
-    mentorProfileDetails();
+    mentorProfileDetails1();
   }, []);
 
   function getTokenRes() {
@@ -177,6 +179,7 @@ const MyProfile = () => {
         languages,
         skills,
         bio,
+        price,
         linkedinUrl,
         twitterHandle,
         website,
@@ -233,6 +236,9 @@ const MyProfile = () => {
       ToasterComponent("success", response.data.statuses);
       setTimeout(() => {}, 2000);
       // console.log(`resres ${response.status}`);
+      if (response.status === 200) {
+        await mentorProfileDetails();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -265,6 +271,10 @@ const MyProfile = () => {
 
   const handleSaveAbout = () => {
     setIsEditingAbout(false);
+    updateMEntorProfile();
+  };
+  const handleSavePrice = () => {
+    setIsEditingPrice(false);
     updateMEntorProfile();
   };
 
@@ -404,13 +414,28 @@ const MyProfile = () => {
               >
                 <div
                   className="position-relative"
+                  style={{ position: "relative", top: "5px", textAlign: "end" }}
+                >
+                  <Button
+                    color="primary"
+                    outline
+                    className="icon-button  bg-light"
+                    style={{ border: "none" }}
+                    size="sm"
+                    onClick={() => handleImageClick()}
+                  >
+                    <i className="simple-icon-pencil" />
+                  </Button>
+                </div>
+                <div
+                  className="position-relative"
                   style={{ position: "relative", top: "70px" }}
                 >
                   <button
                     type="button"
                     className="btn p-0"
                     style={{ border: "none", background: "none" }}
-                    onClick={() => handleImageClick()}
+                    // onClick={() => handleImageClick()}
                     aria-label="Profile image"
                   >
                     {image === null ? (
@@ -964,6 +989,81 @@ const MyProfile = () => {
           </Col>
         </Row>
         {/* skill section ends */}
+        {/* price section starts */}
+        <Row className="my-4 ">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row className="align-items-center">
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">Price</h2>
+
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      size="sm"
+                      onClick={() => setIsEditingPrice(true)}
+                      style={{ border: "none" }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
+                <div>
+                  <h2 className="font-weight-semi-bold ">₹ {price}</h2>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+          {/* price modal starts */}
+          <Modal
+            isOpen={isEditingPrice}
+            toggle={() => setIsEditingPrice(!isEditingPrice)}
+            className=""
+            size="lg"
+            style={{ borderRadius: "10px", overflow: "hidden" }}
+          >
+            <ModalHeader style={{ borderBottom: "none" }}>
+              <h2 className="font-weight-bold">Price</h2>
+            </ModalHeader>
+            <ModalBody>
+              <br />
+
+              <>
+                <Label for="about" className="text-muted">
+                  <h4>Price</h4>
+                </Label>
+                <Input
+                  type="number"
+                  id="about"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className=" text-one"
+                />
+                <br />
+              </>
+            </ModalBody>
+            <ModalFooter
+              style={{ borderTop: "none" }}
+              className="d-flex align-items-center justify-content-center"
+            >
+              <Button color="primary" onClick={() => handleSavePrice()}>
+                Save
+              </Button>{" "}
+              <Button
+                color="primary"
+                outline
+                onClick={() => setIsEditingPrice(false)}
+                className=""
+              >
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+          {/* price modal ends */}
+        </Row>
+        {/* price section ends */}
         {/* new design ends */}
       </Colxx>
     </div>

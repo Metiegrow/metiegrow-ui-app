@@ -106,6 +106,42 @@ const MyProfile = () => {
 
   const token = localStorage.getItem("tokenRes");
   // const newUpdatedWork = [...work, newWork]
+  const mentorProfileDetails = async () => {
+    try {
+      const response = await axios.get(endUrl);
+      const userData = response.data;
+      if (userData) {
+        setImage(userData.userPhotoUrl);
+        setFirstName(userData.firstName);
+        setLastName(userData.lastName);
+        setJobTitle(userData.jobTitle);
+        setLocation(userData.location);
+        setEducation(userData.education);
+        setLinkedInUrl(userData.linkedInUrl);
+        setLanguages(userData.languages);
+        setWork(userData.work);
+        setTwitterHandle(userData.twitterHandle);
+        setPersonalWebsite(userData.personalWebsite);
+        setSkills(userData.skills);
+        setSeekingFor(userData.seekingFor);
+        setGoal(userData.goal);
+        setCertifications(userData.certifications);
+        setBio(userData.bio);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 4000);
+      setProfileData(true);
+    }
+  };
+
+  useEffect(() => {
+    mentorProfileDetails();
+  }, [profileUpdate, uid]);
 
   // check ok
 
@@ -124,6 +160,9 @@ const MyProfile = () => {
         setProfileUpdate(!profileUpdate);
       }, 2000);
       // console.log(`resres ${response.status}`);
+      if (response.status === 200) {
+        await mentorProfileDetails();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -377,43 +416,6 @@ const MyProfile = () => {
     setSelectedLanguages([]);
   };
 
-  useEffect(() => {
-    const mentorProfileDetails = async () => {
-      try {
-        const response = await axios.get(endUrl);
-        const userData = response.data;
-        if (userData) {
-          setImage(userData.userPhotoUrl);
-          setFirstName(userData.firstName);
-          setLastName(userData.lastName);
-          setJobTitle(userData.jobTitle);
-          setLocation(userData.location);
-          setEducation(userData.education);
-          setLinkedInUrl(userData.linkedInUrl);
-          setLanguages(userData.languages);
-          setWork(userData.work);
-          setTwitterHandle(userData.twitterHandle);
-          setPersonalWebsite(userData.personalWebsite);
-          setSkills(userData.skills);
-          setSeekingFor(userData.seekingFor);
-          setGoal(userData.goal);
-          setCertifications(userData.certifications);
-          setBio(userData.bio);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-        }, 4000);
-        setProfileData(true);
-      }
-    };
-
-    mentorProfileDetails();
-  }, [profileUpdate, uid]);
-
   // const updateMentorProfile = async () => {
   //   try {
   //     const updatedData = {
@@ -559,6 +561,25 @@ const MyProfile = () => {
                               <i className="simple-icon-pencil text-primary font-weight-bold" />
                             </Button>}
                           </div> */}
+                          <div
+                            className="position-relative"
+                            style={{
+                              position: "relative",
+                              top: "5px",
+                              textAlign: "end",
+                            }}
+                          >
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button  bg-light"
+                              style={{ border: "none" }}
+                              size="sm"
+                              onClick={() => handleImageClick()}
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+                          </div>
 
                           <div
                             className="position-relative"
@@ -568,7 +589,7 @@ const MyProfile = () => {
                               type="button"
                               className="btn p-0"
                               style={{ border: "none", background: "none" }}
-                              onClick={() => handleImageClick()}
+                              // onClick={() => handleImageClick()}
                               aria-label="Profile image"
                             >
                               {image === null ? (

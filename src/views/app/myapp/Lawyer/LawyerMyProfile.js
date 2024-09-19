@@ -58,33 +58,33 @@ const LawyerMyProfile = () => {
   const token = localStorage.getItem("tokenRes");
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
-  const imageEditUrl = `${baseUrl}/api/lawyer/lawyer-profile-images`;
+  const imageEditUrl = `${baseUrl}/api/lawyer/profile-image`;
+
+  const mentorProfileDetails = async () => {
+    try {
+      const response = await axios.get(endUrl);
+      const userData = response.data;
+      if (userData) {
+        setImageUrl(userData.imageUrl);
+        setFirstName(userData.firstName);
+        setLastName(userData.lastName);
+        setLocation(userData.location);
+        // setLanguages(userData.languages);
+        setLanguages(userData.languages.map((lang) => lang.language));
+        setBio(userData.bio);
+        setRatings(userData.ratings);
+        // setTopic(topicData);
+        setTopic(userData.topic.map((t) => t.topicName));
+        setStar(userData.star);
+        setAbout(userData.about);
+        setProfileLoading(false);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const mentorProfileDetails = async () => {
-      try {
-        const response = await axios.get(endUrl);
-        const userData = response.data;
-        if (userData) {
-          setImageUrl(userData.imageUrl);
-          setFirstName(userData.firstName);
-          setLastName(userData.lastName);
-          setLocation(userData.location);
-          // setLanguages(userData.languages);
-          setLanguages(userData.languages.map((lang) => lang.language));
-          setBio(userData.bio);
-          setRatings(userData.ratings);
-          // setTopic(topicData);
-          setTopic(userData.topic.map((t) => t.topicName));
-          setStar(userData.star);
-          setAbout(userData.about);
-          setProfileLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     mentorProfileDetails();
   }, [isPosted]);
 
@@ -100,6 +100,10 @@ const LawyerMyProfile = () => {
       });
       ToasterComponent("success", response.data.statuses);
       setTimeout(() => {}, 2000);
+      if (response.status === 200) {
+        await mentorProfileDetails();
+      }
+
       // console.log(`resres ${response.status}`);
     } catch (error) {
       console.error(error);
@@ -313,13 +317,29 @@ const LawyerMyProfile = () => {
               >
                 <div
                   className="position-relative"
+                  style={{ position: "relative", top: "5px", textAlign: "end" }}
+                >
+                  <Button
+                    color="primary"
+                    outline
+                    className="icon-button  bg-light"
+                    style={{ border: "none" }}
+                    size="sm"
+                    onClick={() => handleImageClick()}
+                  >
+                    <i className="simple-icon-pencil" />
+                  </Button>
+                </div>
+
+                <div
+                  className="position-relative"
                   style={{ position: "relative", top: "70px" }}
                 >
                   <button
                     type="button"
                     className="btn p-0"
                     style={{ border: "none", background: "none" }}
-                    onClick={() => handleImageClick()}
+                    // onClick={() => handleImageClick()}
                     aria-label="Profile image"
                   >
                     {imageUrl === null ? (

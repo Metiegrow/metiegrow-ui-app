@@ -64,20 +64,26 @@ const MentorAnswers = () => {
 
   const [textQuillStandart, setTextQuillStandart] = useState("");
   const AnswersByMentors = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(url1);
       setAnswers(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Set loading to false once data is fetched or error occurs
     }
   };
   const AnswersByMentors1 = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(url);
       setAnswers1(response.data);
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -295,7 +301,6 @@ const MentorAnswers = () => {
       <Colxx sm="12" md="12" lg="8" xxs="12" className="mx-auto ">
         <div className="form-group">
           {/*  Questions card starts */}
-
           <Card className="mt-3">
             <CardBody>
               <div className="d-flex justify-content-between">
@@ -366,20 +371,30 @@ const MentorAnswers = () => {
               ) : (
                 <p className="text-one">{answers.questionHeadingBrief}</p>
               )}
-
-              <h6 className="text-muted">
-                Asked on {new Date(answers.time).toLocaleString()}
-              </h6>
-              <hr />
-              <div className="d-flex justify-content-between">
-                <h6 className="font-weight-semibold">
-                  {answers.views}
-                  <span className="text-muted"> views</span>
-                </h6>
-                {/* <span className="text-one">
+              {loading ? (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ height: "100px" }}
+                >
+                  <Spinner animation="border" size="sm" color="primary" />
+                </div>
+              ) : (
+                <>
+                  <h6 className="text-muted">
+                    Asked on {new Date(answers.time).toLocaleString()}
+                  </h6>
+                  <hr />
+                  <div className="d-flex justify-content-between">
+                    <h6 className="font-weight-semibold">
+                      {answers.views}
+                      <span className="text-muted"> views</span>
+                    </h6>
+                    {/* <span className="text-one">
                   <i className="iconsminds-mail-inbox" />
                 </span> */}
-              </div>
+                  </div>
+                </>
+              )}
             </CardBody>
           </Card>
 
@@ -414,7 +429,7 @@ const MentorAnswers = () => {
           )}
           {/*  answer starts  */}
 
-          {answers1.answer &&
+          {/* {answers1.answer &&
             answers1.answer.map((an) => {
               return (
                 <Card key={updateTrigger} className="mt-3 ">
@@ -424,33 +439,8 @@ const MentorAnswers = () => {
                         <h3>{an.mentorName}</h3>
                         <p className="text-one text-muted">{an.mentorRole}</p>
                       </div>
-                      {/* <div>
-                        <NavLink href="/app/mentorconsult">
-                          <Button
-                            outline
-                            color="primary"
-                            size="sm"
-                            className=""
-                          >
-                            Consult Now
-                          </Button>
-                        </NavLink>
-                      </div> */}
                     </div>
 
-                    {/* <p>{an.answered}</p> */}
-                    {/* want */}
-                    {/* {editing1 ? (
-                      <input
-                        type="text"
-                        className="form-control py-2 my-2"
-                        value={editedAnswer1}
-                        onChange={(e) => setEditedAnswer1(e.target.value)}
-                      />
-                    ) : (
-                      <p>{an.answered}</p>
-                    )} */}
-                    {/* want ends */}
                     {editStates[an.id] ? (
                       <input
                         type="text"
@@ -462,33 +452,11 @@ const MentorAnswers = () => {
                       <p>{an.answered}</p>
                     )}
                     <p>Answered {an.answeredYear} years ago</p>
-                    {/* <p>0/1 people found this helpful</p> */}
+
                     <hr />
                     <div className="d-flex justify-content-between">
-                      <div className="d-flex align-items-center">
-                        {/* <h6 className="">Was this answer helpful?</h6>
-                        <div className="ml-3">
-                          <Button
-                            outline
-                            color="primary"
-                            size="sm"
-                            className="mr-2"
-                          >
-                            Yes
-                          </Button>
-                          <Button
-                            outline
-                            color="primary"
-                            size="sm"
-                            className=""
-                          >
-                            No
-                          </Button>
-                        </div> */}
-                      </div>
                       <div>
                         <div className="d-flex align-items-center">
-                          {/* {roleRes.includes("MENTOR") && ( */}
                           {+userId === an.mentorId && (
                             <>
                               {editStates[an.id] ? (
@@ -540,14 +508,110 @@ const MentorAnswers = () => {
                               )}
                             </>
                           )}
-                          {/* )} */}
                         </div>
                       </div>
                     </div>
                   </CardBody>
                 </Card>
               );
-            })}
+            })} */}
+          {answers1.answer ? (
+            answers1.answer.map((an) => (
+              <Card key={updateTrigger} className="mt-3">
+                <CardBody>
+                  <div className="d-flex w-100 justify-content-between">
+                    <div>
+                      <h3>{an.mentorName}</h3>
+                      <p className="text-one text-muted">{an.mentorRole}</p>
+                    </div>
+                  </div>
+
+                  {editStates[an.id] ? (
+                    <input
+                      type="text"
+                      className="form-control py-2 my-2"
+                      value={editedAnswer1}
+                      onChange={(e) => setEditedAnswer1(e.target.value)}
+                    />
+                  ) : (
+                    <p>{an.answered}</p>
+                  )}
+                  <p>Answered {an.answeredYear} years ago</p>
+
+                  <hr />
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <div className="d-flex align-items-center">
+                        {+userId === an.mentorId && (
+                          <>
+                            {editStates[an.id] ? (
+                              <>
+                                <Button
+                                  outline
+                                  color="primary"
+                                  onClick={() => handleSave1(an.id)}
+                                  className="mr-2"
+                                  disabled={loadingStates[an.id]}
+                                >
+                                  {loadingStates[an.id] ? (
+                                    <Spinner
+                                      size="sm"
+                                      animation="border"
+                                      color="primary"
+                                    />
+                                  ) : (
+                                    "Save"
+                                  )}
+                                </Button>
+                                <Button
+                                  className="mr-2"
+                                  outline
+                                  color="primary"
+                                  onClick={() => handleCancel1(an.id)}
+                                >
+                                  Cancel
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  className="mr-2"
+                                  outline
+                                  color="primary"
+                                  onClick={() => handleEdit1(an.id)}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                                <Button
+                                  outline
+                                  color="primary"
+                                  onClick={() => handleDeleteAnswer(an.id)}
+                                >
+                                  {loadingStates[an.id] ? (
+                                    <Spinner size="sm" animation="border" />
+                                  ) : (
+                                    <i className="simple-icon-trash" />
+                                  )}
+                                </Button>
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            ))
+          ) : (
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ height: "100px" }}
+            >
+              <Spinner size="sm" animation="border" color="primary" />
+            </div>
+          )}
+
           {/*  answer ends  */}
           {roleRes.includes("USER") ? (
             <></>

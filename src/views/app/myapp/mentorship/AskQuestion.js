@@ -125,7 +125,7 @@ const AskQuestion = () => {
           onClick={handleSubmit}
           disabled={loading}
         >
-          {loading ? "Reviewing..." : "Review your question"}
+          {loading ? "Posting..." : "Post your question"}
         </Button>
       </div>
     </div>

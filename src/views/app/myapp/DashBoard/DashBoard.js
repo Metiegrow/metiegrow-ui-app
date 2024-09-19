@@ -1,4 +1,13 @@
-import React, { useEffect, useState } from "react";
+import "@glidejs/glide/dist/css/glide.core.min.css";
+import axios from "axios";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import { Colxx } from "components/common/CustomBootstrap";
+import Rating from "components/common/Rating";
+import { adminRoot, baseUrl } from "constants/defaultValues";
+import { useEffect, useState } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { useHistory } from "react-router-dom";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import {
   Button,
   Card,
@@ -10,18 +19,9 @@ import {
   NavLink,
   Row,
 } from "reactstrap";
-import { Colxx } from "components/common/CustomBootstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "@glidejs/glide/dist/css/glide.core.min.css";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import Rating from "components/common/Rating";
-import ThumbnailLetters from "components/cards/ThumbnailLetters";
-import { adminRoot, baseUrl } from "constants/defaultValues";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
-import { alumniData } from "./Data";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import language from "../my-login/Languages";
+import { alumniData } from "./Data";
 
 const DashBoard = () => {
   const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
@@ -385,6 +385,7 @@ const DashBoard = () => {
 
   const handleViewMentors = () => history.push("/app/mentor/list");
   const handleViewLawyers = () => history.push("/app/lawyer/list");
+  const handleViewAlumnis = () => history.push("/app/alumni/alumnilists");
   const handleWalletClick = () => history.push("/app/mywallet");
   const handleProfileClick = () => history.push("/app/user/myprofile");
   const handleNewSessionClick = () => history.push("/app/sessionlists");
@@ -821,7 +822,7 @@ const DashBoard = () => {
                   </h3>
                 </Col>
                 <Col xs="auto">
-                  <Button size="xs" color="primary">
+                  <Button size="xs" color="primary" onClick={handleViewAlumnis}>
                     <span>View all</span>
                   </Button>
                 </Col>

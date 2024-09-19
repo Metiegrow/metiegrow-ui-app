@@ -5,7 +5,7 @@ import Rating from "components/common/Rating";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { Badge, Button, Card, CardBody, CardText, Row } from "reactstrap";
 import MentorFilter from "../mentorship/MentorFilter";
 import "../mentorship/mentorcard.css";
@@ -24,7 +24,7 @@ const AlumniLists = () => {
   const [inputkey, setInputKey] = useState("");
 
   const url2 = `${baseUrl}/api/alumni/cards`;
-  const history = useHistory();
+  // const history = useHistory();
 
   const truncateBio = (bio, lineCount) => {
     if (!bio) return "";
@@ -248,7 +248,7 @@ const AlumniLists = () => {
                                 </span>
                                 /Hour
                               </div>
-                              <Button
+                              {/* <Button
                                 color="primary"
                                 onClick={() =>
                                   history.push(
@@ -258,7 +258,16 @@ const AlumniLists = () => {
                                 className="rounded"
                               >
                                 View Profile
-                              </Button>
+                              </Button> */}
+                              <a
+                                href={`/app/alumni/profile/${mentors.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Button color="primary" className="rounded">
+                                  View Profile
+                                </Button>
+                              </a>
                             </div>
                           </CardBody>
                           {/* </div> */}

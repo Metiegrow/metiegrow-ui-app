@@ -1,46 +1,51 @@
 /* eslint-disable no-param-reassign */
-import React, { useState } from 'react';
-import axios from 'axios';
-import { baseUrl } from 'constants/defaultValues';
-import { Colxx } from 'components/common/CustomBootstrap';
-import {  Button, Card, CardBody,  Col,  CustomInput, Form, FormGroup, InputGroup, Label, Row
+import axios from "axios";
+import { Colxx } from "components/common/CustomBootstrap";
+import { baseUrl } from "constants/defaultValues";
+import { useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  CustomInput,
+  Form,
+  FormGroup,
+  InputGroup,
+  Label,
+  Row,
+} from "reactstrap";
+//  import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+//  Dropdown, DropdownItem, DropdownMenu,
+//  DropdownToggle
+import CustomSelectInput from "components/common/CustomSelectInput";
+import { Step, Steps, Wizard } from "react-albus";
+import { injectIntl } from "react-intl";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import Select from "react-select";
 
-   } from 'reactstrap';
-  //  import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
-  //  Dropdown, DropdownItem, DropdownMenu,
-  //  DropdownToggle
-  import Select from 'react-select';
-import CustomSelectInput from 'components/common/CustomSelectInput';
-import { Wizard, Steps, Step } from 'react-albus';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom';
-import { injectIntl } from 'react-intl';
-
-import TopNavigation from 'components/wizard/TopNavigation';
-import DateRangePicker from './DateRangePicker';
-import BottomNavigation from '../my-login/BottomNavigation';
-import ToasterComponent from '../notifications/ToasterComponent';
-
+import TopNavigation from "components/wizard/TopNavigation";
+import BottomNavigation from "../my-login/BottomNavigation";
+import ToasterComponent from "../notifications/ToasterComponent";
+import DateRangePicker from "./DateRangePicker";
 
 // const PopupWizard = ({ selectedDate,setSelectedDate,upcomingsession,mentorId,mentorName})
- const PopupWizard = ({ selectedDate,setSelectedDate,mentorId}) => {
+const PopupWizard = ({ selectedDate, setSelectedDate, mentorId }) => {
+  const history = useHistory();
 
-  const history = useHistory();  
-  
-//  const url=`${baseUrl}/sessionUpcomingHistroy`;
+  //  const url=`${baseUrl}/sessionUpcomingHistroy`;
 
+  //  if you want to change backend url uncomment the below line
+  // const url=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`
 
-//  if you want to change backend url uncomment the below line
- // const url=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`
+  // const url1=`${baseUrl}/ mentorAppointmentTime`
+  const url1 = `${baseUrl}/api/calendar/appointment/UserProfile`;
 
- // const url1=`${baseUrl}/ mentorAppointmentTime`
- const url1=`${baseUrl}/api/calendar/appointment/UserProfile`
- 
-//  if you want to change backend url uncomment the below line
-
+  //  if you want to change backend url uncomment the below line
 
   const redirectToSessionLists = () => {
     // Redirect to the specified URL with the query parameter
-    history.push('/app/sessionlists?appointment=true');
+    history.push("/app/sessionlists?appointment=true");
   };
   // const [selectedDate, setSelectedDate] = useState(null);
   // const [storedData, setStoredData] = useState(null);
@@ -52,177 +57,163 @@ import ToasterComponent from '../notifications/ToasterComponent';
   // const [dropdownBasicOpen5, setDropdownBasicOpen5] = useState(false);
   const [selectedradiobutton, setSelectedRadioButton] = useState(null);
   const [selectedHourDropdown, setSelectedHourDropdown] = useState(null); // Renamed state variable
-   const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
-  //  const [upcomingSessions] = useState([]); 
-  const [minutedrop,setMinutedrop]=useState(null)
-  const [minutedrop1,setMinutedrop1]=useState(null)
+  const [selectedHourDropdown1, setSelectedHourDropdown1] = useState(null); // Renamed state variable
+  //  const [upcomingSessions] = useState([]);
+  const [minutedrop, setMinutedrop] = useState(null);
+  const [minutedrop1, setMinutedrop1] = useState(null);
   const [selectedfromampm, setSelectedFromAmPm] = useState(null); // State for AM selection
   const [selectedfromampm1, setSelectedFromAmPm1] = useState(null); // State for AM selection
-const [license,setLicense]=useState([]);
+  const [license, setLicense] = useState([]);
 
+  // const url=`${baseUrl}/licenseDetails`;
 
+  // Backend Url
+  const url = `${baseUrl}/api/calendar/mentee/license-details`;
 
+  const LicenseDetails = async () => {
+    try {
+      // Generate newData object
+      const selectedDateTime = new Date(selectedDate);
+      const selectedHour =
+        (selectedHourDropdown % 12) + (selectedfromampm === "PM" ? 12 : 0);
+      selectedDateTime.setHours(selectedHour, minutedrop, 0, 0);
+      const fromTimeStamp = selectedDateTime.getTime();
 
+      const toDateTime = new Date(selectedDateTime);
+      const selectedHourTo =
+        (selectedHourDropdown1 % 12) + (selectedfromampm1 === "PM" ? 12 : 0);
+      toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0);
+      const toTimeStamp = toDateTime.getTime();
 
- // const url=`${baseUrl}/licenseDetails`;
+      const newData = {
+        mentorId,
 
+        fromTimeStamp,
+        toTimeStamp,
+      };
 
-// Backend Url
- const url=`${baseUrl}/api/calendar/mentee/license-details`
+      // Convert newData object to query parameters string
+      const queryString = Object.keys(newData)
+        .map(
+          (key) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(newData[key])}`
+        )
+        .join("&");
 
+      // Perform axios request with query parameters
+      const response = await axios.get(`${url}?${queryString}`);
+      console.log("Response from server:", response.data);
 
-const LicenseDetails = async () => {
-  try {
-    // Generate newData object
+      // Set the license state with the response data
+      setLicense(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      if (error.response) {
+        ToasterComponent("error", error.response.data.statuses);
+      }
+    }
+  };
+
+  const handleLicenseNextButtonClick = () => {
+    LicenseDetails();
+  };
+
+  const handleNextButtonClick = () => {
+    // Convert selected date to UTC timestamp
     const selectedDateTime = new Date(selectedDate);
-    const selectedHour = selectedHourDropdown % 12 + (selectedfromampm === 'PM' ? 12 : 0);
-    selectedDateTime.setHours(selectedHour, minutedrop, 0, 0);
-    const fromTimeStamp = selectedDateTime.getTime();
 
-    const toDateTime = new Date(selectedDateTime);
-    const selectedHourTo = selectedHourDropdown1 % 12 + (selectedfromampm1 === 'PM' ? 12 : 0);
-    toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0);
-    const toTimeStamp = toDateTime.getTime();
+    // Set the hours and minutes for the selected date
+    const selectedHour =
+      (selectedHourDropdown % 12) + (selectedfromampm === "PM" ? 12 : 0); // Adjust for PM
+    selectedDateTime.setHours(selectedHour, minutedrop, 0, 0);
+    const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
+
+    // Calculate 'to' time
+    const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
+    const selectedHourTo =
+      (selectedHourDropdown1 % 12) + (selectedfromampm1 === "PM" ? 12 : 0); // Adjust for PM
+    toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0); // Set the 'to' hour
+    const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
+
+    console.log("From Timestamp (milliseconds):", fromTimeStamp);
+    console.log("To Timestamp (milliseconds):", toTimeStamp);
 
     const newData = {
       mentorId,
-    
+      mode: selectedradiobutton,
       fromTimeStamp,
       toTimeStamp,
     };
 
-    // Convert newData object to query parameters string
-    const queryString = Object.keys(newData)
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(newData[key])}`)
-      .join('&');
-    
-    // Perform axios request with query parameters
-    const response = await axios.get(`${url}?${queryString}`);
-    console.log('Response from server:', response.data);
-
-    // Set the license state with the response data
-    setLicense(response.data);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    if(error.response){
-    ToasterComponent('error', error.response.data.statuses);
-    }
-  }
-};
-
-
-
-
-
-
-
-
-const handleLicenseNextButtonClick=()=>{
-  LicenseDetails();
-
-}
-
-
-const handleNextButtonClick = () => {
-  // Convert selected date to UTC timestamp
-  const selectedDateTime = new Date(selectedDate);
-
-  // Set the hours and minutes for the selected date
-  const selectedHour = selectedHourDropdown % 12 + (selectedfromampm === 'PM' ? 12 : 0); // Adjust for PM
-  selectedDateTime.setHours(selectedHour, minutedrop, 0, 0);
-  const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
-
-  // Calculate 'to' time
-  const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
-  const selectedHourTo = selectedHourDropdown1 % 12 + (selectedfromampm1 === 'PM' ? 12 : 0); // Adjust for PM
-  toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0); // Set the 'to' hour
-  const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
-
-  console.log('From Timestamp (milliseconds):', fromTimeStamp);
-  console.log('To Timestamp (milliseconds):', toTimeStamp);
-
-  const newData = {
-    mentorId,
-    mode: selectedradiobutton,
-    fromTimeStamp,
-    toTimeStamp,
-  };
-
-  axios.post(url1, [newData])
-    .then(response => {
-      // Handle successful response, such as redirecting the user
-      console.log('Post request successful:', response.data);
-      ToasterComponent('success', response.data.statuses);
-      // redirectToSessionLists(); // Redirect to the specified URL
-    })
-    .catch(error => {
-      // Handle error
-      console.error('Error posting data:', error);
-      if(error.response){
-        ToasterComponent('error', error.response.data.statuses);
+    axios
+      .post(url1, [newData])
+      .then((response) => {
+        // Handle successful response, such as redirecting the user
+        console.log("Post request successful:", response.data);
+        ToasterComponent("success", response.data.statuses);
+        // redirectToSessionLists(); // Redirect to the specified URL
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error posting data:", error);
+        if (error.response) {
+          ToasterComponent("error", error.response.data.statuses);
         }
-    });
-};
-
-
-
+      });
+  };
 
   const handleDropdownItemClick = (selectedHour) => {
     // Handle the selected hour as needed
     setSelectedHourDropdown(selectedHour.value);
-    
+
     console.log(`Selected hour: ${selectedHour.value}`);
-    // setSelectedHourDropdown(selectedHour); 
+    // setSelectedHourDropdown(selectedHour);
   };
 
   const handleDropdownItemClick1 = (selectedMinute) => {
     // Handle the selected minutes as needed
     setMinutedrop(selectedMinute.value);
-  //  setMinutedrop1(selectedMinute);
+    //  setMinutedrop1(selectedMinute);
     // console.log(`Selected minute: ${selectedMinute}`);
-    // setMinuteDrop(selectedMinute); 
+    // setMinuteDrop(selectedMinute);
   };
-
 
   // const handleDropdownItemClick2 = (selectedHour) => {
   //   // Handle the selected hour as needed
   //   setSelectedHourDropdown1(selectedHour)
   //   console.log(`Selected hour: ${selectedHour}`);
-  //   // setSelectedHourDropdown(selectedHour); 
+  //   // setSelectedHourDropdown(selectedHour);
   // };
 
-
-  const handleDropdownItemClick2=(selectedHour) => {
+  const handleDropdownItemClick2 = (selectedHour) => {
     // Handle the selected minutes as needed
     setSelectedHourDropdown1(selectedHour.value);
-  
   };
   const handleDropdownItemClick3 = (selectedMinute) => {
     // Handle the selected minutes as needed
     setMinutedrop1(selectedMinute.value);
     // console.log(`Selected minute: ${selectedMinute.value}`);
-    // setMinuteDrop(selectedMinute); 
+    // setMinuteDrop(selectedMinute);
   };
-
 
   // const handleDropdownItemClick4 = (selectedAmPmFrom) => {
   //   // Handle the selected minutes as needed
   //   setSelectedFromAmPm(selectedAmPmFrom);
   //   console.log(`Selected from AM/PM: ${selectedAmPmFrom}`);
-  //   // setMinuteDrop(selectedMinute); 
+  //   // setMinuteDrop(selectedMinute);
   // };
 
   const handleDropdownItemClick4 = (selectedAmPmFrom) => {
     // Handle the selected minutes as needed
     setSelectedFromAmPm(selectedAmPmFrom.value);
     console.log(`Selected from AM/PM: ${selectedAmPmFrom.value}`);
-    // setMinuteDrop(selectedMinute); 
+    // setMinuteDrop(selectedMinute);
   };
   const handleDropdownItemClick5 = (selectedAmPmTo) => {
     // Handle the selected minutes as needed
     setSelectedFromAmPm1(selectedAmPmTo.value);
     console.log(`Selected from AM/PM: ${selectedAmPmTo.value}`);
-    // setMinuteDrop(selectedMinute); 
+    // setMinuteDrop(selectedMinute);
   };
   // const generateDropdownItems = () => {
   //   const items = [];
@@ -250,7 +241,6 @@ const handleNextButtonClick = () => {
   //   return items;
   // };
 
-
   const generateDropdownItemsSelect = () => {
     const items = [];
     for (let i = 1; i <= 12; i += 1) {
@@ -259,21 +249,17 @@ const handleNextButtonClick = () => {
     }
     return items;
   };
-  const generateMinuteDropdownItems=()=>{
+  const generateMinuteDropdownItems = () => {
     const minutes = [0, 15, 30, 45];
     const items = [];
 
     minutes.forEach((minute) => {
-    const formattedMinute = minute < 10 ? `0${minute}` : `${minute}`;
-    items.push({ value: formattedMinute, label: formattedMinute });
-  });
+      const formattedMinute = minute < 10 ? `0${minute}` : `${minute}`;
+      items.push({ value: formattedMinute, label: formattedMinute });
+    });
 
-  return items;
+    return items;
   };
-  
-  
-  
-
 
   // const generateMinuteDropdownItems = () => {
   //   const minutes = [0, 15, 30, 45];
@@ -312,15 +298,13 @@ const handleNextButtonClick = () => {
     const items = [];
 
     minutes.forEach((minute) => {
-    const formattedMinute = minute < 10 ? `0${minute}` : `${minute}`;
-    items.push({ value: formattedMinute, label: formattedMinute });
-  });
+      const formattedMinute = minute < 10 ? `0${minute}` : `${minute}`;
+      items.push({ value: formattedMinute, label: formattedMinute });
+    });
 
-  return items;
+    return items;
   };
 
-
-  
   // const generateMinuteDropdownItems1 = () => {
   //   const minutes = [0, 15, 30, 45];
   //   const items = minutes.map((minute) => {
@@ -334,44 +318,43 @@ const handleNextButtonClick = () => {
   //   return items;
   // };
   const generateAmPmDropdownItems = () => {
-    const amPmOptions = ['AM', 'PM'];
+    const amPmOptions = ["AM", "PM"];
     const items = [];
-  
+
     amPmOptions.forEach((amPm) => {
       items.push({ value: amPm, label: amPm });
     });
-  
+
     return items;
   };
 
-  
-// const generateAmPmDropdownItems = () => {
-//   const amPmOptions = ['AM', 'PM'];
-//   return amPmOptions.map((amPm) => (
-//     <DropdownItem key={amPm} onClick={() => handleDropdownItemClick4(amPm)}>
-//       {amPm}
-//     </DropdownItem>
-//   ));
-// };
+  // const generateAmPmDropdownItems = () => {
+  //   const amPmOptions = ['AM', 'PM'];
+  //   return amPmOptions.map((amPm) => (
+  //     <DropdownItem key={amPm} onClick={() => handleDropdownItemClick4(amPm)}>
+  //       {amPm}
+  //     </DropdownItem>
+  //   ));
+  // };
 
-const generateAmPmDropdownItems1 = () => {
-  const amPmOptions = ['AM', 'PM'];
-  const items = [];
+  const generateAmPmDropdownItems1 = () => {
+    const amPmOptions = ["AM", "PM"];
+    const items = [];
 
-  amPmOptions.forEach((amPm) => {
-    items.push({ value: amPm, label: amPm });
-  });
+    amPmOptions.forEach((amPm) => {
+      items.push({ value: amPm, label: amPm });
+    });
 
-  return items;
-};
-// const generateAmPmDropdownItems1 = () => {
-//   const amPmOptions = ['AM', 'PM'];
-//   return amPmOptions.map((amPm) => (
-//     <DropdownItem key={amPm} onClick={() => handleDropdownItemClick5(amPm)}>
-//       {amPm}
-//     </DropdownItem>
-//   ));
-// };
+    return items;
+  };
+  // const generateAmPmDropdownItems1 = () => {
+  //   const amPmOptions = ['AM', 'PM'];
+  //   return amPmOptions.map((amPm) => (
+  //     <DropdownItem key={amPm} onClick={() => handleDropdownItemClick5(amPm)}>
+  //       {amPm}
+  //     </DropdownItem>
+  //   ));
+  // };
 
   const topNavClick = (stepItem, push) => {
     push(stepItem.id);
@@ -395,24 +378,21 @@ const generateAmPmDropdownItems1 = () => {
   const onClickNext = (goToNext, steps, step) => {
     step.isDone = true;
     if (steps.length - 1 <= steps.indexOf(step)) {
-      
-      if (step.id === 'step3') {
+      if (step.id === "step3") {
         redirectToSessionLists(); // Redirect to the session list
         return;
       }
     }
-  
 
-    if (step.id === 'step2') {
-     
-      handleNextButtonClick(); 
-    // Call the function to post data when moving to Step 2
+    if (step.id === "step2") {
+      handleNextButtonClick();
+      // Call the function to post data when moving to Step 2
     }
-   
+
     // handleNextButtonClick(); // Call the function to post data when moving to the next step
     handleLicenseNextButtonClick();
     goToNext();
-};
+  };
 
   const onClickPrev = (goToPrev, steps, step) => {
     if (steps.indexOf(step) <= 0) {
@@ -421,125 +401,128 @@ const generateAmPmDropdownItems1 = () => {
     goToPrev();
   };
 
-  
   const selectData = generateDropdownItemsSelect();
-  const minutesSelectData=generateMinuteDropdownItems();
-  const toHoursSelectData=generateDropdownItems1();
-  const toMinutesSelectData=generateMinuteDropdownItems1();
-  const fromAmPmSelectData=generateAmPmDropdownItems();
-  const toAmPmSelectData=generateAmPmDropdownItems1();
-
-
+  const minutesSelectData = generateMinuteDropdownItems();
+  const toHoursSelectData = generateDropdownItems1();
+  const toMinutesSelectData = generateMinuteDropdownItems1();
+  const fromAmPmSelectData = generateAmPmDropdownItems();
+  const toAmPmSelectData = generateAmPmDropdownItems1();
 
   return (
-    <Row >
-      <Colxx  >
-      <Card className='mt-2    '>
-      <CardBody className="wizard wizard-default  " >
-      <Wizard>
-          <TopNavigation
-            className="justify-content-center"
-            disableNav
-            topNavClick={topNavClick}
-          />
-          <Steps>
-            <Step
-              id="step1"
-              // name={messages['wizard.step-name-1']}
-              name="step 1"
-              desc="Schedule appointement"
-            
-            >
-                       <Form className=' '  >
+    <Row>
+      <Colxx>
+        <Card className="mt-2    ">
+          <CardBody className="wizard wizard-default  ">
+            <Wizard>
+              <TopNavigation
+                className="justify-content-center"
+                disableNav
+                topNavClick={topNavClick}
+              />
+              <Steps>
+                <Step
+                  id="step1"
+                  // name={messages['wizard.step-name-1']}
+                  name="step 1"
+                  desc="Schedule appointement"
+                >
+                  <Form className=" ">
+                    <FormGroup className="">
+                      <div className="">
+                        <Label className="text-one font-weight-bold">
+                          Appointment date
+                        </Label>
+                        <InputGroup className="mb-3 ">
+                          <DateRangePicker
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
+                          />
+                        </InputGroup>
+                      </div>
+                    </FormGroup>
 
-       
-                       <FormGroup className=''>  
-                       
-     
-     <div className=''>
-     
-     <Label className='text-one font-weight-bold'>Appointment date</Label>  
-            <InputGroup className="mb-3 ">
-             <DateRangePicker  selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
-            </InputGroup>
-           
-            
+                    <FormGroup>
+                      <div className="">
+                        <div>
+                          <Label className="text-one font-weight-bold">
+                            From
+                          </Label>
+                          <Row>
+                            <Col md={4} sm={12} lg={4}>
+                              <div className="form-group has-float-label">
+                                <Label>Hours</Label>
 
-     </div>
-                       </FormGroup>
-                       
-      <FormGroup>
-      
-      
-      <div className=''>
-      <div>
-       
-       <Label className='text-one font-weight-bold'>From</Label>
-       <Row>
-        <Col md={4} sm={12} lg={4}>
-        <div className="form-group has-float-label">
- 
-          <Label>
-          Hours
-          </Label>
+                                <Select
+                                  components={{ Input: CustomSelectInput }}
+                                  className="react-select"
+                                  classNamePrefix="react-select"
+                                  name="form-field-name"
+                                  value={generateDropdownItemsSelect().find(
+                                    (option) =>
+                                      option.value === selectedHourDropdown
+                                  )}
+                                  onChange={handleDropdownItemClick}
+                                  options={[
+                                    {
+                                      value: "",
+                                      label: "Hours",
+                                      isDisabled: true,
+                                    },
+                                    ...selectData,
+                                  ]}
+                                />
+                              </div>
+                            </Col>
+                            <Col md={4} sm={12} lg={4}>
+                              <div className="form-group has-float-label">
+                                <Label>Minutes</Label>
 
-          <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          value={generateDropdownItemsSelect().find(option => option.value === selectedHourDropdown)}
-          onChange={handleDropdownItemClick}
-          options={[
-            { value: '', label: 'Hours', isDisabled: true }, 
-            ...selectData
-          ]}
-          />
-          </div>
-        </Col>
-        <Col md={4} sm={12} lg={4}>
-        <div className="form-group has-float-label">
- 
-          <Label>
-          Minutes
-          </Label>
+                                <Select
+                                  components={{ Input: CustomSelectInput }}
+                                  className="react-select"
+                                  classNamePrefix="react-select"
+                                  name="form-field-name"
+                                  value={generateMinuteDropdownItems().find(
+                                    (option) => option.value === minutedrop
+                                  )}
+                                  onChange={handleDropdownItemClick1}
+                                  options={[
+                                    {
+                                      value: "",
+                                      label: "Minutes",
+                                      isDisabled: true,
+                                    },
+                                    ...minutesSelectData,
+                                  ]}
+                                />
+                              </div>
+                            </Col>
+                            <Col md={4} sm={12} lg={4}>
+                              <div className="form-group has-float-label">
+                                <Label>AM/PM</Label>
 
-          <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          value={generateMinuteDropdownItems().find(option => option.value === minutedrop)}
-          onChange={handleDropdownItemClick1}
-          options={[
-            { value: '', label: 'Minutes', isDisabled: true }, 
-            ...minutesSelectData
-          ]}
-          />
-          </div>
-        </Col>
-        <Col md={4} sm={12} lg={4}>
-        <div className="form-group has-float-label">
- 
-          <Label>
-           AM/PM
-          </Label>
-
-          <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          // value={selectedfromampm}
-          value={fromAmPmSelectData.find(option => option.value === selectedfromampm)}
-          onChange={handleDropdownItemClick4}
-          options={[
-            { value: '', label: 'AM/PM', isDisabled: true }, 
-            ...fromAmPmSelectData
-          ]}
-          />
-          </div>
-          {/* <Dropdown direction="down"
+                                <Select
+                                  components={{ Input: CustomSelectInput }}
+                                  className="react-select"
+                                  classNamePrefix="react-select"
+                                  name="form-field-name"
+                                  // value={selectedfromampm}
+                                  value={fromAmPmSelectData.find(
+                                    (option) =>
+                                      option.value === selectedfromampm
+                                  )}
+                                  onChange={handleDropdownItemClick4}
+                                  options={[
+                                    {
+                                      value: "",
+                                      label: "AM/PM",
+                                      isDisabled: true,
+                                    },
+                                    ...fromAmPmSelectData,
+                                  ]}
+                                />
+                              </div>
+                              {/* <Dropdown direction="down"
           isOpen={dropdownBasicOpen4}
           toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
           className="mb-5 "
@@ -554,13 +537,10 @@ const generateAmPmDropdownItems1 = () => {
         </DropdownToggle>
               
           </Dropdown> */}
-        </Col>
-        
-       </Row>
-       <div className=''>
-      
-
-        {/* <Dropdown direction="down"
+                            </Col>
+                          </Row>
+                          <div className="">
+                            {/* <Dropdown direction="down"
         isOpen={dropdownBasicOpen}
         toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
         className="mb-5 "
@@ -582,10 +562,7 @@ const generateAmPmDropdownItems1 = () => {
   </DropdownMenu>
 </Dropdown> */}
 
-
-
-
- {/* <Input
+                            {/* <Input
         type="select"
         value={selectedHourDropdown}
         onChange={handleSelectChange}
@@ -597,12 +574,8 @@ const generateAmPmDropdownItems1 = () => {
         </option>
         {generateDropdownItemsSelect()}
       </Input> */}
-     
 
-
-
-      
-{/* <Dropdown direction='down'
+                            {/* <Dropdown direction='down'
             isOpen={dropdownBasicOpen1}
             toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
             className="mb-5 ml-3"
@@ -618,23 +591,20 @@ const generateAmPmDropdownItems1 = () => {
             </DropdownMenu>
           </Dropdown> */}
 
-          {/* form minutes select start */}
+                            {/* form minutes select start */}
 
+                            {/* form minutes select end */}
+                          </div>
+                        </div>
 
-          {/* form minutes select end */}
-
-         
-     
-       </div>
-     </div>
-
-     <div className=''>
-  
-       <Label className='text-one font-weight-bold'>To</Label>
-       <div className=''>
-       <Row>
-        <Col md={4} lg={4} sm={12}>
-        {/* <Dropdown direction="down"
+                        <div className="">
+                          <Label className="text-one font-weight-bold">
+                            To
+                          </Label>
+                          <div className="">
+                            <Row>
+                              <Col md={4} lg={4} sm={12}>
+                                {/* <Dropdown direction="down"
         isOpen={dropdownBasicOpen2}
         toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
         className="mb-5"
@@ -651,50 +621,58 @@ const generateAmPmDropdownItems1 = () => {
         {generateDropdownItems1()}
         </DropdownMenu>
       </Dropdown> */}
-      <div className="form-group has-float-label">
- 
-          <Label>
-          Hours
-          </Label>
+                                <div className="form-group has-float-label">
+                                  <Label>Hours</Label>
 
-          <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          value={generateDropdownItems1().find(option => option.value === selectedHourDropdown1)}
-          onChange={handleDropdownItemClick2}
-          options={[
-            { value: '', label: 'Hours', isDisabled: true }, 
-            ...toHoursSelectData
-          ]}
-          />
-          </div>
-        </Col>
-        <Col md={4} lg={4} sm={12}>
-        <div className="form-group has-float-label">
- 
-          <Label>
-          Minutes
-          </Label>
+                                  <Select
+                                    components={{ Input: CustomSelectInput }}
+                                    className="react-select"
+                                    classNamePrefix="react-select"
+                                    name="form-field-name"
+                                    value={generateDropdownItems1().find(
+                                      (option) =>
+                                        option.value === selectedHourDropdown1
+                                    )}
+                                    onChange={handleDropdownItemClick2}
+                                    options={[
+                                      {
+                                        value: "",
+                                        label: "Hours",
+                                        isDisabled: true,
+                                      },
+                                      ...toHoursSelectData,
+                                    ]}
+                                  />
+                                </div>
+                              </Col>
+                              <Col md={4} lg={4} sm={12}>
+                                <div className="form-group has-float-label">
+                                  <Label>Minutes</Label>
 
-          <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          value={generateMinuteDropdownItems1().find(option => option.value === selectedHourDropdown1)}
-          onChange={handleDropdownItemClick3}
-          options={[
-            { value: '', label: 'Minutes', isDisabled: true }, 
-            ...toMinutesSelectData
-          ]}
-          />
-          </div>
-        </Col>
-        <Col md={4} lg={4} sm={12}>
-         <div>
-         {/* <Dropdown direction="down"
+                                  <Select
+                                    components={{ Input: CustomSelectInput }}
+                                    className="react-select"
+                                    classNamePrefix="react-select"
+                                    name="form-field-name"
+                                    value={generateMinuteDropdownItems1().find(
+                                      (option) =>
+                                        option.value === selectedHourDropdown1
+                                    )}
+                                    onChange={handleDropdownItemClick3}
+                                    options={[
+                                      {
+                                        value: "",
+                                        label: "Minutes",
+                                        isDisabled: true,
+                                      },
+                                      ...toMinutesSelectData,
+                                    ]}
+                                  />
+                                </div>
+                              </Col>
+                              <Col md={4} lg={4} sm={12}>
+                                <div>
+                                  {/* <Dropdown direction="down"
         isOpen={dropdownBasicOpen5}
         toggle={() => setDropdownBasicOpen5(!dropdownBasicOpen5)}
         className="mb-5 "
@@ -709,31 +687,35 @@ const generateAmPmDropdownItems1 = () => {
       </DropdownToggle>
             
         </Dropdown> */}
-        <div className="form-group has-float-label">
- 
-          <Label>
-           AM/PM
-          </Label>
+                                  <div className="form-group has-float-label">
+                                    <Label>AM/PM</Label>
 
-          <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          // value={selectedfromampm}
-          value={toAmPmSelectData.find(option => option.value === selectedfromampm1)}
-          onChange={handleDropdownItemClick5}
-          options={[
-            { value: '', label: 'AM/PM', isDisabled: true }, 
-            ...toAmPmSelectData
-          ]}
-          />
-          </div>
-         </div>
-        </Col>
-       </Row>
-      
-{/* <Dropdown direction='down'
+                                    <Select
+                                      components={{ Input: CustomSelectInput }}
+                                      className="react-select"
+                                      classNamePrefix="react-select"
+                                      name="form-field-name"
+                                      // value={selectedfromampm}
+                                      value={toAmPmSelectData.find(
+                                        (option) =>
+                                          option.value === selectedfromampm1
+                                      )}
+                                      onChange={handleDropdownItemClick5}
+                                      options={[
+                                        {
+                                          value: "",
+                                          label: "AM/PM",
+                                          isDisabled: true,
+                                        },
+                                        ...toAmPmSelectData,
+                                      ]}
+                                    />
+                                  </div>
+                                </div>
+                              </Col>
+                            </Row>
+
+                            {/* <Dropdown direction='down'
             isOpen={dropdownBasicOpen3}
             toggle={() => setDropdownBasicOpen3(!dropdownBasicOpen3)}
             className="mb-5 ml-3"
@@ -748,176 +730,206 @@ const generateAmPmDropdownItems1 = () => {
              {generateMinuteDropdownItems1()}
             </DropdownMenu>
           </Dropdown> */}
-         
-        
-       </div>
-     </div>
-      </div>
-      </FormGroup>
-     
-   
-       <Form>
+                          </div>
+                        </div>
+                      </div>
+                    </FormGroup>
 
-        <FormGroup>
-      <Label className='text-one font-weight-bold'>Call type</Label>
-     <div className='d-flex '>
-       <CustomInput
-         type="radio"
-         id="exCustomRadio"
-         name="customRadio"
-         label="Audio"
-         value={selectedradiobutton}
-         onChange={() => setSelectedRadioButton('Audio')}
-       />
-       <CustomInput
-         type="radio"
-         id="exCustomRadio2"
-         name="customRadio"
-         label="Video"
-         className='ml-3'
-         value={selectedradiobutton}
-         onChange={() => setSelectedRadioButton('Video')}
-       />
-         
-     </div>
-   </FormGroup>
-   </Form>
-     
-    </Form>
-              
-            </Step>
-            <Step
-              id="step2"
-              // name={messages['wizard.step-name-2']}
-              name="step 2"
-              desc="Payment"
-            
-            >
-             
-            
-<Form className=''>
-            {license && (
-                <>
-                    {license.balance ? (
-                        <>
-                            <FormGroup className='w-100'>
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <Label className='text-one'>Session Price</Label>
-                                    <Colxx lg={5} className=''>
-                                        <h3 className=''><span className='font-weight-bold color-theme-1'>₹{license.sessionPrice}</span></h3>
-                                    </Colxx>
-                                </div>
-                            </FormGroup>
-                            <FormGroup className='w-100'>
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <Label className='text-one'>Your Available Balance</Label>
-                                    <Colxx lg={5}>
-                                        <h3 className=''><span className='font-weight-bold color-theme-1'>₹{license.availableBalance}</span></h3>
-                                    </Colxx>
-                                </div>
-                            </FormGroup>
-                            <FormGroup className='w-100'>
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <Label className='text-one'>Balance after deduction</Label>
-                                    <Colxx lg={5}>
-                                        <h3 className=''><span className='font-weight-bold color-theme-1'>₹{license.balanceAfterDeducation}</span></h3>
-                                    </Colxx>
-                                </div>
-                            </FormGroup>
-                        </>
-                    ) : (
-                        <>
-                            <FormGroup className='w-100'>
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <Label className='text-one'>Session Price</Label>
-                                    <Colxx lg={5}>
-                                        <h3><span className='font-weight-bold color-theme-1'>₹{license.sessionPrice}</span></h3>
-                                    </Colxx>
-                                </div>
-                            </FormGroup>
-                            <FormGroup className='w-100'>
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <Label className='text-one'>Your Available Balance</Label>
-                                    <Colxx lg={5}>
-                                        <h3><span className='font-weight-bold color-theme-1'>₹{license.availableBalance}</span></h3>
-                                    </Colxx>
-                                </div>
-                            </FormGroup>
-                            <FormGroup className='w-100'>
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <Label className='text-one'>Do you want to recharge ?</Label>
-                                </div>
-                                <Colxx lg={12}>
-                                    <div className='d-flex'>
-                                        <Button outline color="primary">Yes</Button>
-                                        <Button outline color="primary" className='ml-3'>No</Button>
-                                    </div>
+                    <Form>
+                      <FormGroup>
+                        <Label className="text-one font-weight-bold">
+                          Call type
+                        </Label>
+                        <div className="d-flex ">
+                          <CustomInput
+                            type="radio"
+                            id="exCustomRadio"
+                            name="customRadio"
+                            label="Audio"
+                            value={selectedradiobutton}
+                            onChange={() => setSelectedRadioButton("Audio")}
+                          />
+                          <CustomInput
+                            type="radio"
+                            id="exCustomRadio2"
+                            name="customRadio"
+                            label="Video"
+                            className="ml-3"
+                            value={selectedradiobutton}
+                            onChange={() => setSelectedRadioButton("Video")}
+                          />
+                        </div>
+                      </FormGroup>
+                    </Form>
+                  </Form>
+                </Step>
+                <Step
+                  id="step2"
+                  // name={messages['wizard.step-name-2']}
+                  name="step 2"
+                  desc="Payment"
+                >
+                  <Form className="">
+                    {license && (
+                      <>
+                        {license.balance ? (
+                          <>
+                            <FormGroup className="w-100">
+                              <div className="d-flex justify-content-between align-items-center">
+                                <Label className="text-one">
+                                  Session Price
+                                </Label>
+                                <Colxx lg={5} className="">
+                                  <h3 className="">
+                                    <span className="font-weight-bold color-theme-1">
+                                      ₹{license.sessionPrice}
+                                    </span>
+                                  </h3>
                                 </Colxx>
+                              </div>
                             </FormGroup>
-                        </>
+                            <FormGroup className="w-100">
+                              <div className="d-flex justify-content-between align-items-center">
+                                <Label className="text-one">
+                                  Your Available Balance
+                                </Label>
+                                <Colxx lg={5}>
+                                  <h3 className="">
+                                    <span className="font-weight-bold color-theme-1">
+                                      ₹{license.availableBalance}
+                                    </span>
+                                  </h3>
+                                </Colxx>
+                              </div>
+                            </FormGroup>
+                            <FormGroup className="w-100">
+                              <div className="d-flex justify-content-between align-items-center">
+                                <Label className="text-one">
+                                  Balance after deduction
+                                </Label>
+                                <Colxx lg={5}>
+                                  <h3 className="">
+                                    <span className="font-weight-bold color-theme-1">
+                                      ₹{license.balanceAfterDeducation}
+                                    </span>
+                                  </h3>
+                                </Colxx>
+                              </div>
+                            </FormGroup>
+                          </>
+                        ) : (
+                          <>
+                            <FormGroup className="w-100">
+                              <div className="d-flex justify-content-between align-items-center">
+                                <Label className="text-one">
+                                  Session Price
+                                </Label>
+                                <Colxx lg={5}>
+                                  <h3>
+                                    <span className="font-weight-bold color-theme-1">
+                                      ₹{license.sessionPrice}
+                                    </span>
+                                  </h3>
+                                </Colxx>
+                              </div>
+                            </FormGroup>
+                            <FormGroup className="w-100">
+                              <div className="d-flex justify-content-between align-items-center">
+                                <Label className="text-one">
+                                  Your Available Balance
+                                </Label>
+                                <Colxx lg={5}>
+                                  <h3>
+                                    <span className="font-weight-bold color-theme-1">
+                                      ₹{license.availableBalance}
+                                    </span>
+                                  </h3>
+                                </Colxx>
+                              </div>
+                            </FormGroup>
+                            <FormGroup className="w-100">
+                              <div className="d-flex justify-content-between align-items-center">
+                                <Label className="text-one">
+                                  Do you want to recharge ?
+                                </Label>
+                              </div>
+                              <Colxx lg={12}>
+                                <div className="d-flex">
+                                  <Button
+                                    outline
+                                    color="primary"
+                                    onClick={() =>
+                                      history.push("/app/mywallet")
+                                    }
+                                  >
+                                    Yes
+                                  </Button>
+                                  <Button
+                                    outline
+                                    color="primary"
+                                    className="ml-3"
+                                    onClick={() =>
+                                      history.push("/app/mentor/list")
+                                    }
+                                  >
+                                    No
+                                  </Button>
+                                </div>
+                              </Colxx>
+                            </FormGroup>
+                          </>
+                        )}
+                      </>
                     )}
-                </>
-            )}
-        </Form>
+                  </Form>
+                </Step>
+                <Step
+                  id="step3"
+                  // name={messages['wizard.step-name-3']}
+                  name="step 3"
+                  desc="Finish"
+                >
+                  <div className="text-center ">
+                    <span className="text-xlarge text-primary">
+                      <i className="simple-icon-check" />
+                    </span>
+                    <h3 className=" my-3 py-3 ">
+                      Your appointment is successfull
+                    </h3>
+                    <h2 className=" my-3">Thank you</h2>
 
-              
+                    <div className="text-center my-2">
+                      {/* <Button color='primary' className="btn btn-primary " onClick={handleCloseButtonClick}> */}
+                      <Button
+                        color="primary"
+                        className="btn btn-primary "
+                        onClick={redirectToSessionLists}
+                      >
+                        Close
+                      </Button>
+                    </div>
+                  </div>
+                </Step>
+              </Steps>
 
-             
-              
-            </Step>
-            <Step
-              id="step3"
-              // name={messages['wizard.step-name-3']}
-              name="step 3"
-              desc="Finish"
-              
-            >
-             
-              <div className='text-center ' >
-              <span className='text-xlarge text-primary'><i className='simple-icon-check'/></span>
-              <h3 className=' my-3 py-3 '>Your appointment is successfull</h3>
-              <h2 className=' my-3'>Thank you</h2>
-      
-              <div className='text-center my-2'>
-              {/* <Button color='primary' className="btn btn-primary " onClick={handleCloseButtonClick}> */}
-              <Button color='primary' className="btn btn-primary " onClick={redirectToSessionLists}>
-                   Close
-                  </Button>
-              </div>
-                  
-              </div>
-              
-              
-            </Step>
-         
-           
-            
-           
-          </Steps>
-          
-          <Form className='mt-4'>
-            <FormGroup>
-            <BottomNavigation
-            onClickNext={onClickNext}
-            onClickPrev={onClickPrev}
-            className="justify-content-center"
-            prevLabel="Back"
-            nextLabel="Next"
-            // licenseBalance={license.length > 0 ? license[0].balance : null} 
-            licenseBalance={license && license.balance} 
-           
-          />
-            </FormGroup>
-          </Form>
-         
-        </Wizard>
-        
-      </CardBody>
-    </Card>
-    
+              <Form className="mt-4">
+                <FormGroup>
+                  <BottomNavigation
+                    onClickNext={onClickNext}
+                    onClickPrev={onClickPrev}
+                    className="justify-content-center"
+                    prevLabel="Back"
+                    nextLabel="Next"
+                    // licenseBalance={license.length > 0 ? license[0].balance : null}
+                    licenseBalance={license && license.balance}
+                  />
+                </FormGroup>
+              </Form>
+            </Wizard>
+          </CardBody>
+        </Card>
       </Colxx>
     </Row>
-      );
+  );
 };
 export default injectIntl(PopupWizard);
-

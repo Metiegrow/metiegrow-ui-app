@@ -5,7 +5,7 @@ import Rating from "components/common/Rating";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { Badge, Button, Card, CardBody, CardText, Row } from "reactstrap";
 // import MentorDropDown from '../mentorship/MentorDropDown';
 import "./ThumbnailImage.css";
@@ -51,7 +51,7 @@ const UserCard = () => {
   //   setSearchClicked(false);
   // }
   // const url=`${baseUrl}/user/cards`
-  const history = useHistory();
+  // const history = useHistory();
 
   // Backend url below
   // const url =`${baseUrl}/api/lawyer`
@@ -224,8 +224,10 @@ const UserCard = () => {
                               className="card-img-left bg-primary 
                d-flex align-items-center justify-content-center"
                               style={{
-                                width: "150px",
+                                width: "200px",
+                                // width: "150px",
                                 height: "250px",
+                                // height: "250px",
                                 borderRadius: "0.75rem",
                               }}
                             >
@@ -233,7 +235,9 @@ const UserCard = () => {
                                 rounded
                                 text={users.firstName}
                                 className="text-xlarge border border-1"
-                                style={{ textAlign: "center" }}
+                                style={{
+                                  textAlign: "center",
+                                }}
                               />
                             </div>
                           ) : (
@@ -343,7 +347,7 @@ const UserCard = () => {
                                 ₹{Math.floor(users.price).toLocaleString()}
                               </span>
                             </div>
-                            <Button
+                            {/* <Button
                               color="primary"
                               onClick={() =>
                                 history.push(`/app/lawyerprofile/${users.id}`)
@@ -351,7 +355,16 @@ const UserCard = () => {
                               className="rounded"
                             >
                               View Profile
-                            </Button>
+                            </Button> */}
+                            <a
+                              href={`/app/lawyerprofile/${users.id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button color="primary" className="rounded">
+                                View Profile
+                              </Button>
+                            </a>
                           </div>
                         </CardBody>
                         {/* </div> */}
