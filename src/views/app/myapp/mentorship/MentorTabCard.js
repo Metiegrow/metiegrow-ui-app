@@ -1,37 +1,36 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+import { NavLink, useHistory } from "react-router-dom";
 import {
-  Row,
+  Button,
   Card,
   CardBody,
-  CardTitle,
   CardHeader,
+  CardTitle,
   Nav,
   NavItem,
+  Row,
   TabContent,
   TabPane,
- Button
-} from 'reactstrap';
-import { NavLink, useHistory } from 'react-router-dom';
+} from "reactstrap";
 
-import classnames from 'classnames';
+import classnames from "classnames";
 
-import { Colxx } from 'components/common/CustomBootstrap';
-import { adminRoot } from 'constants/defaultValues';
+import { Colxx } from "components/common/CustomBootstrap";
+import { adminRoot } from "constants/defaultValues";
 
-const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
-  const [activeFirstTab, setActiveFirstTab] = useState('3');
-  const role = localStorage.getItem("roleRes")
-  
+const MentorTabCard = ({ handleConnectClick, chatUserId, price }) => {
+  const [activeFirstTab, setActiveFirstTab] = useState("3");
+  const role = localStorage.getItem("roleRes");
+
   const history = useHistory();
   const handleChatClick = () => {
-    history.push(`${adminRoot}/chat/${chatUserId}`)
-  }
+    history.push(`${adminRoot}/chat/${chatUserId}`);
+  };
   return (
-    <Row  className="mt-4">
+    <Row className="mt-4">
       <Colxx xxs="12">
-    
         <Row>
-          <Colxx xxs="12" xs="12" lg="10">
+          <Colxx xxs="12" xs="12" lg="12">
             <Card className="mb-4 ">
               <CardHeader>
                 <Nav tabs className="card-header-tabs ">
@@ -70,11 +69,11 @@ const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
                       to="#"
                       location={{}}
                       className={classnames({
-                        active: activeFirstTab === '3',
-                        'nav-link': true,
+                        active: activeFirstTab === "3",
+                        "nav-link": true,
                       })}
                       onClick={() => {
-                        setActiveFirstTab('3');
+                        setActiveFirstTab("3");
                       }}
                     >
                       Hourly plan
@@ -141,30 +140,45 @@ const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
                   </Row>
                 </TabPane> */}
                 <TabPane tabId="3">
-                <Row>
+                  <Row>
                     <Colxx sm="12">
                       <CardBody>
                         <CardTitle className="mb-4">
-                          {price && <h2>₹{Math.floor(price).toLocaleString()}</h2>}
+                          {price && (
+                            <h2>₹{Math.floor(price).toLocaleString()}</h2>
+                          )}
                           <h5>Basic package</h5>
-                          <div className='mt-4 '>
-                            <div className=''  >
+                          <div className="mt-4 ">
+                            <div className="">
                               {role.includes("USER") && (
                                 <Row>
-                            <Button onClick={handleConnectClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
-                                <span className='font-weight-semibold  text-one'>Connect</span>
-                              
-                            </Button>
-                            <Button onClick={handleChatClick} outline color="primary" className=" font-weight-semibold mx-2 " size='large'>
-                                <span className='font-weight-semibold  text-one'>Contact</span>
-                              
-                            </Button>
-                            </Row>
-                            )}
+                                  <Button
+                                    onClick={handleConnectClick}
+                                    outline
+                                    color="primary"
+                                    className=" font-weight-semibold mx-2 "
+                                    size="large"
+                                  >
+                                    <span className="font-weight-semibold  text-one">
+                                      Connect
+                                    </span>
+                                  </Button>
+                                  <Button
+                                    onClick={handleChatClick}
+                                    outline
+                                    color="primary"
+                                    className=" font-weight-semibold mx-2 "
+                                    size="large"
+                                  >
+                                    <span className="font-weight-semibold  text-one">
+                                      Contact
+                                    </span>
+                                  </Button>
+                                </Row>
+                              )}
                             </div>
-                            </div>
+                          </div>
                         </CardTitle>
-                       
                       </CardBody>
                     </Colxx>
                   </Row>
@@ -198,7 +212,6 @@ const MentorTabCard = ({ handleConnectClick, chatUserId , price}) => {
               </TabContent>
             </Card>
           </Colxx>
-
         </Row>
       </Colxx>
     </Row>

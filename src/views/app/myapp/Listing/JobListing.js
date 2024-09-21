@@ -137,20 +137,32 @@ const JobListing = ({ isPosted }) => {
     }
   };
 
+  // const handleInterestPersonPage = (item) => {
+  //   setInterestPerson(item);
+  //   setModal(!modal);
+  // };
+
   const handleInterestPersonPage = (item) => {
+    // Set the state with the interested users
     setInterestPerson(item);
     setModal(!modal);
   };
-
   // const handleKeyDown = (event) => {
   //   if (event.key === "Enter" || event.key === " ") {
   //     handleInterestPersonPage();
   //   }
   // };
 
-  const handleUserClick = (userId) => {
-    const lowerCaseRole = userId.role.toLowerCase();
-    history.push(`/app/${lowerCaseRole}profile/${userId.UserId}`);
+  const handleUserClick = (user) => {
+    const lowerCaseRole = user.role.toLowerCase();
+    // history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
+    if (lowerCaseRole === "alumni") {
+      history.push(`/app/alumni/profile/${user.userId}`);
+    } else if (lowerCaseRole === "user") {
+      history.push(`/app/user/profile/${user.userId}`);
+    } else {
+      history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
+    }
   };
 
   const handleShareButtonClick = async (id) => {
@@ -341,6 +353,27 @@ const JobListing = ({ isPosted }) => {
                                 />
                               </svg>
                             </Button>
+                            {/* <Button
+                              outline
+                              color="primary"
+                              className="d-block d-lg-none"
+                              size="xs"
+                              active={data.loggedInUserInterested}
+                              onClick={() =>
+                                handleInterestedButtonClick(
+                                  data.loggedInUserInterested,
+                                  data.id
+                                )
+                              }
+                            >
+                              <i
+                                className={`iconsminds-like ${
+                                  data.loggedInUserInterested
+                                    ? "text-white"
+                                    : "text-primary"
+                                }`}
+                              />
+                            </Button> */}
                             <Button
                               onClick={() =>
                                 handleInterestedButtonClick(
@@ -349,6 +382,7 @@ const JobListing = ({ isPosted }) => {
                                 )
                               }
                               outline
+                              // className="d-none d-lg-block"
                               color="primary"
                               size="xs"
                               active={data.loggedInUserInterested}

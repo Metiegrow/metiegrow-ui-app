@@ -14,11 +14,14 @@ const AlumniLists = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedIndustry, setSelectedIndustry] = useState("");
   const [selectedPrice, setSelectedPrice] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
   const handleSkillsChange = (skills) => setSelectedSkills(skills);
   const handleIndustryChange = (industry) => setSelectedIndustry(industry);
   const handlePriceChange = (price) => setSelectedPrice(price);
+  const handleLocationChange = (location) => setSelectedLocation(location);
+
   const [isMentorCardFetched, setIsMentorCardFetched] = useState(false);
   const [mentordetails, setMentorDetails] = useState([]);
   const [inputkey, setInputKey] = useState("");
@@ -53,6 +56,9 @@ const AlumniLists = () => {
         params.minPrice = selectedPrice.at(0);
         params.maxPrice = selectedPrice.at(1);
       }
+      if (selectedLocation) {
+        params.location = selectedLocation;
+      }
       if (inputkey) {
         params.firstName = inputkey;
       }
@@ -71,7 +77,14 @@ const AlumniLists = () => {
     };
     mentorCardDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedIndustry, selectedSkills, selectedPrice, currentPage, inputkey]);
+  }, [
+    selectedIndustry,
+    selectedSkills,
+    selectedPrice,
+    selectedLocation,
+    currentPage,
+    inputkey,
+  ]);
 
   return (
     <div>
@@ -112,6 +125,8 @@ const AlumniLists = () => {
                 onPriceChange={handlePriceChange}
                 selectedSkills={selectedSkills}
                 selectedIndustry={selectedIndustry}
+                selectedLocation={selectedLocation}
+                onLocationChange={handleLocationChange}
                 userRole="alumni"
               />
             </div>

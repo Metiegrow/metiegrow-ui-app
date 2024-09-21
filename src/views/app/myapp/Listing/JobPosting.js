@@ -19,8 +19,8 @@ import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
-import { EmploymentTypeData, WorkPlaceTypeData } from "./ListingData";
 import ToasterComponent from "../notifications/ToasterComponent";
+import { EmploymentTypeData, WorkPlaceTypeData } from "./ListingData";
 
 const quillModules = {
   toolbar: [
@@ -81,14 +81,22 @@ const validateDescription = (value) => {
 };
 
 const JobPosting = ({ closeModal, initialData, onEdit }) => {
-  const [id] = useState(initialData?.id || 0)
+  const [id] = useState(initialData?.id || 0);
   const [title, setTitle] = useState(initialData?.title || "");
   const [jobTitle, setJobTitle] = useState(initialData?.jobTitle || "");
   const [company, setCompany] = useState(initialData?.company || "");
-  const [workPlaceType, setWorkPlaceType] = useState(initialData?.workPlaceTypeValue || null);
-  const [jobLocation, setJobLocation] = useState(initialData?.jobLocation || "");
-  const [employmentType, setEmploymentType] = useState(initialData?.employmentTypeValue || null);
-  const [description, setDescription] = useState(initialData?.description || "");
+  const [workPlaceType, setWorkPlaceType] = useState(
+    initialData?.workPlaceTypeValue || null
+  );
+  const [jobLocation, setJobLocation] = useState(
+    initialData?.jobLocation || ""
+  );
+  const [employmentType, setEmploymentType] = useState(
+    initialData?.employmentTypeValue || null
+  );
+  const [description, setDescription] = useState(
+    initialData?.description || ""
+  );
   const [skillsTag, setSkillsTag] = useState(initialData?.skills || []);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -116,12 +124,12 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
       if (initialData) {
         await onEdit(data);
       } else {
-       const response = await axios.post(url, data, {
+        const response = await axios.post(url, data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-      ToasterComponent('success', response.data.statuses);
+        ToasterComponent("success", response.data.statuses);
       }
       closeModal();
       setIsLoading(false);
@@ -138,7 +146,6 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
       }
     }
   };
-
 
   const handleTagsChange = (newSkills) => {
     // setSkillError(false);
@@ -187,9 +194,18 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                       <Field
                         className="form-control"
                         name="title"
-                        onChange={(e) => setTitle(e.target.value)}
+                        // onChange={(e) => setTitle(e.target.value)}
+                        onChange={({ target: { value } }) => {
+                          // Allow only letters and numbers
+                          const alphabeticValue = value.replace(
+                            /[^a-zA-Z]/g,
+                            ""
+                          );
+                          setTitle(alphabeticValue);
+                        }}
                         // validate={validateJobTitle}
                         value={title}
+                        required
                       />
                       {errors.title && touched.title && (
                         <div className="invalid-feedback d-block">
@@ -430,7 +446,9 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                       <span className="bounce2" />
                       <span className="bounce3" />
                     </span>
-                    <span className="label">{initialData ? "Submit" : "Post a job"}</span>
+                    <span className="label">
+                      {initialData ? "Submit" : "Post a job"}
+                    </span>
                   </Button>
                 </div>
               </Form>

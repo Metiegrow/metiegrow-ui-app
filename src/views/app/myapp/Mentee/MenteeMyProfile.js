@@ -561,25 +561,27 @@ const MyProfile = () => {
                               <i className="simple-icon-pencil text-primary font-weight-bold" />
                             </Button>}
                           </div> */}
-                          <div
-                            className="position-relative"
-                            style={{
-                              position: "relative",
-                              top: "5px",
-                              textAlign: "end",
-                            }}
-                          >
-                            <Button
-                              color="primary"
-                              outline
-                              className="icon-button  bg-light"
-                              style={{ border: "none" }}
-                              size="sm"
-                              onClick={() => handleImageClick()}
+                          {!uid && (
+                            <div
+                              className="position-relative"
+                              style={{
+                                position: "relative",
+                                top: "5px",
+                                textAlign: "end",
+                              }}
                             >
-                              <i className="simple-icon-pencil" />
-                            </Button>
-                          </div>
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button  bg-light"
+                                style={{ border: "none" }}
+                                size="sm"
+                                onClick={() => handleImageClick()}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                            </div>
+                          )}
 
                           <div
                             className="position-relative"

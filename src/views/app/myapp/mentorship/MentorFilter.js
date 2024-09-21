@@ -538,8 +538,76 @@ const MentorFilter = ({
                       </DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
+                  <Dropdown
+                    isOpen={dropdownBasicOpen4}
+                    toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
+                    className="mb-3  col-lg-auto col-sm-12"
+                  >
+                    <DropdownToggle
+                      size="sm"
+                      className="col-lg-auto col-sm-12"
+                      caret
+                      color="primary"
+                      outline
+                    >
+                      {selectedLocation ? (
+                        country.find((c) => c.iso_code === selectedLocation)
+                          ?.name
+                      ) : (
+                        <span>Location</span>
+                      )}
+                    </DropdownToggle>
 
-                  {userRole !== "alumni" && (
+                    <DropdownMenu>
+                      <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                        <input
+                          type="text"
+                          className="form-control "
+                          placeholder="Search Country"
+                          value={searchText}
+                          onChange={handleSearchChange}
+                        />
+                      </div>
+                      <PerfectScrollbar
+                        style={{ maxHeight: "200px" }}
+                        options={{
+                          suppressScrollX: true,
+                          wheelPropagation: false,
+                        }}
+                      >
+                        {selectedLocation && (
+                          <DropdownItem
+                            onClick={() => handleLocationSelect("")}
+                            className=" d-flex justify-content-between align-items-center"
+                          >
+                            <span>
+                              {
+                                country.find(
+                                  (c) => c.iso_code === selectedLocation
+                                )?.name
+                              }
+                            </span>
+                            <i className="iconsminds-close ml-auto" />
+                          </DropdownItem>
+                        )}
+                        {filteredCountry.length === 0 && (
+                          <Card className="bg-light d-flex justify-content-between align-items-center">
+                            {searchText} was not found
+                          </Card>
+                        )}
+                        {filteredCountry.map((c, index) => (
+                          <DropdownItem
+                            key={index}
+                            onClick={() => handleLocationSelect(c.iso_code)}
+                          >
+                            {c.name}
+                          </DropdownItem>
+                        ))}
+                      </PerfectScrollbar>
+                    </DropdownMenu>
+                  </Dropdown>
+
+                  {/* {userRole !== "alumni" && (
                     <Dropdown
                       isOpen={dropdownBasicOpen4}
                       toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
@@ -559,29 +627,9 @@ const MentorFilter = ({
                           <span>Location</span>
                         )}
                       </DropdownToggle>
-                      {/* <DropdownMenu
-                  style={{
-                    maxHeight: '200px',
-                    overflowY: 'auto'
-                  }}
-                > */}
-                      {/* <DropdownMenu>
-                  <PerfectScrollbar style={{ maxHeight: '200px' }}>
-                    {country.map((c) => (
-                      <DropdownItem key={c.iso_code} onClick={() => handleLocationSelect(c.iso_code)}>
-                        {c.name}
-                      </DropdownItem>
-                    ))}
-                  </PerfectScrollbar>
-                </DropdownMenu> */}
+                      
                       <DropdownMenu>
-                        {/* <input
-                    type="text"
-                    className="form-control mb-2"
-                    placeholder="Search Country"
-                    value={searchText}
-                    onChange={handleSearchChange}
-                  /> */}
+                       
                         <div className="search-sm mr-1 ml-1 mb-1 align-top">
                           <input
                             type="text"
@@ -629,7 +677,7 @@ const MentorFilter = ({
                         </PerfectScrollbar>
                       </DropdownMenu>
                     </Dropdown>
-                  )}
+                  )} */}
                 </>
               )}
             </div>

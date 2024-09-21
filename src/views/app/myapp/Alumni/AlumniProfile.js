@@ -3,12 +3,14 @@ import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Button, Row } from "reactstrap";
+import { useHistory, useParams } from "react-router-dom";
+import { Button, Col, Row } from "reactstrap";
 import ReviewsComponent from "../Reviews/ReviewsComponent";
+import MentorTabCard from "../mentorship/MentorTabCard";
 
 const AlumniProfile = () => {
   const { mid } = useParams();
+  const history = useHistory();
 
   //  To change url to backend please uncomment the below line
   const url1 = `${baseUrl}/api/alumni/${mid}`;
@@ -56,6 +58,17 @@ const AlumniProfile = () => {
     mentorProfile();
   }, []);
 
+  const chatUserId = alumniprofiledetails.username;
+  const handleConnectClick = () => {
+    // Construct the URL with mentor's ID and name as query parameters
+    const mentorId = alumniprofiledetails.id;
+    const mentorName = `${alumniprofiledetails.firstName} ${alumniprofiledetails.lastName}`;
+    const url2 = `/app/calendar?mentorId=${mentorId}&mentorName=${mentorName}`;
+
+    // Navigate to the Month component with the mentor's ID and name as query parameters
+    history.push(url2);
+  };
+
   // useEffect(() => {
   //   if (showAll) {
   //     document.getElementById("skillsSection").scrollIntoView();
@@ -85,10 +98,10 @@ const AlumniProfile = () => {
               backgroundImage: "linear-gradient(to right, #145388 , #922c88)",
               borderTopLeftRadius: "0.75rem",
               borderTopRightRadius: "0.75rem",
-              height: "115px",
+              height: "142px",
             }}
           >
-            <div className="position-absolute d-block">
+            <div>
               {alumniprofiledetails.imageUrl === null ? (
                 <div>
                   <ThumbnailLetters
@@ -130,7 +143,7 @@ const AlumniProfile = () => {
             </div> */}
           </div>
           <div
-            className="col bg-white"
+            className="col bg-white py-2"
             style={{
               borderBottomLeftRadius: "0.75rem",
               borderBottomRightRadius: "0.75rem",
@@ -199,6 +212,23 @@ const AlumniProfile = () => {
           {/* <MentorTabCard  handleConnectClick={handleConnectClick}/> */}
           {/* </div> */}
         </Row>
+        <Row>
+          <Colxx lg={12}>
+            <Row>
+              <Col sm="12" md="12" lg="12" xxs="12">
+                <div>
+                  <MentorTabCard
+                    handleConnectClick={handleConnectClick}
+                    chatUserId={chatUserId}
+                    // price={alumniprofiledetails.price}
+                    price={alumniprofiledetails.experience[0]?.price}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Colxx>
+        </Row>
+
         <Row>
           <Colxx className='sm="12" md="12" lg="12" xxs="12" mt-3'>
             <Row className="bg-white mb-3" style={{ borderRadius: "0.75rem" }}>

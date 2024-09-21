@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import { NotificationManager } from "components/common/react-notifications";
+import { useState } from "react";
+import { connect } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
 import {
-  Row,
+  Button,
   Card,
   CardTitle,
-  // Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
   // ButtonGroup,
   Col,
+  // Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
 } from "reactstrap";
-import { NavLink, useHistory } from "react-router-dom";
-import { connect } from "react-redux";
 import { registerUser } from "redux/actions";
-import { NotificationManager } from "components/common/react-notifications";
 
-import IntlMessages from "helpers/IntlMessages";
-import { AvForm, AvField } from "availity-reactstrap-validation";
+import { AvField, AvForm } from "availity-reactstrap-validation";
 import { Colxx } from "components/common/CustomBootstrap";
+import IntlMessages from "helpers/IntlMessages";
 import { authService } from "services/authservice";
 // import { baseUrl } from 'constants/defaultValues';
 // import axios from 'axios';
@@ -215,7 +215,7 @@ const Register = () => {
       <Colxx xxs="12" md="10" className="mx-auto my-auto">
         <Card className="auth-card">
           <div className="position-relative image-side ">
-            <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
+            <p className="text-white h2">METIEGROW</p>
             {isSubmitted ? (
               <div />
             ) : (

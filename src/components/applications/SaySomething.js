@@ -1,5 +1,5 @@
-import React from 'react';
-import { Input, Button } from 'reactstrap';
+import React from "react";
+import { Button, Input } from "reactstrap";
 
 const SaySomething = ({
   placeholder,
@@ -27,6 +27,7 @@ const SaySomething = ({
           color="primary"
           className="icon-button large ml-1"
           onClick={() => handleSendButtonClick()}
+          disabled={messageInput.trim() === ""}
         >
           <i className="simple-icon-arrow-right" />
         </Button>

@@ -28,7 +28,7 @@ const StayListing = () => {
   const history = useHistory();
 
   const url = `${baseUrl}/api/posts/stay-post/`;
-  const interestedClickUrl = `${baseUrl}/api/posts/stay-post/interested`;
+  const interestedClickUrl = `${baseUrl}/api/posts/stay-post/interest`;
 
   useEffect(() => {
     const fetchDataFromServer = async () => {

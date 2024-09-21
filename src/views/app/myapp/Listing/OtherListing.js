@@ -29,7 +29,7 @@ const JobListing = ({ isPosted }) => {
   const [noData, setNoData] = useState(false);
   console.log("data", noData);
   const url = `${baseUrl}/api/posts/other-post/`;
-  const interestedClickUrl = `${baseUrl}/api/posts/other-post/interested`;
+  const interestedClickUrl = `${baseUrl}/api/posts/other-post/interest`;
 
   const history = useHistory();
 
@@ -231,13 +231,26 @@ const JobListing = ({ isPosted }) => {
                           color="primary"
                           className="d-block d-lg-none"
                           size="xs"
+                          active={data.loggedInUserInterested}
+                          // onClick={() =>
+                          //   handleInterestedButtonClick(data.id, data.title)
+                          // }
                           onClick={() =>
-                            handleInterestedButtonClick(data.id, data.title)
+                            handleInterestedButtonClick(
+                              data.loggedInUserInterested,
+                              data.id
+                            )
                           }
                         >
-                          <i className="iconsminds-like text-primary" />
+                          <i
+                            className={`iconsminds-like ${
+                              data.loggedInUserInterested
+                                ? "text-white"
+                                : "text-primary"
+                            }`}
+                          />
                         </Button>
-                        <Button
+                        {/* <Button
                           outline
                           color="primary"
                           size="xs"
@@ -245,6 +258,21 @@ const JobListing = ({ isPosted }) => {
                           onClick={() =>
                             handleInterestedButtonClick(data.id, data.title)
                           }
+                        >
+                          I&apos;m interested
+                        </Button> */}
+                        <Button
+                          onClick={() =>
+                            handleInterestedButtonClick(
+                              data.loggedInUserInterested,
+                              data.id
+                            )
+                          }
+                          outline
+                          color="primary"
+                          size="xs"
+                          active={data.loggedInUserInterested}
+                          className="d-none d-lg-block "
                         >
                           I&apos;m interested
                         </Button>

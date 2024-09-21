@@ -175,8 +175,20 @@ const TopNav = ({
         </NavLink>
       );
     }
+
+    if (roleRes.includes("ALUMNI")) {
+      return (
+        <NavLink to={`${adminRoot}/calendar/mentor/appointment`}>
+          <DropdownItem onClick={() => handleMySlots()}>
+            <i className="simple-icon-wallet" /> My Slots
+          </DropdownItem>
+        </NavLink>
+      );
+    }
+
     return null;
   };
+
   const renderMyWallet = () => {
     if (roleRes.includes("USER")) {
       return (
