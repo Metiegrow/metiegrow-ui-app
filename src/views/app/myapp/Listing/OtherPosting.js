@@ -45,10 +45,10 @@ const quillFormats = [
 // };
 
 const OtherPosting = ({ closeModal, initialData, onEdit }) => {
-  const [id] = useState(initialData?.id || 0)
-  const [title, setTitle] = useState(initialData?.title || "");
-  const [job, setJob] = useState(initialData?.job || "");
-  const [description, setDescription] = useState(initialData?.description || "");
+  const [id] = useState(initialData?.id || 0);
+  const [title] = useState(initialData?.title || "");
+  const [job] = useState(initialData?.job || "");
+  const [description] = useState(initialData?.description || "");
   const [isLoading, setIsLoading] = useState(false);
   // const [skills, setSkills] = useState([]);
 
@@ -59,42 +59,42 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
   }
   const token = getTokenRes();
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      const data = {
-        id,
-        title,
-        job,
-        description,
-      };
-      if (initialData) {
-        await onEdit(data);
-      } else {
-       const response = await axios.post(url, data, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      ToasterComponent('success', response.data.statuses);
+  // const handleSubmit = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const data = {
+  //       id,
+  //       title,
+  //       job,
+  //       description,
+  //     };
+  //     if (initialData) {
+  //       await onEdit(data);
+  //     } else {
+  //      const response = await axios.post(url, data, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //     ToasterComponent('success', response.data.statuses);
 
-      }
-      setIsLoading(false);
-      closeModal();
-      // console.log("job posted successfully");
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.statuses
-      ) {
-        ToasterComponent("error", error.response.data.statuses);
-      } else {
-        console.error("Error posting", error);
-      }
-      setIsLoading(false);
-    }
-  };
+  //     }
+  //     setIsLoading(false);
+  //     closeModal();
+  //     // console.log("job posted successfully");
+  //   } catch (error) {
+  //     if (
+  //       error.response &&
+  //       error.response.data &&
+  //       error.response.data.statuses
+  //     ) {
+  //       ToasterComponent("error", error.response.data.statuses);
+  //     } else {
+  //       console.error("Error posting", error);
+  //     }
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div>
@@ -103,13 +103,75 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
         <Colxx sm="12" md="12" lg="12" xxs="12" className="mx-auto ">
           <Formik
             initialValues={{
-              title,
-              job,
-              description,
+              // title,
+              title: title || "",
+              // job,
+              job: job || "",
+              // description,
+              description: description || "",
             }}
             // validate={validate}
+            validate={(values) => {
+              const errors = {};
+              if (!values.title.trim()) {
+                errors.title = "Title is required";
+              }
+              if (!values.job.trim()) {
+                errors.job = "Job  is required";
+              }
+
+              if (!values.description.trim()) {
+                errors.description = "Description is required";
+              }
+
+              return errors;
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              setIsLoading(true);
+              try {
+                const data = {
+                  id,
+                  title: values.title,
+                  job: values.job,
+
+                  description: values.description,
+                };
+                if (initialData) {
+                  await onEdit(data);
+                } else {
+                  const response = await axios.post(url, data, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  });
+                  ToasterComponent("success", response.data.statuses);
+                }
+                closeModal();
+                setIsLoading(false);
+              } catch (error) {
+                setIsLoading(false);
+                if (
+                  error.response &&
+                  error.response.data &&
+                  error.response.data.statuses
+                ) {
+                  ToasterComponent("error", error.response.data.statuses);
+                } else {
+                  console.error("Error posting/editing job:", error);
+                }
+              }
+              setSubmitting(false);
+            }}
           >
-            {({ errors, touched }) => (
+            {({
+              errors,
+              touched,
+              isValid,
+              setFieldTouched,
+              handleSubmit,
+              setFieldValue,
+              values,
+            }) => (
               <Form className="av-tooltip tooltip-label-right ">
                 <Row>
                   <Col md={6}>
@@ -118,9 +180,16 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
                       <Field
                         className="form-control"
                         name="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        // onChange={(e) => setTitle(e.target.value)}
                         // validate={validate}
+                        onChange={({ target: { value } }) => {
+                          const alphabeticValue = value.replace(
+                            /[^a-zA-Z ]/g,
+                            ""
+                          );
+                          setFieldValue("title", alphabeticValue);
+                        }}
+                        value={values.title}
                       />
                       {errors.title && touched.title && (
                         <div className="invalid-feedback d-block">
@@ -132,12 +201,21 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
                   </Col>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Job</Label>
+                      <Label>Job*</Label>
                       <Field
                         className="form-control"
                         name="job"
-                        value={job}
-                        onChange={(e) => setJob(e.target.value)}
+                        value={values.job}
+                        // onChange={(e) => setJob(e.target.value)}
+                        // onChange={(e) => setFieldValue("job", e.target.value)}
+                        onChange={({ target: { value } }) => {
+                          const alphabeticValue = value.replace(
+                            /[^a-zA-Z ]/g,
+                            ""
+                          );
+                          setFieldValue("job", alphabeticValue);
+                        }}
+                        required
                         //   validate={}
                       />
                       {/* {errors.company && touched.company && (
@@ -145,6 +223,11 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
                                 {errors.company}
                               </div>
                             )} */}
+                      {errors.job && touched.job && (
+                        <div className="invalid-feedback d-block">
+                          {errors.job}
+                        </div>
+                      )}
                     </FormGroup>
                   </Col>
                 </Row>
@@ -156,11 +239,17 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
                     <Colxx xxs="12">
                       <ReactQuill
                         theme="snow"
-                        value={description}
-                        onChange={(val) => setDescription(val)}
+                        value={values.description}
+                        onChange={(val) => setFieldValue("description", val)}
+                        onBlur={() => setFieldTouched("description", true)}
                         modules={quillModules}
                         formats={quillFormats}
                       />
+                      {errors.description && touched.description && (
+                        <div className="invalid-feedback d-block">
+                          {errors.description}
+                        </div>
+                      )}
                     </Colxx>
                   </Row>
                 </div>
@@ -186,7 +275,7 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
                 >
                   Post
                 </Button> */}
-                  <Button
+                  {/* <Button
                     color="primary"
                     // className="py-2"
                     className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
@@ -203,7 +292,27 @@ const OtherPosting = ({ closeModal, initialData, onEdit }) => {
                       <span className="bounce2" />
                       <span className="bounce3" />
                     </span>
-                    <span className="label">{initialData ? "Submit" : "Post"}</span>
+                    <span className="label">
+                      {initialData ? "Submit" : "Post"}
+                    </span>
+                  </Button> */}
+                  <Button
+                    color="primary"
+                    className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
+                      isLoading ? "show-spinner" : ""
+                    }`}
+                    onClick={handleSubmit}
+                    type="submit"
+                    disabled={!isValid} // Disable the button if the form is invalid
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">
+                      {initialData ? "Submit" : "Post"}
+                    </span>
                   </Button>
                 </div>
               </Form>

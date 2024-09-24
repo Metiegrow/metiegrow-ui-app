@@ -193,12 +193,16 @@ const StayListing = () => {
                     </Row>
 
                     <Row className="mt-2">
-                      <Col className="">
+                      <Col className="text-start text-sm-left" xs={12} sm={6}>
                         <div className="text-muted mt-2">
                           {data.interestedCount} people have shown interest
                         </div>
                       </Col>
-                      <Col className="text-right">
+                      <Col
+                        className="text-sm-right texr-start mt-sm-0 mt-2"
+                        xs={12}
+                        sm={6}
+                      >
                         <Button
                           outline
                           color="primary"

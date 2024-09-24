@@ -43,6 +43,12 @@ const MyQandA = () => {
     MyQuestions();
   }, []);
 
+  function getRoleRes() {
+    return localStorage.getItem("roleRes");
+  }
+
+  const roleRes = getRoleRes();
+
   return (
     <div>
       <Colxx lg="8" className="mx-auto">
@@ -122,66 +128,76 @@ const MyQandA = () => {
         />
         <div className="mt-5" />
         <hr />
-        <Row>
-          <Colxx xxs="12">
-            <div>
-              <div className="mt-4">
-                <div className="d-flex justify-content-between">
-                  <h2 className="font-weight-semibold">Answers</h2>
-                </div>
-                {myanswers?.totalAnswers !== 0 ? (
-                  <h3 className="my-2">
-                    View all
-                    <span className="font-weight-bold px-1">
-                      {myanswers.totalAnswers}
-                    </span>
-                    answers
-                  </h3>
-                ) : (
-                  <></>
-                )}
-              </div>
-              {myanswers &&
-              myanswers.questions &&
-              myanswers.questions.length > 0 ? (
-                myanswers.questions.map((qs) => {
-                  const qdate = new Date(qs.timestamp);
-                  const qsdateformat = `${qdate.getDate()}/${
-                    qdate.getMonth() + 1
-                  }/${qdate.getFullYear()}`;
-                  return (
-                    <Card key={qs.questionId} className="mb-3">
-                      <NavLink
-                        href={`/app/questions/${qs.questionId}`}
-                        className="d-flex justify-content-between"
-                      >
-                        <CardBody>
-                          <div className="d-flex justify-content-between">
-                            <h3>{qs.question}</h3>
-                            <h3>{qsdateformat}</h3>
-                          </div>
-                        </CardBody>
-                      </NavLink>
+        {roleRes &&
+        (roleRes.includes("MENTOR") ||
+          roleRes.includes("ALUMNI") ||
+          roleRes.includes("LAWYER")) ? (
+          <>
+            <Row>
+              <Colxx xxs="12">
+                <div>
+                  <div className="mt-4">
+                    <div className="d-flex justify-content-between">
+                      <h2 className="font-weight-semibold">Answers</h2>
+                    </div>
+
+                    {myanswers?.totalAnswers !== 0 ? (
+                      <h3 className="my-2">
+                        View all
+                        <span className="font-weight-bold px-1">
+                          {myanswers.totalAnswers}
+                        </span>
+                        answers
+                      </h3>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {myanswers &&
+                  myanswers.questions &&
+                  myanswers.questions.length > 0 ? (
+                    myanswers.questions.map((qs) => {
+                      const qdate = new Date(qs.timestamp);
+                      const qsdateformat = `${qdate.getDate()}/${
+                        qdate.getMonth() + 1
+                      }/${qdate.getFullYear()}`;
+                      return (
+                        <Card key={qs.questionId} className="mb-3">
+                          <NavLink
+                            href={`/app/questions/${qs.questionId}`}
+                            className="d-flex justify-content-between"
+                          >
+                            <CardBody>
+                              <div className="d-flex justify-content-between">
+                                <h3>{qs.question}</h3>
+                                <h3>{qsdateformat}</h3>
+                              </div>
+                            </CardBody>
+                          </NavLink>
+                        </Card>
+                      );
+                    })
+                  ) : (
+                    <Card>
+                      <CardBody>
+                        <h3>No answers</h3>
+                      </CardBody>
                     </Card>
-                  );
-                })
-              ) : (
-                <Card>
-                  <CardBody>
-                    <h3>No answers</h3>
-                  </CardBody>
-                </Card>
-              )}
-            </div>
-          </Colxx>
-        </Row>
-        <Pagination
-          currentPage={currentPage1}
-          totalPage={answerPagination.totalPage}
-          onChangePage={(i) => setCurrentPage1(i)}
-          lastIsActive={answerPagination.last}
-          firstIsActive={answerPagination.first}
-        />
+                  )}
+                </div>
+              </Colxx>
+            </Row>
+            <Pagination
+              currentPage={currentPage1}
+              totalPage={answerPagination.totalPage}
+              onChangePage={(i) => setCurrentPage1(i)}
+              lastIsActive={answerPagination.last}
+              firstIsActive={answerPagination.first}
+            />
+          </>
+        ) : (
+          ""
+        )}
       </Colxx>
     </div>
   );

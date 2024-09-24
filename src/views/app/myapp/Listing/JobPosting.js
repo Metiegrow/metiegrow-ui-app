@@ -1,16 +1,7 @@
 import { Colxx } from "components/common/CustomBootstrap";
 import { useState } from "react";
 import ReactQuill from "react-quill";
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  FormGroup,
-  FormText,
-  Label,
-  Row,
-} from "reactstrap";
+import { Button, Card, Col, Form, FormGroup, Label, Row } from "reactstrap";
 
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
@@ -72,32 +63,24 @@ const quillFormats = [
 //   return error;
 //  };
 
-const validateDescription = (value) => {
-  let error;
-  if (!value) {
-    error = "Description is required";
-  }
-  return error;
-};
+// const validateDescription = (value) => {
+//   let error;
+//   if (!value) {
+//     error = "Description is required";
+//   }
+//   return error;
+// };
 
 const JobPosting = ({ closeModal, initialData, onEdit }) => {
   const [id] = useState(initialData?.id || 0);
-  const [title, setTitle] = useState(initialData?.title || "");
-  const [jobTitle, setJobTitle] = useState(initialData?.jobTitle || "");
-  const [company, setCompany] = useState(initialData?.company || "");
-  const [workPlaceType, setWorkPlaceType] = useState(
-    initialData?.workPlaceTypeValue || null
-  );
-  const [jobLocation, setJobLocation] = useState(
-    initialData?.jobLocation || ""
-  );
-  const [employmentType, setEmploymentType] = useState(
-    initialData?.employmentTypeValue || null
-  );
-  const [description, setDescription] = useState(
-    initialData?.description || ""
-  );
-  const [skillsTag, setSkillsTag] = useState(initialData?.skills || []);
+  const [title] = useState(initialData?.title || "");
+  const [jobTitle] = useState(initialData?.jobTitle || "");
+  const [company] = useState(initialData?.company || "");
+  const [workPlaceType] = useState(initialData?.workPlaceTypeValue || null);
+  const [jobLocation] = useState(initialData?.jobLocation || "");
+  const [employmentType] = useState(initialData?.employmentTypeValue || null);
+  const [description] = useState(initialData?.description || "");
+  const [skillsTag] = useState(initialData?.skills || []);
   const [isLoading, setIsLoading] = useState(false);
 
   const url = `${baseUrl}/api/posts/job-post/`;
@@ -107,50 +90,50 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
   }
   const token = getTokenRes();
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      const data = {
-        id,
-        title,
-        jobTitle,
-        company,
-        workPlaceType,
-        jobLocation,
-        employmentType,
-        description,
-        skills: skillsTag,
-      };
-      if (initialData) {
-        await onEdit(data);
-      } else {
-        const response = await axios.post(url, data, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        ToasterComponent("success", response.data.statuses);
-      }
-      closeModal();
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.statuses
-      ) {
-        ToasterComponent("error", error.response.data.statuses);
-      } else {
-        console.error("Error posting/editing job:", error);
-      }
-    }
-  };
+  // const handleSubmit = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const data = {
+  //       id,
+  //       title,
+  //       jobTitle,
+  //       company,
+  //       workPlaceType,
+  //       jobLocation,
+  //       employmentType,
+  //       description,
+  //       skills: skillsTag,
+  //     };
+  //     if (initialData) {
+  //       await onEdit(data);
+  //     } else {
+  //       const response = await axios.post(url, data, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //       ToasterComponent("success", response.data.statuses);
+  //     }
+  //     closeModal();
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     setIsLoading(false);
+  //     if (
+  //       error.response &&
+  //       error.response.data &&
+  //       error.response.data.statuses
+  //     ) {
+  //       ToasterComponent("error", error.response.data.statuses);
+  //     } else {
+  //       console.error("Error posting/editing job:", error);
+  //     }
+  //   }
+  // };
 
-  const handleTagsChange = (newSkills) => {
-    // setSkillError(false);
-    setSkillsTag(newSkills);
-  };
+  // const handleTagsChange = (newSkills) => {
+  //   // setSkillError(false);
+  //   setSkillsTag(newSkills);
+  // };
 
   return (
     <div>
@@ -159,34 +142,90 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
         <Colxx sm="12" md="12" lg="12" xxs="12" className="mx-auto ">
           <Formik
             initialValues={{
-              title: "",
-              jobTitle: "",
-              company: "",
-              workPlaceType: "",
-              jobLocation: "",
-              employmentType: "",
-              description: "",
-              skills: [],
+              title: title || "",
+              jobTitle: jobTitle || "",
+              company: company || "",
+              workPlaceType: workPlaceType || "",
+              jobLocation: jobLocation || "",
+              employmentType: employmentType || "",
+              description: description || "",
+              skills: skillsTag || [],
             }}
-            //  validate={(values) => {
-            //     const errors = {};
-            //     const jobTitleError = validateJobTitle(values.jobTitle);
-            //     if (jobTitleError) {
-            //       errors.jobTitle = jobTitleError;
-            //     }
-            //     const descriptionError = validateDescription(values.description);
-            //     if (descriptionError) {
-            //       errors.description = descriptionError;
-            //     }
-            //     return errors;
-            //  }}
-            //  onSubmit={(values) => {
-            //     handleSubmit(values);
-            //     closeModal();
-            //   }}
+            validate={(values) => {
+              const errors = {};
+              if (!values.title.trim()) {
+                errors.title = "Title is required";
+              }
+              if (!values.jobTitle.trim()) {
+                errors.jobTitle = "Job title is required";
+              }
+
+              if (!values.jobLocation.trim()) {
+                errors.jobLocation = "Job location is required";
+              }
+              if (!values.company.trim()) {
+                errors.company = "Company is required";
+              }
+
+              if (!values.description.trim()) {
+                errors.description = "Description is required";
+              }
+              if (values.skills.length === 0) {
+                errors.skills = "At least one skill is required";
+              }
+              return errors;
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              setIsLoading(true);
+              try {
+                const data = {
+                  id,
+                  title: values.title,
+                  jobTitle: values.jobTitle,
+                  company: values.company,
+                  workPlaceType: values.workPlaceType,
+                  jobLocation: values.jobLocation,
+                  employmentType: values.employmentType,
+                  description: values.description,
+                  skills: values.skills,
+                };
+                if (initialData) {
+                  await onEdit(data);
+                } else {
+                  const response = await axios.post(url, data, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  });
+                  ToasterComponent("success", response.data.statuses);
+                }
+                closeModal();
+                setIsLoading(false);
+              } catch (error) {
+                setIsLoading(false);
+                if (
+                  error.response &&
+                  error.response.data &&
+                  error.response.data.statuses
+                ) {
+                  ToasterComponent("error", error.response.data.statuses);
+                } else {
+                  console.error("Error posting/editing job:", error);
+                }
+              }
+              setSubmitting(false);
+            }}
           >
-            {({ isValid, errors, touched }) => (
-              <Form className="av-tooltip tooltip-label-right ">
+            {({
+              isValid,
+              errors,
+              touched,
+              setFieldValue,
+              handleSubmit,
+              setFieldTouched,
+              values,
+            }) => (
+              <Form className="av-tooltip tooltip-label-right">
                 <Row>
                   <Col md={12}>
                     <FormGroup className="error-l-75">
@@ -194,17 +233,14 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                       <Field
                         className="form-control"
                         name="title"
-                        // onChange={(e) => setTitle(e.target.value)}
                         onChange={({ target: { value } }) => {
-                          // Allow only letters and numbers
                           const alphabeticValue = value.replace(
-                            /[^a-zA-Z]/g,
+                            /[^a-zA-Z ]/g,
                             ""
                           );
-                          setTitle(alphabeticValue);
+                          setFieldValue("title", alphabeticValue);
                         }}
-                        // validate={validateJobTitle}
-                        value={title}
+                        value={values.title}
                         required
                       />
                       {errors.title && touched.title && (
@@ -215,16 +251,19 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                     </FormGroup>
                   </Col>
                 </Row>
+
                 <Row>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Job title*</Label>
+                      <Label>Job Title*</Label>
                       <Field
                         className="form-control"
                         name="jobTitle"
-                        onChange={(e) => setJobTitle(e.target.value)}
-                        // validate={validateJobTitle}
-                        value={jobTitle}
+                        onChange={(e) =>
+                          setFieldValue("jobTitle", e.target.value)
+                        }
+                        value={values.jobTitle}
+                        required
                       />
                       {errors.jobTitle && touched.jobTitle && (
                         <div className="invalid-feedback d-block">
@@ -235,19 +274,21 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                   </Col>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Company</Label>
+                      <Label>Company*</Label>
                       <Field
                         className="form-control"
                         name="company"
-                        onChange={(e) => setCompany(e.target.value)}
-                        //   validate={}
-                        value={company}
+                        onChange={(e) =>
+                          setFieldValue("company", e.target.value)
+                        }
+                        value={values.company}
+                        required
                       />
-                      {/* {errors.company && touched.company && (
-                              <div className="invalid-feedback d-block">
-                                {errors.company}
-                              </div>
-                            )} */}
+                      {errors.company && touched.company && (
+                        <div className="invalid-feedback d-block">
+                          {errors.company}
+                        </div>
+                      )}
                     </FormGroup>
                   </Col>
                 </Row>
@@ -255,191 +296,123 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                 <Row>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Workplace type</Label>
+                      <Label>Workplace Type</Label>
                       <Field
                         as="select"
                         name="workPlaceType"
-                        onChange={(e) => setWorkPlaceType(e.target.value)}
-                        //   validate={}
+                        onChange={(e) =>
+                          setFieldValue("workPlaceType", e.target.value)
+                        }
                         className="form-control"
-                        value={workPlaceType || ""}
+                        value={values.workPlaceType}
                       >
-                        <option key="" value="" disabled>
-                          Select Work place Type
+                        <option value="" disabled>
+                          Select Workplace Type
                         </option>
-                        {WorkPlaceTypeData.map((option, index) => (
-                          // eslint-disable-next-line react/no-array-index-key
-                          <option key={index} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
+                        {WorkPlaceTypeData &&
+                          WorkPlaceTypeData.map((option) => (
+                            <option key={option} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
                       </Field>
                       {/* {errors.workPlaceType && touched.workPlaceType && (
-                          <div className="invalid-feedback d-block">
-                            {errors.workPlaceType}
-                          </div>
-                        )} */}
+                        <div className="invalid-feedback d-block">
+                          {errors.workPlaceType}
+                        </div>
+                      )} */}
                     </FormGroup>
                   </Col>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Job location</Label>
+                      <Label>Job Location*</Label>
                       <Field
                         className="form-control"
                         name="jobLocation"
-                        onChange={(e) => setJobLocation(e.target.value)}
-                        //   validate={}
-                        value={jobLocation}
+                        onChange={(e) =>
+                          setFieldValue("jobLocation", e.target.value)
+                        }
+                        value={values.jobLocation}
+                        required
                       />
-                      {/* {errors.jobLocation && touched.jobLocation && (
-                              <div className="invalid-feedback d-block">
-                                {errors.jobLocation}
-                              </div>
-                            )} */}
+                      {errors.jobLocation && touched.jobLocation && (
+                        <div className="invalid-feedback d-block">
+                          {errors.jobLocation}
+                        </div>
+                      )}
                     </FormGroup>
                   </Col>
                 </Row>
+
                 <FormGroup className="error-l-75">
-                  <Label>Employment type</Label>
+                  <Label>Employment Type</Label>
                   <Field
                     as="select"
                     name="employmentType"
-                    onChange={(e) => setEmploymentType(e.target.value)}
-                    //   validate={}
+                    onChange={(e) =>
+                      setFieldValue("employmentType", e.target.value)
+                    }
                     className="form-control"
-                    value={employmentType || ""}
+                    value={values.employmentType}
                   >
-                    <option key="" value="" disabled>
-                      Select Employment type
+                    <option value="" disabled>
+                      Select Employment Type
                     </option>
-                    {EmploymentTypeData.map((option, index) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <option key={index} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
+                    {EmploymentTypeData &&
+                      EmploymentTypeData.map((option) => (
+                        <option key={option} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                   </Field>
                   {/* {errors.employmentType && touched.employmentType && (
-                          <div className="invalid-feedback d-block">
-                            {errors.employmentType}
-                          </div>
-                        )} */}
+                    <div className="invalid-feedback d-block">
+                      {errors.employmentType}
+                    </div>
+                  )} */}
                 </FormGroup>
-                <div className="mt-4">
-                  <h6 className="font-weight-semibold">Add a description*</h6>
-                  {/* <p className='text-muted'>Include all the information would need to answer your question</p> */}
-                  <Row className="mb-4">
-                    <Colxx xxs="12">
-                      <ReactQuill
-                        theme="snow"
-                        value={description}
-                        onChange={(val) => setDescription(val)}
-                        modules={quillModules}
-                        formats={quillFormats}
-                        validate={validateDescription}
-                      />
-                      {errors.description && touched.description && (
-                        <div className="invalid-feedback d-block">
-                          {errors.description}
-                        </div>
-                      )}
-                    </Colxx>
-                  </Row>
-                </div>
-                {/* <div className="mt-2">
-                <h6 className="font-weight-semibold">Add Skills</h6>
-                
-                <input
-                  type="text"
-                  className="form-control shadow-none border-none  text-one font-weight-medium my-3"
-                  placeholder=""
-                  //   value={inputkey1}
-                  onChange={(e) => setSkills(e.target.value)}
-                />
-              </div> */}
-                {/* <FormGroup>
-                <Label for="skills">Skills</Label>
-                <Field
-                  type="text"
-                  name="skills"
-                  id="skills"
-                  className="form-control"
-                  placeholder="Enter skills (comma-separated)"
-                  // validate={validateSkills}
-                  value={skills}
-                  onChange={(e) => {
-                    const skillArray = e.target.value
-                      .split(",")
-                      .map((skill) => skill.trim());
-                    setSkills("skills", skillArray);
-                  }}
-                />
-                
-              </FormGroup> */}
-                <FormGroup>
-                  <Label for="skills">Skills</Label>
-                  {/* <Field
-                      type="text"
-                      name="skills"
-                      id="skills"
-                      className="form-control"
-                      placeholder="Enter your skills (comma-separated)"
-                      validate={validateSkills}
-                      onChange={(e) => {
-                        const skillArray = e.target.value
-                          .split(",")
-                          .map((skill) => skill.trim());
-                        setFieldValue("skills", skillArray);
-                      }}
-                      autoComplete="off"
-                    /> */}
 
+                <FormGroup className="error-l-75">
+                  <Label>Description*</Label>
+                  <ReactQuill
+                    theme="snow"
+                    value={values.description}
+                    onChange={(val) => setFieldValue("description", val)}
+                    onBlur={() => setFieldTouched("description", true)}
+                    modules={quillModules}
+                    formats={quillFormats}
+                  />
+                  {errors.description && touched.description && (
+                    <div className="invalid-feedback d-block">
+                      {errors.description}
+                    </div>
+                  )}
+                </FormGroup>
+
+                <FormGroup className="error-l-75">
+                  <Label>Skills*</Label>
                   <TagsInput
-                    value={skillsTag}
-                    onChange={handleTagsChange}
-                    inputProps={{ placeholder: "Add skills " }}
+                    value={values.skills}
+                    onChange={(tags) => setFieldValue("skills", tags)}
                     addOnBlur
                     addKeys={[13, 188]}
                   />
-                  {/* <TagsInput
-                    value={skillsTag}
-                    onChange={handleTagsChange}
-                    renderInput={({ addTag, ...inputProps }) => {
-                      const { onChange, value, ...other } = inputProps;
-                      return (
-                        <input
-                          {...other}
-                          value={inputValue}
-                          onChange={(e) => handleChangeInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              handleAddTag();
-                              e.preventDefault();
-                            }
-                          }}
-                          placeholder="Add skills"
-                        />
-                      );
-                    }}
-                  /> */}
-                  {/* {skillError && (
-                      <div className="invalid-feedback d-block">
-                        {skillErrorMessage}
-                      </div>
-                    )} */}
-                  <FormText>Add skill and press Enter or comma </FormText>
+                  {errors.skills && touched.skills && (
+                    <div className="invalid-feedback d-block">
+                      {errors.skills}
+                    </div>
+                  )}
                 </FormGroup>
+
                 <div className="mt-3 d-flex justify-content-end">
                   <Button
-                    color="primary "
+                    color="primary"
                     className={`col-12 col-md-3 btn-shadow btn-multiple-state ${
                       isLoading ? "show-spinner" : ""
                     }`}
-                    onClick={() => {
-                      handleSubmit();
-                    }}
-                    // type="submit"
-                    disabled={!isValid}
+                    onClick={handleSubmit}
+                    type="submit"
+                    disabled={!isValid} // Disable the button if the form is invalid
                   >
                     <span className="spinner d-inline-block">
                       <span className="bounce1" />

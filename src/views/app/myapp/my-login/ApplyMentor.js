@@ -416,6 +416,25 @@ const ApplyMentor = () => {
                   setSubmitting(false);
                 }
               }}
+              // onSubmit={async (values, { setSubmitting }) => {
+              //   try {
+              //     if (validateFile(file1)) {
+              //       const response = await postDataAbout({
+              //         ...values,
+              //         language: languages,
+              //       });
+              //       if (response.status === 200) {
+              //         // Move to the next step
+              //         setCurrentStep(1);
+              //       }
+              //     }
+              //   } catch (error) {
+              //     // Handle error case if the request fails
+              //     console.error("Error submitting form:", error);
+              //   } finally {
+              //     setSubmitting(false);
+              //   }
+              // }}
             >
               {({ errors, touched }) => (
                 <Form className="av-tooltip tooltip-label-right ">

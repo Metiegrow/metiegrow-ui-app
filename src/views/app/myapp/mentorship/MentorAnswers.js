@@ -536,7 +536,7 @@ const MentorAnswers = () => {
                   ) : (
                     <p>{an.answered}</p>
                   )}
-                  <p>Answered {an.answeredYear} years ago</p>
+                  {/* <p>Answered {an.answeredYear} years ago</p> */}
 
                   <hr />
                   <div className="d-flex justify-content-between">

@@ -27,6 +27,7 @@ const JobListing = ({ isPosted }) => {
   // const [copied, setCopied] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   const [noData, setNoData] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   console.log("data", noData);
   const url = `${baseUrl}/api/posts/other-post/`;
   const interestedClickUrl = `${baseUrl}/api/posts/other-post/interest`;
@@ -184,11 +185,12 @@ const JobListing = ({ isPosted }) => {
 
                     <Row className="align-items-center">
                       <Col className="">
-                        {data.interestedCount && (
+                        {/* {data.interestedCount && (
                           <div className="text-muted mt-2">
                             {data.interestedCount} people have shown interest
                           </div>
-                        )}
+                        )} */}
+                        {data.interestedCount} people have shown interest
                       </Col>
                       <Col className="text-md-right mt-2 mt-md-0 d-flex justify-content-end">
                         <Button
@@ -241,10 +243,17 @@ const JobListing = ({ isPosted }) => {
                               data.id
                             )
                           }
+                          onMouseEnter={() => setIsHovered(true)}
+                          onMouseLeave={() => setIsHovered(false)}
                         >
                           <i
+                            // className={`iconsminds-like ${
+                            //   data.loggedInUserInterested
+                            //     ? "text-white"
+                            //     : "text-primary"
+                            // }`}
                             className={`iconsminds-like ${
-                              data.loggedInUserInterested
+                              data.loggedInUserInterested || isHovered
                                 ? "text-white"
                                 : "text-primary"
                             }`}
