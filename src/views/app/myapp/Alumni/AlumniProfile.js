@@ -217,12 +217,14 @@ const AlumniProfile = () => {
             <Row>
               <Col sm="12" md="12" lg="12" xxs="12">
                 <div>
-                  <MentorTabCard
-                    handleConnectClick={handleConnectClick}
-                    chatUserId={chatUserId}
-                    // price={alumniprofiledetails.price}
-                    price={alumniprofiledetails.experience[0]?.price}
-                  />
+                  {alumniprofiledetails.experience?.length > 0 &&
+                    alumniprofiledetails.experience[0]?.price && (
+                      <MentorTabCard
+                        handleConnectClick={handleConnectClick}
+                        chatUserId={chatUserId}
+                        price={alumniprofiledetails.experience[0]?.price}
+                      />
+                    )}
                 </div>
               </Col>
             </Row>

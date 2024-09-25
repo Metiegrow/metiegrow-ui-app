@@ -273,7 +273,7 @@ const MentorCard = () => {
                                 className="card-img-left bg-primary 
                  d-flex align-items-center justify-content-center"
                                 style={{
-                                  width: "150px",
+                                  width: "200px",
                                   height: "250px",
                                   borderRadius: "0.75rem",
                                 }}

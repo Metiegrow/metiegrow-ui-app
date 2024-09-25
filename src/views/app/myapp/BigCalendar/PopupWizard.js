@@ -162,6 +162,48 @@ const PopupWizard = ({ selectedDate, setSelectedDate, mentorId }) => {
       });
   };
 
+  // This function is used to check the available slot is same as the input given by the user
+  const handleCheckAvailability = () => {
+    // Convert selected date to UTC timestamp
+    const selectedDateTime = new Date(selectedDate);
+
+    // Set the hours and minutes for the selected date
+    const selectedHour =
+      (selectedHourDropdown % 12) + (selectedfromampm === "PM" ? 12 : 0); // Adjust for PM
+    selectedDateTime.setHours(selectedHour, minutedrop, 0, 0);
+    const fromTimeStamp = selectedDateTime.getTime(); // Get the UTC timestamp for 'from' time
+
+    // Calculate 'to' time
+    const toDateTime = new Date(selectedDateTime); // Create a new Date object based on 'from' time
+    const selectedHourTo =
+      (selectedHourDropdown1 % 12) + (selectedfromampm1 === "PM" ? 12 : 0); // Adjust for PM
+    toDateTime.setHours(selectedHourTo, minutedrop1, 0, 0); // Set the 'to' hour
+    const toTimeStamp = toDateTime.getTime(); // Get the UTC timestamp for 'to' time
+
+    console.log("From Timestamp (milliseconds):", fromTimeStamp);
+    console.log("To Timestamp (milliseconds):", toTimeStamp);
+
+    const availabilityUrl = `${baseUrl}/api/calendar/appointment/booking/availability?userId=${mentorId}&fromTimeStamp=${fromTimeStamp}&toTimeStamp=${toTimeStamp}`;
+
+    return axios
+      .get(availabilityUrl)
+      .then((response) => {
+        // Handle successful response
+        console.log("Availability check successful:", response.data);
+        // alert("Availability data fetched successfully"); // Use alert instead of Toaster
+        return response; // Return the response for further processing if needed
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error checking availability:", error);
+        if (error.response) {
+          alert(error.response.data.statuses || "Error fetching availability"); // Use alert for error messages
+        } else {
+          alert("An unexpected error occurred. Please try again."); // Handle unexpected errors
+        }
+      });
+  };
+
   const handleDropdownItemClick = (selectedHour) => {
     // Handle the selected hour as needed
     setSelectedHourDropdown(selectedHour.value);
@@ -377,6 +419,29 @@ const PopupWizard = ({ selectedDate, setSelectedDate, mentorId }) => {
   // };
   const onClickNext = (goToNext, steps, step) => {
     step.isDone = true;
+
+    // new code start
+
+    // If the current step is Step 1, handle availability check
+    if (step.id === "step1") {
+      handleCheckAvailability().then((response) => {
+        // Log the response to ensure it's correct
+        console.log("Response from availability check:", response);
+
+        if (response && response.data && response.data.status) {
+          // If the status is true, allow to go to the next step
+          handleLicenseNextButtonClick();
+          goToNext();
+        } else {
+          // If the status is false, show an error and do not proceed
+          // alert("There is no such slot");
+          ToasterComponent("error", [{ message: "Slot is unavailable" }]);
+        }
+      });
+      return; // Prevent further execution until the availability check is done
+    }
+
+    // new code ends
     if (steps.length - 1 <= steps.indexOf(step)) {
       if (step.id === "step3") {
         redirectToSessionLists(); // Redirect to the session list

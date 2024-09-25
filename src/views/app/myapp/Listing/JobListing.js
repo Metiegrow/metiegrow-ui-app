@@ -260,7 +260,7 @@ const JobListing = ({ isPosted }) => {
                             )}
                           </CardSubtitle>
                         )}
-                        <Row>
+                        {/* <Row>
                           <Col>
                             <i className="iconsminds-office text-primary" />{" "}
                             {data.company}
@@ -281,7 +281,30 @@ const JobListing = ({ isPosted }) => {
                             <i className="simple-icon-briefcase text-primary" />{" "}
                             {data.employmentType}
                           </Col>
+                        </Row> */}
+                        <Row>
+                          <Col xs={12} sm={6} md={4} lg={2}>
+                            <i className="iconsminds-office text-primary" />{" "}
+                            {data.company}
+                          </Col>
+                          <Col xs={12} sm={6} md={4} lg={3}>
+                            <i className="iconsminds-engineering text-primary" />{" "}
+                            {data.jobTitle}
+                          </Col>
+                          <Col xs={12} sm={6} md={4} lg={2}>
+                            <i className="simple-icon-location-pin text-primary" />{" "}
+                            {data.jobLocation}
+                          </Col>
+                          <Col xs={12} sm={6} md={4} lg={2}>
+                            <i className="iconsminds-building text-primary" />{" "}
+                            {data.workPlaceType}
+                          </Col>
+                          <Col xs={12} sm={6} md={4} lg={2}>
+                            <i className="simple-icon-briefcase text-primary" />{" "}
+                            {data.employmentType}
+                          </Col>
                         </Row>
+
                         <Row className="mt-3">
                           <Col>
                             {data.skills?.map((skill) => (
@@ -297,7 +320,11 @@ const JobListing = ({ isPosted }) => {
                           </Col>
                         </Row>
                         <Row className="">
-                          <Col className="">
+                          <Col
+                            className="text-start text-sm-left"
+                            xs={12}
+                            sm={6}
+                          >
                             <div
                               role="button"
                               tabIndex={0}
@@ -317,7 +344,11 @@ const JobListing = ({ isPosted }) => {
                               {data.interestedCount} people have shown interest
                             </div>
                           </Col>
-                          <Col className="text-right">
+                          <Col
+                            className="text-sm-right text-start mt-sm-0 mt-2"
+                            xs={12}
+                            sm={6}
+                          >
                             <Button
                               outline
                               color="primary"
