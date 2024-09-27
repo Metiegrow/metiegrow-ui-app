@@ -44,6 +44,7 @@ const LawyerMyProfile = () => {
   const [bio, setBio] = useState("");
   const [star, setStar] = useState("");
   const [about, setAbout] = useState("");
+  const [packages, setPackages] = useState([]);
   // const [profileLoading, setProfileLoading] = useState(true);
   const [setProfileLoading] = useState(true);
   const [topicValidationMessage, setTopicValidationMessage] = useState("");
@@ -54,11 +55,22 @@ const LawyerMyProfile = () => {
   const [selectedFileBase64, setSelectedFileBase64] = useState(null);
   const [isEditingLanguages, setIsEditingLanguages] = useState(false);
   const [isEditingTopics, setIsEditingTopics] = useState(false);
+  const [isEditingPackages, setIsEditingPackages] = useState(false);
+  const [isAddPackage, setIsAddPackage] = useState(false);
+  const [pid, setPid] = useState(null);
+  const [editPackage, setEditPackage] = useState({
+    serviceName: "",
+    description: "",
+    amount: "",
+  });
+
+  const [newPackage, setNewPackage] = useState([]);
 
   const token = localStorage.getItem("tokenRes");
 
   const endUrl = `${baseUrl}/api/lawyer/myprofile`;
   const imageEditUrl = `${baseUrl}/api/lawyer/profile-image`;
+  const packageURL = `${baseUrl}/api/lawyer/${pid}/package`;
 
   const mentorProfileDetails = async () => {
     try {
@@ -74,6 +86,9 @@ const LawyerMyProfile = () => {
         setBio(userData.bio);
         setRatings(userData.ratings);
         // setTopic(topicData);
+        // Store the id from the response
+        setPid(userData.id);
+
         setTopic(userData.topic.map((t) => t.topicName));
         setStar(userData.star);
         setAbout(userData.about);
@@ -84,9 +99,30 @@ const LawyerMyProfile = () => {
     }
   };
 
+  const LawyerPackage = async () => {
+    console.log(pid);
+    try {
+      const response = await axios.get(packageURL);
+      const fetchedPackages = response.data;
+      setPackages(fetchedPackages);
+
+      // if (fetchedPackages.length > 0) {
+      //   setActiveFirstTab(fetchedPackages[0].id);
+      // }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     mentorProfileDetails();
   }, [isPosted]);
+
+  useEffect(() => {
+    if (pid) {
+      LawyerPackage();
+    }
+  }, [pid]);
 
   const postImageData = async () => {
     try {
@@ -297,6 +333,94 @@ const LawyerMyProfile = () => {
     // console.log("arraychk", languagesArray);
     handleAddLanguages(languagesArray[0]);
     setSelectedLanguages([]);
+  };
+  const handlePackageEditClick = (pack) => {
+    setEditPackage(pack); // Set the selected package details for editing
+    setIsEditingPackages(true); // Open the modal
+  };
+  // const handleAddPackageEditClick = () => {
+  //   setIsAddPackage(true);
+  // };
+  const [currentPackage, setCurrentPackage] = useState({
+    serviceName: "",
+    amount: "",
+    description: "",
+    headline: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentPackage((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handlePackageSave = async () => {
+    try {
+      // Add the current package to the newPackage array
+      setNewPackage((prevPackages) => [...prevPackages, currentPackage]);
+
+      const response = await axios.post(
+        `${baseUrl}/api/lawyer/package`,
+        [...newPackage, currentPackage] // Send the array including the new package
+      );
+
+      response.data.statuses.forEach((status) => {
+        NotificationManager.success(
+          status.message, // Use the status message from the response
+          "Package Added Successfully", // Title for the notification
+          3000 // Duration of the toaster
+        );
+      });
+      // Optionally, refresh the package list or update the state here
+      LawyerPackage();
+      setIsAddPackage(false); // Close the modal
+
+      // Reset the current package fields after saving
+      setCurrentPackage({
+        serviceName: "",
+        amount: "",
+        description: "",
+        headline: "",
+      });
+    } catch (error) {
+      NotificationManager.error(
+        "Error adding package", // Message for the error
+        "Error", // Title for the error notification
+        3000 // Duration of the toaster
+      );
+      console.error("Error saving package:", error);
+    }
+  };
+
+  const handleSavePackage = async () => {
+    try {
+      const updateURL = `${baseUrl}/api/lawyer/package/mypackage/${editPackage.id}`;
+      const response = await axios.put(updateURL, editPackage); // Assuming a PUT request to update the package
+      response.data.statuses.forEach((status) => {
+        NotificationManager.success(
+          status.message, // Use the status message from the response
+          "Package Updated Successfully", // Title for the notification
+          3000 // Duration of the toaster
+        );
+      });
+      LawyerPackage(); // Refresh the packages list
+      setIsEditingPackages(false); // Close the modal
+    } catch (error) {
+      NotificationManager.error(
+        "Error updating package", // Message for the error
+        "Error", // Title for the error notification
+        3000 // Duration of the toaster
+      );
+      console.error("Error updating package:", error);
+    }
+  };
+  const handlePackageCancelEdit = () => {
+    setIsEditingPackages(false); // Close the modal without saving
+  };
+  const handleAddPackageCancel = () => {
+    setIsAddPackage(false);
   };
 
   return (
@@ -924,6 +1048,249 @@ const LawyerMyProfile = () => {
           </Col>
         </Row>
         {/* topic section ends */}
+
+        {/* package section starts  */}
+        <Row className="my-4">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row>
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">Packages</h2>
+                  </Col>
+                </Row>
+
+                <Row>
+                  {packages &&
+                    packages.map((pack) => (
+                      <Col lg={6} key={pack.id} className="my-2">
+                        <Card className="pt-2 pb-2 d-flex">
+                          <CardBody className="pt-2 pb-2">
+                            <div className="price-top-part d-flex justify-content-between align-items-center">
+                              <div>
+                                <i className="" />
+                                <h2 className="mb-0 font-weight-semibold text-primary text-large mb-4">
+                                  {pack.serviceName}
+                                </h2>
+                                {/* <p className=''>{pack.headline}</p> */}
+                                <p className="text-large mb-2 text-default">
+                                  ₹{Math.floor(pack.amount).toLocaleString()}
+                                </p>
+                                <p className="text-muted text-small">
+                                  {pack.description}
+                                </p>
+                              </div>
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button text-end ml-5"
+                                size="sm"
+                                onClick={() => handlePackageEditClick(pack)}
+                                style={{ border: "none" }}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                            </div>
+                          </CardBody>
+                        </Card>
+                      </Col>
+                    ))}
+                </Row>
+                <Row>
+                  <Col lg={12}>
+                    <Card
+                      onClick={() => setIsAddPackage(true)}
+                      className="p-3 text-center my-5"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <h3 className="font-weight-bold text-primary">
+                        + Add more packages
+                      </h3>
+                    </Card>
+                    {/* Modal for adding new package */}
+                    <Modal
+                      isOpen={isAddPackage}
+                      toggle={() => setIsAddPackage(!isAddPackage)}
+                      className=""
+                      size="lg"
+                      style={{ borderRadius: "10px", overflow: "hidden" }}
+                    >
+                      <ModalHeader>
+                        <h2 className="font-weight-bold">Add New Package</h2>
+                      </ModalHeader>
+                      <ModalBody>
+                        <div className="mt-3">
+                          <Row className="my-4">
+                            <Col md="6">
+                              <Label for="serviceName">
+                                <h4>Service Name</h4>
+                              </Label>
+                              <Input
+                                type="text"
+                                name="serviceName"
+                                id="serviceName"
+                                value={newPackage.serviceName}
+                                onChange={handleInputChange}
+                              />
+                            </Col>
+                            {/* <Col md="6">
+                              <Label for="headline">
+                                <h4>Headline</h4>
+                              </Label>
+                              <Input
+                                type="text"
+                                name="headline"
+                                id="headline"
+                                value={newPackage.headline}
+                                onChange={handleInputChange}
+                              />
+                            </Col> */}
+                          </Row>
+
+                          <Row>
+                            <Col>
+                              <Label for="description">
+                                <h4>Description</h4>
+                              </Label>
+                              <Input
+                                type="textarea"
+                                name="description"
+                                id="description"
+                                value={newPackage.description}
+                                onChange={handleInputChange}
+                              />
+                            </Col>
+                          </Row>
+                          <Row className="my-2">
+                            <Col md="6">
+                              <Label for="amount">
+                                <h4>Amount</h4>
+                              </Label>
+                              <Input
+                                type="number"
+                                name="amount"
+                                id="amount"
+                                value={newPackage.amount}
+                                onChange={handleInputChange}
+                                className="text-one"
+                              />
+                            </Col>
+                          </Row>
+                        </div>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button
+                          color="primary"
+                          onClick={handlePackageSave}
+                          className="mr-2"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          color="primary"
+                          outline
+                          onClick={handleAddPackageCancel}
+                          className="ml-2"
+                        >
+                          Cancel
+                        </Button>
+                      </ModalFooter>
+                    </Modal>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+
+            <Modal
+              isOpen={isEditingPackages}
+              toggle={() => setIsEditingPackages(!isEditingPackages)}
+              className=""
+              size="lg"
+              style={{ borderRadius: "10px", overflow: "hidden" }}
+            >
+              <ModalHeader>
+                <h2 className="font-weight-bold">Packages</h2>
+              </ModalHeader>
+              <ModalBody>
+                <div className="mt-3">
+                  {/* <h5>Packages</h5> */}
+                  <Row className="my-4">
+                    <Col md="6">
+                      <Label for="firstName">
+                        <h4>Service Name</h4>
+                      </Label>
+                      <Input
+                        type="text"
+                        id="serviceName"
+                        value={editPackage.serviceName}
+                        onChange={(e) =>
+                          setEditPackage({
+                            ...editPackage,
+                            serviceName: e.target.value,
+                          })
+                        }
+                      />
+                    </Col>
+                    <Col md="6">
+                      <Label for="description">
+                        <h4>Description</h4>
+                      </Label>
+                      <Input
+                        type="text"
+                        id="description"
+                        value={editPackage.description}
+                        onChange={(e) =>
+                          setEditPackage({
+                            ...editPackage,
+                            description: e.target.value,
+                          })
+                        }
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Label for="amount" className="text-muted">
+                        <h4>Amount</h4>
+                      </Label>
+                      <Input
+                        type="number"
+                        id="amount"
+                        value={editPackage.amount}
+                        onChange={(e) =>
+                          setEditPackage({
+                            ...editPackage,
+                            amount: e.target.value,
+                          })
+                        }
+                        className=" text-one"
+                      />
+                    </Col>
+                  </Row>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={handleSavePackage}
+                  className="mr-2"
+                >
+                  Save
+                </Button>
+                <Button
+                  color="primary"
+                  outline
+                  onClick={handlePackageCancelEdit}
+                  className="ml-2"
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </Col>
+        </Row>
+
+        {/* package section ends */}
         {/* new design cocde ends */}
       </Colxx>
     </div>

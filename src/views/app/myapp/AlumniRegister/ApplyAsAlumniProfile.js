@@ -12,9 +12,9 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
   const [profileLoading, setProfileLoading] = useState(false);
 
   const [education, setEducation] = useState({
-    college: [
+    colleges: [
       {
-        college: "",
+        collegeName: "",
         degree: "",
         department: "",
         year: "",
@@ -86,17 +86,17 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
   const removeEducation = (index) => {
     setEducation((prevState) => ({
       ...prevState,
-      college: prevState.college.filter((_, i) => i !== index),
+      colleges: prevState.colleges.filter((_, i) => i !== index),
     }));
   };
 
   const addEducation = () => {
     setEducation((prevState) => ({
       ...prevState,
-      college: [
-        ...prevState.college,
+      colleges: [
+        ...prevState.colleges,
         {
-          college: "",
+          collegeName: "",
           degree: "",
           department: "",
           year: "",
@@ -108,7 +108,7 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
   const handleInputChange = (index, field, value) => {
     setEducation((prevState) => ({
       ...prevState,
-      college: prevState.college.map((edu, i) =>
+      colleges: prevState.colleges.map((edu, i) =>
         i === index ? { ...edu, [field]: value } : edu
       ),
     }));
@@ -126,11 +126,11 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
       >
         {({ errors, touched }) => (
           <Form className="av-tooltip tooltip-label-right my-4">
-            {education.college.map((service, index) => (
+            {education.colleges.map((service, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <div key={index}>
                 <div className="text-right">
-                  {education.college.length > 1 && (
+                  {education.colleges.length > 1 && (
                     <span>
                       <Button
                         id="closeButton"
@@ -153,16 +153,20 @@ const ApplyAsAlumniProfile = ({ currentStep, setCurrentStep }) => {
                       <Input
                         className="form-control"
                         required
-                        name={`education[${index}].college`}
+                        name={`education[${index}].collegeName`}
                         value={service.college}
                         onChange={(e) =>
-                          handleInputChange(index, "college", e.target.value)
+                          handleInputChange(
+                            index,
+                            "collegeName",
+                            e.target.value
+                          )
                         }
                       />
-                      {errors.education?.[index]?.college &&
-                        touched.education?.[index]?.college && (
+                      {errors.education?.[index]?.collegeName &&
+                        touched.education?.[index]?.collegeName && (
                           <div className="invalid-feedback d-block">
-                            {errors.education[index].college}
+                            {errors.education[index].collegeName}
                           </div>
                         )}
                     </FormGroup>

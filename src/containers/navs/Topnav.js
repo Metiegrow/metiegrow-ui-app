@@ -114,7 +114,7 @@ const TopNav = ({
   }, timeUntilExpiration);
 
   let session;
-  if (roleRes.includes("MENTOR")) {
+  if (roleRes.includes("MENTOR") || roleRes.includes("ALUMNI")) {
     session = `${adminRoot}/sessionmentor`;
   } else if (roleRes.includes("USER")) {
     session = `${adminRoot}/sessionlists`;
@@ -221,7 +221,11 @@ const TopNav = ({
     return null;
   };
   const renderMentorSession = () => {
-    if (roleRes.includes("USER") || roleRes.includes("MENTOR")) {
+    if (
+      roleRes.includes("USER") ||
+      roleRes.includes("MENTOR") ||
+      roleRes.includes("ALUMNI")
+    ) {
       return (
         <NavLink to={session}>
           <DropdownItem onClick={() => handleMySessionsClick()}>

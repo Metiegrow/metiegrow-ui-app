@@ -67,11 +67,26 @@ const MentorProfile = () => {
   //   // Navigate to the Month component with the mentor's name as a query parameter
   //   history.push(url2);
   // };
+  // const handleConnectClick = () => {
+  //   // Construct the URL with mentor's ID and name as query parameters
+  //   const mentorId = mentorprofiledetails1.id;
+  //   const mentorName = `${mentorprofiledetails1.firstName} ${mentorprofiledetails1.lastName}`;
+  //   const role = mentorprofiledetails1.role;
+  //   const url2 = `/app/calendar?mentorId=${mentorId}&mentorName=${mentorName}&role=${role}`;
+
+  //   // Navigate to the Month component with the mentor's ID and name as query parameters
+  //   history.push(url2);
+  // };
   const handleConnectClick = () => {
+    // Destructure the properties from mentorprofiledetails1
+    const { id: mentorId, firstName, lastName, role } = mentorprofiledetails1;
+    console.log("Role:", role);
+
+    // Construct the mentorName using destructured values
+    const mentorName = `${firstName} ${lastName}`;
+
     // Construct the URL with mentor's ID and name as query parameters
-    const mentorId = mentorprofiledetails1.id;
-    const mentorName = `${mentorprofiledetails1.firstName} ${mentorprofiledetails1.lastName}`;
-    const url2 = `/app/calendar?mentorId=${mentorId}&mentorName=${mentorName}`;
+    const url2 = `/app/calendar?mentorId=${mentorId}&mentorName=${mentorName}&role=${role}`;
 
     // Navigate to the Month component with the mentor's ID and name as query parameters
     history.push(url2);
@@ -181,6 +196,7 @@ const MentorProfile = () => {
                       color="light"
                       className=" font-weight-semibold mx-2"
                       size="large"
+                      style={{ cursor: "default" }}
                     >
                       <span
                         className="font-weight-semibold text-one"
