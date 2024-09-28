@@ -27,6 +27,9 @@ const Month = () => {
   const searchParams = new URLSearchParams(location.search);
   const mentorName = searchParams.get("mentorName");
   const mentorId = searchParams.get("mentorId");
+  const role = searchParams.get("role");
+
+  console.log("role from search params:", role);
 
   const [selectedDate, setSelectedDate] = useState(null);
   // const [hasAvailableSlots,setHasAvailableSlots] = useState(true);
@@ -121,7 +124,7 @@ const Month = () => {
 
     const newUrl = `${window.location.origin}${
       window.location.pathname
-    }?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}`;
+    }?mentorId=${mentorId}&mentorName=${mentorName}&fromTime=${startOfWeekTimestamp.getTime()}&toTime=${endOfWeekTimestamp.getTime()}&role=${role}`;
     window.history.replaceState(null, "", newUrl);
 
     if (mentorId) {
@@ -513,6 +516,7 @@ const Month = () => {
                           setSelectedDate={setSelectedDate}
                           mentorName={mentorName}
                           mentorId={mentorId}
+                          role={role}
                         />
                         {/* <Button className='ml-2 mt-2 '  outline  color="secondary"  onClick={() => setModalSmall(false)}
                    >

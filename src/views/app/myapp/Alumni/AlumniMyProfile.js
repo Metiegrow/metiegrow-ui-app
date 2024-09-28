@@ -23,7 +23,6 @@ import {
   Row,
 } from "reactstrap";
 import { EmploymentTypeData } from "../Listing/ListingData";
-import CategoryData from "../my-login/CategoryData";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
 import ToasterComponent from "../notifications/ToasterComponent";
@@ -37,9 +36,12 @@ const AlumniMyProfile = () => {
   const [firstName, setFirstName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [experience, setExperience] = useState([]);
+  // const [experience, setExperience] = useState("");
+
   const [location, setLocation] = useState("");
   const [newInputSkill, setNewInputSkill] = useState("");
   const [skills, setSkills] = useState([]);
+  const [price, setPrice] = useState("");
   const [userId, setUserId] = useState(null);
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -65,10 +67,15 @@ const AlumniMyProfile = () => {
   const [selectedFileBase64, setSelectedFileBase64] = useState(null);
   const [isEditingLanguages, setIsEditingLanguages] = useState(false);
   const [isEditingSkills, setIsEditingSkills] = useState(false);
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
+  const [isEditingEducation, setIsEditingEducation] = useState(false);
+  const [expId, setExpId] = useState("");
+  const [collegeId, setCollegeId] = useState("");
 
   const endUrl = `${baseUrl}/api/alumni/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
-  const imageEditUrl = `${baseUrl}/api/mentor/mentor-profile-image`;
+  const imageEditUrl = `${baseUrl}/api/alumni/profile-image`;
+
   const mentorProfileDetails = async () => {
     try {
       const response = await axios.get(endUrl);
@@ -81,6 +88,7 @@ const AlumniMyProfile = () => {
         setCompany(userData.company);
         setLocation(userData.location);
         setSkills(userData.skills);
+        setPrice(userData.price);
         setUserId(userData.id);
         setLastName(userData.lastName);
         setEmail(userData.email);
@@ -97,6 +105,12 @@ const AlumniMyProfile = () => {
         setLanguages(userData.languages);
         setExperience(userData.experience);
         setCollege(userData.colleges);
+        if (userData.experience && userData.experience.length > 0) {
+          setExpId(userData.experience[0].id);
+        }
+        if (userData.colleges && userData.colleges.length > 0) {
+          setCollegeId(userData.colleges[0].id);
+        }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -169,7 +183,8 @@ const AlumniMyProfile = () => {
         featuredArticle,
         reasonForMentor,
         achievement,
-        experience,
+        // experience,
+        price,
       };
 
       const response = await axios.put(endUrl, updatedData, {
@@ -180,6 +195,86 @@ const AlumniMyProfile = () => {
 
       setIsProfileUpdated(!isProfileUpdated);
       ToasterComponent("success", response.data.statuses);
+    } catch (error) {
+      console.error("Error updating profile", error);
+      if (error.response && error.response.data.statuses[0]) {
+        ToasterComponent("warning", error.response.data.statuses);
+      } else {
+        ToasterComponent("error", [
+          { message: "An unexpected error occurred" },
+        ]);
+      }
+    }
+  };
+
+  const experienceUrl = `${baseUrl}/api/alumni/experience/${expId}`;
+  const updateExperience = async () => {
+    try {
+      if (experience.length > 0) {
+        const updatedData = {
+          company: experience[0].company,
+          jobTitle: experience[0].jobTitle,
+          employmentType: experience[0].employmentType,
+          jobLocation: experience[0].jobLocation,
+          startYear: experience[0].startYear,
+          endYear: experience[0].endYear,
+        };
+
+        console.log("Updated Data:", updatedData); // Log updated data to verify
+
+        const response = await axios.put(experienceUrl, updatedData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setIsProfileUpdated(!isProfileUpdated);
+        ToasterComponent("success", response.data.statuses);
+      } else {
+        ToasterComponent("warning", [
+          { message: "No experience data available" },
+        ]);
+      }
+    } catch (error) {
+      console.error("Error updating profile", error);
+      if (error.response && error.response.data.statuses[0]) {
+        ToasterComponent("warning", error.response.data.statuses);
+      } else {
+        ToasterComponent("error", [
+          { message: "An unexpected error occurred" },
+        ]);
+      }
+    }
+  };
+
+  // update education
+
+  const educationUpdateUrl = `${baseUrl}/api/alumni/college/${collegeId}`;
+  const updateEducation = async () => {
+    try {
+      if (college.length > 0) {
+        const updatedData = {
+          collegeName: college[0].collegeName,
+          degree: college[0].degree,
+          department: college[0].department, // Assuming you have this field in your state
+          year: Number(college[0].year), // Ensure year is a number
+        };
+
+        console.log("Updated Data:", updatedData); // Log updated data to verify
+
+        const response = await axios.put(educationUpdateUrl, updatedData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setIsProfileUpdated(!isProfileUpdated);
+        ToasterComponent("success", response.data.statuses);
+      } else {
+        ToasterComponent("warning", [
+          { message: "No experience data available" },
+        ]);
+      }
     } catch (error) {
       console.error("Error updating profile", error);
       if (error.response && error.response.data.statuses[0]) {
@@ -234,12 +329,23 @@ const AlumniMyProfile = () => {
   // const handleEditExpClick = () => {
   //   setIsEditingExp(true);
   // };
-
-  const handleSaveExp = () => {
-    setIsEditingExp(false);
+  const handleSavePrice = () => {
+    setIsEditingPrice(false);
     updateMEntorProfile();
   };
-
+  const handleSaveExp = () => {
+    setIsEditingExp(false);
+    // updateMEntorProfile();
+    updateExperience();
+  };
+  const handleSaveEducation = () => {
+    setIsEditingEducation(false);
+    // updateMEntorProfile();
+    updateEducation();
+  };
+  const handleCancelEditEducation = () => {
+    setIsEditingEducation(false);
+  };
   const handleCancelEditExp = () => {
     setIsEditingExp(false);
   };
@@ -395,6 +501,11 @@ const AlumniMyProfile = () => {
     updatedExperience[index][field] = value;
     setExperience(updatedExperience);
   };
+  const handleInputEducationChange = (index, field, value) => {
+    const updatedCollege = [...college];
+    updatedCollege[index][field] = value;
+    setCollege(updatedCollege);
+  };
 
   return (
     <div className="aluni-profile">
@@ -427,76 +538,82 @@ const AlumniMyProfile = () => {
                   </Button>
                 </div>
                 <div
-                  className="position-relative"
+                  className="position-relative "
                   style={{ position: "relative", top: "70px" }}
                 >
-                  <button
-                    type="button"
-                    className="btn p-0"
-                    style={{ border: "none", background: "none" }}
-                    // onClick={() => handleImageClick()}
-                    aria-label="Profile image"
-                  >
-                    {image === null ? (
-                      <ThumbnailLetters
-                        // small
-                        rounded
-                        text={firstName}
-                        className="mx-2"
-                        color="secondary"
-                      />
-                    ) : (
-                      <img
-                        src={`${baseUrl}/${image}`}
-                        className="mx-2 rounded-circle img-thumbnail border"
-                        style={{
-                          width: "110px",
-                          height: "110px",
-                          objectFit: "cover",
-                          overflow: "hidden",
-                        }}
-                        alt="img"
-                      />
-                    )}
-                  </button>
-                  <div className="mr-4">
-                    {linkedinUrl && (
-                      <NavLink className="d-none d-md-inline-block">
-                        <Button
-                          color="light"
-                          className="font-weight-semibold icon-button"
-                          size="large"
-                          onClick={handleLinkedInClick}
-                        >
-                          <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
-                        </Button>
-                      </NavLink>
-                    )}
-                    {twitterHandle && (
-                      <NavLink className="d-none d-md-inline-block">
-                        <Button
-                          color="light"
-                          className="font-weight-semibold icon-button"
-                          size="large"
-                          onClick={handleTwitterClick}
-                        >
-                          <i className="simple-icon-social-twitter text-primary font-weight-semibold text-one" />
-                        </Button>
-                      </NavLink>
-                    )}
-                    {website && (
-                      <NavLink className="d-none d-md-inline-block">
-                        <Button
-                          color="light"
-                          className="font-weight-semibold icon-button"
-                          size="large"
-                          onClick={handlePersonalWebsiteClick}
-                        >
-                          <i className="simple-icon-globe text-primary font-weight-semibold text-one" />
-                        </Button>
-                      </NavLink>
-                    )}
+                  <div className="d-flex justify-content-between align-items-center">
+                    <button
+                      type="button"
+                      className="btn p-0"
+                      style={{ border: "none", background: "none" }}
+                      // onClick={() => handleImageClick()}
+                      aria-label="Profile image"
+                    >
+                      {image === null ? (
+                        <ThumbnailLetters
+                          // small
+                          rounded
+                          text={firstName}
+                          className="mx-2"
+                          color="secondary"
+                        />
+                      ) : (
+                        <img
+                          src={`${baseUrl}/${image}`}
+                          className="mx-2 rounded-circle img-thumbnail border"
+                          style={{
+                            width: "110px",
+                            height: "110px",
+                            objectFit: "cover",
+                            overflow: "hidden",
+                          }}
+                          alt="img"
+                        />
+                      )}
+                    </button>
+                    <div
+                      className="mr-4 d-flex mb-4"
+                      style={{ display: "none ", visibility: "hidden" }}
+                    >
+                      {linkedinUrl && (
+                        <NavLink className="d-none d-md-inline-block">
+                          <Button
+                            color="light"
+                            className="font-weight-semibold icon-button"
+                            size="large"
+                            onClick={handleLinkedInClick}
+                          >
+                            <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one" />
+                          </Button>
+                        </NavLink>
+                      )}
+                      {twitterHandle && (
+                        <NavLink className="d-none d-md-inline-block">
+                          <Button
+                            color="light"
+                            className="font-weight-semibold icon-button"
+                            size="large"
+                            onClick={handleTwitterClick}
+                          >
+                            <i className="simple-icon-social-twitter text-primary font-weight-semibold text-one" />
+                          </Button>
+                        </NavLink>
+                      )}
+                      {website && (
+                        <NavLink className="d-none d-md-inline-block">
+                          <Button
+                            color="light"
+                            className="font-weight-semibold icon-button"
+                            size="large"
+                            onClick={handlePersonalWebsiteClick}
+                          >
+                            <i className="simple-icon-globe text-primary font-weight-semibold text-one" />
+                          </Button>
+                        </NavLink>
+                      )}
+                    </div>
                   </div>
+
                   <Modal
                     isOpen={imageEditModal}
                     toggle={() => setImageEditModal(!imageEditModal)}
@@ -660,7 +777,7 @@ const AlumniMyProfile = () => {
                     </Row>
                     <br />
                   </>
-                  <>
+                  {/* <>
                     <Label for="jobtitle">
                       <h4>Job Title</h4>
                     </Label>
@@ -671,8 +788,8 @@ const AlumniMyProfile = () => {
                       onChange={(e) => setJobTitle(e.target.value)}
                     />
                     <br />
-                  </>
-                  <>
+                  </> */}
+                  {/* <>
                     <Label for="company">
                       <h4>Company</h4>
                     </Label>
@@ -683,7 +800,7 @@ const AlumniMyProfile = () => {
                       onChange={(e) => setCompany(e.target.value)}
                     />
                     <br />
-                  </>
+                  </> */}
 
                   <>
                     <Label for="location" className="font-weight-medium">
@@ -709,7 +826,7 @@ const AlumniMyProfile = () => {
                     </Input>
                     <br />
                   </>
-                  <>
+                  {/* <>
                     <Label for="location" className="font-weight-medium">
                       <h4>category</h4>
                     </Label>
@@ -731,7 +848,7 @@ const AlumniMyProfile = () => {
                       ))}
                     </Input>
                     <br />
-                  </>
+                  </> */}
                 </div>
               </ModalBody>
               <ModalFooter
@@ -896,7 +1013,7 @@ const AlumniMyProfile = () => {
                         className="text-one font-weight-medium "
                         key={value.id}
                       >
-                        {value.jobTitle} <br /> {value.company} |{" "}
+                        {value.jobtitle} <br /> {value.company} |{" "}
                         {value.startYear} - {value.endYear}
                       </p>
                     ))}
@@ -984,9 +1101,8 @@ const AlumniMyProfile = () => {
                                   <option key="" value="" disabled>
                                     Select Employment type
                                   </option>
-                                  {EmploymentTypeData.map((option, i) => (
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    <option key={i} value={option.label}>
+                                  {EmploymentTypeData.map((option) => (
+                                    <option key={option} value={option.label}>
                                       {option.label}
                                     </option>
                                   ))}
@@ -1012,7 +1128,6 @@ const AlumniMyProfile = () => {
                                       e.target.value
                                     )
                                   }
-                                  // validate={validatePackageDescription}
                                 />
                               </FormGroup>
                             </Col>
@@ -1020,20 +1135,27 @@ const AlumniMyProfile = () => {
                           <Row>
                             <Col>
                               <FormGroup>
-                                <Label for={`education[${index}].startDate`}>
+                                <Label for={`education[${index}].startYear`}>
                                   Start year
                                 </Label>
                                 <Input
                                   type="select"
-                                  name={`education[${index}].startDate`}
-                                  id={`education[${index}].startDate`}
+                                  name={`education[${index}].startYear`}
+                                  id={`education[${index}].startYear`}
                                   className="form-control"
-                                  value={works.startDate}
+                                  value={works.startYear}
+                                  // onChange={(e) =>
+                                  //   handleInputChange(
+                                  //     index,
+                                  //     "startYear",
+                                  //     e.target.value
+                                  //   )
+                                  // }
                                   onChange={(e) =>
                                     handleInputChange(
                                       index,
                                       "startYear",
-                                      e.target.value
+                                      parseInt(e.target.value, 10)
                                     )
                                   }
                                 >
@@ -1050,23 +1172,29 @@ const AlumniMyProfile = () => {
                             </Col>
                             <Col>
                               <FormGroup>
-                                <Label for={`education[${index}].endDate`}>
+                                <Label for={`education[${index}].endYear`}>
                                   End year
                                 </Label>
                                 <Input
                                   type="select"
-                                  name={`education[${index}].endDate`}
-                                  id={`education[${index}].endDate`}
+                                  name={`education[${index}].endYear`}
+                                  id={`education[${index}].endYear`}
                                   className="form-control"
-                                  value={works.endDate}
+                                  value={works.endYear}
+                                  // onChange={(e) =>
+                                  //   handleInputChange(
+                                  //     index,
+                                  //     "endYear",
+                                  //     e.target.value
+                                  //   )
+                                  // }
                                   onChange={(e) =>
                                     handleInputChange(
                                       index,
                                       "endYear",
-                                      e.target.value
+                                      parseInt(e.target.value, 10)
                                     )
                                   }
-                                  // validate={validatePackageDescription}
                                 >
                                   <option disabled value="">
                                     Select year
@@ -1079,7 +1207,7 @@ const AlumniMyProfile = () => {
                                 </Input>
                               </FormGroup>
                             </Col>
-                            <Row>
+                            {/* <Row>
                               <Col>
                                 <FormGroup className="error-l-75">
                                   <Label>Price</Label>
@@ -1098,7 +1226,7 @@ const AlumniMyProfile = () => {
                                   />
                                 </FormGroup>
                               </Col>
-                            </Row>
+                            </Row> */}
                           </Row>
                         </>
                       ))}
@@ -1130,6 +1258,152 @@ const AlumniMyProfile = () => {
           </Col>
         </Row>
         {/* Experience section ends */}
+        {/* Eduction section starts */}
+        <Row className="my-4">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row className="align-items-center">
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">Education</h2>
+
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      size="sm"
+                      onClick={() => setIsEditingEducation(true)}
+                      style={{ border: "none" }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  {college.map((colleges) => (
+                    <Col key={colleges}>
+                      {" "}
+                      {/* Use index as a key, but consider using a unique identifier if available */}
+                      <h3 className="font-weight-semibold">
+                        {colleges.degree}
+                      </h3>
+                      <h3 className="text-muted">
+                        {colleges.collegeName} | {colleges.year}
+                      </h3>
+                    </Col>
+                  ))}
+                </Row>
+
+                {/* Education modal starts */}
+                <Modal
+                  isOpen={isEditingEducation}
+                  toggle={() => setIsEditingEducation(!isEditingEducation)}
+                  className=""
+                  size="lg"
+                  style={{ borderRadius: "10px", overflow: "hidden" }}
+                >
+                  <ModalHeader>
+                    <h2 className="font-weight-bold">Education</h2>
+                  </ModalHeader>
+                  <ModalBody>
+                    <div className="col-lg-12 col-12">
+                      <Label for="experience" className=" text-dark">
+                        <h4>Education</h4>
+                      </Label>
+                      {college.map((works, index) => (
+                        <>
+                          <Row>
+                            <Col md={6}>
+                              <FormGroup className="error-l-75">
+                                <Label>College Name*</Label>
+                                <Input
+                                  className="form-control"
+                                  name={`education[${index}].collegeName`}
+                                  id={`education[${index}].collegeNaame`}
+                                  value={works.collegeName}
+                                  onChange={(e) =>
+                                    handleInputEducationChange(
+                                      index,
+                                      "collegeName",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for={`education[${index}].degree`}>
+                                  Degree*
+                                </Label>
+                                <Input
+                                  name={`education[${index}].degree`}
+                                  id={`education[${index}].degree`}
+                                  className="form-control"
+                                  value={works.degree}
+                                  onChange={(e) =>
+                                    handleInputEducationChange(
+                                      index,
+                                      "degree",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for={`education[${index}].year`}>
+                                  Year*
+                                </Label>
+                                <Input
+                                  name={`education[${index}].year`}
+                                  id={`education[${index}].year`}
+                                  className="form-control"
+                                  value={works.year}
+                                  onChange={(e) =>
+                                    handleInputEducationChange(
+                                      index,
+                                      "year",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                        </>
+                      ))}
+                    </div>
+                  </ModalBody>
+                  <ModalFooter>
+                    <>
+                      <Button
+                        color="primary"
+                        onClick={handleSaveEducation}
+                        className="mr-2"
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        color="primary"
+                        outline
+                        onClick={handleCancelEditEducation}
+                        className="ml-2"
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  </ModalFooter>
+                </Modal>
+                {/* Education modal ends */}
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        {/* Eduction section ends */}
         {/* language section starts */}{" "}
         <Row className="my-4">
           <Col>
@@ -1389,6 +1663,81 @@ const AlumniMyProfile = () => {
           </Modal>
         </Row>
         {/* skill section ends */}
+        {/* price section starts */}
+        <Row className="my-4 ">
+          <Col>
+            <Card>
+              <CardBody>
+                <Row className="align-items-center">
+                  <Col className="d-flex justify-content-between">
+                    <h2 className="font-weight-bold">Price</h2>
+
+                    <Button
+                      color="primary"
+                      outline
+                      className="icon-button"
+                      size="sm"
+                      onClick={() => setIsEditingPrice(true)}
+                      style={{ border: "none" }}
+                    >
+                      <i className="simple-icon-pencil" />
+                    </Button>
+                  </Col>
+                </Row>
+                <div>
+                  <h2 className="font-weight-semi-bold ">₹ {price}</h2>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+          {/* price modal starts */}
+          <Modal
+            isOpen={isEditingPrice}
+            toggle={() => setIsEditingPrice(!isEditingPrice)}
+            className=""
+            size="lg"
+            style={{ borderRadius: "10px", overflow: "hidden" }}
+          >
+            <ModalHeader style={{ borderBottom: "none" }}>
+              <h2 className="font-weight-bold">Price</h2>
+            </ModalHeader>
+            <ModalBody>
+              <br />
+
+              <>
+                <Label for="about" className="text-muted">
+                  <h4>Price</h4>
+                </Label>
+                <Input
+                  type="number"
+                  id="about"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className=" text-one"
+                />
+                <br />
+              </>
+            </ModalBody>
+            <ModalFooter
+              style={{ borderTop: "none" }}
+              className="d-flex align-items-center justify-content-center"
+            >
+              <Button color="primary" onClick={() => handleSavePrice()}>
+                Save
+              </Button>{" "}
+              <Button
+                color="primary"
+                outline
+                onClick={() => setIsEditingPrice(false)}
+                className=""
+              >
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+          {/* price modal ends */}
+        </Row>
+        {/* price section ends */}
         {/* new design code ends */}
       </Colxx>
     </div>

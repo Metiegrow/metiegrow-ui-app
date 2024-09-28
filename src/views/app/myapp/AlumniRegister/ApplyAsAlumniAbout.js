@@ -18,8 +18,9 @@ import {
   Row,
 } from "reactstrap";
 import ToasterComponent from "../notifications/ToasterComponent";
+import country from "./Country";
 import language from "./Languages";
-import { validateBio } from "./validation";
+import { validateBio, validateLocation } from "./validation";
 
 const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -39,6 +40,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     linkedinUrl: "",
     twitterHandle: "",
     bio: "",
+    location: "",
   });
 
   const languageOptions = language.map((option) => ({
@@ -68,34 +70,105 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   };
 
   const mentorAboutUrl = `${baseUrl}/api/alumni/alumnidetails/about`;
+  const imageUploadUrl = `${baseUrl}/api/alumni/profile-image`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
   }
   const token = getTokenRes();
 
-  const postDataAbout = async (data) => {
-    setAboutLoading(true);
-    const formData = new FormData();
-    formData.append("image", file1);
+  // const postDataAbout = async (data) => {
+  //   setAboutLoading(true);
+  //   const formData = new FormData();
+  //   formData.append("image", file1);
 
+  //   const alumniProfile = {
+  //     linkedinUrl: data.linkedinUrl,
+  //     twitterHandle: data.twitterHandle,
+  //     languages: data.language,
+  //     skills: data.skills,
+  //     bio: data.bio,
+  //     location: data.location,
+  //   };
+
+  //   formData.append(
+  //     "alumniProfile",
+  //     new Blob([JSON.stringify(alumniProfile)], { type: "application/json" })
+  //   );
+
+  //   try {
+  //     const response = await axios.post(mentorAboutUrl, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     setAboutLoading(false);
+  //     ToasterComponent("success", response.data.statuses);
+  //     handleNextStep();
+  //     localStorage.setItem("status", "1");
+  //   } catch (error) {
+  //     setImageError(false);
+  //     setAboutLoading(false);
+  //     if (error.response) {
+  //       error.response.data.statuses.forEach((status) => {
+  //         NotificationManager.error(
+  //           status.message,
+  //           "Oops!",
+  //           3000,
+  //           null,
+  //           null,
+  //           ""
+  //         );
+  //         if (status.code === 40327) {
+  //           setImageErrorMessage(status.message);
+  //           setImageError(true);
+  //         }
+  //       });
+  //     } else {
+  //       NotificationManager.error(
+  //         "something went wrong",
+  //         "Oops!",
+  //         3000,
+  //         null,
+  //         null,
+  //         ""
+  //       );
+  //     }
+  //   }
+  // };
+  const postImage = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(imageUploadUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data; // Handle success response from backend
+    } catch (error) {
+      setImageError(true);
+      setImageErrorMessage("Failed to upload image. Please try again.");
+      throw error;
+    }
+  };
+  const postProfileData = async (data) => {
     const alumniProfile = {
       linkedinUrl: data.linkedinUrl,
       twitterHandle: data.twitterHandle,
       languages: data.language,
       skills: data.skills,
       bio: data.bio,
+      location: data.location,
     };
 
-    formData.append(
-      "alumniProfile",
-      new Blob([JSON.stringify(alumniProfile)], { type: "application/json" })
-    );
-
     try {
-      const response = await axios.post(mentorAboutUrl, formData, {
+      const response = await axios.post(mentorAboutUrl, alumniProfile, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // Set Content-Type to application/json
         },
       });
       setAboutLoading(false);
@@ -103,33 +176,39 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
       handleNextStep();
       localStorage.setItem("status", "1");
     } catch (error) {
-      setImageError(false);
       setAboutLoading(false);
-      if (error.response) {
-        error.response.data.statuses.forEach((status) => {
-          NotificationManager.error(
-            status.message,
-            "Oops!",
-            3000,
-            null,
-            null,
-            ""
-          );
-          if (status.code === 40327) {
-            setImageErrorMessage(status.message);
-            setImageError(true);
-          }
-        });
-      } else {
-        NotificationManager.error(
-          "something went wrong",
-          "Oops!",
-          3000,
-          null,
-          null,
-          ""
-        );
+      NotificationManager.error(
+        "Failed to submit profile data",
+        "Oops!",
+        3000,
+        null,
+        null,
+        ""
+      );
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (values) => {
+    setAboutLoading(true);
+
+    try {
+      // First, check if an image exists and upload it
+      if (file1) {
+        await postImage(file1); // Upload the image separately
       }
+
+      // After the image upload, submit the rest of the form data (without the image)
+      await postProfileData({
+        linkedinUrl: values.linkedinUrl,
+        twitterHandle: values.twitterHandle,
+        language: languages,
+        skills: skillsTag,
+        bio: values.bio,
+        location: values.location,
+      });
+    } catch (error) {
+      setAboutLoading(false); // Stop loading in case of error
     }
   };
 
@@ -138,11 +217,11 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   const validateFile = (file) => {
     // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     const maxSize = 2 * 1024 * 1024; // 5MB
-    if (!file) {
-      setImageError(true);
-      setImageErrorMessage("A profile picture is required");
-      return false;
-    }
+    // if (!file) {
+    //   setImageError(true);
+    //   setImageErrorMessage("A profile picture is required");
+    //   return false;
+    // }
     // if (!allowedTypes.includes(file.type)) {
     //   setImageError(true);
     //   setImageErrorMessage(
@@ -150,7 +229,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     //   );
     //   return false;
     // }
-    if (file.size > maxSize) {
+    if (file && file.size > maxSize) {
       setImageError(true);
       setImageErrorMessage("File size must be less than 2MB");
       return false;
@@ -174,15 +253,21 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
           linkedinUrl: fields.linkedinUrl,
           twitterHandle: fields.twitterHandle,
           bio: fields.bio,
+          location: fields.location,
         }}
         validateOnMount
+        // onSubmit={(values) => {
+        //   if (!file1 || validateFile(file1)) {
+        //     postDataAbout({
+        //       ...values,
+        //       language: languages,
+        //       skills: skillsTag,
+        //     });
+        //   }
+        // }}
         onSubmit={(values) => {
-          if (validateFile(file1)) {
-            postDataAbout({
-              ...values,
-              language: languages,
-              skills: skillsTag,
-            });
+          if (!file1 || validateFile(file1)) {
+            handleSubmit(values); // Call the combined submit function
           }
         }}
       >
@@ -200,7 +285,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
               sending the form, so be sure to have a look at those.
             </Alert>
             <FormGroup>
-              <Label for="image">Image*</Label>
+              <Label for="image">Image</Label>
               {imageError && (
                 <div className="invalid-feedback d-block">
                   {imageErrorMessage}
@@ -323,7 +408,33 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
                 </Col>
               </Row>
             </FormGroup>
-
+            <FormGroup className="error-l-75">
+              <Row>
+                <Col md={12}>
+                  <Label>Location*</Label>
+                  <Field
+                    as="select"
+                    name="location"
+                    validate={validateLocation}
+                    className="form-control"
+                  >
+                    <option disabled value="">
+                      Select Country
+                    </option>
+                    {country.map((option) => (
+                      <option key={option.iso_code} value={option.iso_code}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </Field>
+                  {errors.location && touched.location && (
+                    <div className="invalid-feedback d-block">
+                      {errors.location}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            </FormGroup>
             <FormGroup>
               <Row>
                 <Col md={12}>

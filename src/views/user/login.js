@@ -192,19 +192,19 @@ const Login = ({ loading, loginUserAction }) => {
               /> */}
               {/* <div
                 style={{
-                  width: "110px",
+                  width: "120px",
                   marginBottom: "60px",
-                  height: "110px",
+                  height: "120px",
                 }}
               >
                 <img
-                  src="/assets/logos/metiegrowlogo.jpg"
+                  src="/assets/logos/backgroundpng.png"
                   // src="/assets/img/profiles/1.jpg"
                   className="w-100 h-100"
                   alt="Metiegrow Logo"
                   style={{
                     textAlign: "start",
-                    backgroundColor: "red",
+
                     marginLeft: "0px !important",
                     display: "flex",
                   }}

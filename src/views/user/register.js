@@ -232,6 +232,26 @@ const Register = () => {
           <div className="form-side">
             <NavLink to="/" className="white">
               <span className="logo-single" />
+              {/* <div
+                style={{
+                  width: "110px",
+                  marginBottom: "30px",
+                  height: "100px",
+                }}
+              >
+                <img
+                  src="/assets/logos/backgroundpng.png"
+                  // src="/assets/img/profiles/1.jpg"
+                  className="w-100 h-100"
+                  alt="Metiegrow Logo"
+                  style={{
+                    textAlign: "start",
+
+                    marginLeft: "0px !important",
+                    display: "flex",
+                  }}
+                />
+              </div> */}
             </NavLink>
             {/* <img src={`${process.env.PUBLIC_URL}/metiegrowfavicon.jpg`} alt="Logo" className="img-thumbnail" 
         style={{ width: '100px', height: '100px' }} /> */}

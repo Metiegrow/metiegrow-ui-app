@@ -58,11 +58,30 @@ const LawyerJobList = () => {
                   <div className="d-flex justify-content-between flex-wrap ">
                     <div className="d-flex align-items-center flex-wrap">
                       <div className="">
-                        <ThumbnailLetters
+                        {/* <ThumbnailLetters
                           rounded
                           text={j.clientName}
                           className="border border-1 mr-3 "
-                        />
+                        /> */}
+                        {j.imageUrl == null ? (
+                          <ThumbnailLetters
+                            rounded
+                            text={j.clientName}
+                            className="border border-1 mr-3"
+                          />
+                        ) : (
+                          <img
+                            src={`${baseUrl}/${j.imageUrl}`}
+                            alt={j.clientName}
+                            className="border border-1 mr-3"
+                            style={{
+                              width: "90px",
+                              height: "90px",
+                              borderRadius: "50%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        )}
                       </div>
                       <div className="d-flex flex-column ">
                         <h2 className="text-primary">{j.clientName}</h2>
@@ -142,11 +161,30 @@ const LawyerJobList = () => {
                   <div className="d-flex justify-content-between flex-wrap">
                     <div className="d-flex align-items-center flex-wrap">
                       <div className="">
-                        <ThumbnailLetters
+                        {/* <ThumbnailLetters
                           rounded
                           text={j.clientName}
                           className="border border-1 mr-3 "
-                        />
+                        /> */}
+                        {j.imageUrl == null ? (
+                          <ThumbnailLetters
+                            rounded
+                            text={j.clientName}
+                            className="border border-1 mr-3"
+                          />
+                        ) : (
+                          <img
+                            src={`${baseUrl}/${j.imageUrl}`}
+                            alt={j.clientName}
+                            className="border border-1 mr-3"
+                            style={{
+                              width: "90px",
+                              height: "90px",
+                              borderRadius: "50%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        )}
                       </div>
                       <div className="d-flex flex-column ">
                         <h2 className="text-primary">{j.clientName}</h2>

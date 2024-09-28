@@ -17,7 +17,7 @@ const ApplyAsAlumniexperience = ({
   const [profileLoading, setProfileLoading] = useState(false);
   const currentYear = new Date().getFullYear();
   const [work, setWork] = useState({
-    experience: [
+    experiences: [
       {
         company: "",
         jobTitle: "",
@@ -25,9 +25,10 @@ const ApplyAsAlumniexperience = ({
         jobLocation: "",
         startYear: "",
         endYear: "",
-        price: "",
+        // price: "",
       },
     ],
+    price: "",
   });
   const years = [];
   for (let year = currentYear; year >= 2005; year -= 1) {
@@ -95,15 +96,15 @@ const ApplyAsAlumniexperience = ({
   const removeWorkExperience = (index) => {
     setWork((prevState) => ({
       ...prevState,
-      experience: prevState.experience.filter((_, i) => i !== index),
+      experiences: prevState.experiences.filter((_, i) => i !== index),
     }));
   };
 
   const addWorkExperience = () => {
     setWork((prevState) => ({
       ...prevState,
-      experience: [
-        ...prevState.experience,
+      experiences: [
+        ...prevState.experiences,
         {
           company: "",
           jobTitle: "",
@@ -116,14 +117,30 @@ const ApplyAsAlumniexperience = ({
     }));
   };
 
+  // const handleWorkInputChange = (index, field, value) => {
+  //   setWork((prevState) => ({
+  //     ...prevState,
+  //     experience: prevState.experience.map((exp, i) =>
+  //       i === index ? { ...exp, [field]: value } : exp
+  //     ),
+  //   }));
+  // };
   const handleWorkInputChange = (index, field, value) => {
     setWork((prevState) => ({
       ...prevState,
-      experience: prevState.experience.map((exp, i) =>
+      experiences: prevState.experiences.map((exp, i) =>
         i === index ? { ...exp, [field]: value } : exp
       ),
+      // If the field being updated is 'price', update the outer price as well
+      price: field === "price" ? value : prevState.price,
     }));
   };
+  // const handlePriceChange = (e) => {
+  //   setWork((prevState) => ({
+  //     ...prevState,
+  //     price: e.target.value,
+  //   }));
+  // };
 
   return (
     <>
@@ -137,11 +154,11 @@ const ApplyAsAlumniexperience = ({
       >
         {({ errors, touched }) => (
           <Form className="av-tooltip tooltip-label-right my-4">
-            {work.experience.map((works, index) => (
+            {work.experiences.map((works, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <div key={index}>
                 <div className="text-right">
-                  {work.experience.length > 1 && (
+                  {work.experiences.length > 1 && (
                     <span>
                       <Button
                         id="closeButton"
@@ -285,20 +302,20 @@ const ApplyAsAlumniexperience = ({
                   <Col>
                     <FormGroup>
                       <Label for={`education[${index}].startDate`}>
-                        Start year
+                        Start year*
                       </Label>
 
                       <Input
                         type="select"
-                        name={`education[${index}].startDate`}
-                        id={`education[${index}].startDate`}
+                        name={`education[${index}].startYear`}
+                        id={`education[${index}].startYear`}
                         className="form-control"
-                        value={works.startDate}
+                        value={works.startYear}
                         required
                         onChange={(e) =>
                           handleWorkInputChange(
                             index,
-                            "startDate",
+                            "startYear",
                             parseInt(e.target.value, 10)
                           )
                         }
@@ -313,30 +330,30 @@ const ApplyAsAlumniexperience = ({
                         ))}
                       </Input>
 
-                      {errors.education?.[index]?.startDate &&
-                        touched.education?.[index]?.startDate && (
+                      {errors.education?.[index]?.startYear &&
+                        touched.education?.[index]?.startYear && (
                           <div className="invalid-feedback d-block">
-                            {errors.education[index].startDate}
+                            {errors.education[index].startYear}
                           </div>
                         )}
                     </FormGroup>
                   </Col>
                   <Col>
                     <FormGroup>
-                      <Label for={`education[${index}].endDate`}>
-                        End year
+                      <Label for={`education[${index}].endYear`}>
+                        End year*
                       </Label>
                       <Input
                         type="select"
-                        name={`education[${index}].endDate`}
-                        id={`education[${index}].endDate`}
+                        name={`education[${index}].endYear`}
+                        id={`education[${index}].endYear`}
                         className="form-control"
-                        value={works.endDate}
+                        value={works.endYear}
                         required
                         onChange={(e) =>
                           handleWorkInputChange(
                             index,
-                            "endDate",
+                            "endYear",
                             parseInt(e.target.value, 10)
                           )
                         }
@@ -351,23 +368,24 @@ const ApplyAsAlumniexperience = ({
                           </option>
                         ))}
                       </Input>
-                      {errors.education?.[index]?.endDate &&
-                        touched.education?.[index]?.endDate && (
+                      {errors.education?.[index]?.endYear &&
+                        touched.education?.[index]?.endYear && (
                           <div className="invalid-feedback d-block">
-                            {errors.education[index].endDate}
+                            {errors.education[index].endYear}
                           </div>
                         )}
                     </FormGroup>
                   </Col>
-                  <Row>
+                  {/* <Row>
                     <Col>
                       <FormGroup className="error-l-75">
-                        <Label>Price</Label>
+                        <Label>Price*</Label>
                         <Input
                           className="form-control"
                           name={`education[${index}].company`}
                           value={works.price}
                           type="number"
+                          required
                           onChange={(e) =>
                             handleWorkInputChange(
                               index,
@@ -384,7 +402,7 @@ const ApplyAsAlumniexperience = ({
                           )}
                       </FormGroup>
                     </Col>
-                  </Row>
+                  </Row> */}
                 </Row>
                 <hr />
               </div>
@@ -399,6 +417,35 @@ const ApplyAsAlumniexperience = ({
                 + Add more work experience
               </h3>
             </Card>
+            <Row className="my-2">
+              <Col md={12}>
+                <FormGroup>
+                  <Label for="price">Price*</Label>
+                  <Input
+                    type="number"
+                    name="price"
+                    id="price"
+                    required
+                    className="form-control"
+                    value={work.price || ""}
+                    onChange={(e) => {
+                      const value = e.target?.value;
+                      if (value !== null && value !== undefined) {
+                        setWork((prevState) => ({
+                          ...prevState,
+                          price: value, // Update price directly here
+                        }));
+                      }
+                    }}
+                  />
+                  {errors.price && touched.price && (
+                    <div className="invalid-feedback d-block">
+                      {errors.price}
+                    </div>
+                  )}
+                </FormGroup>
+              </Col>
+            </Row>
             <Row>
               {" "}
               <Col>

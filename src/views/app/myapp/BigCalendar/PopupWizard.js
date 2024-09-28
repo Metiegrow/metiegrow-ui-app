@@ -30,7 +30,7 @@ import ToasterComponent from "../notifications/ToasterComponent";
 import DateRangePicker from "./DateRangePicker";
 
 // const PopupWizard = ({ selectedDate,setSelectedDate,upcomingsession,mentorId,mentorName})
-const PopupWizard = ({ selectedDate, setSelectedDate, mentorId }) => {
+const PopupWizard = ({ selectedDate, setSelectedDate, mentorId, role }) => {
   const history = useHistory();
 
   //  const url=`${baseUrl}/sessionUpcomingHistroy`;
@@ -39,7 +39,8 @@ const PopupWizard = ({ selectedDate, setSelectedDate, mentorId }) => {
   // const url=`${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`
 
   // const url1=`${baseUrl}/ mentorAppointmentTime`
-  const url1 = `${baseUrl}/api/calendar/appointment/UserProfile`;
+  // const url1 = `${baseUrl}/api/calendar/appointment/UserProfile`;
+  const url1 = `${baseUrl}/api/calendar/appointment/book?role=${role}`;
 
   //  if you want to change backend url uncomment the below line
 
@@ -68,9 +69,12 @@ const PopupWizard = ({ selectedDate, setSelectedDate, mentorId }) => {
   // const url=`${baseUrl}/licenseDetails`;
 
   // Backend Url
-  const url = `${baseUrl}/api/calendar/mentee/license-details`;
+  // const url = `${baseUrl}/api/calendar/mentee/license-details`;
+  const url = `${baseUrl}/api/calendar/license-details`;
 
   const LicenseDetails = async () => {
+    console.log("Mentor ID:", mentorId);
+    console.log("Role from async function:", role);
     try {
       // Generate newData object
       const selectedDateTime = new Date(selectedDate);
@@ -86,8 +90,8 @@ const PopupWizard = ({ selectedDate, setSelectedDate, mentorId }) => {
       const toTimeStamp = toDateTime.getTime();
 
       const newData = {
-        mentorId,
-
+        userId: mentorId,
+        role,
         fromTimeStamp,
         toTimeStamp,
       };

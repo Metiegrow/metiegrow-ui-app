@@ -55,7 +55,7 @@ const AskQuestion = () => {
         questionHeadingBrief: strippedAnswerText,
       });
       NotificationManager.success(
-        `Question reviwed successfully`,
+        `Question posted successfully`,
         "Success",
         3000
       );

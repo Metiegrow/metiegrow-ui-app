@@ -4,7 +4,7 @@ import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { Colxx } from "components/common/CustomBootstrap";
 import Rating from "components/common/Rating";
 import { adminRoot, baseUrl } from "constants/defaultValues";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useHistory } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -785,14 +785,18 @@ const DashBoard = () => {
                   </CardText>
                 )}
                 <span className="text-truncate">
-                  {currentLawyer.languages.map((lang, index) => (
-                    <>
-                      <span key={lang}>
-                        {language.find((l) => l.iso_code === lang)?.name}
-                      </span>
-                      {index < currentLawyer.languages.length - 1 && " | "}
-                    </>
-                  ))}
+                  {currentLawyer.languages.length > 0 ? (
+                    currentLawyer.languages.map((lang, index) => (
+                      <React.Fragment key={lang}>
+                        <span>
+                          {language.find((l) => l.iso_code === lang)?.name}
+                        </span>
+                        {index < currentLawyer.languages.length - 1 && " | "}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <span>-</span>
+                  )}
                 </span>
                 <div className="separator mb-2 mt-2" />
                 <h3 className="mb-0 fw-bold">
