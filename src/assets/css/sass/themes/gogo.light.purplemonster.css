@@ -1211,6 +1211,11 @@ button {
   background-color: #922c88;
 }
 
+.dropdown-item.no-bg-price.active,
+.dropdown-item.no-bg-price:active {
+  background-color: transparent;
+}
+
 .dropdown-divider {
   border-color: #d7d7d7;
 }
@@ -2868,13 +2873,14 @@ button {
   height: 15px;
   text-align: center;
   font-weight: 700;
-  top: -4px;
-  right: 0px;
+  top: 2px;
+  right: 18px;
   line-height: 14px;
+  background-color: white;
 }
 @media (max-width: 575px) {
   .navbar .header-icon.notificationButton .count {
-    right: -1px;
+    right: 14px;
   }
 }
 .navbar .user {

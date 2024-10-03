@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import language from "../my-login/Languages";
-import { alumniData } from "./Data";
+// import { alumniData } from "./Data";
 
 const DashBoard = () => {
   const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
@@ -53,7 +53,18 @@ const DashBoard = () => {
       languages: [],
     },
   ]);
-  const [alumni, setAlumni] = useState(alumniData);
+  // const [alumni, setAlumni] = useState(alumniData);
+  const [alumni, setAlumni] = useState([
+    {
+      imageUrl: "",
+      company: "",
+      price: 0,
+      firstName: "",
+      lastName: "",
+      jobTitle: "",
+      experienceYears: 0,
+    },
+  ]);
   const [newSession, setNewSession] = useState([
     {
       id: 0,
@@ -73,7 +84,8 @@ const DashBoard = () => {
   const mentorsUrl = `${baseUrl}/api/mentor/cards?page=0&size=10`;
   const sessionsUrl = `${baseUrl}/api/calendar/dashboard/appointment/session-history`;
   const lawyersUrl = `${baseUrl}/api/lawyer/lawyercards?page=0&size=10`;
-  const alumniUrl = `${baseUrl}/api/dashboard/alumni`;
+  // const alumniUrl = `${baseUrl}/api/dashboard/alumni`;
+  const alumniUrl = `${baseUrl}/api/alumni/cards?page=0&size=10`;
   const newSessionUrl = `${baseUrl}/api/calendar/dashboard/appointment/upcoming-bookedslots`;
   const recentChatsDataUrl = `${baseUrl}/api/chat/recent-contact`;
 
@@ -148,7 +160,7 @@ const DashBoard = () => {
     const fetchAlumni = async () => {
       try {
         const response = await axios.get(alumniUrl);
-        setAlumni(response.data);
+        setAlumni(response.data.data);
       } catch (error) {
         console.error("Error Fetching Alumni:", error);
       }
@@ -855,13 +867,14 @@ const DashBoard = () => {
                       <ThumbnailLetters
                         // small
                         rounded
-                        text={currentAlumni.name}
+                        text={currentAlumni.firstName}
                         className="mx-2 mb-3"
                         color="secondary"
                       />
                     ) : (
                       <img
-                        src={currentAlumni.imageUrl}
+                        // src={currentAlumni.imageUrl}
+                        src={`${baseUrl}/${currentAlumni.imageUrl}`}
                         className=" rounded-circle mb-2"
                         style={{
                           width: "90px",
@@ -887,13 +900,13 @@ const DashBoard = () => {
                 </Row>
                 <NavLink to="#">
                   <h3 className="mb-0">
-                    <strong>{currentAlumni.name}</strong>
+                    <strong>{currentAlumni.firstName}</strong>
                   </h3>
                 </NavLink>
                 <CardText className="text-muted text-small mb-2">
                   {currentAlumni.jobTitle} | {currentAlumni.company}
                 </CardText>
-                <span>{currentAlumni.experience} years of experience</span>
+                <span>{currentAlumni.experienceYears} years of experience</span>
                 <div className="separator mb-2 mt-2" />
                 <h3 className="mb-0 fw-bold">
                   <strong>

@@ -23,6 +23,7 @@ import {
 
 import TimestampConverter from "../Calculation/TimestampConverter";
 // import ToasterComponent from "../notifications/ToasterComponent";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const JobListing = ({ isPosted }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -47,33 +48,50 @@ const JobListing = ({ isPosted }) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const params = {
-        page: currentPage - 1,
-        size: 20,
-        // sort: [""]
-      };
-      try {
-        // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
-        const res = await axios.get(url, { params });
-        const { data } = res;
-        const sortedData = data.jobLists
-          .map((x) => ({ ...x }))
-          .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
-        setItems(sortedData);
-        setTotalPage(data.pagination.totalPage);
-        setIsFirst(data.pagination.first);
-        setIsLast(data.pagination.last);
-        // setItems(data.map((x) => ({ ...x })));
-        setIsLoaded(true);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setIsLoaded(true);
-      }
+  const fetchData = async () => {
+    const params = {
+      page: currentPage - 1,
+      size: 20,
+      // sort: [""]
     };
+    try {
+      // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
+      const res = await axios.get(url, { params });
+      const { data } = res;
+      const sortedData = data.jobLists
+        .map((x) => ({ ...x }))
+        .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+      setItems(sortedData);
+      setTotalPage(data.pagination.totalPage);
+      setIsFirst(data.pagination.first);
+      setIsLast(data.pagination.last);
+      // setItems(data.map((x) => ({ ...x })));
+      setIsLoaded(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoaded(true);
+    }
+  };
+
+  const fetchInterestedUsers = async (jobId) => {
+    try {
+      const res = await axios.get(
+        `${baseUrl}/api/posts/job-post/interested-users/${jobId}`,
+        {
+          params: { page: 0, size: 10 },
+        }
+      );
+      const { data } = res;
+      return data.interestedUsers; // Return the list of interested users
+    } catch (error) {
+      console.error("Error fetching interested users:", error);
+      return []; // Return an empty array if there's an error
+    }
+  };
+  useEffect(() => {
     setTimeout(() => {
       fetchData();
+      fetchInterestedUsers();
     }, 1000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, isPosted, interestedClickUrl]);
@@ -89,20 +107,73 @@ const JobListing = ({ isPosted }) => {
     return "";
   }
 
+  // const handleInterestedButtonClick = async (isCurrentlyInterested, itemId) => {
+  //   setItems((prev) =>
+  //     prev.map((job) => {
+  //       if (job.id === itemId) {
+  //         // const isAlreadyInterested = job.interestedUsers.some(
+  //         //   (user) => user.id === currentUserId
+  //         // );
+  //         if (isCurrentlyInterested) {
+  //           // If already interested, decrement the count and remove the user
+  //           return {
+  //             ...job,
+  //             loggedInUserInterested: false,
+  //             interestedCount: job.interestedCount - 1,
+  //             interestedUsers: job.interestedUsers.filter(
+  //               (user) => user.userId !== +currentUserId
+  //             ),
+  //           };
+  //         }
+  //         // If not already interested, increment the count and add the user
+  //         return {
+  //           ...job,
+  //           loggedInUserInterested: true,
+  //           interestedCount: job.interestedCount + 1,
+  //           interestedUsers: [
+  //             ...job.interestedUsers,
+  //             {
+  //               userId: +currentUserId,
+  //               role: currentUserRole,
+  //               userName: currentUserName,
+  //             },
+  //           ],
+  //         };
+  //       }
+  //       return job;
+  //     })
+  //   );
+  //   const data = {
+  //     jobListingId: itemId,
+  //     interested: !isCurrentlyInterested,
+  //   };
+  //   try {
+  //     await axios.post(interestedClickUrl, data);
+  //     // ToasterComponent("success", res.data.statuses);
+  //   } catch (error) {
+  //     console.error("Error sending interest:", error);
+  //   }
+  // };
+
+  // const handleInterestPersonPage = (item) => {
+  //   setInterestPerson(item);
+  //   setModal(!modal);
+  // };
+
   const handleInterestedButtonClick = async (isCurrentlyInterested, itemId) => {
     setItems((prev) =>
       prev.map((job) => {
         if (job.id === itemId) {
-          // const isAlreadyInterested = job.interestedUsers.some(
-          //   (user) => user.id === currentUserId
-          // );
+          // Initialize interestedUsers array if it doesn't exist
+          const interestedUsers = job.interestedUsers || [];
+
           if (isCurrentlyInterested) {
             // If already interested, decrement the count and remove the user
             return {
               ...job,
               loggedInUserInterested: false,
               interestedCount: job.interestedCount - 1,
-              interestedUsers: job.interestedUsers.filter(
+              interestedUsers: interestedUsers.filter(
                 (user) => user.userId !== +currentUserId
               ),
             };
@@ -113,7 +184,7 @@ const JobListing = ({ isPosted }) => {
             loggedInUserInterested: true,
             interestedCount: job.interestedCount + 1,
             interestedUsers: [
-              ...job.interestedUsers,
+              ...interestedUsers,
               {
                 userId: +currentUserId,
                 role: currentUserRole,
@@ -125,22 +196,28 @@ const JobListing = ({ isPosted }) => {
         return job;
       })
     );
+
     const data = {
       jobListingId: itemId,
       interested: !isCurrentlyInterested,
     };
+
     try {
-      await axios.post(interestedClickUrl, data);
-      // ToasterComponent("success", res.data.statuses);
+      const response = await axios.post(interestedClickUrl, data);
+      ToasterComponent("success", response.data.statuses);
+      fetchData();
     } catch (error) {
-      console.error("Error sending interest:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error sending interest:", error);
+      }
     }
   };
-
-  // const handleInterestPersonPage = (item) => {
-  //   setInterestPerson(item);
-  //   setModal(!modal);
-  // };
 
   const handleInterestPersonPage = (item) => {
     // Set the state with the interested users

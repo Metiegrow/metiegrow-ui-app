@@ -39,9 +39,38 @@ const MentorFilter = ({
   const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
   const [priceRange, setPriceRange] = useState([500, 15000]);
 
-  const searchUrl = `${baseUrl}/api/mentor/search/skills`;
-  const companySearchUrl = `${baseUrl}/api/mentor/search/company`;
-  const toolsSearchUrl = `${baseUrl}/api/mentor/search/tools`;
+  // const searchUrl = `${baseUrl}/api/mentor/search/skills`;
+  // const companySearchUrl = `${baseUrl}/api/mentor/search/company`;
+  // const toolsSearchUrl = `${baseUrl}/api/mentor/search/tools`;
+
+  const getApiEndpoint = (endpointType) => {
+    switch (userRole) {
+      case "alumni":
+        switch (endpointType) {
+          case "skills":
+            return `${baseUrl}/api/alumni/search/skills`;
+          case "company":
+            return `${baseUrl}/api/alumni/search/company`;
+          // case "tools":
+          //   return `${baseUrl}/api/alumni/search/tools`;
+          default:
+            throw new Error(`Invalid endpoint type for alumni role`);
+        }
+      case "mentor":
+        switch (endpointType) {
+          case "skills":
+            return `${baseUrl}/api/mentor/search/skills`;
+          case "company":
+            return `${baseUrl}/api/mentor/search/company`;
+          case "tools":
+            return `${baseUrl}/api/mentor/search/tools`;
+          default:
+            throw new Error(`Invalid endpoint type for mentor role`);
+        }
+      default:
+        throw new Error(`Invalid user role`);
+    }
+  };
 
   const handleSkillSelect = (skill) => {
     onSkillsChange(skill);
@@ -163,7 +192,7 @@ const MentorFilter = ({
       params.size = size;
       params.page = 0;
       try {
-        const response = await axios.get(searchUrl, { params });
+        const response = await axios.get(getApiEndpoint("skills"), { params });
         setSkillsData(response.data.data);
         setPaginationMeta(response.data.paginationMeta);
         setSkillsFetched(true);
@@ -188,10 +217,13 @@ const MentorFilter = ({
         params.company = searchCompanies;
       }
 
-      params.size = companySize;
+      // params.size = companySize;
+      if (companySize) {
+        params.size = companySize;
+      }
       params.page = 0;
       try {
-        const response = await axios.get(companySearchUrl, { params });
+        const response = await axios.get(getApiEndpoint("company"), { params });
         setCompanyData(response.data.data);
         setCompanyPaginationMeta(response.data.paginationMeta);
         setCompaniesFetched(true);
@@ -214,7 +246,7 @@ const MentorFilter = ({
       params.size = toolsSize;
       params.page = 0;
       try {
-        const response = await axios.get(toolsSearchUrl, { params });
+        const response = await axios.get(getApiEndpoint("tools"), { params });
         setToolsData(response.data.data);
         setToolsPaginationMeta(response.data.paginationMeta);
         setToolsFetched(true);

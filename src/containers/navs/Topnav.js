@@ -220,16 +220,38 @@ const TopNav = ({
     }
     return null;
   };
+  // const renderMentorSession = () => {
+  //   if (
+  //     roleRes.includes("USER") ||
+  //     roleRes.includes("MENTOR") ||
+  //     roleRes.includes("ALUMNI")
+  //   ) {
+  //     return (
+  //       <NavLink to={session}>
+  //         <DropdownItem onClick={() => handleMySessionsClick()}>
+  //           <i className="simple-icon-list" /> My Mentor Sessions
+  //         </DropdownItem>
+  //       </NavLink>
+  //     );
+  //   }
+  //   return null;
+  // };
+
   const renderMentorSession = () => {
-    if (
-      roleRes.includes("USER") ||
-      roleRes.includes("MENTOR") ||
-      roleRes.includes("ALUMNI")
-    ) {
+    if (roleRes.includes("USER")) {
       return (
         <NavLink to={session}>
           <DropdownItem onClick={() => handleMySessionsClick()}>
             <i className="simple-icon-list" /> My Mentor Sessions
+          </DropdownItem>
+        </NavLink>
+      );
+    }
+    if (roleRes.includes("MENTOR") || roleRes.includes("ALUMNI")) {
+      return (
+        <NavLink to={session}>
+          <DropdownItem onClick={() => handleMySessionsClick()}>
+            <i className="simple-icon-list" /> My Sessions
           </DropdownItem>
         </NavLink>
       );

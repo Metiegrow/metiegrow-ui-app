@@ -416,6 +416,31 @@ const LawyerMyProfile = () => {
       console.error("Error updating package:", error);
     }
   };
+
+  const handlePackageDeleteClick = async (pack) => {
+    try {
+      const deleteURL = `${baseUrl}/api/lawyer/package/mypackage/${pack.id}`; // Construct delete URL
+      const response = await axios.delete(deleteURL); // Perform the DELETE request
+
+      response.data.statuses.forEach((status) => {
+        NotificationManager.success(
+          status.message, // Use the status message from the response
+          "Package Deleted Successfully", // Title for the notification
+          3000 // Duration of the toaster
+        );
+      });
+      setIsEditingPackages(false);
+      LawyerPackage(); // Refresh the packages list, similar to how you update after saving
+    } catch (error) {
+      NotificationManager.error(
+        "Error deleting package", // Message for the error
+        "Error", // Title for the error notification
+        3000 // Duration of the toaster
+      );
+      console.error("Error deleting package:", error);
+    }
+  };
+
   const handlePackageCancelEdit = () => {
     setIsEditingPackages(false); // Close the modal without saving
   };
@@ -1214,9 +1239,23 @@ const LawyerMyProfile = () => {
               <ModalBody>
                 <div className="mt-3">
                   {/* <h5>Packages</h5> */}
+                  <Row className="">
+                    <Col md={12} className="d-flex justify-content-end">
+                      <Button
+                        color="primary"
+                        outline
+                        className="icon-button "
+                        size="sm"
+                        onClick={() => handlePackageDeleteClick(editPackage)}
+                        style={{ border: "none" }}
+                      >
+                        <i className="simple-icon-trash" />
+                      </Button>
+                    </Col>
+                  </Row>
                   <Row className="my-4">
                     <Col md="6">
-                      <Label for="firstName">
+                      <Label for="serviceName">
                         <h4>Service Name</h4>
                       </Label>
                       <Input

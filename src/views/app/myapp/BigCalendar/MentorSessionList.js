@@ -1,4 +1,5 @@
 import axios from "axios";
+import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import { useEffect, useState } from "react";
@@ -237,13 +238,31 @@ const MentorSessionList = () => {
                   src={`${baseUrl}/${up.imageUrl}`}
                   alt="Card image cap"
                   className="m-4"
-                /> */}
-                                  <img
+                /> */}{" "}
+                                  {up.imageUrl === null ? (
+                                    <ThumbnailLetters
+                                      rounded
+                                      text={up.name}
+                                      alt="Card image cap"
+                                      className="m-4"
+                                    />
+                                  ) : (
+                                    <img
+                                      style={{
+                                        height: "140px",
+                                        width: "140px",
+                                      }}
+                                      src={`${baseUrl}/${up.imageUrl}`}
+                                      alt="Card  cap"
+                                      className="m-4 rounded-circle"
+                                    />
+                                  )}
+                                  {/* <img
                                     style={{ height: "140px", width: "140px" }}
                                     src={`${baseUrl}/${up.imageUrl}`}
                                     alt="Card  cap"
                                     className="m-4 rounded-circle"
-                                  />
+                                  /> */}
                                   <h4 className="text-large text-primary ml-2">
                                     {up.name}
                                   </h4>
@@ -423,12 +442,22 @@ const MentorSessionList = () => {
                                 alt="Card image cap"
                                 className="m-4"
                               /> */}
-                              <img
-                                style={{ height: "140px", width: "140px" }}
-                                src={`${baseUrl}/${sh.imageUrl}`}
-                                alt="Card  cap"
-                                className="m-4 rounded-circle"
-                              />
+                              {sh.imageUrl === null ? (
+                                <ThumbnailLetters
+                                  rounded
+                                  text={sh.name}
+                                  alt="Card image cap"
+                                  className="m-4"
+                                />
+                              ) : (
+                                <img
+                                  style={{ height: "140px", width: "140px" }}
+                                  src={`${baseUrl}/${sh.imageUrl}`}
+                                  alt="Card  cap"
+                                  className="m-4 rounded-circle"
+                                />
+                              )}
+
                               <h4 className="text-large text-primary ml-2">
                                 {sh.name}
                               </h4>

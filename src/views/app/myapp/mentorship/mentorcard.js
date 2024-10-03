@@ -224,6 +224,7 @@ const MentorCard = () => {
                 selectedLocation={selectedLocation}
                 selectedIndustry={selectedIndustry}
                 selectedTools={selectedTools}
+                userRole="mentor"
               />
             </div>
           </div>

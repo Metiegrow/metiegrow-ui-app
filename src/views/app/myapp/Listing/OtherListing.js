@@ -15,6 +15,7 @@ import {
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import DesktopNotifications from "../notifications/DesktopNotifications";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const JobListing = ({ isPosted }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -28,8 +29,10 @@ const JobListing = ({ isPosted }) => {
   const [copiedId, setCopiedId] = useState(null);
   const [noData, setNoData] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
   console.log("data", noData);
   const url = `${baseUrl}/api/posts/other-post/`;
+
   const interestedClickUrl = `${baseUrl}/api/posts/other-post/interest`;
 
   const history = useHistory();
@@ -45,39 +48,39 @@ const JobListing = ({ isPosted }) => {
   //   // DesktopNotifications({ title });
   //   <DesktopNotifications title={title} />
   // };
-
-  useEffect(() => {
+  const fetchData = async () => {
     const params = {
       page: currentPage - 1,
       size: 20,
       // sort: [""]
     };
-    const fetchData = async () => {
-      try {
-        // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
-        const res = await axios.get(url, { params });
-        // console.log("other data",res);
-        const { data } = res;
-        // const sortedData = data
-        //   .map((x) => ({ ...x }))
-        //   .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
-        setItems(data.otherposts);
-        setPagination(data.paginationMeta);
-        setIsLoaded(true);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // console.log("ck",error.response.data.statuses[0].code)
-        setIsLoaded(true);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.statuses &&
-          error.response.data.statuses[0].code === 40348
-        ) {
-          setNoData(true);
-        }
+    try {
+      // const res = await axios.get(`${url}?_page=${currentPage}&_limit=8`);
+      const res = await axios.get(url, { params });
+      // console.log("other data",res);
+      const { data } = res;
+      // const sortedData = data
+      //   .map((x) => ({ ...x }))
+      //   .sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+      setItems(data.otherposts);
+      setPagination(data.paginationMeta);
+      setIsLoaded(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // console.log("ck",error.response.data.statuses[0].code)
+      setIsLoaded(true);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses &&
+        error.response.data.statuses[0].code === 40348
+      ) {
+        setNoData(true);
       }
-    };
+    }
+  };
+
+  useEffect(() => {
     setTimeout(() => {
       fetchData();
     }, 3000);
@@ -103,15 +106,25 @@ const JobListing = ({ isPosted }) => {
 
   const handleInterestedButtonClick = async (id, title) => {
     const data = {
-      jobListingId: id,
+      otherPostId: id,
       interested: true,
     };
 
     try {
-      await axios.post(interestedClickUrl, data);
+      const response = await axios.post(interestedClickUrl, data);
       setClickedCardTitle(title);
+      ToasterComponent("success", response.data.statuses);
+      fetchData();
     } catch (error) {
-      console.error("Error sending interest:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error sending interest:", error);
+      }
     }
   };
 
@@ -238,11 +251,14 @@ const JobListing = ({ isPosted }) => {
                           //   handleInterestedButtonClick(data.id, data.title)
                           // }
                           onClick={() =>
-                            handleInterestedButtonClick(
-                              data.loggedInUserInterested,
-                              data.id
-                            )
+                            handleInterestedButtonClick(data.id, data.title)
                           }
+                          // onClick={() =>
+                          //   handleInterestedButtonClick(
+                          //     data.loggedInUserInterested,
+                          //     data.id
+                          //   )
+                          // }
                           onMouseEnter={() => setIsHovered(true)}
                           onMouseLeave={() => setIsHovered(false)}
                         >
@@ -271,11 +287,14 @@ const JobListing = ({ isPosted }) => {
                           I&apos;m interested
                         </Button> */}
                         <Button
+                          // onClick={() =>
+                          //   handleInterestedButtonClick(
+                          //     data.loggedInUserInterested,
+                          //     data.id
+                          //   )
+                          // }
                           onClick={() =>
-                            handleInterestedButtonClick(
-                              data.loggedInUserInterested,
-                              data.id
-                            )
+                            handleInterestedButtonClick(data.id, data.title)
                           }
                           outline
                           color="primary"

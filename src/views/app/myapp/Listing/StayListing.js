@@ -15,6 +15,7 @@ import {
   Row,
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
+import ToasterComponent from "../notifications/ToasterComponent";
 
 const StayListing = () => {
   const [expandedIndex, setExpandedIndex] = useState(-1);
@@ -28,31 +29,32 @@ const StayListing = () => {
   const history = useHistory();
 
   const url = `${baseUrl}/api/posts/stay-post/`;
+  // const interestedClickUrl = `${baseUrl}/api/posts/stay-post/intereststayroomId=${id}&interested=true`;
   const interestedClickUrl = `${baseUrl}/api/posts/stay-post/interest`;
 
+  const fetchDataFromServer = async () => {
+    try {
+      const params = {
+        page: currentPage - 1,
+        size: 20,
+        // sort: [""]
+      };
+      // const res = await axios.get(`${url}?_page=${currentPage}&_limit=4`);
+      const res = await axios.get(url, { params });
+      const { data } = res;
+      // const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
+      setPagination(data.paginationMeta);
+      setItems(data.stayrooms);
+      setIsLoaded(true);
+
+      console.log(data.stayrooms);
+    } catch (error) {
+      setIsLoaded(true);
+
+      console.error("Error while fetching data from the server", error);
+    }
+  };
   useEffect(() => {
-    const fetchDataFromServer = async () => {
-      try {
-        const params = {
-          page: currentPage - 1,
-          size: 20,
-          // sort: [""]
-        };
-        // const res = await axios.get(`${url}?_page=${currentPage}&_limit=4`);
-        const res = await axios.get(url, { params });
-        const { data } = res;
-        // const sortedData = data.map(x => ({ ...x })).sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn));
-        setPagination(data.paginationMeta);
-        setItems(data.stayrooms);
-        setIsLoaded(true);
-
-        console.log(data.stayrooms);
-      } catch (error) {
-        setIsLoaded(true);
-
-        console.error("Error while fetching data from the server", error);
-      }
-    };
     fetchDataFromServer();
   }, [currentPage]);
 
@@ -69,14 +71,25 @@ const StayListing = () => {
 
   const handleInterestedButtonClick = async (id) => {
     const data = {
-      jobListingId: id,
+      // jobListingId: id,
+      stayroomId: id,
       interested: true,
     };
 
     try {
-      await axios.post(interestedClickUrl, data);
+      const response = await axios.post(interestedClickUrl, data);
+      ToasterComponent("success", response.data.statuses);
+      fetchDataFromServer();
     } catch (error) {
-      console.error("Error sending interest:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error sending interest:", error);
+      }
     }
   };
 
@@ -243,6 +256,7 @@ const StayListing = () => {
                           outline
                           color="primary"
                           size="xs"
+                          active={data.loggedInUserInterested}
                         >
                           I&apos;m interested
                         </Button>

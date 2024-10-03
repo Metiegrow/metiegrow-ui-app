@@ -69,8 +69,14 @@ const AlumniMyProfile = () => {
   const [isEditingSkills, setIsEditingSkills] = useState(false);
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [isEditingEducation, setIsEditingEducation] = useState(false);
+  const [isEditingEducationSecond, setIsEditingEducationSecond] =
+    useState(false);
+  // const [editedCollegeIndex, setEditedCollegeIndex] = useState(-1);
   const [expId, setExpId] = useState("");
   const [collegeId, setCollegeId] = useState("");
+  const [isEditingExpSecond, setIsEditingExpSecond] = useState(false);
+  // const [isAddingEducation, setIsAddingEducation] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const endUrl = `${baseUrl}/api/alumni/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
@@ -207,34 +213,223 @@ const AlumniMyProfile = () => {
     }
   };
 
-  const experienceUrl = `${baseUrl}/api/alumni/experience/${expId}`;
+  // update experience
+  const handleEditExperience = (index) => {
+    setIsEditingExpSecond(true);
+    setExpId(experience[index].id);
+    setEditingIndex(index);
+  };
+  console.log(expId);
+
+  const handleDeleteExperience = async (index) => {
+    try {
+      const experienceToDelete = experience[index]; // Get the selected experience
+
+      if (!experienceToDelete.id) {
+        ToasterComponent("error", [{ message: "Experience ID not found." }]);
+        return;
+      }
+
+      const response = await axios.delete(
+        `${baseUrl}/api/alumni/experience/${experienceToDelete.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Ensure you are passing the correct token
+          },
+        }
+      );
+
+      // Remove the experience from the state after deletion
+      setExperience((prevExperience) =>
+        prevExperience.filter((_, i) => i !== index)
+      );
+
+      ToasterComponent("success", response.data.statuses); // Show success message
+      setIsProfileUpdated(!isProfileUpdated); // Trigger profile update state
+    } catch (error) {
+      console.error("Error deleting experience", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error updating profile", error);
+      }
+    }
+  };
+
+  // const experienceUrl = `${baseUrl}/api/alumni/experience/${expId}`;
+  const addExperienceUrl = `${baseUrl}/api/alumni/experience`;
+  // const updateExperience = async () => {
+  //   try {
+  //     if (experience.length > 0) {
+  //       const updatedData = {
+  //         company: experience[editingIndex].company,
+  //         jobTitle: experience[editingIndex].jobTitle,
+  //         employmentType: experience[editingIndex].employmentType,
+  //         jobLocation: experience[editingIndex].jobLocation,
+  //         startYear: experience[editingIndex].startYear,
+  //         endYear: experience[editingIndex].endYear,
+  //       };
+
+  //       console.log("Updated Data:", updatedData); // Log updated data to verify
+
+  //       const response = await axios.put(experienceUrl, updatedData, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       setIsProfileUpdated(!isProfileUpdated);
+  //       ToasterComponent("success", response.data.statuses);
+  //     } else {
+  //       ToasterComponent("warning", [
+  //         { message: "No experience data available" },
+  //       ]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating profile", error);
+  //     if (error.response && error.response.data.statuses[0]) {
+  //       ToasterComponent("warning", error.response.data.statuses);
+  //     } else {
+  //       ToasterComponent("error", [
+  //         { message: "An unexpected error occurred" },
+  //       ]);
+  //     }
+  //   }
+  // };
+
   const updateExperience = async () => {
     try {
-      if (experience.length > 0) {
-        const updatedData = {
-          company: experience[0].company,
-          jobTitle: experience[0].jobTitle,
-          employmentType: experience[0].employmentType,
-          jobLocation: experience[0].jobLocation,
-          startYear: experience[0].startYear,
-          endYear: experience[0].endYear,
-        };
+      const currentExperience = experience[editingIndex]; // Get current experience entry
 
-        console.log("Updated Data:", updatedData); // Log updated data to verify
+      const experienceData = {
+        company: currentExperience.company,
+        jobTitle: currentExperience.jobTitle,
+        employmentType: currentExperience.employmentType,
+        jobLocation: currentExperience.jobLocation,
+        startYear: currentExperience.startYear,
+        endYear: currentExperience.endYear,
+      };
 
-        const response = await axios.put(experienceUrl, updatedData, {
+      let response;
+
+      if (currentExperience.id) {
+        // Construct the update URL by appending the experience ID for PUT request
+        const updateUrl = `${addExperienceUrl}/${currentExperience.id}`;
+        response = await axios.put(updateUrl, experienceData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        ToasterComponent("success", response.data.statuses);
+      } else {
+        // If the experience entry has no id, create a new one using POST
+        response = await axios.post(addExperienceUrl, experienceData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        ToasterComponent("success", response.data.statuses); // Use message from response
+      }
+
+      // Refresh the profile after adding/updating experience
+      setIsProfileUpdated(!isProfileUpdated);
+    } catch (error) {
+      console.error("Error saving experience", error);
+
+      // Improved error handling and logging
+      if (error.response && error.response.data.statuses[0]) {
+        ToasterComponent("warning", error.response.data.statuses);
+      } else {
+        ToasterComponent("error", [
+          { message: "An unexpected error occurred" },
+        ]);
+      }
+    }
+  };
+  const handleAddWork = () => {
+    const newExperience = {
+      // id: null, // Generate an ID or set it later from API response if needed
+      company: "",
+      jobTitle: "",
+      employmentType: "",
+      jobLocation: "",
+      startYear: "",
+      endYear: "",
+    };
+
+    // Add new experience to the array
+    setExperience([...experience, newExperience]);
+
+    // Set the new entry as editable
+    setEditingIndex(experience.length); // Set the index of the new experience
+    setIsEditingExpSecond(true); // Switch to the form to edit the new experience
+  };
+
+  const handleSaveExp = () => {
+    setIsEditingExp(false);
+    // updateMEntorProfile();
+    updateExperience();
+  };
+
+  const handleCancelEditExp = () => {
+    setIsEditingExp(false);
+    setIsEditingExpSecond(false);
+  };
+  const handleInputChange = (index, field, value) => {
+    const updatedExperience = [...experience];
+    updatedExperience[index][field] = value;
+    setExperience(updatedExperience);
+  };
+  // update education
+
+  // const educationUpdateUrl = `${baseUrl}/api/alumni/college/${collegeId}`;
+  console.log(collegeId);
+
+  const addEducationUrl = `${baseUrl}/api/alumni/college`;
+
+  const updateEducation = async () => {
+    try {
+      const currentCollege = college[editingIndex]; // Access the current college being edited
+      const updatedData = {
+        collegeName: currentCollege.collegeName,
+        degree: currentCollege.degree,
+        department: currentCollege.department,
+        year: Number(currentCollege.year), // Ensure the year is treated as a number
+      };
+
+      if (currentCollege.id) {
+        // PUT request to update existing education entry
+        const educationUpdateUrl = `${baseUrl}/api/alumni/college/${currentCollege.id}`;
+        const response = await axios.put(educationUpdateUrl, updatedData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        ToasterComponent("success", response.data.statuses);
+      } else {
+        // POST request to add new education entry
+        const response = await axios.post(addEducationUrl, updatedData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setIsProfileUpdated(!isProfileUpdated);
+        // Extract the collegeId from the POST response and update the state
+        const newCollegeId = collegeId; // Ensure the API returns this field
+        setCollege((prevCollege) =>
+          prevCollege.map((entry, index) =>
+            index === editingIndex ? { ...entry, id: newCollegeId } : entry
+          )
+        );
         ToasterComponent("success", response.data.statuses);
-      } else {
-        ToasterComponent("warning", [
-          { message: "No experience data available" },
-        ]);
       }
+
+      // Toggle the profile update state
+      setIsProfileUpdated(!isProfileUpdated);
     } catch (error) {
       console.error("Error updating profile", error);
       if (error.response && error.response.data.statuses[0]) {
@@ -247,44 +442,26 @@ const AlumniMyProfile = () => {
     }
   };
 
-  // update education
+  const handleAddEducation = () => {
+    // Create a new college entry with empty values
+    const newCollegeEntry = {
+      collegeName: "",
+      degree: "",
+      department: "",
+      year: "",
+    };
 
-  const educationUpdateUrl = `${baseUrl}/api/alumni/college/${collegeId}`;
-  const updateEducation = async () => {
-    try {
-      if (college.length > 0) {
-        const updatedData = {
-          collegeName: college[0].collegeName,
-          degree: college[0].degree,
-          department: college[0].department, // Assuming you have this field in your state
-          year: Number(college[0].year), // Ensure year is a number
-        };
+    // Add the new entry to the college state
+    setCollege((prevCollege) => [...prevCollege, newCollegeEntry]);
+    // Set editing index to the new college entry to allow for immediate editing
+    setEditingIndex(college.length); // Set index to the last entry (new one)
+    setIsEditingEducationSecond(true); // Open the editing modal
+  };
 
-        console.log("Updated Data:", updatedData); // Log updated data to verify
-
-        const response = await axios.put(educationUpdateUrl, updatedData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setIsProfileUpdated(!isProfileUpdated);
-        ToasterComponent("success", response.data.statuses);
-      } else {
-        ToasterComponent("warning", [
-          { message: "No experience data available" },
-        ]);
-      }
-    } catch (error) {
-      console.error("Error updating profile", error);
-      if (error.response && error.response.data.statuses[0]) {
-        ToasterComponent("warning", error.response.data.statuses);
-      } else {
-        ToasterComponent("error", [
-          { message: "An unexpected error occurred" },
-        ]);
-      }
-    }
+  const handleInputEducationChange = (index, field, value) => {
+    const updatedCollege = [...college];
+    updatedCollege[index][field] = value;
+    setCollege(updatedCollege);
   };
 
   const postImageData = async () => {
@@ -333,21 +510,16 @@ const AlumniMyProfile = () => {
     setIsEditingPrice(false);
     updateMEntorProfile();
   };
-  const handleSaveExp = () => {
-    setIsEditingExp(false);
-    // updateMEntorProfile();
-    updateExperience();
-  };
+
   const handleSaveEducation = () => {
     setIsEditingEducation(false);
     // updateMEntorProfile();
     updateEducation();
   };
+
   const handleCancelEditEducation = () => {
     setIsEditingEducation(false);
-  };
-  const handleCancelEditExp = () => {
-    setIsEditingExp(false);
+    setIsEditingEducationSecond(false);
   };
 
   const handleSaveAbout = () => {
@@ -496,16 +668,53 @@ const AlumniMyProfile = () => {
 
   const countryName = country.find((c) => c.iso_code === location)?.name;
 
-  const handleInputChange = (index, field, value) => {
-    const updatedExperience = [...experience];
-    updatedExperience[index][field] = value;
-    setExperience(updatedExperience);
+  const handleEditEducation = (index) => {
+    setIsEditingEducationSecond(true);
+    setCollegeId(college[index].id);
+    setEditingIndex(index); // Set the index of the college to edit
   };
-  const handleInputEducationChange = (index, field, value) => {
-    const updatedCollege = [...college];
-    updatedCollege[index][field] = value;
-    setCollege(updatedCollege);
+
+  const deleteEducationUrl = (id) => `${baseUrl}/api/alumni/college/${id}`;
+
+  // Function to handle deleting a college
+  const handleDeleteEducation = async (index) => {
+    try {
+      const collegeToDelete = college[index]; // Get the selected college
+
+      if (!collegeToDelete.id) {
+        ToasterComponent("error", [{ message: "College ID not found." }]);
+        return;
+      }
+
+      const response = await axios.delete(
+        deleteEducationUrl(collegeToDelete.id),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Ensure you are passing the correct token
+          },
+        }
+      );
+
+      // Remove the college from the state after deletion
+      setCollege((prevCollege) => prevCollege.filter((_, i) => i !== index));
+
+      ToasterComponent("success", response.data.statuses);
+      setIsProfileUpdated(!isProfileUpdated); // Trigger profile update state
+    } catch (error) {
+      console.error("Error deleting education", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.statuses
+      ) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error updating profile", error);
+      }
+    }
   };
+
+  console.log("Editing experience index:", editingIndex);
 
   return (
     <div className="aluni-profile">
@@ -1027,211 +1236,291 @@ const AlumniMyProfile = () => {
                   size="lg"
                   style={{ borderRadius: "10px", overflow: "hidden" }}
                 >
-                  <ModalHeader>
-                    <h2 className="font-weight-bold">Experience</h2>
-                  </ModalHeader>
+                  {/* <ModalHeader>
+                    <Row>
+                      <Col md={8}>
+                        <h2 className="font-weight-bold">Experience</h2>
+                      </Col>
+                      <Col md={4}>
+                        <Button
+                          color="primary"
+                          outline
+                          className="icon-button"
+                          style={{ border: "none" }}
+                          size="sm"
+                          // onClick={handleAddWork}
+                        >
+                          <span
+                            className="text-primary"
+                            style={{ fontSize: "24px" }}
+                          >
+                            +
+                          </span>
+                        </Button>
+                      </Col>
+                    </Row>
+                  </ModalHeader> */}
                   <ModalBody>
-                    <div className="col-lg-12 col-12">
-                      <Label for="experience" className=" text-dark">
-                        <h4>Experience</h4>
-                      </Label>
-                      {experience.map((works, index) => (
-                        <>
-                          <Row>
-                            <Col md={6}>
-                              <FormGroup className="error-l-75">
-                                <Label>Company Name*</Label>
-                                <Input
-                                  className="form-control"
-                                  name="education company"
-                                  value={works.company}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "company",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for={`education[${index}].jobTitle`}>
-                                  Job title*
-                                </Label>
-                                <Input
-                                  name={`education[${index}].jobTitle`}
-                                  id={`education[${index}].jobTitle`}
-                                  className="form-control"
-                                  value={works.jobTitle}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "jobTitle",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label
-                                  for={`education[${index}].employmentType`}
-                                >
-                                  Employment type*
-                                </Label>
-                                <Input
-                                  type="select"
-                                  name={`education[${index}].employmentType`}
-                                  id={`education[${index}].employmentType`}
-                                  className="form-control"
-                                  value={works.employmentType}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "employmentType",
-                                      e.target.value
-                                    )
-                                  }
-                                >
-                                  <option key="" value="" disabled>
-                                    Select Employment type
-                                  </option>
-                                  {EmploymentTypeData.map((option) => (
-                                    <option key={option} value={option.label}>
-                                      {option.label}
-                                    </option>
-                                  ))}
-                                </Input>
-                              </FormGroup>
-                            </Col>
+                    <Row className="align-items-center mb-3 ">
+                      <Col>
+                        <h2 className="font-weight-bold">Edit Experience</h2>
+                      </Col>
+                      <Col xs="auto" className="ml-auto">
+                        <Button
+                          color="primary"
+                          outline
+                          className="icon-button"
+                          style={{ border: "none" }}
+                          size="sm"
+                          onClick={handleAddWork}
+                        >
+                          <span
+                            className="text-primary"
+                            style={{ fontSize: "24px" }}
+                          >
+                            +
+                          </span>
+                        </Button>
+                      </Col>
+                    </Row>
 
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for={`education[${index}].jobLocation`}>
-                                  Job location*
-                                </Label>
-                                <Input
-                                  type="text"
-                                  name={`education[${index}].jobLocation`}
-                                  id={`education[${index}].jobLocation`}
-                                  className="form-control"
-                                  value={works.jobLocation}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "jobLocation",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <FormGroup>
-                                <Label for={`education[${index}].startYear`}>
-                                  Start year
-                                </Label>
-                                <Input
-                                  type="select"
-                                  name={`education[${index}].startYear`}
-                                  id={`education[${index}].startYear`}
-                                  className="form-control"
-                                  value={works.startYear}
-                                  // onChange={(e) =>
-                                  //   handleInputChange(
-                                  //     index,
-                                  //     "startYear",
-                                  //     e.target.value
-                                  //   )
-                                  // }
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "startYear",
-                                      parseInt(e.target.value, 10)
-                                    )
-                                  }
-                                >
-                                  <option disabled value="">
-                                    Select year
-                                  </option>
-                                  {years.map((yr) => (
-                                    <option key={yr} value={yr}>
-                                      {yr}
-                                    </option>
-                                  ))}
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                            <Col>
-                              <FormGroup>
-                                <Label for={`education[${index}].endYear`}>
-                                  End year
-                                </Label>
-                                <Input
-                                  type="select"
-                                  name={`education[${index}].endYear`}
-                                  id={`education[${index}].endYear`}
-                                  className="form-control"
-                                  value={works.endYear}
-                                  // onChange={(e) =>
-                                  //   handleInputChange(
-                                  //     index,
-                                  //     "endYear",
-                                  //     e.target.value
-                                  //   )
-                                  // }
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "endYear",
-                                      parseInt(e.target.value, 10)
-                                    )
-                                  }
-                                >
-                                  <option disabled value="">
-                                    Select year
-                                  </option>
-                                  {years.map((yr) => (
-                                    <option key={yr} value={yr}>
-                                      {yr === currentYear ? "Present" : yr}
-                                    </option>
-                                  ))}
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                            {/* <Row>
-                              <Col>
+                    {isEditingExpSecond ? (
+                      <div className="col-lg-12 col-12">
+                        {/* <Label for="experience" className="text-dark">
+                          <h4>Experience</h4>
+                        </Label> */}
+                        {experience[editingIndex] && (
+                          <>
+                            <Row>
+                              <Col md={6}>
                                 <FormGroup className="error-l-75">
-                                  <Label>Price</Label>
+                                  <Label
+                                    for={`experience[${editingIndex}].company`}
+                                  >
+                                    Company Name*
+                                  </Label>
                                   <Input
                                     className="form-control"
-                                    name={`education[${index}].company`}
-                                    value={works.price}
+                                    name={`experience[${editingIndex}].company`}
+                                    value={
+                                      experience[editingIndex]?.company || ""
+                                    }
                                     onChange={(e) =>
                                       handleInputChange(
-                                        index,
-                                        "price",
+                                        editingIndex,
+                                        "company",
                                         e.target.value
                                       )
                                     }
-                                    type="number"
                                   />
                                 </FormGroup>
                               </Col>
-                            </Row> */}
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label
+                                    for={`experience[${editingIndex}].jobTitle`}
+                                  >
+                                    Job title*
+                                  </Label>
+                                  <Input
+                                    name={`experience[${editingIndex}].jobTitle`}
+                                    id={`experience[${editingIndex}].jobTitle`}
+                                    className="form-control"
+                                    value={
+                                      experience[editingIndex]?.jobTitle || ""
+                                    }
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        editingIndex,
+                                        "jobTitle",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label
+                                    for={`experience[${editingIndex}].employmentType`}
+                                  >
+                                    Employment type*
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`experience[${editingIndex}].employmentType`}
+                                    id={`experience[${editingIndex}].employmentType`}
+                                    className="form-control"
+                                    value={
+                                      experience[editingIndex]
+                                        ?.employmentType || ""
+                                    }
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        editingIndex,
+                                        "employmentType",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option key="" value="" disabled>
+                                      Select Employment type
+                                    </option>
+                                    {EmploymentTypeData.map((option) => (
+                                      <option key={option} value={option.label}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+
+                              <Col md={6}>
+                                <FormGroup>
+                                  <Label
+                                    for={`experience[${editingIndex}].jobLocation`}
+                                  >
+                                    Job location*
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    name={`experience[${editingIndex}].jobLocation`}
+                                    id={`experience[${editingIndex}].jobLocation`}
+                                    className="form-control"
+                                    value={
+                                      experience[editingIndex]?.jobLocation ||
+                                      ""
+                                    }
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        editingIndex,
+                                        "jobLocation",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label
+                                    for={`experience[${editingIndex}].startYear`}
+                                  >
+                                    Start year
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`experience[${editingIndex}].startYear`}
+                                    id={`experience[${editingIndex}].startYear`}
+                                    className="form-control"
+                                    value={
+                                      experience[editingIndex]?.startYear || ""
+                                    }
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        editingIndex,
+                                        "startYear",
+                                        parseInt(e.target.value, 10)
+                                      )
+                                    }
+                                  >
+                                    <option disabled value="">
+                                      Select year
+                                    </option>
+                                    {years.map((yr) => (
+                                      <option key={yr} value={yr}>
+                                        {yr}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+                              <Col>
+                                <FormGroup>
+                                  <Label
+                                    for={`experience[${editingIndex}].endYear`}
+                                  >
+                                    End year
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    name={`experience[${editingIndex}].endYear`}
+                                    id={`experience[${editingIndex}].endYear`}
+                                    className="form-control"
+                                    value={
+                                      experience[editingIndex]?.endYear || ""
+                                    }
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        editingIndex,
+                                        "endYear",
+                                        parseInt(e.target.value, 10)
+                                      )
+                                    }
+                                  >
+                                    <option disabled value="">
+                                      Select year
+                                    </option>
+                                    {years.map((yr) => (
+                                      <option key={yr} value={yr}>
+                                        {yr === currentYear ? "Present" : yr}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <div>
+                        {experience?.map((value, index) => (
+                          <Row
+                            key={value.id}
+                            className="d-flex align-items-center justify-content-between "
+                          >
+                            <Col>
+                              <div>
+                                <p className="text-one font-weight-medium ">
+                                  {value.jobTitle} <br /> {value.company} |{" "}
+                                  {value.startYear} - {value.endYear}
+                                </p>
+                              </div>
+                            </Col>
+
+                            <Col xs="auto">
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button mr-1"
+                                size="sm"
+                                onClick={() => handleEditExperience(index)}
+                                style={{ border: "none" }}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                size="sm"
+                                onClick={() => handleDeleteExperience(index)}
+                                style={{ border: "none" }}
+                              >
+                                <i className="simple-icon-trash" />
+                              </Button>
+                            </Col>
                           </Row>
-                        </>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </ModalBody>
+
                   <ModalFooter>
                     <>
                       <Button
@@ -1281,7 +1570,7 @@ const AlumniMyProfile = () => {
                 </Row>
                 <Row>
                   {college.map((colleges) => (
-                    <Col key={colleges}>
+                    <Col key={colleges} md={12} className="mb-3">
                       {" "}
                       {/* Use index as a key, but consider using a unique identifier if available */}
                       <h3 className="font-weight-semibold">
@@ -1302,100 +1591,215 @@ const AlumniMyProfile = () => {
                   size="lg"
                   style={{ borderRadius: "10px", overflow: "hidden" }}
                 >
-                  <ModalHeader>
-                    <h2 className="font-weight-bold">Education</h2>
-                  </ModalHeader>
                   <ModalBody>
                     <div className="col-lg-12 col-12">
-                      <Label for="experience" className=" text-dark">
-                        <h4>Education</h4>
-                      </Label>
-                      {college.map((works, index) => (
-                        <>
-                          <Row>
-                            <Col md={6}>
-                              <FormGroup className="error-l-75">
-                                <Label>College Name*</Label>
-                                <Input
-                                  className="form-control"
-                                  name={`education[${index}].collegeName`}
-                                  id={`education[${index}].collegeNaame`}
-                                  value={works.collegeName}
-                                  onChange={(e) =>
-                                    handleInputEducationChange(
-                                      index,
-                                      "collegeName",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </FormGroup>
+                      <Row className="align-items-center mb-3">
+                        <Col>
+                          <h2 className="font-weight-bold">Edit Education</h2>
+                        </Col>
+                        <Col xs="auto" className="ml-auto">
+                          <Button
+                            color="primary"
+                            outline
+                            className="icon-button"
+                            style={{ border: "none" }}
+                            size="sm"
+                            onClick={handleAddEducation}
+                          >
+                            <span
+                              className="text-primary"
+                              style={{ fontSize: "24px" }}
+                            >
+                              +
+                            </span>
+                          </Button>
+                        </Col>
+                      </Row>
+
+                      <div className="">
+                        {college.map((colleges, index) => (
+                          <Row key={colleges} className="mt-2">
+                            <Col className="">
+                              <h3 className="font-weight-semibold">
+                                {colleges.degree}
+                              </h3>
+                              <h3 className="text-muted">
+                                {colleges.collegeName} | {colleges.year}
+                              </h3>
                             </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for={`education[${index}].degree`}>
-                                  Degree*
-                                </Label>
-                                <Input
-                                  name={`education[${index}].degree`}
-                                  id={`education[${index}].degree`}
-                                  className="form-control"
-                                  value={works.degree}
-                                  onChange={(e) =>
-                                    handleInputEducationChange(
-                                      index,
-                                      "degree",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </FormGroup>
+                            <Col xs="auto">
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button mr-1"
+                                size="sm"
+                                onClick={() => handleEditEducation(index)} // Call edit handler with index
+                                style={{ border: "none" }}
+                              >
+                                <i className="simple-icon-pencil" />
+                              </Button>
+
+                              <Button
+                                color="primary"
+                                outline
+                                className="icon-button"
+                                size="sm"
+                                onClick={() => handleDeleteEducation(index)} // Call edit handler with index
+                                style={{ border: "none" }}
+                              >
+                                <i className="simple-icon-trash" />
+                              </Button>
                             </Col>
                           </Row>
+                        ))}
+                      </div>
+                      {isEditingEducationSecond ? (
+                        <>
+                          {/* {college.map((colleges, index) => (
+                            <Row key={colleges}>
+                              <Col className="bg-primary">
+                                <h3 className="font-weight-semibold">
+                                  {colleges.degree}
+                                </h3>
+                                <h3 className="text-muted">
+                                  {colleges.collegeName} | {colleges.year}
+                                </h3>
+                              </Col>
+                              <Col xs="auto">
+                                <Button
+                                  color="primary"
+                                  outline
+                                  className="icon-button"
+                                  size="sm"
+                                  onClick={() => handleEditEducation(index)} // Call edit handler with index
+                                  style={{ border: "none" }}
+                                >
+                                  <i className="simple-icon-pencil" />
+                                </Button>
+                              </Col>
+                            </Row>
+                          ))} */}
+
                           <Row>
                             <Col md={6}>
-                              <FormGroup>
-                                <Label for={`education[${index}].year`}>
-                                  Year*
-                                </Label>
-                                <Input
-                                  name={`education[${index}].year`}
-                                  id={`education[${index}].year`}
-                                  className="form-control"
-                                  value={works.year}
-                                  onChange={(e) =>
-                                    handleInputEducationChange(
-                                      index,
-                                      "year",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </FormGroup>
+                              {/* Render only for the selected college */}
+                              {college[editingIndex] && (
+                                <>
+                                  <FormGroup className="error-l-75">
+                                    <Label>College Name*</Label>
+                                    <Input
+                                      className="form-control"
+                                      name={`education[${editingIndex}].collegeName`}
+                                      id={`education[${editingIndex}].collegeName`}
+                                      value={college[editingIndex].collegeName}
+                                      onChange={(e) =>
+                                        handleInputEducationChange(
+                                          editingIndex,
+                                          "collegeName",
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                  </FormGroup>
+                                </>
+                              )}
+                            </Col>
+                            <Col md={6}>
+                              {college[editingIndex] && (
+                                <FormGroup>
+                                  <Label
+                                    for={`education[${editingIndex}].degree`}
+                                  >
+                                    Degree*
+                                  </Label>
+                                  <Input
+                                    name={`education[${editingIndex}].degree`}
+                                    id={`education[${editingIndex}].degree`}
+                                    className="form-control"
+                                    value={college[editingIndex].degree}
+                                    onChange={(e) =>
+                                      handleInputEducationChange(
+                                        editingIndex,
+                                        "degree",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              )}
+                            </Col>
+
+                            <Col md={6}>
+                              {college[editingIndex] && (
+                                <FormGroup>
+                                  <Label
+                                    for={`education[${editingIndex}].department`}
+                                  >
+                                    Department*
+                                  </Label>
+                                  <Input
+                                    name={`education[${editingIndex}].department`}
+                                    id={`education[${editingIndex}].department`}
+                                    className="form-control"
+                                    value={college[editingIndex].department}
+                                    onChange={(e) =>
+                                      handleInputEducationChange(
+                                        editingIndex,
+                                        "department",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              )}
+                            </Col>
+                            <Col md={6}>
+                              {college[editingIndex] && (
+                                <FormGroup>
+                                  <Label
+                                    for={`education[${editingIndex}].degree`}
+                                  >
+                                    Year*
+                                  </Label>
+                                  <Input
+                                    name={`education[${editingIndex}].year`}
+                                    id={`education[${editingIndex}].year`}
+                                    className="form-control"
+                                    value={college[editingIndex].year}
+                                    onChange={(e) =>
+                                      handleInputEducationChange(
+                                        editingIndex,
+                                        "year",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </FormGroup>
+                              )}
                             </Col>
                           </Row>
                         </>
-                      ))}
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </ModalBody>
                   <ModalFooter>
-                    <>
-                      <Button
-                        color="primary"
-                        onClick={handleSaveEducation}
-                        className="mr-2"
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        color="primary"
-                        outline
-                        onClick={handleCancelEditEducation}
-                        className="ml-2"
-                      >
-                        Cancel
-                      </Button>
-                    </>
+                    <Button
+                      color="primary"
+                      onClick={handleSaveEducation}
+                      className="mr-2"
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={handleCancelEditEducation}
+                      className="ml-2"
+                    >
+                      Cancel
+                    </Button>
                   </ModalFooter>
                 </Modal>
                 {/* Education modal ends */}
