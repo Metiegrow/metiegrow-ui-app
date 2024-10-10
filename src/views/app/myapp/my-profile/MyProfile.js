@@ -474,7 +474,7 @@ const MyProfile = () => {
                       <h2 className="font-weight-bold">Profile photo</h2>
                     </ModalHeader>
                     <ModalBody className="d-flex justify-content-center align-items-center">
-                      <img
+                      {/* <img
                         src={selectedFileBase64 || `${baseUrl}/${image}`}
                         className="rounded-circle img-thumbnail border border-3"
                         style={{
@@ -483,7 +483,31 @@ const MyProfile = () => {
                           objectFit: "cover",
                         }}
                         alt="img"
-                      />
+                      /> */}
+                      {image === null ? (
+                        <ThumbnailLetters
+                          rounded
+                          text={firstName}
+                          className="mx-2"
+                          color="secondary"
+                          style={{
+                            width: "130px",
+                            height: "130px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={selectedFileBase64 || `${baseUrl}/${image}`}
+                          className="rounded-circle img-thumbnail border border-3"
+                          style={{
+                            width: "130px",
+                            height: "130px",
+                            objectFit: "cover",
+                          }}
+                          alt="img"
+                        />
+                      )}
                     </ModalBody>
 
                     <ModalFooter className="d-flex align-items-center justify-content-center">

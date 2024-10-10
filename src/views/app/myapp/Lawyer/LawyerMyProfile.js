@@ -949,7 +949,7 @@ const LawyerMyProfile = () => {
               <CardBody>
                 <Row>
                   <Col className="d-flex justify-content-between">
-                    <h2 className="font-weight-bold">Topics</h2>
+                    <h2 className="font-weight-bold">Consulting areas</h2>
                     <Button
                       color="primary"
                       outline
@@ -990,11 +990,11 @@ const LawyerMyProfile = () => {
               style={{ borderRadius: "10px", overflow: "hidden" }}
             >
               <ModalHeader>
-                <h2 className="font-weight-bold">Topics</h2>
+                <h2 className="font-weight-bold">Consulting areas</h2>
               </ModalHeader>
               <ModalBody>
                 <div className="mt-3">
-                  <h5>Topics</h5>
+                  <h5>Consulting areas </h5>
                   <ReactSortable
                     list={topic}
                     setList={setTopic}
@@ -1016,13 +1016,13 @@ const LawyerMyProfile = () => {
                     ))}
                   </ReactSortable>
                   <p className="text-muted ml-2">
-                    Drag topic to set top 3 (the top 3 topics will be displayed
-                    on lawyer cards)
+                    Drag consulting areas to set top 3 (the top 3 Consulting
+                    areas will be displayed on lawyer cards)
                   </p>
                   <InputGroup className="mb-3">
                     <Input
                       type="text"
-                      placeholder="New topic"
+                      placeholder="New Consulting area"
                       value={newInputTopics}
                       onChange={(e) => setNewInputTopics(e.target.value)}
                       onKeyDown={(event) => {
@@ -1041,7 +1041,7 @@ const LawyerMyProfile = () => {
                           setNewInputTopics("");
                         }}
                       >
-                        Add topics
+                        Add Consulting areas
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>

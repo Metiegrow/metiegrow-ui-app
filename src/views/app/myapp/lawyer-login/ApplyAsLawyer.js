@@ -50,7 +50,7 @@ const ApplyAsLawyer = () => {
   const [AboutLoading, setAboutLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [servicesLoading, setServicesLoading] = useState(false);
-  const [topicsInputValue,setTopicsInputValue] = useState("")
+  const [topicsInputValue, setTopicsInputValue] = useState("");
 
   const [aboutField, setAboutField] = useState({
     image: "",
@@ -234,22 +234,24 @@ const ApplyAsLawyer = () => {
   };
 
   const handleTopicsChangeInput = (value) => {
-    if (value.endsWith(',')) {
+    if (value.endsWith(",")) {
       const newTag = value.slice(0, -1).trim();
       if (newTag && !topicsTag.includes(newTag)) {
         setTopicsTag([...topicsTag, newTag]);
       }
-      setTopicsInputValue('');
+      setTopicsInputValue("");
     } else {
       setTopicsInputValue(value);
     }
   };
 
-
   const handleAddTopicsTag = () => {
-    if (topicsInputValue.trim() && !topicsTag.includes(topicsInputValue.trim())) {
+    if (
+      topicsInputValue.trim() &&
+      !topicsTag.includes(topicsInputValue.trim())
+    ) {
       setTopicsTag([...topicsTag, topicsInputValue.trim()]);
-      setTopicsInputValue('');
+      setTopicsInputValue("");
     }
   };
 
@@ -506,7 +508,7 @@ const ApplyAsLawyer = () => {
               {({ errors, touched }) => (
                 <Form className="av-tooltip tooltip-label-right">
                   <FormGroup>
-                    <Label for="topics">Topics*</Label>
+                    <Label for="topics">Consulting areas*</Label>
 
                     {/* <TagsInput
                       value={topicsTag}
@@ -516,37 +518,39 @@ const ApplyAsLawyer = () => {
                       addKeys={[188]}
                     /> */}
                     <TagsInput
-                            value={topicsTag}
-                            onChange={handleTopicsTagsChange}
-                            renderInput={({ addTag, ...inputProps }) => {
-                              const { onChange, value, ...other } = inputProps;
-                              return (
-                                <input
-                                  {...other}
-                                  value={topicsInputValue}
-                                  onChange={(e) => handleTopicsChangeInput(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      handleAddTopicsTag();
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                  placeholder="Add Topics"
-                                />
-                              );
+                      value={topicsTag}
+                      onChange={handleTopicsTagsChange}
+                      renderInput={({ addTag, ...inputProps }) => {
+                        const { onChange, value, ...other } = inputProps;
+                        return (
+                          <input
+                            {...other}
+                            value={topicsInputValue}
+                            onChange={(e) =>
+                              handleTopicsChangeInput(e.target.value)
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                handleAddTopicsTag();
+                                e.preventDefault();
+                              }
                             }}
+                            placeholder="Add Consulting areas"
                           />
+                        );
+                      }}
+                    />
                     {errors.topics && touched.topics && (
                       <div className="invalid-feedback d-block">
                         {errors.topics}
                       </div>
                     )}
                     <FormText color="muted">
-                      Describe your expertise to connect with mentees who have
+                      Describe your expertise to connect with Students who have
                       similar interests.
                       <br />
                       Comma-separated list of your skills (keep it below 10).
-                      Mentees will use this to find you.
+                      Students will use this to find you.
                     </FormText>
                   </FormGroup>
                   <FormGroup>

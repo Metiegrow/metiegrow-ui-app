@@ -126,7 +126,7 @@ const TopNav = ({
   } else if (roleRes.includes("LAWYER")) {
     myProfile = `${adminRoot}/lawyer/myprofile`;
   } else if (roleRes.includes("USER")) {
-    myProfile = `${adminRoot}/user/myprofile`;
+    myProfile = `${adminRoot}/student/myprofile`;
   } else if (roleRes.includes("ALUMNI")) {
     myProfile = `${adminRoot}/alumni/myprofile`;
   }

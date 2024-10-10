@@ -481,7 +481,7 @@ const Register = () => {
                         checked={selectedRole === "USER"}
                         name="userRole"
                       />
-                      User
+                      Student
                     </Label>
                   </FormGroup>
                   <FormGroup check className="">

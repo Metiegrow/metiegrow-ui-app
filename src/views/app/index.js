@@ -287,11 +287,11 @@ const App = ({ match }) => {
   } else if (roleRes.includes("USER")) {
     // redirectTo = `${match.url}/mentor/list`;
     if (statusRes === "0") {
-      redirectTo = `${match.url}/user/apply`;
+      redirectTo = `${match.url}/student/apply`;
     } else if (statusRes === "1") {
-      redirectTo = `${match.url}/user/apply`;
+      redirectTo = `${match.url}/student/apply`;
     } else if (statusRes === "3") {
-      redirectTo = `${match.url}/user/apply`;
+      redirectTo = `${match.url}/student/apply`;
     } else if (statusRes === "7") {
       redirectTo = `${match.url}/dashboard`;
     } else {
@@ -581,15 +581,15 @@ const App = ({ match }) => {
               render={(props) => <ViewLawyerReviews {...props} />}
             />
             <Route
-              path={`${match.url}/user/myprofile`}
+              path={`${match.url}/student/myprofile`}
               render={(props) => <ViewUserMyProfile {...props} />}
             />
             <Route
-              path={`${match.url}/user/profile/:uid`}
+              path={`${match.url}/student/profile/:uid`}
               render={(props) => <ViewUserMyProfile {...props} />}
             />
             <Route
-              path={`${match.url}/user/apply`}
+              path={`${match.url}/student/apply`}
               render={(props) => <ViewUserApply {...props} />}
             />
             <Route
@@ -597,7 +597,7 @@ const App = ({ match }) => {
               render={(props) => <ViewSettings {...props} />}
             />
             <Route
-              path={`${match.url}/user/:uid`}
+              path={`${match.url}/student/:uid`}
               render={(props) => <ViewUserProfile {...props} />}
             />
 

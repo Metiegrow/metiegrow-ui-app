@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 // import { Container, Row, Col } from "reactstrap";
 // import AgoraRTC from "agora-rtc-react"
-import { baseUrl } from "constants/defaultValues";
 import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
 import { Button } from "reactstrap";
 import { useClient, useMicrophoneAndCameraTracks } from "./settings";
 
-import Video from "./Video";
 import Controls from "./Controls";
+import Video from "./Video";
 
 const VideoCallCtrl = (props) => {
   const { setInCall } = props;
@@ -23,8 +23,8 @@ const VideoCallCtrl = (props) => {
   const [channelName, setChannelName] = useState("");
   const [status, setStatus] = useState("");
   const [rtcToken, setRtcToken] = useState(null);
-  const [appId, setAppId] = useState(null)
-  const [bookedByName, setBookedByName] =useState("");
+  const [appId, setAppId] = useState(null);
+  const [bookedByName, setBookedByName] = useState("");
   const [createdByName, setCreatedByName] = useState("");
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
@@ -221,14 +221,14 @@ const VideoCallCtrl = (props) => {
       //   });
       // });
       client.on("user-left", (user) => {
-        setUsers((prevUsers) => prevUsers.filter((User) => User.uid !== user.uid));
-      
+        setUsers((prevUsers) =>
+          prevUsers.filter((User) => User.uid !== user.uid)
+        );
+
         if (users.length === 1) {
           disconnectRemainingUser();
         }
       });
-
-     
 
       try {
         await client.join(appId, name, rtcToken, null);
@@ -247,7 +247,15 @@ const VideoCallCtrl = (props) => {
         console.log(error);
       }
     }
-  }, [readyForCall,channelName, client, ready, tracks, users.length, rtcToken]);
+  }, [
+    readyForCall,
+    channelName,
+    client,
+    ready,
+    tracks,
+    users.length,
+    rtcToken,
+  ]);
 
   const iTime = new Date(parseInt(callStartTime, 10));
 
@@ -298,7 +306,7 @@ const VideoCallCtrl = (props) => {
   const [minutesRemaining1, setMinutesRemaining1] = useState(null);
 
   useEffect(() => {
-    // const endTime = 1716544815000; 
+    // const endTime = 1716544815000;
     const updateRemainingTime = () => {
       const callCurrentTime = Date.now();
       const callTimeRemaining = endTime - callCurrentTime;
@@ -310,7 +318,7 @@ const VideoCallCtrl = (props) => {
     };
 
     updateRemainingTime();
-    const intervalId = setInterval(updateRemainingTime, 60000); 
+    const intervalId = setInterval(updateRemainingTime, 60000);
 
     return () => clearInterval(intervalId);
   }, [endTime]);
@@ -332,31 +340,53 @@ const VideoCallCtrl = (props) => {
       <div className="row p-0 d-flex justify-content-between">
         {/* <h4 className="mr-auto">Initiated Time: {initiatedTime}</h4> */}
         {callStartTime && (
-          <h4 className="mr-auto text-muted">Initiated Time: {initiatedTime}</h4>
+          <h4 className="mr-auto text-muted">
+            Initiated Time: {initiatedTime}
+          </h4>
         )}
         {/* <h4>
           Time Remaining :{" "}
           <span className="text-danger">{minutesRemaining1}</span>
         </h4> */}
-        {minutesRemaining1 && minutesRemaining1 > 0 && minutesRemaining1 <= 10 ? (
+        {minutesRemaining1 &&
+        minutesRemaining1 > 0 &&
+        minutesRemaining1 <= 10 ? (
           // <div>Time Remaining : {minutesRemaining1} minutes</div>
           <h4>
             Time Remaining :{" "}
-            <span className="text-danger">{minutesRemaining1} minutes</span>{" "}{roleRes.includes("USER") ? (<span>Extend by 15 minutes? <Button color="primary">Pay from wallet</Button></span>) : null }
+            <span className="text-danger">{minutesRemaining1} minutes</span>{" "}
+            {roleRes.includes("USER") ? (
+              <span>
+                Extend by 15 minutes?{" "}
+                <Button color="primary">Pay from wallet</Button>
+              </span>
+            ) : null}
           </h4>
         ) : (
           <></>
         )}
-        {minutesRemaining1 && roleRes.includes("USER") && minutesRemaining1 === 0 ? (
+        {minutesRemaining1 &&
+        roleRes.includes("USER") &&
+        minutesRemaining1 === 0 ? (
           <div>
             <h4>
-            Extend by 15 minutes? <Button color="primary">Pay from wallet</Button>
+              Extend by 15 minutes?{" "}
+              <Button color="primary">Pay from wallet</Button>
             </h4>
           </div>
         ) : null}
       </div>
       <div className="row" style={{ height: "90%" }}>
-        {start && tracks ? (<Video tracks={tracks} users={users} createdByName={createdByName} bookedByName={bookedByName} />) : <div className="loading" />}
+        {start && tracks ? (
+          <Video
+            tracks={tracks}
+            users={users}
+            createdByName={createdByName}
+            bookedByName={bookedByName}
+          />
+        ) : (
+          <div className="loading" />
+        )}
       </div>
       <div className="row ml-2" style={{ height: "10%" }}>
         {ready && tracks && (

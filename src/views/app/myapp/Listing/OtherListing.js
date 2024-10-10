@@ -212,6 +212,8 @@ const JobListing = ({ isPosted }) => {
                           className="mr-2"
                           size="xs"
                           onClick={() => handleClick(data.id)}
+                          data-toggle="tooltip"
+                          title="Full screen"
                         >
                           <i className="simple-icon-size-fullscreen text-primary" />
                         </Button>
@@ -226,6 +228,8 @@ const JobListing = ({ isPosted }) => {
                           className="mr-2"
                           size="xs"
                           onClick={() => handleShareButtonClick(data.id)}
+                          data-toggle="tooltip"
+                          title="copy"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

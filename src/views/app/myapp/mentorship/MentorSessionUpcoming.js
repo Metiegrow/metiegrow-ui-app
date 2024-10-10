@@ -154,7 +154,7 @@ const MentorSessionUpcoming = () => {
                             <Row className="">
                               <Col className="d-flex">
                                 <NavLink
-                                  href={`/app/user/profile/${up.menteeId}`}
+                                  href={`/app/student/profile/${up.menteeId}`}
                                   className="d-flex align-items-center"
                                 >
                                   {up.imageUrl === null ? (

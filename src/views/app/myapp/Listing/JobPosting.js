@@ -166,6 +166,12 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
               if (!values.company.trim()) {
                 errors.company = "Company is required";
               }
+              if (!values.employmentType.trim()) {
+                errors.employmentType = "employment type is required";
+              }
+              if (!values.workPlaceType.trim()) {
+                errors.workPlaceType = "workplace type is required";
+              }
 
               if (!values.description.trim()) {
                 errors.description = "Description is required";
@@ -296,7 +302,7 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                 <Row>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Workplace Type</Label>
+                      <Label>Workplace Type*</Label>
                       <Field
                         as="select"
                         name="workPlaceType"
@@ -316,11 +322,11 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                             </option>
                           ))}
                       </Field>
-                      {/* {errors.workPlaceType && touched.workPlaceType && (
+                      {errors.workPlaceType && touched.workPlaceType && (
                         <div className="invalid-feedback d-block">
                           {errors.workPlaceType}
                         </div>
-                      )} */}
+                      )}
                     </FormGroup>
                   </Col>
                   <Col md={6}>
@@ -345,7 +351,7 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                 </Row>
 
                 <FormGroup className="error-l-75">
-                  <Label>Employment Type</Label>
+                  <Label>Employment Type*</Label>
                   <Field
                     as="select"
                     name="employmentType"
@@ -365,11 +371,11 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                         </option>
                       ))}
                   </Field>
-                  {/* {errors.employmentType && touched.employmentType && (
+                  {errors.employmentType && touched.employmentType && (
                     <div className="invalid-feedback d-block">
                       {errors.employmentType}
                     </div>
-                  )} */}
+                  )}
                 </FormGroup>
 
                 <FormGroup className="error-l-75">

@@ -59,6 +59,7 @@ const AlumniProfile = () => {
   }, []);
 
   const chatUserId = alumniprofiledetails.username;
+
   // const handleConnectClick = () => {
   //   // Construct the URL with mentor's ID and name as query parameters
   //   const mentorId = alumniprofiledetails.id;

@@ -135,13 +135,13 @@ const MentorProfile = () => {
   const remainingSkillsCount = mentorprofiledetails1.skills
     ? mentorprofiledetails1.skills.length - 3
     : 0;
-  const handleLinkedInClick = () => {
-    // Assuming mentorprofiledetails1 contains the LinkedIn URL of the mentor
-    const linkedInUrl = mentorprofiledetails1.linkedinUrl;
+  // const handleLinkedInClick = () => {
+  //   // Assuming mentorprofiledetails1 contains the LinkedIn URL of the mentor
+  //   const linkedInUrl = mentorprofiledetails1.linkedinUrl;
 
-    // Open the mentor's LinkedIn profile in a new tab/window
-    window.open(linkedInUrl, "_blank");
-  };
+  //   // Open the mentor's LinkedIn profile in a new tab/window
+  //   window.open(linkedInUrl, "_blank");
+  // };
   const countryName = country.find(
     (c) => c.iso_code === mentorprofiledetails1.location
   )?.name;
@@ -215,7 +215,9 @@ const MentorProfile = () => {
               </Button>
               </NavLink>
             </div> */}
-                  <div>
+
+                  {/* linkedin div */}
+                  {/* <div>
                     <Button
                       color="light"
                       className=" font-weight-semibold mx-2 "
@@ -224,7 +226,7 @@ const MentorProfile = () => {
                     >
                       <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one  " />
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-sm-5 mt-4 ">
                   <h1 className="font-weight-semibold text-xlarge">

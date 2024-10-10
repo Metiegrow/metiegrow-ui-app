@@ -222,6 +222,24 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
               if (!values.description.trim()) {
                 errors.description = "Description is required";
               }
+              if (!values.BHKType.trim()) {
+                errors.BHKType = "BHK type is required";
+              }
+              if (!values.roomMate.trim()) {
+                errors.roomMate = "Room mate is required";
+              }
+              if (!values.apartmentType.trim()) {
+                errors.apartmentType = "Apartment type is required";
+              }
+              if (!values.floor.trim()) {
+                errors.floor = "Floor type is required";
+              }
+              if (!values.expectedRent.trim()) {
+                errors.expectedRent = "Expected rent is required";
+              }
+              if (!values.parking.trim()) {
+                errors.parking = "parking is required";
+              }
               // if (values.skills.length === 0) {
               //   errors.skills = "At least one skill is required";
               // }
@@ -315,7 +333,7 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                   </Col>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>BHK Type</Label>
+                      <Label>BHK Type*</Label>
                       <Field
                         as="select"
                         name="BHKType"
@@ -349,7 +367,7 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                 <Row>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Floor</Label>
+                      <Label>Floor*</Label>
                       <Field
                         as="select"
                         name="floor"
@@ -379,7 +397,7 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                   </Col>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Apartment Type</Label>
+                      <Label>Apartment Type*</Label>
                       <Field
                         as="select"
                         name="apartmentType"
@@ -446,7 +464,7 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                   </Col>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Room Mate</Label>
+                      <Label>Room Mate*</Label>
 
                       <Field
                         as="select"
@@ -481,7 +499,7 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                 <Row>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Expected Rent</Label>
+                      <Label>Expected Rent*</Label>
 
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">₹</InputGroupAddon>
@@ -498,6 +516,11 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                           value={values.expectedRent}
                         />
                       </InputGroup>
+                      {errors.expectedRent && touched.expectedRent && (
+                        <div className="invalid-feedback d-block">
+                          {errors.expectedRent}
+                        </div>
+                      )}
                     </FormGroup>
                   </Col>
                   <Col md={6}>

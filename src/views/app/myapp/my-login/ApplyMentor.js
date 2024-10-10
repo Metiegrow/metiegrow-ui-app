@@ -35,7 +35,6 @@ import {
   validateCategory,
   validateCompany,
   validateJobTitle,
-  validateLinkedinUrl,
   validateLocation,
   validateReasonForMentor,
 } from "./validation";
@@ -62,9 +61,7 @@ const ApplyMentor = () => {
   const [aboutLoading, setAboutLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [experienceLoading, setExperienceLoading] = useState(false);
-  const [aboutField, setAboutField] = useState({
-    image: "",
-  });
+  const [aboutField, setAboutField] = useState({});
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
@@ -89,11 +86,11 @@ const ApplyMentor = () => {
   const validateFile = (file) => {
     // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     const maxSize = 2 * 1024 * 1024; // 5MB
-    if (!file) {
-      setImageError(true);
-      setImageErrorMessage("A profile picture is required");
-      return false;
-    }
+    // if (!file) {
+    //   setImageError(true);
+    //   setImageErrorMessage("A profile picture is required");
+    //   return false;
+    // }
     // if (!allowedTypes.includes(file.type)) {
     //   setImageError(true);
     //   setImageErrorMessage(
@@ -101,7 +98,7 @@ const ApplyMentor = () => {
     //   );
     //   return false;
     // }
-    if (file.size > maxSize) {
+    if (file && file.size > maxSize) {
       setImageError(true);
       setImageErrorMessage("File size must be less than 2MB");
       return false;
@@ -114,7 +111,7 @@ const ApplyMentor = () => {
   // file upload validation end
 
   const [fields] = useState({
-    image: "",
+    // image: "",
 
     jobTitle: "",
     company: "",
@@ -122,7 +119,7 @@ const ApplyMentor = () => {
     category: "",
     skills: [],
     bio: "",
-    linkedinUrl: "",
+    // linkedinUrl: "",
     twitterHandle: "",
     website: "",
     introVideo: "",
@@ -166,6 +163,7 @@ const ApplyMentor = () => {
         // setFieldValue("image", base64Image);
         setAboutField({ ...aboutField, image: base64Image });
         // console.log(base64Image)
+        validateFile(file);
       };
 
       reader.readAsDataURL(file);
@@ -174,6 +172,7 @@ const ApplyMentor = () => {
   //   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
   //   const mentorAboutUrl="http://localhost:3001/acheckabout";
   const mentorAboutUrl = `${baseUrl}/api/mentor/details/about`;
+  const imageUploadUrl = `${baseUrl}/api/mentor/profile-image`;
   const mentorProfileUrl = `${baseUrl}/api/mentor/details/profile`;
   const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
   function getTokenRes() {
@@ -181,76 +180,160 @@ const ApplyMentor = () => {
   }
   const token = getTokenRes();
 
-  const postDataAbout = async (data) => {
-    console.log(data);
-    setAboutLoading(true);
-    const formData = new FormData();
-    formData.append("image", file1);
+  // const postDataAbout = async (data) => {
+  //   console.log(data);
+  //   setAboutLoading(true);
+  //   const formData = new FormData();
+  //   formData.append("image", file1);
 
-    const mentorProfile = {
-      jobTitle: data.jobTitle,
-      company: data.company,
-      location: data.location,
-      linkedinUrl: data.linkedinUrl,
-      twitterHandle: data.twitterHandle,
-      language: data.language,
-    };
-    formData.append(
-      "mentorProfile",
-      new Blob([JSON.stringify(mentorProfile)], { type: "application/json" })
-    );
-    console.log(formData);
+  //   const mentorProfile = {
+  //     jobTitle: data.jobTitle,
+  //     company: data.company,
+  //     location: data.location,
+  //     // linkedinUrl: data.linkedinUrl,
+  //     twitterHandle: data.twitterHandle,
+  //     language: data.language,
+  //   };
+  //   formData.append(
+  //     "mentorProfile",
+  //     new Blob([JSON.stringify(mentorProfile)], { type: "application/json" })
+  //   );
+  //   console.log(formData);
 
-    try {
-      const response = await axios.post(mentorAboutUrl, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // setNextStep(true)
-      setAboutLoading(false);
-      //   console.log(`resres ${response.status}`);
-      ToasterComponent("success", response.data.statuses);
-      handleNextStep();
-      localStorage.setItem("status", "1");
-    } catch (error) {
-      setImageError(false);
-      // console.error(error);
-      setAboutLoading(false);
-      if (error.response) {
-        error.response.data.statuses.forEach((status) => {
-          NotificationManager.error(
-            status.message,
-            "Oops!",
-            3000,
-            null,
-            null,
-            ""
-          );
-          if (status.code === 40327) {
-            setImageErrorMessage(status.message);
-            setImageError(true);
-          }
-        });
-      } else {
+  //   try {
+  //     const response = await axios.post(mentorAboutUrl, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     // setNextStep(true)
+  //     setAboutLoading(false);
+  //     //   console.log(`resres ${response.status}`);
+  //     ToasterComponent("success", response.data.statuses);
+  //     handleNextStep();
+  //     localStorage.setItem("status", "1");
+  //   } catch (error) {
+  //     setImageError(false);
+  //     // console.error(error);
+  //     setAboutLoading(false);
+  //     if (error.response) {
+  //       error.response.data.statuses.forEach((status) => {
+  //         NotificationManager.error(
+  //           status.message,
+  //           "Oops!",
+  //           3000,
+  //           null,
+  //           null,
+  //           ""
+  //         );
+  //         if (status.code === 40327) {
+  //           setImageErrorMessage(status.message);
+  //           setImageError(true);
+  //         }
+  //       });
+  //     } else {
+  //       NotificationManager.error(
+  //         "something went wrong",
+  //         "Oops!",
+  //         3000,
+  //         null,
+  //         null,
+  //         ""
+  //       );
+  //     }
+  //     // console.log("er",error.response.data.statuses)
+  //     // NotificationManager.warning(
+  //     //   "Something went wrong",
+  //     //   "Oops!",
+  //     //   3000,
+  //     //   null,
+  //     //   null,
+  //     //   ""
+  //     // );
+  //   }
+  // };
+  // Helper function for error handling
+  const handleError = (error) => {
+    if (error.response) {
+      error.response.data.statuses.forEach((status) => {
         NotificationManager.error(
-          "something went wrong",
+          status.message,
           "Oops!",
           3000,
           null,
           null,
           ""
         );
+      });
+    } else {
+      NotificationManager.error(
+        "Something went wrong",
+        "Oops!",
+        3000,
+        null,
+        null,
+        ""
+      );
+    }
+  };
+
+  const postDataAbout = async (data) => {
+    console.log(data);
+    setAboutLoading(true);
+
+    // Check if an image is available
+    const hasImage = file1 !== null && file1.size > 0;
+
+    // Create the mentor profile object
+    const mentorProfile = {
+      jobTitle: data.jobTitle,
+      company: data.company,
+      location: data.location,
+      twitterHandle: data.twitterHandle,
+      languages: data.language, // Assuming `language` is a string that should be in an array
+    };
+
+    try {
+      if (hasImage) {
+        // If there's an image, append it to the form data
+        const imageData = new FormData();
+        imageData.append("image", file1);
+        await axios.post(imageUploadUrl, imageData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // After uploading the image, prepare the JSON payload
+        const response = await axios.post(mentorAboutUrl, mentorProfile, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // Set content type to JSON
+          },
+        });
+
+        setAboutLoading(false);
+        ToasterComponent("success", response.data.statuses);
+        handleNextStep();
+        localStorage.setItem("status", "1");
+      } else {
+        // No image, directly submit the mentor profile
+        const response = await axios.post(mentorAboutUrl, mentorProfile, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // Set content type to JSON
+          },
+        });
+
+        setAboutLoading(false);
+        ToasterComponent("success", response.data.statuses);
+        handleNextStep();
+        localStorage.setItem("status", "1");
       }
-      // console.log("er",error.response.data.statuses)
-      // NotificationManager.warning(
-      //   "Something went wrong",
-      //   "Oops!",
-      //   3000,
-      //   null,
-      //   null,
-      //   ""
-      // );
+    } catch (error) {
+      // Error handling
+      setAboutLoading(false);
+      handleError(error);
     }
   };
 
@@ -402,7 +485,7 @@ const ApplyMentor = () => {
                 jobTitle: fields.jobTitle,
                 company: fields.company,
                 location: fields.location,
-                linkedinUrl: fields.linkedinUrl,
+                // linkedinUrl: fields.linkedinUrl,
                 twitterHandle: fields.twitterHandle,
               }}
               validateOnMount
@@ -410,11 +493,13 @@ const ApplyMentor = () => {
               //   postDataAbout({ ...values, language: languages })
               // }}
               onSubmit={(values, { setSubmitting }) => {
-                if (validateFile(file1)) {
-                  postDataAbout({ ...values, language: languages });
-                } else {
-                  setSubmitting(false);
-                }
+                // if (validateFile(file1)) {
+                //   postDataAbout({ ...values, language: languages });
+                // } else {
+                //   setSubmitting(false);
+                // }
+                postDataAbout({ ...values, language: languages });
+                setSubmitting(false);
               }}
               // onSubmit={async (values, { setSubmitting }) => {
               //   try {
@@ -451,7 +536,7 @@ const ApplyMentor = () => {
                     sending the form, so be sure to have a look at those.
                   </Alert>
                   <FormGroup>
-                    <Label for="image">Image*</Label>
+                    <Label for="image">Image</Label>
                     {imageError && (
                       <div className="invalid-feedback d-block">
                         {imageErrorMessage}
@@ -572,7 +657,7 @@ const ApplyMentor = () => {
 
                   <FormGroup className="error-l-125">
                     <Row>
-                      <Col md={6}>
+                      {/* <Col md={6}>
                         <Label for="linkedinUrl">LinkedIn URL*</Label>
                         <Field
                           className="form-control"
@@ -589,7 +674,7 @@ const ApplyMentor = () => {
                             {errors.linkedinUrl}
                           </div>
                         )}
-                      </Col>
+                      </Col> */}
                       <Col md={6}>
                         <Label for="twitterHandle">
                           Twitter Handle (optional)

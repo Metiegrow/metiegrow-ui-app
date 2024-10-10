@@ -13,11 +13,6 @@ import {
   CardSubtitle,
   CardTitle,
   Col,
-  ListGroup,
-  ListGroupItem,
-  Modal,
-  ModalBody,
-  ModalHeader,
   Row,
 } from "reactstrap";
 
@@ -33,11 +28,11 @@ const JobListing = ({ isPosted }) => {
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [isFirst, setIsFirst] = useState(true);
   const [isLast, setIsLast] = useState(true);
-  const [modal, setModal] = useState(false);
-  const [interestPerson, setInterestPerson] = useState([]);
+  // const [modal, setModal] = useState(false);
+  // const [interestPerson, setInterestPerson] = useState([]);
   const [copiedId, setCopiedId] = useState(null);
 
-  const toggle = () => setModal(!modal);
+  // const toggle = () => setModal(!modal);
   const url = `${baseUrl}/api/posts/job-post/`;
   const interestedClickUrl = `${baseUrl}/api/posts/job-post/interested`;
   const history = useHistory();
@@ -219,28 +214,28 @@ const JobListing = ({ isPosted }) => {
     }
   };
 
-  const handleInterestPersonPage = (item) => {
-    // Set the state with the interested users
-    setInterestPerson(item);
-    setModal(!modal);
-  };
+  // const handleInterestPersonPage = (item) => {
+  //   // Set the state with the interested users
+  //   setInterestPerson(item);
+  //   setModal(!modal);
+  // };
   // const handleKeyDown = (event) => {
   //   if (event.key === "Enter" || event.key === " ") {
   //     handleInterestPersonPage();
   //   }
   // };
 
-  const handleUserClick = (user) => {
-    const lowerCaseRole = user.role.toLowerCase();
-    // history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
-    if (lowerCaseRole === "alumni") {
-      history.push(`/app/alumni/profile/${user.userId}`);
-    } else if (lowerCaseRole === "user") {
-      history.push(`/app/user/profile/${user.userId}`);
-    } else {
-      history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
-    }
-  };
+  // const handleUserClick = (user) => {
+  //   const lowerCaseRole = user.role.toLowerCase();
+  //   // history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
+  //   if (lowerCaseRole === "alumni") {
+  //     history.push(`/app/alumni/profile/${user.userId}`);
+  //   } else if (lowerCaseRole === "user") {
+  //     history.push(`/app/user/profile/${user.userId}`);
+  //   } else {
+  //     history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
+  //   }
+  // };
 
   const handleShareButtonClick = async (id) => {
     try {
@@ -258,7 +253,7 @@ const JobListing = ({ isPosted }) => {
 
   return (
     <>
-      <Modal isOpen={modal} toggle={toggle}>
+      {/* <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader className="p-3" toggle={toggle}>
           Interested
         </ModalHeader>
@@ -281,7 +276,7 @@ const JobListing = ({ isPosted }) => {
             )}
           </ListGroup>
         </ModalBody>
-      </Modal>
+      </Modal> */}
       {!isLoaded ? (
         <div className="loading" />
       ) : (
@@ -403,20 +398,20 @@ const JobListing = ({ isPosted }) => {
                             sm={6}
                           >
                             <div
-                              role="button"
-                              tabIndex={0}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  handleInterestPersonPage(
-                                    data.interestedUsers
-                                  );
-                                }
-                              }}
+                              // role="button"
+                              // tabIndex={0}
+                              // onKeyDown={(e) => {
+                              //   if (e.key === "Enter" || e.key === " ") {
+                              //     handleInterestPersonPage(
+                              //       data.interestedUsers
+                              //     );
+                              //   }
+                              // }}
                               className="text-muted mt-2"
-                              onClick={() => {
-                                handleInterestPersonPage(data.interestedUsers);
-                              }}
-                              style={{ cursor: "pointer" }}
+                              // onClick={() => {
+                              //   handleInterestPersonPage(data.interestedUsers);
+                              // }}
+                              // style={{ cursor: "pointer" }}
                             >
                               {data.interestedCount} people have shown interest
                             </div>
@@ -432,6 +427,8 @@ const JobListing = ({ isPosted }) => {
                               className="mr-2"
                               size="xs"
                               onClick={() => handleClick(data.id)}
+                              data-toggle="tooltip"
+                              title="Full screen"
                             >
                               <i className="simple-icon-size-fullscreen text-primary" />
                             </Button>
@@ -446,6 +443,8 @@ const JobListing = ({ isPosted }) => {
                               className="mr-2"
                               size="xs"
                               onClick={() => handleShareButtonClick(data.id)}
+                              data-toggle="tooltip"
+                              title="copy"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"

@@ -635,7 +635,7 @@ const MyProfile = () => {
                                 </h2>
                               </ModalHeader>
                               <ModalBody className="d-flex justify-content-center align-items-center">
-                                <img
+                                {/* <img
                                   // src="/assets/img/profiles/2.jpg"
                                   src={
                                     selectedFileBase64 || `${baseUrl}/${image}`
@@ -647,7 +647,34 @@ const MyProfile = () => {
                                     objectFit: "cover",
                                   }}
                                   alt="img"
-                                />
+                                /> */}
+                                {image === null ? (
+                                  <ThumbnailLetters
+                                    rounded
+                                    text={firstName}
+                                    className="mx-2"
+                                    color="secondary"
+                                    style={{
+                                      width: "130px",
+                                      height: "130px",
+                                      objectFit: "cover",
+                                    }}
+                                  />
+                                ) : (
+                                  <img
+                                    src={
+                                      selectedFileBase64 ||
+                                      `${baseUrl}/${image}`
+                                    }
+                                    className="rounded-circle img-thumbnail border border-3"
+                                    style={{
+                                      width: "130px",
+                                      height: "130px",
+                                      objectFit: "cover",
+                                    }}
+                                    alt="img"
+                                  />
+                                )}
                               </ModalBody>
                               {!uid && (
                                 <ModalFooter

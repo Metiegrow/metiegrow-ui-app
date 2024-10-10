@@ -130,6 +130,35 @@ const ApplyAsMentor = () => {
     setCurrentStep(currentStep - 1);
   };
 
+  // file upload validation
+
+  const validateFile = (file) => {
+    // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const maxSize = 2 * 1024 * 1024; // 5MB
+    // if (!file) {
+    //   setImageError(true);
+    //   setImageErrorMessage("A profile picture is required");
+    //   return false;
+    // }
+    // if (!allowedTypes.includes(file.type)) {
+    //   setImageError(true);
+    //   setImageErrorMessage(
+    //     "Please upload a valid image file (JPEG, PNG, or GIF)"
+    //   );
+    //   return false;
+    // }
+    if (file.size > maxSize) {
+      setImageError(true);
+      setImageErrorMessage("File size must be less than 2MB");
+      return false;
+    }
+
+    setImageError(false);
+    setImageErrorMessage("");
+    return true;
+  };
+  // file upload validation end
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFile1(file);
@@ -144,6 +173,7 @@ const ApplyAsMentor = () => {
         // setFieldValue("image", base64Image);
         setAboutField({ ...aboutField, image: base64Image });
         // console.log(base64Image)
+        validateFile(file);
       };
 
       reader.readAsDataURL(file);
@@ -152,17 +182,76 @@ const ApplyAsMentor = () => {
   //   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
   //   const mentorAboutUrl="http://localhost:3001/acheckabout";
   const userProfileUrl = `${baseUrl}/api/userprofile/profile`;
+  const ImageUrl = `${baseUrl}/api/userprofile/profile-image`;
   const mentorExperienceUrl = `${baseUrl}/api/userprofile/experience`;
   const userAboutUrl = `${baseUrl}/api/userprofile/about`;
 
   const token = localStorage.getItem("tokenRes");
 
-  const postDataUserProfile = async (data) => {
-    // handleNextStep();
+  // const postDataUserProfile = async (data) => {
+  //   // handleNextStep();
 
+  //   setAboutLoading(true);
+  //   const formData = new FormData();
+  //   formData.append("image", file1);
+
+  //   const userProfile = {
+  //     languages,
+  //     linkedInUrl: data.linkedinUrl,
+  //     twitterHandle: data.twitterHandle,
+  //     personalWebsite: data.personalWebsite,
+  //   };
+  //   formData.append(
+  //     "userProfile",
+  //     new Blob([JSON.stringify(userProfile)], { type: "application/json" })
+  //   );
+
+  //   try {
+  //     const response = await axios.post(userProfileUrl, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     // setNextStep(true)
+  //     setAboutLoading(false);
+  //     //   console.log(`resres ${response.status}`);
+  //     ToasterComponent("success", response.data.statuses);
+  //     handleNextStep();
+  //     localStorage.setItem("status", "1");
+  //   } catch (error) {
+  //     setImageError(false);
+  //     // console.error(error);
+  //     setAboutLoading(false);
+  //     if (error.response) {
+  //       error.response.data.statuses.forEach((status) => {
+  //         NotificationManager.error(
+  //           status.message,
+  //           "Oops!",
+  //           3000,
+  //           null,
+  //           null,
+  //           ""
+  //         );
+  //         if (status.code === 40327) {
+  //           setImageErrorMessage(status.message);
+  //           setImageError(true);
+  //         }
+  //       });
+  //     } else {
+  //       NotificationManager.error(
+  //         "something went wrong",
+  //         "Oops!",
+  //         3000,
+  //         null,
+  //         null,
+  //         ""
+  //       );
+  //     }
+  //   }
+  // };
+
+  const postDataUserProfile = async (data) => {
     setAboutLoading(true);
-    const formData = new FormData();
-    formData.append("image", file1);
 
     const userProfile = {
       languages,
@@ -170,27 +259,36 @@ const ApplyAsMentor = () => {
       twitterHandle: data.twitterHandle,
       personalWebsite: data.personalWebsite,
     };
-    formData.append(
-      "userProfile",
-      new Blob([JSON.stringify(userProfile)], { type: "application/json" })
-    );
 
     try {
-      const response = await axios.post(userProfileUrl, formData, {
+      // Step 1: Post user profile data
+      const response = await axios.post(userProfileUrl, userProfile, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
-      // setNextStep(true)
+
+      // Step 2: Conditionally upload image if it exists
+      if (file1) {
+        const formData = new FormData();
+        formData.append("image", file1);
+
+        await axios.post(ImageUrl, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+
       setAboutLoading(false);
-      //   console.log(`resres ${response.status}`);
       ToasterComponent("success", response.data.statuses);
       handleNextStep();
       localStorage.setItem("status", "1");
     } catch (error) {
       setImageError(false);
-      // console.error(error);
       setAboutLoading(false);
+
       if (error.response) {
         error.response.data.statuses.forEach((status) => {
           NotificationManager.error(
@@ -208,7 +306,7 @@ const ApplyAsMentor = () => {
         });
       } else {
         NotificationManager.error(
-          "something went wrong",
+          "Something went wrong",
           "Oops!",
           3000,
           null,
@@ -435,39 +533,10 @@ const ApplyAsMentor = () => {
     history.push(`${adminRoot}/dashboard`);
   };
 
-  // file upload validation
-
-  const validateFile = (file) => {
-    // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    const maxSize = 2 * 1024 * 1024; // 5MB
-    if (!file) {
-      setImageError(true);
-      setImageErrorMessage("A profile picture is required");
-      return false;
-    }
-    // if (!allowedTypes.includes(file.type)) {
-    //   setImageError(true);
-    //   setImageErrorMessage(
-    //     "Please upload a valid image file (JPEG, PNG, or GIF)"
-    //   );
-    //   return false;
-    // }
-    if (file.size > maxSize) {
-      setImageError(true);
-      setImageErrorMessage("File size must be less than 2MB");
-      return false;
-    }
-
-    setImageError(false);
-    setImageErrorMessage("");
-    return true;
-  };
-  // file upload validation end
-
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
-        <h1 className="mt-4 font-weight-bold">Apply as a User</h1>
+        <h1 className="mt-4 font-weight-bold">Apply as a student</h1>
         <ul className="nav nav-tabs justify-content-center">
           {steps.map((stepItem, index) => (
             // <li key={`topNavStep_${index}`} className={`nav-item ${index === currentStep ? 'step-doing' : ''}`}>
@@ -502,9 +571,10 @@ const ApplyAsMentor = () => {
               // onSubmit={postDataUserProfile}
               onSubmit={(values) => {
                 console.log("test");
-                if (validateFile(file1)) {
-                  postDataUserProfile({ ...values });
-                }
+                postDataUserProfile({ ...values });
+                // if (validateFile(file1)) {
+
+                // }
               }}
             >
               {({ errors, touched }) => (
@@ -526,7 +596,7 @@ const ApplyAsMentor = () => {
                     </ul>
                   </Alert>
                   <FormGroup>
-                    <Label for="image">Image*</Label>
+                    <Label for="image">Image</Label>
                     {imageError && (
                       <div className="invalid-feedback d-block">
                         {imageErrorMessage}

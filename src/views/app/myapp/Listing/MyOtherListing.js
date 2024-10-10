@@ -3,11 +3,12 @@ import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import {
   Button,
   Card,
-  
+  ListGroup,
+  ListGroupItem,
   Modal,
   ModalBody,
   ModalHeader,
@@ -15,8 +16,6 @@ import {
 import TimestampConverter from "../Calculation/TimestampConverter";
 import ToasterComponent from "../notifications/ToasterComponent";
 import OtherPosting from "./OtherPosting";
-
-
 
 const MyOtherListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +25,10 @@ const MyOtherListing = () => {
   const [deleteStayPost, setDeleteStayPost] = useState(false);
   const [modal, setModal] = useState(false);
   const [selectedOther, setSelectedOther] = useState(null);
-
+  const [interestUsersModal, setInterestedUsersModal] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [jobId, setJobId] = useState(null);
+  const history = useHistory();
 
   // console.log(data)
   const url = `${baseUrl}/api/posts/other-post/myotherposts`;
@@ -37,6 +39,10 @@ const MyOtherListing = () => {
         const response = await axios.get(url);
         setPagination(response.data.paginationMeta);
         setData(response.data.otherposts);
+        // Assuming there's at least one job listing
+        if (response.data.otherposts.length > 0) {
+          setJobId(response.data.otherposts[0].id); // Set the job ID from the first job listing
+        }
         setIsLoaded(true);
       } catch (error) {
         setIsLoaded(true);
@@ -47,18 +53,18 @@ const MyOtherListing = () => {
     };
 
     fetchMyOtherListingData();
-  }, [deleteStayPost,modal]);
+  }, [deleteStayPost, modal]);
 
   const handleEditOthers = async (othersData) => {
     try {
       const token = localStorage.getItem("tokenRes");
-      const editUrl = `${baseUrl}/api/posts/other-post/`; 
+      const editUrl = `${baseUrl}/api/posts/other-post/`;
       const response = await axios.put(editUrl, othersData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      ToasterComponent('success', response.data.statuses);
+      ToasterComponent("success", response.data.statuses);
       setModal(false);
     } catch (error) {
       if (
@@ -72,8 +78,6 @@ const MyOtherListing = () => {
       }
     }
   };
-
-
 
   const deletePost = async (id) => {
     const otherDeleteUrl = `${baseUrl}/api/posts/other-post/${id}`;
@@ -92,7 +96,6 @@ const MyOtherListing = () => {
         console.error("There was an error!", error);
       }
     }
-    
   };
 
   const handleMyOtherListDelete = (id) => deletePost(id);
@@ -101,13 +104,37 @@ const MyOtherListing = () => {
     setModal(true);
   };
 
-  
-
   const toggleModalState = () => {
     setModal(false);
     setSelectedOther(null);
   };
 
+  const interestedPeopleUrl = `${baseUrl}/api/posts/other-post/interested-users/${jobId}`;
+
+  const handleModalToggle = async () => {
+    if (!interestUsersModal) {
+      // Fetch users only if modal is being opened
+      try {
+        const response = await axios.get(interestedPeopleUrl);
+        setUsers(response.data.interestedUsers);
+      } catch (error) {
+        console.error("Error fetching interested users:", error);
+      }
+    }
+    setInterestedUsersModal(!interestUsersModal); // Toggle modal visibility
+  };
+
+  const handleUserClick = (user) => {
+    const lowerCaseRole = user.role.toLowerCase();
+    // history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
+    if (lowerCaseRole === "alumni") {
+      history.push(`/app/alumni/profile/${user.userId}`);
+    } else if (lowerCaseRole === "user") {
+      history.push(`/app/user/profile/${user.userId}`);
+    } else {
+      history.push(`/app/${lowerCaseRole}profile/${user.userId}`);
+    }
+  };
 
   return !isLoaded ? (
     <div className="loading" />
@@ -141,6 +168,20 @@ const MyOtherListing = () => {
                       format="datetime"
                     />
                   </p>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    className="mb-1 text-muted text-small w-15 w-sm-100"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        handleModalToggle();
+                      }
+                    }}
+                    onClick={handleModalToggle}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i className="iconsminds-like" /> {item.interestedCount}
+                  </div>
                 </div>
                 <div className="custom-control custom-checkbox pl-1 align-self-center pr-4">
                   <Button
@@ -162,19 +203,18 @@ const MyOtherListing = () => {
                 </div>
               </div>
               <Modal size="lg" isOpen={modal} toggle={() => setModal(!modal)}>
-        <ModalHeader className="pb-1" toggle={() => setModal(!modal)}>
-          <h1 className="font-weight-semibold">Edit</h1>
-        </ModalHeader>
-        <ModalBody>
-        {/* <JobPosting closeModal={toggleModalState}  /> */}
-        <OtherPosting
-          closeModal={toggleModalState}
-          initialData={selectedOther}
-          onEdit={handleEditOthers}
-        />
-          
-        </ModalBody>
-      </Modal>
+                <ModalHeader className="pb-1" toggle={() => setModal(!modal)}>
+                  <h1 className="font-weight-semibold">Edit</h1>
+                </ModalHeader>
+                <ModalBody>
+                  {/* <JobPosting closeModal={toggleModalState}  /> */}
+                  <OtherPosting
+                    closeModal={toggleModalState}
+                    initialData={selectedOther}
+                    onEdit={handleEditOthers}
+                  />
+                </ModalBody>
+              </Modal>
             </Card>
           ))}
           <Pagination
@@ -186,6 +226,32 @@ const MyOtherListing = () => {
           />
         </Colxx>
       )}
+      {/* modal to display interested people start */}
+      <Modal isOpen={interestUsersModal} toggle={handleModalToggle}>
+        <ModalHeader className="p-3" toggle={handleModalToggle}>
+          Interested
+        </ModalHeader>
+        <ModalBody className="p-3">
+          <ListGroup flush>
+            {users?.length > 0 ? (
+              users.map((datas) => (
+                <ListGroupItem
+                  key={datas.userId}
+                  tag="a"
+                  style={{ cursor: "pointer" }}
+                  // href={`/app/mentorprofile/${data.id}`}
+                  onClick={() => handleUserClick(datas)}
+                >
+                  {datas.userName}
+                </ListGroupItem>
+              ))
+            ) : (
+              <p>No interested persons yet.</p>
+            )}
+          </ListGroup>
+        </ModalBody>
+      </Modal>
+      {/* modal to display interested people end */}
     </>
   );
 };

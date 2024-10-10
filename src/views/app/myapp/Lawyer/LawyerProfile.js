@@ -181,7 +181,7 @@ const LawyerProfile = () => {
               </div>
 
               <div className=" mt-4">
-                <h2 className="">Topics</h2>
+                <h2 className="">Consulting areas</h2>
 
                 <div className="d-flex align-items-center flex-wrap">
                   <div className="d-flex">
@@ -226,7 +226,7 @@ const LawyerProfile = () => {
               </div>
               <div>
                 <div className="my-4 " id="skillsSection">
-                  <h2 className="text-start mr-2">All Topics</h2>
+                  <h2 className="text-start mr-2">All Consulting areas</h2>
                   <div className="d-flex flex-wrap ">
                     {lawyerprofile.topic &&
                       lawyerprofile.topic.map((skill) => (
