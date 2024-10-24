@@ -9,9 +9,13 @@ import { ReactSortable } from "react-sortablejs";
 
 import {
   Button,
+  ButtonDropdown,
   Card,
   CardBody,
   Col,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   FormGroup,
   Input,
   InputGroup,
@@ -37,6 +41,8 @@ const LawyerMyProfile = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [resumeFileName, setResumeFileName] = useState("");
+  const [resumeFileId, setResumeFileId] = useState("");
   const [location, setLocation] = useState("");
   const [languages, setLanguages] = useState([]);
   const [topic, setTopic] = useState([]);
@@ -81,6 +87,8 @@ const LawyerMyProfile = () => {
         setFirstName(userData.firstName);
         setLastName(userData.lastName);
         setLocation(userData.location);
+        setResumeFileName(userData.documentName);
+        setResumeFileId(userData.documentId);
         // setLanguages(userData.languages);
         setLanguages(userData.languages.map((lang) => lang.language));
         setBio(userData.bio);
@@ -448,6 +456,135 @@ const LawyerMyProfile = () => {
     setIsAddPackage(false);
   };
 
+  const [fileError, setFileError] = useState("");
+
+  const handleFileChange1 = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const fileType = file.type;
+      const fileSize = file.size;
+
+      // Check if the file is a PDF
+      if (fileType !== "application/pdf") {
+        setFileError("Please upload a PDF file.");
+        setResumeFileName(""); // Clear the file name if invalid
+        return;
+      }
+
+      // Check if the file size is more than 2MB
+      if (fileSize > 2 * 1024 * 1024) {
+        setFileError("File size should be less than 2MB.");
+        setResumeFileName(""); // Clear the file name if invalid
+        return;
+      }
+
+      // If valid, clear the error and set the file name
+      setFileError("");
+      setResumeFileName(file.name);
+
+      const formData = new FormData();
+      formData.append("resume", file);
+
+      // Post the file to the given URL
+      const uploadUrl = `${baseUrl}/api/resume?role=LAWYER`;
+
+      try {
+        const response = await axios.post(uploadUrl, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Handle successful response
+        if (response.status === 200) {
+          ToasterComponent("success", response.data.statuses);
+          console.log("Resume uploaded successfully", response.data);
+          setResumeFileId(response.data.documentId);
+        } else {
+          ToasterComponent("error", "Failed to upload resume");
+          console.error("Failed to upload resume", response.data);
+        }
+      } catch (error) {
+        // Handle errors
+        if (error.response) {
+          ToasterComponent(
+            "error",
+            error.response.data.message || "Upload failed"
+          );
+          console.error("Error uploading resume:", error.response);
+        } else {
+          ToasterComponent("error", "An error occurred while uploading");
+          console.error("Error uploading resume:", error);
+        }
+      }
+    }
+  };
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  const handleView = async (fileId) => {
+    const viewUrl = `${baseUrl}/api/resume/${fileId}`; // Replace with your actual API endpoint
+
+    try {
+      const response = await axios.get(viewUrl, {
+        // This is important for downloading binary files
+        headers: {
+          Authorization: `Bearer ${token}`, // Include authorization if required
+        },
+      });
+      // const response = await axios.get(viewUrl);
+
+      if (response.status === 200) {
+        // Create a URL for the binary response
+        // const fileUrl = window.URL.createObjectURL(new Blob([response.data]));
+        // const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+
+        // Open the file in a new tab
+        window.open(viewUrl, "_blank");
+      } else {
+        ToasterComponent("error", "Failed to view resume");
+        console.error("Failed to view resume");
+      }
+    } catch (error) {
+      if (error.response) {
+        ToasterComponent("error", error.response.data.message || "View failed");
+        console.error("Error viewing resume:", error.response);
+      } else {
+        ToasterComponent("error", "An error occurred while viewing");
+        console.error("Error viewing resume:", error);
+      }
+    }
+  };
+
+  const handleDelete = async (fileId) => {
+    const deleteUrl = `${baseUrl}/api/resume/${fileId}?role=LAWYER`; // Replace with your actual delete API endpoint
+
+    try {
+      const response = await axios.delete(deleteUrl);
+
+      if (response.status === 200) {
+        // Assuming the deletion is successful
+        ToasterComponent("success", response.data.statuses);
+        console.log("File deleted successfully");
+        // Add any other logic here like updating the state or UI
+        setResumeFileName("");
+      } else {
+        console.error("Failed to delete the file", "Error");
+      }
+    } catch (error) {
+      // Handle the error here
+      if (error?.response?.data?.statuses) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error deleting the file:", error);
+      }
+    }
+  };
+
   return (
     <div className="mentor-profile">
       <Colxx sm="12" md="12" lg="12" xxs="12" className="">
@@ -613,63 +750,147 @@ const LawyerMyProfile = () => {
                   <ModalBody>
                     <div className="">
                       <div>
-                        <>
-                          <Row>
-                            <Col md="6">
-                              <Label for="firstName">
-                                <h4>First Name</h4>
-                              </Label>
-                              <Input
-                                type="text"
-                                id="firstName"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                              />
-                            </Col>
-                            <Col md="6">
-                              <Label for="lastName">
-                                <h4>Last Name</h4>
-                              </Label>
-                              <Input
-                                type="text"
-                                id="lastName"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                              />
-                            </Col>
-                          </Row>
-                          <>
-                            <Label
-                              for="location"
-                              className="font-weight-medium"
-                            >
-                              <h4>Location</h4>
+                        <Row>
+                          <Col md="6">
+                            <Label for="firstName">
+                              <h4>First Name</h4>
                             </Label>
-
                             <Input
-                              type="select"
-                              name="location"
-                              value={location}
-                              onChange={(e) => setLocation(e.target.value)}
-                              className="form-control"
+                              type="text"
+                              id="firstName"
+                              value={firstName}
+                              onChange={(e) => setFirstName(e.target.value)}
+                            />
+                          </Col>
+                          <Col md="6">
+                            <Label for="lastName">
+                              <h4>Last Name</h4>
+                            </Label>
+                            <Input
+                              type="text"
+                              id="lastName"
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                            />
+                          </Col>
+                        </Row>
+
+                        <Label for="location" className="font-weight-medium">
+                          <h4>Location</h4>
+                        </Label>
+
+                        <Input
+                          type="select"
+                          name="location"
+                          value={location}
+                          onChange={(e) => setLocation(e.target.value)}
+                          className="form-control"
+                        >
+                          <option disabled value="">
+                            Select Location
+                          </option>
+                          {country.map((option) => (
+                            <option
+                              // eslint-disable-next-line react/no-array-index-key
+                              key={option}
+                              value={option.iso_code}
                             >
-                              <option disabled value="">
-                                Select Location
-                              </option>
-                              {country.map((option, index) => (
-                                <option
-                                  // eslint-disable-next-line react/no-array-index-key
-                                  key={index}
-                                  value={option.iso_code}
+                              {option.name}
+                            </option>
+                          ))}
+                        </Input>
+                        <br />
+
+                        <br />
+
+                        <Row>
+                          <Col md={6}>
+                            <>
+                              <Label
+                                for="resume"
+                                className="font-weight-medium"
+                              >
+                                <h4>CV</h4>
+                              </Label>
+                              <div
+                                className=" p-2 my-2 d-flex text-one align-items-center justify-content-between"
+                                style={{
+                                  border: "1px solid #ccc",
+                                  minWidth: "200px",
+                                }}
+                              >
+                                {resumeFileName || "no file selected"}
+                                <ButtonDropdown
+                                  isOpen={dropdownOpen}
+                                  toggle={toggleDropdown}
                                 >
-                                  {option.name}
-                                </option>
-                              ))}
-                            </Input>
-                            <br />
-                          </>
-                          <br />
-                        </>
+                                  <DropdownToggle
+                                    caret
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      border: "none",
+                                      padding: 0,
+                                    }}
+                                  >
+                                    <i
+                                      className="fa-solid fa-ellipsis"
+                                      style={{
+                                        color: "#333",
+                                        cursor: "pointer",
+                                      }}
+                                    />
+                                  </DropdownToggle>
+
+                                  <DropdownMenu>
+                                    <DropdownItem
+                                      onClick={() => handleView(resumeFileId)}
+                                    >
+                                      view
+                                    </DropdownItem>
+                                    <DropdownItem
+                                      onClick={() => handleDelete(resumeFileId)}
+                                    >
+                                      delete
+                                    </DropdownItem>
+                                  </DropdownMenu>
+                                </ButtonDropdown>
+                              </div>
+                              <InputGroup className="">
+                                <div className="">
+                                  <button
+                                    type="button"
+                                    style={{
+                                      cursor: "pointer",
+
+                                      background: "none",
+                                      border: "none",
+                                    }}
+                                    onClick={() =>
+                                      document
+                                        .getElementById("file-upload")
+                                        .click()
+                                    }
+                                  >
+                                    <h5>+ Add your Resume</h5>
+                                  </button>
+                                  {/* <Form> */}
+                                  <Input
+                                    id="file-upload"
+                                    type="file"
+                                    className="d-none"
+                                    // onChange={handleFileChange1}
+                                    // validate={validateFile}
+                                    onChange={(e) => handleFileChange1(e)}
+                                  />
+                                </div>
+                              </InputGroup>
+                              <br />
+                              {fileError && (
+                                <p style={{ color: "red" }}>{fileError}</p>
+                              )}
+                            </>
+                          </Col>
+                        </Row>
                       </div>
                     </div>
                     <br />
@@ -721,6 +942,7 @@ const LawyerMyProfile = () => {
                       <i className="simple-icon-star text-primary " />
                       <span className="ml-2">{`${star} (${ratings} ratings)`}</span>
                     </h6>
+                    <h6 className="text-muted">{resumeFileName}</h6>
                   </div>
                 </div>
               </CardBody>
@@ -848,10 +1070,10 @@ const LawyerMyProfile = () => {
                         paddingLeft: 0,
                       }}
                     >
-                      {languages.map((lang, index) => (
+                      {languages.map((lang) => (
                         <li
                           // eslint-disable-next-line react/no-array-index-key
-                          key={index}
+                          key={lang}
                           style={{
                             position: "relative",
                             paddingLeft: "20px",
@@ -906,7 +1128,7 @@ const LawyerMyProfile = () => {
                       {languages.map((lang, index) => (
                         <Button
                           // eslint-disable-next-line react/no-array-index-key
-                          key={index}
+                          key={lang}
                           outline
                           color="primary"
                           className="mt-2 font-weight-semibold mr-2"
@@ -1004,7 +1226,7 @@ const LawyerMyProfile = () => {
                     {topic.map((newTopics, index) => (
                       <Button
                         // eslint-disable-next-line react/no-array-index-key
-                        key={index}
+                        key={newTopics}
                         color={index < 3 ? "primary" : "light"}
                         // className=" mb-2 font-weight-semibold "
                         className=" my-2 font-weight-semibold mr-2 d-flex align-items-center "
@@ -1086,40 +1308,39 @@ const LawyerMyProfile = () => {
                 </Row>
 
                 <Row>
-                  {packages &&
-                    packages.map((pack) => (
-                      <Col lg={6} key={pack.id} className="my-2">
-                        <Card className="pt-2 pb-2 d-flex">
-                          <CardBody className="pt-2 pb-2">
-                            <div className="price-top-part d-flex justify-content-between align-items-center">
-                              <div>
-                                <i className="" />
-                                <h2 className="mb-0 font-weight-semibold text-primary text-large mb-4">
-                                  {pack.serviceName}
-                                </h2>
-                                {/* <p className=''>{pack.headline}</p> */}
-                                <p className="text-large mb-2 text-default">
-                                  ₹{Math.floor(pack.amount).toLocaleString()}
-                                </p>
-                                <p className="text-muted text-small">
-                                  {pack.description}
-                                </p>
-                              </div>
-                              <Button
-                                color="primary"
-                                outline
-                                className="icon-button text-end ml-5"
-                                size="sm"
-                                onClick={() => handlePackageEditClick(pack)}
-                                style={{ border: "none" }}
-                              >
-                                <i className="simple-icon-pencil" />
-                              </Button>
+                  {packages?.map((pack) => (
+                    <Col lg={6} key={pack.id} className="my-2">
+                      <Card className="pt-2 pb-2 d-flex">
+                        <CardBody className="pt-2 pb-2">
+                          <div className="price-top-part d-flex justify-content-between align-items-center">
+                            <div>
+                              <i className="" />
+                              <h2 className="mb-0 font-weight-semibold text-primary text-large mb-4">
+                                {pack.serviceName}
+                              </h2>
+                              {/* <p className=''>{pack.headline}</p> */}
+                              <p className="text-large mb-2 text-default">
+                                ₹{Math.floor(pack.amount).toLocaleString()}
+                              </p>
+                              <p className="text-muted text-small">
+                                {pack.description}
+                              </p>
                             </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
+                            <Button
+                              color="primary"
+                              outline
+                              className="icon-button text-end ml-5"
+                              size="sm"
+                              onClick={() => handlePackageEditClick(pack)}
+                              style={{ border: "none" }}
+                            >
+                              <i className="simple-icon-pencil" />
+                            </Button>
+                          </div>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  ))}
                 </Row>
                 <Row>
                   <Col lg={12}>

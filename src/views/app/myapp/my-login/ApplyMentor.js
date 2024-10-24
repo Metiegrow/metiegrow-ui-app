@@ -54,8 +54,10 @@ const ApplyMentor = () => {
   const [skillsTag, setSkillsTag] = useState([]);
   const [toolsTag, setToolsTag] = useState([]);
   const [imageError, setImageError] = useState(false);
+  const [imageError1, setImageError1] = useState(false);
   const [skillError, setSkillError] = useState(false);
   const [imageErrorMessage, setImageErrorMessage] = useState(null);
+  const [imageErrorMessage1, setImageErrorMessage1] = useState(null);
   const [skillErrorMessage, setSkillErrorMessage] = useState(null);
   const [languages, setLanguages] = useState([]);
   const [aboutLoading, setAboutLoading] = useState(false);
@@ -169,12 +171,42 @@ const ApplyMentor = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  const [selectedFile2, setSelectedFile2] = useState(null);
+
+  // Handle file change
+  const handleFileChangeResume = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileType = file.type;
+      const fileSize = file.size / 1024 / 1024; // Convert size to MB
+
+      if (fileType !== "application/pdf") {
+        // alert("Please upload a PDF file.");
+        setImageError1(true);
+        setImageErrorMessage1("Please upload a PDF file.");
+        return;
+      }
+
+      if (fileSize > 2) {
+        // alert("File size exceeds 2MB. Please upload a smaller file.");
+        setImageError1(true);
+        setImageErrorMessage1("File size must be less than  2MB");
+        return;
+      }
+
+      setSelectedFile2(file);
+      setImageError1(false);
+      setImageErrorMessage1("");
+    }
+  };
   //   const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
   //   const mentorAboutUrl="http://localhost:3001/acheckabout";
   const mentorAboutUrl = `${baseUrl}/api/mentor/details/about`;
   const imageUploadUrl = `${baseUrl}/api/mentor/profile-image`;
   const mentorProfileUrl = `${baseUrl}/api/mentor/details/profile`;
   const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
+  const mentorResumeUrl = `${baseUrl}/resume?role=MENTOR`;
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
   }
@@ -277,12 +309,70 @@ const ApplyMentor = () => {
     }
   };
 
+  // const postDataAbout = async (data) => {
+  //   console.log(data);
+  //   setAboutLoading(true);
+
+  //   // Check if an image is available
+  //   const hasImage = file1 !== null && file1.size > 0;
+
+  //   // Create the mentor profile object
+  //   const mentorProfile = {
+  //     jobTitle: data.jobTitle,
+  //     company: data.company,
+  //     location: data.location,
+  //     twitterHandle: data.twitterHandle,
+  //     languages: data.language, // Assuming `language` is a string that should be in an array
+  //   };
+
+  //   try {
+  //     if (hasImage) {
+  //       // If there's an image, append it to the form data
+  //       const imageData = new FormData();
+  //       imageData.append("image", file1);
+  //       await axios.post(imageUploadUrl, imageData, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       // After uploading the image, prepare the JSON payload
+  //       const response = await axios.post(mentorAboutUrl, mentorProfile, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json", // Set content type to JSON
+  //         },
+  //       });
+
+  //       setAboutLoading(false);
+  //       ToasterComponent("success", response.data.statuses);
+  //       handleNextStep();
+  //       localStorage.setItem("status", "1");
+  //     }
+
+  //     else {
+  //       // No image, directly submit the mentor profile
+  //       const response = await axios.post(mentorAboutUrl, mentorProfile, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json", // Set content type to JSON
+  //         },
+  //       });
+
+  //       setAboutLoading(false);
+  //       ToasterComponent("success", response.data.statuses);
+  //       handleNextStep();
+  //       localStorage.setItem("status", "1");
+  //     }
+  //   } catch (error) {
+  //     // Error handling
+  //     setAboutLoading(false);
+  //     handleError(error);
+  //   }
+  // };
   const postDataAbout = async (data) => {
     console.log(data);
     setAboutLoading(true);
-
-    // Check if an image is available
-    const hasImage = file1 !== null && file1.size > 0;
 
     // Create the mentor profile object
     const mentorProfile = {
@@ -290,10 +380,25 @@ const ApplyMentor = () => {
       company: data.company,
       location: data.location,
       twitterHandle: data.twitterHandle,
-      languages: data.language, // Assuming `language` is a string that should be in an array
+      languages: Array.isArray(data.language) ? data.language : [data.language], // Ensure languages is always an array
     };
 
     try {
+      // Submit the mentor profile first
+      const response = await axios.post(mentorAboutUrl, mentorProfile, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      setAboutLoading(false);
+      ToasterComponent("success", response.data.statuses);
+      handleNextStep();
+
+      // Check if an image is available
+      const hasImage = file1 !== null && file1.size > 0;
+
       if (hasImage) {
         // If there's an image, append it to the form data
         const imageData = new FormData();
@@ -303,33 +408,23 @@ const ApplyMentor = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        // After uploading the image, prepare the JSON payload
-        const response = await axios.post(mentorAboutUrl, mentorProfile, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json", // Set content type to JSON
-          },
-        });
-
-        setAboutLoading(false);
-        ToasterComponent("success", response.data.statuses);
-        handleNextStep();
-        localStorage.setItem("status", "1");
-      } else {
-        // No image, directly submit the mentor profile
-        const response = await axios.post(mentorAboutUrl, mentorProfile, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json", // Set content type to JSON
-          },
-        });
-
-        setAboutLoading(false);
-        ToasterComponent("success", response.data.statuses);
-        handleNextStep();
-        localStorage.setItem("status", "1");
       }
+
+      // Check if a resume is available
+      const hasResume = selectedFile2 !== null && selectedFile2.size > 0;
+
+      if (hasResume) {
+        // If there's a resume, append it to the form data
+        const formData = new FormData();
+        formData.append("resume", selectedFile2);
+        await axios.post(mentorResumeUrl, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+
+      localStorage.setItem("status", "1");
     } catch (error) {
       // Error handling
       setAboutLoading(false);
@@ -694,6 +789,45 @@ const ApplyMentor = () => {
                           {errors.twitterHandle}
                         </div>
                       )} */}
+                      </Col>
+                      <Col md={6}>
+                        <Label>CV</Label>
+                        {imageError1 && (
+                          <div className="invalid-feedback d-block">
+                            {imageErrorMessage1}
+                          </div>
+                        )}
+
+                        <InputGroup className="">
+                          <div className="">
+                            <Button
+                              className="default"
+                              color="primary"
+                              onClick={() =>
+                                document
+                                  .getElementById("file-upload-resume")
+                                  .click()
+                              }
+                            >
+                              Upload Resume{" "}
+                              <i className="iconsminds-upload ml-2" />
+                            </Button>
+                            {/* <Form> */}
+                            <Input
+                              id="file-upload-resume"
+                              type="file"
+                              className="d-none"
+                              onChange={handleFileChangeResume}
+                              // validate={validateFile}
+                            />
+                          </div>
+                        </InputGroup>
+                        <div className="  my-2 ">
+                          {/* {selectedFile2 ? selectedFile2.name : ""} */}
+                          {selectedFile2
+                            ? `selected file is ${selectedFile2.name}`
+                            : ""}
+                        </div>
                       </Col>
                     </Row>
                   </FormGroup>

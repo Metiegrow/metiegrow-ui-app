@@ -91,6 +91,8 @@ const ApplyAsLawyer = () => {
 
   const [imageError, setImageError] = useState(false);
   const [imageErrorMessage, setImageErrorMessage] = useState(null);
+  const [imageError1, setImageError1] = useState(false);
+  const [imageErrorMessage1, setImageErrorMessage1] = useState(null);
 
   const validateFile = (file) => {
     // const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -159,10 +161,45 @@ const ApplyAsLawyer = () => {
     ]);
   };
 
+  const [selectedFile2, setSelectedFile2] = useState(null);
+
+  // Handle file change
+  // const handleFileChange2 = (event) => {
+  //   const file = event.target.files[0];
+  //   setSelectedFile2(file);
+  // };
+  const handleFileChange2 = (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return; // No file selected
+
+    if (!(file.type === "application/pdf")) {
+      // alert("Please select a valid PDF file.");
+      setImageError1(true);
+      setImageErrorMessage1("Please upload a PDF file.");
+      return;
+    }
+
+    const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+
+    if (fileSizeMB > 2) {
+      // alert("File size exceeds 2MB limit.");
+      setImageError1(true);
+      setImageErrorMessage1("File size must be less than  2MB");
+
+      return;
+    }
+
+    setSelectedFile2(file);
+    setImageError1(false);
+    setImageErrorMessage1("");
+  };
+
   const lawyerAboutUrl = `${baseUrl}/api/lawyer/about`;
   const lawyerProfileUrl = `${baseUrl}/api/lawyer/profile`;
   const packageUrl = `${baseUrl}/api/lawyer/services`;
   const lawyerImagePostUrl = `${baseUrl}/api/lawyer/lawyer-profile-images`;
+  const lawyerResumePostUrl = ` ${baseUrl}/resume?role=LAWYER`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
@@ -175,6 +212,22 @@ const ApplyAsLawyer = () => {
       formData.append("image", file1);
 
       await axios.post(lawyerImagePostUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(`resres ${response.status}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const postResumeData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("resume", selectedFile2);
+
+      await axios.post(lawyerResumePostUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -339,6 +392,7 @@ const ApplyAsLawyer = () => {
                 if (validateFile(file1)) {
                   postDataAbout(values);
                   postImageData();
+                  postResumeData();
                 }
 
                 // console.log(aboutField.image);
@@ -425,27 +479,73 @@ const ApplyAsLawyer = () => {
                     </Row>
                   </FormGroup>
                   <FormGroup className="error-l-75">
-                    <Label>Location*</Label>
-                    <Field
-                      as="select"
-                      name="location"
-                      validate={validateLocation}
-                      className="form-control"
-                    >
-                      <option disabled value="">
-                        Select Location
-                      </option>
-                      {country.map((option) => (
-                        <option key={option.iso_code} value={option.iso_code}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </Field>
-                    {errors.location && touched.location && (
-                      <div className="invalid-feedback d-block">
-                        {errors.location}
-                      </div>
-                    )}
+                    <Row>
+                      <Col md={6}>
+                        <Label>Location*</Label>
+                        <Field
+                          as="select"
+                          name="location"
+                          validate={validateLocation}
+                          className="form-control"
+                        >
+                          <option disabled value="">
+                            Select Location
+                          </option>
+                          {country.map((option) => (
+                            <option
+                              key={option.iso_code}
+                              value={option.iso_code}
+                            >
+                              {option.name}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.location && touched.location && (
+                          <div className="invalid-feedback d-block">
+                            {errors.location}
+                          </div>
+                        )}
+                      </Col>
+                      <Col md={6}>
+                        <Label>CV</Label>
+                        {imageError1 && (
+                          <div className="invalid-feedback d-block">
+                            {imageErrorMessage1}
+                          </div>
+                        )}
+
+                        <InputGroup className="">
+                          <div className="">
+                            <Button
+                              className="default"
+                              color="primary"
+                              onClick={() =>
+                                document
+                                  .getElementById("file-upload-resume")
+                                  .click()
+                              }
+                            >
+                              Upload Resume{" "}
+                              <i className="iconsminds-upload ml-2" />
+                            </Button>
+                            {/* <Form> */}
+                            <Input
+                              id="file-upload-resume"
+                              type="file"
+                              className="d-none"
+                              onChange={handleFileChange2}
+                              // validate={validateFile}
+                            />
+                          </div>
+                        </InputGroup>
+                        <div className="  my-2 ">
+                          {/* {selectedFile2 ? selectedFile2.name : ""} */}
+                          {selectedFile2
+                            ? `selected file is ${selectedFile2.name}`
+                            : ""}
+                        </div>
+                      </Col>
+                    </Row>
                   </FormGroup>
                   <FormGroup className="error-l-75">
                     <Label>Languages known*</Label>

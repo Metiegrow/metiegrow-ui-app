@@ -4,6 +4,7 @@ import { baseUrl } from "constants/defaultValues";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Button, Card, CardBody, CardImg, NavLink, Row } from "reactstrap";
+import ThumbnailLetters from "../Chat/ThumbnailLetters";
 import ReviewsComponent from "../Reviews/ReviewsComponent";
 import country from "../my-login/Country";
 import MentorTabCard from "./MentorTabCard";
@@ -176,10 +177,53 @@ const MentorProfile = () => {
           </Colxx> */}
               <Row className="h-100">
                 <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
-                  <div className=" ">
-                    {/* <img src="/assets/img/profiles/2.jpg" className=' col-2 mx-2 w-60
-             rounded-circle img-thumbnail border    ' alt="" /> */}
-                    <img
+                  <div className="d-flex align-items-center ">
+                    {mentorprofiledetails1.imageUrl == null ? (
+                      <div
+                        style={{
+                          width: "110px",
+                          height: "110px",
+                          objectFit: "cover",
+                        }}
+                        className="mx-2 rounded-circle border img-thumbnail"
+                      >
+                        <ThumbnailLetters
+                          rounded
+                          small
+                          text={mentorprofiledetails1.firstName}
+                          // className="border border-1 mx-2"
+                          className="w-100 h-100"
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`}
+                        // className=' col-2 mx-2 w-60 rounded-circle img-thumbnail border'
+                        className="mx-2 rounded-circle img-thumbnail border"
+                        alt=""
+                        style={{
+                          width: "110px",
+                          height: "110px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
+                    {/* <div
+                      style={{
+                        width: "110px",
+                        height: "110px",
+                        objectFit: "cover",
+                      }}
+                      // className="mx-2 rounded-circle border img-thumbnail"
+                    >
+                      <ThumbnailLetters
+                        rounded
+                        small
+                        text={mentorprofiledetails1.firstName}
+                        className="border border-1 mx-2"
+                      />
+                    </div> */}
+                    {/* <img
                       src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`}
                       // className=' col-2 mx-2 w-60 rounded-circle img-thumbnail border'
                       className="mx-2 rounded-circle img-thumbnail border"
@@ -189,9 +233,7 @@ const MentorProfile = () => {
                         height: "110px",
                         objectFit: "cover",
                       }}
-                    />
-                    {/* <img  src={`${baseUrl}/api/public/images/${mid}/profile-pic`} className=' col-2 mx-2 w-60 rounded-circle
-              img-thumbnail border    ' alt="" /> */}
+                    /> */}
                     <Button
                       color="light"
                       className=" font-weight-semibold mx-2"
@@ -206,27 +248,10 @@ const MentorProfile = () => {
                         {mentorprofiledetails1.achievement}
                       </span>
                     </Button>
-                  </div>
-                  {/* <div>
-            <NavLink  onClick={handleConnectClick}>
-              <Button color="light" className=" font-weight-semibold mx-2 " size='large'>
-                <span className='font-weight-semibold text-primary text-one'>Connect</span>
-             
-              </Button>
-              </NavLink>
-            </div> */}
 
-                  {/* linkedin div */}
-                  {/* <div>
-                    <Button
-                      color="light"
-                      className=" font-weight-semibold mx-2 "
-                      size="large"
-                      onClick={handleLinkedInClick}
-                    >
-                      <i className="simple-icon-social-linkedin text-primary font-weight-semibold text-one  " />
-                    </Button>
-                  </div> */}
+                    {/* <img  src={`${baseUrl}/api/public/images/${mid}/profile-pic`} className=' col-2 mx-2 w-60 rounded-circle
+              img-thumbnail border    ' alt="" /> */}
+                  </div>
                 </div>
                 <div className="col-sm-5 mt-4 ">
                   <h1 className="font-weight-semibold text-xlarge">

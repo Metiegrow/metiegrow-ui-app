@@ -254,7 +254,7 @@ const MentorCard = () => {
                       <Colxx
                         sm="12"
                         md="12"
-                        lg="8"
+                        lg="9"
                         xxs="12"
                         className="mx-auto"
                       >
@@ -307,7 +307,7 @@ const MentorCard = () => {
                               style={{ columnGap: "24px" }}
                             >
                               <div
-                                className="d-flex flex-wrap"
+                                className="d-flex flex-wrap align-items-center"
                                 style={{ gap: "10px" }}
                               >
                                 <div className="font-weight-semibold text-large text-capitalize">
@@ -316,12 +316,25 @@ const MentorCard = () => {
                                 <div className="font-weight-semibold text-large text-capitalize">
                                   {mentors.lastName}
                                 </div>
+                                <div className="mx-2">
+                                  <Badge
+                                    pill
+                                    style={{
+                                      background: "#fcba0a",
+                                    }}
+                                    color="#fcba0a"
+                                    className="py-1 px-2 text-one text-dark"
+                                  >
+                                    {mentors.consultations} consultants
+                                  </Badge>
+                                </div>
                               </div>
+
                               <CardText
                                 className="text-one d-flex align-items-center flex-wrap"
                                 style={{ gap: "4px" }}
                               >
-                                <span className="font-weight-semibold">
+                                <span className="font-weight-semibold mt-md-0 mt-2">
                                   <Rating
                                     total={5}
                                     rating={mentors.star}
@@ -350,21 +363,29 @@ const MentorCard = () => {
                               {/* {mentors.bio} */}
                               {truncateBio(mentors.bio, 20)}
                             </CardText>
-                            <CardText className="d-flex flex-wrap">
-                              {/* {mentordetails.skills&&mentordetails.skills.map((skill) => (
+
+                            <div>
+                              <CardText>
+                                <p className="text-muted ">Ready to offer</p>
+                              </CardText>
+
+                              <CardText className="d-flex flex-wrap">
+                                {/* {mentordetails.skills&&mentordetails.skills.map((skill) => (
               <span key={skill} className="">{skill}</span>
             ))} */}
-                              {mentors.skills &&
-                                mentors.skills.slice(0, 3).map((skill) => (
-                                  <div
-                                    key={skill}
-                                    className="pr-2"
-                                    id="btn.rounded"
-                                  >
-                                    <Badge color="light">{skill}</Badge>
-                                  </div>
-                                ))}
-                            </CardText>
+
+                                {mentors.skills &&
+                                  mentors.skills.slice(0, 3).map((skill) => (
+                                    <div
+                                      key={skill}
+                                      className="pr-2"
+                                      id="btn.rounded"
+                                    >
+                                      <Badge color="light">{skill}</Badge>
+                                    </div>
+                                  ))}
+                              </CardText>
+                            </div>
 
                             <div
                               className="d-flex justify-content-between align-items-center mt-auto flex-wrap"

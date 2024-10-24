@@ -7,9 +7,13 @@ import Select from "react-select";
 import { ReactSortable } from "react-sortablejs";
 import {
   Button,
+  ButtonDropdown,
   Card,
   CardBody,
   Col,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   FormGroup,
   Input,
   InputGroup,
@@ -77,6 +81,9 @@ const AlumniMyProfile = () => {
   const [isEditingExpSecond, setIsEditingExpSecond] = useState(false);
   // const [isAddingEducation, setIsAddingEducation] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [resumeFileName, setResumeFileName] = useState("");
+  const [resumeFileId, setResumeFileId] = useState("");
+  const [fileError, setFileError] = useState("");
 
   const endUrl = `${baseUrl}/api/alumni/myprofile`;
   const inputUrl = `${baseUrl}/inputs`;
@@ -93,6 +100,8 @@ const AlumniMyProfile = () => {
         setJobTitle(userData.jobTitle);
         setCompany(userData.company);
         setLocation(userData.location);
+        setResumeFileName(userData.documentName);
+        setResumeFileId(userData.documentId);
         setSkills(userData.skills);
         setPrice(userData.price);
         setUserId(userData.id);
@@ -203,7 +212,7 @@ const AlumniMyProfile = () => {
       ToasterComponent("success", response.data.statuses);
     } catch (error) {
       console.error("Error updating profile", error);
-      if (error.response && error.response.data.statuses[0]) {
+      if (error?.response?.data?.statuses[0]) {
         ToasterComponent("warning", error.response.data.statuses);
       } else {
         ToasterComponent("error", [
@@ -499,13 +508,68 @@ const AlumniMyProfile = () => {
   const handleRemoveLanguages = (index) => {
     setLanguages(languages.filter((_, i) => i !== index));
   };
-  // const handleEditAboutClick = () => {
-  //   setIsEditingAbout(true);
-  // };
 
-  // const handleEditExpClick = () => {
-  //   setIsEditingExp(true);
-  // };
+  const handleFileChange1 = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const fileType = file.type;
+      const fileSize = file.size;
+
+      // Check if the file is a PDF
+      if (fileType !== "application/pdf") {
+        setFileError("Please upload a PDF file.");
+        setResumeFileName(""); // Clear the file name if invalid
+        return;
+      }
+
+      // Check if the file size is more than 2MB
+      if (fileSize > 2 * 1024 * 1024) {
+        setFileError("File size should be less than 2MB.");
+        setResumeFileName(""); // Clear the file name if invalid
+        return;
+      }
+
+      // If valid, clear the error and set the file name
+      setFileError("");
+      setResumeFileName(file.name);
+      const formData = new FormData();
+      formData.append("resume", file);
+      // Post the file to the given URL
+      const uploadUrl = `${baseUrl}/api/resume?role=ALUMNI`;
+      try {
+        const response = await axios.post(uploadUrl, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Handle successful response
+        if (response.status === 200) {
+          ToasterComponent("success", response.data.statuses);
+          console.log("Resume uploaded successfully", response.data);
+          setResumeFileId(response.data.documentId);
+        } else {
+          ToasterComponent("error", "Failed to upload resume");
+          console.error("Failed to upload resume", response.data);
+        }
+      } catch (error) {
+        // Handle errors
+        if (error.response) {
+          ToasterComponent(
+            "error",
+            error.response.data.message || "Upload failed"
+          );
+          console.error("Error uploading resume:", error.response);
+        } else {
+          ToasterComponent("error", "An error occurred while uploading");
+          console.error("Error uploading resume:", error);
+        }
+      }
+    }
+  };
+
   const handleSavePrice = () => {
     setIsEditingPrice(false);
     updateMEntorProfile();
@@ -527,13 +591,6 @@ const AlumniMyProfile = () => {
     updateMEntorProfile();
   };
 
-  // const handleCancelEditAbout = () => {
-  //   setIsEditingAbout(false);
-  // };
-
-  // const handleEditButton = () => {
-  //   setIsEditingButton(true);
-  // };
   const handleLanguagesSave = () => {
     if (languages.length === 0) {
       setSkillValidationMessage("At least one language is required.");
@@ -557,36 +614,12 @@ const AlumniMyProfile = () => {
   const handleSkillCancel = () => {
     setIsEditingSkills(false);
   };
-  // const handleSaveButton = () => {
-  //   if (skills.length === 0) {
-  //     setSkillValidationMessage("At least one skill is required.");
-  //   } else {
-  //     setIsEditingButton(false);
-  //     updateMEntorProfile();
-  //   }
-  // };
-
-  // const handleCancelButton = () => {
-  //   if (skills.length === 0) {
-  //     setSkillValidationMessage("At least one skill is required.");
-  //   } else {
-  //     setIsEditingButton(false);
-  //   }
-  // };
-
-  // const handleEditClick = () => {
-  //   setIsEditing(true);
-  // };
 
   const handleSave = () => {
     setIsEditing(false);
     updateMEntorProfile();
     postImageData();
   };
-
-  // const handleCancel = () => {
-  //   setIsEditing(false);
-  // };
 
   const handleImageClick = () => setImageEditModal(true);
 
@@ -626,10 +659,6 @@ const AlumniMyProfile = () => {
   const handleAddLanguages = (newLanguages) => {
     setLanguages([...languages, newLanguages]);
   };
-
-  // const handleRemoveLanguages = (index) => {
-  //   setLanguages(languages.filter((_, i) => i !== index));
-  // };
 
   const languageOptions = language.map((option) => ({
     value: option.iso_code,
@@ -715,6 +744,62 @@ const AlumniMyProfile = () => {
   };
 
   console.log("Editing experience index:", editingIndex);
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  const handleView = async (fileId) => {
+    const viewUrl = `${baseUrl}/api/resume/${fileId}`; // Replace with your actual API endpoint
+
+    try {
+      const response = await axios.get(viewUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        window.open(viewUrl, "_blank");
+      } else {
+        ToasterComponent("error", "Failed to view resume");
+        console.error("Failed to view resume");
+      }
+    } catch (error) {
+      if (error.response) {
+        ToasterComponent("error", error.response.data.message || "View failed");
+        console.error("Error viewing resume:", error.response);
+      } else {
+        ToasterComponent("error", "An error occurred while viewing");
+        console.error("Error viewing resume:", error);
+      }
+    }
+  };
+
+  const handleDelete = async (fileId) => {
+    const deleteUrl = `${baseUrl}/api/resume/${fileId}?role=ALUMNI`; // Replace with your actual delete API endpoint
+
+    try {
+      const response = await axios.delete(deleteUrl);
+
+      if (response.status === 200) {
+        // Assuming the deletion is successful
+        ToasterComponent("success", response.data.statuses);
+        console.log("File deleted successfully");
+        // Add any other logic here like updating the state or UI
+        setResumeFileName("");
+      } else {
+        console.error("Failed to delete the file", "Error");
+      }
+    } catch (error) {
+      // Handle the error here
+      if (error?.response?.data?.statuses) {
+        ToasterComponent("error", error.response.data.statuses);
+      } else {
+        console.error("Error deleting the file:", error);
+      }
+    }
+  };
 
   return (
     <div className="aluni-profile">
@@ -939,6 +1024,7 @@ const AlumniMyProfile = () => {
                       <i className="simple-icon-star text-primary " />
                       <span className="ml-2">{`${averageStar} (${totalRatings} reviews)`}</span>
                     </h6>
+                    <h6 className="text-muted">{resumeFileName}</h6>
                   </div>
                 </div>
               </CardBody>
@@ -1035,6 +1121,90 @@ const AlumniMyProfile = () => {
                     </Input>
                     <br />
                   </>
+                  <Row>
+                    <Col md={6}>
+                      <>
+                        <Label for="resume" className="text-muted">
+                          <h4>CV</h4>
+                        </Label>
+                        <div
+                          className=" p-2 mb-2 d-flex justify-content-between text-one align-items-center"
+                          style={{
+                            border: "1px solid #ccc",
+                            minWidth: "200px",
+                          }}
+                        >
+                          {resumeFileName || "no file selected"}
+                          <ButtonDropdown
+                            isOpen={dropdownOpen}
+                            toggle={toggleDropdown}
+                          >
+                            <DropdownToggle
+                              caret
+                              style={{
+                                backgroundColor: "transparent",
+                                border: "none",
+                                padding: 0,
+                              }}
+                            >
+                              <i
+                                className="fa-solid fa-ellipsis"
+                                style={{
+                                  color: "#333",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </DropdownToggle>
+
+                            <DropdownMenu>
+                              <DropdownItem
+                                onClick={() => handleView(resumeFileId)}
+                              >
+                                view
+                              </DropdownItem>
+                              <DropdownItem
+                                onClick={() => handleDelete(resumeFileId)}
+                              >
+                                delete
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </ButtonDropdown>
+                        </div>
+                        <InputGroup className="">
+                          <div className="">
+                            <button
+                              type="button"
+                              style={{
+                                cursor: "pointer",
+
+                                background: "none",
+                                border: "none",
+                              }}
+                              onClick={() =>
+                                document.getElementById("file-upload").click()
+                              }
+                            >
+                              <h5>+ Add your Resume</h5>
+                            </button>
+                            {/* <Form> */}
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              className="d-none"
+                              // onChange={handleFileChange1}
+                              // validate={validateFile}
+                              onChange={(e) => handleFileChange1(e)}
+                            />
+                          </div>
+                        </InputGroup>
+                        <br />
+                        {fileError && (
+                          <p style={{ color: "red" }}>{fileError}</p>
+                        )}
+                      </>
+                    </Col>
+                  </Row>
+
                   {/* <>
                     <Label for="location" className="font-weight-medium">
                       <h4>category</h4>

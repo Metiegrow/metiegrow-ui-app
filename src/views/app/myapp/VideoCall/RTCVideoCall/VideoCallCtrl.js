@@ -127,7 +127,7 @@ const VideoCallCtrl = (props) => {
   const roleRes = getRoleRes();
 
   useEffect(() => {
-    if (roleRes.includes("MENTOR")) {
+    if (roleRes.includes("USER")) {
       const postData = async () => {
         console.log("fetchedData chk");
         try {

@@ -19,8 +19,9 @@ import {
 } from "reactstrap";
 import ToasterComponent from "../notifications/ToasterComponent";
 import country from "./Country";
+import DomainList from "./DomainList";
 import language from "./Languages";
-import { validateBio, validateLocation } from "./validation";
+import { validateBio, validateDomain, validateLocation } from "./validation";
 
 const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -34,6 +35,8 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [skillsTag, setSkillsTag] = useState([]);
+  const [imageError1, setImageError1] = useState(false);
+  const [imageErrorMessage1, setImageErrorMessage1] = useState(null);
 
   const [fields] = useState({
     image: "",
@@ -41,6 +44,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     twitterHandle: "",
     bio: "",
     location: "",
+    domain: "",
   });
 
   const languageOptions = language.map((option) => ({
@@ -69,9 +73,38 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     }
   };
 
+  const [selectedFile2, setSelectedFile2] = useState(null);
+
+  const handleFileChange2 = (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return; // No file selected
+
+    if (!(file.type === "application/pdf")) {
+      // alert("Please select a valid PDF file.");
+      setImageError1(true);
+      setImageErrorMessage1("Please upload a PDF file.");
+      return;
+    }
+
+    const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+
+    if (fileSizeMB > 2) {
+      // alert("File size exceeds 2MB limit.");
+      setImageError1(true);
+      setImageErrorMessage1("File size must be less than  2MB");
+
+      return;
+    }
+
+    setSelectedFile2(file);
+    setImageError1(false);
+    setImageErrorMessage1("");
+  };
+
   const mentorAboutUrl = `${baseUrl}/api/alumni/alumnidetails/about`;
   const imageUploadUrl = `${baseUrl}/api/alumni/profile-image`;
-
+  const alumniResumePostUrl = ` ${baseUrl}/resume?role=ALUMNI`;
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
   }
@@ -162,6 +195,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
       skills: data.skills,
       bio: data.bio,
       location: data.location,
+      domain: data.domain,
     };
 
     try {
@@ -206,6 +240,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
         skills: skillsTag,
         bio: values.bio,
         location: values.location,
+        domain: values.domain,
       });
     } catch (error) {
       setAboutLoading(false); // Stop loading in case of error
@@ -245,6 +280,22 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     setSkillsTag(newSkills);
   };
 
+  const postResumeData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("resume", selectedFile2);
+
+      await axios.post(alumniResumePostUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(`resres ${response.status}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Formik
@@ -254,6 +305,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
           twitterHandle: fields.twitterHandle,
           bio: fields.bio,
           location: fields.location,
+          domain: fields.domain,
         }}
         validateOnMount
         // onSubmit={(values) => {
@@ -267,7 +319,8 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
         // }}
         onSubmit={(values) => {
           if (!file1 || validateFile(file1)) {
-            handleSubmit(values); // Call the combined submit function
+            handleSubmit(values);
+            postResumeData(); // Call the combined submit function
           }
         }}
       >
@@ -410,7 +463,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
             </FormGroup>
             <FormGroup className="error-l-75">
               <Row>
-                <Col md={12}>
+                <Col md={6}>
                   <Label>Location*</Label>
                   <Field
                     as="select"
@@ -432,6 +485,67 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
                       {errors.location}
                     </div>
                   )}
+                </Col>
+                <Col md={6}>
+                  <Label>Domain*</Label>
+                  <Field
+                    as="select"
+                    name="domain"
+                    validate={validateDomain}
+                    className="form-control"
+                  >
+                    <option disabled value="">
+                      Select Domain
+                    </option>
+                    {DomainList.map((option) => (
+                      <option key={option.name} value={option.name}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </Field>
+                  {errors.domain && touched.domain && (
+                    <div className="invalid-feedback d-block">
+                      {errors.domain}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Col md={6}>
+                  <Label>CV</Label>
+                  {imageError1 && (
+                    <div className="invalid-feedback d-block">
+                      {imageErrorMessage1}
+                    </div>
+                  )}
+
+                  <InputGroup className="">
+                    <div className="">
+                      <Button
+                        className="default"
+                        color="primary"
+                        onClick={() =>
+                          document.getElementById("file-upload-resume").click()
+                        }
+                      >
+                        Upload Resume <i className="iconsminds-upload ml-2" />
+                      </Button>
+                      {/* <Form> */}
+                      <Input
+                        id="file-upload-resume"
+                        type="file"
+                        className="d-none"
+                        onChange={handleFileChange2}
+                        // validate={validateFile}
+                      />
+                    </div>
+                  </InputGroup>
+                  <div className="  my-2 ">
+                    {/* {selectedFile2 ? selectedFile2.name : ""} */}
+                    {selectedFile2
+                      ? `selected file is ${selectedFile2.name}`
+                      : ""}
+                  </div>
                 </Col>
               </Row>
             </FormGroup>

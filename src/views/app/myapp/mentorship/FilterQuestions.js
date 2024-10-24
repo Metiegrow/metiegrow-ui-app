@@ -4,10 +4,26 @@ import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
 import { useEffect, useState } from "react";
-import { Button, Card, CardBody, NavLink, Spinner } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  CustomInput,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  NavLink,
+  Spinner,
+} from "reactstrap";
 
 const FilterQuestions = () => {
   const [isQuestionFetched, setIsQuestionFetched] = useState(false);
+  const [dropdownBasicOpen, setDropdownBasicOpen] = useState(false);
+  const [dropdownBasicOpen1, setDropdownBasicOpen1] = useState(false);
 
   // Backend url below
   const url = `${baseUrl}/api/questions`;
@@ -21,8 +37,26 @@ const FilterQuestions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
   const [inputkey, setInputKey] = useState("");
+  const [selectedValue, setSelectedValue] = useState("Sort by"); // Default value
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const userId = localStorage.getItem("userId");
+
+  // Handle dropdown item click
+  const handleSelect = (value) => {
+    setSelectedValue(value); // Update the selected value
+  };
+
+  const handleCategoryChange = (e) => {
+    const { id, checked } = e.target;
+    if (checked) {
+      setSelectedCategories([...selectedCategories, id]);
+    } else {
+      setSelectedCategories(
+        selectedCategories.filter((category) => category !== id)
+      );
+    }
+  };
 
   const handleDeleteAnswer = async (questionId) => {
     setLoadingStates((prev) => ({ ...prev, [questionId]: true }));
@@ -82,6 +116,13 @@ const FilterQuestions = () => {
   //   }
   //   setEditing(false);
   // };
+  const categories = [
+    { id: "c1", label: "Category 1" },
+    { id: "c2", label: "Category 2" },
+    { id: "c3", label: "Category 3" },
+    { id: "c4", label: "Category 4" },
+    { id: "c5", label: "Category 5" },
+  ];
 
   const handleSave = async (id) => {
     const questionToUpdate = multiquestions.find((q) => q.id === id);
@@ -154,6 +195,17 @@ const FilterQuestions = () => {
       params.size = 10;
       params.page = currentPage - 1;
 
+      // Add the sort parameter based on the selected dropdown option
+      if (selectedValue === "Most liked") {
+        params.sort = "likes";
+      } else if (selectedValue === "Most Viewed") {
+        params.sort = "views";
+      }
+
+      if (selectedCategories.length > 0) {
+        params.categories = selectedCategories.join(","); // Join selected categories into a comma-separated string
+      }
+
       try {
         const response = await axios.get(url, { params });
         setMultiQuestions(response.data.data);
@@ -166,7 +218,7 @@ const FilterQuestions = () => {
       }
     };
     FilterMultiQuestions();
-  }, [inputkey, currentPage]);
+  }, [inputkey, currentPage, selectedValue, selectedCategories]);
 
   return (
     <div>
@@ -190,21 +242,103 @@ const FilterQuestions = () => {
               className="simple-icon-magnifier mr-3"
               style={{
                 position: "absolute",
-                top: "50%",
+                top: "40%",
                 right: "15px",
                 transform: "translateY(-50%)",
                 zIndex: 2,
                 color: "#aaa",
               }}
             />
-            <input
+            {/* <input
               type="text"
               className="form-control text-one py-3"
               placeholder="Search questions"
               value={inputkey}
               onChange={(e) => setInputKey(e.target.value)}
               style={{ paddingRight: "2.5rem" }}
-            />
+            /> */}
+
+            <InputGroup className="mb-3 ">
+              <InputGroupAddon addonType="prepend">
+                <Dropdown
+                  isOpen={dropdownBasicOpen}
+                  toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
+                  className=" default"
+                  style={{
+                    borderRadius: "0px",
+                    height: "100%",
+                  }}
+                >
+                  <DropdownToggle
+                    caret
+                    color="primary"
+                    outline
+                    style={{
+                      borderRadius: "0px",
+                      height: "100%",
+                    }}
+                  >
+                    {/* Sort by */}
+                    {selectedValue}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    {/* <DropdownItem>Most liked</DropdownItem>
+                    <DropdownItem>Most Viewed</DropdownItem>
+                    <DropdownItem>Category</DropdownItem> */}
+                    <DropdownItem onClick={() => handleSelect("Most liked")}>
+                      Most liked
+                    </DropdownItem>
+                    <DropdownItem onClick={() => handleSelect("Most Viewed")}>
+                      Most Viewed
+                    </DropdownItem>
+                    {/* <DropdownItem onClick={() => handleSelect("Category")}>
+                      Category
+                    </DropdownItem> */}
+                  </DropdownMenu>
+                </Dropdown>
+                {/* caategory filter */}
+                <Dropdown
+                  isOpen={dropdownBasicOpen1}
+                  toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
+                  className=" default"
+                  style={{
+                    borderRadius: "0px",
+                    height: "100%",
+                  }}
+                >
+                  <DropdownToggle
+                    caret
+                    color="primary"
+                    outline
+                    style={{
+                      borderRadius: "0px",
+                      height: "100%",
+                    }}
+                  >
+                    Category
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    {categories.map((category) => (
+                      <CustomInput
+                        key={category.id}
+                        className="ml-2 "
+                        type="checkbox"
+                        id={category.id}
+                        label={category.label}
+                        onChange={handleCategoryChange}
+                      />
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              </InputGroupAddon>
+              <Input
+                type="text"
+                className="form-control text-one py-3"
+                placeholder="Search questions"
+                value={inputkey}
+                onChange={(e) => setInputKey(e.target.value)}
+              />
+            </InputGroup>
           </div>
         </div>
         {!isQuestionFetched ? (

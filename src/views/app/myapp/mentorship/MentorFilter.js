@@ -18,17 +18,21 @@ import {
   // Label,
   Row,
 } from "reactstrap";
+import DomainList from "../AlumniRegister/DomainList";
 import country from "../my-login/Country";
 
 const MentorFilter = ({
   onSkillsChange,
   onToolsChange,
   onIndustryChange,
+  onUniversityChange,
   onPriceChange,
   onLocationChange,
+  onDomainChange,
   selectedSkills,
   selectedLocation,
   selectedIndustry,
+  selectedUniversity,
   selectedTools,
   userRole,
 }) => {
@@ -37,7 +41,10 @@ const MentorFilter = ({
   const [dropdownBasicOpen2, setDropdownBasicOpen2] = useState(false);
   const [dropdownBasicOpen3, setDropdownBasicOpen3] = useState(false);
   const [dropdownBasicOpen4, setDropdownBasicOpen4] = useState(false);
+  const [dropdownBasicOpen5, setDropdownBasicOpen5] = useState(false);
+  const [dropdownBasicOpen6, setDropdownBasicOpen6] = useState(false);
   const [priceRange, setPriceRange] = useState([500, 15000]);
+  const [selectedDomain, setSelectedDomain] = useState("");
 
   // const searchUrl = `${baseUrl}/api/mentor/search/skills`;
   // const companySearchUrl = `${baseUrl}/api/mentor/search/company`;
@@ -51,8 +58,8 @@ const MentorFilter = ({
             return `${baseUrl}/api/alumni/search/skills`;
           case "company":
             return `${baseUrl}/api/alumni/search/company`;
-          // case "tools":
-          //   return `${baseUrl}/api/alumni/search/tools`;
+          case "university":
+            return `${baseUrl}/api/alumni/search/university`;
           default:
             throw new Error(`Invalid endpoint type for alumni role`);
         }
@@ -83,9 +90,16 @@ const MentorFilter = ({
   const handleIndustrySelect = (industry) => {
     onIndustryChange(industry);
   };
+  const handleUniversitySelect = (university) => {
+    onUniversityChange(university);
+  };
 
   const handleLocationSelect = (location) => {
     onLocationChange(location);
+  };
+  const handleDomainSelect = (domain) => {
+    onDomainChange(domain);
+    setSelectedDomain(domain);
   };
 
   const handleSliderChange = (value) => {
@@ -112,10 +126,13 @@ const MentorFilter = ({
   // ]
 
   const [searchText, setSearchText] = useState("");
+  const [searchText1, setSearchText1] = useState("");
   const [searchCompanies, setSearchCompanies] = useState("");
+  const [searchUniversities, setSearchUniversities] = useState("");
   const [searchTools, setSearchTools] = useState("");
   const [searchSkills, setSearchSkills] = useState("");
   const [filteredCountry, setFilteredCountry] = useState(country);
+  const [filteredDomain, setFilteredDomain] = useState(DomainList);
   // const [filteredTools, setFilteredTools] = useState(tools);
   // const [filteredCompanies, setFilteredCompanies] = useState(companies);
   // const [filteredSkills, setFilteredSkills] = useState(skills);
@@ -123,19 +140,23 @@ const MentorFilter = ({
 
   const [skillsData, setSkillsData] = useState([]);
   const [companyData, setCompanyData] = useState([]);
+  const [universityData, setUniversityData] = useState([]);
   const [toolsData, setToolsData] = useState([]);
 
   const [paginationMeta, setPaginationMeta] = useState([]);
   const [companyPaginationMeta, setCompanyPaginationMeta] = useState([]);
+  const [universityPaginationMeta, setUniversityPaginationMeta] = useState([]);
   const [toolsPaginationMeta, setToolsPaginationMeta] = useState([]);
 
   const [size, setSize] = useState(10);
   const [companySize, setCompanySize] = useState(10);
+  const [universitySize, setUniversitySize] = useState(10);
   const [toolsSize, setToolsSize] = useState(10);
 
   const [skillsFetched, setSkillsFetched] = useState(false);
   const [toolsFetched, setToolsFetched] = useState(false);
   const [companiesFetched, setCompaniesFetched] = useState(false);
+  const [universityFetched, setUniversitiesFetched] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -159,11 +180,21 @@ const MentorFilter = ({
       country.filter((c) => c.name.toLowerCase().includes(newText))
     );
   };
+  const handleSearchDomainChange = (event) => {
+    const newText = event.target.value.toLowerCase();
+    setSearchText1(newText);
+    setFilteredDomain(
+      DomainList.filter((c) => c.name.toLowerCase().includes(newText))
+    );
+  };
 
   const handleSearchCompanies = (event) => {
     // const newText = event.target.value.toLowerCase();
     setSearchCompanies(event.target.value);
     // setFilteredCompanies(companies.filter((c) => c.toLowerCase().includes(newText)));
+  };
+  const handleSearchUniversities = (event) => {
+    setSearchUniversities(event.target.value);
   };
   const handleSearchTools = (event) => {
     // const newText = event.target.value.toLowerCase();
@@ -236,6 +267,39 @@ const MentorFilter = ({
   }, [searchCompanies, companySize]);
 
   useEffect(() => {
+    const FetchUniversities = async () => {
+      // const params = {
+      //   company: selectedIndustry,
+      //   location: selectedLocation,
+      //   skills: selectedSkills,
+      // };
+      const params = {};
+
+      if (searchUniversities) {
+        params.university = searchUniversities;
+      }
+
+      // params.size = companySize;
+      if (universitySize) {
+        params.size = universitySize;
+      }
+      params.page = 0;
+      try {
+        const response = await axios.get(getApiEndpoint("university"), {
+          params,
+        });
+        setUniversityData(response.data.data);
+        setUniversityPaginationMeta(response.data.paginationMeta);
+        setUniversitiesFetched(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setUniversitiesFetched(false);
+      }
+    };
+    FetchUniversities();
+  }, [searchUniversities, universitySize]);
+
+  useEffect(() => {
     const FetchTools = async () => {
       const params = {};
 
@@ -264,6 +328,7 @@ const MentorFilter = ({
 
   const handleLoadMore = () => setSize(size + 5);
   const handleCompanyLoadMore = () => setCompanySize(companySize + 5);
+  const handleUniversityLoadMore = () => setUniversitySize(universitySize + 5);
   const handleToolsLoadMore = () => setToolsSize(toolsSize + 5);
 
   return (
@@ -319,6 +384,82 @@ const MentorFilter = ({
 
               {(!isMobile || viewFilters) && (
                 <>
+                  {/* university filter starts */}
+                  {userRole === "alumni" && (
+                    <Dropdown
+                      isOpen={dropdownBasicOpen6}
+                      toggle={() => setDropdownBasicOpen6(!dropdownBasicOpen6)}
+                      className="mb-3  col-lg-auto col-sm-12"
+                    >
+                      <DropdownToggle
+                        size="sm"
+                        className="col-lg-auto col-sm-12"
+                        caret
+                        color="primary"
+                        outline
+                      >
+                        {selectedUniversity || <span>Universities</span>}
+                      </DropdownToggle>
+                      <DropdownMenu className="col-lg-auto col-sm-12">
+                        <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                          <input
+                            type="text"
+                            className="form-control "
+                            placeholder="Search University"
+                            value={searchUniversities}
+                            onChange={handleSearchUniversities}
+                          />
+                        </div>
+                        <PerfectScrollbar
+                          style={{ maxHeight: "200px" }}
+                          options={{
+                            suppressScrollX: true,
+                            wheelPropagation: false,
+                          }}
+                        >
+                          {selectedUniversity && (
+                            <DropdownItem
+                              onClick={() => handleUniversitySelect("")}
+                              className="bg-light d-flex justify-content-between align-items-center"
+                            >
+                              <span>{selectedUniversity}</span>
+                              <i className="iconsminds-close ml-auto" />
+                            </DropdownItem>
+                          )}
+                          {universityFetched && universityData.length === 0 && (
+                            <Card className=" d-flex justify-content-between align-items-center">
+                              {searchUniversities} was not found
+                            </Card>
+                          )}
+                          {!universityFetched && (
+                            <Card className=" d-flex justify-content-between align-items-center">
+                              Failed to load data!
+                            </Card>
+                          )}
+                          {universityData.map((c, index) => (
+                            <DropdownItem
+                              key={index}
+                              onClick={() => handleUniversitySelect(c)}
+                            >
+                              {c}
+                            </DropdownItem>
+                          ))}
+                          {!universityPaginationMeta.last &&
+                            universityFetched && (
+                              <Card
+                                style={{ cursor: "pointer" }}
+                                onClick={handleUniversityLoadMore}
+                                className="bg-light d-flex justify-content-between align-items-center"
+                              >
+                                load more
+                              </Card>
+                            )}
+                        </PerfectScrollbar>
+                      </DropdownMenu>
+                    </Dropdown>
+                  )}
+
+                  {/* university filter ends */}
                   <Dropdown
                     isOpen={dropdownBasicOpen}
                     toggle={() => setDropdownBasicOpen(!dropdownBasicOpen)}
@@ -638,11 +779,11 @@ const MentorFilter = ({
                       </PerfectScrollbar>
                     </DropdownMenu>
                   </Dropdown>
-
-                  {/* {userRole !== "alumni" && (
+                  {/* domain filter starts */}
+                  {userRole === "alumni" && (
                     <Dropdown
-                      isOpen={dropdownBasicOpen4}
-                      toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}
+                      isOpen={dropdownBasicOpen5}
+                      toggle={() => setDropdownBasicOpen5(!dropdownBasicOpen5)}
                       className="mb-3  col-lg-auto col-sm-12"
                     >
                       <DropdownToggle
@@ -652,23 +793,17 @@ const MentorFilter = ({
                         color="primary"
                         outline
                       >
-                        {selectedLocation ? (
-                          country.find((c) => c.iso_code === selectedLocation)
-                            ?.name
-                        ) : (
-                          <span>Location</span>
-                        )}
+                        {selectedDomain || <span>Domain</span>}
                       </DropdownToggle>
-                      
+
                       <DropdownMenu>
-                       
                         <div className="search-sm mr-1 ml-1 mb-1 align-top">
                           <input
                             type="text"
                             className="form-control "
-                            placeholder="Search Country"
-                            value={searchText}
-                            onChange={handleSearchChange}
+                            placeholder="Search Domain"
+                            value={searchText1}
+                            onChange={handleSearchDomainChange}
                           />
                         </div>
                         <PerfectScrollbar
@@ -678,30 +813,30 @@ const MentorFilter = ({
                             wheelPropagation: false,
                           }}
                         >
-                          {selectedLocation && (
+                          {selectedDomain && (
                             <DropdownItem
-                              onClick={() => handleLocationSelect("")}
-                              className=" d-flex justify-content-between align-items-center"
+                              onClick={() => handleDomainSelect("")}
+                              className=" d-flex justify-content-between align-items-center "
                             >
                               <span>
                                 {
-                                  country.find(
-                                    (c) => c.iso_code === selectedLocation
+                                  DomainList.find(
+                                    (c) => c.name === selectedDomain
                                   )?.name
                                 }
                               </span>
-                              <i className="iconsminds-close ml-auto" />
+                              <i className="iconsminds-close ml-auto " />
                             </DropdownItem>
                           )}
-                          {filteredCountry.length === 0 && (
+                          {filteredDomain.length === 0 && (
                             <Card className="bg-light d-flex justify-content-between align-items-center">
-                              {searchText} was not found
+                              {searchText1} was not found
                             </Card>
                           )}
-                          {filteredCountry.map((c, index) => (
+                          {filteredDomain.map((c) => (
                             <DropdownItem
-                              key={index}
-                              onClick={() => handleLocationSelect(c.iso_code)}
+                              key={c.name}
+                              onClick={() => handleDomainSelect(c.name)}
                             >
                               {c.name}
                             </DropdownItem>
@@ -709,7 +844,8 @@ const MentorFilter = ({
                         </PerfectScrollbar>
                       </DropdownMenu>
                     </Dropdown>
-                  )} */}
+                  )}
+                  {/* domain filter ends */}
                 </>
               )}
             </div>

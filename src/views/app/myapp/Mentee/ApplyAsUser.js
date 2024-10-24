@@ -33,16 +33,18 @@ import "react-tagsinput/react-tagsinput.css";
 import {
   // validateReasonForMentor,
   validateAchievement,
-  // validateCategory,
-  // validateLocation,
   // validateCompany,
   // validateJobTitle,
   // validateSkills,
   // validateBio,
   validateLinkedinUrl,
+  // validateCategory,
+  validateLocation,
+  validateStudent,
 } from "../my-login/validation";
 
 // import country from "./Country";
+import country from "../AlumniRegister/Country";
 import { EmploymentTypeData } from "../Listing/ListingData";
 import language from "../my-login/Languages";
 import ToasterComponent from "../notifications/ToasterComponent";
@@ -122,6 +124,12 @@ const ApplyAsMentor = () => {
     label: option.name,
   }));
 
+  const studentTypeOptions = [
+    { value: "CURRENT_STUDENT", label: "Current Student" },
+    { value: "ABROAD_EDUCATION", label: "Aboard Education" },
+    { value: "NEW_ENTRANT", label: "New Entrant" },
+  ];
+
   const handleNextStep = () => {
     setCurrentStep(currentStep + 1);
   };
@@ -185,8 +193,42 @@ const ApplyAsMentor = () => {
   const ImageUrl = `${baseUrl}/api/userprofile/profile-image`;
   const mentorExperienceUrl = `${baseUrl}/api/userprofile/experience`;
   const userAboutUrl = `${baseUrl}/api/userprofile/about`;
+  const ResumeUploadUrl = `${baseUrl}/resume?role=USER`;
 
   const token = localStorage.getItem("tokenRes");
+  const [selectedFile2, setSelectedFile2] = useState(null);
+  const [imageError1, setImageError1] = useState(false);
+  const [imageErrorMessage1, setImageErrorMessage1] = useState(null);
+
+  // Handle file change
+  const handleFileChange2 = (event) => {
+    // const file = event.target.files[0];
+    // setSelectedFile2(file);
+    const file = event.target.files[0];
+
+    if (!file) return; // No file selected
+
+    if (!(file.type === "application/pdf")) {
+      // alert("Please select a valid PDF file.");
+      setImageError1(true);
+      setImageErrorMessage1("Please upload a PDF file.");
+      return;
+    }
+
+    const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+
+    if (fileSizeMB > 2) {
+      // alert("File size exceeds 2MB limit.");
+      setImageError1(true);
+      setImageErrorMessage1("File size must be less than  2MB");
+
+      return;
+    }
+
+    setSelectedFile2(file);
+    setImageError1(false);
+    setImageErrorMessage1("");
+  };
 
   // const postDataUserProfile = async (data) => {
   //   // handleNextStep();
@@ -258,6 +300,8 @@ const ApplyAsMentor = () => {
       linkedInUrl: data.linkedinUrl,
       twitterHandle: data.twitterHandle,
       personalWebsite: data.personalWebsite,
+      location: data.location,
+      studentType: data.studentType,
     };
 
     try {
@@ -376,6 +420,16 @@ const ApplyAsMentor = () => {
       });
       // setNextStep(true)
       // console.log(response);
+      if (selectedFile2) {
+        const formData = new FormData();
+        formData.append("resume", selectedFile2);
+
+        await axios.post(ResumeUploadUrl, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
       setExperienceLoading(false);
       ToasterComponent("success", response.data.statuses);
       handleNextStep();
@@ -533,6 +587,14 @@ const ApplyAsMentor = () => {
     history.push(`${adminRoot}/dashboard`);
   };
 
+  // const [selectedFile1, setSelectedFile1] = useState(null);
+
+  // // Handle file change
+  // const handleFileChange1 = (event) => {
+  //   const file = event.target.files[0];
+  //   setSelectedFile1(file);
+  // };
+
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
@@ -567,6 +629,8 @@ const ApplyAsMentor = () => {
                 languages: "",
                 linkedinUrl: "",
                 twitterHandle: "",
+                studentType: "",
+                location: "",
               }}
               // onSubmit={postDataUserProfile}
               onSubmit={(values) => {
@@ -717,6 +781,60 @@ const ApplyAsMentor = () => {
                         <FormText color="muted">
                           Omit the &ldquo;@&rdquo; -e.g. &ldquo;dqmonn&rdquo;
                         </FormText>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+
+                  <FormGroup className="error-l-125">
+                    <Row>
+                      <Col md={6}>
+                        <Label for="studentType">Student Type*</Label>
+                        <Field
+                          as="select"
+                          name="studentType"
+                          validate={validateStudent}
+                          className="form-control"
+                        >
+                          <option disabled value="">
+                            Select Student Type
+                          </option>
+                          {studentTypeOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.studentType && touched.studentType && (
+                          <div className="invalid-feedback d-block">
+                            {errors.studentType}
+                          </div>
+                        )}
+                      </Col>
+                      <Col md={6}>
+                        <Label>Location*</Label>
+                        <Field
+                          as="select"
+                          name="location"
+                          validate={validateLocation}
+                          className="form-control"
+                        >
+                          <option disabled value="">
+                            Select Country
+                          </option>
+                          {country.map((option) => (
+                            <option
+                              key={option.iso_code}
+                              value={option.iso_code}
+                            >
+                              {option.name}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.location && touched.location && (
+                          <div className="invalid-feedback d-block">
+                            {errors.location}
+                          </div>
+                        )}
                       </Col>
                     </Row>
                   </FormGroup>
@@ -1357,6 +1475,87 @@ const ApplyAsMentor = () => {
                     <FormText>
                       Add Certification and press Enter or Comma{" "}
                     </FormText>
+                  </FormGroup>
+                  <FormGroup>
+                    <Row>
+                      {/* <Col md={6}>
+                        <Label>Certifications*</Label>
+
+                        <InputGroup className="">
+                          <div className="">
+                            <Button
+                              className="default"
+                              color="primary"
+                              onClick={() =>
+                                document.getElementById("file-upload").click()
+                              }
+                            >
+                              Upload certifications{" "}
+                              <i className="iconsminds-upload ml-2" />
+                            </Button>
+                            
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              className="d-none"
+                              onChange={handleFileChange1}
+                              
+                            />
+                          </div>
+                        </InputGroup>
+                        <div
+                          className="  my-2"
+                       
+                        >
+                          {selectedFile1 ? selectedFile1.name : ""}
+                        </div>
+                      </Col> */}
+                      <Col md={6}>
+                        <Label>CV</Label>
+                        {imageError1 && (
+                          <div className="invalid-feedback d-block">
+                            {imageErrorMessage1}
+                          </div>
+                        )}
+
+                        <InputGroup className="">
+                          <div className="">
+                            <Button
+                              className="default"
+                              color="primary"
+                              onClick={() =>
+                                document
+                                  .getElementById("file-upload-resume")
+                                  .click()
+                              }
+                            >
+                              Upload Resume{" "}
+                              <i className="iconsminds-upload ml-2" />
+                            </Button>
+                            {/* <Form> */}
+                            <Input
+                              id="file-upload-resume"
+                              type="file"
+                              className="d-none"
+                              onChange={handleFileChange2}
+                              // validate={validateFile}
+                            />
+                          </div>
+                        </InputGroup>
+                        <div
+                          className="  my-2 "
+                          // style={{
+                          //   border: "1px solid #ccc",
+                          //   minWidth: "200px",
+                          // }}
+                        >
+                          {/* {selectedFile2 ? selectedFile2.name : ""} */}
+                          {selectedFile2
+                            ? `selected file is ${selectedFile2.name}`
+                            : ""}
+                        </div>
+                      </Col>
+                    </Row>
                   </FormGroup>
                   <FormGroup>
                     <Label>Goal*</Label>

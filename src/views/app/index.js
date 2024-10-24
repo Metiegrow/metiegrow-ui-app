@@ -241,6 +241,11 @@ const ViewAlumniMyProfile = React.lazy(() =>
 const ViewAlumniCalendar = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ "./myapp/Alumni/AlumniCalendar")
 );
+const ViewMyAlumniSessions = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ "./myapp/Alumni/AlumniSessionLists"
+  )
+);
 const ViewUserApply = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ "./myapp/Mentee/ApplyAsUser")
 );
@@ -618,6 +623,10 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/calendar/alumni/appointment`}
               render={(props) => <ViewAlumniCalendar {...props} />}
+            />
+            <Route
+              path={`${match.url}/alumni/sessionlists`}
+              render={(props) => <ViewMyAlumniSessions {...props} />}
             />
 
             {/* alumin networking routes ends */}

@@ -59,6 +59,13 @@ function validateLocation(value) {
   }
   return error;
 }
+function validateStudent(value) {
+  let error;
+  if (!value) {
+    error = "Please select a student type";
+  }
+  return error;
+}
 
 function validateCompany(value) {
   let error;
@@ -215,4 +222,5 @@ export {
   validatePassword,
   validateReasonForMentor,
   validateSkills,
+  validateStudent,
 };

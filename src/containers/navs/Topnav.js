@@ -146,6 +146,9 @@ const TopNav = ({
   const handleMySessionsClick = () => {
     history.push(session);
   };
+  const handleMyAlumniSession = () => {
+    history.push(`${adminRoot}/alumni/sessionlists`);
+  };
   const handleMyLawyerJobsClick = () => {
     history.push(`${adminRoot}/jobslist`);
   };
@@ -236,6 +239,18 @@ const TopNav = ({
   //   }
   //   return null;
   // };
+  const renderMyAlumniSessions = () => {
+    if (roleRes.includes("USER")) {
+      return (
+        <NavLink to={`${adminRoot}/alumni/sessionlists`}>
+          <DropdownItem onClick={() => handleMyAlumniSession()}>
+            <i className="simple-icon-list" /> My Alumni Sessions
+          </DropdownItem>
+        </NavLink>
+      );
+    }
+    return null;
+  };
 
   const renderMentorSession = () => {
     if (roleRes.includes("USER")) {
@@ -247,6 +262,7 @@ const TopNav = ({
         </NavLink>
       );
     }
+
     if (roleRes.includes("MENTOR") || roleRes.includes("ALUMNI")) {
       return (
         <NavLink to={session}>
@@ -397,6 +413,7 @@ const TopNav = ({
                 </DropdownItem>
               </NavLink>
               {renderMentorSession()}
+              {renderMyAlumniSessions()}
               {/* <NavLink to={session}>
                 <DropdownItem onClick={() => handleMySessionsClick()}>
                 <i className="simple-icon-list" /> Mentor Sessions

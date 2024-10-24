@@ -13,14 +13,19 @@ import "../mentorship/mentorcard.css";
 const AlumniLists = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedIndustry, setSelectedIndustry] = useState("");
+  const [selectedUniversity, setSelectedUniversity] = useState("");
   const [selectedPrice, setSelectedPrice] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedDomain, setSelectedDomain] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
   const handleSkillsChange = (skills) => setSelectedSkills(skills);
   const handleIndustryChange = (industry) => setSelectedIndustry(industry);
+  const handleUniversityChange = (university) =>
+    setSelectedUniversity(university);
   const handlePriceChange = (price) => setSelectedPrice(price);
   const handleLocationChange = (location) => setSelectedLocation(location);
+  const handleDomainChange = (domain) => setSelectedDomain(domain);
 
   const [isMentorCardFetched, setIsMentorCardFetched] = useState(false);
   const [mentordetails, setMentorDetails] = useState([]);
@@ -49,6 +54,9 @@ const AlumniLists = () => {
       if (selectedIndustry) {
         params.company = selectedIndustry;
       }
+      if (selectedUniversity) {
+        params.college = selectedUniversity;
+      }
       if (selectedSkills) {
         params.skills = selectedSkills;
       }
@@ -58,6 +66,9 @@ const AlumniLists = () => {
       }
       if (selectedLocation) {
         params.location = selectedLocation;
+      }
+      if (selectedDomain) {
+        params.domain = selectedDomain;
       }
       if (inputkey) {
         params.firstName = inputkey;
@@ -79,9 +90,11 @@ const AlumniLists = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedIndustry,
+    selectedUniversity,
     selectedSkills,
     selectedPrice,
     selectedLocation,
+    selectedDomain,
     currentPage,
     inputkey,
   ]);
@@ -122,11 +135,14 @@ const AlumniLists = () => {
               <MentorFilter
                 onSkillsChange={handleSkillsChange}
                 onIndustryChange={handleIndustryChange}
+                onUniversityChange={handleUniversityChange}
                 onPriceChange={handlePriceChange}
                 selectedSkills={selectedSkills}
                 selectedIndustry={selectedIndustry}
+                selectedUniversity={selectedUniversity}
                 selectedLocation={selectedLocation}
                 onLocationChange={handleLocationChange}
+                onDomainChange={handleDomainChange}
                 userRole="alumni"
               />
             </div>
@@ -138,132 +154,137 @@ const AlumniLists = () => {
       {!isMentorCardFetched ? (
         <div className="loading" />
       ) : (
-        <>
-          <div>
-            {mentordetails.length === 0 ? (
-              <Colxx sm="12" md="12" lg="8" xxs="12" className="mx-auto ">
-                <Card>
-                  <CardBody>
-                    <h2 className="text-center text-large ">No Alumni</h2>
-                  </CardBody>
-                </Card>
-              </Colxx>
-            ) : (
-              Array.isArray(mentordetails) &&
-              mentordetails.map((mentors) => {
-                return (
-                  <Colxx xxs="12" key={mentors.id}>
-                    <Row>
-                      <Colxx
-                        sm="12"
-                        md="12"
-                        lg="8"
-                        xxs="12"
-                        className="mx-auto"
+        <div>
+          {mentordetails.length === 0 ? (
+            <Colxx sm="12" md="12" lg="8" xxs="12" className="mx-auto ">
+              <Card>
+                <CardBody>
+                  <h2 className="text-center text-large ">No Alumni</h2>
+                </CardBody>
+              </Card>
+            </Colxx>
+          ) : (
+            Array.isArray(mentordetails) &&
+            mentordetails.map((mentors) => {
+              return (
+                <Colxx xxs="12" key={mentors.id}>
+                  <Row>
+                    <Colxx sm="12" md="12" lg="9" xxs="12" className="mx-auto">
+                      <Card
+                        className="flex-row flex-wrap flex-sm-nowrap listing-card-container my-3 p-3"
+                        style={{ gap: "16px" }}
                       >
-                        <Card
-                          className="flex-row flex-wrap flex-sm-nowrap listing-card-container my-3 p-3"
-                          style={{ gap: "16px" }}
-                        >
-                          <div className="d-block mentor-card-img-container">
-                            {mentors.imageUrl == null ? (
-                              <div
-                                className="card-img-left bg-primary 
-                 d-flex align-items-center justify-content-center"
-                                style={{
-                                  width: "150px",
-                                  height: "250px",
-                                  borderRadius: "0.75rem",
-                                }}
-                              >
-                                <ThumbnailLetters
-                                  rounded
-                                  text={mentors.firstName}
-                                  className="text-xlarge border border-1"
-                                  style={{ textAlign: "center" }}
-                                />
-                              </div>
-                            ) : (
-                              <img
-                                className="mentor-card-width"
-                                src={`${baseUrl}/${mentors.imageUrl}`}
-                                alt="Card"
-                              />
-                            )}
-                          </div>
-                          <CardBody className="d-flex flex-column flex-fill p-0">
+                        <div className="d-block mentor-card-img-container">
+                          {mentors.imageUrl == null ? (
                             <div
-                              className="d-flex flex-wrap justify-content-between mb-1"
-                              style={{ columnGap: "24px" }}
+                              className="card-img-left bg-primary 
+                 d-flex align-items-center justify-content-center"
+                              style={{
+                                width: "150px",
+                                height: "250px",
+                                borderRadius: "0.75rem",
+                              }}
                             >
-                              <div
-                                className="d-flex flex-wrap"
-                                style={{ gap: "10px" }}
-                              >
-                                <div className="font-weight-semibold text-large text-capitalize">
-                                  {mentors.firstName}
-                                </div>
-                                <div className="font-weight-semibold text-large text-capitalize">
-                                  {mentors.lastName}
-                                </div>
-                              </div>
-                              <CardText
-                                className="text-one d-flex align-items-center flex-wrap"
-                                style={{ gap: "4px" }}
-                              >
-                                <span className="font-weight-semibold">
-                                  <Rating
-                                    total={5}
-                                    rating={mentors.star}
-                                    interactive={false}
-                                  />
-                                </span>
-                                <span className="font-weight-semibold">
-                                  {mentors.star}
-                                </span>
-                                <span> ({mentors.ratings} reviews)</span>
-                              </CardText>
+                              <ThumbnailLetters
+                                rounded
+                                text={mentors.firstName}
+                                className="text-xlarge border border-1"
+                                style={{ textAlign: "center" }}
+                              />
                             </div>
-                            <div className="d-flex" style={{ gap: "8px" }}>
-                              <CardText className="text-one text-muted mb-2">
-                                {mentors.jobTitle}
-                              </CardText>
-                              <div>|</div>
-                              <CardText className="text-one text-primary mb-2">
-                                {mentors.company}
-                              </CardText>
+                          ) : (
+                            <img
+                              className="mentor-card-width"
+                              src={`${baseUrl}/${mentors.imageUrl}`}
+                              alt="Card"
+                            />
+                          )}
+                        </div>
+                        <CardBody className="d-flex flex-column flex-fill p-0">
+                          <div
+                            className="d-flex flex-wrap justify-content-between mb-1"
+                            style={{ columnGap: "24px" }}
+                          >
+                            <div
+                              className="d-flex flex-wrap align-items-center"
+                              style={{ gap: "10px" }}
+                            >
+                              <div className="font-weight-semibold text-large text-capitalize">
+                                {mentors.firstName}
+                              </div>
+                              <div className="font-weight-semibold text-large text-capitalize">
+                                {mentors.lastName}
+                              </div>
+                              <div className="mx-2 ">
+                                <Badge
+                                  pill
+                                  style={{
+                                    background: "#fcba0a",
+                                  }}
+                                  color="#fcba0a"
+                                  className="py-1 px-2 text-one text-dark"
+                                >
+                                  {mentors.consultations} consultants
+                                </Badge>
+                              </div>
                             </div>
                             <CardText
-                              className="text-one mb-2"
-                              style={{ maxHeight: "62px", overflow: "hidden" }}
+                              className="text-one d-flex align-items-center flex-wrap"
+                              style={{ gap: "4px" }}
                             >
-                              {/* {mentors.bio} */}
-                              {truncateBio(mentors.bio, 20)}
+                              <span className="font-weight-semibold">
+                                <Rating
+                                  total={5}
+                                  rating={mentors.star}
+                                  interactive={false}
+                                />
+                              </span>
+                              <span className="font-weight-semibold">
+                                {mentors.star}
+                              </span>
+                              <span> ({mentors.ratings} reviews)</span>
                             </CardText>
-                            <CardText className="d-flex flex-wrap">
-                              {mentors.skills &&
-                                mentors.skills.slice(0, 3).map((skill) => (
-                                  <div
-                                    key={skill}
-                                    className="pr-2"
-                                    id="btn.rounded"
-                                  >
-                                    <Badge color="light">{skill}</Badge>
-                                  </div>
-                                ))}
+                          </div>
+                          <div className="d-flex" style={{ gap: "8px" }}>
+                            <CardText className="text-one text-muted mb-2">
+                              {mentors.jobTitle}
                             </CardText>
+                            <div>|</div>
+                            <CardText className="text-one text-primary mb-2">
+                              {mentors.company}
+                            </CardText>
+                          </div>
+                          <CardText
+                            className="text-one mb-2"
+                            style={{ maxHeight: "62px", overflow: "hidden" }}
+                          >
+                            {/* {mentors.bio} */}
+                            {truncateBio(mentors.bio, 20)}
+                          </CardText>
+                          <CardText className="d-flex flex-wrap">
+                            {mentors.skills &&
+                              mentors.skills.slice(0, 3).map((skill) => (
+                                <div
+                                  key={skill}
+                                  className="pr-2"
+                                  id="btn.rounded"
+                                >
+                                  <Badge color="light">{skill}</Badge>
+                                </div>
+                              ))}
+                          </CardText>
 
-                            <div
-                              className="d-flex justify-content-between align-items-center mt-auto flex-wrap"
-                              style={{ columnGap: "24px" }}
-                            >
-                              <div className="text-primary">
-                                <span className="text-xlarge font-weight-semibold">
-                                  ₹{Math.floor(mentors.price).toLocaleString()}
-                                </span>
-                                /Hour
-                              </div>
-                              {/* <Button
+                          <div
+                            className="d-flex justify-content-between align-items-center mt-auto flex-wrap"
+                            style={{ columnGap: "24px" }}
+                          >
+                            <div className="text-primary">
+                              <span className="text-xlarge font-weight-semibold">
+                                ₹{Math.floor(mentors.price).toLocaleString()}
+                              </span>
+                              /Hour
+                            </div>
+                            {/* <Button
                                 color="primary"
                                 onClick={() =>
                                   history.push(
@@ -274,27 +295,26 @@ const AlumniLists = () => {
                               >
                                 View Profile
                               </Button> */}
-                              <a
-                                href={`/app/alumni/profile/${mentors.id}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Button color="primary" className="rounded">
-                                  View Profile
-                                </Button>
-                              </a>
-                            </div>
-                          </CardBody>
-                          {/* </div> */}
-                        </Card>
-                      </Colxx>
-                    </Row>
-                  </Colxx>
-                );
-              })
-            )}
-          </div>
-        </>
+                            <a
+                              href={`/app/alumni/profile/${mentors.id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button color="primary" className="rounded">
+                                View Profile
+                              </Button>
+                            </a>
+                          </div>
+                        </CardBody>
+                        {/* </div> */}
+                      </Card>
+                    </Colxx>
+                  </Row>
+                </Colxx>
+              );
+            })
+          )}
+        </div>
       )}
       {isMentorCardFetched && (
         <Pagination

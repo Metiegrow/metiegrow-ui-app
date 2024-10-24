@@ -10,6 +10,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardImg,
   CardSubtitle,
   CardTitle,
   Col,
@@ -514,6 +515,181 @@ const JobListing = ({ isPosted }) => {
           )}
         </>
       )}
+
+      {/* new design starts */}
+
+      {!isLoaded ? (
+        <div className="loading" />
+      ) : (
+        <>
+          {!items?.length > 0 ? (
+            <Card className="d-flex justify-content-center align-items-center ">
+              <h2 className="mt-4 mb-4">There are no posts available</h2>
+            </Card>
+          ) : (
+            <div className="disable-text-selection">
+              <Row>
+                {items.map((data, index) => (
+                  <Col
+                    xxs="12"
+                    md="6"
+                    lg="6"
+                    sm="12"
+                    key={data.title + data.id}
+                    className="mb-2"
+                  >
+                    <Card className=" my-2">
+                      <CardBody className="p-3">
+                        <CardImg
+                          top
+                          // src="/assets/img/cards/thumb-1.jpg"
+                          src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                          alt="Card image cap"
+                        />
+
+                        <Row>
+                          <Col>
+                            <h3 className="font-weight-bold mt-2 text-large">
+                              {data.jobTitle}
+                            </h3>
+                            <h6>{data.company}</h6>
+                          </Col>
+                        </Row>
+                        {expandedIndex === index ? (
+                          <CardSubtitle>
+                            {removeTags(data.description)}
+                          </CardSubtitle>
+                        ) : (
+                          <CardSubtitle>
+                            {`${(
+                              (data.description &&
+                                removeTags(data.description)) ||
+                              ""
+                            ).slice(0, 100)}`}{" "}
+                            {data.description?.length > 100 && (
+                              <Button
+                                color="link"
+                                onClick={() => toggleExpand(index)}
+                                className=" p-0"
+                              >
+                                {expandedIndex === index
+                                  ? "Read less"
+                                  : "Read more"}
+                              </Button>
+                            )}
+                          </CardSubtitle>
+                        )}
+
+                        <Row>
+                          <Col>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold"
+                              size="xs"
+                            >
+                              job
+                            </Button>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold mx-1"
+                              size="xs"
+                            >
+                              fresher
+                            </Button>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold mx-1"
+                              size="xs"
+                            >
+                              {data.workPlaceType}
+                            </Button>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold mx-1"
+                              size="xs"
+                            >
+                              {data.jobLocation}
+                            </Button>
+                          </Col>
+                        </Row>
+
+                        <Row className="mt-2 text-one">
+                          <Col className="" xs={12} sm={8}>
+                            <span className="text-muted ">
+                              Posted on
+                              <TimestampConverter
+                                timeStamp={data.postedOn}
+                                format="datetime"
+                              />
+                            </span>
+                          </Col>
+                          <Col
+                            // className="text-sm-right text-start mt-sm-0 mt-2"
+                            className="d-flex justify-content-sm-end justify-content-start align-items-center mt-sm-0 mt-2"
+                            xs={12}
+                            sm={4}
+                          >
+                            <Button
+                              onClick={() =>
+                                handleInterestedButtonClick(
+                                  data.loggedInUserInterested,
+                                  data.id
+                                )
+                              }
+                              outline
+                              // className="d-none d-lg-block"
+                              color="primary"
+                              size="xs"
+                              active={data.loggedInUserInterested}
+                            >
+                              I&apos;m interested
+                            </Button>
+                          </Col>
+                        </Row>
+
+                        {/* <Row className="mt-2 ">
+                          <Col className="d-flex justify-content-between align-items-center">
+                            <span className="text-muted ">
+                              Posted on
+                              <TimestampConverter
+                                timeStamp={data.postedOn}
+                                format="datetime"
+                              />
+                            </span>
+                            <Button
+                              onClick={() =>
+                                handleInterestedButtonClick(
+                                  data.loggedInUserInterested,
+                                  data.id
+                                )
+                              }
+                              outline
+                              // className="d-none d-lg-block"
+                              color="primary"
+                              size="xs"
+                              active={data.loggedInUserInterested}
+                            >
+                              I&apos;m interested
+                            </Button>
+                          </Col>
+                        </Row> */}
+                      </CardBody>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+              <Pagination
+                currentPage={currentPage}
+                totalPage={totalPage}
+                onChangePage={(i) => setCurrentPage(i)}
+                lastIsActive={isFirst}
+                firstIsActive={isLast}
+              />
+            </div>
+          )}
+        </>
+      )}
+      {/* new design ends */}
     </>
   );
 };

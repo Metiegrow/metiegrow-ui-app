@@ -12,7 +12,7 @@ import {
   Button,
   Card,
   CardBody,
-  // CardImg,
+  CardImg,
   CardText,
   CardTitle,
   Col,
@@ -926,6 +926,384 @@ const DashBoard = () => {
           </Card>
         </Colxx>
       </Row>
+      {/* job and stay listing starts */}
+      <Row className="mx-auto  " style={{ maxWidth: "1000px" }}>
+        <Colxx lg="6" md="6">
+          <Card className="mx-auto">
+            <CardBody className="p-4 position-relative">
+              <Button
+                className="rounded-circle px-2 py-0   text-one bg-white position-absolute "
+                style={{
+                  border: "3px solid #a16390",
+                  top: "30px",
+                  right: "30px",
+                  cursor: "pointer",
+                  zIndex: 10,
+                }}
+                // onClick={toggleOwnerInfo}
+              >
+                <i
+                  className="fa-solid fa-user"
+                  color="secondary"
+                  style={{ color: "#a16390" }}
+                />
+              </Button>
+              <CardImg
+                top
+                // src="/assets/img/cards/thumb-1.jpg"
+                src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                alt="Card image cap"
+                className="mb-2"
+                style={{ height: "250px" }}
+                // style={{
+                //   opacity: isOwnerInfoVisible ? 0.1 : 1, // Reduce opacity when info is visible
+                //   transition: "opacity 0.3s ease-in-out", // Add a transition effect
+                // }}
+              />
+
+              {/* <span
+                style={{
+                  position: "absolute",
+                  top: "100px",
+                  right: "80px",
+
+                  padding: "10px",
+                  borderRadius: "5px",
+                  
+                }}
+                className="font-weight-bold"
+              >
+                <h2 className="text-large">Owner: Prakash Raj</h2>
+                <h4 className="">
+                  
+                  <i className="fa-solid fa-phone mr-2" />
+                  9876543210
+                </h4>
+                <h4
+                  className="d-inline-flex align-items-center"
+                  style={{ display: "inline-flex" }}
+                >
+               
+                  <i className="fa-solid fa-envelope mr-2" /> prakash@gmail.com
+                </h4>
+              </span> */}
+
+              <Row>
+                <Col xs="12" sm="12" className="d-flex align-items-center">
+                  <h3 className="font-weight-bold mt-2 text-one ">
+                    Rent: <span className="text-primary">₹</span>
+                    <span data-toggle="tooltip" title="Expected Rent">
+                      5000
+                    </span>
+                  </h3>
+                  <Button
+                    color="light"
+                    className=" font-weight-semibold mx-2"
+                    size="xs"
+                  >
+                    Apartment
+                  </Button>
+                </Col>
+              </Row>
+
+              {/* icons tstart */}
+              <Row className="my-2">
+                <Col className="d-flex flex-wrap">
+                  <Button
+                    color="light"
+                    className="font-weight-bold mr-1 my-1"
+                    size="sm"
+                  >
+                    <i className="fas fa-bed " /> 2
+                  </Button>
+                  <Button
+                    color="light"
+                    className="font-weight-bold m-1"
+                    size="sm"
+                  >
+                    <i className="fa-solid fa-shower" /> 2
+                  </Button>
+                  <Button
+                    color="light"
+                    className="font-weight-bold m-1"
+                    size="sm"
+                  >
+                    <i className="fa-solid fa-car" /> 2
+                  </Button>
+                </Col>
+              </Row>
+              {/* icons end */}
+
+              <Row className="mt-2">
+                <Col className="text-start text-sm-left" xs={12} sm={6}>
+                  <div className="text-muted mt-2">
+                    {/* {data.interestedCount} liked this property */}5 liked
+                    this property
+                  </div>
+                </Col>
+                <Col
+                  className="text-sm-right texr-start mt-sm-0 mt-2"
+                  xs={12}
+                  sm={6}
+                >
+                  <Button
+                    // onClick={() => handleInterestedButtonClick(data.id)}
+                    outline
+                    color="primary"
+                    size="xs"
+                    // active={data.loggedInUserInterested}
+                  >
+                    I&apos;m interested
+                  </Button>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Colxx>
+        <Colxx lg="6" md="6">
+          <Card className=" my-2">
+            <CardBody className="p-3">
+              <CardImg
+                top
+                // src="/assets/img/cards/thumb-1.jpg"
+                src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                alt="Card image cap"
+                style={{ height: "250px" }}
+              />
+
+              <Row>
+                <Col>
+                  <h3 className="font-weight-bold mt-2 text-large">
+                    developer
+                  </h3>
+                  <h6>TCS</h6>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <Button
+                    color="light"
+                    className="mb-2 font-weight-semibold"
+                    size="xs"
+                  >
+                    job
+                  </Button>
+                  <Button
+                    color="light"
+                    className="mb-2 font-weight-semibold mx-1"
+                    size="xs"
+                  >
+                    fresher
+                  </Button>
+                  <Button
+                    color="light"
+                    className="mb-2 font-weight-semibold mx-1"
+                    size="xs"
+                  >
+                    fffffff
+                  </Button>
+                  <Button
+                    color="light"
+                    className="mb-2 font-weight-semibold mx-1"
+                    size="xs"
+                  >
+                    chennai
+                  </Button>
+                </Col>
+              </Row>
+
+              <Row className="mt-2 text-one">
+                <Col className="" xs={12} sm={8}>
+                  <span className="text-muted ">
+                    Posted on
+                    {/* <TimestampConverter
+                                timeStamp={data.postedOn}
+                                format="datetime"
+                              /> */}
+                  </span>
+                </Col>
+                <Col
+                  // className="text-sm-right text-start mt-sm-0 mt-2"
+                  className="d-flex justify-content-sm-end justify-content-start align-items-center mt-sm-0 mt-2"
+                  xs={12}
+                  sm={4}
+                >
+                  <Button
+                    outline
+                    // className="d-none d-lg-block"
+                    color="primary"
+                    size="xs"
+                  >
+                    I&apos;m interested
+                  </Button>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Colxx>
+      </Row>
+      {/* job and stay listing ends */}
+      {/* Q and A starts */}
+      <Row className="mx-auto  mt-4" style={{ maxWidth: "1000px" }}>
+        <Colxx lg="8" md="7" className="mb-2">
+          {/* <Col lg={7}> */}
+          <Card>
+            <CardBody>
+              <CardTitle>
+                <strong>Q&A</strong>
+              </CardTitle>
+              <div>
+                <div className="d-flex align-items-center justify-content-between ">
+                  <h4>Self improvement</h4>
+                  <p className="text-muted">A week ago</p>
+                </div>
+
+                <p>
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Provident ut porro odit exercitationem, nesciunt quae aperiam
+                  vero! Eveniet libero tenetur fugiat quas. Amet fuga dicta
+                  sequi eius labore ducimus animi nihil, sapiente ullam magni
+                  natus quisquam dolorem dolorum dolor ipsam tenetur. Sed
+                  voluptatibus delectus enim quod non repellendus ratione eum?
+                </p>
+              </div>
+              <hr />
+              <div className="d-flex align-items-center justify-content-between my-2">
+                <span className="text-one">36 views</span>
+                <span className="text-one">
+                  <i className="simple-icon-envelope " color="primary" />
+                </span>
+              </div>
+              <div className="w-full d-flex ">
+                <Button
+                  className="text-center mx-auto"
+                  color="primary"
+                  size="sm"
+                >
+                  View all answers
+                </Button>
+              </div>
+            </CardBody>
+          </Card>
+          {/* </Col> */}
+        </Colxx>
+        <Colxx lg="4" md="5" className="mb-2">
+          {/* <Col lg={5}> */}
+          <Card className="mb-2">
+            {currentMentor && (
+              <CardBody>
+                <Row className="mb-3 align-items-center">
+                  <Col>
+                    <h3 className="mb-0 fw-bold">
+                      <strong>Batch Mates</strong>
+                    </h3>
+                  </Col>
+                  <Col xs="auto">
+                    <Button
+                      size="xs"
+                      color="primary"
+                      onClick={handleViewMentors}
+                    >
+                      <span>View all</span>
+                    </Button>
+                  </Col>
+                </Row>
+                <div className="text-center">
+                  <Row>
+                    <Col className="d-flex align-items-center">
+                      <button
+                        onClick={handleMentorPrevious}
+                        type="button"
+                        className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
+                        data-glide-dir="<"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i className="simple-icon-arrow-left" />
+                      </button>
+                    </Col>
+                    <Col className="d-flex justify-content-center align-items-center">
+                      {/* <CardImg
+                  top
+                  src={`${baseUrl}/${currentMentor.imageUrl}`}
+                  alt="Card image cap"
+                  className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
+                /> */}
+                      {!currentMentor.imageUrl ? (
+                        <ThumbnailLetters
+                          // small
+                          rounded
+                          text={currentMentor.firstName}
+                          className="mx-2 mb-3"
+                          color="secondary"
+                        />
+                      ) : (
+                        <img
+                          src={`${baseUrl}/${currentMentor.imageUrl}`}
+                          className=" rounded-circle mb-2"
+                          style={{
+                            width: "90px",
+                            height: "90px",
+                            objectFit: "cover",
+                            overflow: "hidden",
+                          }}
+                          alt="img"
+                        />
+                      )}
+                    </Col>
+                    <Col className="d-flex align-items-center justify-content-end">
+                      <button
+                        onClick={handleMentorNext}
+                        type="button"
+                        className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
+                        data-glide-dir=">"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i className="simple-icon-arrow-right" />
+                      </button>
+                    </Col>
+                  </Row>
+                  <NavLink to="#">
+                    <h3 className="mb-0">
+                      <strong>
+                        {currentMentor.firstName} {currentMentor.lastName}
+                      </strong>
+                    </h3>
+                  </NavLink>
+                  <CardText className="text-muted text-small mb-2">
+                    {currentMentor.jobTitle} | {currentMentor.company}
+                  </CardText>
+                  <span>
+                    {currentMentor.experience === undefined ||
+                    currentMentor.experience === 0
+                      ? "No experience"
+                      : `${currentMentor.experience} years of experience`}
+                  </span>
+
+                  <div className="separator mb-2 mt-2" />
+                  <h3 className="mb-0 fw-bold">
+                    <strong>
+                      ₹{Math.floor(currentMentor.price).toLocaleString()}/hr
+                    </strong>
+                  </h3>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <div
+                    className="glide__bullets slider-dot-container"
+                    data-glide-el="controls[nav]"
+                  >
+                    {renderMentorsDots()}
+                  </div>
+                </div>
+              </CardBody>
+            )}
+          </Card>
+          {/* </Col> */}
+        </Colxx>
+      </Row>
+      {/* Q and A ends */}
+
+      {/* recent chats and recent sessions start */}
       <Row className="mx-auto  " style={{ maxWidth: "1000px" }}>
         <Colxx lg="7" md="6" className="mb-2">
           {/* <Col lg={7}> */}
@@ -1089,6 +1467,7 @@ const DashBoard = () => {
           {/* </Col> */}
         </Colxx>
       </Row>
+      {/* recent chats and recent sessions end */}
     </>
   );
 };
