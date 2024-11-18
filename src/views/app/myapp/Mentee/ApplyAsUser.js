@@ -33,6 +33,7 @@ import "react-tagsinput/react-tagsinput.css";
 import {
   // validateReasonForMentor,
   validateAchievement,
+  validateIdentityStatus,
   // validateCompany,
   // validateJobTitle,
   // validateSkills,
@@ -44,7 +45,9 @@ import {
 } from "../my-login/validation";
 
 // import country from "./Country";
+
 import country from "../AlumniRegister/Country";
+import indentityStatusList from "../CommonCardList/IdentityStatusList";
 import { EmploymentTypeData } from "../Listing/ListingData";
 import language from "../my-login/Languages";
 import ToasterComponent from "../notifications/ToasterComponent";
@@ -193,7 +196,7 @@ const ApplyAsMentor = () => {
   const ImageUrl = `${baseUrl}/api/userprofile/profile-image`;
   const mentorExperienceUrl = `${baseUrl}/api/userprofile/experience`;
   const userAboutUrl = `${baseUrl}/api/userprofile/about`;
-  const ResumeUploadUrl = `${baseUrl}/resume?role=USER`;
+  const ResumeUploadUrl = `${baseUrl}/api/resume?role=USER`;
 
   const token = localStorage.getItem("tokenRes");
   const [selectedFile2, setSelectedFile2] = useState(null);
@@ -230,68 +233,6 @@ const ApplyAsMentor = () => {
     setImageErrorMessage1("");
   };
 
-  // const postDataUserProfile = async (data) => {
-  //   // handleNextStep();
-
-  //   setAboutLoading(true);
-  //   const formData = new FormData();
-  //   formData.append("image", file1);
-
-  //   const userProfile = {
-  //     languages,
-  //     linkedInUrl: data.linkedinUrl,
-  //     twitterHandle: data.twitterHandle,
-  //     personalWebsite: data.personalWebsite,
-  //   };
-  //   formData.append(
-  //     "userProfile",
-  //     new Blob([JSON.stringify(userProfile)], { type: "application/json" })
-  //   );
-
-  //   try {
-  //     const response = await axios.post(userProfileUrl, formData, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     // setNextStep(true)
-  //     setAboutLoading(false);
-  //     //   console.log(`resres ${response.status}`);
-  //     ToasterComponent("success", response.data.statuses);
-  //     handleNextStep();
-  //     localStorage.setItem("status", "1");
-  //   } catch (error) {
-  //     setImageError(false);
-  //     // console.error(error);
-  //     setAboutLoading(false);
-  //     if (error.response) {
-  //       error.response.data.statuses.forEach((status) => {
-  //         NotificationManager.error(
-  //           status.message,
-  //           "Oops!",
-  //           3000,
-  //           null,
-  //           null,
-  //           ""
-  //         );
-  //         if (status.code === 40327) {
-  //           setImageErrorMessage(status.message);
-  //           setImageError(true);
-  //         }
-  //       });
-  //     } else {
-  //       NotificationManager.error(
-  //         "something went wrong",
-  //         "Oops!",
-  //         3000,
-  //         null,
-  //         null,
-  //         ""
-  //       );
-  //     }
-  //   }
-  // };
-
   const postDataUserProfile = async (data) => {
     setAboutLoading(true);
 
@@ -302,6 +243,7 @@ const ApplyAsMentor = () => {
       personalWebsite: data.personalWebsite,
       location: data.location,
       studentType: data.studentType,
+      identityStatus: data.identityStatus,
     };
 
     try {
@@ -488,7 +430,7 @@ const ApplyAsMentor = () => {
   //   setToolsTag(newTools);
   // };
   const [education, setEducation] = useState([
-    { college: "", degree: "", department: "", year: "" },
+    { college: "", degree: "", department: "", startYear: "", endYear: "" },
   ]);
 
   const [work, setWork] = useState([
@@ -516,7 +458,7 @@ const ApplyAsMentor = () => {
   const addEducation = () => {
     setEducation([
       ...education,
-      { college: "", degree: "", department: "", year: 0 },
+      { college: "", degree: "", department: "", startYear: 0, endYear: 0 },
     ]);
   };
   const addWorkExperience = () => {
@@ -631,6 +573,7 @@ const ApplyAsMentor = () => {
                 twitterHandle: "",
                 studentType: "",
                 location: "",
+                identityStatus: "",
               }}
               // onSubmit={postDataUserProfile}
               onSubmit={(values) => {
@@ -838,6 +781,33 @@ const ApplyAsMentor = () => {
                       </Col>
                     </Row>
                   </FormGroup>
+                  <FormGroup>
+                    <Row>
+                      <Col md={6}>
+                        <Label>Identity Status*</Label>
+                        <Field
+                          as="select"
+                          name="identityStatus"
+                          validate={validateIdentityStatus}
+                          className="form-control"
+                        >
+                          <option disabled value="">
+                            Select Identity Satus
+                          </option>
+                          {indentityStatusList.map((option) => (
+                            <option key={option.name} value={option.name}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.identityStatus && touched.identityStatus && (
+                          <div className="invalid-feedback d-block">
+                            {errors.identityStatus}
+                          </div>
+                        )}
+                      </Col>
+                    </Row>
+                  </FormGroup>
 
                   <div className="d-flex justify-content-end">
                     <Button
@@ -868,7 +838,8 @@ const ApplyAsMentor = () => {
                     college: "",
                     department: "",
                     degree: "",
-                    year: "",
+                    startYear: "",
+                    endYear: "",
                   },
                 ],
                 work: [
@@ -985,6 +956,45 @@ const ApplyAsMentor = () => {
                         </Col>
                       </Row>
                       <Row>
+                        <Col>
+                          <FormGroup>
+                            <Label for={`education[${index}].startDate`}>
+                              Start year
+                            </Label>
+
+                            <Input
+                              type="select"
+                              name={`education[${index}].startYear`}
+                              id={`education[${index}].startYear`}
+                              className="form-control"
+                              value={service.startYear}
+                              required
+                              onChange={(e) =>
+                                handleInputChange(
+                                  index,
+                                  "startYear",
+                                  parseInt(e.target.value, 10)
+                                )
+                              }
+                            >
+                              <option disabled value="">
+                                Select year
+                              </option>
+                              {years.map((yr) => (
+                                <option key={yr} value={yr}>
+                                  {yr}
+                                </option>
+                              ))}
+                            </Input>
+
+                            {errors.education?.[index]?.startDate &&
+                              touched.education?.[index]?.startDate && (
+                                <div className="invalid-feedback d-block">
+                                  {errors.education[index].startYear}
+                                </div>
+                              )}
+                          </FormGroup>
+                        </Col>
                         <Col md={6}>
                           <FormGroup>
                             <Label for={`education[${index}].department`}>
@@ -1014,8 +1024,48 @@ const ApplyAsMentor = () => {
                               )}
                           </FormGroup>
                         </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <FormGroup>
+                            <Label for={`education[${index}].endDate`}>
+                              End year
+                            </Label>
+                            <Input
+                              type="select"
+                              name={`education[${index}].endDate`}
+                              id={`education[${index}].endDate`}
+                              className="form-control"
+                              value={service.endYear}
+                              required
+                              onChange={(e) =>
+                                handleInputChange(
+                                  index,
+                                  "endYear",
+                                  parseInt(e.target.value, 10)
+                                )
+                              }
+                              // validate={validatePackageDescription}
+                            >
+                              <option disabled value="">
+                                Select year
+                              </option>
+                              {years.map((yr) => (
+                                <option key={yr} value={yr}>
+                                  {currentYear === yr ? "Present" : yr}
+                                </option>
+                              ))}
+                            </Input>
+                            {errors.education?.[index]?.endDate &&
+                              touched.education?.[index]?.endDate && (
+                                <div className="invalid-feedback d-block">
+                                  {errors.education[index].endDate}
+                                </div>
+                              )}
+                          </FormGroup>
+                        </Col>
 
-                        <Col md={6}>
+                        {/* <Col md={6}>
                           <FormGroup>
                             <Label for={`education[${index}].department`}>
                               Year of passing*
@@ -1051,7 +1101,7 @@ const ApplyAsMentor = () => {
                                 </div>
                               )}
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                       </Row>
 
                       <hr />

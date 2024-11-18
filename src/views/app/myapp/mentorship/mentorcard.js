@@ -444,65 +444,6 @@ const MentorCard = () => {
           firstIsActive={paginationMeta.first}
         />
       )}
-
-      {/* <Colxx xxs="12">
-      <Row>
-      <Colxx  sm="12" md="12" lg="8" xxs="12" className='mx-auto'>
-            <Card className=" flex-row listing-card-container  ">
-           
-              <div className=' postion-relative'>
-            
-                <img
-                      className="card-img-left"
-                      src='/assets/img/cards/thumb-1.jpg'
-                      alt="Card"
-                    />
-                    
-              </div>
-             
-              <div className=" d-flex align-items-center">
-              <CardBody className=" " >
-                  <div className="min-width-zero">
-                 
-                    <CardText className=" font-weight-semibold text-large mb-2">
-                     Suresh Kumar
-                    </CardText>
-                    <CardText className=" text-one mb-2">
-                     FrontEnd developer IN
-                    </CardText>
-                    <CardText className=" text-one mb-2 text-primary">
-                     Aaga technologies
-                    </CardText>
-                    <CardText className="text-small text-small mb-2">
-                     4.5(100 reviews)
-                    </CardText>
-                    <CardText className=" text-one mb-2">
-                    I started programming at an age of 14 because I wanted to help people, 
-                    specifically my mother who is an artist and who I made a website for. 
-                    Since then I simply got addicted to creating cool and hopefully helpful apps.
-                     Peculiarly, it turned out that freelancing as a software …
-                    </CardText>
-                  
-                  </div>
-                  <div className='d-flex align-items-center justify-content-between my-5'>
-                        <CardText className='text-primary'>
-                            <span className='text-large font-weight-semibold'>$290</span>/month
-                        </CardText>
-                        <Button color="primary " className="default  ">
-                        View Profile
-              </Button>
-                    </div>
-                </CardBody>
-                
-              </div>
-             
-            </Card>
-            
-           
-          </Colxx>
-        
-      </Row>
-      </Colxx> */}
     </div>
   );
 };

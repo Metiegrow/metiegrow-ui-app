@@ -513,7 +513,11 @@ const Register = () => {
                   </div>
                 )}
                 {/* {roleError && <p className="text-danger">Please select at least one role</p>} */}
-                <div className="d-flex justify-content-end align-items-center">
+                <div className="d-flex justify-content-between flex-wrap align-items-center">
+                  <div>
+                    Already a registered user?{" "}
+                    <NavLink to="/login">login</NavLink>
+                  </div>
                   <Button
                     color="primary"
                     //  className="btn-shadow"
@@ -521,7 +525,7 @@ const Register = () => {
                     type="submit"
                     className={`btn-shadow btn-multiple-state ${
                       loading ? "show-spinner" : ""
-                    }`}
+                    } mt-2 mt-sm-0`}
                     size="lg"
                   >
                     <span className="spinner d-inline-block">
@@ -534,10 +538,10 @@ const Register = () => {
                     </span>
                   </Button>
                 </div>
-                <div>
+                {/* <div>
                   Already a registered user?{" "}
                   <NavLink to="/login">login</NavLink>
-                </div>
+                </div> */}
               </AvForm>
             )}
           </div>

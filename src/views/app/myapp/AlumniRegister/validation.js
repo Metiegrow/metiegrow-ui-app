@@ -66,7 +66,13 @@ function validateDomain(value) {
   }
   return error;
 }
-
+function validateIdentityStatus(value) {
+  let error;
+  if (!value) {
+    error = "Please select a identity status";
+  }
+  return error;
+}
 function validateCompany(value) {
   let error;
   if (!value) {
@@ -216,6 +222,7 @@ export {
   validateEmail,
   validateFile,
   validateFirstName,
+  validateIdentityStatus,
   validateJobTitle,
   validateLastName,
   validateLinkedinUrl,

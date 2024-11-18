@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import axios from "axios";
-import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 import {
   Button,
@@ -12,7 +11,6 @@ import {
   CardBody,
   CardImg,
   CardSubtitle,
-  CardTitle,
   Col,
   Row,
 } from "reactstrap";
@@ -31,12 +29,12 @@ const JobListing = ({ isPosted }) => {
   const [isLast, setIsLast] = useState(true);
   // const [modal, setModal] = useState(false);
   // const [interestPerson, setInterestPerson] = useState([]);
-  const [copiedId, setCopiedId] = useState(null);
+  // const [copiedId, setCopiedId] = useState(null);
 
   // const toggle = () => setModal(!modal);
   const url = `${baseUrl}/api/posts/job-post/`;
   const interestedClickUrl = `${baseUrl}/api/posts/job-post/interested`;
-  const history = useHistory();
+  // const history = useHistory();
   const currentUserId = localStorage.getItem("userId");
   const currentUserRole = localStorage.getItem("roleRes");
   const currentUserName = localStorage.getItem("userName");
@@ -92,9 +90,9 @@ const JobListing = ({ isPosted }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, isPosted, interestedClickUrl]);
 
-  const handleClick = (id) => {
-    history.push(`/app/listing/job/view/${id}`);
-  };
+  // const handleClick = (id) => {
+  //   history.push(`/app/listing/job/view/${id}`);
+  // };
 
   function removeTags(str) {
     if (typeof str === "string") {
@@ -238,19 +236,19 @@ const JobListing = ({ isPosted }) => {
   //   }
   // };
 
-  const handleShareButtonClick = async (id) => {
-    try {
-      await navigator.clipboard.writeText(
-        `${window.location.href}/joblisting/view/${id}`
-      );
-      setCopiedId(id);
-      setTimeout(() => {
-        setCopiedId(null);
-      }, 3000);
-    } catch (error) {
-      console.error("Error copying link:", error);
-    }
-  };
+  // const handleShareButtonClick = async (id) => {
+  //   try {
+  //     await navigator.clipboard.writeText(
+  //       `${window.location.href}/joblisting/view/${id}`
+  //     );
+  //     setCopiedId(id);
+  //     setTimeout(() => {
+  //       setCopiedId(null);
+  //     }, 3000);
+  //   } catch (error) {
+  //     console.error("Error copying link:", error);
+  //   }
+  // };
 
   return (
     <>
@@ -278,7 +276,7 @@ const JobListing = ({ isPosted }) => {
           </ListGroup>
         </ModalBody>
       </Modal> */}
-      {!isLoaded ? (
+      {/* {!isLoaded ? (
         <div className="loading" />
       ) : (
         <>
@@ -333,28 +331,7 @@ const JobListing = ({ isPosted }) => {
                             )}
                           </CardSubtitle>
                         )}
-                        {/* <Row>
-                          <Col>
-                            <i className="iconsminds-office text-primary" />{" "}
-                            {data.company}
-                          </Col>
-                          <Col>
-                            <i className="iconsminds-engineering text-primary" />{" "}
-                            {data.jobTitle}
-                          </Col>
-                          <Col>
-                            <i className="simple-icon-location-pin text-primary" />{" "}
-                            {data.jobLocation}
-                          </Col>
-                          <Col>
-                            <i className="iconsminds-building text-primary" />{" "}
-                            {data.workPlaceType}
-                          </Col>
-                          <Col>
-                            <i className="simple-icon-briefcase text-primary" />{" "}
-                            {data.employmentType}
-                          </Col>
-                        </Row> */}
+                       
                         <Row>
                           <Col xs={12} sm={6} md={4} lg={2}>
                             <i className="iconsminds-office text-primary" />{" "}
@@ -399,20 +376,9 @@ const JobListing = ({ isPosted }) => {
                             sm={6}
                           >
                             <div
-                              // role="button"
-                              // tabIndex={0}
-                              // onKeyDown={(e) => {
-                              //   if (e.key === "Enter" || e.key === " ") {
-                              //     handleInterestPersonPage(
-                              //       data.interestedUsers
-                              //     );
-                              //   }
-                              // }}
+                              
                               className="text-muted mt-2"
-                              // onClick={() => {
-                              //   handleInterestPersonPage(data.interestedUsers);
-                              // }}
-                              // style={{ cursor: "pointer" }}
+                             
                             >
                               {data.interestedCount} people have shown interest
                             </div>
@@ -461,27 +427,7 @@ const JobListing = ({ isPosted }) => {
                                 />
                               </svg>
                             </Button>
-                            {/* <Button
-                              outline
-                              color="primary"
-                              className="d-block d-lg-none"
-                              size="xs"
-                              active={data.loggedInUserInterested}
-                              onClick={() =>
-                                handleInterestedButtonClick(
-                                  data.loggedInUserInterested,
-                                  data.id
-                                )
-                              }
-                            >
-                              <i
-                                className={`iconsminds-like ${
-                                  data.loggedInUserInterested
-                                    ? "text-white"
-                                    : "text-primary"
-                                }`}
-                              />
-                            </Button> */}
+                            
                             <Button
                               onClick={() =>
                                 handleInterestedButtonClick(
@@ -514,7 +460,7 @@ const JobListing = ({ isPosted }) => {
             </div>
           )}
         </>
-      )}
+      )} */}
 
       {/* new design starts */}
 
@@ -543,7 +489,17 @@ const JobListing = ({ isPosted }) => {
                         <CardImg
                           top
                           // src="/assets/img/cards/thumb-1.jpg"
-                          src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                          // src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                          // src={
+                          //   data.image !== null
+                          //     ? `${baseUrl}/${data.imageUrl}`
+                          //     : "https://via.placeholder.com/300x200?text=No+Image"
+                          // }
+                          src={
+                            data.image && data.image.imageUrl
+                              ? `${baseUrl}/${data.image.imageUrl}`
+                              : "https://via.placeholder.com/300x200?text=No+Image"
+                          }
                           alt="Card image cap"
                         />
 

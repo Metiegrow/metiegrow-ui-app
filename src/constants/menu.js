@@ -53,6 +53,13 @@ const data = [
     // ]
   },
   {
+    id: "Student",
+    icon: "iconsminds-students",
+    label: "Student",
+    to: `${adminRoot}/student/list`,
+    subs: [],
+  },
+  {
     id: "Q & A",
     icon: "simple-icon-question",
     label: "Q & A",

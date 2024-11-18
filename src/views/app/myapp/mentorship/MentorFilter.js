@@ -531,7 +531,7 @@ const MentorFilter = ({
                     </DropdownMenu>
                   </Dropdown>
 
-                  {userRole !== "alumni" && (
+                  {userRole !== "alumni" && userRole !== "user" && (
                     <Dropdown
                       isOpen={dropdownBasicOpen1}
                       toggle={() => setDropdownBasicOpen1(!dropdownBasicOpen1)}
@@ -604,113 +604,118 @@ const MentorFilter = ({
                     </Dropdown>
                   )}
 
-                  <Dropdown
-                    isOpen={dropdownBasicOpen2}
-                    toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
-                    className="mb-3  col-lg-auto col-sm-12"
-                  >
-                    <DropdownToggle
-                      size="sm"
-                      className="col-lg-auto col-sm-12"
-                      caret
-                      color="primary"
-                      outline
+                  {userRole !== "user" && (
+                    <Dropdown
+                      isOpen={dropdownBasicOpen2}
+                      toggle={() => setDropdownBasicOpen2(!dropdownBasicOpen2)}
+                      className="mb-3  col-lg-auto col-sm-12"
                     >
-                      {selectedIndustry || <span>Companies</span>}
-                    </DropdownToggle>
-                    <DropdownMenu className="col-lg-auto col-sm-12">
-                      <div className="search-sm mr-1 ml-1 mb-1 align-top">
-                        <input
-                          type="text"
-                          className="form-control "
-                          placeholder="Search Company"
-                          value={searchCompanies}
-                          onChange={handleSearchCompanies}
-                        />
-                      </div>
-                      <PerfectScrollbar
-                        style={{ maxHeight: "200px" }}
-                        options={{
-                          suppressScrollX: true,
-                          wheelPropagation: false,
-                        }}
+                      <DropdownToggle
+                        size="sm"
+                        className="col-lg-auto col-sm-12"
+                        caret
+                        color="primary"
+                        outline
                       >
-                        {selectedIndustry && (
-                          <DropdownItem
-                            onClick={() => handleIndustrySelect("")}
-                            className="bg-light d-flex justify-content-between align-items-center"
-                          >
-                            <span>{selectedIndustry}</span>
-                            <i className="iconsminds-close ml-auto" />
-                          </DropdownItem>
-                        )}
-                        {companiesFetched && companyData.length === 0 && (
-                          <Card className=" d-flex justify-content-between align-items-center">
-                            {searchCompanies} was not found
-                          </Card>
-                        )}
-                        {!companiesFetched && (
-                          <Card className=" d-flex justify-content-between align-items-center">
-                            Failed to load data!
-                          </Card>
-                        )}
-                        {companyData.map((c, index) => (
-                          <DropdownItem
-                            key={index}
-                            onClick={() => handleIndustrySelect(c)}
-                          >
-                            {c}
-                          </DropdownItem>
-                        ))}
-                        {!companyPaginationMeta.last && companiesFetched && (
-                          <Card
-                            style={{ cursor: "pointer" }}
-                            onClick={handleCompanyLoadMore}
-                            className="bg-light d-flex justify-content-between align-items-center"
-                          >
-                            load more
-                          </Card>
-                        )}
-                      </PerfectScrollbar>
-                    </DropdownMenu>
-                  </Dropdown>
+                        {selectedIndustry || <span>Companies</span>}
+                      </DropdownToggle>
+                      <DropdownMenu className="col-lg-auto col-sm-12">
+                        <div className="search-sm mr-1 ml-1 mb-1 align-top">
+                          <input
+                            type="text"
+                            className="form-control "
+                            placeholder="Search Company"
+                            value={searchCompanies}
+                            onChange={handleSearchCompanies}
+                          />
+                        </div>
+                        <PerfectScrollbar
+                          style={{ maxHeight: "200px" }}
+                          options={{
+                            suppressScrollX: true,
+                            wheelPropagation: false,
+                          }}
+                        >
+                          {selectedIndustry && (
+                            <DropdownItem
+                              onClick={() => handleIndustrySelect("")}
+                              className="bg-light d-flex justify-content-between align-items-center"
+                            >
+                              <span>{selectedIndustry}</span>
+                              <i className="iconsminds-close ml-auto" />
+                            </DropdownItem>
+                          )}
+                          {companiesFetched && companyData.length === 0 && (
+                            <Card className=" d-flex justify-content-between align-items-center">
+                              {searchCompanies} was not found
+                            </Card>
+                          )}
+                          {!companiesFetched && (
+                            <Card className=" d-flex justify-content-between align-items-center">
+                              Failed to load data!
+                            </Card>
+                          )}
+                          {companyData.map((c, index) => (
+                            <DropdownItem
+                              key={index}
+                              onClick={() => handleIndustrySelect(c)}
+                            >
+                              {c}
+                            </DropdownItem>
+                          ))}
+                          {!companyPaginationMeta.last && companiesFetched && (
+                            <Card
+                              style={{ cursor: "pointer" }}
+                              onClick={handleCompanyLoadMore}
+                              className="bg-light d-flex justify-content-between align-items-center"
+                            >
+                              load more
+                            </Card>
+                          )}
+                        </PerfectScrollbar>
+                      </DropdownMenu>
+                    </Dropdown>
+                  )}
 
-                  <Dropdown
-                    isOpen={dropdownBasicOpen3}
-                    toggle={() => setDropdownBasicOpen3(!dropdownBasicOpen3)}
-                    className="mb-3  col-lg-auto col-sm-12"
-                  >
-                    <DropdownToggle
-                      size="sm"
-                      className="col-lg-auto col-sm-12"
-                      caret
-                      color="primary"
-                      outline
+                  {userRole !== "user" && (
+                    <Dropdown
+                      isOpen={dropdownBasicOpen3}
+                      toggle={() => setDropdownBasicOpen3(!dropdownBasicOpen3)}
+                      className="mb-3  col-lg-auto col-sm-12"
                     >
-                      Price
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      <DropdownItem className="no-bg-price">
-                        {/* <SliderExamples onChange={onPriceChange} /> */}
-                        <Row>
-                          <Colxx xxs="12" sm="12">
-                            <RangeTooltip
-                              min={500}
-                              max={15000}
-                              className="mb-5"
-                              defaultValue={[500, 15000]}
-                              allowCross={false}
-                              pushable={100}
-                              step={500}
-                              value={priceRange}
-                              onChange={handleSliderChange}
-                              onAfterChange={handleAfterChange}
-                            />
-                          </Colxx>
-                        </Row>
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
+                      <DropdownToggle
+                        size="sm"
+                        className="col-lg-auto col-sm-12"
+                        caret
+                        color="primary"
+                        outline
+                      >
+                        Price
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem className="no-bg-price">
+                          {/* <SliderExamples onChange={onPriceChange} /> */}
+                          <Row>
+                            <Colxx xxs="12" sm="12">
+                              <RangeTooltip
+                                min={500}
+                                max={15000}
+                                className="mb-5"
+                                defaultValue={[500, 15000]}
+                                allowCross={false}
+                                pushable={100}
+                                step={500}
+                                value={priceRange}
+                                onChange={handleSliderChange}
+                                onAfterChange={handleAfterChange}
+                              />
+                            </Colxx>
+                          </Row>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  )}
+
                   <Dropdown
                     isOpen={dropdownBasicOpen4}
                     toggle={() => setDropdownBasicOpen4(!dropdownBasicOpen4)}

@@ -21,6 +21,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
+import indentityStatusList from "../CommonCardList/IdentityStatusList";
 import ToasterComponent from "../notifications/ToasterComponent";
 import {
   ApartmentTypeData,
@@ -105,7 +106,13 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
     initialData?.maintenanceAmount || null
   );
   // const [parking] = useState(initialData?.parkingValue || null);
-  const [contact, setContact] = useState(initialData?.contact || "");
+  // const [contact, setContact] = useState(initialData?.contact || "");
+  // const [email, setEmail] = useState(initialData?.email || "");
+  // const [mobileNumber, setMobileNumber] = useState(
+  //   initialData?.mobileNumber || ""
+  // );
+  // const [ownerName, setOwnerName] = useState(initialData?.ownerName || "");
+  // const [location, setLocation] = useState(initialData?.location || "");
   // const [description, setDescription] = useState(
   //   initialData?.description || ""
   // );
@@ -181,6 +188,12 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
     setAvailableFrom(timestampInMilliseconds);
   };
 
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange2 = (e) => {
+    setSelectedFiles([...e.target.files]); // Converts FileList to an array
+  };
+
   return (
     <div>
       <Card className="mx-auto my-4 p-3" style={{ maxWidth: "900px" }}>
@@ -197,16 +210,25 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
               roomMate: initialData?.roomMateValue || "",
               expectedRent: initialData?.expectedRent || "",
               expectedDeposit: initialData?.expectedDeposit || "",
-              contact: initialData?.contact || "",
+              // contact: initialData?.contact || "",
+              email: initialData?.email || "",
+              location: initialData?.location || "",
+              ownerName: initialData?.ownerName || "",
+              mobileNumber: initialData?.mobileNumber || "",
               monthlyMaintenance: initialData?.monthlyMaintenance || false,
               maintenanceAmount: initialData?.maintenanceAmount || null,
               parking: initialData?.parkingValue || "",
               description: initialData?.description || "",
+              stayCategory: initialData?.stayCategory || "",
+              parkingCount: initialData?.parkingCount || "",
             }}
             validate={(values) => {
               const errors = {};
               if (!values.title.trim()) {
                 errors.title = "Title is required";
+              }
+              if (!values.parkingCount.trim()) {
+                errors.parkingCount = "Parking count is required";
               }
               // if (!values.jobTitle.trim()) {
               //   errors.jobTitle = "Job title is required";
@@ -240,6 +262,9 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
               if (!values.parking.trim()) {
                 errors.parking = "parking is required";
               }
+              if (!values.stayCategory.trim()) {
+                errors.stayCategory = "stay category is required";
+              }
               // if (values.skills.length === 0) {
               //   errors.skills = "At least one skill is required";
               // }
@@ -248,29 +273,117 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
             onSubmit={async (values, { setSubmitting }) => {
               setIsLoading(true);
               try {
+                const formData = new FormData();
+                // formData.append(
+                //   "images",
+                //   // selectedFiles.map((file) => file)
+                //   selectedFiles
+                // );
+                // const data = {
+                //   id,
+                //   title: values.title,
+                //   apartmentType: values.apartmentType,
+                //   bhkType: values.BHKType,
+                //   floor: values.floor,
+                //   roomType: values.roomType,
+                //   roomMate: values.roomMate,
+                //   expectedRent: values.expectedRent,
+                //   expectedDeposit: values.expectedDeposit,
+                //   availableFrom,
+                //   monthlyMaintenance,
+                //   maintenanceAmount: monthlyMaintenance
+                //     ? maintenanceAmount
+                //     : null,
+                //   parking: values.parking,
+                //   parkingCount: values.parkingCount,
+                //   contact,
+                //   description: values.description,
+                //   // stayCategory: values.stayCategory,
+                // };
+                // const data = {
+                //   id,
+                //   title: values.title,
+                //   apartmentType: parseInt(values.apartmentType, 10),
+                //   bhkType: parseInt(values.BHKType, 10),
+                //   floor: parseInt(values.floor, 10),
+                //   roomType: parseInt(values.roomType, 10),
+                //   roomMate: parseInt(values.roomMate, 10),
+                //   expectedRent: parseInt(values.expectedRent, 10),
+                //   expectedDeposit: parseInt(values.expectedDeposit, 10),
+                //   availableFrom: parseInt(availableFrom, 10),
+                //   monthlyMaintenance: values.monthlyMaintenance,
+                //   maintenanceAmount: values.monthlyMaintenance
+                //     ? parseInt(maintenanceAmount, 10)
+                //     : null,
+                //   parking: parseInt(values.parking, 10),
+                //   parkingCount: parseInt(values.parkingCount, 10),
+                //   ownerName: values.ownerName,
+                //   mobileNumber: parseInt(values.mobileNumber, 10),
+                //   email: values.email,
+                //   location: values.location,
+                //   description: values.description,
+                // };
                 const data = {
                   id,
                   title: values.title,
-                  apartmentType: values.apartmentType,
-                  bhkType: values.BHKType,
-                  floor: values.floor,
-                  roomType: values.roomType,
-                  roomMate: values.roomMate,
-                  expectedRent: values.expectedRent,
-                  expectedDeposit: values.expectedDeposit,
-                  availableFrom,
-                  monthlyMaintenance,
+                  apartmentType: parseInt(values.apartmentType, 10),
+                  bhkType: parseInt(values.BHKType, 10),
+                  floor: parseInt(values.floor, 10),
+                  roomType: parseInt(values.roomType, 10),
+                  roomMate: parseInt(values.roomMate, 10),
+                  expectedRent: parseInt(values.expectedRent, 10),
+                  expectedDeposit: parseInt(values.expectedDeposit, 10),
+                  availableFrom: parseInt(availableFrom, 10),
+                  monthlyMaintenance: values.monthlyMaintenance,
                   maintenanceAmount: monthlyMaintenance
-                    ? maintenanceAmount
+                    ? parseInt(maintenanceAmount, 10)
                     : null,
-                  parking: values.parking,
-                  contact,
+                  parking: parseInt(values.parking, 10),
+                  parkingCount: parseInt(values.parkingCount, 10),
+                  // contact,
+                  ownerName: values.ownerName,
+                  mobileNumber: parseInt(values.mobileNumber, 10),
+                  // mobileNumber: +${values.mobileNumber},
+                  identityStatus: values.stayCategory,
+                  // };
+                  email: values.email,
+                  location: values.location,
                   description: values.description,
                 };
+
+                // selectedFiles.forEach((file) => {
+                //   formData.append("images", file);
+                // });
+
+                // formData.append(
+                //   "stayRoom",
+                //   // new Blob([JSON.stringify(data)], { type: "application/json" })
+                //   JSON.stringify(data)
+                // );
+
+                // formData.append("stayRoom", JSON.stringify(data));
+                formData.append(
+                  "stayRoom",
+                  new Blob([JSON.stringify(data)], { type: "application/json" })
+                );
+
+                // Then append each file in selectedFiles as "images"
+                // selectedFiles.forEach((file) => {
+                //   formData.append("images", file);
+                // });
+                console.log("Selected files:", selectedFiles);
+                if (selectedFiles && selectedFiles.length > 0) {
+                  selectedFiles.forEach((file) => {
+                    console.log("File:", file);
+                    formData.append("images", file);
+                  });
+                }
+
+                console.log("FormData being sent: ", formData);
                 if (initialData) {
                   await onEdit(data);
                 } else {
-                  const response = await axios.post(url, data, {
+                  const response = await axios.post(url, formData, {
                     headers: {
                       Authorization: `Bearer ${token}`,
                     },
@@ -595,20 +708,48 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                 <Row>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
-                      <Label>Contact</Label>
+                      <Label>Owner name</Label>
+                      <Field
+                        className="form-control"
+                        name="ownerName"
+                        placeholder="Enter owner name"
+                        // onChange={(e) => setOwnerName(e.target.value)}
+                        onChange={(e) =>
+                          setFieldValue("ownerName", e.target.value)
+                        }
+                        value={values.owenerName}
+                        //   validate={}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Mobile number</Label>
+                      <Field
+                        className="form-control"
+                        name="mobile"
+                        placeholder="Enter mobile number"
+                        onChange={(e) =>
+                          setFieldValue("mobileNumber", e.target.value)
+                        }
+                        value={values.mobileNumber}
+                        //   validate={}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Email</Label>
                       <Field
                         className="form-control"
                         name="company"
-                        placeholder="Enter Email or phone Number"
-                        onChange={(e) => setContact(e.target.value)}
-                        value={contact}
+                        placeholder="Enter your email "
+                        onChange={(e) => setFieldValue("email", e.target.value)}
+                        value={values.email}
                         //   validate={}
                       />
-                      {/* {errors.company && touched.company && (
-                              <div className="invalid-feedback d-block">
-                                {errors.company}
-                              </div>
-                            )} */}
                     </FormGroup>
                   </Col>
                   <Col md={6}>
@@ -622,6 +763,7 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                     </FormGroup>
                   </Col>
                 </Row>
+
                 <Row>
                   <Col md={6}>
                     <FormGroup className="error-l-75">
@@ -656,8 +798,119 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                       )}
                     </FormGroup>
                   </Col>
+                  <Col md={6}>
+                    <Label>Stay Category*</Label>
+                    <Field
+                      as="select"
+                      name="stayCategory"
+                      // validate={validateIdentityStatus}
+                      onChange={(e) =>
+                        setFieldValue("stayCategory", e.target.value)
+                      }
+                      className="form-control"
+                      value={values.stayCategory}
+                    >
+                      <option disabled value="">
+                        Select Stay Category
+                      </option>
+                      {indentityStatusList.map((option) => (
+                        <option key={option.name} value={option.name}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Field>
+                    {errors.stayCategory && touched.stayCategory && (
+                      <div className="invalid-feedback d-block">
+                        {errors.stayCategory}
+                      </div>
+                    )}
+                  </Col>
                 </Row>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Parking Count*</Label>
+                      <Field
+                        className="form-control"
+                        name="parkingCount"
+                        placeholder=""
+                        value={values.parkingCount}
+                        // onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) =>
+                          setFieldValue("parkingCount", e.target.value)
+                        }
+                        required
+                        //   validate={}
+                      />
 
+                      {errors.parkingCount && touched.parkingCount && (
+                        <div className="invalid-feedback d-block">
+                          {errors.parkingCount}
+                        </div>
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Location</Label>
+                      <Field
+                        className="form-control"
+                        name="company"
+                        placeholder="Enter your location"
+                        onChange={(e) =>
+                          setFieldValue("location", e.target.value)
+                        }
+                        value={values.location}
+                        //   validate={}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    <Label>Image</Label>
+                    {/* Image Error Message */}
+                    {/* {imageError1 && (
+    <div className="invalid-feedback d-block">
+      {imageErrorMessage1}
+    </div>
+  )} */}
+
+                    <InputGroup>
+                      <div>
+                        <Button
+                          className="default"
+                          color="primary"
+                          onClick={() =>
+                            document
+                              .getElementById("file-upload-resume")
+                              .click()
+                          }
+                        >
+                          Upload Photos <i className="iconsminds-upload ml-2" />
+                        </Button>
+                        <Input
+                          id="file-upload-resume"
+                          type="file"
+                          multiple
+                          className="d-none"
+                          onChange={handleFileChange2}
+                        />
+                      </div>
+                    </InputGroup>
+                    <div className="my-2">
+                      {selectedFiles.length > 0 ? (
+                        <ul>
+                          {selectedFiles.map((file) => (
+                            <li key={file}>Selected file: {file.name}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </Col>
+                </Row>
                 <Row>
                   <Col>
                     <FormGroup className="error-l-75">

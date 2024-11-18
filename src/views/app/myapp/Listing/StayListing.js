@@ -1,9 +1,8 @@
 import axios from "axios";
-import { Colxx } from "components/common/CustomBootstrap";
 import { baseUrl } from "constants/defaultValues";
 import Pagination from "containers/pages/Pagination";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import {
   // Collapse,
   Button,
@@ -11,11 +10,9 @@ import {
   CardBody,
   CardImg,
   CardSubtitle,
-  CardTitle,
   Col,
   Row,
 } from "reactstrap";
-import TimestampConverter from "../Calculation/TimestampConverter";
 import ToasterComponent from "../notifications/ToasterComponent";
 
 const StayListing = () => {
@@ -24,15 +21,18 @@ const StayListing = () => {
   const [pagination, setPagination] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [copiedId, setCopiedId] = useState(null);
+  // const [copiedId, setCopiedId] = useState(null);
   const [isOwnerInfoVisible, setIsOwnerInfoVisible] = useState(false);
 
-  const toggleOwnerInfo = () => {
-    setIsOwnerInfoVisible((prev) => !prev);
+  // const toggleOwnerInfo = () => {
+  //   setIsOwnerInfoVisible((prev) => !prev);
+  // };
+  const toggleOwnerInfo = (id) => {
+    setIsOwnerInfoVisible((prevId) => (prevId === id ? null : id)); // Toggle owner info
   };
 
   // const [totalPage] = useState(2);
-  const history = useHistory();
+  // const history = useHistory();
 
   const url = `${baseUrl}/api/posts/stay-post/`;
   // const interestedClickUrl = `${baseUrl}/api/posts/stay-post/intereststayroomId=${id}&interested=true`;
@@ -71,9 +71,9 @@ const StayListing = () => {
       setExpandedIndex(index);
     }
   };
-  const handleClick = (id) => {
-    history.push(`/app/listing/stay/view/${id}`);
-  };
+  // const handleClick = (id) => {
+  //   history.push(`/app/listing/stay/view/${id}`);
+  // };
 
   const handleInterestedButtonClick = async (id) => {
     const data = {
@@ -106,25 +106,25 @@ const StayListing = () => {
     return str.replace(/(<([^>]+)>)/gi, "");
   }
 
-  const handleShareButtonClick = async (id) => {
-    try {
-      await navigator.clipboard.writeText(
-        `${window.location.href}/staylisting/view/${id}`
-      );
-      setCopiedId(id);
-      setTimeout(() => {
-        setCopiedId(null);
-      }, 3000);
-    } catch (error) {
-      console.error("Error copying link:", error);
-    }
-  };
+  // const handleShareButtonClick = async (id) => {
+  //   try {
+  //     await navigator.clipboard.writeText(
+  //       `${window.location.href}/staylisting/view/${id}`
+  //     );
+  //     setCopiedId(id);
+  //     setTimeout(() => {
+  //       setCopiedId(null);
+  //     }, 3000);
+  //   } catch (error) {
+  //     console.error("Error copying link:", error);
+  //   }
+  // };
 
   return !isLoaded ? (
     <div className="loading" />
   ) : (
     <>
-      {!items.length > 0 ? (
+      {/* {!items.length > 0 ? (
         <Card className="d-flex justify-content-center align-items-center ">
           <h2 className="mt-4 mb-4">There are no posts available</h2>
         </Card>
@@ -152,7 +152,7 @@ const StayListing = () => {
                         </p>
                       </Col>
                     </Row>
-                    {/* <CardSubtitle>{data.description}</CardSubtitle> */}
+                   
                     {expandedIndex === index ? (
                       <CardSubtitle>
                         {removeTags(data.description)}
@@ -285,7 +285,7 @@ const StayListing = () => {
             firstIsActive={pagination.last}
           />
         </div>
-      )}
+      )} */}
 
       {/* new design starts  */}
       {!items.length > 0 ? (
@@ -296,8 +296,8 @@ const StayListing = () => {
         <div className="disable-text-selection">
           <Row>
             {items.map((data, index) => (
-              <Col xxs="12" key={data.title} className="mb-2">
-                <Card className="mx-auto">
+              <Col xxs="12" md={6} key={data.title} className="mb-2">
+                <Card className="mx-auto mt-2">
                   <CardBody className="p-4 position-relative">
                     <Button
                       className="rounded-circle px-2 py-0   text-one bg-white position-absolute "
@@ -308,7 +308,8 @@ const StayListing = () => {
                         cursor: "pointer",
                         zIndex: 10,
                       }}
-                      onClick={toggleOwnerInfo}
+                      // onClick={toggleOwnerInfo}
+                      onClick={() => toggleOwnerInfo(data.id)}
                     >
                       <i
                         className="fa-solid fa-user"
@@ -319,12 +320,19 @@ const StayListing = () => {
                     <CardImg
                       top
                       // src="/assets/img/cards/thumb-1.jpg"
-                      src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                      // src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                      src={
+                        data.images.length > 0
+                          ? `${baseUrl}/${data.images[0].imageUrl}` // Use the first image URL
+                          : "https://via.placeholder.com/300x200?text=No+Image" // Fallback image
+                      }
                       alt="Card image cap"
                       className="mb-2"
                       style={{
-                        opacity: isOwnerInfoVisible ? 0.1 : 1, // Reduce opacity when info is visible
-                        transition: "opacity 0.3s ease-in-out", // Add a transition effect
+                        opacity: isOwnerInfoVisible === data.id ? 0.1 : 1, // Reduce opacity when info is visible
+                        transition: "opacity 0.3s ease-in-out",
+                        height: "300px",
+                        objectFit: "cover", // Add a transition effect
                       }}
                     />
                     {/* <span>
@@ -338,7 +346,7 @@ const StayListing = () => {
                       </h5>
                     </span> */}
 
-                    {isOwnerInfoVisible && (
+                    {isOwnerInfoVisible === data.id && (
                       <span
                         style={{
                           position: "absolute",
@@ -351,11 +359,11 @@ const StayListing = () => {
                         }}
                         className="font-weight-bold"
                       >
-                        <h2 className="text-large">Owner: Prakash Raj</h2>
+                        <h2 className="text-large">Owner: {data.ownerName}</h2>
                         <h4 className="">
                           {/* <i className="simple-icon-phone" /> */}
                           <i className="fa-solid fa-phone mr-2" />
-                          9876543210
+                          {data.mobileNumber}
                         </h4>
                         <h4
                           className="d-inline-flex align-items-center"
@@ -363,7 +371,7 @@ const StayListing = () => {
                         >
                           {/* <i className="iconsminds-envelope" color="primary" />{" "} */}
                           <i className="fa-solid fa-envelope mr-2" />{" "}
-                          prakash@gmail.com
+                          {data.email}
                         </h4>
                       </span>
                     )}

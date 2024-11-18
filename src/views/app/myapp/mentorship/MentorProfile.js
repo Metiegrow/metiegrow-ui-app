@@ -166,15 +166,6 @@ const MentorProfile = () => {
         <div className="">
           <Colxx sm="12" md="12" lg="12" xxs="12" className="">
             <div className="">
-              {/* <Colxx className='bg-secondary '>
-           <Row >
-            <div className='col-2'>
-            <h1>image</h1>
-            <img src="/assets/img/profiles/2.jpg" alt="" className='rounded-circle img-thumbnail  '/>
-            </div>
-             
-            </Row>
-          </Colxx> */}
               <Row className="h-100">
                 <div className="w-100 py-3 position-relative bg-primary d-flex justify-content-between align-items-center">
                   <div className="d-flex align-items-center ">
@@ -208,32 +199,7 @@ const MentorProfile = () => {
                         }}
                       />
                     )}
-                    {/* <div
-                      style={{
-                        width: "110px",
-                        height: "110px",
-                        objectFit: "cover",
-                      }}
-                      // className="mx-2 rounded-circle border img-thumbnail"
-                    >
-                      <ThumbnailLetters
-                        rounded
-                        small
-                        text={mentorprofiledetails1.firstName}
-                        className="border border-1 mx-2"
-                      />
-                    </div> */}
-                    {/* <img
-                      src={`${baseUrl}/${mentorprofiledetails1.imageUrl}`}
-                      // className=' col-2 mx-2 w-60 rounded-circle img-thumbnail border'
-                      className="mx-2 rounded-circle img-thumbnail border"
-                      alt=""
-                      style={{
-                        width: "110px",
-                        height: "110px",
-                        objectFit: "cover",
-                      }}
-                    /> */}
+
                     <Button
                       color="light"
                       className=" font-weight-semibold mx-2"

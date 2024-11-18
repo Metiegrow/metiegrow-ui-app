@@ -17,11 +17,17 @@ import {
   Label,
   Row,
 } from "reactstrap";
+import indentityStatusList from "../CommonCardList/IdentityStatusList";
 import ToasterComponent from "../notifications/ToasterComponent";
 import country from "./Country";
 import DomainList from "./DomainList";
 import language from "./Languages";
-import { validateBio, validateDomain, validateLocation } from "./validation";
+import {
+  validateBio,
+  validateDomain,
+  validateIdentityStatus,
+  validateLocation,
+} from "./validation";
 
 const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -45,12 +51,18 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
     bio: "",
     location: "",
     domain: "",
+    identityStatus: "",
   });
 
   const languageOptions = language.map((option) => ({
     value: option.iso_code,
     label: option.name,
   }));
+
+  // const indentityStatusList = [
+  //   { value: "IMMIGRANT", label: "IMMIGRANT" },
+  //   { value: "PR_CITIZEN", label: "PR_CITIZEN" },
+  // ];
 
   const handleNextStep = () => {
     setCurrentStep(currentStep + 1);
@@ -104,7 +116,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
 
   const mentorAboutUrl = `${baseUrl}/api/alumni/alumnidetails/about`;
   const imageUploadUrl = `${baseUrl}/api/alumni/profile-image`;
-  const alumniResumePostUrl = ` ${baseUrl}/resume?role=ALUMNI`;
+  const alumniResumePostUrl = ` ${baseUrl}/api/resume?role=ALUMNI`;
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
   }
@@ -196,6 +208,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
       bio: data.bio,
       location: data.location,
       domain: data.domain,
+      identityStatus: data.identityStatus,
     };
 
     try {
@@ -241,6 +254,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
         bio: values.bio,
         location: values.location,
         domain: values.domain,
+        identityStatus: values.identityStatus,
       });
     } catch (error) {
       setAboutLoading(false); // Stop loading in case of error
@@ -306,6 +320,7 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
           bio: fields.bio,
           location: fields.location,
           domain: fields.domain,
+          identityStatus: fields.identityStatus,
         }}
         validateOnMount
         // onSubmit={(values) => {
@@ -506,6 +521,31 @@ const ApplyAsAlumniAbout = ({ currentStep, setCurrentStep }) => {
                   {errors.domain && touched.domain && (
                     <div className="invalid-feedback d-block">
                       {errors.domain}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+              <Row className="my-3">
+                <Col md={6}>
+                  <Label>Identity Status*</Label>
+                  <Field
+                    as="select"
+                    name="identityStatus"
+                    validate={validateIdentityStatus}
+                    className="form-control"
+                  >
+                    <option disabled value="">
+                      Select Identity Satus
+                    </option>
+                    {indentityStatusList.map((option) => (
+                      <option key={option.name} value={option.name}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Field>
+                  {errors.identityStatus && touched.identityStatus && (
+                    <div className="invalid-feedback d-block">
+                      {errors.identityStatus}
                     </div>
                   )}
                 </Col>

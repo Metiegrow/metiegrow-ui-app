@@ -34,15 +34,24 @@ import {
   validateBio,
   validateCategory,
   validateCompany,
+  validateIdentityStatus,
   validateJobTitle,
   validateLocation,
   validateReasonForMentor,
 } from "./validation";
 
+import indentityStatusList from "../CommonCardList/IdentityStatusList";
+import { EmploymentTypeData } from "../Listing/ListingData";
 import ToasterComponent from "../notifications/ToasterComponent";
 import CategoryData from "./CategoryData";
 import country from "./Country";
 import language from "./Languages";
+
+const currentYear = new Date().getFullYear();
+const years = [];
+for (let year = currentYear; year >= 2005; year -= 1) {
+  years.push(year);
+}
 
 const ApplyMentor = () => {
   const forms = [createRef(null), createRef(null), createRef(null)];
@@ -65,6 +74,37 @@ const ApplyMentor = () => {
   const [experienceLoading, setExperienceLoading] = useState(false);
   const [aboutField, setAboutField] = useState({});
   const [selectedFile, setSelectedFile] = useState(null);
+  const [works, setWorks] = useState([
+    {
+      company: "",
+      jobTitle: "",
+      employmentType: "",
+      jobLocation: "",
+      startYear: "",
+      endYear: "",
+    },
+  ]);
+
+  const handleWorkInputChange = (index, field, value) => {
+    const updatedWorks = works.map((work, i) =>
+      i === index ? { ...work, [field]: value } : work
+    );
+    setWorks(updatedWorks);
+  };
+
+  const addWorkExperience = () => {
+    setWorks([
+      ...works,
+      {
+        company: "",
+        jobTitle: "",
+        employmentType: "",
+        jobLocation: "",
+        startYear: "",
+        endYear: "",
+      },
+    ]);
+  };
 
   useEffect(() => {
     const status = localStorage.getItem("status");
@@ -122,12 +162,23 @@ const ApplyMentor = () => {
     skills: [],
     bio: "",
     // linkedinUrl: "",
+    identityStatus: "",
     twitterHandle: "",
     website: "",
     introVideo: "",
     featuredArticle: "",
     reasonForMentor: "",
     achievement: "",
+    experience: [
+      {
+        company: "",
+        jobTitle: "",
+        employmentType: "",
+        jobLocation: "",
+        startYear: "",
+        endYear: "",
+      },
+    ],
   });
 
   // const CategoryData = [
@@ -206,11 +257,15 @@ const ApplyMentor = () => {
   const imageUploadUrl = `${baseUrl}/api/mentor/profile-image`;
   const mentorProfileUrl = `${baseUrl}/api/mentor/details/profile`;
   const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
-  const mentorResumeUrl = `${baseUrl}/resume?role=MENTOR`;
+  const mentorResumeUrl = `${baseUrl}/api/resume?role=MENTOR`;
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
   }
   const token = getTokenRes();
+  // const indentityStatusList = [
+  //   { value: "IMMIGRANT", label: "IMMIGRANT" },
+  //   { value: "PR_CITIZEN", label: "PR_CITIZEN" },
+  // ];
 
   // const postDataAbout = async (data) => {
   //   console.log(data);
@@ -380,6 +435,7 @@ const ApplyMentor = () => {
       company: data.company,
       location: data.location,
       twitterHandle: data.twitterHandle,
+      identityStatus: data.identityStatus,
       languages: Array.isArray(data.language) ? data.language : [data.language], // Ensure languages is always an array
     };
 
@@ -479,7 +535,7 @@ const ApplyMentor = () => {
 
   const postDataExperience = async (data) => {
     setExperienceLoading(true);
-    const postDataExp = { ...data, price: amount };
+    const postDataExp = { ...data, price: amount, experiences: works };
     try {
       const response = await axios.post(experienceUrl, postDataExp, {
         headers: {
@@ -582,6 +638,7 @@ const ApplyMentor = () => {
                 location: fields.location,
                 // linkedinUrl: fields.linkedinUrl,
                 twitterHandle: fields.twitterHandle,
+                identityStatus: fields.identityStatus,
               }}
               validateOnMount
               // onSubmit={(values) => {
@@ -726,29 +783,59 @@ const ApplyMentor = () => {
                       </FormGroup>
                     </Col>
                   </Row>
-                  <FormGroup className="error-l-75">
-                    <Label>Country*</Label>
-                    <Field
-                      as="select"
-                      name="location"
-                      validate={validateLocation}
-                      className="form-control"
-                    >
-                      <option disabled value="">
-                        Select Country
-                      </option>
-                      {country.map((option) => (
-                        <option key={option.iso_code} value={option.iso_code}>
-                          {option.name}
+                  <Row>
+                    <Col md={6}>
+                      <FormGroup className="error-l-75">
+                        <Label>Country*</Label>
+                        <Field
+                          as="select"
+                          name="location"
+                          validate={validateLocation}
+                          className="form-control"
+                        >
+                          <option disabled value="">
+                            Select Country
+                          </option>
+                          {country.map((option) => (
+                            <option
+                              key={option.iso_code}
+                              value={option.iso_code}
+                            >
+                              {option.name}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.location && touched.location && (
+                          <div className="invalid-feedback d-block">
+                            {errors.location}
+                          </div>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md={6}>
+                      <Label>Identity Status*</Label>
+                      <Field
+                        as="select"
+                        name="identityStatus"
+                        validate={validateIdentityStatus}
+                        className="form-control"
+                      >
+                        <option disabled value="">
+                          Select Identity Satus
                         </option>
-                      ))}
-                    </Field>
-                    {errors.location && touched.location && (
-                      <div className="invalid-feedback d-block">
-                        {errors.location}
-                      </div>
-                    )}
-                  </FormGroup>
+                        {indentityStatusList.map((option) => (
+                          <option key={option.name} value={option.name}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </Field>
+                      {errors.identityStatus && touched.identityStatus && (
+                        <div className="invalid-feedback d-block">
+                          {errors.identityStatus}
+                        </div>
+                      )}
+                    </Col>
+                  </Row>
 
                   <FormGroup className="error-l-125">
                     <Row>
@@ -1094,6 +1181,7 @@ const ApplyMentor = () => {
                 featuredArticle: fields.featuredArticle,
                 reasonForMentor: fields.reasonForMentor,
                 achievement: fields.achievement,
+                experiences: works,
               }}
               onSubmit={(values) => {
                 postDataExperience(values);
@@ -1151,6 +1239,232 @@ const ApplyMentor = () => {
                       </Col>
                     </Row>
                   </FormGroup> */}
+                  {works.map((work, index) => {
+                    return (
+                      <div key={work}>
+                        <Row>
+                          <Col md={6}>
+                            <FormGroup className="error-l-75">
+                              <Label>Company Name*</Label>
+                              <Input
+                                className="form-control"
+                                required
+                                name={`experiences[${index}].company`}
+                                value={work.company}
+                                onChange={(e) =>
+                                  handleWorkInputChange(
+                                    index,
+                                    "company",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                              {errors.experiences?.[index]?.jobTitle &&
+                                touched.experiences?.[index]?.jobTitle && (
+                                  <div className="invalid-feedback d-block">
+                                    {errors.experiences[index].company}
+                                  </div>
+                                )}
+                            </FormGroup>
+                          </Col>
+                          <Col md={6}>
+                            <FormGroup>
+                              <Label for={`experiences[${index}].jobTitle`}>
+                                Job title*
+                              </Label>
+                              <Input
+                                name={`experiences[${index}].jobTitle`}
+                                id={`experiences[${index}].jobTitle`}
+                                required
+                                className="form-control"
+                                value={work.jobTitle}
+                                onChange={(e) =>
+                                  handleWorkInputChange(
+                                    index,
+                                    "jobTitle",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                              {errors.experiences?.[index]?.jobTitle &&
+                                touched.experiences?.[index]?.jobTitle && (
+                                  <div className="invalid-feedback d-block">
+                                    {errors.experiences[index].jobTitle}
+                                  </div>
+                                )}
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={6}>
+                            <FormGroup>
+                              <Label
+                                for={`experiences[${index}].employmentType`}
+                              >
+                                Employment type*
+                              </Label>
+                              <Input
+                                type="select"
+                                name={`experiences[${index}].employmentType`}
+                                id={`experiences[${index}].employmentType`}
+                                className="form-control"
+                                value={work.employmentType}
+                                required
+                                onChange={(e) =>
+                                  handleWorkInputChange(
+                                    index,
+                                    "employmentType",
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                <option key="" value="" disabled>
+                                  Select Employment type
+                                </option>
+                                {EmploymentTypeData.map((option, i) => (
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  <option key={i} value={option.label}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </Input>
+
+                              {errors.experiences?.[index]?.employmentType &&
+                                touched.experiences?.[index]
+                                  ?.employmentType && (
+                                  <div className="invalid-feedback d-block">
+                                    {errors.experiences[index].employmentType}
+                                  </div>
+                                )}
+                            </FormGroup>
+                          </Col>
+
+                          <Col md={6}>
+                            <FormGroup>
+                              <Label for={`experiences[${index}].jobLocation`}>
+                                Job location*
+                              </Label>
+                              <Input
+                                type="text"
+                                name={`experiences[${index}].jobLocation`}
+                                id={`experiences[${index}].jobLocation`}
+                                className="form-control"
+                                required
+                                value={work.jobLocation}
+                                onChange={(e) =>
+                                  handleWorkInputChange(
+                                    index,
+                                    "jobLocation",
+                                    e.target.value
+                                  )
+                                }
+                                // validate={validatePackageDescription}
+                              />
+                              {errors.experiences?.[index]?.jobLocation &&
+                                touched.experiences?.[index]?.jobLocation && (
+                                  <div className="invalid-feedback d-block">
+                                    {errors.experiences[index].jobLocation}
+                                  </div>
+                                )}
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <FormGroup>
+                              <Label for={`experiences[${index}].startDate`}>
+                                Start year*
+                              </Label>
+
+                              <Input
+                                type="select"
+                                name={`experiences[${index}].startYear`}
+                                id={`experiences[${index}].startYear`}
+                                className="form-control"
+                                value={work.startYear}
+                                required
+                                onChange={(e) =>
+                                  handleWorkInputChange(
+                                    index,
+                                    "startYear",
+                                    parseInt(e.target.value, 10)
+                                  )
+                                }
+                              >
+                                <option disabled value="">
+                                  Select year
+                                </option>
+                                {years.map((yr) => (
+                                  <option key={yr} value={yr}>
+                                    {yr}
+                                  </option>
+                                ))}
+                              </Input>
+
+                              {errors.experiences?.[index]?.startYear &&
+                                touched.experiences?.[index]?.startYear && (
+                                  <div className="invalid-feedback d-block">
+                                    {errors.experiences[index].startYear}
+                                  </div>
+                                )}
+                            </FormGroup>
+                          </Col>
+                          <Col>
+                            <FormGroup>
+                              <Label for={`experiences[${index}].endYear`}>
+                                End year*
+                              </Label>
+                              <Input
+                                type="select"
+                                name={`experiences[${index}].endYear`}
+                                id={`experiences[${index}].endYear`}
+                                className="form-control"
+                                value={work.endYear}
+                                required
+                                onChange={(e) =>
+                                  handleWorkInputChange(
+                                    index,
+                                    "endYear",
+                                    parseInt(e.target.value, 10)
+                                  )
+                                }
+                                // validate={validatePackageDescription}
+                              >
+                                <option disabled value="">
+                                  Select year
+                                </option>
+                                {years.map((yr) => (
+                                  <option key={yr} value={yr}>
+                                    {currentYear === yr ? "Present" : yr}
+                                  </option>
+                                ))}
+                              </Input>
+                              {errors.experiences?.[index]?.endYear &&
+                                touched.experiences?.[index]?.endYear && (
+                                  <div className="invalid-feedback d-block">
+                                    {errors.experiences[index].endYear}
+                                  </div>
+                                )}
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={12}>
+                            <Card
+                              onClick={addWorkExperience}
+                              className="p-3 text-center my-5"
+                              style={{ cursor: "pointer" }}
+                            >
+                              <h3 className="font-weight-bold text-primary">
+                                + Add more work experience
+                              </h3>
+                            </Card>
+                          </Col>
+                        </Row>
+                      </div>
+                    );
+                  })}
+
                   <FormGroup>
                     <Row>
                       <Col md={12}>

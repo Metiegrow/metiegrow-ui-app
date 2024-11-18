@@ -30,12 +30,14 @@ import {
 import {
   validateAbout,
   validateBio,
+  validateIdentityStatus,
   validateLocation,
   validatePackageDescription,
   validatePackageTopic,
   validateServiceName,
 } from "./ValidationsPart";
 
+import indentityStatusList from "../CommonCardList/IdentityStatusList";
 import country from "../my-login/Country";
 import language from "../my-login/Languages";
 import ToasterComponent from "../notifications/ToasterComponent";
@@ -85,6 +87,7 @@ const ApplyAsLawyer = () => {
     bio: "",
     languages: [],
     about: "",
+    identityStatus: "",
   });
 
   // file upload validation
@@ -199,7 +202,7 @@ const ApplyAsLawyer = () => {
   const lawyerProfileUrl = `${baseUrl}/api/lawyer/profile`;
   const packageUrl = `${baseUrl}/api/lawyer/services`;
   const lawyerImagePostUrl = `${baseUrl}/api/lawyer/lawyer-profile-images`;
-  const lawyerResumePostUrl = ` ${baseUrl}/resume?role=LAWYER`;
+  const lawyerResumePostUrl = ` ${baseUrl}/api/resume?role=LAWYER`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");
@@ -386,6 +389,7 @@ const ApplyAsLawyer = () => {
                 // lastName: fields.lastName,
                 location: fields.location,
                 languages: fields.languages,
+                identityStatus: fields.identityStatus,
               }}
               validateOnMount
               onSubmit={(values) => {
@@ -414,7 +418,7 @@ const ApplyAsLawyer = () => {
                   </Alert>
 
                   <FormGroup>
-                    <Label for="image">Image*</Label>
+                    <Label for="image">Image</Label>
                     {imageError && (
                       <div className="invalid-feedback d-block">
                         {imageErrorMessage}
@@ -506,6 +510,32 @@ const ApplyAsLawyer = () => {
                           </div>
                         )}
                       </Col>
+                      <Col md={6}>
+                        <Label>Identity Status*</Label>
+                        <Field
+                          as="select"
+                          name="identityStatus"
+                          validate={validateIdentityStatus}
+                          className="form-control"
+                        >
+                          <option disabled value="">
+                            Select Identity Satus
+                          </option>
+                          {indentityStatusList.map((option) => (
+                            <option key={option.name} value={option.name}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.identityStatus && touched.identityStatus && (
+                          <div className="invalid-feedback d-block">
+                            {errors.identityStatus}
+                          </div>
+                        )}
+                      </Col>
+                    </Row>
+
+                    <Row className="my-2">
                       <Col md={6}>
                         <Label>CV</Label>
                         {imageError1 && (

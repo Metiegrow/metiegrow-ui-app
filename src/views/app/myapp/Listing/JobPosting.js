@@ -1,7 +1,17 @@
 import { Colxx } from "components/common/CustomBootstrap";
 import { useState } from "react";
 import ReactQuill from "react-quill";
-import { Button, Card, Col, Form, FormGroup, Label, Row } from "reactstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  InputGroup,
+  Label,
+  Row,
+} from "reactstrap";
 
 import axios from "axios";
 import { baseUrl } from "constants/defaultValues";
@@ -10,6 +20,7 @@ import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
+import indentityStatusList from "../CommonCardList/IdentityStatusList";
 import ToasterComponent from "../notifications/ToasterComponent";
 import { EmploymentTypeData, WorkPlaceTypeData } from "./ListingData";
 
@@ -79,9 +90,11 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
   const [workPlaceType] = useState(initialData?.workPlaceTypeValue || null);
   const [jobLocation] = useState(initialData?.jobLocation || "");
   const [employmentType] = useState(initialData?.employmentTypeValue || null);
+  const [identityStatus] = useState(initialData?.identityStatus || null);
   const [description] = useState(initialData?.description || "");
   const [skillsTag] = useState(initialData?.skills || []);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile2, setSelectedFile2] = useState(null);
 
   const url = `${baseUrl}/api/posts/job-post/`;
 
@@ -89,6 +102,37 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
     return localStorage.getItem("tokenRes");
   }
   const token = getTokenRes();
+
+  const handleFileChange2 = (event) => {
+    // const file = event.target.files[0];
+    // setSelectedFile2(file);
+    const file = event.target.files[0];
+
+    if (!file) return; // No file selected
+
+    // if (!(file.type === "application/pdf")) {
+    //   // alert("Please select a valid PDF file.");
+    //   setImageError1(true);
+    //   setImageErrorMessage1("Please upload a PDF file.");
+    //   return;
+    // }
+    if (file) {
+      setSelectedFile2(file);
+    }
+    // const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+
+    // if (fileSizeMB > 2) {
+    //   // alert("File size exceeds 2MB limit.");
+    //   setImageError1(true);
+    //   setImageErrorMessage1("File size must be less than  2MB");
+
+    //   return;
+    // }
+
+    setSelectedFile2(file);
+    // setImageError1(false);
+    // setImageErrorMessage1("");
+  };
 
   // const handleSubmit = async () => {
   //   setIsLoading(true);
@@ -148,6 +192,7 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
               workPlaceType: workPlaceType || "",
               jobLocation: jobLocation || "",
               employmentType: employmentType || "",
+              identityStatus: identityStatus || "",
               description: description || "",
               skills: skillsTag || [],
             }}
@@ -169,6 +214,9 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
               if (!values.employmentType.trim()) {
                 errors.employmentType = "employment type is required";
               }
+              if (!values.identityStatus.trim()) {
+                errors.employmentType = "identity status is required";
+              }
               if (!values.workPlaceType.trim()) {
                 errors.workPlaceType = "workplace type is required";
               }
@@ -183,6 +231,7 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
             }}
             onSubmit={async (values, { setSubmitting }) => {
               setIsLoading(true);
+
               try {
                 const data = {
                   id,
@@ -192,6 +241,7 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                   workPlaceType: values.workPlaceType,
                   jobLocation: values.jobLocation,
                   employmentType: values.employmentType,
+                  identityStatus: values.identityStatus,
                   description: values.description,
                   skills: values.skills,
                 };
@@ -204,6 +254,20 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                     },
                   });
                   ToasterComponent("success", response.data.statuses);
+                  if (selectedFile2) {
+                    const formData = new FormData();
+                    formData.append("image", selectedFile2);
+
+                    const imageUploadUrl = `${baseUrl}/api/posts/job-post/image`;
+                    await axios.post(imageUploadUrl, formData, {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                        // "Content-Type": "multipart/form-data",
+                      },
+                    });
+
+                    ToasterComponent("success", "Image uploaded successfully");
+                  }
                 }
                 closeModal();
                 setIsLoading(false);
@@ -349,34 +413,126 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                     </FormGroup>
                   </Col>
                 </Row>
-
-                <FormGroup className="error-l-75">
-                  <Label>Employment Type*</Label>
-                  <Field
-                    as="select"
-                    name="employmentType"
-                    onChange={(e) =>
-                      setFieldValue("employmentType", e.target.value)
-                    }
-                    className="form-control"
-                    value={values.employmentType}
-                  >
-                    <option value="" disabled>
-                      Select Employment Type
-                    </option>
-                    {EmploymentTypeData &&
-                      EmploymentTypeData.map((option) => (
-                        <option key={option} value={option.value}>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Employment Type*</Label>
+                      <Field
+                        as="select"
+                        name="employmentType"
+                        onChange={(e) =>
+                          setFieldValue("employmentType", e.target.value)
+                        }
+                        className="form-control"
+                        value={values.employmentType}
+                      >
+                        <option value="" disabled>
+                          Select Employment Type
+                        </option>
+                        {EmploymentTypeData &&
+                          EmploymentTypeData.map((option) => (
+                            <option key={option} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                      </Field>
+                      {errors.employmentType && touched.employmentType && (
+                        <div className="invalid-feedback d-block">
+                          {errors.employmentType}
+                        </div>
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <Label>Employment Category*</Label>
+                    <Field
+                      as="select"
+                      name="identityStatus"
+                      // validate={validateIdentityStatus}
+                      onChange={(e) =>
+                        setFieldValue("identityStatus", e.target.value)
+                      }
+                      className="form-control"
+                      value={values.identityStatus}
+                    >
+                      <option disabled value="">
+                        Select Employment Category
+                      </option>
+                      {indentityStatusList.map((option) => (
+                        <option key={option.name} value={option.name}>
                           {option.label}
                         </option>
                       ))}
-                  </Field>
-                  {errors.employmentType && touched.employmentType && (
-                    <div className="invalid-feedback d-block">
-                      {errors.employmentType}
+                    </Field>
+                    {errors.identityStatus && touched.identityStatus && (
+                      <div className="invalid-feedback d-block">
+                        {errors.identityStatus}
+                      </div>
+                    )}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup className="error-l-75">
+                      <Label>Skills*</Label>
+                      <TagsInput
+                        value={values.skills}
+                        onChange={(tags) => setFieldValue("skills", tags)}
+                        addOnBlur
+                        addKeys={[13, 188]}
+                      />
+                      {errors.skills && touched.skills && (
+                        <div className="invalid-feedback d-block">
+                          {errors.skills}
+                        </div>
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <Label>Image</Label>
+                    {/* {imageError1 && (
+                          <div className="invalid-feedback d-block">
+                            {imageErrorMessage1}
+                          </div>
+                        )} */}
+
+                    <InputGroup className="">
+                      <div className="">
+                        <Button
+                          className="default"
+                          color="primary"
+                          onClick={() =>
+                            document
+                              .getElementById("file-upload-resume")
+                              .click()
+                          }
+                        >
+                          Upload Photo <i className="iconsminds-upload ml-2" />
+                        </Button>
+                        {/* <Form> */}
+                        <Input
+                          id="file-upload-resume"
+                          type="file"
+                          className="d-none"
+                          onChange={handleFileChange2}
+                          // validate={validateFile}
+                        />
+                      </div>
+                    </InputGroup>
+                    <div
+                      className="  my-2 "
+                      // style={{
+                      //   border: "1px solid #ccc",
+                      //   minWidth: "200px",
+                      // }}
+                    >
+                      {/* {selectedFile2 ? selectedFile2.name : ""} */}
+                      {selectedFile2
+                        ? `selected file is ${selectedFile2.name}`
+                        : ""}
                     </div>
-                  )}
-                </FormGroup>
+                  </Col>
+                </Row>
 
                 <FormGroup className="error-l-75">
                   <Label>Description*</Label>
@@ -391,21 +547,6 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                   {errors.description && touched.description && (
                     <div className="invalid-feedback d-block">
                       {errors.description}
-                    </div>
-                  )}
-                </FormGroup>
-
-                <FormGroup className="error-l-75">
-                  <Label>Skills*</Label>
-                  <TagsInput
-                    value={values.skills}
-                    onChange={(tags) => setFieldValue("skills", tags)}
-                    addOnBlur
-                    addKeys={[13, 188]}
-                  />
-                  {errors.skills && touched.skills && (
-                    <div className="invalid-feedback d-block">
-                      {errors.skills}
                     </div>
                   )}
                 </FormGroup>

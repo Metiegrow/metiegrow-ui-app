@@ -235,6 +235,15 @@ const ViewUserProfile = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ "./myapp/Mentee/MenteeProfile")
 );
 
+const ViewStudentList = React.lazy(() =>
+  import(/* webpackChunkName: "views-app" */ "./myapp/Mentee/StudentList")
+);
+const ViewStudentProfile = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ "./myapp/Mentee/StudentViewProfile"
+  )
+);
+
 const ViewAlumniMyProfile = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ "./myapp/Alumni/AlumniMyProfile")
 );
@@ -597,6 +606,15 @@ const App = ({ match }) => {
               path={`${match.url}/student/apply`}
               render={(props) => <ViewUserApply {...props} />}
             />
+            <Route
+              path={`${match.url}/student/list`}
+              render={(props) => <ViewStudentList {...props} />}
+            />
+            <Route
+              path={`${match.url}/studentprofile/:sid`}
+              render={(props) => <ViewStudentProfile {...props} />}
+            />
+
             <Route
               path={`${match.url}/settings`}
               render={(props) => <ViewSettings {...props} />}

@@ -1,6 +1,7 @@
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import axios from "axios";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
+import GlideComponent from "components/carousel/GlideComponent";
 import { Colxx } from "components/common/CustomBootstrap";
 import Rating from "components/common/Rating";
 import { adminRoot, baseUrl } from "constants/defaultValues";
@@ -28,6 +29,9 @@ const DashBoard = () => {
   const [currentMentorIndex, setCurrentMentorIndex] = useState(0);
   const [currentLawyerIndex, setCurrentLawyerIndex] = useState(0);
   const [currentAlumniIndex, setCurrentAlumniIndex] = useState(0);
+  const [currentJobIndex, setCurrentJobIndex] = useState(0);
+  const [currentStayIndex, setCurrentStayIndex] = useState(0);
+  const [currentBatchMateIndex, setCurrentBatchMateIndex] = useState(0);
 
   const [walletBalance, setWalletBalance] = useState(0);
   const [profileStatus, setProfileStatus] = useState(0);
@@ -78,6 +82,10 @@ const DashBoard = () => {
     },
   ]);
   const [recentChats, setRecentChats] = useState([]);
+  const [dashboardQuestions, setDashboardQuestions] = useState([]);
+  const [jobList, setJobList] = useState("");
+  const [stayList, setStaylist] = useState("");
+  const [batchMates, setBatchMates] = useState("");
 
   const walletUrl = `${baseUrl}/api/wallet/balance`;
   const profileStatusUrl = `${baseUrl}/api/userprofile/dashboard/status/profile-completion`;
@@ -85,115 +93,136 @@ const DashBoard = () => {
   const sessionsUrl = `${baseUrl}/api/calendar/dashboard/appointment/session-history`;
   const lawyersUrl = `${baseUrl}/api/lawyer/lawyercards?page=0&size=10`;
   // const alumniUrl = `${baseUrl}/api/dashboard/alumni`;
+  const batchUrl = `${baseUrl}/api/userprofile/dashboard/batchmates`;
   const alumniUrl = `${baseUrl}/api/alumni/cards?page=0&size=10`;
   const newSessionUrl = `${baseUrl}/api/calendar/dashboard/appointment/upcoming-bookedslots`;
   const recentChatsDataUrl = `${baseUrl}/api/chat/recent-contact`;
+  const questionsUrl = `${baseUrl}/api/dashboard/latest`;
+  const joblistUrl = `${baseUrl}/api/posts/job-post/dashboard`;
+  const staylistUrl = `${baseUrl}/api/posts/stay-post/dashboard`;
 
   // console.log("mentors",mentors)
 
-  useEffect(() => {
-    const fetchProfileStatus = async () => {
-      try {
-        const response = await axios.get(profileStatusUrl);
-        setProfileStatus(response.data);
-      } catch (error) {
-        console.error("Error Fetching profile status:", error);
-      }
-    };
+  const fetchProfileStatus = async () => {
+    try {
+      const response = await axios.get(profileStatusUrl);
+      setProfileStatus(response.data);
+    } catch (error) {
+      console.error("Error Fetching profile status:", error);
+    }
+  };
+  const fetchWalletBalance = async () => {
+    try {
+      const response = await axios.get(walletUrl);
+      setWalletBalance(response.data.balance);
+    } catch (error) {
+      console.error("Error Fetching Balance:", error);
+    }
+  };
+  const fetchRecentSessions = async () => {
+    try {
+      const response = await axios.get(sessionsUrl);
+      setRecentSessions(response.data);
+    } catch (error) {
+      console.error("Error Fetching RecentSessions:", error);
+    }
+  };
 
+  const fetchMentors = async () => {
+    try {
+      const response = await axios.get(mentorsUrl);
+      setMentors(response.data.data);
+    } catch (error) {
+      console.error("Error Fetching Mentors:", error);
+    }
+  };
+
+  const fetchBatchMates = async () => {
+    try {
+      const response = await axios.get(batchUrl);
+      setBatchMates(response.data);
+    } catch (error) {
+      console.error("Error Fetching Mentors:", error);
+    }
+  };
+
+  const fetchLawyers = async () => {
+    try {
+      const response = await axios.get(lawyersUrl);
+      setLawyers(response.data.data);
+    } catch (error) {
+      console.error("Error Fetching Lawyers:", error);
+    }
+  };
+
+  const fetchAlumni = async () => {
+    try {
+      const response = await axios.get(alumniUrl);
+      setAlumni(response.data.data);
+    } catch (error) {
+      console.error("Error Fetching Alumni:", error);
+    }
+  };
+
+  const fetchNewsession = async () => {
+    try {
+      const response = await axios.get(newSessionUrl);
+      setNewSession(response.data);
+    } catch (error) {
+      console.error("Error Fetching Newsession:", error);
+    }
+  };
+
+  const fetchRecentChats = async () => {
+    try {
+      const response = await axios.get(recentChatsDataUrl);
+      setRecentChats(response.data);
+    } catch (error) {
+      console.error("Error Fetching RecentChats:", error);
+    }
+  };
+
+  const fetchLatestQuestions = async () => {
+    try {
+      const response = await axios.get(questionsUrl);
+      setDashboardQuestions(response.data);
+    } catch (error) {
+      console.error("Error Fetching questions and answers", error);
+    }
+  };
+
+  const fetchJobList = async () => {
+    try {
+      const response = await axios.get(joblistUrl);
+      setJobList(response.data);
+    } catch (error) {
+      console.error("Error Fetching joblist status:", error);
+    }
+  };
+
+  const fetchStayList = async () => {
+    try {
+      const response = await axios.get(staylistUrl);
+      setStaylist(response.data);
+    } catch (error) {
+      console.error("Error Fetching Staylist status:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchProfileStatus();
-  }, []);
-
-  useEffect(() => {
-    const fetchWalletBalance = async () => {
-      try {
-        const response = await axios.get(walletUrl);
-        setWalletBalance(response.data.balance);
-      } catch (error) {
-        console.error("Error Fetching Balance:", error);
-      }
-    };
-
     fetchWalletBalance();
-  }, []);
-
-  useEffect(() => {
-    const fetchRecentSessions = async () => {
-      try {
-        const response = await axios.get(sessionsUrl);
-        setRecentSessions(response.data);
-      } catch (error) {
-        console.error("Error Fetching RecentSessions:", error);
-      }
-    };
-
     fetchRecentSessions();
-  }, []);
-
-  useEffect(() => {
-    const fetchMentors = async () => {
-      try {
-        const response = await axios.get(mentorsUrl);
-        setMentors(response.data.data);
-      } catch (error) {
-        console.error("Error Fetching Mentors:", error);
-      }
-    };
-
     fetchMentors();
-  }, []);
-
-  useEffect(() => {
-    const fetchLawyers = async () => {
-      try {
-        const response = await axios.get(lawyersUrl);
-        setLawyers(response.data.data);
-      } catch (error) {
-        console.error("Error Fetching Lawyers:", error);
-      }
-    };
-
     fetchLawyers();
-  }, []);
-
-  useEffect(() => {
-    const fetchAlumni = async () => {
-      try {
-        const response = await axios.get(alumniUrl);
-        setAlumni(response.data.data);
-      } catch (error) {
-        console.error("Error Fetching Alumni:", error);
-      }
-    };
-
     fetchAlumni();
-  }, []);
-
-  useEffect(() => {
-    const fetchNewsession = async () => {
-      try {
-        const response = await axios.get(newSessionUrl);
-        setNewSession(response.data);
-      } catch (error) {
-        console.error("Error Fetching Newsession:", error);
-      }
-    };
-
     fetchNewsession();
-  }, []);
-
-  useEffect(() => {
-    const fetchRecentChats = async () => {
-      try {
-        const response = await axios.get(recentChatsDataUrl);
-        setRecentChats(response.data);
-      } catch (error) {
-        console.error("Error Fetching RecentChats:", error);
-      }
-    };
-
     fetchRecentChats();
-  }, []);
+    fetchLatestQuestions();
+    fetchJobList();
+    fetchStayList();
+    fetchBatchMates();
+  }, [dashboardQuestions]);
 
   const renderDots = () => {
     // const total = React.Children.count(props.children);
@@ -230,6 +259,26 @@ const DashBoard = () => {
           key={i}
           data-glide-dir={`=${i}`}
           onClick={() => setCurrentMentorIndex(i)}
+        />
+      );
+    }
+    return dots;
+  };
+  const renderBatchMateDots = () => {
+    // const total = React.Children.count(props.children);
+    const total = batchMates.length;
+    const dots = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        <button
+          type="button"
+          className={`glide__bullet slider-dot ${
+            i === currentBatchMateIndex ? "bg-primary" : "bg-light"
+          }`}
+          key={i}
+          data-glide-dir={`=${i}`}
+          onClick={() => setCurrentBatchMateIndex(i)}
         />
       );
     }
@@ -275,23 +324,49 @@ const DashBoard = () => {
     }
     return dots;
   };
-  // const renderDots = () => {
-  //   const total = newSession.length;
-  //   const dots = [];
-  //   // eslint-disable-next-line no-plusplus
-  //   for (let i = 0; i < total; i++) {
-  //     dots.push(
-  //       <button
-  //         type="button"
-  //         className={` btn-xs primary glide__bullet slider-dot p-0 mx-1 ${i === currentSessionIndex ? 'bg-primary' : 'bg-light'}`}
-  //         key={i}
-  //         onClick={() => setCurrentSessionIndex(i)}
-  //         style={{ width: '10px', height: '10px' }}
-  //       />
-  //     );
-  //   }
-  //   return dots;
-  // };
+
+  const renderJobListDots = () => {
+    // const total = React.Children.count(props.children);
+    const total = jobList.length;
+    const dots = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        <button
+          type="button"
+          className={`glide__bullet slider-dot ${
+            i === currentJobIndex ? "bg-primary" : "bg-light"
+          }`}
+          key={i}
+          data-glide-dir={`=${i}`}
+          onClick={() => setCurrentJobIndex(i)}
+        />
+      );
+    }
+    return dots;
+  };
+
+  const renderStayListDots = () => {
+    // const total = React.Children.count(props.children);
+    const total = stayList.length;
+    const dots = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        <button
+          type="button"
+          className={`glide__bullet slider-dot ${
+            i === currentStayIndex ? "bg-primary" : "bg-light"
+          }`}
+          key={i}
+          data-glide-dir={`=${i}`}
+          onClick={() => setCurrentStayIndex(i)}
+        />
+      );
+    }
+    return dots;
+  };
+
   const handlePrevious = () => {
     setCurrentSessionIndex((prevIndex) =>
       prevIndex > 0 ? prevIndex - 1 : newSession.length - 1
@@ -313,6 +388,18 @@ const DashBoard = () => {
   const handleMentorNext = () => {
     setCurrentMentorIndex((prevIndex) =>
       prevIndex < mentors.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+  const handleBatchMatePrevious = () => {
+    setCurrentBatchMateIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : batchMates.length - 1
+    );
+  };
+
+  const handleBatchMateNext = () => {
+    setCurrentBatchMateIndex((prevIndex) =>
+      prevIndex < batchMates.length - 1 ? prevIndex + 1 : 0
     );
   };
 
@@ -340,6 +427,18 @@ const DashBoard = () => {
     );
   };
 
+  // const handleJobPrevious = () => {
+  //   setCurrentJobIndex((prevIndex) =>
+  //     prevIndex > 0 ? prevIndex - 1 : jobList.length - 1
+  //   );
+  // };
+
+  // const handleJobNext = () => {
+  //   setCurrentJobIndex((prevIndex) =>
+  //     prevIndex < alumni.length - 1 ? prevIndex + 1 : 0
+  //   );
+  // };
+
   const currentSession = newSession[currentSessionIndex];
   const currentMentor = mentors[currentMentorIndex];
   // const currentMentor = mentors && currentMentorIndex >= 0 && currentMentorIndex < mentors.length ? mentors[currentMentorIndex] : null;
@@ -347,6 +446,9 @@ const DashBoard = () => {
   // const currentLawyer = lawyers && currentLawyerIndex >= 0 && currentLawyerIndex < lawyers.length ? lawyers[currentLawyerIndex] : null;
 
   const currentAlumni = alumni[currentAlumniIndex];
+  const currentJobList = jobList[currentJobIndex];
+  const currentStayList = stayList[currentStayIndex];
+  const currentBatchMate = batchMates[currentBatchMateIndex];
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -378,6 +480,15 @@ const DashBoard = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      setCurrentBatchMateIndex((prevIndex) =>
+        prevIndex < batchMates.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [batchMates]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       setCurrentLawyerIndex((prevIndex) =>
         prevIndex < lawyers.length - 1 ? prevIndex + 1 : 0
       );
@@ -393,6 +504,32 @@ const DashBoard = () => {
     }, 3800);
     return () => clearInterval(interval);
   }, [alumni]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentJobIndex((prevIndex) =>
+        prevIndex < jobList.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 3800);
+    return () => clearInterval(interval);
+  }, [jobList]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentStayIndex((prevIndex) =>
+        prevIndex < stayList.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 3800);
+    return () => clearInterval(interval);
+  }, [stayList]);
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return `${String(date.getDate()).padStart(2, "0")}-${String(
+      date.getMonth() + 1
+    ).padStart(2, "0")}-${date.getFullYear()}`;
+  };
+
   const history = useHistory();
 
   const handleViewMentors = () => history.push("/app/mentor/list");
@@ -401,6 +538,7 @@ const DashBoard = () => {
   const handleWalletClick = () => history.push("/app/mywallet");
   const handleProfileClick = () => history.push("/app/user/myprofile");
   const handleNewSessionClick = () => history.push("/app/sessionlists");
+  const handleViewBatchmates = () => history.push("/app/student/list");
 
   return (
     <>
@@ -928,40 +1066,47 @@ const DashBoard = () => {
       </Row>
       {/* job and stay listing starts */}
       <Row className="mx-auto  " style={{ maxWidth: "1000px" }}>
-        <Colxx lg="6" md="6">
-          <Card className="mx-auto">
-            <CardBody className="p-4 position-relative">
-              <Button
-                className="rounded-circle px-2 py-0   text-one bg-white position-absolute "
-                style={{
-                  border: "3px solid #a16390",
-                  top: "30px",
-                  right: "30px",
-                  cursor: "pointer",
-                  zIndex: 10,
-                }}
-                // onClick={toggleOwnerInfo}
-              >
-                <i
-                  className="fa-solid fa-user"
-                  color="secondary"
-                  style={{ color: "#a16390" }}
-                />
-              </Button>
-              <CardImg
-                top
-                // src="/assets/img/cards/thumb-1.jpg"
-                src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                alt="Card image cap"
-                className="mb-2"
-                style={{ height: "250px" }}
-                // style={{
-                //   opacity: isOwnerInfoVisible ? 0.1 : 1, // Reduce opacity when info is visible
-                //   transition: "opacity 0.3s ease-in-out", // Add a transition effect
-                // }}
-              />
+        <Colxx lg="6" md="12" sm="12">
+          <Card className="mb-2" style={{ height: "500px" }}>
+            {currentStayList ? (
+              <CardBody>
+                <div className="p-4 position-relative">
+                  <Button
+                    className="rounded-circle px-2 py-0   text-one bg-white position-absolute "
+                    style={{
+                      border: "3px solid #a16390",
+                      top: "30px",
+                      right: "30px",
+                      cursor: "pointer",
+                      zIndex: 10,
+                    }}
+                    // onClick={toggleOwnerInfo}
+                  >
+                    <i
+                      className="fa-solid fa-user"
+                      color="secondary"
+                      style={{ color: "#a16390" }}
+                    />
+                  </Button>
+                  <CardImg
+                    top
+                    // src="/assets/img/cards/thumb-1.jpg"
+                    // src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+                    src={
+                      currentStayList.images.length > 0
+                        ? `${baseUrl}/${currentStayList.images[0].imageUrl}` // Use the first image URL
+                        : "https://via.placeholder.com/300x200?text=No+Image" // Fallback image
+                    }
+                    alt="Card image cap"
+                    className="mb-2"
+                    style={{ height: "250px", objectFit: "cover" }}
+                    // style={{
+                    //   opacity: isOwnerInfoVisible ? 0.1 : 1, // Reduce opacity when info is visible
+                    //   transition: "opacity 0.3s ease-in-out", // Add a transition effect
+                    // }}
+                  />
 
-              {/* <span
+                  {/* <span
                 style={{
                   position: "absolute",
                   top: "100px",
@@ -988,84 +1133,101 @@ const DashBoard = () => {
                 </h4>
               </span> */}
 
-              <Row>
-                <Col xs="12" sm="12" className="d-flex align-items-center">
-                  <h3 className="font-weight-bold mt-2 text-one ">
-                    Rent: <span className="text-primary">₹</span>
-                    <span data-toggle="tooltip" title="Expected Rent">
-                      5000
-                    </span>
-                  </h3>
-                  <Button
-                    color="light"
-                    className=" font-weight-semibold mx-2"
-                    size="xs"
-                  >
-                    Apartment
-                  </Button>
-                </Col>
-              </Row>
+                  <Row>
+                    <Col xs="12" sm="12" className="d-flex align-items-center">
+                      <h3 className="font-weight-bold mt-2 text-one ">
+                        Rent: <span className="text-primary">₹</span>
+                        <span data-toggle="tooltip" title="Expected Rent">
+                          {currentStayList.expectedRent}
+                        </span>
+                      </h3>
+                      <Button
+                        color="light"
+                        className=" font-weight-semibold mx-2"
+                        size="xs"
+                      >
+                        {currentStayList.apartmentType}
+                      </Button>
+                    </Col>
+                  </Row>
 
-              {/* icons tstart */}
-              <Row className="my-2">
-                <Col className="d-flex flex-wrap">
-                  <Button
-                    color="light"
-                    className="font-weight-bold mr-1 my-1"
-                    size="sm"
-                  >
-                    <i className="fas fa-bed " /> 2
-                  </Button>
-                  <Button
-                    color="light"
-                    className="font-weight-bold m-1"
-                    size="sm"
-                  >
-                    <i className="fa-solid fa-shower" /> 2
-                  </Button>
-                  <Button
-                    color="light"
-                    className="font-weight-bold m-1"
-                    size="sm"
-                  >
-                    <i className="fa-solid fa-car" /> 2
-                  </Button>
-                </Col>
-              </Row>
-              {/* icons end */}
+                  {/* icons tstart */}
+                  <Row className="my-2">
+                    <Col className="d-flex flex-wrap">
+                      <Button
+                        color="light"
+                        className="font-weight-bold mr-1 my-1"
+                        size="sm"
+                      >
+                        <i className="fas fa-bed " />{" "}
+                        {currentStayList.bhkTypeValue}
+                      </Button>
+                      <Button
+                        color="light"
+                        className="font-weight-bold m-1"
+                        size="sm"
+                      >
+                        <i className="fa-solid fa-shower" />{" "}
+                        {currentStayList.bhkTypeValue}
+                      </Button>
+                      <Button
+                        color="light"
+                        className="font-weight-bold m-1"
+                        size="sm"
+                      >
+                        <i className="fa-solid fa-car" />{" "}
+                        {currentStayList.parkingValue}
+                      </Button>
+                    </Col>
+                  </Row>
+                  {/* icons end */}
 
-              <Row className="mt-2">
-                <Col className="text-start text-sm-left" xs={12} sm={6}>
-                  <div className="text-muted mt-2">
-                    {/* {data.interestedCount} liked this property */}5 liked
-                    this property
+                  <Row className="mt-2">
+                    <Col className="text-start text-sm-left" xs={12} sm={6}>
+                      <div className="text-muted mt-2">
+                        {/* {data.interestedCount} liked this property */}{" "}
+                        {currentStayList.interestedCount} liked this property
+                      </div>
+                    </Col>
+                    <Col
+                      className="text-sm-right texr-start mt-sm-0 mt-2"
+                      xs={12}
+                      sm={6}
+                    >
+                      <Button
+                        // onClick={() => handleInterestedButtonClick(data.id)}
+                        outline
+                        color="primary"
+                        size="xs"
+                        // active={data.loggedInUserInterested}
+                      >
+                        I&apos;m interested
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <div
+                    className="glide__bullets slider-dot-container"
+                    data-glide-el="controls[nav]"
+                  >
+                    {renderStayListDots()}
                   </div>
-                </Col>
-                <Col
-                  className="text-sm-right texr-start mt-sm-0 mt-2"
-                  xs={12}
-                  sm={6}
-                >
-                  <Button
-                    // onClick={() => handleInterestedButtonClick(data.id)}
-                    outline
-                    color="primary"
-                    size="xs"
-                    // active={data.loggedInUserInterested}
-                  >
-                    I&apos;m interested
-                  </Button>
-                </Col>
-              </Row>
-            </CardBody>
+                </div>
+              </CardBody>
+            ) : (
+              <CardBody className="h-100 d-flex justify-content-center align-items-center">
+                <h1 className="text-center mx-auto">There is no stay list</h1>
+              </CardBody>
+            )}
           </Card>
         </Colxx>
-        <Colxx lg="6" md="6">
+        {/* <Colxx lg="6" md="6">
           <Card className=" my-2">
             <CardBody className="p-3">
               <CardImg
                 top
-                // src="/assets/img/cards/thumb-1.jpg"
+                
                 src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
                 alt="Card image cap"
                 style={{ height: "250px" }}
@@ -1117,10 +1279,10 @@ const DashBoard = () => {
                 <Col className="" xs={12} sm={8}>
                   <span className="text-muted ">
                     Posted on
-                    {/* <TimestampConverter
+                    <TimestampConverter
                                 timeStamp={data.postedOn}
                                 format="datetime"
-                              /> */}
+                              />
                   </span>
                 </Col>
                 <Col
@@ -1141,14 +1303,146 @@ const DashBoard = () => {
               </Row>
             </CardBody>
           </Card>
+        </Colxx> */}
+        <Colxx lg="6" md="12" sm="12">
+          <Card className="mb-2" style={{ height: "500px" }}>
+            {currentJobList ? (
+              <CardBody>
+                <div className="text-center d-flex justify-content-center align-items-center">
+                  <Row>
+                    {/* <Col className="text-center d-flex align-items-center">
+                      <button
+                        onClick={handleJobPrevious}
+                        type="button"
+                        className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
+                        data-glide-dir="<"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i className="simple-icon-arrow-left" />
+                      </button>
+                    </Col> */}
+                    <Col md={12}>
+                      <div className="">
+                        <CardImg
+                          top
+                          // src="/assets/img/cards/thumb-1.jpg"
+                          // src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg"
+                          src={
+                            currentJobList.image !== null
+                              ? `${baseUrl}/${currentJobList.imageUrl}` // Use the first image URL
+                              : "https://via.placeholder.com/300x200?text=No+Image" // Fallback image
+                          }
+                          alt="Card image cap"
+                          style={{ height: "250px", objectFit: "cover" }}
+                        />
+
+                        <Row>
+                          <Col>
+                            <h3 className="font-weight-bold mt-2 text-large">
+                              {currentJobList.jobTitle}
+                            </h3>
+                            <h6>{currentJobList.company}</h6>
+                          </Col>
+                        </Row>
+
+                        <Row>
+                          <Col>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold"
+                              size="xs"
+                            >
+                              {currentJobList.jobTitle}
+                            </Button>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold mx-1"
+                              size="xs"
+                            >
+                              {currentJobList.workPlaceType}
+                            </Button>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold mx-1"
+                              size="xs"
+                            >
+                              {currentJobList.employmentType}
+                            </Button>
+                            <Button
+                              color="light"
+                              className="mb-2 font-weight-semibold mx-1"
+                              size="xs"
+                            >
+                              {currentJobList.jobLocation}
+                            </Button>
+                          </Col>
+                        </Row>
+
+                        <Row className="mt-2 ">
+                          <Col className="" xs={12} sm={8}>
+                            <span className="text-muted ">
+                              Posted on
+                              <TimestampConverter
+                                timeStamp={currentJobList.postedOn}
+                                format="datetime"
+                              />
+                            </span>
+                          </Col>
+                          <Col
+                            // className="text-sm-right text-start mt-sm-0 mt-2"
+                            className="d-flex justify-content-sm-end justify-content-start align-items-center mt-sm-0 mt-2"
+                            xs={12}
+                            sm={4}
+                          >
+                            <Button
+                              outline
+                              // className="d-none d-lg-block"
+                              color="primary"
+                              size="xs"
+                            >
+                              I&apos;m interested
+                            </Button>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Col>
+                    {/* <Col className="text-center d-flex align-items-center">
+                      <button
+                        onClick={handleJobNext}
+                        type="button"
+                        className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
+                        data-glide-dir=">"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i className="simple-icon-arrow-right" />
+                      </button>
+                    </Col> */}
+                  </Row>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <div
+                    className="glide__bullets slider-dot-container"
+                    data-glide-el="controls[nav]"
+                  >
+                    {renderJobListDots()}
+                  </div>
+                </div>
+              </CardBody>
+            ) : (
+              <CardBody className="h-100 d-flex justify-content-center align-items-center">
+                <h1 className="text-center mx-auto">There is no job list</h1>
+              </CardBody>
+            )}
+          </Card>
         </Colxx>
       </Row>
+
       {/* job and stay listing ends */}
       {/* Q and A starts */}
       <Row className="mx-auto  mt-4" style={{ maxWidth: "1000px" }}>
         <Colxx lg="8" md="7" className="mb-2">
           {/* <Col lg={7}> */}
-          <Card>
+          {/* <Card>
             <CardBody>
               <CardTitle>
                 <strong>Q&A</strong>
@@ -1185,13 +1479,81 @@ const DashBoard = () => {
                 </Button>
               </div>
             </CardBody>
-          </Card>
+          </Card> */}
+          <Col lg={12} md={12}>
+            <Card className="my-2">
+              <CardBody>
+                <GlideComponent
+                  settings={{
+                    gap: 5,
+                    perView: 1,
+                    type: "carousel",
+                  }}
+                >
+                  {dashboardQuestions &&
+                    dashboardQuestions.map((item) => {
+                      return (
+                        <div key={item.id}>
+                          <Card>
+                            <div>
+                              <CardTitle>
+                                <strong className="text-large">Q&A</strong>
+                              </CardTitle>
+                              <div>
+                                <div className="d-flex align-items-center justify-content-between ">
+                                  <h2 className="font-weight-semi-bold text-large py-1">
+                                    {item.questionHeading}
+                                  </h2>
+                                  <p className="text-muted">
+                                    {formatDate(item.time)}
+                                  </p>
+                                </div>
+
+                                <p className="text-one font-weight-semibold text-muted py-1">
+                                  {item.questionHeadingBrief}
+                                </p>
+                              </div>
+                              <hr />
+                              <div className="d-flex align-items-center justify-content-between my-2">
+                                <span className="text-one">
+                                  {item.views} views
+                                </span>
+                                <span className="text-one">
+                                  <i
+                                    className="simple-icon-envelope "
+                                    color="primary"
+                                  />
+                                </span>
+                              </div>
+                              <div className="w-full d-flex ">
+                                <Button
+                                  className="text-center mx-auto"
+                                  color="primary"
+                                  size="sm"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() =>
+                                    history.push(`/app/questions/${item.id}`)
+                                  }
+                                >
+                                  View all answers
+                                </Button>
+                              </div>
+                            </div>
+                          </Card>
+                        </div>
+                      );
+                    })}
+                </GlideComponent>
+              </CardBody>
+            </Card>
+          </Col>
+
           {/* </Col> */}
         </Colxx>
         <Colxx lg="4" md="5" className="mb-2">
           {/* <Col lg={5}> */}
           <Card className="mb-2">
-            {currentMentor && (
+            {currentBatchMate && (
               <CardBody>
                 <Row className="mb-3 align-items-center">
                   <Col>
@@ -1203,7 +1565,7 @@ const DashBoard = () => {
                     <Button
                       size="xs"
                       color="primary"
-                      onClick={handleViewMentors}
+                      onClick={handleViewBatchmates}
                     >
                       <span>View all</span>
                     </Button>
@@ -1213,7 +1575,7 @@ const DashBoard = () => {
                   <Row>
                     <Col className="d-flex align-items-center">
                       <button
-                        onClick={handleMentorPrevious}
+                        onClick={handleBatchMatePrevious}
                         type="button"
                         className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
                         data-glide-dir="<"
@@ -1223,23 +1585,17 @@ const DashBoard = () => {
                       </button>
                     </Col>
                     <Col className="d-flex justify-content-center align-items-center">
-                      {/* <CardImg
-                  top
-                  src={`${baseUrl}/${currentMentor.imageUrl}`}
-                  alt="Card image cap"
-                  className="img-thumbnail border-0 rounded-circle mb-2 list-thumbnail"
-                /> */}
-                      {!currentMentor.imageUrl ? (
+                      {!currentBatchMate.imageUrl ? (
                         <ThumbnailLetters
                           // small
                           rounded
-                          text={currentMentor.firstName}
+                          text={currentBatchMate.firstName}
                           className="mx-2 mb-3"
                           color="secondary"
                         />
                       ) : (
                         <img
-                          src={`${baseUrl}/${currentMentor.imageUrl}`}
+                          src={`${baseUrl}/${currentBatchMate.imageUrl}`}
                           className=" rounded-circle mb-2"
                           style={{
                             width: "90px",
@@ -1253,7 +1609,7 @@ const DashBoard = () => {
                     </Col>
                     <Col className="d-flex align-items-center justify-content-end">
                       <button
-                        onClick={handleMentorNext}
+                        onClick={handleBatchMateNext}
                         type="button"
                         className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
                         data-glide-dir=">"
@@ -1266,33 +1622,33 @@ const DashBoard = () => {
                   <NavLink to="#">
                     <h3 className="mb-0">
                       <strong>
-                        {currentMentor.firstName} {currentMentor.lastName}
+                        {currentBatchMate.firstName} {currentBatchMate.lastName}
                       </strong>
                     </h3>
                   </NavLink>
                   <CardText className="text-muted text-small mb-2">
-                    {currentMentor.jobTitle} | {currentMentor.company}
+                    {currentBatchMate.jobTitle} | {currentBatchMate.company}
                   </CardText>
-                  <span>
-                    {currentMentor.experience === undefined ||
-                    currentMentor.experience === 0
+                  {/* <span>
+                    {currentBatchMate.experience === undefined ||
+                    currentBatchMate.experience === 0
                       ? "No experience"
-                      : `${currentMentor.experience} years of experience`}
-                  </span>
+                      : `${currentBatchMate.experience} years of experience`}
+                  </span> */}
 
                   <div className="separator mb-2 mt-2" />
-                  <h3 className="mb-0 fw-bold">
+                  {/* <h3 className="mb-0 fw-bold">
                     <strong>
-                      ₹{Math.floor(currentMentor.price).toLocaleString()}/hr
+                      ₹{Math.floor(currentBatchMate.price).toLocaleString()}/hr
                     </strong>
-                  </h3>
+                  </h3> */}
                 </div>
                 <div className="d-flex justify-content-center">
                   <div
                     className="glide__bullets slider-dot-container"
                     data-glide-el="controls[nav]"
                   >
-                    {renderMentorsDots()}
+                    {renderBatchMateDots()}
                   </div>
                 </div>
               </CardBody>
