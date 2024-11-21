@@ -109,6 +109,13 @@ const ViewAlumnilogin = React.lazy(() =>
     /* webpackChunkName: "views-app" */ "./myapp/AlumniRegister/ApplyAlumni"
   )
 );
+
+const ViewHrlogin = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ "./myapp/HumanResource/HRRegistration/ApplyHR"
+  )
+);
+
 const ViewMyProfile = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ "./myapp/my-profile/MyProfile")
 );
@@ -270,6 +277,12 @@ const ViewAlumniProfile = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ "./myapp/Alumni/AlumniProfile")
 );
 
+const ViewRealEstateAgentApply = React.lazy(() =>
+  import(
+    /* webpackChunkName: "views-app" */ "./myapp/RealEstateAgent/RealEstateAgentRegistration/RealEstateAgentApply"
+  )
+);
+
 const App = ({ match }) => {
   const statusRes = getStatusRes();
   const roleRes = getRoleRes();
@@ -322,6 +335,19 @@ const App = ({ match }) => {
       redirectTo = `${match.url}/jobslist`;
     } else {
       redirectTo = `${match.url}/jobslist`;
+    }
+  } else if (roleRes.includes("HR")) {
+    if (statusRes === "0") {
+      console.log("zero status");
+      redirectTo = `${match.url}/hr/apply`;
+    } else if (statusRes === "1") {
+      redirectTo = `${match.url}/hr/apply`;
+    } else if (statusRes === "3") {
+      redirectTo = `${match.url}/hr/apply`;
+    } else if (statusRes === "7") {
+      redirectTo = `${match.url}/mentor/list`;
+    } else {
+      redirectTo = `${match.url}/mentor/list`;
     }
   } else if (roleRes.includes("LAWYER")) {
     if (statusRes === "0") {
@@ -648,6 +674,21 @@ const App = ({ match }) => {
             />
 
             {/* alumin networking routes ends */}
+
+            {/* HR routes starts */}
+            <Route
+              path={`${match.url}/hr/apply`}
+              render={(props) => <ViewHrlogin {...props} />}
+            />
+
+            {/* HR routes sends */}
+
+            {/* real estate agent routes starts */}
+            <Route
+              path={`${match.url}/agent/apply`}
+              render={(props) => <ViewRealEstateAgentApply {...props} />}
+            />
+            {/* real estate agent routes ends */}
 
             {/* <Route
               path={`${match.url}/jobs`}

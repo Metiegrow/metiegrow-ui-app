@@ -3,11 +3,13 @@ import axios from "axios";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import GlideComponent from "components/carousel/GlideComponent";
 import { Colxx } from "components/common/CustomBootstrap";
+import CustomSelectInput from "components/common/CustomSelectInput";
 import Rating from "components/common/Rating";
 import { adminRoot, baseUrl } from "constants/defaultValues";
 import React, { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useHistory } from "react-router-dom";
+import Select from "react-select";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import {
   Button,
@@ -17,14 +19,21 @@ import {
   CardText,
   CardTitle,
   Col,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   NavLink,
   Row,
 } from "reactstrap";
 import TimestampConverter from "../Calculation/TimestampConverter";
 import language from "../my-login/Languages";
+
 // import { alumniData } from "./Data";
 
 const DashBoard = () => {
+  const [modalBasic, setModalBasic] = useState(false);
   const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
   const [currentMentorIndex, setCurrentMentorIndex] = useState(0);
   const [currentLawyerIndex, setCurrentLawyerIndex] = useState(0);
@@ -32,6 +41,7 @@ const DashBoard = () => {
   const [currentJobIndex, setCurrentJobIndex] = useState(0);
   const [currentStayIndex, setCurrentStayIndex] = useState(0);
   const [currentBatchMateIndex, setCurrentBatchMateIndex] = useState(0);
+  const history = useHistory();
 
   const [walletBalance, setWalletBalance] = useState(0);
   const [profileStatus, setProfileStatus] = useState(0);
@@ -86,6 +96,40 @@ const DashBoard = () => {
   const [jobList, setJobList] = useState("");
   const [stayList, setStaylist] = useState("");
   const [batchMates, setBatchMates] = useState("");
+  const [inputkey, setInputKey] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const SelectedCategoryOptions = [
+    { label: "IT", value: "IT", key: 0 },
+    {
+      label: "MANUFACTURING_MECHANICAL",
+      value: "MANUFACTURING_MECHANICAL",
+      key: 1,
+    },
+    { label: "CIVIL", value: "CIVIL", key: 2 },
+    { label: "INTERVIEW_PREPARATION", value: "INTERVIEW_PREPARATION", key: 3 },
+    { label: "UNIV_ADMISSIONS", value: "UNIV_ADMISSIONS", key: 4 },
+    { label: "RESUMES_WRITTING", value: "RESUMES_WRITTING", key: 5 },
+    { label: "VISA_ASSITANCE", value: "VISA_ASSITANCE", key: 6 },
+  ];
+
+  // useEffect(() => {
+  //   if (selectedCategory?.value === "VISA_ASSITANCE") {
+  //     history.push("/app/lawyer/list");
+  //   }
+  // }, [selectedCategory]);
+
+  useEffect(() => {
+    if (selectedCategory?.value === "VISA_ASSITANCE") {
+      history.push("/app/lawyer/list");
+    } else if (selectedCategory) {
+      history.push({
+        pathname: "/app/mentor/list",
+        state: { category: selectedCategory },
+      });
+    }
+  }, [selectedCategory, history]);
+  console.log("selected", selectedCategory);
 
   const walletUrl = `${baseUrl}/api/wallet/balance`;
   const profileStatusUrl = `${baseUrl}/api/userprofile/dashboard/status/profile-completion`;
@@ -474,7 +518,7 @@ const DashBoard = () => {
       setCurrentMentorIndex((prevIndex) =>
         prevIndex < mentors.length - 1 ? prevIndex + 1 : 0
       );
-    }, 3000);
+    }, 3600);
     return () => clearInterval(interval);
   }, [mentors]);
 
@@ -530,8 +574,6 @@ const DashBoard = () => {
     ).padStart(2, "0")}-${date.getFullYear()}`;
   };
 
-  const history = useHistory();
-
   const handleViewMentors = () => history.push("/app/mentor/list");
   const handleViewLawyers = () => history.push("/app/lawyer/list");
   const handleViewAlumnis = () => history.push("/app/alumni/alumnilists");
@@ -540,8 +582,74 @@ const DashBoard = () => {
   const handleNewSessionClick = () => history.push("/app/sessionlists");
   const handleViewBatchmates = () => history.push("/app/student/list");
 
+  console.log("Current Mentor:", currentMentor);
+
   return (
     <>
+      <Row className="mx-auto" style={{ maxWidth: "1000px" }}>
+        <Col xs={12} lg={12} className="mb-3 mb-lg-0">
+          <div className="form-group">
+            <div className="input-group">
+              <div
+                style={{ position: "relative" }}
+                className="col-12 col-lg-12 col-md-12"
+              >
+                <i
+                  className="simple-icon-magnifier mr-3"
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    right: "15px",
+                    transform: "translateY(-50%)",
+                    zIndex: 2,
+                    color: "#aaa",
+                  }}
+                />
+                <input
+                  type="text"
+                  className="form-control rounded p-2"
+                  placeholder="Search by Category"
+                  value={inputkey}
+                  onChange={(e) => setInputKey(e.target.value)}
+                  // style={{ paddingRight: "2.5rem" }}
+                  onClick={() => setModalBasic(true)}
+                />
+
+                <Modal
+                  isOpen={modalBasic}
+                  toggle={() => setModalBasic(!modalBasic)}
+                >
+                  <ModalHeader>
+                    <h1>Category</h1>
+                  </ModalHeader>
+                  <ModalBody>
+                    <Label>Category</Label>
+                    <Select
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name"
+                      value={selectedCategory}
+                      onChange={setSelectedCategory}
+                      options={SelectedCategoryOptions}
+                    />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => setModalBasic(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
+
       <Row className="mx-auto" style={{ maxWidth: "1000px" }}>
         <Col xs={12} lg={3} className="mb-3 mb-lg-0">
           <Card
@@ -846,7 +954,7 @@ const DashBoard = () => {
         </Colxx>
         <Colxx md="6" sm="6" lg="4" xxs="12">
           <Card className="mb-2">
-            <CardBody>
+            <CardBody style={{ height: "310px" }}>
               <Row className="mb-3 align-items-center">
                 <Col>
                   <h3 className="mb-0 fw-bold">

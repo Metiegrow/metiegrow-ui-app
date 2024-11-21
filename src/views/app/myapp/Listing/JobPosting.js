@@ -245,29 +245,41 @@ const JobPosting = ({ closeModal, initialData, onEdit }) => {
                   description: values.description,
                   skills: values.skills,
                 };
+                const formData = new FormData();
+                // formData.append("jobListing", JSON.stringify(data));
+                formData.append(
+                  "jobListing",
+                  new Blob([JSON.stringify(data)], {
+                    type: "application/json",
+                  })
+                );
+                if (selectedFile2) {
+                  formData.append("images", selectedFile2);
+                }
+
                 if (initialData) {
                   await onEdit(data);
                 } else {
-                  const response = await axios.post(url, data, {
+                  const response = await axios.post(url, formData, {
                     headers: {
                       Authorization: `Bearer ${token}`,
                     },
                   });
                   ToasterComponent("success", response.data.statuses);
-                  if (selectedFile2) {
-                    const formData = new FormData();
-                    formData.append("image", selectedFile2);
+                  // if (selectedFile2) {
+                  //   const formData = new FormData();
+                  //   formData.append("image", selectedFile2);
 
-                    const imageUploadUrl = `${baseUrl}/api/posts/job-post/image`;
-                    await axios.post(imageUploadUrl, formData, {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                        // "Content-Type": "multipart/form-data",
-                      },
-                    });
+                  //   const imageUploadUrl = `${baseUrl}/api/posts/job-post/image`;
+                  //   await axios.post(imageUploadUrl, formData, {
+                  //     headers: {
+                  //       Authorization: `Bearer ${token}`,
+                  //       // "Content-Type": "multipart/form-data",
+                  //     },
+                  //   });
 
-                    ToasterComponent("success", "Image uploaded successfully");
-                  }
+                  //   ToasterComponent("success", "Image uploaded successfully");
+                  // }
                 }
                 closeModal();
                 setIsLoading(false);

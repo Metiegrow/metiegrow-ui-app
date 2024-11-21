@@ -114,6 +114,7 @@ const TopNav = ({
   }, timeUntilExpiration);
 
   let session;
+
   if (roleRes.includes("MENTOR") || roleRes.includes("ALUMNI")) {
     session = `${adminRoot}/sessionmentor`;
   } else if (roleRes.includes("USER")) {
@@ -128,6 +129,8 @@ const TopNav = ({
   } else if (roleRes.includes("USER")) {
     myProfile = `${adminRoot}/student/myprofile`;
   } else if (roleRes.includes("ALUMNI")) {
+    myProfile = `${adminRoot}/alumni/myprofile`;
+  } else if (roleRes.includes("HR")) {
     myProfile = `${adminRoot}/alumni/myprofile`;
   }
 

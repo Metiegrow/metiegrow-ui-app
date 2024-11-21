@@ -342,7 +342,8 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                   parkingCount: parseInt(values.parkingCount, 10),
                   // contact,
                   ownerName: values.ownerName,
-                  mobileNumber: parseInt(values.mobileNumber, 10),
+                  // mobileNumber: parseInt(values.mobileNumber, 10),
+                  mobileNumber: `+91${parseInt(values.mobileNumber, 10)}`,
                   // mobileNumber: +${values.mobileNumber},
                   identityStatus: values.stayCategory,
                   // };
@@ -364,8 +365,15 @@ const StayPosting = ({ closeModal, initialData, onEdit }) => {
                 // formData.append("stayRoom", JSON.stringify(data));
                 formData.append(
                   "stayRoom",
-                  new Blob([JSON.stringify(data)], { type: "application/json" })
+                  new Blob([JSON.stringify(data)], {
+                    type: "application/json",
+                  })
                 );
+
+                // formData.append(
+                //   "stayRoom",
+                //   new Blob([JSON.stringify(data)], { type: "application/json" })
+                // );
 
                 // Then append each file in selectedFiles as "images"
                 // selectedFiles.forEach((file) => {

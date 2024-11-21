@@ -9,6 +9,7 @@ import { Badge, Button, Card, CardBody, CardText, Row } from "reactstrap";
 // import RatingExamples from './RatingExamples';
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import Rating from "components/common/Rating";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import MentorFilter from "./MentorFilter";
 import "./mentorcard.css";
 // import MentorDropDown from './MentorDropDown';
@@ -21,6 +22,9 @@ const MentorCard = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState([]);
+
+  const locationCategory = useLocation();
+  const category = locationCategory.state?.category;
 
   // const [searchClick, setSearchClick] = useState("")
   // const [searchClicked, setSearchClicked] = useState(false)
@@ -52,36 +56,10 @@ const MentorCard = () => {
   // const url1=`${baseUrl}/api/mentor`
   // const history = useHistory();
 
-  // const {category}=useParams();
-  // const location = useLocation();
-  // const firstNameParam = new URLSearchParams(location.search).get('firstName');
-  // const jobTitleParam = new URLSearchParams(location.search).get('jobTitle');
-  // Using useLocation hook
-  // const age = new URLSearchParams(location.search);
-
-  // let filteredUrl = `${url}?`;
-  // if (firstNameParam) filteredUrl += `firstName=${firstNameParam}&`;
-  // if (jobTitleParam) filteredUrl += `jobTitle=${jobTitleParam}&`;
-  // Add more conditions for other parameters
-  // const age = searchParams.get('age');
-  // console.log('Category:', category);
-  // const url=`${baseUrl}/mentor/cards`;
-  // const url=`${baseUrl}/mentorDetails/?${firstNameParam}&jobTitle=${jobTitleParam}`;
-  // const url1=`${baseUrl}/mentorDetails/${category}`;
-  // const url='http://localhost:9091/api/mentor/cards?page=0&size=3 ';
   const [mentordetails, setMentorDetails] = useState([]);
   // const[mentorfilter,setMentorFilter]=useState([]);
   // const [image]=useState('');
   const [inputkey, setInputKey] = useState("");
-  //   const handleSearchByName = () => {
-  //     setSearchClick(inputkey);
-  //     setSearchClicked(true);
-  //   }
-  // const handleSearchClear = () =>{
-  //   setInputKey("");
-  //   setSearchClick("");
-  //   setSearchClicked(false);
-  // }
 
   // const [filteredMentors, setFilteredMentors] = useState([]);
   const truncateBio = (bio, lineCount) => {
@@ -96,43 +74,6 @@ const MentorCard = () => {
     return truncatedBio;
   };
 
-  //   const searchParams = new URLSearchParams(location.search);
-  //   searchParams.set('firstName', newFirstName);
-  //   const newSearch = searchParams.toString();
-  //   const newPath = `${location.pathname}?${newSearch}`;
-  //   window.history.replaceState(null, '', newPath);
-  //   setInputKey(newFirstName); // Optionally, you can update the state with the new value
-  // };
-
-  // useEffect(()=>{
-  //   const mentorCardDetails = async () => {
-  //     try {
-  //       const response = await axios.get(url);
-  //       setMentorDetails(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   mentorCardDetails();
-  // },[location.search])
-  // useEffect(() => {
-  //   setIsMentorCardFetched(false);
-  //   const mentorCardDetails = async () => {
-  //     try {
-  //       let url = url1;
-  //       if (firstNameParam || jobTitleParam) {
-  //         url += `?firstName=${firstNameParam || ''}&jobTitle=${jobTitleParam || ''}`;
-  //       }
-  //       const response = await axios.get(url);
-  //       setMentorDetails(response.data);
-  //       setIsMentorCardFetched(true);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //       setIsMentorCardFetched(true);
-  //     }
-  //   };
-  //   mentorCardDetails();
-  // }, [location.search]);
   useEffect(() => {
     setIsMentorCardFetched(false);
     const mentorCardDetails = async () => {
@@ -156,6 +97,9 @@ const MentorCard = () => {
       }
       if (inputkey) {
         params.firstName = inputkey;
+      }
+      if (category) {
+        params.category = category.value; // Adding selectedCategory.value
       }
       params.size = 10;
       params.page = currentPage - 1;

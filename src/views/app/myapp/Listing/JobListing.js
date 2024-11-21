@@ -67,25 +67,25 @@ const JobListing = ({ isPosted }) => {
     }
   };
 
-  const fetchInterestedUsers = async (jobId) => {
-    try {
-      const res = await axios.get(
-        `${baseUrl}/api/posts/job-post/interested-users/${jobId}`,
-        {
-          params: { page: 0, size: 10 },
-        }
-      );
-      const { data } = res;
-      return data.interestedUsers; // Return the list of interested users
-    } catch (error) {
-      console.error("Error fetching interested users:", error);
-      return []; // Return an empty array if there's an error
-    }
-  };
+  // const fetchInterestedUsers = async (jobId) => {
+  //   try {
+  //     const res = await axios.get(
+  //       `${baseUrl}/api/posts/job-post/interested-users/${jobId}`,
+  //       {
+  //         params: { page: 0, size: 10 },
+  //       }
+  //     );
+  //     const { data } = res;
+  //     return data.interestedUsers; // Return the list of interested users
+  //   } catch (error) {
+  //     console.error("Error fetching interested users:", error);
+  //     return []; // Return an empty array if there's an error
+  //   }
+  // };
   useEffect(() => {
     setTimeout(() => {
       fetchData();
-      fetchInterestedUsers();
+      // fetchInterestedUsers();
     }, 1000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, isPosted, interestedClickUrl]);
@@ -488,19 +488,18 @@ const JobListing = ({ isPosted }) => {
                       <CardBody className="p-3">
                         <CardImg
                           top
-                          // src="/assets/img/cards/thumb-1.jpg"
-                          // src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                          // src={
-                          //   data.image !== null
-                          //     ? `${baseUrl}/${data.imageUrl}`
-                          //     : "https://via.placeholder.com/300x200?text=No+Image"
-                          // }
                           src={
                             data.image && data.image.imageUrl
                               ? `${baseUrl}/${data.image.imageUrl}`
-                              : "https://via.placeholder.com/300x200?text=No+Image"
+                              : "https://via.placeholder.com/300x200?text=No%20Image"
                           }
                           alt="Card image cap"
+                          className="thumbnail"
+                          style={{
+                            height: "300px",
+                            width: "100%",
+                            objectFit: "fill",
+                          }}
                         />
 
                         <Row>

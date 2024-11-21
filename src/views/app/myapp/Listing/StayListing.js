@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import ToasterComponent from "../notifications/ToasterComponent";
 
-const StayListing = () => {
+const StayListing = ({ isPosted }) => {
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState([]);
@@ -62,7 +62,7 @@ const StayListing = () => {
   };
   useEffect(() => {
     fetchDataFromServer();
-  }, [currentPage]);
+  }, [currentPage, isPosted]);
 
   const toggleExpand = (index) => {
     if (expandedIndex === index) {
@@ -332,7 +332,7 @@ const StayListing = () => {
                         opacity: isOwnerInfoVisible === data.id ? 0.1 : 1, // Reduce opacity when info is visible
                         transition: "opacity 0.3s ease-in-out",
                         height: "300px",
-                        objectFit: "cover", // Add a transition effect
+                        objectFit: "fill", // Add a transition effect
                       }}
                     />
                     {/* <span>
@@ -415,6 +415,7 @@ const StayListing = () => {
                     ) : (
                       <CardSubtitle>
                         {`${removeTags(data.description).slice(0, 100)}...`}
+
                         {data.description.length > 100 && (
                           <Button
                             color="link"
@@ -473,21 +474,22 @@ const StayListing = () => {
                           className="font-weight-bold mr-1 my-1"
                           size="sm"
                         >
-                          <i className="fas fa-bed " /> 2
+                          <i className="fas fa-bed " /> {data.bhkTypeValue}
                         </Button>
                         <Button
                           color="light"
                           className="font-weight-bold m-1"
                           size="sm"
                         >
-                          <i className="fa-solid fa-shower" /> 2
+                          <i className="fa-solid fa-shower" />{" "}
+                          {data.bhkTypeValue}
                         </Button>
                         <Button
                           color="light"
                           className="font-weight-bold m-1"
                           size="sm"
                         >
-                          <i className="fa-solid fa-car" /> 2
+                          <i className="fa-solid fa-car" /> {data.parkingCount}
                         </Button>
                       </Col>
                     </Row>

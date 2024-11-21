@@ -506,6 +506,17 @@ const Register = () => {
                       Alumni
                     </Label>
                   </FormGroup>
+                  <FormGroup check>
+                    <Label check className="ml-2">
+                      <Input
+                        type="radio"
+                        onChange={() => handleRoleChange("HR")}
+                        checked={selectedRole === "HR"}
+                        name="userRole"
+                      />
+                      HR
+                    </Label>
+                  </FormGroup>
                 </Row>
                 {roleError && (
                   <div className="invalid-feedback d-block mt-2 ml-4">
