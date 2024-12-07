@@ -54,6 +54,11 @@ const DetailsAltPages = () => {
     setIsPosted(!isPosted);
   };
 
+  function getTokenRes() {
+    return localStorage.getItem("roleRes");
+  }
+  const role = getTokenRes();
+
   useEffect(() => {
     const path = location.pathname.split("/").pop();
     setActiveTab(path === "listing" ? "all" : path);
@@ -146,48 +151,56 @@ const DetailsAltPages = () => {
                 All
               </NavLink>
             </NavItem> */}
-            <NavItem>
-              <NavLink
-                location={{}}
-                to="#"
-                className={classnames({
-                  active: activeTab === "job",
-                  "nav-link": true,
-                })}
-                onClick={() => changeTab("job")}
-              >
-                <i className="iconsminds-management text-primary" />
-                Job
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                location={{}}
-                to="#"
-                className={classnames({
-                  active: activeTab === "stay",
-                  "nav-link": true,
-                })}
-                onClick={() => changeTab("stay")}
-              >
-                <i className="iconsminds-building text-primary" />
-                Stay
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                location={{}}
-                to="#"
-                className={classnames({
-                  active: activeTab === "others",
-                  "nav-link": true,
-                })}
-                onClick={() => changeTab("others")}
-              >
-                <i className="iconsminds-testimonal text-primary" />
-                Others
-              </NavLink>
-            </NavItem>
+            {role !== "REALESTATE" && (
+              <NavItem>
+                <NavLink
+                  location={{}}
+                  to="#"
+                  className={classnames({
+                    active: activeTab === "job",
+                    "nav-link": true,
+                  })}
+                  onClick={() => changeTab("job")}
+                >
+                  <i className="iconsminds-management text-primary" />
+                  Job
+                </NavLink>
+              </NavItem>
+            )}
+
+            {role !== "HR" && (
+              <NavItem>
+                <NavLink
+                  location={{}}
+                  to="#"
+                  className={classnames({
+                    active: activeTab === "stay",
+                    "nav-link": true,
+                  })}
+                  onClick={() => changeTab("stay")}
+                >
+                  <i className="iconsminds-building text-primary" />
+                  Stay
+                </NavLink>
+              </NavItem>
+            )}
+
+            {role !== "HR" && role !== "REALESTATE" && (
+              <NavItem>
+                <NavLink
+                  location={{}}
+                  to="#"
+                  className={classnames({
+                    active: activeTab === "others",
+                    "nav-link": true,
+                  })}
+                  onClick={() => changeTab("others")}
+                >
+                  <i className="iconsminds-testimonal text-primary" />
+                  Others
+                </NavLink>
+              </NavItem>
+            )}
           </Nav>
 
           <TabContent activeTab={activeTab}>

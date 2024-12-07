@@ -517,6 +517,17 @@ const Register = () => {
                       HR
                     </Label>
                   </FormGroup>
+                  <FormGroup check>
+                    <Label check className="ml-2">
+                      <Input
+                        type="radio"
+                        onChange={() => handleRoleChange("REALESTATE")}
+                        checked={selectedRole === "REALESTATE"}
+                        name="userRole"
+                      />
+                      Real estate agent
+                    </Label>
+                  </FormGroup>
                 </Row>
                 {roleError && (
                   <div className="invalid-feedback d-block mt-2 ml-4">

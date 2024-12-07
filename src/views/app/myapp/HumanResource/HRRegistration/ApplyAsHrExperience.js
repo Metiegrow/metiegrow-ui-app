@@ -24,7 +24,6 @@ const ApplyAsHrExperience = ({ currentStep, setCurrentStep, setLoading }) => {
         // price: "",
       },
     ],
-    price: "",
   });
   const years = [];
   for (let year = currentYear; year >= 2005; year -= 1) {

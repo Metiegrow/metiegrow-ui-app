@@ -44,7 +44,7 @@ const RealEstateAgentApply = () => {
   }, []);
 
   const history = useHistory();
-  const handleMySlotsClick = () => history.push(`${adminRoot}/mentor/list`);
+  const handleMySlotsClick = () => history.push(`${adminRoot}/listing/stay`);
 
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
@@ -118,7 +118,7 @@ const RealEstateAgentApply = () => {
                               size="lg"
                               onClick={() => handleMySlotsClick()}
                             >
-                              mentor list
+                              stay list
                             </Button>
                           </p>
                         </Jumbotron>

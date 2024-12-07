@@ -38,9 +38,9 @@ const RealEstateAgentAbout = ({ currentStep, setCurrentStep }) => {
   const [imageError1, setImageError1] = useState(false);
   const [imageErrorMessage1, setImageErrorMessage1] = useState(null);
 
-  const hrAboutUrl = `${baseUrl}/api/humanresource/profile`;
-  const imageUploadUrl = `${baseUrl}/api/humanresource/profile-image`;
-  const hrResumePostUrl = ` ${baseUrl}/api/resume?role=HR`;
+  const hrAboutUrl = `${baseUrl}/api/realestate/about`;
+  const imageUploadUrl = `${baseUrl}/api/realestate/profile-image`;
+  const hrResumePostUrl = ` ${baseUrl}/api/resume?role=REALESTATE`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");

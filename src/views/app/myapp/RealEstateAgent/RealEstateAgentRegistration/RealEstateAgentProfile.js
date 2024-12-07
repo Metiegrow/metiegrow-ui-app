@@ -33,7 +33,7 @@ const RealEstateAgentProfile = ({ currentStep, setCurrentStep }) => {
     setCurrentStep(currentStep + 1);
   };
 
-  const hrProfileUrl = `${baseUrl}/api/humanresource/about`;
+  const hrProfileUrl = `${baseUrl}/api/realestate/profile`;
 
   function getTokenRes() {
     return localStorage.getItem("tokenRes");

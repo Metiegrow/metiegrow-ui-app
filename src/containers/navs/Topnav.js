@@ -132,6 +132,8 @@ const TopNav = ({
     myProfile = `${adminRoot}/alumni/myprofile`;
   } else if (roleRes.includes("HR")) {
     myProfile = `${adminRoot}/alumni/myprofile`;
+  } else if (roleRes.includes("REALESTATE")) {
+    myProfile = `${adminRoot}/alumni/myprofile`;
   }
 
   const handleMyProfileClick = () => {
@@ -169,6 +171,13 @@ const TopNav = ({
     logoutUserAction(history);
     localStorage.removeItem("roleRes");
     localStorage.removeItem("tokenRes");
+    localStorage.removeItem("status");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("imageUrl");
+    localStorage.removeItem("__theme_selected_color");
+    localStorage.removeItem("expirationTime");
+    localStorage.removeItem("__theme_radius");
   };
 
   const renderMySlots = () => {

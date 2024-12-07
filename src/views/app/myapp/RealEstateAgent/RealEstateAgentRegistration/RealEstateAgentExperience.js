@@ -28,7 +28,6 @@ const RealEstateAgentExperience = ({
         // price: "",
       },
     ],
-    price: "",
   });
   const years = [];
   for (let year = currentYear; year >= 2005; year -= 1) {
@@ -43,7 +42,7 @@ const RealEstateAgentExperience = ({
     setCurrentStep(currentStep - 1);
   };
 
-  const hrExperienceUrl = `${baseUrl}/api/humanresource/experience`;
+  const hrExperienceUrl = `${baseUrl}/api/realestate/experience`;
 
   const token = localStorage.getItem("tokenRes");
 

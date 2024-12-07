@@ -345,9 +345,22 @@ const App = ({ match }) => {
     } else if (statusRes === "3") {
       redirectTo = `${match.url}/hr/apply`;
     } else if (statusRes === "7") {
-      redirectTo = `${match.url}/mentor/list`;
+      redirectTo = `${match.url}/listing/job`;
     } else {
-      redirectTo = `${match.url}/mentor/list`;
+      redirectTo = `${match.url}/listing/job`;
+    }
+  } else if (roleRes.includes("REALESTATE")) {
+    if (statusRes === "0") {
+      console.log("zero status");
+      redirectTo = `${match.url}/agent/apply`;
+    } else if (statusRes === "1") {
+      redirectTo = `${match.url}/agent/apply`;
+    } else if (statusRes === "3") {
+      redirectTo = `${match.url}/agent/apply`;
+    } else if (statusRes === "7") {
+      redirectTo = `${match.url}/listing/stay`;
+    } else {
+      redirectTo = `${match.url}/listing/stay`;
     }
   } else if (roleRes.includes("LAWYER")) {
     if (statusRes === "0") {

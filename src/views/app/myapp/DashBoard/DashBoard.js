@@ -146,127 +146,148 @@ const DashBoard = () => {
   const staylistUrl = `${baseUrl}/api/posts/stay-post/dashboard`;
 
   // console.log("mentors",mentors)
-
-  const fetchProfileStatus = async () => {
-    try {
-      const response = await axios.get(profileStatusUrl);
-      setProfileStatus(response.data);
-    } catch (error) {
-      console.error("Error Fetching profile status:", error);
-    }
-  };
-  const fetchWalletBalance = async () => {
-    try {
-      const response = await axios.get(walletUrl);
-      setWalletBalance(response.data.balance);
-    } catch (error) {
-      console.error("Error Fetching Balance:", error);
-    }
-  };
-  const fetchRecentSessions = async () => {
-    try {
-      const response = await axios.get(sessionsUrl);
-      setRecentSessions(response.data);
-    } catch (error) {
-      console.error("Error Fetching RecentSessions:", error);
-    }
-  };
-
-  const fetchMentors = async () => {
-    try {
-      const response = await axios.get(mentorsUrl);
-      setMentors(response.data.data);
-    } catch (error) {
-      console.error("Error Fetching Mentors:", error);
-    }
-  };
-
-  const fetchBatchMates = async () => {
-    try {
-      const response = await axios.get(batchUrl);
-      setBatchMates(response.data);
-    } catch (error) {
-      console.error("Error Fetching Mentors:", error);
-    }
-  };
-
-  const fetchLawyers = async () => {
-    try {
-      const response = await axios.get(lawyersUrl);
-      setLawyers(response.data.data);
-    } catch (error) {
-      console.error("Error Fetching Lawyers:", error);
-    }
-  };
-
-  const fetchAlumni = async () => {
-    try {
-      const response = await axios.get(alumniUrl);
-      setAlumni(response.data.data);
-    } catch (error) {
-      console.error("Error Fetching Alumni:", error);
-    }
-  };
-
-  const fetchNewsession = async () => {
-    try {
-      const response = await axios.get(newSessionUrl);
-      setNewSession(response.data);
-    } catch (error) {
-      console.error("Error Fetching Newsession:", error);
-    }
-  };
-
-  const fetchRecentChats = async () => {
-    try {
-      const response = await axios.get(recentChatsDataUrl);
-      setRecentChats(response.data);
-    } catch (error) {
-      console.error("Error Fetching RecentChats:", error);
-    }
-  };
-
-  const fetchLatestQuestions = async () => {
-    try {
-      const response = await axios.get(questionsUrl);
-      setDashboardQuestions(response.data);
-    } catch (error) {
-      console.error("Error Fetching questions and answers", error);
-    }
-  };
-
-  const fetchJobList = async () => {
-    try {
-      const response = await axios.get(joblistUrl);
-      setJobList(response.data);
-    } catch (error) {
-      console.error("Error Fetching joblist status:", error);
-    }
-  };
-
-  const fetchStayList = async () => {
-    try {
-      const response = await axios.get(staylistUrl);
-      setStaylist(response.data);
-    } catch (error) {
-      console.error("Error Fetching Staylist status:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchProfileStatus = async () => {
+      try {
+        const response = await axios.get(profileStatusUrl);
+        setProfileStatus(response.data);
+      } catch (error) {
+        console.error("Error Fetching profile status:", error);
+      }
+    };
+    fetchProfileStatus();
+  }, []);
 
   useEffect(() => {
-    fetchProfileStatus();
+    const fetchWalletBalance = async () => {
+      try {
+        const response = await axios.get(walletUrl);
+        setWalletBalance(response.data.balance);
+      } catch (error) {
+        console.error("Error Fetching Balance:", error);
+      }
+    };
     fetchWalletBalance();
+  }, []);
+
+  useEffect(() => {
+    const fetchRecentSessions = async () => {
+      try {
+        const response = await axios.get(sessionsUrl);
+        setRecentSessions(response.data);
+      } catch (error) {
+        console.error("Error Fetching RecentSessions:", error);
+      }
+    };
     fetchRecentSessions();
+  }, []);
+
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const response = await axios.get(mentorsUrl);
+        setMentors(response.data.data);
+      } catch (error) {
+        console.error("Error Fetching Mentors:", error);
+      }
+    };
     fetchMentors();
-    fetchLawyers();
-    fetchAlumni();
-    fetchNewsession();
-    fetchRecentChats();
-    fetchLatestQuestions();
-    fetchJobList();
-    fetchStayList();
+  }, []);
+
+  useEffect(() => {
+    const fetchBatchMates = async () => {
+      try {
+        const response = await axios.get(batchUrl);
+        setBatchMates(response.data);
+      } catch (error) {
+        console.error("Error Fetching Mentors:", error);
+      }
+    };
     fetchBatchMates();
-  }, [dashboardQuestions]);
+  }, []);
+
+  useEffect(() => {
+    const fetchLawyers = async () => {
+      try {
+        const response = await axios.get(lawyersUrl);
+        setLawyers(response.data.data);
+      } catch (error) {
+        console.error("Error Fetching Lawyers:", error);
+      }
+    };
+    fetchLawyers();
+  }, []);
+
+  useEffect(() => {
+    const fetchAlumni = async () => {
+      try {
+        const response = await axios.get(alumniUrl);
+        setAlumni(response.data.data);
+      } catch (error) {
+        console.error("Error Fetching Alumni:", error);
+      }
+    };
+    fetchAlumni();
+  }, []);
+
+  useEffect(() => {
+    const fetchNewsession = async () => {
+      try {
+        const response = await axios.get(newSessionUrl);
+        setNewSession(response.data);
+      } catch (error) {
+        console.error("Error Fetching Newsession:", error);
+      }
+    };
+    fetchNewsession();
+  }, []);
+
+  useEffect(() => {
+    const fetchRecentChats = async () => {
+      try {
+        const response = await axios.get(recentChatsDataUrl);
+        setRecentChats(response.data);
+      } catch (error) {
+        console.error("Error Fetching RecentChats:", error);
+      }
+    };
+    fetchRecentChats();
+  }, []);
+
+  useEffect(() => {
+    const fetchLatestQuestions = async () => {
+      try {
+        const response = await axios.get(questionsUrl);
+        setDashboardQuestions(response.data);
+      } catch (error) {
+        console.error("Error Fetching questions and answers", error);
+      }
+    };
+    fetchLatestQuestions();
+  }, []);
+  useEffect(() => {
+    const fetchJobList = async () => {
+      try {
+        const response = await axios.get(joblistUrl);
+        setJobList(response.data);
+      } catch (error) {
+        console.error("Error Fetching joblist status:", error);
+      }
+    };
+    fetchJobList();
+  }, []);
+
+  useEffect(() => {
+    const fetchStayList = async () => {
+      try {
+        const response = await axios.get(staylistUrl);
+        setStaylist(response.data);
+      } catch (error) {
+        console.error("Error Fetching Staylist status:", error);
+      }
+    };
+    fetchStayList();
+  }, []);
 
   const renderDots = () => {
     // const total = React.Children.count(props.children);
@@ -493,16 +514,6 @@ const DashBoard = () => {
   const currentJobList = jobList[currentJobIndex];
   const currentStayList = stayList[currentStayIndex];
   const currentBatchMate = batchMates[currentBatchMateIndex];
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentSessionIndex(prevIndex => (prevIndex + 1) % newSession.length);
-  //     setCurrentMentorIndex(prevIndex => (prevIndex + 1) % mentors.length);
-  //     setCurrentLawyerIndex(prevIndex => (prevIndex + 1) % lawyers.length);
-  //     setCurrentAlumniIndex(prevIndex => (prevIndex + 1) % alumni.length);
-  //   }, 3000);
-  //   return () => clearInterval(interval);
-  // }, [newSession.length, mentors.length, lawyers.length, alumni.length]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -954,7 +965,7 @@ const DashBoard = () => {
         </Colxx>
         <Colxx md="6" sm="6" lg="4" xxs="12">
           <Card className="mb-2">
-            <CardBody style={{ height: "310px" }}>
+            <CardBody>
               <Row className="mb-3 align-items-center">
                 <Col>
                   <h3 className="mb-0 fw-bold">
@@ -1207,7 +1218,7 @@ const DashBoard = () => {
                     }
                     alt="Card image cap"
                     className="mb-2"
-                    style={{ height: "250px", objectFit: "cover" }}
+                    style={{ height: "250px", objectFit: "fill" }}
                     // style={{
                     //   opacity: isOwnerInfoVisible ? 0.1 : 1, // Reduce opacity when info is visible
                     //   transition: "opacity 0.3s ease-in-out", // Add a transition effect
@@ -1441,7 +1452,7 @@ const DashBoard = () => {
                               : "https://via.placeholder.com/300x200?text=No+Image" // Fallback image
                           }
                           alt="Card image cap"
-                          style={{ height: "250px", objectFit: "cover" }}
+                          style={{ height: "250px", objectFit: "fill" }}
                         />
 
                         <Row>
@@ -1549,111 +1560,76 @@ const DashBoard = () => {
       {/* Q and A starts */}
       <Row className="mx-auto  mt-4" style={{ maxWidth: "1000px" }}>
         <Colxx lg="8" md="7" className="mb-2">
-          {/* <Col lg={7}> */}
-          {/* <Card>
-            <CardBody>
-              <CardTitle>
-                <strong>Q&A</strong>
-              </CardTitle>
-              <div>
-                <div className="d-flex align-items-center justify-content-between ">
-                  <h4>Self improvement</h4>
-                  <p className="text-muted">A week ago</p>
-                </div>
-
-                <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Provident ut porro odit exercitationem, nesciunt quae aperiam
-                  vero! Eveniet libero tenetur fugiat quas. Amet fuga dicta
-                  sequi eius labore ducimus animi nihil, sapiente ullam magni
-                  natus quisquam dolorem dolorum dolor ipsam tenetur. Sed
-                  voluptatibus delectus enim quod non repellendus ratione eum?
-                </p>
-              </div>
-              <hr />
-              <div className="d-flex align-items-center justify-content-between my-2">
-                <span className="text-one">36 views</span>
-                <span className="text-one">
-                  <i className="simple-icon-envelope " color="primary" />
-                </span>
-              </div>
-              <div className="w-full d-flex ">
-                <Button
-                  className="text-center mx-auto"
-                  color="primary"
-                  size="sm"
-                >
-                  View all answers
-                </Button>
-              </div>
-            </CardBody>
-          </Card> */}
           <Col lg={12} md={12}>
-            <Card className="my-2">
-              <CardBody>
-                <GlideComponent
-                  settings={{
-                    gap: 5,
-                    perView: 1,
-                    type: "carousel",
-                  }}
-                >
-                  {dashboardQuestions &&
-                    dashboardQuestions.map((item) => {
-                      return (
-                        <div key={item.id}>
-                          <Card>
+            {dashboardQuestions && dashboardQuestions.length > 0 ? (
+              <Card className="my-2" style={{ height: "360px" }}>
+                <CardBody>
+                  <GlideComponent
+                    settings={{
+                      gap: 5,
+                      perView: 1,
+                      type: "carousel",
+                    }}
+                  >
+                    {dashboardQuestions.map((items) => (
+                      <div key={items.id}>
+                        <Card>
+                          <div>
+                            <CardTitle>
+                              <strong className="text-large">Q&A</strong>
+                            </CardTitle>
                             <div>
-                              <CardTitle>
-                                <strong className="text-large">Q&A</strong>
-                              </CardTitle>
-                              <div>
-                                <div className="d-flex align-items-center justify-content-between ">
-                                  <h2 className="font-weight-semi-bold text-large py-1">
-                                    {item.questionHeading}
-                                  </h2>
-                                  <p className="text-muted">
-                                    {formatDate(item.time)}
-                                  </p>
-                                </div>
-
-                                <p className="text-one font-weight-semibold text-muted py-1">
-                                  {item.questionHeadingBrief}
+                              <div className="d-flex align-items-center justify-content-between">
+                                <h2 className="font-weight-semi-bold text-large py-1">
+                                  {items.questionHeading}
+                                </h2>
+                                <p className="text-muted">
+                                  {formatDate(items.time)}
                                 </p>
                               </div>
-                              <hr />
-                              <div className="d-flex align-items-center justify-content-between my-2">
-                                <span className="text-one">
-                                  {item.views} views
-                                </span>
-                                <span className="text-one">
-                                  <i
-                                    className="simple-icon-envelope "
-                                    color="primary"
-                                  />
-                                </span>
-                              </div>
-                              <div className="w-full d-flex ">
-                                <Button
-                                  className="text-center mx-auto"
-                                  color="primary"
-                                  size="sm"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() =>
-                                    history.push(`/app/questions/${item.id}`)
-                                  }
-                                >
-                                  View all answers
-                                </Button>
-                              </div>
+                              <p className="text-one font-weight-semibold text-muted py-1">
+                                {items.questionHeadingBrief}
+                              </p>
                             </div>
-                          </Card>
-                        </div>
-                      );
-                    })}
-                </GlideComponent>
-              </CardBody>
-            </Card>
+                            <hr />
+                            <div className="d-flex align-items-center justify-content-between my-2">
+                              <span className="text-one">
+                                {items.views} views
+                              </span>
+                              <span className="text-one">
+                                <i
+                                  className="simple-icon-envelope"
+                                  color="primary"
+                                />
+                              </span>
+                            </div>
+                            <div className="w-full d-flex">
+                              <Button
+                                className="text-center mx-auto"
+                                color="primary"
+                                size="sm"
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  history.push(`/app/questions/${items.id}`)
+                                }
+                              >
+                                View all answers
+                              </Button>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                    ))}
+                  </GlideComponent>
+                </CardBody>
+              </Card>
+            ) : (
+              <Card className="my-2" style={{ height: "360px" }}>
+                <CardBody className="d-flex align-items-center justify-content-center">
+                  <h2>No Q&A Available</h2>
+                </CardBody>
+              </Card>
+            )}
           </Col>
 
           {/* </Col> */}
@@ -1661,8 +1637,8 @@ const DashBoard = () => {
         <Colxx lg="4" md="5" className="mb-2">
           {/* <Col lg={5}> */}
           <Card className="mb-2">
-            {currentBatchMate && (
-              <CardBody>
+            {currentBatchMate ? (
+              <CardBody style={{ minHeight: "360px" }}>
                 <Row className="mb-3 align-items-center">
                   <Col>
                     <h3 className="mb-0 fw-bold">
@@ -1759,6 +1735,13 @@ const DashBoard = () => {
                     {renderBatchMateDots()}
                   </div>
                 </div>
+              </CardBody>
+            ) : (
+              <CardBody
+                className="d-flex align-items-center justify-content-center"
+                style={{ height: "360px" }}
+              >
+                <h2>No Batchmates</h2>
               </CardBody>
             )}
           </Card>
