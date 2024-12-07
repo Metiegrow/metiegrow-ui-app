@@ -11,28 +11,32 @@ import {
   Col,
   FormText,
   Alert,
-  CustomInput,
-  InputGroupAddon,
+  // CustomInput,
+  // InputGroupAddon,
   InputGroup,
+  Input,
 } from "reactstrap";
 import axios from "axios";
-import ThumbnailImage from "components/cards/ThumbnailImage";
+// import ThumbnailImage from "components/cards/ThumbnailImage";
 import { Wizard, Steps, Step, WithWizard } from "react-albus";
 import { injectIntl } from "react-intl";
 import { Formik, Form, Field } from "formik";
+import { SliderTooltip } from 'components/common/SliderTooltips';
+
 // import IntlMessages from "helpers/IntlMessages";
 // import BottomNavigation from "components/wizard/BottomNavigation";
 import TopNavigation from "components/wizard/TopNavigation";
 // import { AvField, AvForm } from "availity-reactstrap-validation";
 // import Experience from "./Experience";
 // import { FormikTagsInput } from "containers/form-validations/FormikFields";
+// import { NotificationManager } from "components/common/react-notifications";
 import { baseUrl } from "constants/defaultValues";
 import JumbotronUi from "./JumbotronUi";
 import {
-  validateLastName,
-  validateFirstName,
-  validateEmail,
-  validatePassword,
+  // validateLastName,
+  // validateFirstName,
+  // validateEmail,
+  // validatePassword,
   validateCategory,
   validateLocation,
   validateCompany,
@@ -40,10 +44,12 @@ import {
   validateSkills,
   validateBio,
   validateLinkedinUrl,
-  validateWhy,
-  validateWhat,
+  validateReasonForMentor,
+  validateAchievement,
   validateFile,
 } from "./validation";
+import country from "./Country";
+
 
 const CategoryData = [
   "Select Category",
@@ -52,13 +58,13 @@ const CategoryData = [
   "Category3",
   "Category4",
 ];
-const LocationData = [
-  "Select Location",
-  "Location1",
-  "Location2",
-  "Location3",
-  "Location4",
-];
+// const LocationData = [
+//   "Select Location",
+//   "Location1",
+//   "Location2",
+//   "Location3",
+//   "Location4",
+// ];
 
 const BottomNavigation = ({
   className,
@@ -66,9 +72,11 @@ const BottomNavigation = ({
   prevLabel,
   onClickNext,
   // nextLabel,
+  initialStep,
 }) => {
   return (
     <WithWizard
+    initialStep={initialStep}
       render={({ next, previous, step, steps }) => {
         if (steps.indexOf(step) === 3) {
           return null;
@@ -117,12 +125,15 @@ const Mylogin = ({ intl }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [file1, setFile1] = useState(null);
+  const [amount, setAmount] = useState(250);
+
   const [fields, setFields] = useState({
-    // photo: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
+    image: "",
+    // firstName: "Raj",
+    // lastName: "dd",
+    // email: "raj@gmail.com",
+    // password: "Raj@1996",
     jobTitle: "",
     company: "",
     location: "",
@@ -131,15 +142,31 @@ const Mylogin = ({ intl }) => {
     bio: "",
     linkedinUrl: "",
     twitterHandle: "",
-    personalWebsite: "",
+    website: "",
     introVideo: "",
     featuredArticle: "",
-    why: "",
-    what: "",
+    reasonForMentor: "",
+    achievement: "",
+  });
+  const [aboutField, setAboutField] = useState({
+    image: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
+  // const [nextStep, setNextStep] = useState(false)
 
-  const url = `${baseUrl}/mentor/profile`;
+  // const url = `${baseUrl}/mentor/profile`;
+  const mentorAboutUrl=`${baseUrl}/api/mentor/details/about`;
+  const mentorProfileUrl =`${baseUrl}/api/mentor/details/profile` ;
+  const experienceUrl = `${baseUrl}/api/mentor/details/experience`;
+
+  const handleSliderChange = (value) => {
+    setAmount(value);
+    
+  };
+
+  // const mentorAboutUrl = `${baseUrl}/mentorAbout`;
+  //  const mentorProfileUrl = `${baseUrl}/mentorProfile`;
+  // const experienceUrl = `${baseUrl}/mentorExperience`;
 
   // const postData = async () => {
 
@@ -147,18 +174,122 @@ const Mylogin = ({ intl }) => {
 
   // };
 
-  const postData = async (data) => {
-    await axios.post(url, data);
+  // const postData = async (data) => {
+  //   await axios.post(url, data);
+  // };
+
+  // const postDataAbout = async (data) => {
+  //   await axios.post(mentorAboutUrl, data);
+  // };
+
+  // const postDataProfile = async (data) => {
+  //   await axios.post(mentorProfileUrl, data);
+  // };
+  // const postDataExperience = async (data) => {
+  //   await axios.post(experienceUrl, data);
+  // };
+
+  function getTokenRes() {
+    return localStorage.getItem('tokenRes');
+}
+const token = getTokenRes();
+// console.log(token);
+
+  
+// const token = "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9NRU5URUUiLCJzdWIiOiJhbmp1IiwiaWF0IjoxNzA3NzEyODI3LCJleHAiOjE3MDc3MzA4Mjd9.PAUNEoy_7mtPkblS7B0g6xTfML8J3a3ooaV56Sv8rbNF4VqgLHfou6B0UKzcdUeATnvH-CG4KHoYOAeybKn_KQ"
+
+  // const postDataAbout = async (data) => {
+  //   await axios.post(mentorAboutUrl, data, {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  // };
+
+  const postDataAbout = async (data) => {
+    try {
+      const response = await axios.post(mentorAboutUrl, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // setNextStep(true)
+      console.log(`resres ${response.status}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
+
+  const postDataProfile = async (data) => {
+    try {
+      const response = await axios.post(mentorProfileUrl, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // setNextStep(true)
+    console.log(`resres ${response.status}`);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+  // const postDataExperience = async (data) => {
+  //   await axios.post(experienceUrl, data, {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   }).then(res => console.log(res));
+
+  // };
+
+  const postDataExperience = async (data) => {
+    const postDataExp = {...data, price: amount}
+    try {
+      await axios.post(experienceUrl, postDataExp, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // setNextStep(true)
+      // console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+
+  //   if (file) {
+  //     const reader = new FileReader();
+
+  //     reader.onloadend = () => {
+  //       setSelectedFile(reader.result);
+  //     };
+
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+  // console.log(selectedFile)
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    setFile1(event.target.files[0]);
+    
 
     if (file) {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setSelectedFile(reader.result);
+        const base64Image = reader.result;
+        // .split(",")[1];
+        setSelectedFile(base64Image);
+        // setFieldValue("image", base64Image);
+        setAboutField({ ...aboutField, image: base64Image });
+        // console.log(base64Image)
       };
 
       reader.readAsDataURL(file);
@@ -183,8 +314,7 @@ const Mylogin = ({ intl }) => {
           setLoading(true);
 
           try {
-            await postData(newFields);
-
+            // await postData(newFields);
             setTimeout(() => {
               setLoading(false);
             }, 3000);
@@ -196,6 +326,15 @@ const Mylogin = ({ intl }) => {
 
         goToNext();
         step.isDone = true;
+        
+      // if(nextStep){
+      //   goToNext();
+      //   step.isDone = true;
+      //   setNextStep(false);
+      // }else{
+      // NotificationManager.warning("Something went wrong", 'Oops!', 3000, null, null, '');
+
+      // }
       }
     });
   };
@@ -212,7 +351,7 @@ const Mylogin = ({ intl }) => {
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
         <h1 className="mt-4 font-weight-bold">Apply as a mentor</h1>
-        <Wizard>
+        <Wizard >
           <TopNavigation className="justify-content-center" disableNav />
           <Steps>
             <Step
@@ -224,18 +363,21 @@ const Mylogin = ({ intl }) => {
                 <Formik
                   innerRef={forms[0]}
                   initialValues={{
-                    photo: fields.photo,
-                    firstName: fields.firstName,
-                    lastName: fields.lastName,
-                    email: fields.email,
-                    password: fields.password,
+                    // image: aboutField.image,
+                    // firstName: fields.firstName,
+                    // lastName: fields.lastName,
+                    // email: fields.email,
+                    // password: fields.password,
                     jobTitle: fields.jobTitle,
                     company: fields.company,
                     location: fields.location,
                   }}
                   validateOnMount
                   onSubmit={(values) => {
-                    console.log("Form 1 values:", values);
+                    // postDataAbout(values,aboutField.image);
+                    postDataAbout({ ...values, image: aboutField.image });
+
+                    // console.log(aboutField.image);
                   }}
                 >
                   {({ errors, touched }) => (
@@ -254,25 +396,34 @@ const Mylogin = ({ intl }) => {
                         at those.
                       </Alert>
                       <FormGroup>
-                        <Label for="photo">Photo</Label>
+                        <Label for="image">Image*</Label>
                         <Row>
-                          <Col md={1}>
-                            <ThumbnailImage
+                          <Col md={2} className="">
+                            {/* <ThumbnailImage
                               rounded
                               small
                               src={
                                 selectedFile || "/assets/img/profiles/l-1.jpg"
                                 // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
                               }
-                              alt="photo"
+                              alt="image"
+                            /> */}
+                            <img
+                             src={
+                              selectedFile || "/assets/img/profiles/l-1.jpg"
+                              // "https://gogo-react.coloredstrategies.com/assets/img/profiles/l-1.jpg"
+                            }
+                              className="mx-2 rounded-circle img-thumbnail border"
+                              style={{ width: "70px", height: "70px" }}
+                              alt=""
                             />
                           </Col>
-                          <Col md={5} className="mt-3">
-                            <Label for="photo" className="d-md-none">
+                          <Col md={5} className="mt-3 ">
+                            {/* <Label for="image" className="d-md-none">
                               Photo
-                            </Label>
+                            </Label> */}
                             <InputGroup className="mb-3">
-                              <InputGroupAddon
+                              {/* <InputGroupAddon
                                 addonType="prepend"
                                 className="cursor-pointer"
                               >
@@ -280,29 +431,53 @@ const Mylogin = ({ intl }) => {
                               </InputGroupAddon>
                               <CustomInput
                                 type="file"
-                                id="exampleCustomFileBrowser1"
-                                name="photo"
+                                id="image"
+                                name="image"
                                 onChange={handleFileChange}
+                                // onChange={() => {
+                                //   handleFileChange()}}
                                 validate={validateFile}
-                              />
+                              /> */}
                               {/* <Field
                                 className="form-control"
                                 type="file"
                                 id="exampleCustomFileBrowser1"
-                                name="photo"
+                                name="image"
                                 validate={validateFile}
                                 onChange={handleFileChange}
                               /> */}
-                              {errors.photo && touched.photo && (
+                              {errors.image && touched.image && (
                                 <div className="invalid-feedback d-block">
-                                  {errors.photo}
+                                  {errors.image}
                                 </div>
                               )}
+                              <div className="mt-2">
+                              <Button
+                                className="default"
+                                color="primary"
+                                onClick={() => document.getElementById("file-upload").click()}
+                              >
+                                Upload profile pic <i className="iconsminds-upload " />
+                              </Button>
+                              {/* <Form> */}
+                                <Input
+                                  id="file-upload"
+                                  type="file"
+                                  className="form-control d-none"
+                                  onChange={handleFileChange}
+                                  validate={validateFile}
+                                />
+                              {/* </Form> */}
+                              {file1 && <p className="mt-2">Selected file: {file1.name}</p>}
+                              {errors.image && touched.image && (
+    <div className="invalid-feedback d-block">{errors.image}</div>
+  )}
+                            </div>
                             </InputGroup>
                           </Col>
                         </Row>
                       </FormGroup>
-                      <Row>
+                      {/* <Row>
                         <Col md={6}>
                           <FormGroup className="error-l-75">
                             <Label>First Name*</Label>
@@ -310,6 +485,7 @@ const Mylogin = ({ intl }) => {
                               className="form-control"
                               name="firstName"
                               validate={validateFirstName}
+                              autoComplete="off"
                             />
                             {errors.firstName && touched.firstName && (
                               <div className="invalid-feedback d-block">
@@ -325,6 +501,7 @@ const Mylogin = ({ intl }) => {
                               className="form-control"
                               name="lastName"
                               validate={validateLastName}
+                              autoComplete="off"
                             />
                             {errors.lastName && touched.lastName && (
                               <div className="invalid-feedback d-block">
@@ -343,6 +520,7 @@ const Mylogin = ({ intl }) => {
                               name="email"
                               type="email"
                               validate={validateEmail}
+                              autoComplete="off"
                             />
                             {errors.email && touched.email && (
                               <div className="invalid-feedback d-block">
@@ -367,7 +545,7 @@ const Mylogin = ({ intl }) => {
                             )}
                           </FormGroup>
                         </Col>
-                      </Row>
+                      </Row> */}
                       <Row>
                         <Col md={6}>
                           <FormGroup className="error-l-75">
@@ -377,6 +555,7 @@ const Mylogin = ({ intl }) => {
                               type="text"
                               name="jobTitle"
                               validate={validateJobTitle}
+                              autoComplete="off"
                             />
                             {errors.jobTitle && touched.jobTitle && (
                               <div className="invalid-feedback d-block">
@@ -393,6 +572,7 @@ const Mylogin = ({ intl }) => {
                               type="text"
                               name="company"
                               validate={validateCompany}
+                              autoComplete="off"
                             />
                             {errors.company && touched.company && (
                               <div className="invalid-feedback d-block">
@@ -410,9 +590,12 @@ const Mylogin = ({ intl }) => {
                           validate={validateLocation}
                           className="form-control"
                         >
-                          {LocationData.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
+                          <option disabled value="">
+                              Select Location
+                            </option>
+                          {country.map((option) => (
+                            <option key={option.iso_code} value={option.iso_code}>
+                              {option.name}
                             </option>
                           ))}
                         </Field>
@@ -441,9 +624,11 @@ const Mylogin = ({ intl }) => {
                     bio: fields.bio,
                     linkedinUrl: fields.linkedinUrl,
                     twitterHandle: fields.twitterHandle,
-                    personalWebsite: fields.personalWebsite,
+                    website: fields.website,
                   }}
-                  onSubmit={() => {}}
+                  onSubmit={(values) => {
+                    postDataProfile(values);
+                  }}
                   validateOnMount
                 >
                   {({
@@ -490,6 +675,7 @@ const Mylogin = ({ intl }) => {
                               .map((skill) => skill.trim());
                             setFieldValue("skills", skillArray);
                           }}
+                          autoComplete="off"
                         />
                         {errors.skills && touched.skills && (
                           <div className="invalid-feedback d-block">
@@ -533,6 +719,7 @@ const Mylogin = ({ intl }) => {
                           id="bio"
                           className="form-control"
                           validate={validateBio}
+                          autoComplete="off"
                         />
                         {errors.bio && touched.bio && (
                           <div className="invalid-feedback d-block">
@@ -555,6 +742,7 @@ const Mylogin = ({ intl }) => {
                               name="linkedinUrl"
                               type="url"
                               validate={validateLinkedinUrl}
+                              autoComplete="off"
                             />
                             {errors.linkedinUrl && touched.linkedinUrl && (
                               <div className="invalid-feedback d-block">
@@ -571,6 +759,7 @@ const Mylogin = ({ intl }) => {
                               name="twitterHandle"
                               id="twitterHandle"
                               className="form-control"
+                              autoComplete="off"
                             />
                             <FormText color="muted">
                               Omit the &ldquo;@&rdquo; -e.g.
@@ -585,21 +774,20 @@ const Mylogin = ({ intl }) => {
                         </Row>
                       </FormGroup>
                       <FormGroup>
-                        <Label for="personalWebsite">
-                          Personal Website (optional)
-                        </Label>
+                        <Label for="website">Personal Website (optional)</Label>
                         <Field
                           type="url"
-                          name="personalWebsite"
-                          id="personalWebsite"
+                          name="website"
+                          id="website"
                           className="form-control"
+                          autoComplete="off"
                         />
                         <FormText color="muted">
                           You can add your blog, GitHub profile or similar here
                         </FormText>
-                        {/* {errors.personalWebsite && touched.personalWebsite && (
+                        {/* {errors.website && touched.website && (
                           <div className="invalid-feedback d-block">
-                            {errors.personalWebsite}
+                            {errors.website}
                           </div>
                         )} */}
                       </FormGroup>
@@ -619,11 +807,11 @@ const Mylogin = ({ intl }) => {
                   initialValues={{
                     introVideo: fields.introVideo,
                     featuredArticle: fields.featuredArticle,
-                    why: fields.why,
-                    what: fields.what,
+                    reasonForMentor: fields.reasonForMentor,
+                    achievement: fields.achievement,
                   }}
                   onSubmit={(values) => {
-                    console.log("Form 3 values:", values);
+                    postDataExperience(values);
                   }}
                   validateOnMount
                 >
@@ -641,6 +829,27 @@ const Mylogin = ({ intl }) => {
                         a jumpstart once you&apos;re a mentor.
                       </Alert>
                       <FormGroup>
+                      <Row>
+                            <Col md={12}>
+                            <FormGroup className="error-l-75">
+                            <Label>Amount*</Label>
+                             
+                           <SliderTooltip
+                          min={250}
+                          max={500000}
+                          
+                          defaultValue={250}
+                          className="mb-5"
+                          step={500}
+                          value={amount} 
+                          onChange={handleSliderChange}
+          
+                 />
+                          </FormGroup>
+                            </Col>
+                          </Row>
+                      </FormGroup>
+                      <FormGroup>
                         <Row>
                           <Col md={6}>
                             <Label for="introVideo">Intro Video</Label>
@@ -649,6 +858,7 @@ const Mylogin = ({ intl }) => {
                               name="introVideo"
                               id="introVideo"
                               className="form-control"
+                              autoComplete="off"
                             />
                             <FormText color="muted">
                               Add a youTube video or record a Loom for your
@@ -669,6 +879,7 @@ const Mylogin = ({ intl }) => {
                               name="featuredArticle"
                               id="featuredArticle"
                               className="form-control"
+                              autoComplete="off"
                             />
                             <FormText color="muted">
                               Link an interview / podcast / piece of writing you
@@ -684,14 +895,15 @@ const Mylogin = ({ intl }) => {
                         </Label>
                         <Field
                           as="textarea"
-                          name="why"
-                          id="why"
+                          name="reasonForMentor"
+                          id="reasonForMentor"
                           className="form-control"
-                          validate={validateWhy}
+                          validate={validateReasonForMentor}
+                          autoComplete="off"
                         />
-                        {errors.why && touched.why && (
+                        {errors.reasonForMentor && touched.reasonForMentor && (
                           <div className="invalid-feedback d-block">
-                            {errors.why}
+                            {errors.reasonForMentor}
                           </div>
                         )}
                       </FormGroup>
@@ -702,14 +914,15 @@ const Mylogin = ({ intl }) => {
                         </Label>
                         <Field
                           as="textarea"
-                          name="what"
-                          id="what"
+                          name="achievement"
+                          id="achievement"
                           className="form-control"
-                          validate={validateWhat}
+                          validate={validateAchievement}
+                          autoComplete="off"
                         />
-                        {errors.what && touched.what && (
+                        {errors.achievement && touched.achievement && (
                           <div className="invalid-feedback d-block">
-                            {errors.what}
+                            {errors.achievement}
                           </div>
                         )}
                       </FormGroup>
@@ -750,6 +963,7 @@ const Mylogin = ({ intl }) => {
             }`}
             prevLabel="Previous Step"
             // nextLabel="Next Step"
+            initialStep="step2"
           />
         </Wizard>
       </CardBody>

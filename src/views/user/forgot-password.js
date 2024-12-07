@@ -1,72 +1,152 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Card, CardTitle, Label, FormGroup, Button } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import { connect } from 'react-redux';
-import { Colxx } from 'components/common/CustomBootstrap';
-import IntlMessages from 'helpers/IntlMessages';
-import { forgotPassword } from 'redux/actions';
-import { NotificationManager } from 'components/common/react-notifications';
+import React, { useState } from "react";
+import {
+  Row,
+  Card,
+  CardTitle,
+  Label,
+  FormGroup,
+  Button,
+  Input,
+} from "reactstrap";
+import { NavLink } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
+import { connect } from "react-redux";
+import { Colxx } from "components/common/CustomBootstrap";
+import IntlMessages from "helpers/IntlMessages";
+import { forgotPassword } from "redux/actions";
+import { NotificationManager } from "components/common/react-notifications";
+import { authService } from "services/authservice";
+import axios from "axios";
+import { baseUrl } from "constants/defaultValues";
+import ResetPassword from "./reset-password";
 
 const validateEmail = (value) => {
   let error;
   if (!value) {
-    error = 'Please enter your email address';
+    error = "Please enter your email address";
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-    error = 'Invalid email address';
+    error = "Invalid email address";
   }
   return error;
 };
 
 const ForgotPassword = ({
-  history,
-  forgotUserMail,
+  // history,
+  // forgotUserMail,
   loading,
-  error,
-  forgotPasswordAction,
+  // error,
+  // forgotPasswordAction,
 }) => {
-  const [email] = useState('demo@coloredstrategies.com');
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpSubmitted, setOtpSubmitted] = useState(false);
 
-  const onForgotPassword = (values) => {
+  const onForgotPassword = async (values) => {
     if (!loading) {
-      if (values.email !== '') {
-        forgotPasswordAction(values, history);
+      setEmail(values.email);
+      if (values.email !== "") {
+        // setIsFormSubmitted(true);
+        // forgotPasswordAction(values.email, history);
+        const response = await authService.sendPasswordResetEmail(
+           values.email
+        );
+        if (response && response.status === 200) {
+          setIsSubmitted(true);
+          // setIsFormSubmitted(false);
+        } else {
+          console.error("forgot email post Failed:", response);
+          // setIsFormSubmitted(false);
+          response.data.statuses.forEach((status) => {
+            NotificationManager.warning(status.message, status.status, 5000, null, null, '');
+        });
+          
+        }
+      } 
       }
+    
+  };
+
+  // useEffect(() => {
+  //   if (isFormSubmitted) {
+  //     if (error) {
+        // NotificationManager.warning(
+        //   error,
+        //   "Forgot Password Error",
+        //   3000,
+        //   null,
+        //   null,
+        //   ""
+        // );
+      //   setIsFormSubmitted(false);
+      // } else if (!loading && forgotUserMail === "success") {
+        // NotificationManager.success(
+        //   "Please check your email.",
+        //   "Forgot Password Success",
+        //   3000,
+        //   null,
+        //   null,
+        //   ""
+        // );
+  //       setIsSubmitted(true);
+  //       setIsFormSubmitted(false);
+  //     }
+  //   }
+  // }, [error, forgotUserMail, loading, isFormSubmitted]);
+
+  const handleOtpSend = async () => {
+    setOtpLoading(true);
+    try {
+      const data = { email, otp };
+      const url = `${baseUrl}/api/verifyotp`;
+      const response = await axios.post(url, data);
+      if (response.data.statuses[0].status === "success") {
+          setOtpSubmitted(true);
+          setOtpLoading(false);
+          response.data.statuses.forEach((status) => {
+            NotificationManager.success(
+              status.message,
+              status.status,
+              6000,
+              null,
+              null,
+              ""
+            );
+          });
+      }
+    } catch (er) {
+      console.error(
+        "Error Submitting OTP:",
+        er.response ? er.response.data : er.message
+      );
+
+      setTimeout(() => {
+        NotificationManager.warning(
+          "Error Submitting OTP",
+          "Oops!",
+          3000,
+          null,
+          null,
+          ""
+        );
+        setOtpLoading(false);
+      }, 3000);
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      NotificationManager.warning(
-        error,
-        'Forgot Password Error',
-        3000,
-        null,
-        null,
-        ''
-      );
-    } else if (!loading && forgotUserMail === 'success')
-      NotificationManager.success(
-        'Please check your email.',
-        'Forgot Password Success',
-        3000,
-        null,
-        null,
-        ''
-      );
-  }, [error, forgotUserMail, loading]);
-
   const initialValues = { email };
 
-  return (
+  return !otpSubmitted ? (
     <Row className="h-100">
       <Colxx xxs="12" md="10" className="mx-auto my-auto">
         <Card className="auth-card">
-          <div className="position-relative image-side ">
+          <div className="position-relative image-side">
             <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
             <p className="white mb-0">
               Please use your e-mail to reset your password. <br />
-              If you are not a member, please{' '}
+              If you are not a member, please{" "}
               <NavLink to="/user/register" className="white">
                 register
               </NavLink>
@@ -99,35 +179,64 @@ const ForgotPassword = ({
                       </div>
                     )}
                   </FormGroup>
-
-                  <div className="d-flex justify-content-between align-items-center">
-                    <NavLink to="/user/forgot-password">
-                      <IntlMessages id="user.forgot-password-question" />
-                    </NavLink>
-                    <Button
-                      color="primary"
-                      className={`btn-shadow btn-multiple-state ${
-                        loading ? 'show-spinner' : ''
-                      }`}
-                      size="lg"
-                    >
-                      <span className="spinner d-inline-block">
-                        <span className="bounce1" />
-                        <span className="bounce2" />
-                        <span className="bounce3" />
-                      </span>
-                      <span className="label">
-                        <IntlMessages id="user.reset-password-button" />
-                      </span>
-                    </Button>
-                  </div>
+                  {!isSubmitted && (
+                    <div className="d-flex justify-content-between align-items-center">
+                      <NavLink to="/login">Back to login</NavLink>
+                      <Button
+                        type="submit"
+                        color="primary"
+                        className={`btn-shadow btn-multiple-state ${
+                          loading ? "show-spinner" : ""
+                        }`}
+                        size="lg"
+                      >
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label">Submit</span>
+                      </Button>
+                    </div>
+                  )}
                 </Form>
               )}
             </Formik>
+
+            {isSubmitted && (
+              <FormGroup className="form-group has-float-label mt-4">
+                <Label>Enter OTP</Label>
+                <Input
+                  className="form-control"
+                  name="otp"
+                  type="number"
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+                <div className="text-right">
+                  <Button
+                    color="primary"
+                    className={`mt-3 btn-shadow btn-multiple-state ${
+                      otpLoading ? "show-spinner" : ""
+                    }`}
+                    size="lg"
+                    onClick={handleOtpSend}
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">Submit OTP</span>
+                  </Button>
+                </div>
+              </FormGroup>
+            )}
           </div>
         </Card>
       </Colxx>
     </Row>
+  ) : (
+    <ResetPassword email={email} />
   );
 };
 

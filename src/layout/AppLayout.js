@@ -1,11 +1,9 @@
-import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import TopNav from "containers/navs/Topnav";
-import Sidebar from "containers/navs/Sidebar";
 import Footer from "containers/navs/Footer";
-import BottomMenu from "containers/navs/BottomMenu";
+import Sidebar from "containers/navs/Sidebar";
+import TopNav from "containers/navs/Topnav";
 
 const AppLayout = ({ containerClassnames, children, history }) => {
   return (
@@ -16,9 +14,9 @@ const AppLayout = ({ containerClassnames, children, history }) => {
         <div className="container-fluid">{children}</div>
       </main>
       <Footer />
-      <div className="d-md-none">
+      {/* <div className="d-md-none">
         <BottomMenu />
-      </div>
+      </div> */}
     </div>
   );
 };

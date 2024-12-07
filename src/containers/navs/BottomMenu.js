@@ -1,19 +1,19 @@
 /* eslint-disable react/no-array-index-key */
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import ReactDOM from "react-dom";
-import { Nav, NavItem } from "reactstrap";
-import { NavLink, withRouter } from "react-router-dom";
 import classnames from "classnames";
+import { Component } from "react";
+import ReactDOM from "react-dom";
+import { connect } from "react-redux";
+import { NavLink, withRouter } from "react-router-dom";
+import { Nav, NavItem } from "reactstrap";
 // import PerfectScrollbar from "react-perfect-scrollbar";
 
 import IntlMessages from "helpers/IntlMessages";
 
 import {
-  setContainerClassnames,
   addContainerClassname,
   changeDefaultClassnames,
   changeSelectedMenuHasSubItems,
+  setContainerClassnames,
 } from "redux/actions";
 
 import menuItems from "constants/menu";
@@ -361,20 +361,20 @@ class BottomMenu extends Component {
             > */}
         <Nav horizontal className="list-unstyled w-100">
           <div className=" d-flex flex-row justify-content-around w-100">
-          {menuItems &&
-            this.filteredList(menuItems)
-              .slice(0, 5)
-              .map((item) => (
-                <NavItem
-                  key={item.id}
-                  className={classnames({
-                    active:
-                      (selectedParentMenu === item.id &&
-                        viewingParentMenu === "") ||
-                      viewingParentMenu === item.id,
-                  })}
-                >
-                            {/* {item.newWindow ? (
+            {menuItems &&
+              this.filteredList(menuItems)
+                .slice(0, 5)
+                .map((item) => (
+                  <NavItem
+                    key={item.id}
+                    className={classnames({
+                      active:
+                        (selectedParentMenu === item.id &&
+                          viewingParentMenu === "") ||
+                        viewingParentMenu === item.id,
+                    })}
+                  >
+                    {/* {item.newWindow ? (
                       <a
                         href={item.to}
                         rel="noopener noreferrer"
@@ -385,19 +385,19 @@ class BottomMenu extends Component {
                         <IntlMessages id={item.label} />
                       </a>
                     ) : ( */}
-                  <NavLink
-                    to={item.to}
-                    onClick={(e) => this.openSubMenu(e, item)}
-                    data-flag={item.id}
-                    className="d-flex flex-column justify-content-center align-items-center"
-                  >
-                    <i className={item.icon} />
-                    <IntlMessages id={item.label} />
-                  </NavLink>
-                  {/* )} */}
-                </NavItem>
-              ))}
-              </div>
+                    <NavLink
+                      to={item.to}
+                      onClick={(e) => this.openSubMenu(e, item)}
+                      data-flag={item.id}
+                      className="d-flex flex-column justify-content-center align-items-center"
+                    >
+                      <i className={item.icon} />
+                      <IntlMessages id={item.label} />
+                    </NavLink>
+                    {/* )} */}
+                  </NavItem>
+                ))}
+          </div>
         </Nav>
 
         {/* </PerfectScrollbar> */}

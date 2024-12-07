@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import classnames from 'classnames';
 
-import IntlMessages from 'helpers/IntlMessages';
+// import IntlMessages from 'helpers/IntlMessages';
 import ApplicationMenu from 'components/common/ApplicationMenu';
 
 import {
@@ -94,7 +94,8 @@ const ChatApplicationMenu = ({
               })}
               onClick={() => toggleMenu('messages')}
             >
-              <IntlMessages id="chat.messages" />
+              {/* <IntlMessages id="chat.messages" /> */}
+              Messages
             </NavLink>
           </NavItem>
           <NavItem className="w-50 text-center">
@@ -107,7 +108,8 @@ const ChatApplicationMenu = ({
               })}
               onClick={() => toggleAppMenu('contacts')}
             >
-              <IntlMessages id="chat.contacts" />
+              {/* <IntlMessages id="chat.contacts" /> */}
+              Contacts
             </NavLink>
           </NavItem>
         </Nav>

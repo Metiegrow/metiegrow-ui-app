@@ -1,79 +1,64 @@
-import { adminRoot } from './defaultValues';
+import { adminRoot } from "./defaultValues";
 
 const data = [
   {
-    id: 'profile',
-    icon: 'iconsminds-home',
-    label: 'menu.home',
-    to: `${adminRoot}/profile`,
+    id: "Dashboard",
+    icon: "iconsminds-shop-4",
+    label: "Dashboard",
+    to: `${adminRoot}/dashboard`,
+    roles: ["USER"],
   },
   {
-    id: 'Mentor',
-    icon: 'simple-icon-people',
-    label: 'MentorShip',
-    to: `${adminRoot}/mentor`,
-    subs: [
-      {
-        icon: 'simple-icon-user',
-        label: 'MentorCard',
-        to: `${adminRoot}/mentor`,
-   
-      },
-      {
-        icon: 'simple-icon-question',
-        label: 'Student Questions',
-        to: `${adminRoot}/questions`,
-   
-      },
-      {
-        icon: 'simple-icon-bubbles',
-        label: 'Chat',
-        to: `${adminRoot}/chat`,
-   
-      },
-      {
-        icon: 'simple-icon-calendar',
-        label: 'Calendar',
-        to: `${adminRoot}/calendar`,
-   
-      },
-    ]
+    id: "Mentor",
+    icon: "simple-icon-people",
+    label: "MentorShip",
+    to: `${adminRoot}/mentor/list`,
+    roles: ["ADMIN", "USER", "MENTOR", "ALUMNI"],
   },
   {
-    id: 'myapplications',
-    icon: 'iconsminds-folder',
-    label: 'menu.myapplications',
-    to: `${adminRoot}/myapplications`,
+    id: "Student",
+    icon: "iconsminds-students",
+    label: "Student",
+    to: `${adminRoot}/student/list`,
+    roles: ["ADMIN", "USER", "MENTOR", "ALUMNI"],
+    subs: [],
   },
   {
-    id: 'mydetails',
-    icon: 'iconsminds-folder',
-    label: 'menu.mydetails',
-    to: `${adminRoot}/mydetails`,
+    id: "Q & A",
+    icon: "simple-icon-question",
+    label: "Q & A",
+    to: `${adminRoot}/questions`,
+    roles: ["ADMIN", "USER", "MENTOR", "ALUMNI"],
+    subs: [],
   },
   {
-    id: 'mydocuments',
-    icon: 'iconsminds-folder',
-    label: 'menu.mydocuments',
-    to: `${adminRoot}/mydocuments`,
+    id: "Lawyer",
+    icon: "iconsminds-scale",
+    label: "Lawyer",
+    to: `${adminRoot}/lawyer/list`,
+    roles: ["ADMIN", "USER", "MENTOR", "ALUMNI"],
   },
   {
-    id: 'App',
-    icon: 'iconsminds-folder',
-    label: 'menu.myapp',
-    to: `${adminRoot}/myapp`,
+    id: "Alumni",
+    icon: "iconsminds-student-hat",
+    label: "Alumni",
+    to: `${adminRoot}/alumni/alumnilists`,
+    roles: ["ADMIN", "USER", "MENTOR", "ALUMNI"],
   },
   {
-    id: 'Login',
-    icon: 'iconsminds-folder',
-    label: 'mylogin',
-    to: `${adminRoot}/mylogin`,
+    id: "Listing",
+    icon: "simple-icon-list",
+    label: "Listing",
+    to: `${adminRoot}/listing/job`,
+    roles: ["ADMIN", "USER", "MENTOR", "ALUMNI", "HR", "REALESTATE"],
   },
   {
-    id: 'Chat',
-    icon: 'iconsminds-speach-bubbles',
-    label: 'Chat',
+    id: "Chat",
+    icon: "simple-icon-bubbles",
+    label: "Chat",
     to: `${adminRoot}/chat`,
+    roles: ["ADMIN", "USER", "MENTOR", "ALUMNI"],
   },
 ];
+
 export default data;

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Input, Button } from 'reactstrap';
+import React from "react";
+import { Button, Input } from "reactstrap";
 
 const SaySomething = ({
   placeholder,
@@ -19,14 +19,15 @@ const SaySomething = ({
         onChange={(e) => handleChatInputChange(e)}
       />
       <div>
-        <Button outline color="primary" className="icon-button large ml-1">
+        {/* <Button outline color="primary" className="icon-button large ml-1">
           <i className="simple-icon-paper-clip" />
-        </Button>
+        </Button> */}
 
         <Button
           color="primary"
           className="icon-button large ml-1"
           onClick={() => handleSendButtonClick()}
+          disabled={messageInput.trim() === ""}
         >
           <i className="simple-icon-arrow-right" />
         </Button>
