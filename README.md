@@ -17,7 +17,6 @@ Create SQL database named metiegrow
 
 Update DB username, password, etc. in application.properties
 
-
 Signup in Agora
 
 
