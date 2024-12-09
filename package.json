@@ -67,6 +67,9 @@
     "precommit": "lint-staged",
     "json-server": "json-server --watch db.json --routes routes.json --port 3001"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
