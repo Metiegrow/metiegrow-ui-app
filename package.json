@@ -65,6 +65,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "precommit": "lint-staged",
+    "dev": "vite",
     "json-server": "json-server --watch db.json --routes routes.json --port 3001"
   },
   "engines": {
@@ -98,6 +99,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.1",
-    "sass": "^1.69.5"
+    "sass": "^1.69.5",
+    "vite": "^6.0.11"
   }
 }
