@@ -1447,9 +1447,9 @@ const DashBoard = () => {
                           // src="/assets/img/cards/thumb-1.jpg"
                           // src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg"
                           src={
-                            currentJobList.image !== null
-                              ? `${baseUrl}/${currentJobList.imageUrl}` // Use the first image URL
-                              : "https://via.placeholder.com/300x200?text=No+Image" // Fallback image
+                            currentJobList?.image?.imageUrl
+                              ? `${baseUrl}/${currentJobList.image.imageUrl}`
+                              : "https://placehold.co/300x200?text=No%20Image" // Fallback image
                           }
                           alt="Card image cap"
                           style={{ height: "250px", objectFit: "fill" }}
@@ -1558,11 +1558,12 @@ const DashBoard = () => {
 
       {/* job and stay listing ends */}
       {/* Q and A starts */}
-      <Row className="mx-auto  mt-4" style={{ maxWidth: "1000px" }}>
-        <Colxx lg="8" md="7" className="mb-2">
+      <Row className="mx-auto mt-4 mb-3" style={{ maxWidth: "1040px", paddingLeft: "2px"}}>
+        <Colxx lg="8" md="7" className="mb-2" style={{ marginLeft: "-4px" }}>
+        
           <Col lg={12} md={12}>
             {dashboardQuestions && dashboardQuestions.length > 0 ? (
-              <Card className="my-2" style={{ height: "360px" }}>
+              <Card className="ms-[-12px]" style={{ height: "360px" }}>
                 <CardBody>
                   <GlideComponent
                     settings={{
@@ -1634,7 +1635,8 @@ const DashBoard = () => {
 
           {/* </Col> */}
         </Colxx>
-        <Colxx lg="4" md="5" className="mb-2">
+        <Colxx lg="4" md="5" className="mb-2" style={{ marginLeft: "-12px" }}>
+        
           {/* <Col lg={5}> */}
           <Card className="mb-2">
             {currentBatchMate ? (
@@ -1751,7 +1753,7 @@ const DashBoard = () => {
       {/* Q and A ends */}
 
       {/* recent chats and recent sessions start */}
-      <Row className="mx-auto  " style={{ maxWidth: "1000px" }}>
+      <Row className="mx-auto  " style={{ maxWidth: "1020px" }}>
         <Colxx lg="7" md="6" className="mb-2">
           {/* <Col lg={7}> */}
           <Card>

@@ -447,7 +447,7 @@ const ApplyAsLawyer = () => {
                               {errors.image}
                             </div>
                           )}
-                          <div className="mt-2">
+                          <div className="mt-1.5">
                             <Button
                               className="default"
                               color="primary"

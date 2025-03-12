@@ -392,6 +392,7 @@ const StayListing = ({ isPosted }) => {
                           color="light"
                           className=" font-weight-semibold mx-2"
                           size="xs"
+                          style={{ pointerEvents: "none" }} 
                         >
                           {data.apartmentType}
                         </Button>
@@ -473,6 +474,7 @@ const StayListing = ({ isPosted }) => {
                           color="light"
                           className="font-weight-bold mr-1 my-1"
                           size="sm"
+                            style={{ pointerEvents: "none" }} 
                         >
                           <i className="fas fa-bed " /> {data.bhkTypeValue}
                         </Button>
@@ -480,6 +482,7 @@ const StayListing = ({ isPosted }) => {
                           color="light"
                           className="font-weight-bold m-1"
                           size="sm"
+                          style={{ pointerEvents: "none" }} 
                         >
                           <i className="fa-solid fa-shower" />{" "}
                           {data.bhkTypeValue}
@@ -488,6 +491,7 @@ const StayListing = ({ isPosted }) => {
                           color="light"
                           className="font-weight-bold m-1"
                           size="sm"
+                          style={{ pointerEvents: "none" }} 
                         >
                           <i className="fa-solid fa-car" /> {data.parkingCount}
                         </Button>

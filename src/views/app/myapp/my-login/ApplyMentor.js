@@ -605,7 +605,7 @@ const ApplyMentor = () => {
   return (
     <Card className="mx-auto my-4 " style={{ maxWidth: "900px" }}>
       <CardBody className="wizard wizard-default">
-        <h1 className="mt-4 font-weight-bold">Apply as a mentor</h1>
+        <h1 className="mt-4 font-weight-bold">Apply as a Mentor</h1>
         <ul className="nav nav-tabs justify-content-center">
           {steps.map((stepItem, index) => (
             // <li key={`topNavStep_${index}`} className={`nav-item ${index === currentStep ? 'step-doing' : ''}`}>
@@ -712,7 +712,7 @@ const ApplyMentor = () => {
                       </Col>
                       <Col md={5} className="mt-3 ">
                         <InputGroup className="mb-3">
-                          <div className="mt-2">
+                          <div className="mt-1.5">
                             <Button
                               className="default"
                               color="primary"

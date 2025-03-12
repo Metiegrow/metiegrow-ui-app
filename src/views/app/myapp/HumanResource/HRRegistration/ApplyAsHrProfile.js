@@ -33,6 +33,10 @@ const ApplyAsHrProfile = ({ currentStep, setCurrentStep }) => {
     setCurrentStep(currentStep + 1);
   };
 
+  const handlePrevStep = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
   const hrProfileUrl = `${baseUrl}/api/humanresource/about`;
 
   function getTokenRes() {
@@ -190,8 +194,15 @@ const ApplyAsHrProfile = ({ currentStep, setCurrentStep }) => {
                 </Col>
               </Row>
             </FormGroup>
-            <Row>
-              <Col className="text-center">
+                  <Row>
+                    {" "}
+                    <Col>
+                      {" "}
+                      <Button color="primary" onClick={handlePrevStep}>
+                        Previous
+                      </Button>
+                    </Col>
+                    <Col className="text-right">
                 <Button
                   color="primary"
                   type="submit"

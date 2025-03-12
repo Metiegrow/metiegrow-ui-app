@@ -275,7 +275,7 @@ const ApplyAsHrAbout = ({ currentStep, setCurrentStep }) => {
               </Col>
               <Col md={5} className="mt-3 ">
                 <InputGroup className="mb-3">
-                  <div className="mt-2">
+                  <div className="mt-1.5">
                     <Button
                       className="default"
                       color="primary"
