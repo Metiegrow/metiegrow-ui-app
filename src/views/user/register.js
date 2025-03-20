@@ -17,7 +17,7 @@ import { AvField, AvForm } from "availity-reactstrap-validation";
 import { Colxx } from "components/common/CustomBootstrap";
 import IntlMessages from "helpers/IntlMessages";
 import { authService } from "services/authservice";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+// import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 import { NotificationManager } from "components/common/react-notifications"; // Ensure this import is correct
 
 const Register = () => {
@@ -285,7 +285,7 @@ const Register = () => {
         style={{ top: "50%", right: "1px", transform: "translateY(-50%)" }}
         onClick={() => setShowPassword(!showPassword)}
       >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
+        {showPassword}
       </button>
     </FormGroup>
   </Col>
@@ -310,7 +310,7 @@ const Register = () => {
         style={{ top: "50%", right: "1px", transform: "translateY(-50%)" }}
         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
       >
-        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+        {showConfirmPassword}
       </button>
     </FormGroup>
                      </Col>
