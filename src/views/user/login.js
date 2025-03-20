@@ -262,7 +262,7 @@ const Login = ({ loading, loginUserAction }) => {
       }}
       onClick={() => setShowPassword(!showPassword)}
     >
-      {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+      {showPassword ? <FaEyeSlash size={17} /> : <FaEye size={18} />}
     </button>
   </div>
   {errors.password && touched.password && (
