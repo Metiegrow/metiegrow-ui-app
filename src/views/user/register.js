@@ -114,7 +114,20 @@ const Register = () => {
           </div>
           <div className="form-side">
             <NavLink to="/" className="white">
-              <span className="logo-single" />
+              {/* <span className="logo-single" /> */}
+              
+              <span
+                style={{
+                  display: "inline-block",
+                  width: "110px",
+                  height: "55px",
+                  backgroundImage: "url('/assets/logos/metiegrowlogo.jpg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center center",
+                  marginBottom: "60px",
+                }}
+                aria-label="Metiegrow Logo"
+              />
             </NavLink>
             {isSubmitted ? (
               <Row>
@@ -233,33 +246,33 @@ const Register = () => {
                     autoComplete="off"
                   />
                 </FormGroup>
-                <FormGroup className="form-group has-float-label">
-                  <Label>Mobile Number</Label>
-                  <AvField
-                    name="phoneNumber"
-                    type="text"
-                    value={phoneNumber}
-                    maxLength={13}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    onKeyPress={(event) => {
-                      if (!/[0-9]/.test(event.key)) {
-                        event.preventDefault();
-                      }
-                    }}
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: "Phone number cannot be empty",
-                      },
-                      pattern: {
-                        value: "^[0-9]{12}$",
-                        errorMessage:
-                          "Please enter a valid mobile number with 2-digit country code and 10-digit number (e.g., 911234567890)",
-                      },
-                    }}
-                    autoComplete="off"
-                  />
-                </FormGroup>
+<FormGroup className="form-group has-float-label">
+  <Label>Mobile Number</Label>
+  <AvField
+    name="phoneNumber"
+    type="text"
+    value={phoneNumber}
+    maxLength={16} 
+    onChange={(e) => setPhoneNumber(e.target.value)}
+    onKeyPress={(event) => {
+      if (!/[0-9+]/.test(event.key)) {
+        event.preventDefault();
+      }
+    }}
+    validate={{
+      required: {
+        value: true,
+        errorMessage: "Phone number cannot be empty",
+      },
+      pattern: {
+        value: "^\\+[0-9]{10,15}$", 
+        errorMessage: "Please enter a valid mobile number with country code (e.g., +911234567890)",
+      },
+    }}
+    autoComplete="off"
+  />
+</FormGroup>
+
 
                 <Row>
                   <Col>
@@ -299,11 +312,19 @@ const Register = () => {
         type={showConfirmPassword ? "text" : "password"}
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        validate={{
-          required: { value: true, errorMessage: "Confirm password is required" },
-          match: { value: password, errorMessage: "Passwords do not match" },
-        }}
-      />
+      //   validate={{
+      //     required: { value: true, errorMessage: "Confirm password is required" },
+      //     match: { value: password, errorMessage: "Passwords do not match" },
+      //   }}
+      // />
+      validate={{
+        required: { value: true, errorMessage: "Confirm password is required" },
+        match: {
+          value: "password", // This should match the name of the password field
+          errorMessage: "Passwords do not match",
+        },
+      }}
+    />
       <button
         type="button"
         className="btn btn-link position-absolute"

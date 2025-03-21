@@ -177,9 +177,10 @@ const Login = ({ loading, loginUserAction }) => {
           </div>
           <div className="form-side ">
             <NavLink to="/" className="">
-              <span className="logo-single" />
+              {/* <span className="logo-single" />
+               */}
 
-              {/* <span
+              <span
                 style={{
                   display: "inline-block",
                   width: "110px",
@@ -190,7 +191,7 @@ const Login = ({ loading, loginUserAction }) => {
                   marginBottom: "60px",
                 }}
                 aria-label="Metiegrow Logo"
-              /> */}
+              />
               {/* <div
                 style={{
                   width: "120px",

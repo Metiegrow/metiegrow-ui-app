@@ -45,7 +45,7 @@
     "react-scripts": "^4.0.3",
     "react-scroll": "^1.8.2",
     "react-select": "^4.3.1",
-    "react-sortablejs": "^6.0.0",
+    "react-sortablejs": "^5.0.5",
     "react-table": "7.7.0",
     "react-tagsinput": "^3.19.0",
     "react-transition-group": "^4.4.2",
@@ -90,6 +90,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint": "^7.28.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",

@@ -1558,202 +1558,174 @@ const DashBoard = () => {
 
       {/* job and stay listing ends */}
       {/* Q and A starts */}
-      <Row className="mx-auto mt-4 mb-3" style={{ maxWidth: "1040px", paddingLeft: "2px"}}>
-        <Colxx lg="8" md="7" className="mb-2" style={{ marginLeft: "-4px" }}>
-        
-          <Col lg={12} md={12}>
-            {dashboardQuestions && dashboardQuestions.length > 0 ? (
-              <Card className="ms-[-12px]" style={{ height: "360px" }}>
-                <CardBody>
-                  <GlideComponent
-                    settings={{
-                      gap: 5,
-                      perView: 1,
-                      type: "carousel",
-                    }}
-                  >
-                    {dashboardQuestions.map((items) => (
-                      <div key={items.id}>
-                        <Card>
-                          <div>
-                            <CardTitle>
-                              <strong className="text-large">Q&A</strong>
-                            </CardTitle>
-                            <div>
-                              <div className="d-flex align-items-center justify-content-between">
-                                <h2 className="font-weight-semi-bold text-large py-1">
-                                  {items.questionHeading}
-                                </h2>
-                                <p className="text-muted">
-                                  {formatDate(items.time)}
-                                </p>
-                              </div>
-                              <p className="text-one font-weight-semibold text-muted py-1">
-                                {items.questionHeadingBrief}
-                              </p>
-                            </div>
-                            <hr />
-                            <div className="d-flex align-items-center justify-content-between my-2">
-                              <span className="text-one">
-                                {items.views} views
-                              </span>
-                              <span className="text-one">
-                                <i
-                                  className="simple-icon-envelope"
-                                  color="primary"
-                                />
-                              </span>
-                            </div>
-                            <div className="w-full d-flex">
-                              <Button
-                                className="text-center mx-auto"
-                                color="primary"
-                                size="sm"
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                  history.push(`/app/questions/${items.id}`)
-                                }
-                              >
-                                View all answers
-                              </Button>
-                            </div>
-                          </div>
-                        </Card>
+      <Row className="mx-auto" style={{ maxWidth: "1008px" }}>
+  <Colxx lg="7" md="6" className="mb-2">
+    <Card>
+      <CardBody>
+        {dashboardQuestions && dashboardQuestions.length > 0 ? (
+          <GlideComponent
+            settings={{
+              gap: 5,
+              perView: 1,
+              type: "carousel",
+            }}
+          >
+            {dashboardQuestions.map((items) => (
+              <div key={items.id}>
+                <Card>
+                  <div>
+                    <CardTitle>
+                      <strong className="text-large">Q&A</strong>
+                    </CardTitle>
+                    <div>
+                      <div className="d-flex align-items-center justify-content-between">
+                        <h2 className="font-weight-semi-bold text-large py-1">
+                          {items.questionHeading}
+                        </h2>
+                        <p className="text-muted">
+                          {formatDate(items.time)}
+                        </p>
                       </div>
-                    ))}
-                  </GlideComponent>
-                </CardBody>
-              </Card>
-            ) : (
-              <Card className="my-2" style={{ height: "360px" }}>
-                <CardBody className="d-flex align-items-center justify-content-center">
-                  <h2>No Q&A Available</h2>
-                </CardBody>
-              </Card>
-            )}
-          </Col>
-
-          {/* </Col> */}
-        </Colxx>
-        <Colxx lg="4" md="5" className="mb-2" style={{ marginLeft: "-12px" }}>
-        
-          {/* <Col lg={5}> */}
-          <Card className="mb-2">
-            {currentBatchMate ? (
-              <CardBody style={{ minHeight: "360px" }}>
-                <Row className="mb-3 align-items-center">
-                  <Col>
-                    <h3 className="mb-0 fw-bold">
-                      <strong>Batch Mates</strong>
-                    </h3>
-                  </Col>
-                  <Col xs="auto">
-                    <Button
-                      size="xs"
-                      color="primary"
-                      onClick={handleViewBatchmates}
-                    >
-                      <span>View all</span>
-                    </Button>
-                  </Col>
-                </Row>
-                <div className="text-center">
-                  <Row>
-                    <Col className="d-flex align-items-center">
-                      <button
-                        onClick={handleBatchMatePrevious}
-                        type="button"
-                        className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
-                        data-glide-dir="<"
-                        style={{ textDecoration: "none" }}
-                      >
-                        <i className="simple-icon-arrow-left" />
-                      </button>
-                    </Col>
-                    <Col className="d-flex justify-content-center align-items-center">
-                      {!currentBatchMate.imageUrl ? (
-                        <ThumbnailLetters
-                          // small
-                          rounded
-                          text={currentBatchMate.firstName}
-                          className="mx-2 mb-3"
-                          color="secondary"
+                      <p className="text-one font-weight-semibold text-muted py-1">
+                        {items.questionHeadingBrief}
+                      </p>
+                    </div>
+                    <hr />
+                    <div className="d-flex align-items-center justify-content-between my-2">
+                      <span className="text-one">
+                        {items.views} views
+                      </span>
+                      <span className="text-one">
+                        <i
+                          className="simple-icon-envelope"
+                          color="primary"
                         />
-                      ) : (
-                        <img
-                          src={`${baseUrl}/${currentBatchMate.imageUrl}`}
-                          className=" rounded-circle mb-2"
-                          style={{
-                            width: "90px",
-                            height: "90px",
-                            objectFit: "cover",
-                            overflow: "hidden",
-                          }}
-                          alt="img"
-                        />
-                      )}
-                    </Col>
-                    <Col className="d-flex align-items-center justify-content-end">
-                      <button
-                        onClick={handleBatchMateNext}
-                        type="button"
-                        className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
-                        data-glide-dir=">"
-                        style={{ textDecoration: "none" }}
+                      </span>
+                    </div>
+                    <div className="w-full d-flex">
+                      <Button
+                        className="text-center mx-auto"
+                        color="primary"
+                        size="sm"
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          history.push(`/app/questions/${items.id}`)
+                        }
                       >
-                        <i className="simple-icon-arrow-right" />
-                      </button>
-                    </Col>
-                  </Row>
-                  <NavLink to="#">
-                    <h3 className="mb-0">
-                      <strong>
-                        {currentBatchMate.firstName} {currentBatchMate.lastName}
-                      </strong>
-                    </h3>
-                  </NavLink>
-                  <CardText className="text-muted text-small mb-2">
-                    {currentBatchMate.jobTitle} | {currentBatchMate.company}
-                  </CardText>
-                  {/* <span>
-                    {currentBatchMate.experience === undefined ||
-                    currentBatchMate.experience === 0
-                      ? "No experience"
-                      : `${currentBatchMate.experience} years of experience`}
-                  </span> */}
-
-                  <div className="separator mb-2 mt-2" />
-                  {/* <h3 className="mb-0 fw-bold">
-                    <strong>
-                      ₹{Math.floor(currentBatchMate.price).toLocaleString()}/hr
-                    </strong>
-                  </h3> */}
-                </div>
-                <div className="d-flex justify-content-center">
-                  <div
-                    className="glide__bullets slider-dot-container"
-                    data-glide-el="controls[nav]"
-                  >
-                    {renderBatchMateDots()}
+                        View all answers
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </CardBody>
-            ) : (
-              <CardBody
-                className="d-flex align-items-center justify-content-center"
-                style={{ height: "360px" }}
+                </Card>
+              </div>
+            ))}
+          </GlideComponent>
+        ) : (
+          <div className="d-flex justify-content-center">
+            <h2>No Q&A Available</h2>
+          </div>
+        )}
+      </CardBody>
+    </Card>
+  </Colxx>
+
+    <Colxx lg="5" md="6" className="mb-2">
+    <Card style={{ height: "360px" }}>
+      <CardBody>
+        {currentBatchMate ? (
+          <>
+            <div className="d-flex align-items-center justify-content-between mb-3">
+              <h3 className="mb-0 fw-bold">
+                <strong>Batch Mates</strong>
+              </h3>
+              <Button
+                size="xs"
+                color="primary"
+                onClick={handleViewBatchmates}
               >
-                <h2>No Batchmates</h2>
-              </CardBody>
-            )}
-          </Card>
-          {/* </Col> */}
-        </Colxx>
-      </Row>
+                <span>View all</span>
+              </Button>
+            </div>
+            <div className="text-center">
+              <Row>
+                <Col className="d-flex align-items-center">
+                  <button
+                    onClick={handleBatchMatePrevious}
+                    type="button"
+                    className="glide__arrow glide__arrow--left left-arrow btn btn-link btn-xs"
+                    data-glide-dir="<"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <i className="simple-icon-arrow-left" />
+                  </button>
+                </Col>
+                <Col className="d-flex justify-content-center align-items-center">
+                  {!currentBatchMate.imageUrl ? (
+                    <ThumbnailLetters
+                      rounded
+                      text={currentBatchMate.firstName}
+                      className="mx-2 mb-3"
+                      color="secondary"
+                    />
+                  ) : (
+                    <img
+                      src={`${baseUrl}/${currentBatchMate.imageUrl}`}
+                      className="rounded-circle mb-2"
+                      style={{
+                        width: "90px",
+                        height: "90px",
+                        objectFit: "cover",
+                        overflow: "hidden",
+                      }}
+                      alt="img"
+                    />
+                  )}
+                </Col>
+                <Col className="d-flex align-items-center justify-content-end">
+                  <button
+                    onClick={handleBatchMateNext}
+                    type="button"
+                    className="glide__arrow glide__arrow--right right-arrow btn btn-link btn-xs"
+                    data-glide-dir=">"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <i className="simple-icon-arrow-right" />
+                  </button>
+                </Col>
+              </Row>
+              <NavLink to="#">
+                <h3 className="mb-0">
+                  <strong>
+                    {currentBatchMate.firstName} {currentBatchMate.lastName}
+                  </strong>
+                </h3>
+              </NavLink>
+              <CardText className="text-muted text-small mb-2">
+                {currentBatchMate.jobTitle} | {currentBatchMate.company}
+              </CardText>
+              <div className="separator mb-2 mt-2" />
+            </div>
+            <div className="d-flex justify-content-center">
+              <div
+                className="glide__bullets slider-dot-container"
+                data-glide-el="controls[nav]"
+              >
+                {renderBatchMateDots()}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="d-flex justify-content-center">
+            <h2>No Batchmates</h2>
+          </div>
+        )}
+      </CardBody>
+    </Card>
+  </Colxx>
+</Row>
       {/* Q and A ends */}
 
-      {/* recent chats and recent sessions start */}
-      <Row className="mx-auto  " style={{ maxWidth: "1020px" }}>
+      <Row className="mx-auto  " style={{ maxWidth: "1008px" }}>
         <Colxx lg="7" md="6" className="mb-2">
           {/* <Col lg={7}> */}
           <Card>
