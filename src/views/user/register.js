@@ -10,15 +10,14 @@ import {
   Input,
   Label,
   Row,
-
 } from "reactstrap";
 import { registerUser } from "redux/actions";
 import { AvField, AvForm } from "availity-reactstrap-validation";
 import { Colxx } from "components/common/CustomBootstrap";
 import IntlMessages from "helpers/IntlMessages";
 import { authService } from "services/authservice";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
-import { NotificationManager } from "components/common/react-notifications"; // Ensure this import is correct
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { NotificationManager } from "components/common/react-notifications";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -32,8 +31,8 @@ const Register = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("MENTOR");
-  const [showPassword, setShowPassword] = useState(false); // State for password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const history = useHistory();
 
@@ -115,7 +114,7 @@ const Register = () => {
           <div className="form-side">
             <NavLink to="/" className="white">
               {/* <span className="logo-single" /> */}
-              
+
               <span
                 style={{
                   display: "inline-block",
@@ -246,95 +245,105 @@ const Register = () => {
                     autoComplete="off"
                   />
                 </FormGroup>
-<FormGroup className="form-group has-float-label">
-  <Label>Mobile Number</Label>
-  <AvField
-    name="phoneNumber"
-    type="text"
-    value={phoneNumber}
-    maxLength={16} 
-    onChange={(e) => setPhoneNumber(e.target.value)}
-    onKeyPress={(event) => {
-      if (!/[0-9+]/.test(event.key)) {
-        event.preventDefault();
-      }
-    }}
-    validate={{
-      required: {
-        value: true,
-        errorMessage: "Phone number cannot be empty",
-      },
-      pattern: {
-        value: "^\\+[0-9]{10,15}$", 
-        errorMessage: "Please enter a valid mobile number with country code (e.g., +911234567890)",
-      },
-    }}
-    autoComplete="off"
-  />
-</FormGroup>
-
+                <FormGroup className="form-group has-float-label">
+                  <Label>Mobile Number</Label>
+                  <AvField
+                    name="phoneNumber"
+                    type="text"
+                    value={phoneNumber}
+                    maxLength={16}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onKeyPress={(event) => {
+                      if (!/[0-9+]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: "Phone number cannot be empty",
+                      },
+                      pattern: {
+                        value: "^\\+[0-9]{10,15}$",
+                        errorMessage:
+                          "Please enter a valid mobile number with country code (e.g., +911234567890)",
+                      },
+                    }}
+                    autoComplete="off"
+                  />
+                </FormGroup>
 
                 <Row>
                   <Col>
-                  <FormGroup className="form-group has-float-label position-relative">
-      <Label>Password</Label>
-      <AvField
-        name="password"
-        type={showPassword ? "text" : "password"}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        validate={{
-          required: { value: true, errorMessage: "Please enter your password" },
-          pattern: {
-            value: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,15}$",
-            errorMessage:
-              "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be 8-15 characters long",
-          },
-        }}
-      />
-      <button
-        type="button"
-        className="btn btn-link position-absolute"
-        style={{ top: "50%", right: "1px", transform: "translateY(-50%)" }}
-        onClick={() => setShowPassword(!showPassword)}
-      >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </button>
-    </FormGroup>
-  </Col>
-
-  {/* Confirm Password Field */}
-  <Col>
-    <FormGroup className="form-group has-float-label position-relative">
-      <Label>Confirm Password</Label>
-      <AvField
-        name="confirmPassword"
-        type={showConfirmPassword ? "text" : "password"}
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      //   validate={{
-      //     required: { value: true, errorMessage: "Confirm password is required" },
-      //     match: { value: password, errorMessage: "Passwords do not match" },
-      //   }}
-      // />
-      validate={{
-        required: { value: true, errorMessage: "Confirm password is required" },
-        match: {
-          value: "password", // This should match the name of the password field
-          errorMessage: "Passwords do not match",
-        },
-      }}
-    />
-      <button
-        type="button"
-        className="btn btn-link position-absolute"
-        style={{ top: "50%", right: "1px", transform: "translateY(-50%)" }}
-        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-      >
-        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-      </button>
-    </FormGroup>
-                     </Col>
+                    <FormGroup className="form-group has-float-label position-relative">
+                      <Label>Password</Label>
+                      <AvField
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: "Please enter your password",
+                          },
+                          pattern: {
+                            value:
+                              "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,15}$",
+                            errorMessage:
+                              "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be 8-15 characters long",
+                          },
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-link position-absolute"
+                        style={{
+                          top: "50%",
+                          right: "1px",
+                          transform: "translateY(-50%)",
+                        }}
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup className="form-group has-float-label position-relative">
+                      <Label>Confirm Password</Label>
+                      <AvField
+                        name="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: "Confirm password is required",
+                          },
+                          match: {
+                            value: "password", 
+                            errorMessage: "Passwords do not match",
+                          },
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-link position-absolute"
+                        style={{
+                          top: "50%",
+                          right: "1px",
+                          transform: "translateY(-50%)",
+                        }}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </FormGroup>
+                  </Col>
                 </Row>
                 <Row>
                   <FormGroup check>

@@ -242,7 +242,7 @@ const Login = ({ loading, loginUserAction }) => {
   </Label>
   <div className="position-relative">
     <Field
-      className="form-control pe-5" // Adds padding to prevent text overlap
+      className="form-control pe-5" 
       type={showPassword ? "text" : "password"}
       name="password"
       validate={validatePassword}

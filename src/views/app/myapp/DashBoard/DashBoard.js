@@ -1555,12 +1555,13 @@ const DashBoard = () => {
           </Card>
         </Colxx>
       </Row>
-
       {/* job and stay listing ends */}
+      
       {/* Q and A starts */}
       <Row className="mx-auto" style={{ maxWidth: "1008px" }}>
-  <Colxx lg="7" md="6" className="mb-2">
-    <Card>
+  <Colxx lg="7" md="6" className="mb-2 mt-4">
+    {/* <Card> */}
+    <Card style={{ height: "360px" }}>
       <CardBody>
         {dashboardQuestions && dashboardQuestions.length > 0 ? (
           <GlideComponent
@@ -1629,7 +1630,7 @@ const DashBoard = () => {
     </Card>
   </Colxx>
 
-    <Colxx lg="5" md="6" className="mb-2">
+    <Colxx lg="5" md="6" className="mb-2 mt-4">
     <Card style={{ height: "360px" }}>
       <CardBody>
         {currentBatchMate ? (
@@ -1726,7 +1727,7 @@ const DashBoard = () => {
       {/* Q and A ends */}
 
       <Row className="mx-auto  " style={{ maxWidth: "1008px" }}>
-        <Colxx lg="7" md="6" className="mb-2">
+        <Colxx lg="7" md="6" className="mb-2 mt-4">
           {/* <Col lg={7}> */}
           <Card>
             <CardBody>
@@ -1774,7 +1775,6 @@ const DashBoard = () => {
                                   {/* </div> */}
                                 </Col>
                                 <Col className="mt-3  d-flex flex-column align-items-center">
-                                  {/* <div className="mt-3 pr-2 ml-4"> */}
                                   <p className="text-muted mb-0 text-small">
                                     <TimestampConverter
                                       timeStamp={sessions.fromTimeStamp}
@@ -1792,16 +1792,13 @@ const DashBoard = () => {
                                       format="time"
                                     />
                                   </p>
-                                  {/* </div> */}
                                 </Col>
                                 <Col className="mt-3">
-                                  {/* <div className="d-flex justify-end ml-4 mr-2 pr-2 mt-3"> */}
                                   <Rating
                                     total={5}
                                     rating={sessions.star}
                                     interactive={false}
                                   />
-                                  {/* </div> */}
                                 </Col>
                               </Row>
                             </div>
@@ -1819,7 +1816,7 @@ const DashBoard = () => {
           </Card>
           {/* </Col> */}
         </Colxx>
-        <Colxx lg="5" md="6" className="mb-2">
+        <Colxx lg="5" md="6" className="mb-2 mt-4">
           {/* <Col lg={5}> */}
           <Card>
             <CardBody>
