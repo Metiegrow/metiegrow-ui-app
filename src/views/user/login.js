@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { Button, Card, CardTitle, FormGroup, Label, Row } from "reactstrap";
 import { loginUser } from "redux/actions";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; 
+// import { FaEye, FaEyeSlash } from "react-icons/fa"; 
 // import axios from 'axios';
 // import { baseUrl } from 'constants/defaultValues';
 // import { authService } from 'services/authservice';
@@ -263,7 +263,7 @@ const Login = ({ loading, loginUserAction }) => {
       }}
       onClick={() => setShowPassword(!showPassword)}
     >
-      {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+      {showPassword}
     </button>
   </div>
   {errors.password && touched.password && (
