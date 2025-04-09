@@ -42,7 +42,8 @@ export const servicePath = 'https://api.coloredstrategies.com';
  // export const baseUrl = 'http://159.65.148.48:9091/';
 // export const baseUrl = 'http://localhost:3001';
 // export const baseUrl = 'http://localhost:9091';
-export const baseUrl = 'https://api.metiegrow.in';
+// export const baseUrl = 'https://api.metiegrow.in';
+export const baseUrl = 'https://qfj7n755-9091.inc1.devtunnels.ms/';
 // export const baseUrl = 'http://ec2-51-20-42-40.eu-north-1.compute.amazonaws.com:9091';
 
 export const currentUser = {
