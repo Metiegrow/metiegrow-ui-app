@@ -29,6 +29,9 @@ AGORA_APP_ID=4e6374a1edfe4d20a604fb0513fae8fb
 Copy AGORA_APP_CERTIFICATE and set environment variable:
 AGORA_APP_CERTIFICATE=d3439fabbf5548ea9c2a75f37ec7908f
 
+server start use :
+npm start
+
 
 During first start, run the below SQL:
 insert into db_courses.calendar values(1,'mentor calendar',1713588470000,0,0,1);

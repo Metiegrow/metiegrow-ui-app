@@ -1,4 +1,3 @@
-import { NotificationManager } from "components/common/react-notifications";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
@@ -6,43 +5,35 @@ import {
   Button,
   Card,
   CardTitle,
-  // ButtonGroup,
   Col,
-  // Form,
   FormGroup,
   Input,
   Label,
   Row,
+
 } from "reactstrap";
 import { registerUser } from "redux/actions";
-
 import { AvField, AvForm } from "availity-reactstrap-validation";
 import { Colxx } from "components/common/CustomBootstrap";
 import IntlMessages from "helpers/IntlMessages";
 import { authService } from "services/authservice";
-// import { baseUrl } from 'constants/defaultValues';
-// import axios from 'axios';
-// import { adminRoot } from 'constants/defaultValues';
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import { NotificationManager } from "components/common/react-notifications"; // Ensure this import is correct
 
 const Register = () => {
-  // const [newUser, setNewUser] = useState({
-  //   name: 'testName',
-  //   email: 'test@email.com',
-  //   password: 'TestPass',
-  //   role: "MENTOR",
-  // });
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("+91");
   const [password, setPassword] = useState("");
-  // const [userRoles, setUserRoles] = useState(["MENTOR"]);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [roleError, setRoleError] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("MENTOR");
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password visibility
 
   const history = useHistory();
 
@@ -50,72 +41,12 @@ const Register = () => {
     setSelectedRole(role);
   };
 
-  // const handleRoleChange = (role) => {
-  //   if (userRoles.includes(role)) {
-  //     setUserRoles(userRoles.filter((item) => item !== role));
-  //   } else {
-  //     setUserRoles([...userRoles, role]);
-  //   }
-  // };
-
   const clickToLogin = () => {
     history.push("/login");
   };
 
-  // function handleChange(field, value) {
-  //   setNewUser((prevState) => ({
-  //     ...prevState,
-  //     [field]: value,
-  //   }));
-  // }
-
-  // function handleChange(field, e) {
-  //   switch (field) {
-  //     case 'name':
-  //       setNewUser((props) => {
-  //         return {
-  //           ...props,
-  //           name: e.target.value,
-  //         };
-  //       });
-  //       break;
-  //     case 'email':
-  //       setNewUser((props) => {
-  //         return {
-  //           ...props,
-  //           email: e.target.value,
-  //         };
-  //       });
-  //       break;
-  //     case 'password':
-  //       setNewUser((props) => {
-  //         return {
-  //           ...props,
-  //           password: e.target.value,
-  //         };
-  //       });
-  //       break;
-  //     case 'role':
-  //       setNewUser((props) => {
-  //         return {
-  //           ...props,
-  //           role: e === 1 ? 'MENTOR' : 'USER', // checks if the event value passed is 1 and assigns the respective role
-  //         };
-  //       });
-  //       break;
-
-  //     default:
-  //       console.log('default case ran');
-  //       break;
-  //   }
-  // }
   const OnRegisterButtonclick = async () => {
     try {
-      // const response = await authService.signUp(
-      //   newUser.email,
-      //   newUser.password,
-      //   newUser.name,
-      //   newUser.role
       if (selectedRole.length === 0) {
         setRoleError(true);
         return;
@@ -135,12 +66,9 @@ const Register = () => {
       if (signUpResponse && signUpResponse.status === 200) {
         setIsSubmitted(true);
         setLoading(false);
-        // console.log("signupsuccess")
-        // history.push('/login');
       } else {
         console.error("Signup Failed:", signUpResponse);
         setLoading(false);
-        // console.log("su",signUpResponse.data.statuses[0].message)
         signUpResponse.data.statuses.forEach((status) => {
           NotificationManager.warning(
             status.message,
@@ -151,14 +79,6 @@ const Register = () => {
             ""
           );
         });
-        // NotificationManager.warning(
-        //   "Something went wrong",
-        //   "Oops!",
-        //   3000,
-        //   null,
-        //   null,
-        //   ""
-        // );
       }
     } catch (error) {
       console.error("Error registering user:", error);
@@ -172,43 +92,6 @@ const Register = () => {
       );
     }
   };
-
-  // function OnRegisterButtonclick() {
-  //   console.log(newUser);
-  //   authService.signUp(
-  //     newUser.email,
-  //     newUser.password,
-  //     newUser.name,
-  //     newUser.role
-  //   );
-  // axios
-  //   .post(`${baseUrl}api/signup`, {
-  //     username: newUser.name,
-  //     password: newUser.password,
-  //     email: newUser.email,
-  //     userType: newUser.role,
-  //   })
-  //   .then((response) => {
-  //     console.log(response.status);
-  //     // console.log(response.data.token);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // }
-
-  // const [email] = useState('demo@gogo.com');
-  // const [password] = useState('gogo123');
-  // const [name] = useState('Sarah Kortney');
-
-  // const onUserRegister = (payload) => {
-  //   console.log(payload);
-  //   if (payload.email !== '' && payload.password !== '') {
-  //     console.log(history);
-  //     // history.push(adminRoot);
-  //   }
-  //   // call registerUserAction()
-  // };
 
   return (
     <Row className="h-100">
@@ -231,30 +114,21 @@ const Register = () => {
           </div>
           <div className="form-side">
             <NavLink to="/" className="white">
-              <span className="logo-single" />
-              {/* <div
+              {/* <span className="logo-single" /> */}
+              
+              <span
                 style={{
+                  display: "inline-block",
                   width: "110px",
-                  marginBottom: "30px",
-                  height: "100px",
+                  height: "55px",
+                  backgroundImage: "url('/assets/logos/metiegrowlogo.jpg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center center",
+                  marginBottom: "60px",
                 }}
-              >
-                <img
-                  src="/assets/logos/backgroundpng.png"
-                  // src="/assets/img/profiles/1.jpg"
-                  className="w-100 h-100"
-                  alt="Metiegrow Logo"
-                  style={{
-                    textAlign: "start",
-
-                    marginLeft: "0px !important",
-                    display: "flex",
-                  }}
-                />
-              </div> */}
+                aria-label="Metiegrow Logo"
+              />
             </NavLink>
-            {/* <img src={`${process.env.PUBLIC_URL}/metiegrowfavicon.jpg`} alt="Logo" className="img-thumbnail" 
-        style={{ width: '100px', height: '100px' }} /> */}
             {isSubmitted ? (
               <Row>
                 <div className="d-flex ">
@@ -372,94 +246,95 @@ const Register = () => {
                     autoComplete="off"
                   />
                 </FormGroup>
+<FormGroup className="form-group has-float-label">
+  <Label>Mobile Number</Label>
+  <AvField
+    name="phoneNumber"
+    type="text"
+    value={phoneNumber}
+    maxLength={16} 
+    onChange={(e) => setPhoneNumber(e.target.value)}
+    onKeyPress={(event) => {
+      if (!/[0-9+]/.test(event.key)) {
+        event.preventDefault();
+      }
+    }}
+    validate={{
+      required: {
+        value: true,
+        errorMessage: "Phone number cannot be empty",
+      },
+      pattern: {
+        value: "^\\+[0-9]{10,15}$", 
+        errorMessage: "Please enter a valid mobile number with country code (e.g., +911234567890)",
+      },
+    }}
+    autoComplete="off"
+  />
+</FormGroup>
 
-                <FormGroup className="form-group has-float-label">
-                  <Label>Mobile Number</Label>
-                  <AvField
-                    name="phoneNumber"
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: "Phone number cannot be empty",
-                      },
-                      pattern: {
-                        value: "^\\+[0-9]{2}[0-9]{10}$",
-                        errorMessage: "Please enter a valid mobile number",
-                      },
-                    }}
-                    autoComplete="off"
-                  />
-                </FormGroup>
 
                 <Row>
                   <Col>
-                    {/* <AvField
-                name="password"
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                validate={{ required: true }}
-              /> */}
-                    {/* <AvGroup className="error-l-100 tooltip-label-right"> */}
-                    <FormGroup className="form-group has-float-label">
-                      <Label>Password</Label>
-                      <AvField
-                        name="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        validate={{
-                          required: {
-                            value: true,
-                            errorMessage: "Please enter your password",
-                          },
-                          pattern: {
-                            value:
-                              "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,15}$",
-                            errorMessage:
-                              "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be between 8 and 15 characters long",
-                          },
-                          minLength: {
-                            value: 8,
-                            errorMessage:
-                              "Password must be at least 8 characters long",
-                          },
-                          maxLength: {
-                            value: 15,
-                            errorMessage:
-                              "Password must be at most 15 characters long",
-                          },
-                        }}
-                      />
-                    </FormGroup>
+                  <FormGroup className="form-group has-float-label position-relative">
+      <Label>Password</Label>
+      <AvField
+        name="password"
+        type={showPassword ? "text" : "password"}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        validate={{
+          required: { value: true, errorMessage: "Please enter your password" },
+          pattern: {
+            value: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,15}$",
+            errorMessage:
+              "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be 8-15 characters long",
+          },
+        }}
+      />
+      <button
+        type="button"
+        className="btn btn-link position-absolute"
+        style={{ top: "50%", right: "1px", transform: "translateY(-50%)" }}
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? <FaEyeSlash /> : <FaEye />}
+      </button>
+    </FormGroup>
+  </Col>
 
-                    {/* </AvGroup> */}
-                  </Col>
-                  <Col>
-                    <FormGroup className="form-group has-float-label">
-                      <Label>Confirm Password</Label>
-                      <AvField
-                        name="confirmPassword"
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        validate={{
-                          required: {
-                            value: true,
-                            errorMessage: "Confirm Password cannot be empty",
-                          },
-                          match: {
-                            value: "password",
-                            errorMessage: "Passwords do not match",
-                          },
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
+  {/* Confirm Password Field */}
+  <Col>
+    <FormGroup className="form-group has-float-label position-relative">
+      <Label>Confirm Password</Label>
+      <AvField
+        name="confirmPassword"
+        type={showConfirmPassword ? "text" : "password"}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      //   validate={{
+      //     required: { value: true, errorMessage: "Confirm password is required" },
+      //     match: { value: password, errorMessage: "Passwords do not match" },
+      //   }}
+      // />
+      validate={{
+        required: { value: true, errorMessage: "Confirm password is required" },
+        match: {
+          value: "password", // This should match the name of the password field
+          errorMessage: "Passwords do not match",
+        },
+      }}
+    />
+      <button
+        type="button"
+        className="btn btn-link position-absolute"
+        style={{ top: "50%", right: "1px", transform: "translateY(-50%)" }}
+        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+      >
+        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+      </button>
+    </FormGroup>
+                     </Col>
                 </Row>
                 <Row>
                   <FormGroup check>
@@ -534,7 +409,6 @@ const Register = () => {
                     Please select at least one role
                   </div>
                 )}
-                {/* {roleError && <p className="text-danger">Please select at least one role</p>} */}
                 <div className="d-flex justify-content-between flex-wrap align-items-center">
                   <div>
                     Already a registered user?{" "}
@@ -542,13 +416,11 @@ const Register = () => {
                   </div>
                   <Button
                     color="primary"
-                    //  className="btn-shadow"
-                    //  size="lg"
-                    type="submit"
                     className={`btn-shadow btn-multiple-state ${
                       loading ? "show-spinner" : ""
                     } mt-2 mt-sm-0`}
                     size="lg"
+                    type="submit"
                   >
                     <span className="spinner d-inline-block">
                       <span className="bounce1" />
@@ -560,10 +432,6 @@ const Register = () => {
                     </span>
                   </Button>
                 </div>
-                {/* <div>
-                  Already a registered user?{" "}
-                  <NavLink to="/login">login</NavLink>
-                </div> */}
               </AvForm>
             )}
           </div>
@@ -572,6 +440,7 @@ const Register = () => {
     </Row>
   );
 };
+
 const mapStateToProps = () => {};
 
 export default connect(mapStateToProps, {

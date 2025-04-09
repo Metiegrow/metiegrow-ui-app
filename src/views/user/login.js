@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { Button, Card, CardTitle, FormGroup, Label, Row } from "reactstrap";
 import { loginUser } from "redux/actions";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa"; 
 // import axios from 'axios';
 // import { baseUrl } from 'constants/defaultValues';
 // import { authService } from 'services/authservice';
@@ -94,6 +94,7 @@ const Login = ({ loading, loginUserAction }) => {
   // }
   const [email] = useState("");
   const [password] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // useEffect(() => {
   //   if (error) {
@@ -176,9 +177,10 @@ const Login = ({ loading, loginUserAction }) => {
           </div>
           <div className="form-side ">
             <NavLink to="/" className="">
-              <span className="logo-single" />
+              {/* <span className="logo-single" />
+               */}
 
-              {/* <span
+              <span
                 style={{
                   display: "inline-block",
                   width: "110px",
@@ -189,7 +191,7 @@ const Login = ({ loading, loginUserAction }) => {
                   marginBottom: "60px",
                 }}
                 aria-label="Metiegrow Logo"
-              /> */}
+              />
               {/* <div
                 style={{
                   width: "120px",
@@ -234,22 +236,40 @@ const Login = ({ loading, loginUserAction }) => {
                       </div>
                     )}
                   </FormGroup>
-                  <FormGroup className="form-group has-float-label">
-                    <Label>
-                      <IntlMessages id="user.password" />
-                    </Label>
-                    <Field
-                      className="form-control"
-                      type="password"
-                      name="password"
-                      validate={validatePassword}
-                    />
-                    {errors.password && touched.password && (
-                      <div className="invalid-feedback d-block">
-                        {errors.password}
-                      </div>
-                    )}
-                  </FormGroup>
+                     <FormGroup className="form-group has-float-label">
+  <Label>
+    <IntlMessages id="user.password" />
+  </Label>
+  <div className="position-relative">
+    <Field
+      className="form-control pe-5" // Adds padding to prevent text overlap
+      type={showPassword ? "text" : "password"}
+      name="password"
+      validate={validatePassword}
+    />
+    <button
+      type="button"
+      className="btn btn-link position-absolute p-0"
+      style={{
+        top: "50%",
+        right: "10px",
+        transform: "translateY(-50%)",
+        border: "none",
+        background: "transparent",
+        outline: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+    </button>
+  </div>
+  {errors.password && touched.password && (
+    <div className="invalid-feedback d-block">{errors.password}</div>
+  )}
+</FormGroup>
                   <div className="d-flex justify-content-between align-items-center">
                     <NavLink to="/forgot-password">
                       <IntlMessages id="user.forgot-password-question" />

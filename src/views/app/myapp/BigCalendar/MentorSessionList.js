@@ -1,6 +1,7 @@
 import axios from "axios";
 import ThumbnailLetters from "components/cards/ThumbnailLetters";
 import { Colxx } from "components/common/CustomBootstrap";
+import Pagination from "containers/pages/Pagination";
 import { baseUrl } from "constants/defaultValues";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -19,48 +20,47 @@ const MentorSessionList = () => {
   // const { sessions } = location.state || {}; // Retrieve sessions from location state
   const [session, setSession] = useState("");
   const [upcomingsession, setUpcomingSession] = useState("");
+  const [sessionPagination, setSessionPagination] = useState("");
   const [showSuccessCard, setShowSuccessCard] = useState(false);
   const [mentorName, setMentorName] = useState("");
 
+  
+  const upcomingSessionsUrl = `${baseUrl}/api/calendar/user/upcoming-bookedslots`;
+  const sessionHistoryUrl = `${baseUrl}/api/calendar/user/session-history`;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage1, setCurrentPage1] = useState(1);
+  const [pagination, setPagination] = useState("");
+
+  
   const location = useLocation();
-  // const url=`${baseUrl}/mentor/session`;
-  // const url1=`${baseUrl}/sessionUpcomingHistroy`;
-  // To change the url to backend uncomment the below line
-  const url1 = `${baseUrl}/api/calendar/mentee/upcoming-bookedslots-session-history`;
+
   const history = useHistory();
 
-  // const handleJoinCall = (id) => {
-  //   // onClick();
-  //   history.push(`/app/videocall/${id}`);
-  // };
   const handleJoinCall = (userId, id) => {
     const fullUrl = `/app/videocall/${userId}/${id}`;
     history.push(fullUrl);
   };
 
   useEffect(() => {
-    // const SessionHistroy=async()=>{
-    //     try {
-    //         const response = await axios.get(url);
-    //         setSession(response.data);
-    //       } catch (error) {
-    //         console.error('Error fetching data:', error);
-    //       }
-    // }
-    // SessionHistroy();
     const SessionHistroy = async () => {
       try {
-        const response = await axios.get(url1);
-        setSession(response.data.data);
+         const response = await axios.get(`${sessionHistoryUrl}?page=${currentPage1 -1}&size=10&role=MENTOR`);
+         setSession(response.data.data);
+         setSessionPagination(response.data.paginationMeta);
+      
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    SessionHistroy();
+    
     const SessionUpcomingHistroy = async () => {
       try {
-        const response = (await axios.get(url1)) || [];
-        setUpcomingSession(response.data.data);
+        const response = await axios.get(`${upcomingSessionsUrl}?page=${currentPage -1}&size=10&role=MENTOR`);
+        setUpcomingSession(response.data.data );
+        setPagination(response.data.paginationMeta );
+      
         const queryParams = new URLSearchParams(location.search);
         const appointment = queryParams.get("appointment");
         // setShowSuccessCard(appointment === 'true');
@@ -78,8 +78,10 @@ const MentorSessionList = () => {
         console.error("Error fetching data:", error);
       }
     };
+    SessionHistroy();
     SessionUpcomingHistroy();
-  }, []);
+  }, [currentPage, currentPage1, location.search]);
+
 
   // const [currentTime, setCurrentTime] = useState(new Date())
   // useEffect(() => {
@@ -174,10 +176,9 @@ const MentorSessionList = () => {
        </div> */}
 
               <div className="">
-                {upcomingsession &&
-                upcomingsession.upcomingSessions &&
-                upcomingsession.upcomingSessions.length > 0 ? (
-                  upcomingsession.upcomingSessions.map((up) => {
+                {
+                upcomingsession.length > 0 ? (
+                  upcomingsession.map((up) => {
                     const date = new Date(up.fromTimeStamp);
                     const fromtime = new Date(up.fromTimeStamp);
                     const totime = new Date(up.toTimeStamp);
@@ -317,6 +318,13 @@ const MentorSessionList = () => {
               </div>
             </div>
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPage={pagination.totalPage}
+            onChangePage={(i) => setCurrentPage(i)}
+            lastIsActive={pagination.last}
+            firstIsActive={pagination.first}
+          />
           <div className="my-3 mt-4">
             <h2 className="font-weight-medium">Session history</h2>
             {/* <div>
@@ -370,8 +378,8 @@ const MentorSessionList = () => {
            
           </div> */}
             <div>
-              {session && session.history && session.history.length > 0 ? (
-                session.history.map((sh) => {
+              {session && session.length > 0 ? (
+                session.map((sh) => {
                   const date = new Date(sh.fromTimeStamp);
                   const fromtime = new Date(sh.fromTimeStamp);
                   const totime = new Date(sh.toTimeStamp);
@@ -509,6 +517,13 @@ const MentorSessionList = () => {
           </div>
         </Colxx>
       </Row>
+      <Pagination
+        currentPage={currentPage1}
+        totalPage={sessionPagination.totalPage}
+        onChangePage={(i) => setCurrentPage1(i)}
+        lastIsActive={sessionPagination.last}
+        firstIsActive={sessionPagination.first}
+      />
     </div>
   );
 };
