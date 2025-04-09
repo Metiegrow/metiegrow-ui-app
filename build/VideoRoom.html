@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Introducing SDK, 2.9.20 is the sample version number, you can check the latest version number through the release notes or GitHub warehouse branch  -->
+    <script src="https://download.agora.io/edu-apaas/release/edu_sdk@2.9.20.bundle.js"></script>
+    <!-- Introducing Widget, 2.9.20 is the sample version number. You can check the latest version number through the release notes or GitHub warehouse branch. (Widgets before 2.9.20 are packaged together with the SDK, and there is no need to introduce this library) -->
+    <script src="https://download.agora.io/edu-apaas/release/edu_widget@2.9.20.bundle.js"></script>
+</head>
+<body>
+    <style>
+        #root {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div id="root"></div>
+    <script type="text/javascript">
+        const token = localStorage.getItem('tokenRes');
+        const userId = localStorage.getItem("userId");
+        const role = localStorage.getItem("roleRes");
+        const userName = localStorage.getItem("userName");
+        const type = role.includes("USER") ? 2 : 1;
+
+        fetch('https://api.metiegrow.in/api/userprofile/generate-rtm-token', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const rtmToken = data.rtmToken;
+                // console.log("tmToken",rtmToken)
+                AgoraEduSDK.config({
+                    appId: '27671fc2e9ba4a218703efe56d740034',
+                    region: 'NA'
+                });
+                AgoraEduSDK.launch(document.querySelector('#root'), {
+                    userUuid: userId,
+                    userName: userName,
+                    roomUuid: 'room id',
+                    roleType: type, // User roles: 1 is teacher, 2 is student.
+                    roomType: 0, // Room type: 0 is one-on-one, 2 is large class, and 4 is small class.
+                    roomName: 'room name',
+                    pretest: true, // Whether to enable pre-class equipment detection.
+                    rtmToken: rtmToken, 
+                    language: 'en', // The language of the classroom interface. If the interface is in English, set it to 'en'.
+                    startTime: new Date().getTime(),
+                    duration: 60 * 60, // Course time in seconds.
+                    recordUrl: 'https://solutions-apaas.agora.io/apaas/record/dev/2.8.0/record_page.html',
+                    courseWareList: [],
+                    virtualBackgroundImages: [".src/assets/img/details/1.jpg"], // Virtual background image resource list.
+                    webrtcExtensionBaseUrl: 'https://solutions-apaas.agora.io/static', // WebRTC Plug-in deployment address.
+                    uiMode: 'light', // Set the classroom interface to bright mode. If you want the interface to be in dark mode, set it to 'dark'.
+                    widgets: {
+                        popupQuiz: AgoraSelector,
+                        countdownTimer: AgoraCountdown,
+                        easemobIM: AgoraHXChatWidget,
+                        mediaPlayer: FcrStreamMediaPlayerWidget,
+                        poll: AgoraPolling,
+                        watermark: FcrWatermarkWidget,
+                        webView: FcrWebviewWidget,
+                        netlessBoard: FcrBoardWidget
+                    },
+                    listener: (evt, args) => {
+                        console.log("evt",args)
+                        if (evt === 2) {
+                            console.log('exit classroom');
+                            window.location.replace('/app/profile');
+                            // window.close();
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching rtmToken:', error);
+            });
+    </script>
+</body>
+</html>
