@@ -1,50 +1,12 @@
-# jobportal
+# React + Vite
 
-Install MySql
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+Currently, two official plugins are available:
 
-Install MySql Workbench (Optional)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Expanding the ESLint configuration
 
-Install VS Code
-
-
-Install Mongodb
-
-
-Create SQL database named metiegrow
-
-
-Update DB username, password, etc. in application.properties
-
-Signup in Agora
-
-
-Copy AGORA_APP_ID and set environment variable:
-AGORA_APP_ID=4e6374a1edfe4d20a604fb0513fae8fb
-
-
-Copy AGORA_APP_CERTIFICATE and set environment variable:
-AGORA_APP_CERTIFICATE=d3439fabbf5548ea9c2a75f37ec7908f
-
-server start use :
-npm start
-
-
-During first start, run the below SQL:
-insert into db_courses.calendar values(1,'mentor calendar',1713588470000,0,0,1);
-
-
-Load the notification template be calling the below endpoint:
-http://localhost:9091/api/admin/load-notification-templates
-POST 
-By app_admin only
-
-
-Run with the required command:
-./gradlew bootRun
-java -jar backend-0.0.1.jar
-
-
-Once user is signed up, activate by:
-UPDATE users SET active = true WHERE id = 1;
+If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
